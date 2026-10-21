@@ -63,8 +63,7 @@ func _refresh() -> void:
   var owned: bool = ShopManager.unlocked_skins.has(skin_id)
   var is_premium: bool = bool(item.get("premium", false))
   var price_text: String = str(item.get("price", "")) if is_premium else str(item.get("cost", 0)) + " Edelsteine"
-  button.text = str(item.get("title", skin_id)) + "
-" + ("Freigeschaltet" if owned else price_text)
+  button.text = str(item.get("title", skin_id)) + "\n" + ("Freigeschaltet" if owned else price_text)
   button.custom_minimum_size.y = 68
   if owned:
    button.disabled = str(item.get("kind", "")) != "hero"
