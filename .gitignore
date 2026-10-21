@@ -1,0 +1,13 @@
+# Godot generated cache (Godot 4)
+.godot/
+.import/
+# Local/editor/generated exports
+*.tmp
+*.bak
+*.log
+*.apk
+*.aab
+*.keystore
+*.jks
+.DS_Store
+Thumbs.db
