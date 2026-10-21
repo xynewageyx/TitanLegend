@@ -1,0 +1,101 @@
+[gd_scene load_steps=11 format=3]
+[ext_resource type="Script" path="res://scripts/biome_manager.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/team_formation.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/battle_manager.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/ui_manager.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/camera_follow.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/class_menu.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/skill_menu.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/talent_menu.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/world_transition.gd" id="9"]
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.04, 0.12, 0.08, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.6, 0.8, 0.6, 1)
+ambient_light_energy = 0.7
+[node name="Main" type="Node3D"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -30, 0)
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 10, 13)
+current = true
+script = ExtResource("5")
+[node name="BiomeManager" type="Node3D" parent="." node_paths=PackedStringArray("environment_node", "sun_light")]
+script = ExtResource("1")
+environment_node = NodePath("../WorldEnvironment")
+sun_light = NodePath("../Sun")
+[node name="TeamFormation" type="Node3D" parent="."]
+position = Vector3(0, 0, 3)
+script = ExtResource("2")
+[node name="EnemySpawn" type="Node3D" parent="."]
+position = Vector3(0, 0, -8)
+[node name="BattleManager" type="Node3D" parent="." node_paths=PackedStringArray("team_formation", "biome_manager", "enemy_spawn_node")]
+script = ExtResource("3")
+team_formation = NodePath("../TeamFormation")
+biome_manager = NodePath("../BiomeManager")
+enemy_spawn_node = NodePath("../EnemySpawn")
+[node name="HUD" type="Control" parent="." node_paths=PackedStringArray("battle_manager", "biome_manager")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4")
+battle_manager = NodePath("../BattleManager")
+biome_manager = NodePath("../BiomeManager")
+[node name="Margin" type="MarginContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 0.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+[node name="Stack" type="VBoxContainer" parent="HUD/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+[node name="Header" type="HBoxContainer" parent="HUD/Margin/Stack"]
+layout_mode = 2
+[node name="Gold" type="Label" parent="HUD/Margin/Stack/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Gold"
+[node name="Tickets" type="Label" parent="HUD/Margin/Stack/Header"]
+layout_mode = 2
+text = "Tickets"
+[node name="Status" type="Label" parent="HUD/Margin/Stack"]
+layout_mode = 2
+text = "Titan Legends"
+[node name="Detail" type="Label" parent="HUD/Margin/Stack"]
+layout_mode = 2
+text = "Kampfstatus"
+[node name="Action" type="Button" parent="HUD/Margin/Stack"]
+layout_mode = 2
+text = "Aktion"
+[node name="Tabs" type="HBoxContainer" parent="HUD/Margin/Stack"]
+layout_mode = 2
+[connection signal="pressed" from="HUD/Margin/Stack/Action" to="HUD" method="_on_action_pressed"]
+
+[node name="ClassMenu" type="Control" parent="HUD" node_paths=PackedStringArray("team_formation")]
+script = ExtResource("6")
+team_formation = NodePath("../../TeamFormation")
+
+[node name="SkillMenu" type="Control" parent="HUD" node_paths=PackedStringArray("team_formation", "battle_manager")]
+script = ExtResource("7")
+team_formation = NodePath("../../TeamFormation")
+battle_manager = NodePath("../../BattleManager")
+
+[node name="TalentMenu" type="Control" parent="HUD" node_paths=PackedStringArray("team_formation", "battle_manager")]
+script = ExtResource("8")
+team_formation = NodePath("../../TeamFormation")
+battle_manager = NodePath("../../BattleManager")
+
+[node name="WorldTransition" type="CanvasLayer" parent="." node_paths=PackedStringArray("biome_manager")]
+script = ExtResource("9")
+biome_manager = NodePath("../BiomeManager")
