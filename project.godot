@@ -1,0 +1,24 @@
+config_version=5
+
+[application]
+config/name="Titan Legends - Idle RPG"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.2", "GL Compatibility")
+
+[autoload]
+GameManager="*res://scripts/game_manager.gd"
+AdManager="*res://scripts/ad_manager.gd"
+ShopManager="*res://scripts/shop_manager.gd"
+SaveManager="*res://scripts/save_manager.gd"
+AudioManager="*res://scripts/audio_manager.gd"
+
+[display]
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/stretch/mode="canvas_items"
+window/handheld/orientation=1
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
