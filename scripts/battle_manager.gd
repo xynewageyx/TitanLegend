@@ -121,6 +121,8 @@ func _sync_team_health() -> void:
 
 func _reset_hero_health() -> void:
  for i in range(4):
+  var pet_health: float = float(_pet_stats(i).get("health", 0.0))
+  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health)))
   hero_hp[i] = hero_max_hp[i]
  tank_taunt_until.fill(0)
  tank_intercept_until.fill(0)
@@ -331,6 +333,8 @@ func _attack_tick() -> void:
  var damage: int = maxi(1, roundi(float(hero_max_hp[target]) * 0.04))
  if is_boss:
   damage = roundi(float(damage) * (1.9 if is_fusion_boss else 1.5))
+  if boss_buff_active and boss_buff_kind == "attack":
+   damage = maxi(1, roundi(float(damage) * 1.15))
   # Boss area attacks happen periodically. The tank can intercept them.
   if skill_tick % 4 == 0:
    var group_targets: Array[int] = []
@@ -501,7 +505,7 @@ func _on_boss_minion_defeated() -> void:
  battle_status_changed.emit()
 
 func _boss_minions_attack() -> void:
- if not is_boss:
+ if not battle_active or not is_boss:
   return
  for index in range(2):
   if boss_minion_hp[index] <= 0:
@@ -524,9 +528,7 @@ func _hero_attack(slot: int, role: int) -> void:
  _deal_damage_to_enemy(slot, actual_damage)
  last_ability = "Kritischer Treffer" if critical else "Standardangriff"
  skill_hit_charge[slot] = mini(MAX_SKILL_HITS, skill_hit_charge[slot] + 1)
- if enemy_hp <= 0:
-  finish_wave()
- else:
+ if battle_active and enemy_hp > 0:
   _try_cast_charged_skill(slot, role)
  battle_status_changed.emit()
 
