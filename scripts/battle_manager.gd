@@ -273,19 +273,18 @@ func _try_cast_charged_skill(slot: int, role: int) -> void:
  var loadout: Array = skill_loadouts[slot]
  if loadout.is_empty():
   return
- # Fixed order, circular across the player's four chosen skill slots.
- for offset in range(loadout.size()):
-  var index: int = (next_skill_slot[slot] + offset) % loadout.size()
-  var choice: int = int(loadout[index])
-  if not _skill_is_usable(slot, role, choice):
-   continue
-  var required_hits: int = _skill_hit_cost(role, choice)
-  if skill_hit_charge[slot] < required_hits:
-   continue
-  skill_hit_charge[slot] = 0
-  next_skill_slot[slot] = (index + 1) % loadout.size()
-  _execute_equipped_skill(slot, role, choice)
+ # Strict order: slot 1 -> 2 -> 3 -> 4 -> slot 1.
+ # Do not skip a slot because it is charging or its condition is unmet.
+ var index: int = next_skill_slot[slot] % loadout.size()
+ var choice: int = int(loadout[index])
+ var required_hits: int = _skill_hit_cost(role, choice)
+ if skill_hit_charge[slot] < required_hits:
   return
+ if not _skill_is_usable(slot, role, choice):
+  return
+ skill_hit_charge[slot] = 0
+ next_skill_slot[slot] = (index + 1) % loadout.size()
+ _execute_equipped_skill(slot, role, choice)
 
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  if role == 0 and choice == 8:
@@ -343,7 +342,10 @@ func _hero_attack(slot: int, role: int) -> void:
 func set_skill_loadout(hero: int, skill_slot: int, ability: int) -> void:
  if hero < 0 or hero >= 4 or skill_slot < 0 or skill_slot >= 4:
   return
- skill_loadouts[hero][skill_slot] = clampi(ability, 0, 10)
+ skill_loadouts[hero][skill_slot] = clampi(ability, 0, 9 if team_formation != null and int(team_formation.role_ids[hero]) == 0 else 7)
+ # New equipment always starts its rotation at skill position 1.
+ next_skill_slot[hero] = 0
+ skill_hit_charge[hero] = 0
  SaveManager.save_game()
  battle_status_changed.emit()
 
