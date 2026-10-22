@@ -446,6 +446,67 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   if enemy_hp <= 0:
    finish_wave()
 
+func _pet_stats(slot: int) -> Dictionary:
+ if team_formation == null:
+  return {"penetration":0.0, "health":0.0, "crit":0.0}
+ var hero_class: int = int(team_formation.class_ids[slot])
+ var pet_element: int = int(team_formation.pet_element_ids[slot])
+ var boss_element: int = 0
+ if biome_manager != null:
+  boss_element = maxi(0, int(biome_manager.current_biome))
+ return TitanCombatBalance.passive_pet_stats(hero_class, pet_element, boss_element)
+
+func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> void:
+ if not battle_active or amount <= 0:
+  return
+ var stats: Dictionary = _pet_stats(slot)
+ var dealt: int = amount
+ if is_boss:
+  dealt = TitanCombatBalance.damage_after_resistance(amount, boss_resistance, float(stats.get("penetration", 0.0)))
+ # Midgame minions can be targeted and removed before the main boss.
+ if is_boss and not boss_minion_hp.is_empty():
+  for index in range(2):
+   if boss_minion_hp[index] <= 0:
+    continue
+   boss_minion_hp[index] = maxi(0, boss_minion_hp[index] - dealt)
+   if boss_minion_hp[index] == 0:
+    if index < boss_minion_visuals.size() and is_instance_valid(boss_minion_visuals[index]):
+     boss_minion_visuals[index].visible = false
+    _on_boss_minion_defeated()
+   if not is_area:
+    return
+ # If an area skill hit adds, the remaining boss also takes one hit.
+ var defense: float = 0.13 if boss_buff_active and boss_buff_kind == "defense" else 0.0
+ enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense))))
+ _update_enemy_casualties()
+ if enemy_hp <= 0:
+  finish_wave()
+
+func _on_boss_minion_defeated() -> void:
+ if boss_minion_hp[0] > 0 or boss_minion_hp[1] > 0 or boss_buff_active:
+  return
+ boss_buff_active = true
+ match boss_buff_kind:
+  "heal":
+   enemy_hp = mini(enemy_max_hp, enemy_hp + maxi(1, roundi(float(enemy_max_hp) * 0.06)))
+   last_ability = "Bossphase: Heilung"
+  "defense":
+   last_ability = "Bossphase: Panzerung"
+  _:
+   last_ability = "Bossphase: Wutanfall"
+ battle_status_changed.emit()
+
+func _boss_minions_attack() -> void:
+ if not is_boss:
+  return
+ for index in range(2):
+  if boss_minion_hp[index] <= 0:
+   continue
+  var target: int = _choose_routine_enemy_target()
+  if target >= 0:
+   # Each add deals ~2% of target max HP per enemy attack tick.
+   _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.02)), [target])
+
 func _hero_attack(slot: int, role: int) -> void:
  if not battle_active or enemy_hp <= 0:
   return
