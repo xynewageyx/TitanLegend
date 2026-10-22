@@ -53,7 +53,7 @@ var _finishing: bool = false
 func _ready() -> void:
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
- current_level = maxi(1, GameManager.current_stage if "current_stage" in GameManager else 1)
+ current_level = 1 # Progress restoration remains part of the original importer
  _reset_hero_health()
  call_deferred("start_next_encounter")
 
