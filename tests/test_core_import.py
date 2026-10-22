@@ -89,7 +89,8 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("mob.visible = false", text)
         self.assertIn("enemies_remaining = survivors", text)
         attack = text.split("func _hero_attack(", 1)[1].split("\nfunc ", 1)[0]
-        self.assertIn("_update_enemy_casualties()", attack)
+        self.assertIn("_deal_damage_to_enemy(slot, actual_damage)", attack)
+        self.assertIn("_update_enemy_casualties()", text.split("func _deal_damage_to_enemy(", 1)[1].split("\nfunc ", 1)[0])
 
     def test_defeat_retries_same_wave_without_reassigning_tank(self):
         text = source("battle_manager.gd")
