@@ -42,6 +42,7 @@ var team_element_status: int = -1
 var team_status_until_tick: int = 0
 var boss_cast_ticks: int = 0
 var boss_cast_name: String = ""
+var boss_next_cast_tick: int = 0
 var boss_interrupt_message: String = ""
 var last_ability: String = ""
 var skill_loadouts: Array = [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
@@ -108,6 +109,8 @@ func _reset_hero_health() -> void:
   hero_hp[i] = hero_max_hp[i]
  tank_taunt_until.fill(0)
  tank_intercept_until.fill(0)
+ skill_hit_charge.fill(0)
+ next_skill_slot.fill(0)
  team_element_status = -1
  if team_formation != null and team_formation.has_method("reset_individual_defeat_poses"):
   team_formation.reset_individual_defeat_poses()
@@ -211,6 +214,15 @@ func _attack_tick() -> void:
  if not battle_active:
   return
  skill_tick += 1
+ # Boss casts create a real interrupt window for equipped control skills.
+ if is_boss:
+  if boss_cast_ticks > 0:
+   boss_cast_ticks -= 1
+  elif skill_tick >= boss_next_cast_tick:
+   boss_cast_ticks = 3
+   boss_cast_name = "Titanhieb"
+   boss_interrupt_message = ""
+   boss_next_cast_tick = skill_tick + 9
  var target: int = _choose_routine_enemy_target()
  if target < 0:
   _on_team_defeat("normal")
@@ -302,6 +314,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   return
  if choice == 7:
   boss_cast_ticks = 0
+  boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
   boss_interrupt_message = "Boss unterbrochen"
   last_ability = "Unterbrechung"
   return
@@ -415,6 +428,10 @@ func spawn_wave() -> void:
  # Full recovery only occurs when an explicit run/reset begins.
  boss_elapsed = 0.0
  boss_time_remaining = BOSS_TIME_LIMIT
+ boss_cast_ticks = 0
+ boss_cast_name = ""
+ boss_interrupt_message = ""
+ boss_next_cast_tick = skill_tick + 4
  hero_attack_elapsed.fill(0.0)
  _enemy_attack_elapsed = 0.0
  defeat_reason = ""
