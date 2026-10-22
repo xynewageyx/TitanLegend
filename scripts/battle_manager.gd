@@ -101,7 +101,11 @@ func _process(delta: float) -> void:
  if _enemy_attack_elapsed >= 2.2:
   _enemy_attack_elapsed = 0.0
   _attack_tick()
+  if not battle_active:
+   return
  for slot in range(4):
+  if not battle_active:
+   return
   if hero_hp[slot] <= 0:
    continue
   hero_attack_elapsed[slot] += delta
@@ -353,6 +357,8 @@ func _attack_tick() -> void:
    boss_cast_ticks -= 1
    if boss_cast_ticks == 0:
     _resolve_boss_cast()
+    if not battle_active:
+     return
   elif skill_tick >= boss_next_cast_tick:
    _begin_boss_cast()
  var target: int = _choose_routine_enemy_target()
@@ -507,6 +513,9 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
   return
  var stats: Dictionary = _pet_stats(slot)
  var dealt: int = amount
+ if not is_boss and is_area:
+  # Normal mob waves use an aggregate HP pool, so distribute AoE once here.
+  dealt *= mini(maxi(enemies_remaining, 1), 7)
  if is_boss:
   dealt = TitanCombatBalance.damage_after_resistance(amount, boss_resistance, float(stats.get("penetration", 0.0)))
  # Midgame minions can be targeted and removed before the main boss.
@@ -546,6 +555,8 @@ func _boss_minions_attack() -> void:
  if not battle_active or not is_boss:
   return
  for index in range(2):
+  if not battle_active:
+   return
   if boss_minion_hp[index] <= 0:
    continue
   var target: int = _choose_routine_enemy_target()
