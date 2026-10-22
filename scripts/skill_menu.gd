@@ -2,6 +2,7 @@ extends Control
 @export var team_formation: Node3D
 @export var battle_manager: Node3D
 var hero_selector: OptionButton
+var pet_element_selector: OptionButton
 var skill_selectors: Array[OptionButton] = []
 var info: Label
 var charge_info: Label
@@ -25,7 +26,12 @@ func _ready() -> void:
  add_child(margin)
  var stack := VBoxContainer.new()
  stack.add_theme_constant_override("separation", 9)
- margin.add_child(stack)
+ var scroll := ScrollContainer.new()
+ scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ margin.add_child(scroll)
+ stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ scroll.add_child(stack)
  var title := Label.new()
  title.text = "SKILLS: PRIORITAET 1 BIS 4"
  title.add_theme_font_size_override("font_size", 27)
@@ -34,6 +40,13 @@ func _ready() -> void:
  for i in range(4):
   hero_selector.add_item("Held " + str(i + 1), i)
  stack.add_child(hero_selector)
+ pet_element_selector = OptionButton.new()
+ pet_element_selector.custom_minimum_size.y = 44
+ var elements := ["Feuer", "Wasser", "Erde", "Natur", "Licht", "Schatten", "Wind", "Eis", "Blitz", "Chaos"]
+ for i in range(elements.size()):
+  pet_element_selector.add_item("Begleiter-Element: " + elements[i], i)
+ stack.add_child(pet_element_selector)
+ pet_element_selector.item_selected.connect(_on_pet_element_selected)
  for skill_slot in range(4):
   var selector := OptionButton.new()
   selector.custom_minimum_size.y = 55
@@ -96,8 +109,14 @@ func _process(_delta: float) -> void:
   charge_bars[index].value = progress if is_active else 0
   charge_labels[index].text = ("%d: %d/%d" % [index + 1, progress if is_active else 0, required])
 
+func _on_pet_element_selected(element: int) -> void:
+ if team_formation != null:
+  team_formation.set_pet_element(clampi(hero_selector.selected, 0, 3), element)
+
 func _refresh() -> void:
  var hero: int = hero_selector.selected
+ if pet_element_selector != null and team_formation != null:
+  pet_element_selector.select(clampi(int(team_formation.pet_element_ids[hero]), 0, 9))
  var role: int = int(team_formation.role_ids[hero])
  var class_id: int = int(team_formation.class_ids[hero])
  for skill_slot in range(4):
