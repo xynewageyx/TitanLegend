@@ -673,7 +673,7 @@ func spawn_wave() -> void:
  enemy_max_hp = (220 + current_level * 65) * (8 if is_fusion_boss else (5 if is_boss else 1))
  if is_boss:
   # Small archetype differences, not multiplying HP every time elements repeat.
-  var variant_hp_scale: Array[float] = [1.08, 0.96, 1.0, 1.12]
+  var variant_hp_scale: Array[float] = [1.08, 0.96, 0.94, 1.05]
   enemy_max_hp = maxi(1, roundi(float(enemy_max_hp) * variant_hp_scale[boss_variant_id]))
  if astral_active:
   enemy_max_hp = roundi(float(enemy_max_hp) * (1.0 + float(astral_floor) * 0.14))
