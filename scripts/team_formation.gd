@@ -63,6 +63,7 @@ func create_team() -> void:
   heroes.append(hero)
   _build_hero(hero, role_ids[i], CLASS_COLORS[class_ids[i]])
   _decorate_class(hero, class_ids[i])
+  _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
   pet.position = Vector3(0.76, 0.1, 0.12)
@@ -200,8 +201,62 @@ func play_team_protection_impact(_element_id: int = -1) -> void:
   tween.tween_property(protection_wall, "scale", Vector3(1.1, 1.12, 1.0), 0.12)
   tween.tween_property(protection_wall, "scale", Vector3.ONE, 0.2)
 
-func update_hero_health_bars(_hp_values: Array[int], _max_values: Array[int]) -> void:
- pass # Core combat health is owned by BattleManager.
+func _health_bar_piece(parent: Node3D, piece_name: String, tint: Color, depth: float) -> MeshInstance3D:
+ var piece := MeshInstance3D.new()
+ piece.name = piece_name
+ var mesh := QuadMesh.new()
+ mesh.size = Vector2(1.04, 0.14)
+ piece.mesh = mesh
+ var material := StandardMaterial3D.new()
+ material.albedo_color = tint
+ material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+ material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+ material.no_depth_test = true
+ piece.material_override = material
+ piece.position.z = depth
+ parent.add_child(piece)
+ return piece
+
+func _create_hero_health_bar(hero: Node3D) -> void:
+ var bar := Node3D.new()
+ bar.name = "HeroHealthBar"
+ bar.position = Vector3(0.0, 2.68, 0.0)
+ hero.add_child(bar)
+ var frame: MeshInstance3D = _health_bar_piece(bar, "Frame", Color(0.02, 0.04, 0.08, 0.98), -0.012)
+ (frame.mesh as QuadMesh).size = Vector2(1.10, 0.20)
+ _health_bar_piece(bar, "Background", Color(0.18, 0.20, 0.24, 0.98), 0.0)
+ _health_bar_piece(bar, "Fill", Color(0.25, 0.88, 0.43), 0.018)
+ var value_label := Label3D.new()
+ value_label.name = "HPValue"
+ value_label.position = Vector3(0.0, 0.19, 0.04)
+ value_label.font_size = 34
+ value_label.pixel_size = 0.004
+ value_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+ value_label.no_depth_test = true
+ value_label.modulate = Color(1.0, 1.0, 1.0, 0.98)
+ value_label.outline_modulate = Color(0.02, 0.04, 0.09, 1.0)
+ value_label.text = "HP"
+ bar.add_child(value_label)
+
+func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> void:
+ for i in range(mini(heroes.size(), mini(hp_values.size(), max_values.size()))):
+  var bar: Node3D = heroes[i].get_node_or_null("HeroHealthBar") as Node3D
+  if bar == null:
+   continue
+  var fill: MeshInstance3D = bar.get_node_or_null("Fill") as MeshInstance3D
+  if fill == null:
+   continue
+  var ratio: float = clampf(float(hp_values[i]) / float(maxi(1, max_values[i])), 0.0, 1.0)
+  fill.scale.x = maxf(0.0001, ratio)
+  fill.position.x = -0.52 * (1.0 - ratio)
+  fill.visible = ratio > 0.0
+  var hp_label: Label3D = bar.get_node_or_null("HPValue") as Label3D
+  if hp_label != null:
+   hp_label.text = "%d / %d" % [maxi(0, hp_values[i]), maxi(1, max_values[i])]
+   hp_label.modulate = Color(1.0, 0.62, 0.62) if ratio <= 0.25 else Color.WHITE
+  var material: StandardMaterial3D = fill.material_override as StandardMaterial3D
+  if material != null:
+   material.albedo_color = Color(0.94, 0.23, 0.20) if ratio <= 0.25 else (Color(0.97, 0.69, 0.22) if ratio <= 0.55 else Color(0.25, 0.88, 0.43))
 
 func set_class(slot: int, class_id: int) -> bool:
  if slot < 0 or slot >= 4 or class_id < 0 or class_id >= CLASS_NAMES.size():
