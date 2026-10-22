@@ -111,17 +111,20 @@ func _living_tank_slot() -> int:
  return -1
 
 func _choose_routine_enemy_target() -> int:
- # Update 168: Never transfer tank role after a tank dies.
- # Living tank is the first target even without active taunt.
- var tank: int = _living_tank_slot()
- if tank >= 0:
-  return tank
- var candidates: Array[int] = []
- for i in range(4):
-  if hero_hp[i] > 0:
-   candidates.append(i)
- return candidates.pick_random() if not candidates.is_empty() else -1
-
+ var survivors: Array[int] = []
+ var active_tank: int = _living_tank_slot()
+ for index in range(mini(4, hero_hp.size())):
+  if hero_hp[index] > 0:
+   survivors.append(index)
+ if survivors.is_empty():
+  return -1
+ if active_tank >= 0:
+  if tank_taunt_until[active_tank] > 0 and tank_taunt_until[active_tank] >= skill_tick:
+   return active_tank
+  if survivors.size() == 1 or randf() < 0.65:
+   return active_tank
+  survivors.erase(active_tank)
+ return survivors[randi_range(0, survivors.size() - 1)]
 func _hero_dodge_chance(index: int) -> float:
  if index < 0 or index >= 4:
   return 0.0
