@@ -49,6 +49,21 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("func _living_tank_slot()", text)
         self.assertIn("func _choose_routine_enemy_target()", text)
 
+    def test_saved_progress_restores_stage_wave_and_skills(self):
+        text = source("battle_manager.gd")
+        self.assertIn("SaveManager.get_saved_battle_progress()", text)
+        self.assertIn("current_level = maxi(1, saved_progress.x)", text)
+        self.assertIn("current_wave = clampi(saved_progress.y, 1, WAVE_ENEMY_COUNTS.size())", text)
+        self.assertIn("SaveManager.get_saved_skill_choices()", text)
+        self.assertIn("SaveManager.get_saved_skill_loadouts()", text)
+        self.assertIn('add_to_group("battle_manager")', text)
+
+    def test_normal_wave_preserves_party_health(self):
+        text = source("battle_manager.gd")
+        wave = text.split("func spawn_wave()", 1)[1].split("\nfunc ", 1)[0]
+        self.assertNotIn("_reset_hero_health()", wave)
+        self.assertIn("SaveManager.save_game()", text.split("func finish_wave()", 1)[1])
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
