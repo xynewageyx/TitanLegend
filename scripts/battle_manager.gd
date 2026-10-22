@@ -331,13 +331,19 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   _refresh_tank_defense_visuals()
   return
  if choice == 7:
-  boss_cast_ticks = 0
-  boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
-  boss_interrupt_message = "Boss unterbrochen"
-  last_ability = "Unterbrechung"
+  boss_cc_progress += 1
+  last_ability = "Kontrolle %d/%d" % [boss_cc_progress, boss_cc_required]
+  if boss_cc_progress >= boss_cc_required:
+   boss_cast_ticks = 0
+   boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
+   boss_interrupt_message = "Boss unterbrochen"
+   last_ability = "Unterbrechung"
   return
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  last_ability = str(skill.get("name", "Skill"))
+ if role == 2 and choice == 8:
+  _apply_heal_over_time(slot, skill)
+  return
  var healing: float = float(skill.get("heal", 0.0))
  if role == 2 and healing > 0.0:
   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
@@ -373,7 +379,8 @@ func _hero_attack(slot: int, role: int) -> void:
 func set_skill_loadout(hero: int, skill_slot: int, ability: int) -> void:
  if hero < 0 or hero >= 4 or skill_slot < 0 or skill_slot >= 4:
   return
- skill_loadouts[hero][skill_slot] = clampi(ability, 0, 9 if team_formation != null and int(team_formation.role_ids[hero]) == 0 else 7)
+ var active_role: int = int(team_formation.role_ids[hero]) if team_formation != null else 1
+ skill_loadouts[hero][skill_slot] = clampi(ability, 0, 9 if active_role == 0 else (8 if active_role == 2 else 7))
  # New equipment always starts its rotation at skill position 1.
  next_skill_slot[hero] = 0
  skill_hit_charge[hero] = 0
