@@ -5,6 +5,8 @@ var hero_selector: OptionButton
 var skill_selectors: Array[OptionButton] = []
 var info: Label
 var charge_info: Label
+var charge_bars: Array[ProgressBar] = []
+var charge_labels: Array[Label] = []
 
 func _ready() -> void:
  visible = false
@@ -45,6 +47,19 @@ func _ready() -> void:
  charge_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  charge_info.add_theme_font_size_override("font_size", 20)
  stack.add_child(charge_info)
+ for skill_index in range(4):
+  var skill_row := HBoxContainer.new()
+  stack.add_child(skill_row)
+  var label := Label.new()
+  label.custom_minimum_size.x = 90
+  skill_row.add_child(label)
+  charge_labels.append(label)
+  var bar := ProgressBar.new()
+  bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+  bar.custom_minimum_size.y = 19
+  bar.show_percentage = false
+  skill_row.add_child(bar)
+  charge_bars.append(bar)
  var apply := Button.new()
  apply.text = "Vier Skills speichern"
  apply.custom_minimum_size.y = 65
@@ -73,6 +88,13 @@ func _process(_delta: float) -> void:
  var progress: int = mini(needed, int(battle_manager.skill_hit_charge[hero]))
  var skill: String = TitanCrowdControl.ability_name(int(team_formation.class_ids[hero])) if ability == 7 else str(TitanSkillSystem.skill_for_role(role, ability).get("name", "Skill"))
  charge_info.text = "Naechster Skill: Platz %d – %s\nNormale Treffer: %d / %d" % [active_slot + 1, skill, progress, needed]
+ for index in range(4):
+  var equipped: int = int(battle_manager.skill_loadouts[hero][index])
+  var required: int = battle_manager._skill_hit_cost(role, equipped)
+  var is_active: bool = index == active_slot
+  charge_bars[index].max_value = required
+  charge_bars[index].value = progress if is_active else 0
+  charge_labels[index].text = ("%d: %d/%d" % [index + 1, progress if is_active else 0, required])
 
 func _refresh() -> void:
  var hero: int = hero_selector.selected
