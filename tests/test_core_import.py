@@ -160,6 +160,29 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("func play_skill_cast(role: int, choice: int)", motion)
         self.assertIn("skill_flash_remaining", motion)
 
+    def test_timed_cc_and_boss_attack_variety(self):
+        battle = source("battle_manager.gd")
+        self.assertIn("boss_cc_progress += 1", battle)
+        self.assertIn("boss_cc_progress >= boss_cc_required", battle)
+        self.assertIn('boss_cast_kind = "self_heal"', battle)
+        self.assertIn('boss_cast_kind = "single"', battle)
+        self.assertIn('boss_cast_kind = "aoe"', battle)
+        self.assertIn("boss_cast_ticks = 3", battle)
+        self.assertIn("enemy_hp = mini(enemy_max_hp", battle)
+        self.assertIn("boss_cc_required = 3 if is_fusion_boss else 2", battle)
+
+    def test_healer_hot_is_timed_and_cannot_revive(self):
+        battle = source("battle_manager.gd")
+        skills = source("skill_system.gd")
+        menu = source("skill_menu.gd")
+        self.assertIn("func _apply_heal_over_time(", battle)
+        self.assertIn("func _tick_heal_over_time()", battle)
+        self.assertIn("if hero_hp[i] <= 0:", battle)
+        self.assertIn("hero_hot_ticks[i] -= 1", battle)
+        self.assertIn('"hot_ticks":4', skills)
+        self.assertIn("9 if role == 2 else 8", menu)
+        self.assertIn("hero_hot_ticks.fill(0)", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
