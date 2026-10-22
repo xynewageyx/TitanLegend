@@ -70,6 +70,12 @@ func create_team() -> void:
   hero.add_child(pet)
   _build_pet(pet, role_ids[i], CLASS_COLORS[class_ids[i]])
  team_changed.emit()
+ call_deferred("_refresh_health_after_rebuild")
+
+func _refresh_health_after_rebuild() -> void:
+ var battle: Node = get_tree().get_first_node_in_group("battle_manager")
+ if battle != null and battle.has_method("_sync_team_health"):
+  battle.call("_sync_team_health")
 
 func _build_hero(hero: Node3D, role: int, tint: Color) -> void:
  VisualFactory.sphere(hero, 0.37, Vector3(0, 1.85, 0), Color("#d5a17b"))
