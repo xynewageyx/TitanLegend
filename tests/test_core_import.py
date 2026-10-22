@@ -112,6 +112,18 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn('func _refresh_health_after_rebuild()', text)
         self.assertNotIn('pass # Core combat health is owned by BattleManager.', text)
 
+    def test_automatic_tank_skills_and_boss_group_damage(self):
+        source_code = source("battle_manager.gd")
+        self.assertIn("func _activate_tank_skill(slot: int)", source_code)
+        self.assertIn("if slot != _living_tank_slot():", source_code)
+        self.assertIn("tank_taunt_until[slot] = skill_tick + 3", source_code)
+        self.assertIn("tank_intercept_until[slot] = skill_tick + 4", source_code)
+        self.assertIn("if skill_tick % 4 == 0:", source_code)
+        self.assertIn("_damage_heroes(damage, group_targets)", source_code)
+        self.assertIn("tank_intercept_until[tank] >= skill_tick", source_code)
+        self.assertIn('last_ability = "Gruppenschaden abfangen"', source_code)
+        self.assertNotIn("hp_regeneration", source_code)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
