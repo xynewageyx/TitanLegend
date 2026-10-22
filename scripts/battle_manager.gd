@@ -340,6 +340,7 @@ func _attack_tick() -> void:
    _damage_heroes(damage, [target])
  else:
   _damage_heroes(damage, [target])
+ _boss_minions_attack()
  _refresh_tank_defense_visuals()
  battle_status_changed.emit()
 
@@ -441,10 +442,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  if power > 0.0:
   var base_damage: int = 35 + current_level * 6
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
-  enemy_hp = maxi(0, enemy_hp - maxi(1, damage))
-  _update_enemy_casualties()
-  if enemy_hp <= 0:
-   finish_wave()
+  _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
  if team_formation == null:
@@ -515,10 +513,9 @@ func _hero_attack(slot: int, role: int) -> void:
  # Every living hero lands a normal hit to charge their next skill.
  var normal_damage: int = 35 + current_level * 6
  var multiplier: float = TitanSkillSystem.damage_multiplier(role)
- var critical: bool = randf() < 0.10
+ var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
  var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * (1.6 if critical else 1.0)))
- enemy_hp = maxi(0, enemy_hp - actual_damage)
- _update_enemy_casualties()
+ _deal_damage_to_enemy(slot, actual_damage)
  last_ability = "Kritischer Treffer" if critical else "Standardangriff"
  skill_hit_charge[slot] = mini(MAX_SKILL_HITS, skill_hit_charge[slot] + 1)
  if enemy_hp <= 0:
