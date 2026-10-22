@@ -299,6 +299,10 @@ func _try_cast_charged_skill(slot: int, role: int) -> void:
  _execute_equipped_skill(slot, role, choice)
 
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
+ if team_formation != null and slot < team_formation.heroes.size():
+  var motion: Node = team_formation.heroes[slot].get_node_or_null("HeroCombatMotion")
+  if motion != null and motion.has_method("play_skill_cast"):
+   motion.call("play_skill_cast", role, choice)
  if role == 0 and choice == 8:
   tank_taunt_until[slot] = skill_tick + 3
   last_ability = "Spott"
