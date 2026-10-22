@@ -219,6 +219,86 @@ func _refresh_tank_defense_visuals() -> void:
  var active: bool = slot >= 0 and tank_intercept_until[slot] > skill_tick
  team_formation.set_team_protection_wall(active)
 
+func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
+ # Renew the HoT on the most injured living ally; it never resurrects heroes.
+ var target: int = -1
+ var lowest: float = 1.01
+ for i in range(4):
+  if hero_hp[i] <= 0:
+   continue
+  var ratio: float = float(hero_hp[i]) / float(maxi(1, hero_max_hp[i]))
+  if ratio < lowest:
+   lowest = ratio
+   target = i
+ if target < 0:
+  return
+ hero_hot_ticks[target] = clampi(int(skill.get("hot_ticks", 4)), 1, 4)
+ hero_hot_amount[target] = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075))))
+ last_ability = "Erneuerung (HoT)"
+
+func _tick_heal_over_time() -> void:
+ var changed: bool = false
+ for i in range(4):
+  if hero_hot_ticks[i] <= 0:
+   continue
+  hero_hot_ticks[i] -= 1
+  if hero_hp[i] <= 0:
+   continue
+  var before: int = hero_hp[i]
+  hero_hp[i] = mini(hero_max_hp[i], hero_hp[i] + hero_hot_amount[i])
+  changed = changed or hero_hp[i] != before
+  if hero_hp[i] > before:
+   _show_hero_combat_number(i, hero_hp[i] - before, true)
+ if changed:
+  _sync_team_health()
+
+func _begin_boss_cast() -> void:
+ boss_cast_index += 1
+ boss_cc_progress = 0
+ boss_cast_ticks = 3
+ boss_interrupt_message = ""
+ # Not every boss has a dangerous spell; all deal normal hit damage.
+ var boss_profile: int = current_level % 4
+ if boss_profile == 1:
+  boss_cast_kind = "single"
+  boss_cast_name = "Gezielter Hieb"
+  boss_cc_required = 0 # Harmless cast, CC not required.
+ elif boss_cast_index % 3 == 0:
+  boss_cast_kind = "self_heal"
+  boss_cast_name = "Titanheilung"
+  boss_cc_required = 1
+ elif boss_profile == 2:
+  boss_cast_kind = "single"
+  boss_cast_name = "Zerschmettern"
+  boss_cc_required = 1
+ else:
+  boss_cast_kind = "aoe"
+  boss_cast_name = "Verheerende Welle"
+  boss_cc_required = 3 if is_fusion_boss else 2
+ boss_next_cast_tick = skill_tick + 9
+
+func _resolve_boss_cast() -> void:
+ if not battle_active or not is_boss:
+  return
+ if boss_cast_kind == "self_heal":
+  enemy_hp = mini(enemy_max_hp, enemy_hp + maxi(1, roundi(float(enemy_max_hp) * 0.05)))
+  last_ability = "Boss: Selbstheilung"
+ elif boss_cast_kind == "single":
+  var target: int = _choose_routine_enemy_target()
+  if target >= 0:
+   _damage_heroes(maxi(1, roundi(float(12 * current_level) * (1.9 if is_fusion_boss else 1.4))), [target])
+  last_ability = "Boss: Einzelziel"
+ elif boss_cast_kind == "aoe":
+  var targets: Array[int] = []
+  for i in range(hero_hp.size()):
+   if hero_hp[i] > 0:
+    targets.append(i)
+  _damage_heroes(maxi(1, roundi(float(12 * current_level) * (1.5 if is_fusion_boss else 1.2))), targets)
+  last_ability = "Boss: Flaechenschaden"
+ boss_cast_kind = ""
+ boss_cc_progress = 0
+ boss_cc_required = 0
+
 func _attack_tick() -> void:
  if not battle_active:
   return
