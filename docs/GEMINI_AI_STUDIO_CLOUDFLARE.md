@@ -47,6 +47,20 @@ curl -fsS \
 
 Das Gateway wurde erstellt; der Test wurde **noch nicht** mit einem gültigen Gemini-Key durchgeführt.
 
+## Automatisierter Smoke-Test (Android/Termux)
+
+Im geklonten GitHub-Projekt ausführen:
+
+```sh
+pkg install python
+cd TitanLegend
+python tools/test_gemini_gateway.py
+```
+
+Der Test sendet **nur** dann eine Gemini-Anfrage, wenn `GEMINI_API_KEY` lokal als Umgebungsvariable gesetzt ist. Ohne API-Key wird er übersprungen. Eine erfolgreiche Verbindung wird als `PASS` mit `TITAN_OK` bestätigt. Das Skript zeigt den Schlüssel nicht an und führt keine GitHub-Schreiboperationen aus.
+
+**Achtung:** Der bestehende Cloudflare AI Gateway verwendet BYOK-only und das Anfrage-Logging ist aus. Cloudflare garantiert damit keine kostenlosen Google-AI-Studio-Anfragen; Quota- und Preisregeln von Google bleiben relevant. Die eigentliche Verbindung wurde noch nicht live mit einem Gemini-API-Key validiert.
+
 ## Arbeitsweise
 
 1. ChatGPT prüft und verändert den Quellcode über den GitHub-Connector.
