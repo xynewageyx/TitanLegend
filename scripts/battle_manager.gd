@@ -258,8 +258,6 @@ func _hero_attack(slot: int, role: int) -> void:
   _heal_heroes(7 + current_level * 2, skill_tick % 3 == 0)
   last_ability = "Heilung"
  else:
-  if role == 0:
-   _activate_tank_skill(slot)
   var base_damage: int = 35 + current_level * 6
   if role == 0:
    base_damage = roundi(float(base_damage) * 0.6)
@@ -267,6 +265,8 @@ func _hero_attack(slot: int, role: int) -> void:
   enemy_hp = maxi(0, enemy_hp - roundi(float(base_damage) * (1.6 if critical else 1.0)))
   _update_enemy_casualties()
   last_ability = "Kritischer Treffer" if critical else "Standardangriff"
+  if role == 0:
+   _activate_tank_skill(slot)
   if enemy_hp <= 0:
    finish_wave()
  battle_status_changed.emit()
