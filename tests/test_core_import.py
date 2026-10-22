@@ -82,6 +82,26 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("GameManager.add_gold(gold_reward)", text)
         self.assertIn("SaveManager.get_saved_astral()", text)
 
+    def test_wave_enemy_casualties_are_visible(self):
+        text = source("battle_manager.gd")
+        self.assertIn("func _update_enemy_casualties()", text)
+        self.assertIn("survivors = clampi(survivors, 0, enemy_visuals.size())", text)
+        self.assertIn("mob.visible = false", text)
+        self.assertIn("enemies_remaining = survivors", text)
+        attack = text.split("func _hero_attack(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("_update_enemy_casualties()", attack)
+
+    def test_defeat_retries_same_wave_without_reassigning_tank(self):
+        text = source("battle_manager.gd")
+        defeat = text.split("func _on_team_defeat(", 1)[1].split("\nfunc ", 1)[0]
+        retry = text.split("func _retry_defeated_encounter(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("_retry_pending = true", defeat)
+        self.assertIn("create_timer(2.0).timeout.connect(_retry_defeated_encounter)", defeat)
+        self.assertIn("_reset_hero_health()", retry)
+        self.assertIn("start_next_encounter()", retry)
+        self.assertNotIn("current_wave +=", retry)
+        self.assertNotIn("set_role(", retry)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
