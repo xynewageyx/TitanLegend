@@ -242,6 +242,21 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("_deal_damage_to_enemy(slot, actual_damage)", hero_attack)
         self.assertIn("if not battle_active:", hero_attack)
 
+    def test_area_difficulty_starts_at_stage_101(self):
+        balance = source("titan_combat_balance.gd")
+        battle = source("battle_manager.gd")
+        self.assertIn("static func area_number(stage: int)", balance)
+        self.assertIn("static func enemy_hp_scale(stage: int)", balance)
+        self.assertIn("static func enemy_damage_scale(stage: int)", balance)
+        self.assertIn("0.045 * completed + 0.003 * completed * completed", balance)
+        self.assertIn("0.022 * completed + 0.0015 * completed * completed", balance)
+        self.assertIn("TitanCombatBalance.enemy_hp_scale(current_level)", battle)
+        self.assertGreaterEqual(battle.count("TitanCombatBalance.enemy_damage_scale(current_level)"), 5)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+        self.assertIn("boss_time_remaining = BOSS_TIME_LIMIT", battle)
+        self.assertIn("boss_variant_id = TitanCombatBalance.boss_variant(current_level)", battle)
+        self.assertIn("stage >= 401", balance)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
