@@ -238,11 +238,15 @@ func _hero_attack(slot: int, role: int) -> void:
 func set_skill_loadout(hero: int, skill_slot: int, ability: int) -> void:
  if hero < 0 or hero >= 4 or skill_slot < 0 or skill_slot >= 4:
   return
- skill_loadouts[hero][skill_slot] = ability
+ skill_loadouts[hero][skill_slot] = clampi(ability, 0, 10)
+ SaveManager.save_game()
+ battle_status_changed.emit()
 
 func set_skill_choice(slot: int, choice: int) -> void:
- if slot >= 0 and slot < 4:
-  skill_choices[slot] = choice
+ if slot < 0 or slot >= 4:
+  return
+ skill_choices[slot] = clampi(choice, 0, 1)
+ set_skill_loadout(slot, 0, choice)
 
 func _hero_is_controlled(_hero_index: int) -> bool:
  return false
@@ -253,17 +257,24 @@ func _choose_automatic_skill(slot: int, _role: int) -> int:
 func enter_astral() -> void:
  if astral_active:
   return
+ world_progress = Vector2i(current_level, current_wave)
  astral_active = true
- astral_floor = maxi(1, astral_floor)
- _reset_hero_health()
+ current_level = maxi(1, astral_floor)
+ current_wave = BOSS_WAVE
  start_next_encounter()
+ battle_status_changed.emit()
 
 func leave_astral() -> void:
  if not astral_active:
   return
  astral_active = false
- _reset_hero_health()
+ current_level = world_progress.x
+ current_wave = world_progress.y
+ if biome_manager != null:
+  biome_manager.call("update_biome_from_stage", current_level)
  start_next_encounter()
+ SaveManager.save_game()
+ battle_status_changed.emit()
 
 func buy_astral_reward() -> bool:
  if astral_marks < 30:
@@ -326,6 +337,10 @@ func finish_wave() -> void:
   return
  battle_active = false
  _finishing = true
+ var gold_reward: int = current_level * (500 if is_fusion_boss else (250 if is_boss else 50))
+ if team_formation != null and team_formation.has_formation_bonus():
+  gold_reward = roundi(float(gold_reward) * 1.05)
+ GameManager.add_gold(gold_reward)
  if astral_active:
   astral_marks += 5 + mini(astral_floor, 50)
   astral_floor += 1
