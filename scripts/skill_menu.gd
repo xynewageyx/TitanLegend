@@ -66,9 +66,10 @@ func _refresh() -> void:
   selector.clear()
   for choice in range(10 if role == 0 else 8):
    var skill_name: String = TitanCrowdControl.ability_name(class_id) if choice == 7 else str(TitanSkillSystem.skill_for_role(role, choice)["name"])
-   selector.add_item(str(skill_slot + 1) + ". " + skill_name, choice)
+   var hits: int = battle_manager._skill_hit_cost(role, choice)
+   selector.add_item(str(skill_slot + 1) + ". " + skill_name + "  (" + str(hits) + " Treffer)", choice)
   selector.select(clampi(int(battle_manager.skill_loadouts[hero][skill_slot]), 0, 9 if role == 0 else 7))
- info.text = "Reihenfolge: Platz 1 zuerst, danach 2, 3, 4.\nNur ausgeruestete und einsatzbereite Skills werden genutzt.\nHeilung nur bei Bedarf; CC nur bei einem Boss-Cast."
+ info.text = "Normale Treffer laden Skills auf (2 bis 5 Treffer).\nAlle 4 belegten Skills werden der Reihe nach automatisch genutzt.\nSpott und Gruppenschutz sind getrennte Tank-Skills.\nHeilung nur bei Bedarf; CC nur bei einem Boss-Cast."
 
 func _apply() -> void:
  var hero: int = hero_selector.selected
