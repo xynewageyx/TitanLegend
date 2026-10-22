@@ -112,17 +112,28 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn('func _refresh_health_after_rebuild()', text)
         self.assertNotIn('pass # Core combat health is owned by BattleManager.', text)
 
-    def test_automatic_tank_skills_and_boss_group_damage(self):
-        source_code = source("battle_manager.gd")
-        self.assertIn("func _activate_tank_skill(slot: int)", source_code)
-        self.assertIn("if slot != _living_tank_slot():", source_code)
-        self.assertIn("tank_taunt_until[slot] = skill_tick + 3", source_code)
-        self.assertIn("tank_intercept_until[slot] = skill_tick + 4", source_code)
-        self.assertIn("if skill_tick % 4 == 0:", source_code)
-        self.assertIn("_damage_heroes(damage, group_targets)", source_code)
-        self.assertIn("tank_intercept_until[tank] >= skill_tick", source_code)
-        self.assertIn('last_ability = "Gruppenschaden abfangen"', source_code)
-        self.assertNotIn("hp_regeneration", source_code)
+    def test_skills_charge_from_normal_hits_at_most_five(self):
+        code = source("battle_manager.gd")
+        self.assertIn("const MAX_SKILL_HITS: int = 5", code)
+        self.assertIn("skill_hit_charge[slot] + 1", code)
+        self.assertIn("_try_cast_charged_skill(slot, role)", code)
+        self.assertIn("next_skill_slot[slot] = (index + 1) % loadout.size()", code)
+        self.assertIn("if skill_hit_charge[slot] < required_hits:", code)
+        self.assertIn("skill_hit_charge[slot] = 0", code)
+        self.assertNotIn("func _activate_tank_skill(slot: int)", code)
+
+    def test_tank_skills_are_separate_equipped_automatic_skills(self):
+        code = source("battle_manager.gd")
+        self.assertIn("if role == 0 and choice == 8:", code)
+        self.assertIn("if role == 0 and choice == 9:", code)
+        self.assertIn("tank_taunt_until[slot] = skill_tick + 3", code)
+        self.assertIn("tank_intercept_until[slot] = skill_tick + 4", code)
+        self.assertIn("return 5 # Gruppenschaden abfangen", code)
+        self.assertIn("if skill_tick % 4 == 0:", code)
+        self.assertIn("_damage_heroes(damage, group_targets)", code)
+        self.assertIn("tank_intercept_until[tank] >= skill_tick", code)
+        self.assertIn('last_ability = "Gruppenschaden abfangen"', code)
+        self.assertNotIn("hp_regeneration", code)
 
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
