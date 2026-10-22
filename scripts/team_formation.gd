@@ -80,7 +80,7 @@ func _build_hero(hero: Node3D, role: int, tint: Color) -> void:
  motion.name = "HeroCombatMotion"
  motion.set_script(load("res://scripts/hero_combat_motion.gd"))
  hero.add_child(motion)
- motion.configure(class_ids[heroes.find(hero)])
+ motion.call("configure", class_ids[heroes.find(hero)])
 
 func _build_pet(pet: Node3D, role: int, color: Color) -> void:
  VisualFactory.sphere(pet, 0.26, Vector3(0, 0.42, 0), color.lightened(0.25))
@@ -88,7 +88,7 @@ func _build_pet(pet: Node3D, role: int, color: Color) -> void:
  # Pets are passive: no damage, cooldown, attack or skill component.
 
 func _decorate_class(hero: Node3D, class_id: int) -> void:
- HeroClassSilhouettes64.decorate(hero, class_id)
+ preload("res://scripts/hero_class_silhouettes_64.gd").decorate(hero, class_id)
 
 func start_walking() -> void:
  if is_walking:
