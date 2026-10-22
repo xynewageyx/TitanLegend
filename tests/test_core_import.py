@@ -257,6 +257,24 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("boss_variant_id = TitanCombatBalance.boss_variant(current_level)", battle)
         self.assertIn("stage >= 401", balance)
 
+    def test_aoe_applied_once_per_target(self):
+        skill = source("skill_system.gd")
+        battle = source("battle_manager.gd")
+        body = skill.split("static func damage_for_skill(", 1)[1]
+        self.assertNotIn("float(targets)", body)
+        self.assertIn("damage_multiplier(role)", body)
+        self.assertIn("if not is_boss and is_area:", battle)
+        self.assertIn("dealt *= mini(maxi(enemies_remaining, 1), 7)", battle)
+        self.assertIn("_deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get(\"aoe\", false)))", battle)
+
+    def test_no_post_defeat_actions_in_same_frame(self):
+        battle = source("battle_manager.gd")
+        process = battle.split("func _process(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("_attack_tick()\n  if not battle_active:\n   return", process)
+        self.assertIn("for slot in range(4):\n  if not battle_active:", process)
+        attack = battle.split("func _attack_tick(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("_resolve_boss_cast()\n    if not battle_active:", attack)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
