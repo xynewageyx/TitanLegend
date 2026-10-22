@@ -42,6 +42,7 @@ static func skill_for_role(role: int, choice: int) -> Dictionary:
 static func damage_multiplier(role: int) -> float:
  return ROLE_DAMAGE[clampi(role, 0, ROLE_DAMAGE.size() - 1)]
 
-static func damage_for_skill(skill: Dictionary, role: int, base_damage: int, target_count: int) -> int:
- var targets: int = mini(maxi(target_count, 1), 7) if bool(skill.get("aoe", false)) else 1
- return int(round(float(base_damage) * float(skill.get("power", 0.0)) * damage_multiplier(role) * float(targets)))
+static func damage_for_skill(skill: Dictionary, role: int, base_damage: int, _target_count: int) -> int:
+ # Damage is per target. The battle manager distributes AoE to actual targets.
+ # Multiplying here as well inflated AoE exponentially in multi-enemy fights.
+ return maxi(0, roundi(float(base_damage) * float(skill.get("power", 0.0)) * damage_multiplier(role)))
