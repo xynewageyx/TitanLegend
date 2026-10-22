@@ -275,6 +275,20 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         attack = battle.split("func _attack_tick(", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn("_resolve_boss_cast()\n    if not battle_active:", attack)
 
+    def test_hero_talents_and_jewels_reach_battle_formulas(self):
+        battle = source("battle_manager.gd")
+        balance = source("titan_combat_balance.gd")
+        self.assertIn("static func hero_progression(", balance)
+        self.assertIn("TitanTalentSystem.OFFENSE[cls]", balance)
+        self.assertIn("TitanTalentSystem.DEFENSE[cls]", balance)
+        self.assertIn("TitanTalentSystem.SUPPORT[cls]", balance)
+        self.assertIn("minf(0.20", balance)
+        self.assertIn("func _hero_progression(slot: int)", battle)
+        self.assertIn("GameManager.jewel_level", battle)
+        self.assertIn('get("attack", 0.0)', battle)
+        self.assertIn('get("defense", 0.0)', battle)
+        self.assertIn('get("healing", 0.0)', battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
