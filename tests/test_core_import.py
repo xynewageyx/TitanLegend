@@ -139,6 +139,15 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn('last_ability = "Gruppenschaden abfangen"', code)
         self.assertNotIn("hp_regeneration", code)
 
+    def test_skill_display_and_boss_cast(self):
+        battle = source("battle_manager.gd")
+        menu = source("skill_menu.gd")
+        self.assertIn("boss_cast_ticks = 3", battle)
+        self.assertIn("skill_hit_charge.fill(0)", battle)
+        self.assertIn("next_skill_slot.fill(0)", battle)
+        self.assertIn("battle_manager.next_skill_slot[hero]", menu)
+        self.assertIn("battle_manager.skill_hit_charge[hero]", menu)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
