@@ -764,9 +764,22 @@ func _spawn_enemy_visuals() -> void:
   if biome_manager != null:
    tint = biome_manager.COLORS[biome_manager.current_biome]
   var size := 2.2 if is_boss else 0.65
+  if is_boss:
+   # Recognizable silhouettes; the tint remains the shared zone element.
+   size *= [1.05, 0.85, 0.95, 1.17][boss_variant_id]
   VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
   VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
   VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
+  if is_boss:
+   match boss_variant_id:
+    0:
+     VisualFactory.box(mob, Vector3(2.2, 0.42, 0.7), Vector3(0, size * 1.25, -0.25), tint.lightened(0.3))
+    1:
+     VisualFactory.sphere(mob, 0.75, Vector3(0, size * 2.0 + 0.35, 0), tint.lightened(0.48))
+    2:
+     VisualFactory.cylinder(mob, 1.25, 0.52, Vector3(0, size * 1.8, 0), tint.darkened(0.32))
+    3:
+     VisualFactory.box(mob, Vector3(2.6, 0.55, 1.1), Vector3(0, size * 1.65, 0), tint.darkened(0.2))
 
 func _spawn_boss_minion_visuals() -> void:
  if not is_boss or boss_minion_max_hp <= 0 or enemy_spawn_node == null:
