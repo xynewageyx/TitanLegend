@@ -36,6 +36,14 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("return false", body)
         self.assertNotRegex(body, r"role_ids\[i\]\s*=\s*1")
 
+    def test_tank_target_priority_matches_update_168(self):
+        text = source("battle_manager.gd")
+        body = text.split("func _choose_routine_enemy_target()", 1)[1].split("\\nfunc ", 1)[0]
+        self.assertIn("tank_taunt_until[active_tank] >= skill_tick", body)
+        self.assertIn("randf() < 0.65", body)
+        self.assertIn("survivors.erase(active_tank)", body)
+        self.assertNotIn("role_ids[", body, "Enemy targeting must not change team roles")
+
     def test_enemy_combat_uses_single_living_tank(self):
         text = source("battle_manager.gd")
         self.assertIn("func _living_tank_slot()", text)
