@@ -212,6 +212,18 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("pet_element_selector", menu)
         self.assertIn("ScrollContainer.new()", menu)
 
+    def test_four_reusable_bosses_in_each_elemental_area(self):
+        balance = source("titan_combat_balance.gd")
+        battle = source("battle_manager.gd")
+        biome = source("biome_manager.gd")
+        self.assertIn('BOSS_TITLES := ["Waechter", "Sturmrufer", "Runenhueter", "Urtitan"]', balance)
+        self.assertIn("posmod(maxi(1, stage) - 1, 100)", balance)
+        self.assertIn("match boss_variant_id:", battle)
+        self.assertIn("variant_hp_scale", battle)
+        self.assertIn("boss_cc_required = 3 if is_fusion_boss else 2", battle)
+        self.assertIn("floori(float(stage - 1) / 100.0)", biome)
+        self.assertIn("% 10", biome)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
