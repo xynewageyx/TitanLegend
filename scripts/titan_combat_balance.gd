@@ -8,6 +8,11 @@ const BOSS_SPECIAL := ["attack", "defense", "heal", "attack"]
 static func boss_variant(stage: int) -> int:
  return posmod(int(posmod(maxi(1, stage) - 1, 100) / 10), BOSS_TITLES.size())
 
+static func boss_resistance(variant: int) -> float:
+ # Element is fixed for the zone; only archetype durability changes.
+ const RESISTANCES: Array[float] = [0.16, 0.14, 0.18, 0.20]
+ return RESISTANCES[posmod(variant, RESISTANCES.size())]
+
 static func has_boss_minions(stage: int, fusion: bool) -> bool:
  # Midgame begins at stage 401 (area 5 of 12). Not every encounter uses the extra enemies.
  return stage >= 401 and (fusion or posmod(int((stage - 1) / 10), 3) == 2)
