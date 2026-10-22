@@ -270,24 +270,35 @@ func _begin_boss_cast() -> void:
  boss_cc_progress = 0
  boss_cast_ticks = 3
  boss_interrupt_message = ""
- # Not every boss has a dangerous spell; all deal normal hit damage.
- var boss_profile: int = current_level % 4
- if boss_profile == 1:
-  boss_cast_kind = "single"
-  boss_cast_name = "Gezielter Hieb"
-  boss_cc_required = 0 # Harmless cast, CC not required.
- elif boss_cast_index % 3 == 0:
-  boss_cast_kind = "self_heal"
-  boss_cast_name = "Titanheilung"
-  boss_cc_required = 1
- elif boss_profile == 2:
-  boss_cast_kind = "single"
-  boss_cast_name = "Zerschmettern"
-  boss_cc_required = 1
- else:
-  boss_cast_kind = "aoe"
-  boss_cast_name = "Verheerende Welle"
-  boss_cc_required = 3 if is_fusion_boss else 2
+ # Each element has the same four recurring boss styles; spells differ.
+ # Harmless casts do not require CC. Dangerous casts have limited windows.
+ match boss_variant_id:
+  0: # Guardian: mostly single target, some interruptible heavy blows.
+   boss_cast_kind = "single"
+   boss_cast_name = "Gezielter Hieb"
+   boss_cc_required = 1 if boss_cast_index % 3 == 0 else 0
+  1: # Stormcaller: AoE specialist, team CC matters.
+   boss_cast_kind = "aoe"
+   boss_cast_name = "Verheerende Welle"
+   boss_cc_required = 3 if is_fusion_boss else 2
+  2: # Rune keeper: self-heal alternating with mild strikes.
+   if boss_cast_index % 2 == 0:
+    boss_cast_kind = "single"
+    boss_cast_name = "Runenschlag"
+    boss_cc_required = 0
+   else:
+    boss_cast_kind = "self_heal"
+    boss_cast_name = "Titanheilung"
+    boss_cc_required = 1
+  _: # Ancient titan: alternates moderate AoE and heavy single hits.
+   if boss_cast_index % 2 == 0:
+    boss_cast_kind = "aoe"
+    boss_cast_name = "Elementarsturm"
+    boss_cc_required = 2 if is_fusion_boss else 1
+   else:
+    boss_cast_kind = "single"
+    boss_cast_name = "Zerschmettern"
+    boss_cc_required = 1
  boss_next_cast_tick = skill_tick + 9
 
 func _resolve_boss_cast() -> void:
@@ -651,6 +662,10 @@ func spawn_wave() -> void:
  boss_minion_hp = [0, 0]
  enemies_remaining = 1 if is_boss else mini(2 + current_wave, 7)
  enemy_max_hp = (220 + current_level * 65) * (8 if is_fusion_boss else (5 if is_boss else 1))
+ if is_boss:
+  # Small archetype differences, not multiplying HP every time elements repeat.
+  var variant_hp_scale: Array[float] = [1.08, 0.96, 1.0, 1.12]
+  enemy_max_hp = maxi(1, roundi(float(enemy_max_hp) * variant_hp_scale[boss_variant_id]))
  if astral_active:
   enemy_max_hp = roundi(float(enemy_max_hp) * (1.0 + float(astral_floor) * 0.14))
  _enemy_unit_hp = maxi(1, enemy_max_hp)
