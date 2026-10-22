@@ -242,7 +242,9 @@ func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
  if target < 0:
   return
  hero_hot_ticks[target] = clampi(int(skill.get("hot_ticks", 4)), 1, 4)
- hero_hot_amount[target] = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075))))
+ var class_id: int = int(team_formation.class_ids[_caster]) if team_formation != null else 9
+ var hot_modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("hot", 1.0))
+ hero_hot_amount[target] = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier))
  last_ability = "Erneuerung (HoT)"
 
 func _tick_heal_over_time() -> void:
@@ -437,11 +439,15 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   return
  var healing: float = float(skill.get("heal", 0.0))
  if role == 2 and healing > 0.0:
+  var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
+  healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
  var power: float = float(skill.get("power", 0.0))
  if power > 0.0:
   var base_damage: int = 35 + current_level * 6
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
+  if role == 2 and team_formation != null:
+   damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
   _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
