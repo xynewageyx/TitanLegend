@@ -53,7 +53,7 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         text = source("battle_manager.gd")
         self.assertIn("SaveManager.get_saved_battle_progress()", text)
         self.assertIn("current_level = maxi(1, saved_progress.x)", text)
-        self.assertIn("current_wave = clampi(saved_progress.y, 1, WAVE_ENEMY_COUNTS.size())", text)
+        self.assertIn("current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)", text)
         self.assertIn("SaveManager.get_saved_skill_choices()", text)
         self.assertIn("SaveManager.get_saved_skill_loadouts()", text)
         self.assertIn('add_to_group("battle_manager")', text)
@@ -63,6 +63,24 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         wave = text.split("func spawn_wave()", 1)[1].split("\nfunc ", 1)[0]
         self.assertNotIn("_reset_hero_health()", wave)
         self.assertIn("SaveManager.save_game()", text.split("func finish_wave()", 1)[1])
+
+    def test_original_ten_wave_boss_flow(self):
+        text = source("battle_manager.gd")
+        self.assertIn("const BOSS_WAVE: int = 10", text)
+        self.assertIn("is_boss = astral_active or current_wave == BOSS_WAVE", text)
+        self.assertIn("enemies_remaining = 1 if is_boss else mini(2 + current_wave, 7)", text)
+        self.assertIn("_spawn_enemy_visuals()", text)
+        self.assertIn("enemy_spawn_node.add_child(mob)", text)
+        self.assertNotIn("WAVE_ENEMY_COUNTS", text)
+
+    def test_astral_round_trip_and_rewards(self):
+        text = source("battle_manager.gd")
+        self.assertIn("world_progress = Vector2i(current_level, current_wave)", text)
+        self.assertIn("current_level = world_progress.x", text)
+        self.assertIn("current_wave = world_progress.y", text)
+        self.assertIn("GameManager.add_tickets(10)", text)
+        self.assertIn("GameManager.add_gold(gold_reward)", text)
+        self.assertIn("SaveManager.get_saved_astral()", text)
 
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
