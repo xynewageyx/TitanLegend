@@ -399,6 +399,11 @@ func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
   return false
  if choice == 8 and role not in [0, 2]:
   return false
+ if role == 2 and choice == 8:
+  for i in range(4):
+   if hero_hp[i] > 0 and hero_hp[i] < hero_max_hp[i]:
+    return true
+  return false
  if choice == 7:
   return is_boss and boss_cast_ticks > 0 and boss_cc_required > 0
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
