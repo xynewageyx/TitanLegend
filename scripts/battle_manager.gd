@@ -312,6 +312,22 @@ func _resolve_boss_cast() -> void:
  boss_cc_progress = 0
  boss_cc_required = 0
 
+func _boss_phase_two_tick() -> void:
+ if not battle_active or not is_boss or not boss_buff_active:
+  return
+ match boss_buff_kind:
+  "heal":
+   if skill_tick % 7 == 0:
+    enemy_hp = mini(enemy_max_hp, enemy_hp + maxi(1, roundi(float(enemy_max_hp) * 0.02)))
+    last_ability = "Boss: Regeneration"
+  "attack":
+   if skill_tick % 6 == 0:
+    var target: int = _choose_routine_enemy_target()
+    if target >= 0:
+     _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.05)), [target])
+     last_ability = "Boss: Wutschlag"
+  # Defense is the passive armored phase-two ability.
+
 func _attack_tick() -> void:
  if not battle_active:
   return
@@ -347,6 +363,7 @@ func _attack_tick() -> void:
  else:
   _damage_heroes(damage, [target])
  _boss_minions_attack()
+ _boss_phase_two_tick()
  _refresh_tank_defense_visuals()
  battle_status_changed.emit()
 
