@@ -9,7 +9,7 @@ signal battle_status_changed
 
 const BOSS_TIME_LIMIT: float = 60.0
 const ROLE_ATTACK_INTERVALS: Array[float] = [1.25, 0.75, 1.5]
-const WAVE_ENEMY_COUNTS: Array[int] = [2, 5, 7]
+const BOSS_WAVE: int = 10
 var astral_active: bool = false
 var astral_floor: int = 1
 var astral_marks: int = 0
@@ -55,7 +55,11 @@ func _ready() -> void:
   team_formation.walking_finished.connect(_on_walking_finished)
  var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
  current_level = maxi(1, saved_progress.x)
- current_wave = clampi(saved_progress.y, 1, WAVE_ENEMY_COUNTS.size())
+ current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)
+ world_progress = saved_progress
+ var astral_progress: Dictionary = SaveManager.get_saved_astral()
+ astral_floor = maxi(1, int(astral_progress.get("floor", 1)))
+ astral_marks = maxi(0, int(astral_progress.get("marks", 0)))
  skill_choices = SaveManager.get_saved_skill_choices()
  skill_loadouts = SaveManager.get_saved_skill_loadouts()
  add_to_group("battle_manager")
@@ -265,13 +269,16 @@ func buy_astral_reward() -> bool:
  if astral_marks < 30:
   return false
  astral_marks -= 30
- GameManager.reincarnation_tickets += 10
+ GameManager.add_tickets(10)
+ SaveManager.save_game()
  battle_status_changed.emit()
  return true
 
 func start_next_encounter() -> void:
- if team_formation == null or _finishing:
+ if _finishing:
   return
+ if team_hp <= 0:
+  _reset_hero_health()
  clear_enemies()
  battle_active = false
  if team_formation.has_method("start_walking"):
@@ -293,13 +300,14 @@ func spawn_wave() -> void:
  hero_attack_elapsed.fill(0.0)
  _enemy_attack_elapsed = 0.0
  defeat_reason = ""
- is_boss = not astral_active and current_level % 10 == 0 and current_wave == 1
- is_fusion_boss = is_boss and current_level % 100 == 0
- enemies_remaining = 1 if is_boss else WAVE_ENEMY_COUNTS[clampi(current_wave - 1, 0, 2)]
- enemy_max_hp = maxi(1, current_level * 100 * enemies_remaining * (4 if is_boss else 1))
- if is_fusion_boss:
-  enemy_max_hp *= 2
- enemy_hp = enemy_max_hp
+ is_boss = astral_active or current_wave == BOSS_WAVE
+ is_fusion_boss = is_boss and current_level % 10 == 0
+ enemies_remaining = 1 if is_boss else mini(2 + current_wave, 7)
+ enemy_max_hp = (220 + current_level * 65) * (8 if is_fusion_boss else (5 if is_boss else 1))
+ if astral_active:
+  enemy_max_hp = roundi(float(enemy_max_hp) * (1.0 + float(astral_floor) * 0.14))
+ enemy_hp = enemy_max_hp * enemies_remaining
+ _spawn_enemy_visuals()
  battle_active = true
  battle_status_changed.emit()
 
@@ -319,20 +327,40 @@ func finish_wave() -> void:
  battle_active = false
  _finishing = true
  if astral_active:
-  astral_marks += 5
+  astral_marks += 5 + mini(astral_floor, 50)
   astral_floor += 1
+  current_level = astral_floor
+  current_wave = BOSS_WAVE
  elif is_boss:
+  GameManager.character_level += 1
   current_level += 1
   current_wave = 1
+  if biome_manager != null:
+   biome_manager.call("update_biome_from_stage", current_level)
  else:
   current_wave += 1
-  if current_wave > WAVE_ENEMY_COUNTS.size():
-   current_wave = 1
-   current_level += 1
+  # Wave ten is always the boss; do not advance stage early.
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
  call_deferred("start_next_encounter")
+
+func _spawn_enemy_visuals() -> void:
+ if enemy_spawn_node == null:
+  return
+ for i in range(enemies_remaining):
+  var mob := Node3D.new()
+  mob.name = "Boss" if is_boss else "WaveMob" + str(i + 1)
+  mob.position = Vector3((float(i) - float(enemies_remaining - 1) / 2.0) * 1.4, 0.0, -float(i % 2))
+  enemy_spawn_node.add_child(mob)
+  enemy_visuals.append(mob)
+  var tint := Color("#b84d5b") if is_boss else Color("#779f57")
+  if biome_manager != null:
+   tint = biome_manager.COLORS[biome_manager.current_biome]
+  var size := 2.2 if is_boss else 0.65
+  VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
+  VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
+  VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
 
 func clear_enemies() -> void:
  for enemy in enemy_visuals:
