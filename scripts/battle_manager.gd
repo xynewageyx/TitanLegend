@@ -232,43 +232,112 @@ func _attack_tick() -> void:
  _refresh_tank_defense_visuals()
  battle_status_changed.emit()
 
-func _activate_tank_skill(slot: int) -> void:
- # Only the hero currently occupying the active tank role may cast these.
- if slot != _living_tank_slot():
+# Normal hits charge equipped skills. Skill cost is capped at 5 hits.
+# Each hero rotates through four equipped skill slots so no slot is starved.
+const MAX_SKILL_HITS: int = 5
+var skill_hit_charge: Array[int] = [0, 0, 0, 0]
+var next_skill_slot: Array[int] = [0, 0, 0, 0]
+
+func _skill_hit_cost(role: int, choice: int) -> int:
+ if role == 0 and choice == 8:
+  return 3 # Spott
+ if role == 0 and choice == 9:
+  return 5 # Gruppenschaden abfangen (strongest defensive skill)
+ match choice:
+  0: return 2
+  1: return 3
+  2: return 4
+  3: return 2
+  4: return 4
+  5: return 5 # Bossbrecher
+  6: return 3
+  7: return 4 # Unterbrechung (boss only)
+ return MAX_SKILL_HITS
+
+func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
+ if role == 0 and slot != _living_tank_slot():
+  return false
+ if choice in [8, 9] and role != 0:
+  return false
+ if choice == 7:
+  return is_boss and boss_cast_ticks > 0
+ var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
+ if float(skill.get("heal", 0.0)) > 0.0 and role == 2:
+  for i in range(4):
+   if hero_hp[i] > 0 and hero_hp[i] < hero_max_hp[i]:
+    return true
+  return false
+ return true
+
+func _try_cast_charged_skill(slot: int, role: int) -> void:
+ var loadout: Array = skill_loadouts[slot]
+ if loadout.is_empty():
   return
- # Skill timing is based on enemy attack ticks, never on real-world time.
- if skill_tick > 0 and skill_tick % 6 == 0 and tank_taunt_until[slot] < skill_tick:
+ # Fixed order, circular across the player's four chosen skill slots.
+ for offset in range(loadout.size()):
+  var index: int = (next_skill_slot[slot] + offset) % loadout.size()
+  var choice: int = int(loadout[index])
+  if not _skill_is_usable(slot, role, choice):
+   continue
+  var required_hits: int = _skill_hit_cost(role, choice)
+  if skill_hit_charge[slot] < required_hits:
+   continue
+  skill_hit_charge[slot] = 0
+  next_skill_slot[slot] = (index + 1) % loadout.size()
+  _execute_equipped_skill(slot, role, choice)
+  return
+
+func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
+ if role == 0 and choice == 8:
   tank_taunt_until[slot] = skill_tick + 3
   last_ability = "Spott"
   if team_formation != null:
    var motion: Node = team_formation.heroes[slot].get_node_or_null("HeroCombatMotion")
    if motion != null and motion.has_method("play_tank_skill_fx"):
     motion.call("play_tank_skill_fx", 0)
- if skill_tick > 0 and skill_tick % 9 == 0 and tank_intercept_until[slot] < skill_tick:
+  return
+ if role == 0 and choice == 9:
   tank_intercept_until[slot] = skill_tick + 4
   last_ability = "Gruppenschaden abfangen"
   _refresh_tank_defense_visuals()
+  return
+ if choice == 7:
+  boss_cast_ticks = 0
+  boss_interrupt_message = "Boss unterbrochen"
+  last_ability = "Unterbrechung"
+  return
+ var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
+ last_ability = str(skill.get("name", "Skill"))
+ var healing: float = float(skill.get("heal", 0.0))
+ if role == 2 and healing > 0.0:
+  _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
+ var power: float = float(skill.get("power", 0.0))
+ if power > 0.0:
+  var base_damage: int = 35 + current_level * 6
+  var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
+  enemy_hp = maxi(0, enemy_hp - maxi(1, damage))
+  _update_enemy_casualties()
+  if enemy_hp <= 0:
+   finish_wave()
 
 func _hero_attack(slot: int, role: int) -> void:
  if not battle_active or enemy_hp <= 0:
   return
  if team_formation != null:
   team_formation.play_attack_for_hero(slot)
- if role == 2:
-  _heal_heroes(7 + current_level * 2, skill_tick % 3 == 0)
-  last_ability = "Heilung"
+ # Every living hero lands a normal hit to charge their next skill.
+ var normal_damage: int = 35 + current_level * 6
+ var multiplier: float = TitanSkillSystem.damage_multiplier(role)
+ var critical: bool = randf() < 0.10
+ var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * (1.6 if critical else 1.0)))
+ enemy_hp = maxi(0, enemy_hp - actual_damage)
+ _update_enemy_casualties()
+ last_ability = "Kritischer Treffer" if critical else "Standardangriff"
+ skill_hit_charge[slot] = mini(MAX_SKILL_HITS, skill_hit_charge[slot] + 1)
+ if enemy_hp <= 0:
+  finish_wave()
  else:
-  var base_damage: int = 35 + current_level * 6
-  if role == 0:
-   base_damage = roundi(float(base_damage) * 0.6)
-  var critical: bool = randf() < 0.10
-  enemy_hp = maxi(0, enemy_hp - roundi(float(base_damage) * (1.6 if critical else 1.0)))
-  _update_enemy_casualties()
-  last_ability = "Kritischer Treffer" if critical else "Standardangriff"
-  if role == 0:
-   _activate_tank_skill(slot)
-  if enemy_hp <= 0:
-   finish_wave()
+  _try_cast_charged_skill(slot, role)
  battle_status_changed.emit()
 
 func set_skill_loadout(hero: int, skill_slot: int, ability: int) -> void:
