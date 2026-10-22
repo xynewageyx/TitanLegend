@@ -313,14 +313,14 @@ func _resolve_boss_cast() -> void:
  elif boss_cast_kind == "single":
   var target: int = _choose_routine_enemy_target()
   if target >= 0:
-   _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * (0.18 if is_fusion_boss else 0.14))), [target])
+   _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * (0.18 if is_fusion_boss else 0.14) * TitanCombatBalance.enemy_damage_scale(current_level))), [target])
   last_ability = "Boss: Einzelziel"
  elif boss_cast_kind == "aoe":
   var targets: Array[int] = []
   for i in range(hero_hp.size()):
    if hero_hp[i] > 0:
     targets.append(i)
-  _damage_heroes(maxi(1, roundi(float(hero_max_hp[0]) * (0.13 if is_fusion_boss else 0.10))), targets)
+  _damage_heroes(maxi(1, roundi(float(hero_max_hp[0]) * (0.13 if is_fusion_boss else 0.10) * TitanCombatBalance.enemy_damage_scale(current_level))), targets)
   last_ability = "Boss: Flaechenschaden"
  boss_cast_kind = ""
  boss_cc_progress = 0
@@ -338,7 +338,7 @@ func _boss_phase_two_tick() -> void:
    if skill_tick % 6 == 0:
     var target: int = _choose_routine_enemy_target()
     if target >= 0:
-     _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.05)), [target])
+     _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.05 * TitanCombatBalance.enemy_damage_scale(current_level))), [target])
      last_ability = "Boss: Wutschlag"
   # Defense is the passive armored phase-two ability.
 
@@ -360,7 +360,7 @@ func _attack_tick() -> void:
   _on_team_defeat("normal")
   return
  # Scale routine damage to hero durability; avoid instant kills at high stages.
- var damage: int = maxi(1, roundi(float(hero_max_hp[target]) * 0.04))
+ var damage: int = maxi(1, roundi(float(hero_max_hp[target]) * 0.04 * TitanCombatBalance.enemy_damage_scale(current_level)))
  if is_boss:
   damage = roundi(float(damage) * (1.9 if is_fusion_boss else 1.5))
   if boss_buff_active and boss_buff_kind == "attack":
@@ -551,7 +551,7 @@ func _boss_minions_attack() -> void:
   var target: int = _choose_routine_enemy_target()
   if target >= 0:
    # Each add deals ~2% of target max HP per enemy attack tick.
-   _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.02)), [target])
+   _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.02 * TitanCombatBalance.enemy_damage_scale(current_level))), [target])
 
 func _hero_attack(slot: int, role: int) -> void:
  if not battle_active or enemy_hp <= 0:
@@ -675,6 +675,8 @@ func spawn_wave() -> void:
   # Small archetype differences, not multiplying HP every time elements repeat.
   var variant_hp_scale: Array[float] = [1.08, 0.96, 0.94, 1.05]
   enemy_max_hp = maxi(1, roundi(float(enemy_max_hp) * variant_hp_scale[boss_variant_id]))
+ # Area progression raises enemy durability from stage 101 onward.
+ enemy_max_hp = maxi(1, roundi(float(enemy_max_hp) * TitanCombatBalance.enemy_hp_scale(current_level)))
  if astral_active:
   enemy_max_hp = roundi(float(enemy_max_hp) * (1.0 + float(astral_floor) * 0.14))
  _enemy_unit_hp = maxi(1, enemy_max_hp)
