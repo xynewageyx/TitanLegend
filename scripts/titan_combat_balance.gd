@@ -10,7 +10,7 @@ static func boss_variant(stage: int) -> int:
 
 static func has_boss_minions(stage: int, fusion: bool) -> bool:
  # Midgame begins at stage 51. Not every encounter uses the extra enemies.
- return stage >= 51 and (fusion or posmod(int((stage - 1) / 10), 3) == 1)
+ return stage >= 51 and (fusion or posmod(int((stage - 1) / 10), 3) == 2)
 
 static func boss_gain_type(variant: int) -> String:
  return str(BOSS_SPECIAL[posmod(variant, BOSS_SPECIAL.size())])
