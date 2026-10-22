@@ -556,12 +556,23 @@ func spawn_wave() -> void:
  defeat_reason = ""
  is_boss = astral_active or current_wave == BOSS_WAVE
  is_fusion_boss = is_boss and current_level % 10 == 0
+ boss_variant_id = TitanCombatBalance.boss_variant(current_level)
+ boss_title = TitanCombatBalance.BOSS_TITLES[boss_variant_id]
+ boss_buff_active = false
+ boss_buff_kind = TitanCombatBalance.boss_gain_type(boss_variant_id)
+ boss_minion_hp = [0, 0]
  enemies_remaining = 1 if is_boss else mini(2 + current_wave, 7)
  enemy_max_hp = (220 + current_level * 65) * (8 if is_fusion_boss else (5 if is_boss else 1))
  if astral_active:
   enemy_max_hp = roundi(float(enemy_max_hp) * (1.0 + float(astral_floor) * 0.14))
  _enemy_unit_hp = maxi(1, enemy_max_hp)
  enemy_hp = _enemy_unit_hp * enemies_remaining
+ if is_boss and TitanCombatBalance.has_boss_minions(current_level, is_fusion_boss):
+  # Each of the two adds owns 12 percent of boss health.
+  boss_minion_max_hp = maxi(1, roundi(float(enemy_max_hp) * 0.12))
+  boss_minion_hp = [boss_minion_max_hp, boss_minion_max_hp]
+ else:
+  boss_minion_max_hp = 0
  _spawn_enemy_visuals()
  battle_active = true
  battle_status_changed.emit()
