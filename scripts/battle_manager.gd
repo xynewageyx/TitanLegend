@@ -23,6 +23,15 @@ var battle_active: bool = false
 var is_boss: bool = false
 var is_fusion_boss: bool = false
 var enemy_visuals: Array[Node3D] = []
+var boss_variant_id: int = 0
+var boss_title: String = ""
+var boss_minion_hp: Array[int] = [0, 0]
+var boss_minion_max_hp: int = 0
+var boss_minion_visuals: Array[Node3D] = []
+var boss_buff_active: bool = false
+var boss_buff_kind: String = ""
+var boss_resistance: float = 0.18
+
 var attack_timer: Timer
 var hero_attack_elapsed: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var boss_elapsed: float = 0.0
