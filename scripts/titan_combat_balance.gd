@@ -5,6 +5,20 @@ class_name TitanCombatBalance
 const BOSS_TITLES := ["Waechter", "Sturmrufer", "Runenhueter", "Urtitan"]
 const BOSS_SPECIAL := ["attack", "defense", "heal", "attack"]
 # Existing biome index already determines the element for the entire zone.
+# 12 areas, 100 stages each. Area 1 is the baseline.
+# The modest nonlinear curve makes repeated elements tougher without changing
+# their element, boss identity, skill order or the 60-second boss limit.
+static func area_number(stage: int) -> int:
+ return clampi(int((maxi(1, stage) - 1) / 100) + 1, 1, 12)
+
+static func enemy_hp_scale(stage: int) -> float:
+ var completed: float = float(area_number(stage) - 1)
+ return 1.0 + 0.045 * completed + 0.003 * completed * completed
+
+static func enemy_damage_scale(stage: int) -> float:
+ var completed: float = float(area_number(stage) - 1)
+ return 1.0 + 0.022 * completed + 0.0015 * completed * completed
+
 static func boss_variant(stage: int) -> int:
  return posmod(int(posmod(maxi(1, stage) - 1, 100) / 10), BOSS_TITLES.size())
 
