@@ -376,6 +376,8 @@ func _attack_tick() -> void:
    _damage_heroes(damage, [target])
  else:
   _damage_heroes(damage, [target])
+ if not battle_active:
+  return
  _boss_minions_attack()
  _boss_phase_two_tick()
  _refresh_tank_defense_visuals()
@@ -562,6 +564,8 @@ func _hero_attack(slot: int, role: int) -> void:
  var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
  var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * (1.6 if critical else 1.0)))
  _deal_damage_to_enemy(slot, actual_damage)
+ if not battle_active:
+  return
  last_ability = "Kritischer Treffer" if critical else "Standardangriff"
  skill_hit_charge[slot] = mini(MAX_SKILL_HITS, skill_hit_charge[slot] + 1)
  if battle_active and enemy_hp > 0:
@@ -660,6 +664,8 @@ func spawn_wave() -> void:
  is_fusion_boss = is_boss and current_level % 10 == 0
  boss_variant_id = TitanCombatBalance.boss_variant(current_level)
  boss_title = TitanCombatBalance.BOSS_TITLES[boss_variant_id]
+ # Four archetypes share their zone element but have distinct resistances.
+ boss_resistance = TitanCombatBalance.boss_resistance(boss_variant_id)
  boss_buff_active = false
  boss_buff_kind = TitanCombatBalance.boss_gain_type(boss_variant_id)
  boss_minion_hp = [0, 0]
