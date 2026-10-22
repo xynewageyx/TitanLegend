@@ -49,6 +49,8 @@ var skill_choices: Array[int] = [0, 0, 0, 0]
 var _enemy_attack_elapsed: float = 0.0
 var _wave_hp_pool: int = 0
 var _finishing: bool = false
+var _retry_pending: bool = false
+var _enemy_unit_hp: int = 1
 
 func _ready() -> void:
  if team_formation != null and team_formation.has_signal("walking_finished"):
@@ -230,6 +232,7 @@ func _hero_attack(slot: int, role: int) -> void:
    base_damage = roundi(float(base_damage) * 0.6)
   var critical: bool = randf() < 0.10
   enemy_hp = maxi(0, enemy_hp - roundi(float(base_damage) * (1.6 if critical else 1.0)))
+  _update_enemy_casualties()
   last_ability = "Kritischer Treffer" if critical else "Standardangriff"
   if enemy_hp <= 0:
    finish_wave()
@@ -317,7 +320,8 @@ func spawn_wave() -> void:
  enemy_max_hp = (220 + current_level * 65) * (8 if is_fusion_boss else (5 if is_boss else 1))
  if astral_active:
   enemy_max_hp = roundi(float(enemy_max_hp) * (1.0 + float(astral_floor) * 0.14))
- enemy_hp = enemy_max_hp * enemies_remaining
+ _enemy_unit_hp = maxi(1, enemy_max_hp)
+ enemy_hp = _enemy_unit_hp * enemies_remaining
  _spawn_enemy_visuals()
  battle_active = true
  battle_status_changed.emit()
@@ -326,11 +330,23 @@ func _boss_time_expired() -> void:
  _on_team_defeat("boss_finisher")
 
 func _on_team_defeat(reason: String) -> void:
+ if _retry_pending:
+  return
  battle_active = false
  defeat_reason = reason
+ _retry_pending = true
  if team_formation != null:
   team_formation.play_team_defeat()
  battle_status_changed.emit()
+ # Restart the same wave, not a later one; no automatic role reassignment.
+ get_tree().create_timer(2.0).timeout.connect(_retry_defeated_encounter)
+
+func _retry_defeated_encounter() -> void:
+ _retry_pending = false
+ if not is_inside_tree() or battle_active:
+  return
+ _reset_hero_health()
+ start_next_encounter()
 
 func finish_wave() -> void:
  if not battle_active or _finishing:
@@ -359,6 +375,17 @@ func finish_wave() -> void:
  SaveManager.save_game()
  battle_status_changed.emit()
  call_deferred("start_next_encounter")
+
+func _update_enemy_casualties() -> void:
+ if is_boss or _enemy_unit_hp <= 0:
+  return
+ var survivors: int = ceili(float(enemy_hp) / float(_enemy_unit_hp))
+ survivors = clampi(survivors, 0, enemy_visuals.size())
+ for index in range(survivors, enemy_visuals.size()):
+  var mob: Node3D = enemy_visuals[index]
+  if is_instance_valid(mob):
+   mob.visible = false
+ enemies_remaining = survivors
 
 func _spawn_enemy_visuals() -> void:
  if enemy_spawn_node == null:
