@@ -640,6 +640,7 @@ func spawn_wave() -> void:
  else:
   boss_minion_max_hp = 0
  _spawn_enemy_visuals()
+ _spawn_boss_minion_visuals()
  battle_active = true
  battle_status_changed.emit()
 
@@ -721,7 +722,26 @@ func _spawn_enemy_visuals() -> void:
   VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
   VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
 
+func _spawn_boss_minion_visuals() -> void:
+ if not is_boss or boss_minion_max_hp <= 0 or enemy_spawn_node == null:
+  return
+ var tint: Color = Color("#7dbac1")
+ if biome_manager != null and biome_manager.current_biome >= 0:
+  tint = biome_manager.COLORS[biome_manager.current_biome]
+ for i in range(2):
+  var companion := Node3D.new()
+  companion.name = "BossMinion%d" % [i + 1]
+  companion.position = Vector3(-2.4 if i == 0 else 2.4, 0.0, -0.8)
+  enemy_spawn_node.add_child(companion)
+  boss_minion_visuals.append(companion)
+  VisualFactory.sphere(companion, 0.72, Vector3(0, 0.8, 0), tint.lightened(0.18))
+  VisualFactory.sphere(companion, 0.23, Vector3(0, 1.44, -0.25), tint.darkened(0.3))
+
 func clear_enemies() -> void:
+ for companion in boss_minion_visuals:
+  if is_instance_valid(companion):
+   companion.queue_free()
+ boss_minion_visuals.clear()
  for enemy in enemy_visuals:
   if is_instance_valid(enemy):
    enemy.queue_free()
