@@ -38,7 +38,7 @@ class ImportedCoreRegressionTests(unittest.TestCase):
 
     def test_tank_target_priority_matches_update_168(self):
         text = source("battle_manager.gd")
-        body = text.split("func _choose_routine_enemy_target()", 1)[1].split("\\nfunc ", 1)[0]
+        body = text.split("func _choose_routine_enemy_target()", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn("tank_taunt_until[active_tank] >= skill_tick", body)
         self.assertIn("randf() < 0.65", body)
         self.assertIn("survivors.erase(active_tank)", body)
