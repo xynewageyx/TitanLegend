@@ -13,6 +13,8 @@ func _ready() -> void:
  add_child(terrain)
  set_biome(BiomeType.NATURE)
 func update_biome_from_stage(stage: int) -> void:
+ # 12 areas x 100 stages; ten elements intentionally repeat in areas 11 and 12.
+ # Later areas remain distinct through stage-based enemy and boss progression.
  var index: int = (floori(float(stage - 1) / 100.0) + 3) % 10
  set_biome(index)
 func set_biome(biome: int) -> void:
