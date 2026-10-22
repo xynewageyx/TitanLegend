@@ -75,6 +75,9 @@ func _ready() -> void:
  current_level = maxi(1, saved_progress.x)
  current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)
  world_progress = saved_progress
+ # Restore the area's element before spawning bosses, including save-game loads.
+ if biome_manager != null:
+  biome_manager.call("update_biome_from_stage", current_level)
  var astral_progress: Dictionary = SaveManager.get_saved_astral()
  astral_floor = maxi(1, int(astral_progress.get("floor", 1)))
  astral_marks = maxi(0, int(astral_progress.get("marks", 0)))
