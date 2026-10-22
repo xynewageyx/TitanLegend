@@ -359,7 +359,7 @@ func _refresh(_unused: int = 0) -> void:
     element_name = str(biome_manager.NAMES[biome_manager.current_biome])
    boss_name.text = ("FUSIONSTITAN – " if battle_manager.is_fusion_boss else "") + element_name + "-Titan"
    if battle_manager.boss_cast_ticks > 0:
-    boss_name.text = "⚠ CAST: " + battle_manager.boss_cast_name
+    boss_name.text = "⚠ " + battle_manager.boss_cast_name + (" | CC %d/%d" % [battle_manager.boss_cc_progress, battle_manager.boss_cc_required] if battle_manager.boss_cc_required > 0 else " | Kein Pflicht-CC")
    elif battle_manager.boss_interrupt_message != "":
     boss_name.text = "✓ " + battle_manager.boss_interrupt_message
    boss_hp.value = 100.0 * float(battle_manager.enemy_hp) / float(maxi(1, battle_manager.enemy_max_hp))
