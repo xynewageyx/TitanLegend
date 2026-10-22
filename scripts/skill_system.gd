@@ -19,6 +19,8 @@ const SKILLS: Array[Dictionary] = [
 static func skill_for_role(role: int, choice: int) -> Dictionary:
  if role == 0 and choice == 8:
   return {"name":"Spott", "cooldown":10, "power":0.0, "aoe":false, "heal":0.0, "guard":0.10}
+ if role == 2 and choice == 8:
+  return {"name":"Erneuerung", "power":0.0, "aoe":false, "heal":0.0, "hot":0.075, "hot_ticks":4}
  if role == 0 and choice == 9:
   return {"name":"Gruppenschaden abfangen", "cooldown":12, "power":0.0, "aoe":false, "heal":0.0, "guard":0.0}
  if choice == 3:
