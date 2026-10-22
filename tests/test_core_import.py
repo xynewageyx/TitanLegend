@@ -224,6 +224,23 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("floori(float(stage - 1) / 100.0)", biome)
         self.assertIn("% 10", biome)
 
+    def test_boss_variants_keep_one_element_and_different_silhouettes(self):
+        battle = source("battle_manager.gd")
+        balance = source("titan_combat_balance.gd")
+        self.assertIn("boss_resistance = TitanCombatBalance.boss_resistance(boss_variant_id)", battle)
+        self.assertIn("static func boss_resistance(variant: int)", balance)
+        self.assertIn("const RESISTANCES:", balance)
+        self.assertIn("match boss_variant_id:", battle)
+        self.assertIn("tint = biome_manager.COLORS[biome_manager.current_biome]", battle)
+        self.assertIn("VisualFactory.cylinder(mob", battle)
+        self.assertIn("VisualFactory.box(mob", battle)
+
+    def test_no_hero_attack_after_encounter_finishes(self):
+        battle = source("battle_manager.gd")
+        hero_attack = battle.split("func _hero_attack(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("_deal_damage_to_enemy(slot, actual_damage)", hero_attack)
+        self.assertIn("if not battle_active:", hero_attack)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
