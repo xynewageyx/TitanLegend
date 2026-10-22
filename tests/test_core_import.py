@@ -220,6 +220,7 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("posmod(maxi(1, stage) - 1, 100)", balance)
         self.assertIn("match boss_variant_id:", battle)
         self.assertIn("variant_hp_scale", battle)
+        self.assertIn("[1.08, 0.96, 0.94, 1.05]", battle)
         self.assertIn("boss_cc_required = 3 if is_fusion_boss else 2", battle)
         self.assertIn("floori(float(stage - 1) / 100.0)", biome)
         self.assertIn("% 10", biome)
