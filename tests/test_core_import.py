@@ -187,7 +187,8 @@ class ImportedCoreRegressionTests(unittest.TestCase):
     def test_midgame_boss_minions_and_second_phase(self):
         boss = source("battle_manager.gd")
         balance = source("titan_combat_balance.gd")
-        self.assertIn("stage >= 51", balance)
+        self.assertIn("stage >= 401", balance)
+        self.assertIn("static func has_boss_minions(stage: int, fusion: bool)", balance)
         self.assertIn("boss_minion_hp = [boss_minion_max_hp, boss_minion_max_hp]", boss)
         self.assertIn("func _spawn_boss_minion_visuals()", boss)
         self.assertIn("func _boss_minions_attack()", boss)
