@@ -12,6 +12,7 @@ const POSITIONS := [Vector3(-1.1, 0, -1.7), Vector3(-1.6, 0, 1.0), Vector3(0.0, 
 
 var class_ids: Array[int] = [0, 6, 4, 9]
 var role_ids: Array[int] = [0, 1, 1, 2]
+var pet_element_ids: Array[int] = [0, 1, 2, 3]
 var talent_ranks: Array = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
 var heroes: Array[Node3D] = []
@@ -28,6 +29,7 @@ func _ready() -> void:
  add_to_group("talent_team")
  _load_classes()
  _load_roles()
+ _load_pet_elements()
  talent_ranks = SaveManager.get_saved_talents()
  talent_branches = SaveManager.get_saved_talent_branches()
  create_team()
@@ -49,6 +51,26 @@ func _process(delta: float) -> void:
   var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
   if pet != null:
    pet.position.y = 0.12 + 0.1 * sin(animation_clock * 3.0 + float(i))
+
+func _load_pet_elements() -> void:
+ if not FileAccess.file_exists("user://pet_elements.json"):
+  return
+ var file := FileAccess.open("user://pet_elements.json", FileAccess.READ)
+ if file == null:
+  return
+ var data: Variant = JSON.parse_string(file.get_as_text())
+ if data is Array and data.size() == 4:
+  for i in range(4):
+   pet_element_ids[i] = clampi(int(data[i]), 0, 9)
+
+func set_pet_element(slot: int, element: int) -> void:
+ if slot < 0 or slot >= 4:
+  return
+ pet_element_ids[slot] = clampi(element, 0, 9)
+ var file := FileAccess.open("user://pet_elements.json", FileAccess.WRITE)
+ if file != null:
+  file.store_string(JSON.stringify(pet_element_ids))
+ team_changed.emit()
 
 func create_team() -> void:
  for hero in heroes:
