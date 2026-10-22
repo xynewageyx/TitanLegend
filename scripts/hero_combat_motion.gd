@@ -25,6 +25,9 @@ var right_leg: Node3D
 var magic_flash: MeshInstance3D
 var attack_duration: float = 0.42
 var attack_variant: int = 0
+var skill_flash_remaining: float = 0.0
+var skill_flash_duration: float = 0.55
+var skill_flash: MeshInstance3D
 var defense_ring: Node3D
 var defense_segments: Array[MeshInstance3D] = []
 var class_fx_color: Color = Color("#f8d98e")
@@ -74,6 +77,10 @@ func configure(hero_class: int) -> void:
  var flash_root: Node3D = _part(self, "AttackFlash", Vector3(0.0, 1.45, -0.7))
  magic_flash = VisualFactory.sphere(flash_root, class_fx_size, Vector3.ZERO, class_fx_color)
  magic_flash.visible = false
+ skill_flash = VisualFactory.sphere(flash_root, 0.45, Vector3(0.0, 0.18, -0.15), Color("#ffe59a"))
+ skill_flash.visible = false
+ skill_flash.material_override = StandardMaterial3D.new()
+ (skill_flash.material_override as StandardMaterial3D).shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
  defense_ring = _part(self, "TankDefenseRing", Vector3(0.0, 0.8, 0.0))
  for i in range(10):
   var angle: float = float(i) * TAU / 10.0
@@ -85,6 +92,25 @@ func play_attack() -> void:
  attack_variant = (attack_variant + 1) % 2
  attack_duration = 0.34 if class_id in [2, 4, 10] else (0.52 if class_id in [0, 1] else 0.42)
  attack_remaining = attack_duration
+
+func play_skill_cast(role: int, choice: int) -> void:
+ # Distinct skill pulse; passive pets never cast or attack.
+ skill_flash_remaining = skill_flash_duration
+ play_attack()
+ if skill_flash == null:
+  return
+ var tint := Color("#f3ba62")
+ if role == 2:
+  tint = Color("#65e9a7")
+ elif role == 1:
+  tint = Color("#b498ff")
+ if role == 0 and choice == 9:
+  tint = Color("#5cbaff")
+ elif role == 0 and choice == 8:
+  tint = Color("#ff9650")
+ var material: StandardMaterial3D = skill_flash.material_override as StandardMaterial3D
+ if material != null:
+  material.albedo_color = tint
 
 func play_hit(critical: bool = false) -> void:
  hit_critical = critical
@@ -122,6 +148,12 @@ func _process(delta: float) -> void:
  dodge_remaining = maxf(0.0, dodge_remaining - delta)
  element_remaining = maxf(0.0, element_remaining - delta)
  defense_remaining = maxf(0.0, defense_remaining - delta)
+ skill_flash_remaining = maxf(0.0, skill_flash_remaining - delta)
+ if skill_flash != null:
+  skill_flash.visible = skill_flash_remaining > 0.0
+  if skill_flash.visible:
+   var pulse: float = skill_flash_remaining / skill_flash_duration
+   skill_flash.scale = Vector3.ONE * (0.8 + (1.0 - pulse) * 2.2)
  var walking: bool = false
  var hero: Node = get_parent()
  if hero != null:
