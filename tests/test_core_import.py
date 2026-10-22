@@ -102,6 +102,16 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertNotIn("current_wave +=", retry)
         self.assertNotIn("set_role(", retry)
 
+    def test_individual_hero_hp_bars_are_real(self):
+        text = source("team_formation.gd")
+        self.assertIn('_create_hero_health_bar(hero)', text)
+        self.assertIn('bar.name = "HeroHealthBar"', text)
+        self.assertIn('value_label.name = "HPValue"', text)
+        self.assertIn('fill.scale.x = maxf(0.0001, ratio)', text)
+        self.assertIn('hp_label.text = "%d / %d"', text)
+        self.assertIn('func _refresh_health_after_rebuild()', text)
+        self.assertNotIn('pass # Core combat health is owned by BattleManager.', text)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
