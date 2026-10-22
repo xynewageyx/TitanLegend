@@ -148,6 +148,18 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("battle_manager.next_skill_slot[hero]", menu)
         self.assertIn("battle_manager.skill_hit_charge[hero]", menu)
 
+    def test_update_171_skill_bars_and_fx(self):
+        menu = source("skill_menu.gd")
+        battle = source("battle_manager.gd")
+        motion = source("hero_combat_motion.gd")
+        self.assertIn("var charge_bars: Array[ProgressBar]", menu)
+        self.assertIn("var charge_labels: Array[Label]", menu)
+        self.assertIn("charge_bars[index].value", menu)
+        self.assertIn("battle_manager.skill_hit_charge[hero]", menu)
+        self.assertIn('motion.call("play_skill_cast", role, choice)', battle)
+        self.assertIn("func play_skill_cast(role: int, choice: int)", motion)
+        self.assertIn("skill_flash_remaining", motion)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
