@@ -4,6 +4,7 @@ extends Control
 var hero_selector: OptionButton
 var skill_selectors: Array[OptionButton] = []
 var info: Label
+var charge_info: Label
 
 func _ready() -> void:
  visible = false
@@ -40,6 +41,10 @@ func _ready() -> void:
  info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  info.add_theme_font_size_override("font_size", 19)
  stack.add_child(info)
+ charge_info = Label.new()
+ charge_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ charge_info.add_theme_font_size_override("font_size", 20)
+ stack.add_child(charge_info)
  var apply := Button.new()
  apply.text = "Vier Skills speichern"
  apply.custom_minimum_size.y = 65
@@ -56,6 +61,18 @@ func _ready() -> void:
 func open_menu() -> void:
  visible = true
  _refresh()
+
+func _process(_delta: float) -> void:
+ if not visible or charge_info == null or battle_manager == null:
+  return
+ var hero: int = clampi(hero_selector.selected, 0, 3)
+ var active_slot: int = int(battle_manager.next_skill_slot[hero]) % 4
+ var role: int = int(team_formation.role_ids[hero])
+ var ability: int = int(battle_manager.skill_loadouts[hero][active_slot])
+ var needed: int = battle_manager._skill_hit_cost(role, ability)
+ var progress: int = mini(needed, int(battle_manager.skill_hit_charge[hero]))
+ var skill: String = TitanCrowdControl.ability_name(int(team_formation.class_ids[hero])) if ability == 7 else str(TitanSkillSystem.skill_for_role(role, ability).get("name", "Skill"))
+ charge_info.text = "Naechster Skill: Platz %d – %s\nNormale Treffer: %d / %d" % [active_slot + 1, skill, progress, needed]
 
 func _refresh() -> void:
  var hero: int = hero_selector.selected
