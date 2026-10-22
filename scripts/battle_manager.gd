@@ -286,14 +286,14 @@ func _resolve_boss_cast() -> void:
  elif boss_cast_kind == "single":
   var target: int = _choose_routine_enemy_target()
   if target >= 0:
-   _damage_heroes(maxi(1, roundi(float(12 * current_level) * (1.9 if is_fusion_boss else 1.4))), [target])
+   _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * (0.18 if is_fusion_boss else 0.14))), [target])
   last_ability = "Boss: Einzelziel"
  elif boss_cast_kind == "aoe":
   var targets: Array[int] = []
   for i in range(hero_hp.size()):
    if hero_hp[i] > 0:
     targets.append(i)
-  _damage_heroes(maxi(1, roundi(float(12 * current_level) * (1.5 if is_fusion_boss else 1.2))), targets)
+  _damage_heroes(maxi(1, roundi(float(hero_max_hp[0]) * (0.13 if is_fusion_boss else 0.10))), targets)
   last_ability = "Boss: Flaechenschaden"
  boss_cast_kind = ""
  boss_cc_progress = 0
@@ -316,7 +316,8 @@ func _attack_tick() -> void:
  if target < 0:
   _on_team_defeat("normal")
   return
- var damage: int = maxi(1, 12 * current_level)
+ # Scale routine damage to hero durability; avoid instant kills at high stages.
+ var damage: int = maxi(1, roundi(float(hero_max_hp[target]) * 0.04))
  if is_boss:
   damage = roundi(float(damage) * (1.9 if is_fusion_boss else 1.5))
   # Boss area attacks happen periodically. The tank can intercept them.
