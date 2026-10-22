@@ -178,6 +178,11 @@ func _show_hero_combat_number(_slot: int, _value: int, _is_heal: bool) -> void:
  # No damage popup can be shown without the original FloatingText scene.
  pass
 
+func _hero_progression(slot: int) -> Dictionary:
+ if team_formation == null or slot < 0 or slot >= team_formation.class_ids.size():
+  return {"attack":0.0, "defense":0.0, "healing":0.0}
+ return TitanCombatBalance.hero_progression(int(team_formation.class_ids[slot]), team_formation.talent_ranks[slot], GameManager.jewel_level)
+
 func _damage_heroes(amount: int, targets: Array[int]) -> void:
  var hits: Array[int] = []
  var dodges: Array[int] = []
@@ -192,7 +197,9 @@ func _damage_heroes(amount: int, targets: Array[int]) -> void:
   # Active interception reduces damage to allies during boss area attacks.
   if tank >= 0 and index != tank and tank_intercept_until[tank] >= skill_tick:
    mitigation = 0.35
-  var damage: int = maxi(1, roundi(float(amount) * (1.0 - mitigation)))
+  # Talent defense is multiplicative and capped separately from tank mitigation.
+  var talent_defense: float = float(_hero_progression(index).get("defense", 0.0))
+  var damage: int = maxi(1, roundi(float(amount) * (1.0 - mitigation) * (1.0 - talent_defense)))
   var previous: int = hero_hp[index]
   hero_hp[index] = maxi(0, previous - damage)
   _show_hero_combat_number(index, previous - hero_hp[index], false)
@@ -253,6 +260,7 @@ func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
  hero_hot_ticks[target] = clampi(int(skill.get("hot_ticks", 4)), 1, 4)
  var class_id: int = int(team_formation.class_ids[_caster]) if team_formation != null else 9
  var hot_modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("hot", 1.0))
+ hot_modifier *= 1.0 + float(_hero_progression(_caster).get("healing", 0.0))
  hero_hot_amount[target] = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier))
  last_ability = "Erneuerung (HoT)"
 
@@ -489,6 +497,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  if role == 2 and healing > 0.0:
   var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
   healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
+  healing *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
  var power: float = float(skill.get("power", 0.0))
  if power > 0.0:
@@ -496,6 +505,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
   if role == 2 and team_formation != null:
    damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
+  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)))))
   _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
@@ -573,7 +583,8 @@ func _hero_attack(slot: int, role: int) -> void:
  var normal_damage: int = 35 + current_level * 6
  var multiplier: float = TitanSkillSystem.damage_multiplier(role)
  var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
- var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * (1.6 if critical else 1.0)))
+ var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0))
+ var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 if critical else 1.0)))
  _deal_damage_to_enemy(slot, actual_damage)
  if not battle_active:
   return
