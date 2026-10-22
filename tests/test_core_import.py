@@ -183,6 +183,33 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("9 if role == 2 else 8", menu)
         self.assertIn("hero_hot_ticks.fill(0)", battle)
 
+    def test_midgame_boss_minions_and_second_phase(self):
+        boss = source("battle_manager.gd")
+        balance = source("titan_combat_balance.gd")
+        self.assertIn("stage >= 51", balance)
+        self.assertIn("boss_minion_hp = [boss_minion_max_hp, boss_minion_max_hp]", boss)
+        self.assertIn("func _spawn_boss_minion_visuals()", boss)
+        self.assertIn("func _boss_minions_attack()", boss)
+        self.assertIn("func _on_boss_minion_defeated()", boss)
+        self.assertIn("func _boss_phase_two_tick()", boss)
+        self.assertIn('"heal"', boss)
+        self.assertIn('"defense"', boss)
+        self.assertIn('"attack"', boss)
+
+    def test_passive_element_pets_and_healer_differences(self):
+        boss = source("battle_manager.gd")
+        balance = source("titan_combat_balance.gd")
+        team = source("team_formation.gd")
+        menu = source("skill_menu.gd")
+        self.assertIn("static func passive_pet_stats(", balance)
+        self.assertIn("static func damage_after_resistance(", balance)
+        self.assertIn("pet_element_ids", team)
+        self.assertIn("set_pet_element(", team)
+        self.assertIn("_pet_stats(slot)", boss)
+        self.assertIn("TitanCombatBalance.healer_profile(", boss)
+        self.assertIn("pet_element_selector", menu)
+        self.assertIn("ScrollContainer.new()", menu)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
