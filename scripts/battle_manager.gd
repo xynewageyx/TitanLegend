@@ -223,15 +223,15 @@ func _attack_tick() -> void:
  if not battle_active:
   return
  skill_tick += 1
- # Boss casts create a real interrupt window for equipped control skills.
+ _tick_heal_over_time()
+ # Only marked boss abilities are interruptible. Routine damage is not.
  if is_boss:
   if boss_cast_ticks > 0:
    boss_cast_ticks -= 1
+   if boss_cast_ticks == 0:
+    _resolve_boss_cast()
   elif skill_tick >= boss_next_cast_tick:
-   boss_cast_ticks = 3
-   boss_cast_name = "Titanhieb"
-   boss_interrupt_message = ""
-   boss_next_cast_tick = skill_tick + 9
+   _begin_boss_cast()
  var target: int = _choose_routine_enemy_target()
  if target < 0:
   _on_team_defeat("normal")
@@ -455,6 +455,10 @@ func spawn_wave() -> void:
  boss_time_remaining = BOSS_TIME_LIMIT
  boss_cast_ticks = 0
  boss_cast_name = ""
+ boss_cast_kind = ""
+ boss_cc_required = 0
+ boss_cc_progress = 0
+ boss_cast_index = 0
  boss_interrupt_message = ""
  boss_next_cast_tick = skill_tick + 4
  hero_attack_elapsed.fill(0.0)
