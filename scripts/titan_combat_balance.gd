@@ -1,12 +1,12 @@
 extends RefCounted
 class_name TitanCombatBalance
 
-# Four distinct bosses per element zone, rotating across the 100 stages.
+# Four recurring boss archetypes in every 100-stage area, reused for repeated elements.
 const BOSS_TITLES := ["Waechter", "Sturmrufer", "Runenhueter", "Urtitan"]
 const BOSS_SPECIAL := ["attack", "defense", "heal", "attack"]
 # Existing biome index already determines the element for the entire zone.
 static func boss_variant(stage: int) -> int:
- return posmod(int((maxi(1, stage) - 1) / 10), 4)
+ return posmod(int(posmod(maxi(1, stage) - 1, 100) / 10), BOSS_TITLES.size())
 
 static func has_boss_minions(stage: int, fusion: bool) -> bool:
  # Midgame begins at stage 401 (area 5 of 12). Not every encounter uses the extra enemies.
