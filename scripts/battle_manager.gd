@@ -117,6 +117,9 @@ func _reset_hero_health() -> void:
  tank_intercept_until.fill(0)
  skill_hit_charge.fill(0)
  next_skill_slot.fill(0)
+ hero_hot_ticks.fill(0)
+ hero_hot_amount.fill(0)
+ boss_cc_progress = 0
  team_element_status = -1
  if team_formation != null and team_formation.has_method("reset_individual_defeat_poses"):
   team_formation.reset_individual_defeat_poses()
@@ -270,15 +273,20 @@ func _skill_hit_cost(role: int, choice: int) -> int:
   5: return 5 # Bossbrecher
   6: return 3
   7: return 4 # Unterbrechung (boss only)
+  8:
+   if role == 2:
+    return 4 # Erneuerung (HoT)
  return MAX_SKILL_HITS
 
 func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
  if role == 0 and slot != _living_tank_slot():
   return false
- if choice in [8, 9] and role != 0:
+ if choice == 9 and role != 0:
+  return false
+ if choice == 8 and role not in [0, 2]:
   return false
  if choice == 7:
-  return is_boss and boss_cast_ticks > 0
+  return is_boss and boss_cast_ticks > 0 and boss_cc_required > 0
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  if float(skill.get("heal", 0.0)) > 0.0 and role == 2:
   for i in range(4):
