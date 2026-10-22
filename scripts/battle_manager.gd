@@ -53,7 +53,12 @@ var _finishing: bool = false
 func _ready() -> void:
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
- current_level = 1 # Progress restoration remains part of the original importer
+ var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
+ current_level = maxi(1, saved_progress.x)
+ current_wave = clampi(saved_progress.y, 1, WAVE_ENEMY_COUNTS.size())
+ skill_choices = SaveManager.get_saved_skill_choices()
+ skill_loadouts = SaveManager.get_saved_skill_loadouts()
+ add_to_group("battle_manager")
  _reset_hero_health()
  call_deferred("start_next_encounter")
 
@@ -281,7 +286,8 @@ func spawn_wave() -> void:
  if _finishing:
   return
  clear_enemies()
- _reset_hero_health()
+ # Preserve surviving heroes' HP across normal waves.
+ # Full recovery only occurs when an explicit run/reset begins.
  boss_elapsed = 0.0
  boss_time_remaining = BOSS_TIME_LIMIT
  hero_attack_elapsed.fill(0.0)
@@ -324,6 +330,7 @@ func finish_wave() -> void:
    current_wave = 1
    current_level += 1
  _finishing = false
+ SaveManager.save_game()
  battle_status_changed.emit()
  call_deferred("start_next_encounter")
 
