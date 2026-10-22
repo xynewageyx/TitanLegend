@@ -118,6 +118,10 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("skill_hit_charge[slot] + 1", code)
         self.assertIn("_try_cast_charged_skill(slot, role)", code)
         self.assertIn("next_skill_slot[slot] = (index + 1) % loadout.size()", code)
+        body = code.split("func _try_cast_charged_skill(", 1)[1].split("\\nfunc ", 1)[0]
+        self.assertIn("var index: int = next_skill_slot[slot] % loadout.size()", body)
+        self.assertNotIn("for offset in range(loadout.size())", body)
+        self.assertIn("if not _skill_is_usable(slot, role, choice):", body)
         self.assertIn("if skill_hit_charge[slot] < required_hits:", code)
         self.assertIn("skill_hit_charge[slot] = 0", code)
         self.assertNotIn("func _activate_tank_skill(slot: int)", code)
