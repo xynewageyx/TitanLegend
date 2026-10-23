@@ -55,6 +55,7 @@ var boss_next_cast_tick: int = 0
 var boss_cast_kind: String = ""
 var boss_cc_required: int = 0
 var boss_cc_progress: int = 0
+var prepared_cc: Array[int] = [0, 0, 0, 0]
 var boss_cast_index: int = 0
 var hero_hot_ticks: Array[int] = [0, 0, 0, 0]
 var hero_hot_amount: Array[int] = [0, 0, 0, 0]
@@ -138,6 +139,7 @@ func _reset_hero_health() -> void:
  hero_hot_ticks.fill(0)
  hero_hot_amount.fill(0)
  boss_cc_progress = 0
+ prepared_cc.fill(0)
  team_element_status = -1
  if team_formation != null and team_formation.has_method("reset_individual_defeat_poses"):
   team_formation.reset_individual_defeat_poses()
@@ -280,6 +282,20 @@ func _tick_heal_over_time() -> void:
  if changed:
   _sync_team_health()
 
+func _apply_boss_cc_hit() -> void:
+ if not battle_active or not is_boss or boss_cast_ticks <= 0 or boss_cc_required <= 0:
+  return
+ boss_cc_progress += 1
+ last_ability = "Kontrolle %d/%d" % [boss_cc_progress, boss_cc_required]
+ if boss_cc_progress >= boss_cc_required:
+  boss_cast_ticks = 0
+  boss_cast_kind = ""
+  boss_cc_required = 0
+  boss_cc_progress = 0
+  boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
+  boss_interrupt_message = "Boss unterbrochen"
+  last_ability = "Unterbrechung"
+
 func _begin_boss_cast() -> void:
  boss_cast_index += 1
  boss_cc_progress = 0
@@ -318,6 +334,16 @@ func _begin_boss_cast() -> void:
  # This changes only the cast window, never the 60-second boss timer.
  boss_cast_ticks = 3 + maxi(0, boss_cc_required - 1) * 2
  boss_next_cast_tick = skill_tick + 9
+ if boss_cc_required > 0:
+  # Prepared hits were earned by the strict four-slot rotation earlier.
+  # Each living hero can contribute at most one banked hit.
+  for slot in range(4):
+   if prepared_cc[slot] <= 0 or hero_hp[slot] <= 0:
+    continue
+   prepared_cc[slot] = 0
+   _apply_boss_cc_hit()
+   if boss_cast_ticks <= 0:
+    break
 
 func _resolve_boss_cast() -> void:
  if not battle_active or not is_boss:
@@ -485,18 +511,11 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   return
  if choice == 7:
   if not is_boss or boss_cast_ticks <= 0 or boss_cc_required <= 0:
+   # This slot was genuinely charged and used in order; bank at most one hit.
+   prepared_cc[slot] = 1
    last_ability = "Kontrolle vorbereitet"
    return
-  boss_cc_progress += 1
-  last_ability = "Kontrolle %d/%d" % [boss_cc_progress, boss_cc_required]
-  if boss_cc_progress >= boss_cc_required:
-   boss_cast_ticks = 0
-   boss_cast_kind = ""
-   boss_cc_required = 0
-   boss_cc_progress = 0
-   boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
-   boss_interrupt_message = "Boss unterbrochen"
-   last_ability = "Unterbrechung"
+  _apply_boss_cc_hit()
   return
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  last_ability = str(skill.get("name", "Skill"))
