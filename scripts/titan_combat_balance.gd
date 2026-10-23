@@ -26,11 +26,11 @@ static func hero_progression(class_id: int, ranks: Array, jewel_level: int) -> D
  var attack_rank: int = maxi(0, int(ranks[0])) if ranks.size() > 0 else 0
  var defense_rank: int = maxi(0, int(ranks[1])) if ranks.size() > 1 else 0
  var support_rank: int = maxi(0, int(ranks[2])) if ranks.size() > 2 else 0
- var jewel_bonus: float = minf(0.20, float(maxi(0, jewel_level - 1)) * 0.002)
+ var jewel_bonus: float = minf(0.20, float(maxi(0, jewel_level - 1)) * 0.0002)
  return {
-  "attack": minf(0.75, float(attack_rank) * float(TitanTalentSystem.OFFENSE[cls]) + 0.015 * TitanTalentSystem.milestone_count(attack_rank)) + jewel_bonus,
-  "defense": minf(0.35, float(defense_rank) * float(TitanTalentSystem.DEFENSE[cls]) + 0.01 * TitanTalentSystem.milestone_count(defense_rank)),
-  "healing": minf(0.75, float(support_rank) * float(TitanTalentSystem.SUPPORT[cls]) + 0.015 * TitanTalentSystem.milestone_count(support_rank))
+  "attack": minf(0.75, float(attack_rank) * float(TitanTalentSystem.OFFENSE[cls]) * 0.25 + 0.015 * TitanTalentSystem.milestone_count(attack_rank)) + jewel_bonus,
+  "defense": minf(0.35, float(defense_rank) * float(TitanTalentSystem.DEFENSE[cls]) * 0.20 + 0.01 * TitanTalentSystem.milestone_count(defense_rank)),
+  "healing": minf(0.75, float(support_rank) * float(TitanTalentSystem.SUPPORT[cls]) * 0.20 + 0.015 * TitanTalentSystem.milestone_count(support_rank))
  }
 
 static func boss_variant(stage: int) -> int:
