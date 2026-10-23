@@ -290,11 +290,18 @@ func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
    target = i
  if target < 0:
   return
- hero_hot_ticks[target] = clampi(int(skill.get("hot_ticks", 4)), 1, 4)
+ var new_ticks: int = clampi(int(skill.get("hot_ticks", 4)), 1, 4)
  var class_id: int = int(team_formation.class_ids[_caster]) if team_formation != null else 9
  var hot_modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("hot", 1.0))
  hot_modifier *= 1.0 + float(_hero_progression(_caster).get("healing", 0.0))
- hero_hot_amount[target] = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier))
+ var new_amount: int = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier))
+ # A weaker or shorter HoT must never erase stronger ongoing healing.
+ if hero_hot_ticks[target] > 0:
+  hero_hot_amount[target] = maxi(hero_hot_amount[target], new_amount)
+  hero_hot_ticks[target] = maxi(hero_hot_ticks[target], new_ticks)
+ else:
+  hero_hot_amount[target] = new_amount
+  hero_hot_ticks[target] = new_ticks
  last_ability = "Erneuerung (HoT)"
 
 func _tick_heal_over_time() -> void:
