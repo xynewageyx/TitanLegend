@@ -55,6 +55,10 @@ var boss_next_cast_tick: int = 0
 var boss_cast_kind: String = ""
 var boss_cc_required: int = 0
 var boss_cc_progress: int = 0
+# Successful interrupts briefly expose the boss; normal casts do not.
+const INTERRUPT_VULNERABILITY_TICKS: int = 4
+const INTERRUPT_BOSS_DAMAGE_BONUS: float = 0.15
+var boss_vulnerable_until_tick: int = -1
 var prepared_cc: Array[int] = [0, 0, 0, 0]
 var prepared_healing: Array[int] = [-1, -1, -1, -1]
 var boss_cast_index: int = 0
@@ -337,6 +341,7 @@ func _apply_boss_cc_hit() -> void:
   boss_cc_required = 0
   boss_cc_progress = 0
   boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
+  boss_vulnerable_until_tick = skill_tick + INTERRUPT_VULNERABILITY_TICKS
   boss_interrupt_message = "Boss unterbrochen"
   last_ability = "Unterbrechung"
 
@@ -617,7 +622,8 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
     return
  # If an area skill hit adds, the remaining boss also takes one hit.
  var defense: float = 0.13 if boss_buff_active and boss_buff_kind == "defense" else 0.0
- enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense))))
+ var vulnerability: float = 1.0 + INTERRUPT_BOSS_DAMAGE_BONUS if is_boss and skill_tick <= boss_vulnerable_until_tick else 1.0
+ enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense) * vulnerability)))
  _update_enemy_casualties()
  if enemy_hp <= 0:
   finish_wave()
@@ -754,6 +760,7 @@ func spawn_wave() -> void:
  boss_cast_kind = ""
  boss_cc_required = 0
  boss_cc_progress = 0
+ boss_vulnerable_until_tick = -1
  boss_cast_index = 0
  boss_interrupt_message = ""
  boss_next_cast_tick = skill_tick + 4
