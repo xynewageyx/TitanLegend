@@ -660,9 +660,12 @@ func set_skill_loadout(hero: int, skill_slot: int, ability: int) -> void:
   return
  var active_role: int = int(team_formation.role_ids[hero]) if team_formation != null else 1
  skill_loadouts[hero][skill_slot] = clampi(ability, 0, 9 if active_role == 0 else (8 if active_role == 2 else 7))
- # New equipment always starts its rotation at skill position 1.
+ # Changing a loadout invalidates banked effects earned by the old skills.
+ # Prevents keeping an interrupt or heal after removing that skill.
  next_skill_slot[hero] = 0
  skill_hit_charge[hero] = 0
+ prepared_cc[hero] = 0
+ prepared_healing[hero] = -1
  SaveManager.save_game()
  battle_status_changed.emit()
 
