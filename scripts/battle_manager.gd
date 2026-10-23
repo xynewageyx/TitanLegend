@@ -585,7 +585,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
   if role == 2 and team_formation != null:
    damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
-  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)))))
+  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot))))
   _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
@@ -664,7 +664,7 @@ func _hero_attack(slot: int, role: int) -> void:
  var normal_damage: int = 35 + current_level * 6
  var multiplier: float = TitanSkillSystem.damage_multiplier(role)
  var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
- var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0))
+ var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot)
  var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 if critical else 1.0)))
  _deal_damage_to_enemy(slot, actual_damage)
  if not battle_active:
