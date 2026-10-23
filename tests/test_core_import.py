@@ -335,6 +335,27 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("if boss_cast_ticks <= 0:", cast)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_healer_slots_do_not_deadlock_at_full_health(self):
+        battle = source("battle_manager.gd")
+        usable = battle.split("func _skill_is_usable(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("if role == 2 and choice == 8:\n  return true", usable)
+        self.assertNotIn("hero_hp[i] < hero_max_hp[i]", usable)
+        self.assertIn('last_ability = "Heilung vorbereitet"', battle)
+        self.assertIn('last_ability = "Erneuerung vorbereitet"', battle)
+        self.assertIn("next_skill_slot[slot] = (index + 1) % loadout.size()", battle)
+
+    def test_prepared_heals_are_bounded_and_cannot_revive(self):
+        battle = source("battle_manager.gd")
+        self.assertIn("var prepared_healing: Array[int] = [-1, -1, -1, -1]", battle)
+        self.assertIn("prepared_healing.fill(-1)", battle)
+        self.assertIn("prepared_healing[slot] = choice", battle)
+        helper = battle.split("func _trigger_prepared_healing(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("hero_hp[slot] <= 0", helper)
+        self.assertIn("prepared_healing[slot] = -1", helper)
+        self.assertIn("if not _has_wounded_hero():", helper)
+        self.assertIn("_trigger_prepared_healing()", battle)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
