@@ -440,6 +440,25 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("weapon_hero_slot = (weapon_hero_slot + 1) % 4", ui)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_four_hardening_fields_gold_cap_and_saves(self):
+        game = source("game_manager.gd")
+        save = source("save_manager.gd")
+        battle = source("battle_manager.gd")
+        ui = source("ui_manager.gd")
+        self.assertIn("var hardening_levels: Array =", game)
+        self.assertIn("if level >= maxi(1, character_level):", game)
+        self.assertIn("return 1000 * (level + 1)", game)
+        self.assertIn("if cost <= 0 or current_gold < cost:", game)
+        self.assertIn("hardening_levels[hero][field] = int(hardening_levels[hero][field]) + 1", game)
+        self.assertIn('"hardening_levels": GameManager.hardening_levels.duplicate(true)', save)
+        self.assertIn('data.get("hardening_levels", [])', save)
+        self.assertIn("GameManager.hardening_bonus(i, 2)", battle)
+        self.assertIn("GameManager.hardening_bonus(index, 1)", battle)
+        self.assertGreaterEqual(battle.count("GameManager.hardening_bonus(slot, 0)"), 2)
+        self.assertIn("GameManager.hardening_bonus(slot, 3)", battle)
+        self.assertIn("GameManager.upgrade_hardening(weapon_hero_slot, hardening_field)", ui)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
