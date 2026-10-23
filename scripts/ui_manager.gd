@@ -31,6 +31,9 @@ var astral_shop_button: Button
 var weapon_hero_slot: int = 0
 var weapon_upgrade_button: Button
 var weapon_hero_button: Button
+var hardening_field: int = 0
+var hardening_select_button: Button
+var hardening_upgrade_button: Button
 var skin_shop_menu: Control
 
 func _ready() -> void:
@@ -253,6 +256,8 @@ func _make_hud() -> void:
  action_button = _make_button("Ausführen", modal, _on_action_pressed, 19)
  weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
+ hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
+ hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  astral_shop_button = _make_button("Astralshop: 30 Marken → 10 Tickets", modal, _buy_astral_reward, 17)
  astral_shop_button.hide()
  _make_button("Schließen", modal, func(): action_panel.hide(), 18)
@@ -381,12 +386,19 @@ func _refresh(_unused: int = 0) -> void:
  astral_shop_button.visible = current_tab == "astral"
  weapon_hero_button.visible = current_tab == "jewels"
  weapon_upgrade_button.visible = current_tab == "jewels"
+ hardening_select_button.visible = current_tab == "jewels"
+ hardening_upgrade_button.visible = current_tab == "jewels"
  if current_tab == "jewels":
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
   weapon_upgrade_button.text = "Waffe %d → %d | %d Gold" % [weapon_level, weapon_level + 1, weapon_cost] if weapon_cost > 0 else "Waffe MAX"
   weapon_upgrade_button.disabled = weapon_cost <= 0 or GameManager.current_gold < weapon_cost
+  var hardening_level: int = int(GameManager.hardening_levels[weapon_hero_slot][hardening_field])
+  var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
+  hardening_select_button.text = "Feld %d: %s (Rang %d)" % [hardening_field + 1, GameManager.HARDENING_NAMES[hardening_field], hardening_level]
+  hardening_upgrade_button.text = "Haerten %d Gold" % hardening_cost if hardening_cost > 0 else "Haertung am Level-Limit"
+  hardening_upgrade_button.disabled = hardening_cost <= 0 or GameManager.current_gold < hardening_cost
  if current_tab == "astral" and battle_manager != null:
   astral_shop_button.disabled = battle_manager.astral_marks < 30
  match current_tab:
@@ -417,6 +429,15 @@ func _next_weapon_hero() -> void:
 func _upgrade_current_weapon() -> void:
  if GameManager.upgrade_weapon(weapon_hero_slot):
   _append("System", "Waffe Held %d verbessert" % (weapon_hero_slot + 1))
+ _refresh()
+
+func _next_hardening_field() -> void:
+ hardening_field = (hardening_field + 1) % 4
+ _refresh()
+
+func _upgrade_current_hardening() -> void:
+ if GameManager.upgrade_hardening(weapon_hero_slot, hardening_field):
+  _append("System", "Haertung fuer Held %d verbessert" % (weapon_hero_slot + 1))
  _refresh()
 
 func _on_equipment_upgraded(_slot: int, _level: int) -> void:
