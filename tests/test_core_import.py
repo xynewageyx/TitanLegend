@@ -422,6 +422,24 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertEqual([t for t in range(10, 17) if t < 10 + 4], [10, 11, 12, 13])
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_weapon_upgrades_charge_gold_save_and_affect_both_attack_paths(self):
+        game = source("game_manager.gd")
+        save = source("save_manager.gd")
+        battle = source("battle_manager.gd")
+        ui = source("ui_manager.gd")
+        self.assertIn("var weapon_levels: Array[int] = [0, 0, 0, 0]", game)
+        self.assertIn("const MAX_WEAPON_LEVEL: int = 300", game)
+        self.assertIn("return 500 * (weapon_levels[slot] + 1)", game)
+        self.assertIn("return minf(0.15, float(weapon_levels[slot]) * 0.0005)", game)
+        self.assertIn("add_gold(-cost)", game)
+        self.assertIn('"weapon_levels": GameManager.weapon_levels.duplicate()', save)
+        self.assertIn('data.get("weapon_levels", [0, 0, 0, 0])', save)
+        self.assertIn("GameManager.weapon_attack_bonus(slot)", battle)
+        self.assertGreaterEqual(battle.count("GameManager.weapon_attack_bonus(slot)"), 2)
+        self.assertIn("GameManager.upgrade_weapon(weapon_hero_slot)", ui)
+        self.assertIn("weapon_hero_slot = (weapon_hero_slot + 1) % 4", ui)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
