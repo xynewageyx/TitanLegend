@@ -366,6 +366,17 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("SaveManager.save_game()", setter)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_multiple_healers_preserve_stronger_active_hot(self):
+        battle = source("battle_manager.gd")
+        hot = battle.split("func _apply_heal_over_time(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("hero_hot_amount[target] = maxi(hero_hot_amount[target], new_amount)", hot)
+        self.assertIn("hero_hot_ticks[target] = maxi(hero_hot_ticks[target], new_ticks)", hot)
+        self.assertIn("hero_hp[i] <= 0", hot)
+        prepared = battle.split("func _trigger_prepared_healing(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("prepared_healing[slot] = -1", prepared)
+        self.assertIn("_apply_heal_over_time(slot, skill)", prepared)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
