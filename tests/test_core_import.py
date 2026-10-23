@@ -400,6 +400,21 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("var intercept_active: bool =", damage)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_successful_cc_only_exposes_boss_for_four_ticks(self):
+        battle = source("battle_manager.gd")
+        self.assertIn("const INTERRUPT_VULNERABILITY_TICKS: int = 4", battle)
+        self.assertIn("const INTERRUPT_BOSS_DAMAGE_BONUS: float = 0.15", battle)
+        interrupt = battle.split("func _apply_boss_cc_hit(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("if boss_cc_progress >= boss_cc_required:", interrupt)
+        self.assertIn("boss_vulnerable_until_tick = skill_tick + INTERRUPT_VULNERABILITY_TICKS", interrupt)
+        wave = battle.split("func spawn_wave(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("boss_vulnerable_until_tick = -1", wave)
+        damage = battle.split("func _deal_damage_to_enemy(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("if is_boss and skill_tick <= boss_vulnerable_until_tick else 1.0", damage)
+        self.assertLess(damage.index("if is_boss and not boss_minion_hp.is_empty()"), damage.index("var vulnerability:"))
+        self.assertIn("(1.0 - defense) * vulnerability", damage)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
