@@ -16,6 +16,7 @@ func save_game() -> void:
   "reincarnation": GameManager.current_reincarnation_level,
   "character_level": GameManager.character_level,
   "jewel_level": GameManager.jewel_level,
+  "weapon_levels": GameManager.weapon_levels.duplicate(),
   "ads_watched": AdManager.ads_watched_today,
   "ad_date": AdManager.last_watch_date,
   "stage": 1, "wave": 1, "skill_choices": [0, 0, 0, 0], "skill_loadouts": [[0,1,2,7],[0,1,2,7],[0,1,2,7],[0,1,2,7]], "talents": [[0,0,0],[0,0,0],[0,0,0],[0,0,0]], "talent_branches": [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]
@@ -56,6 +57,11 @@ func load_game() -> void:
  GameManager.current_reincarnation_level = clampi(int(data.get("reincarnation", 0)), 0, 5)
  GameManager.character_level = maxi(1, int(data.get("character_level", 1)))
  GameManager.jewel_level = maxi(1, int(data.get("jewel_level", 1)))
+ var weapons: Variant = data.get("weapon_levels", [0, 0, 0, 0])
+ GameManager.weapon_levels = [0, 0, 0, 0]
+ if weapons is Array:
+  for slot in range(mini(4, weapons.size())):
+   GameManager.weapon_levels[slot] = clampi(int(weapons[slot]), 0, GameManager.MAX_WEAPON_LEVEL)
  AdManager.ads_watched_today = clampi(int(data.get("ads_watched", 0)), 0, 3)
  AdManager.last_watch_date = str(data.get("ad_date", ""))
  AdManager.check_daily_reset()
