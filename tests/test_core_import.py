@@ -377,6 +377,17 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("_apply_heal_over_time(slot, skill)", prepared)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_simultaneous_aoe_uses_one_tank_intercept_snapshot(self):
+        battle = source("battle_manager.gd")
+        damage = battle.split("func _damage_heroes(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("var tank: int = _living_tank_slot()", damage)
+        self.assertIn("var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] >= skill_tick", damage)
+        self.assertIn("if intercept_active and index != tank:", damage)
+        self.assertEqual(damage.count("_living_tank_slot()"), 1)
+        self.assertLess(damage.index("var intercept_active:"), damage.index("for index in targets:"))
+        self.assertIn("_trigger_prepared_healing()", damage)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
