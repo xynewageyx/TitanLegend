@@ -622,7 +622,7 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
     return
  # If an area skill hit adds, the remaining boss also takes one hit.
  var defense: float = 0.13 if boss_buff_active and boss_buff_kind == "defense" else 0.0
- var vulnerability: float = 1.0 + INTERRUPT_BOSS_DAMAGE_BONUS if is_boss and skill_tick <= boss_vulnerable_until_tick else 1.0
+ var vulnerability: float = 1.0 + INTERRUPT_BOSS_DAMAGE_BONUS if is_boss and skill_tick < boss_vulnerable_until_tick else 1.0
  enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense) * vulnerability)))
  _update_enemy_casualties()
  if enemy_hp <= 0:
