@@ -59,3 +59,21 @@ Median Fusions-Bosskampfzeit in Gebiet 12: 60,0 s (60 % ungelevelt), 60,0 s (60 
 **Keine pauschale Boss-HP-Erhöhung** auf Grundlage dieser Simulation. Der wichtigste nächste Balancepunkt ist ein Test *mit und ohne Unterbrechungsfertigkeiten* sowie mit realistischer Boss-HP-/Mana-/Ausrüstungsprogression; andernfalls verdeckt nahezu perfekte CC-Abdeckung den realen Druck von Boss-Zaubern.
 
 Die Rohdaten `balance_update189.csv` und das ausführbare Python-Modell `sim_update189.py` wurden im zugehörigen Chat als Dateien bereitgestellt.
+
+
+## Ergänzung: CC-Loadout-Sensitivität (weitere 2.304 Modellläufe)
+
+Zusätzlich wurde derselbe Entwicklungsstand (60 % Basisschaden, alle drei Talentränge je 50, Juwelenlevel 300) auf Gebieten 5 sowie 8–12 mit **CC-Loadout** (zwei DD-Unterbrechungen plus Heiler-Unterbrechung) und **ohne CC-Skills** (stattdessen weitere Schadens- und Heilskills) geprüft: 6 Gebiete × 4 Archetypen × 2 Bossarten × 4 Heiler × 2 Affinitäten × 3 Seeds × 2 Loadouts.
+
+| Gebiet | Fusion mit CC | Fusion ohne CC |
+|---:|---:|---:|
+| 5 | 100 % | 100 % |
+| 8 | 100 % | 100 % |
+| 9 | 100 % | 100 % |
+| 10 | 83,3 % | 100 % |
+| 11 | 45,8 % | 58,3 % |
+| 12 | 12,5 % | 12,5 % |
+
+In dieser Näherung kann der zusätzliche direkte Schaden **ohne** CC-Skills die vermiedenen Boss-Casts überwiegen. Das deutet auf eine noch nicht überzeugende Risiko-/Belohnungsbalance zwischen Schaden und Unterbrechung hin. Nicht als Beweis für den realen Godot-Kampf verwenden: Der Simulator bildet insbesondere Tod, Zaubertiming und Überheilung vereinfacht ab.
+
+Die ergänzenden Rohdaten: `balance_cc_sensitivity_189.csv` im zugehörigen Chat. Insgesamt wurden für Update 189 damit **9.216 unabhängige Modellkämpfe** ausgeführt (6.912 Hauptvergleich + 2.304 CC-Sensitivität). Die gefundene Balanceabweichung wird dokumentiert, **nicht ungeprüft durch Boss-Buffs oder automatische CC-Schadensboni überdeckt**.
