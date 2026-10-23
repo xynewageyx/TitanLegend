@@ -388,6 +388,18 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("_trigger_prepared_healing()", damage)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_boss_spell_aoe_scales_for_each_living_hero(self):
+        battle = source("battle_manager.gd")
+        aoe = battle.split("func _resolve_boss_cast(", 1)[1].split("\nfunc ", 1)[0]
+        damage = battle.split("func _damage_heroes(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("_damage_heroes(0, targets, 0.13 if is_fusion_boss else 0.10)", aoe)
+        self.assertNotIn("hero_max_hp[0]", aoe)
+        self.assertIn("max_hp_fraction: float = 0.0", battle)
+        self.assertIn("float(hero_max_hp[index]) * max_hp_fraction", damage)
+        self.assertIn("TitanCombatBalance.enemy_damage_scale(current_level)", damage)
+        self.assertIn("var intercept_active: bool =", damage)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
