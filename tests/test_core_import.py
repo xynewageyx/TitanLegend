@@ -301,6 +301,26 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("float(SUPPORT[class_id]) * 0.20", talents)
         self.assertIn("const MAX_RANK: int = 500", talents)
 
+    def test_cc_slot_no_longer_blocks_strict_rotation(self):
+        battle = source("battle_manager.gd")
+        usability = battle.split("func _skill_is_usable(", 1)[1].split("\nfunc ", 1)[0]
+        execute = battle.split("func _execute_equipped_skill(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn('if choice == 7:\n  # The fourth slot must not deadlock', usability)
+        self.assertIn('last_ability = "Kontrolle vorbereitet"', execute)
+        self.assertIn("boss_cc_progress += 1", execute)
+        self.assertIn('boss_cast_kind = ""', execute)
+        self.assertIn("boss_cc_required = 0", execute)
+        self.assertIn("next_skill_slot[slot] = (index + 1) % loadout.size()", battle)
+
+    def test_multiple_cc_cast_window_without_changing_boss_timer(self):
+        battle = source("battle_manager.gd")
+        cast = battle.split("func _begin_boss_cast(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("boss_cast_ticks = 3 + maxi(0, boss_cc_required - 1) * 2", cast)
+        self.assertIn("boss_cc_required = 3 if is_fusion_boss else 2", cast)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+        # Required hits 1/2/3 => windows 3/5/7 enemy ticks.
+        self.assertEqual([3 + max(0, n - 1) * 2 for n in (1, 2, 3)], [3, 5, 7])
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
