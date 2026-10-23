@@ -307,9 +307,12 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         execute = battle.split("func _execute_equipped_skill(", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn('if choice == 7:\n  # The fourth slot must not deadlock', usability)
         self.assertIn('last_ability = "Kontrolle vorbereitet"', execute)
-        self.assertIn("boss_cc_progress += 1", execute)
-        self.assertIn('boss_cast_kind = ""', execute)
-        self.assertIn("boss_cc_required = 0", execute)
+        self.assertIn("_apply_boss_cc_hit()", execute)
+        self.assertIn("prepared_cc[slot] = 1", execute)
+        cc = battle.split("func _apply_boss_cc_hit(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("boss_cc_progress += 1", cc)
+        self.assertIn('boss_cast_kind = ""', cc)
+        self.assertIn("boss_cc_required = 0", cc)
         self.assertIn("next_skill_slot[slot] = (index + 1) % loadout.size()", battle)
 
     def test_multiple_cc_cast_window_without_changing_boss_timer(self):
@@ -320,6 +323,17 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
         # Required hits 1/2/3 => windows 3/5/7 enemy ticks.
         self.assertEqual([3 + max(0, n - 1) * 2 for n in (1, 2, 3)], [3, 5, 7])
+
+    def test_prepared_cc_contributes_once_per_living_hero(self):
+        battle = source("battle_manager.gd")
+        self.assertIn("var prepared_cc: Array[int] = [0, 0, 0, 0]", battle)
+        self.assertIn("prepared_cc.fill(0)", battle)
+        cast = battle.split("func _begin_boss_cast(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("if prepared_cc[slot] <= 0 or hero_hp[slot] <= 0:", cast)
+        self.assertIn("prepared_cc[slot] = 0", cast)
+        self.assertIn("_apply_boss_cc_hit()", cast)
+        self.assertIn("if boss_cast_ticks <= 0:", cast)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
