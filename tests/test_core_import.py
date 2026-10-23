@@ -410,9 +410,16 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         wave = battle.split("func spawn_wave(", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn("boss_vulnerable_until_tick = -1", wave)
         damage = battle.split("func _deal_damage_to_enemy(", 1)[1].split("\nfunc ", 1)[0]
-        self.assertIn("if is_boss and skill_tick <= boss_vulnerable_until_tick else 1.0", damage)
+        self.assertIn("if is_boss and skill_tick < boss_vulnerable_until_tick else 1.0", damage)
         self.assertLess(damage.index("if is_boss and not boss_minion_hp.is_empty()"), damage.index("var vulnerability:"))
         self.assertIn("(1.0 - defense) * vulnerability", damage)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
+    def test_cc_vulnerability_is_exactly_four_ticks(self):
+        battle = source("battle_manager.gd")
+        self.assertIn("boss_vulnerable_until_tick = skill_tick + INTERRUPT_VULNERABILITY_TICKS", battle)
+        self.assertIn("skill_tick < boss_vulnerable_until_tick", battle)
+        self.assertEqual([t for t in range(10, 17) if t < 10 + 4], [10, 11, 12, 13])
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
     def test_save_manager_is_present(self):
