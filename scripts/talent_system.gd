@@ -63,13 +63,13 @@ static func description_for_class(class_id: int, tree: int, rank: int) -> String
  var label: String = ""
  match tree:
   0:
-   bonus = minf(0.75, rank * float(OFFENSE[class_id]))
+   bonus = minf(0.75, rank * float(OFFENSE[class_id]) * 0.25 + 0.015 * milestone_count(rank))
    label = "Angriff"
   1:
-   bonus = minf(0.50, rank * float(DEFENSE[class_id]))
+   bonus = minf(0.35, rank * float(DEFENSE[class_id]) * 0.20 + 0.01 * milestone_count(rank))
    label = "Schadensschutz"
   _:
-   bonus = minf(0.75, rank * float(SUPPORT[class_id]))
+   bonus = minf(0.75, rank * float(SUPPORT[class_id]) * 0.20 + 0.015 * milestone_count(rank))
    label = "Heilkraft"
  return "+" + str(int(round(bonus * 100.0))) + "% " + label if tree != 1 else str(int(round(bonus * 100.0))) + "% " + label
 
