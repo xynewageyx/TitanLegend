@@ -289,6 +289,18 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn('get("defense", 0.0)', battle)
         self.assertIn('get("healing", 0.0)', battle)
 
+    def test_progression_scaling_is_gradual_and_talent_labels_match(self):
+        balance = source("titan_combat_balance.gd")
+        talents = source("talent_system.gd")
+        self.assertIn("float(maxi(0, jewel_level - 1)) * 0.0002", balance)
+        self.assertIn("float(TitanTalentSystem.OFFENSE[cls]) * 0.25", balance)
+        self.assertIn("float(TitanTalentSystem.DEFENSE[cls]) * 0.20", balance)
+        self.assertIn("float(TitanTalentSystem.SUPPORT[cls]) * 0.20", balance)
+        self.assertIn("float(OFFENSE[class_id]) * 0.25", talents)
+        self.assertIn("float(DEFENSE[class_id]) * 0.20", talents)
+        self.assertIn("float(SUPPORT[class_id]) * 0.20", talents)
+        self.assertIn("const MAX_RANK: int = 500", talents)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
