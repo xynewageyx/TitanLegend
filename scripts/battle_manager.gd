@@ -187,7 +187,7 @@ func _hero_progression(slot: int) -> Dictionary:
   return {"attack":0.0, "defense":0.0, "healing":0.0}
  return TitanCombatBalance.hero_progression(int(team_formation.class_ids[slot]), team_formation.talent_ranks[slot], GameManager.jewel_level)
 
-func _damage_heroes(amount: int, targets: Array[int]) -> void:
+func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0.0) -> void:
  var hits: Array[int] = []
  var dodges: Array[int] = []
  # Resolve the tank's protection once for the entire simultaneous hit.
@@ -206,7 +206,10 @@ func _damage_heroes(amount: int, targets: Array[int]) -> void:
    mitigation = 0.35
   # Talent defense is multiplicative and capped separately from tank mitigation.
   var talent_defense: float = float(_hero_progression(index).get("defense", 0.0))
-  var damage: int = maxi(1, roundi(float(amount) * (1.0 - mitigation) * (1.0 - talent_defense)))
+  var incoming: int = amount
+  if max_hp_fraction > 0.0:
+   incoming = maxi(1, roundi(float(hero_max_hp[index]) * max_hp_fraction * TitanCombatBalance.enemy_damage_scale(current_level)))
+  var damage: int = maxi(1, roundi(float(incoming) * (1.0 - mitigation) * (1.0 - talent_defense)))
   var previous: int = hero_hp[index]
   hero_hp[index] = maxi(0, previous - damage)
   _show_hero_combat_number(index, previous - hero_hp[index], false)
@@ -402,7 +405,8 @@ func _resolve_boss_cast() -> void:
   for i in range(hero_hp.size()):
    if hero_hp[i] > 0:
     targets.append(i)
-  _damage_heroes(maxi(1, roundi(float(hero_max_hp[0]) * (0.13 if is_fusion_boss else 0.10) * TitanCombatBalance.enemy_damage_scale(current_level))), targets)
+  # Each living hero takes damage proportional to their own max HP.
+  _damage_heroes(0, targets, 0.13 if is_fusion_boss else 0.10)
   last_ability = "Boss: Flaechenschaden"
  boss_cast_kind = ""
  boss_cc_progress = 0
