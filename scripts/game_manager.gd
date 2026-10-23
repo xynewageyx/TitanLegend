@@ -12,6 +12,9 @@ var jewel_level: int = 1
 # Initial weapon upgrade track, independently stored for each hero.
 var weapon_levels: Array[int] = [0, 0, 0, 0]
 const MAX_WEAPON_LEVEL: int = 300
+# Four equipment-hardening fields per hero: attack, armor, max HP, critical damage.
+var hardening_levels: Array = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+const HARDENING_NAMES := ["Angriff", "Ruestung", "Lebenspunkte", "Krit-Schaden"]
 const MAX_R: int = 5
 func add_gold(amount: int) -> void:
  current_gold = maxi(0, current_gold + amount)
@@ -56,5 +59,28 @@ func upgrade_weapon(slot: int) -> bool:
  add_gold(-cost)
  weapon_levels[slot] += 1
  equipment_upgraded.emit(slot, weapon_levels[slot])
+ SaveManager.save_game()
+ return true
+
+func hardening_upgrade_cost(hero: int, field: int) -> int:
+ if hero < 0 or hero >= 4 or field < 0 or field >= 4:
+  return 0
+ var level: int = int(hardening_levels[hero][field])
+ if level >= maxi(1, character_level):
+  return 0
+ return 1000 * (level + 1)
+
+func hardening_bonus(hero: int, field: int) -> float:
+ if hero < 0 or hero >= 4 or field < 0 or field >= 4:
+  return 0.0
+ return minf(0.20, float(hardening_levels[hero][field]) * 0.0002)
+
+func upgrade_hardening(hero: int, field: int) -> bool:
+ var cost: int = hardening_upgrade_cost(hero, field)
+ if cost <= 0 or current_gold < cost:
+  return false
+ add_gold(-cost)
+ hardening_levels[hero][field] = int(hardening_levels[hero][field]) + 1
+ equipment_upgraded.emit(hero, int(hardening_levels[hero][field]))
  SaveManager.save_game()
  return true
