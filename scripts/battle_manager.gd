@@ -56,6 +56,7 @@ var boss_cast_kind: String = ""
 var boss_cc_required: int = 0
 var boss_cc_progress: int = 0
 var prepared_cc: Array[int] = [0, 0, 0, 0]
+var prepared_healing: Array[int] = [-1, -1, -1, -1]
 var boss_cast_index: int = 0
 var hero_hot_ticks: Array[int] = [0, 0, 0, 0]
 var hero_hot_amount: Array[int] = [0, 0, 0, 0]
@@ -140,6 +141,7 @@ func _reset_hero_health() -> void:
  hero_hot_amount.fill(0)
  boss_cc_progress = 0
  prepared_cc.fill(0)
+ prepared_healing.fill(-1)
  team_element_status = -1
  if team_formation != null and team_formation.has_method("reset_individual_defeat_poses"):
   team_formation.reset_individual_defeat_poses()
@@ -214,6 +216,35 @@ func _damage_heroes(amount: int, targets: Array[int]) -> void:
  _sync_team_health()
  if team_hp <= 0:
   _on_team_defeat("normal")
+ else:
+  _trigger_prepared_healing()
+
+func _has_wounded_hero() -> bool:
+ for i in range(4):
+  if hero_hp[i] > 0 and hero_hp[i] < hero_max_hp[i]:
+   return true
+ return false
+
+func _trigger_prepared_healing() -> void:
+ if not battle_active or not _has_wounded_hero():
+  return
+ for slot in range(4):
+  if prepared_healing[slot] < 0 or hero_hp[slot] <= 0:
+   continue
+  var choice: int = prepared_healing[slot]
+  prepared_healing[slot] = -1
+  var skill: Dictionary = TitanSkillSystem.skill_for_role(2, choice)
+  if choice == 8:
+   _apply_heal_over_time(slot, skill)
+  else:
+   var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
+   var modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
+   modifier *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
+   var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier))
+   _heal_heroes(amount, bool(skill.get("aoe", false)))
+  last_ability = "Vorbereitete Heilung"
+  if not _has_wounded_hero():
+   break
 
 func _heal_heroes(amount: int, group_heal: bool = false) -> void:
  if amount <= 0:
@@ -459,19 +490,12 @@ func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
  if choice == 8 and role not in [0, 2]:
   return false
  if role == 2 and choice == 8:
-  for i in range(4):
-   if hero_hp[i] > 0 and hero_hp[i] < hero_max_hp[i]:
-    return true
-  return false
+  return true
  if choice == 7:
   # The fourth slot must not deadlock on mobs or between boss casts.
   return true
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
- if float(skill.get("heal", 0.0)) > 0.0 and role == 2:
-  for i in range(4):
-   if hero_hp[i] > 0 and hero_hp[i] < hero_max_hp[i]:
-    return true
-  return false
+ # Fully healed teams may prepare the healing portion of this slot.
  return true
 
 func _try_cast_charged_skill(slot: int, role: int) -> void:
@@ -520,14 +544,22 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  last_ability = str(skill.get("name", "Skill"))
  if role == 2 and choice == 8:
-  _apply_heal_over_time(slot, skill)
+  if _has_wounded_hero():
+   _apply_heal_over_time(slot, skill)
+  else:
+   prepared_healing[slot] = choice
+   last_ability = "Erneuerung vorbereitet"
   return
  var healing: float = float(skill.get("heal", 0.0))
  if role == 2 and healing > 0.0:
   var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
   healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
   healing *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
-  _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
+  if _has_wounded_hero():
+   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
+  else:
+   prepared_healing[slot] = choice
+   last_ability = "Heilung vorbereitet"
  var power: float = float(skill.get("power", 0.0))
  if power > 0.0:
   var base_damage: int = 35 + current_level * 6
