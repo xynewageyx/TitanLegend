@@ -190,16 +190,19 @@ func _hero_progression(slot: int) -> Dictionary:
 func _damage_heroes(amount: int, targets: Array[int]) -> void:
  var hits: Array[int] = []
  var dodges: Array[int] = []
+ # Resolve the tank's protection once for the entire simultaneous hit.
+ # A tank defeated during this attack still protects allies struck by it.
+ var tank: int = _living_tank_slot()
+ var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] >= skill_tick
  for index in targets:
   if index < 0 or index >= 4 or hero_hp[index] <= 0:
    continue
   if _hero_dodges(index):
    dodges.append(index)
    continue
-  var tank: int = _living_tank_slot()
   var mitigation: float = 0.30 if index == tank else 0.05
   # Active interception reduces damage to allies during boss area attacks.
-  if tank >= 0 and index != tank and tank_intercept_until[tank] >= skill_tick:
+  if intercept_active and index != tank:
    mitigation = 0.35
   # Talent defense is multiplicative and capped separately from tank mitigation.
   var talent_defense: float = float(_hero_progression(index).get("defense", 0.0))
