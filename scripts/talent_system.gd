@@ -66,7 +66,7 @@ static func description_for_class(class_id: int, tree: int, rank: int) -> String
    bonus = minf(0.75, rank * float(OFFENSE[class_id]) * 0.25 + 0.015 * milestone_count(rank))
    label = "Angriff"
   1:
-   bonus = minf(0.35, rank * float(DEFENSE[class_id]) * 0.20 + 0.01 * milestone_count(rank))
+   bonus = minf(0.35, rank * float(DEFENSE[class_id]) * 0.10 + 0.01 * milestone_count(rank))
    label = "Schadensschutz"
   _:
    bonus = minf(0.75, rank * float(SUPPORT[class_id]) * 0.20 + 0.015 * milestone_count(rank))
