@@ -314,6 +314,9 @@ func _begin_boss_cast() -> void:
     boss_cast_kind = "single"
     boss_cast_name = "Zerschmettern"
     boss_cc_required = 1
+ # More required CC hits give the team more real attack cycles.
+ # This changes only the cast window, never the 60-second boss timer.
+ boss_cast_ticks = 3 + maxi(0, boss_cc_required - 1) * 2
  boss_next_cast_tick = skill_tick + 9
 
 func _resolve_boss_cast() -> void:
@@ -435,7 +438,8 @@ func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
     return true
   return false
  if choice == 7:
-  return is_boss and boss_cast_ticks > 0 and boss_cc_required > 0
+  # The fourth slot must not deadlock on mobs or between boss casts.
+  return true
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  if float(skill.get("heal", 0.0)) > 0.0 and role == 2:
   for i in range(4):
@@ -480,10 +484,16 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   _refresh_tank_defense_visuals()
   return
  if choice == 7:
+  if not is_boss or boss_cast_ticks <= 0 or boss_cc_required <= 0:
+   last_ability = "Kontrolle vorbereitet"
+   return
   boss_cc_progress += 1
   last_ability = "Kontrolle %d/%d" % [boss_cc_progress, boss_cc_required]
   if boss_cc_progress >= boss_cc_required:
    boss_cast_ticks = 0
+   boss_cast_kind = ""
+   boss_cc_required = 0
+   boss_cc_progress = 0
    boss_next_cast_tick = maxi(boss_next_cast_tick, skill_tick + 5)
    boss_interrupt_message = "Boss unterbrochen"
    last_ability = "Unterbrechung"
