@@ -356,6 +356,16 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("_trigger_prepared_healing()", battle)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_re_equipping_clears_prepared_combat_effects(self):
+        battle = source("battle_manager.gd")
+        setter = battle.split("func set_skill_loadout(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("next_skill_slot[hero] = 0", setter)
+        self.assertIn("skill_hit_charge[hero] = 0", setter)
+        self.assertIn("prepared_cc[hero] = 0", setter)
+        self.assertIn("prepared_healing[hero] = -1", setter)
+        self.assertIn("SaveManager.save_game()", setter)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
