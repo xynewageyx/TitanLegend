@@ -152,3 +152,82 @@ func upgrade_weapon_rarity(slot: int) -> bool:
  equipment_upgraded.emit(slot, weapon_levels[slot])
  SaveManager.save_game()
  return true
+
+# Update 197: boss equipment drops. Weapons remain a separate upgrade track.
+signal loot_changed
+const LOOT_SLOTS := ["Helm", "Ruestung", "Zubehoer"]
+const MAX_LOOT_ITEMS: int = 60
+var equipment_inventory: Array = []
+# Each hero references item IDs, not inventory indices, so sorting cannot unequip items.
+var equipped_loot: Array = [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]
+var next_loot_id: int = 1
+
+func boss_loot_rarity(stage: int) -> int:
+ var roll: float = randf()
+ var bonus: float = minf(0.10, float(maxi(0, stage - 1)) / 12000.0)
+ if roll < 0.003 + bonus * 0.10: return 5
+ if roll < 0.018 + bonus * 0.20: return 4
+ if roll < 0.070 + bonus * 0.40: return 3
+ if roll < 0.200 + bonus * 0.70: return 2
+ if roll < 0.480 + bonus: return 1
+ return 0
+
+func grant_boss_loot(stage: int, fusion: bool) -> Dictionary:
+ # Boss-only, bounded inventory; a full bag does not destroy anything.
+ if equipment_inventory.size() >= MAX_LOOT_ITEMS:
+  return {}
+ var drop_chance: float = 0.85 if fusion else 0.55
+ if randf() >= drop_chance:
+  return {}
+ var item: Dictionary = {
+  "id": next_loot_id,
+  "slot": randi_range(0, LOOT_SLOTS.size() - 1),
+  "rarity": boss_loot_rarity(stage),
+  "level": clampi(stage, 1, 1200)
+ }
+ next_loot_id += 1
+ equipment_inventory.append(item)
+ loot_changed.emit()
+ return item
+
+func loot_item_by_id(item_id: int) -> Dictionary:
+ for value in equipment_inventory:
+  if value is Dictionary and int(value.get("id", -1)) == item_id:
+   return value
+ return {}
+
+func equip_loot(hero: int, item_id: int) -> bool:
+ if hero < 0 or hero >= 4:
+  return false
+ var item: Dictionary = loot_item_by_id(item_id)
+ if item.is_empty():
+  return false
+ var slot: int = int(item.get("slot", -1))
+ if slot < 0 or slot >= LOOT_SLOTS.size():
+  return false
+ # An item can only be worn by one hero at a time.
+ for h in range(4):
+  for i in range(LOOT_SLOTS.size()):
+   if int(equipped_loot[h][i]) == item_id:
+    equipped_loot[h][i] = -1
+ equipped_loot[hero][slot] = item_id
+ loot_changed.emit()
+ SaveManager.save_game()
+ return true
+
+func loot_bonus(hero: int, slot: int) -> float:
+ if hero < 0 or hero >= 4 or slot < 0 or slot >= LOOT_SLOTS.size():
+  return 0.0
+ var item: Dictionary = loot_item_by_id(int(equipped_loot[hero][slot]))
+ if item.is_empty() or int(item.get("slot", -1)) != slot:
+  return 0.0
+ var rarity: int = clampi(int(item.get("rarity", 0)), 0, 5)
+ var level: int = clampi(int(item.get("level", 1)), 1, 1200)
+ return minf(0.12, float(rarity + 1) * 0.008 + float(level) * 0.000015)
+
+func loot_item_name(item: Dictionary) -> String:
+ if item.is_empty():
+  return "Leer"
+ var quality: int = clampi(int(item.get("rarity", 0)), 0, 5)
+ var slot: int = clampi(int(item.get("slot", 0)), 0, 2)
+ return "%s %s (Stufe %d)" % [WEAPON_RARITIES[quality], LOOT_SLOTS[slot], int(item.get("level", 1))]
