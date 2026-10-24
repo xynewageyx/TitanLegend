@@ -335,11 +335,17 @@ func _hero_progression(slot: int) -> Dictionary:
 func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0.0) -> void:
  var hits: Array[int] = []
  var dodges: Array[int] = []
+ # Process each hero at most once per enemy attack. Boss area patterns can
+ # overlap; duplicate target IDs must not trigger extra dodge rolls or damage.
+ var unique_targets: Array[int] = []
+ for target_slot in targets:
+  if target_slot >= 0 and target_slot < 4 and not unique_targets.has(target_slot):
+   unique_targets.append(target_slot)
  # Resolve the tank's protection once for the entire simultaneous hit.
  # A tank defeated during this attack still protects allies struck by it.
  var tank: int = _living_tank_slot()
  var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] >= skill_tick
- for index in targets:
+ for index in unique_targets:
   if index < 0 or index >= 4 or hero_hp[index] <= 0:
    continue
   if _hero_dodges(index):
