@@ -37,6 +37,9 @@ var loot_select_button: Button
 var loot_equip_button: Button
 var loot_compare_label: Label
 var loot_sell_button: Button
+var loot_transfer_confirmation: ConfirmationDialog
+var pending_loot_equip_id: int = -1
+var pending_loot_equip_hero: int = -1
 var loot_sale_confirmation: ConfirmationDialog
 var pending_loot_sale_id: int = -1
 var weapon_upgrade_button: Button
@@ -292,6 +295,11 @@ func _make_hud() -> void:
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
+ loot_transfer_confirmation = ConfirmationDialog.new()
+ loot_transfer_confirmation.title = "Ausrüstung übertragen?"
+ loot_transfer_confirmation.confirmed.connect(_confirm_loot_transfer)
+ loot_transfer_confirmation.canceled.connect(_cancel_loot_transfer)
+ add_child(loot_transfer_confirmation)
  loot_compare_label = Label.new()
  loot_compare_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  loot_compare_label.add_theme_font_size_override("font_size", 17)
@@ -501,6 +509,8 @@ func _refresh(_unused: int = 0) -> void:
    var worn_by: int = GameManager.loot_equipped_hero(int(selected_loot["id"]))
    var ownership: String = "Im Inventar" if worn_by < 0 else "Angelegt bei Held %d" % (worn_by + 1)
    loot_compare_label.text = "%s | %s\\nAktuell: %s (+%.2f%%)\\nAusgewaehlt: +%.2f%%\\n%s: %+.2f Prozentpunkte" % [comparison["slot_name"], ownership, comparison["equipped_name"], 100.0 * float(comparison["equipped"]), 100.0 * float(comparison["candidate"]), verdict, 100.0 * difference]
+   if worn_by >= 0 and worn_by != weapon_hero_slot:
+    loot_compare_label.text += "\\nACHTUNG: Held %d verliert diesen Gegenstand bei Übertragung." % (worn_by + 1)
    var equipped: bool = GameManager.is_loot_equipped(int(selected_loot["id"]))
    loot_sell_button.text = "Angelegten Gegenstand nicht verkaufen" if equipped else "Verkaufen: %d Gold" % GameManager.loot_sale_price(selected_loot)
    loot_sell_button.disabled = equipped
@@ -574,9 +584,41 @@ func _next_loot_item() -> void:
 func _equip_selected_loot() -> void:
  if GameManager.equipment_inventory.is_empty():
   return
+ loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
  var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
- if GameManager.equip_loot(weapon_hero_slot, int(item["id"])):
+ var item_id: int = int(item.get("id", -1))
+ var worn_by: int = GameManager.loot_equipped_hero(item_id)
+ if worn_by >= 0 and worn_by != weapon_hero_slot:
+  pending_loot_equip_id = item_id
+  pending_loot_equip_hero = weapon_hero_slot
+  loot_transfer_confirmation.dialog_text = "%s von Held %d auf Held %d übertragen?\\nHeld %d verliert damit diesen Gegenstand." % [GameManager.loot_item_name(item), worn_by + 1, weapon_hero_slot + 1, worn_by + 1]
+  loot_transfer_confirmation.popup_centered()
+  return
+ if GameManager.equip_loot(weapon_hero_slot, item_id):
   _append("System", "Gegenstand ausgeruestet: " + GameManager.loot_item_name(item))
+ _refresh()
+
+func _cancel_loot_transfer() -> void:
+ pending_loot_equip_id = -1
+ pending_loot_equip_hero = -1
+
+func _confirm_loot_transfer() -> void:
+ var item_id: int = pending_loot_equip_id
+ var hero: int = pending_loot_equip_hero
+ _cancel_loot_transfer()
+ if hero < 0 or hero >= 4:
+  return
+ var item: Dictionary = GameManager.loot_item_by_id(item_id)
+ if item.is_empty():
+  _refresh()
+  return
+ var worn_by: int = GameManager.loot_equipped_hero(item_id)
+ if worn_by < 0 or worn_by == hero:
+  # State changed after the dialog opened; do not silently transfer.
+  _refresh()
+  return
+ if GameManager.equip_loot(hero, item_id):
+  _append("System", "%s von Held %d zu Held %d übertragen" % [GameManager.loot_item_name(item), worn_by + 1, hero + 1])
  _refresh()
 
 func _sell_selected_loot() -> void:
