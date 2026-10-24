@@ -14,7 +14,9 @@ var weapon_levels: Array[int] = [0, 0, 0, 0]
 const MAX_WEAPON_LEVEL: int = 300
 # Four equipment-hardening fields per hero: attack, armor, max HP, critical damage.
 var hardening_levels: Array = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-const HARDENING_NAMES := ["Angriff", "Ruestung", "Lebenspunkte", "Krit-Schaden"]
+const HARDENING_NAMES := ["Angriff", "Ruestung", "Lebenspunkte", "Krit-Schaden", "Ausweichen", "Aufspiessen"]
+# Legacy save files already have four fields, mapped to their original attributes.
+var hardening_attributes: Array = [[0,1,2,3],[0,1,2,3],[0,1,2,3],[0,1,2,3]]
 const MAX_R: int = 5
 func add_gold(amount: int) -> void:
  current_gold = maxi(0, current_gold + amount)
@@ -70,10 +72,50 @@ func hardening_upgrade_cost(hero: int, field: int) -> int:
   return 0
  return 1000 * (level + 1)
 
-func hardening_bonus(hero: int, field: int) -> float:
- if hero < 0 or hero >= 4 or field < 0 or field >= 4:
+func hardening_bonus(hero: int, attribute: int) -> float:
+ if hero < 0 or hero >= 4 or attribute < 0 or attribute >= HARDENING_NAMES.size():
   return 0.0
- return minf(0.20, float(hardening_levels[hero][field]) * 0.0002)
+ var ranks: int = 0
+ for field in range(4):
+  if int(hardening_attributes[hero][field]) == attribute:
+   ranks += int(hardening_levels[hero][field])
+ return minf(0.20, float(ranks) * 0.0002)
+
+func hardening_reroll_cost(hero: int, field: int) -> int:
+ if hero < 0 or hero >= 4 or field < 0 or field >= 4:
+  return 0
+ return 250 * (int(hardening_levels[hero][field]) + 1)
+
+func select_hardening_attribute(hero: int, field: int, attribute: int) -> bool:
+ # Choosing a specific attribute is a gold service; ranks remain intact.
+ if hero < 0 or hero >= 4 or field < 0 or field >= 4 or attribute < 0 or attribute >= HARDENING_NAMES.size():
+  return false
+ if int(hardening_attributes[hero][field]) == attribute:
+  return false
+ var cost: int = hardening_reroll_cost(hero, field)
+ if current_gold < cost:
+  return false
+ add_gold(-cost)
+ hardening_attributes[hero][field] = attribute
+ equipment_upgraded.emit(hero, int(hardening_levels[hero][field]))
+ SaveManager.save_game()
+ return true
+
+func reroll_hardening_attribute(hero: int, field: int) -> bool:
+ if hero < 0 or hero >= 4 or field < 0 or field >= 4:
+  return false
+ var cost: int = hardening_reroll_cost(hero, field)
+ if current_gold < cost:
+  return false
+ var previous: int = int(hardening_attributes[hero][field])
+ var rolled: int = randi_range(0, HARDENING_NAMES.size() - 2)
+ if rolled >= previous:
+  rolled += 1
+ add_gold(-cost)
+ hardening_attributes[hero][field] = rolled
+ equipment_upgraded.emit(hero, int(hardening_levels[hero][field]))
+ SaveManager.save_game()
+ return true
 
 func upgrade_hardening(hero: int, field: int) -> bool:
  var cost: int = hardening_upgrade_cost(hero, field)
