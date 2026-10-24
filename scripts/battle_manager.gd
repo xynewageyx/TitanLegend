@@ -301,9 +301,31 @@ func _hero_dodge_chance(index: int) -> float:
 func _hero_dodges(index: int) -> bool:
  return randf() < _hero_dodge_chance(index)
 
-func _show_hero_combat_number(_slot: int, _value: int, _is_heal: bool) -> void:
- # No damage popup can be shown without the original FloatingText scene.
- pass
+func _show_hero_combat_number(slot: int, value: int, is_heal: bool) -> void:
+ # Use the existing lightweight Label3D effect for actual HP changes.
+ # Limit floating labels independently per hero so close formations do not
+ # cause one hero's popups to hide another hero's numbers.
+ if value <= 0 or team_formation == null or slot < 0 or slot >= 4:
+  return
+ if slot >= team_formation.heroes.size():
+  return
+ var hero: Node3D = team_formation.heroes[slot] as Node3D
+ if not is_instance_valid(hero) or not hero.is_inside_tree():
+  return
+ var active_labels: Array[Node] = []
+ for child in hero.get_children():
+  if child is Label3D and child.is_in_group("hero_combat_popup") and not child.is_queued_for_deletion():
+   active_labels.append(child)
+ if active_labels.size() >= 3:
+  active_labels[0].queue_free()
+ var popup := Label3D.new()
+ popup.set_script(preload("res://scripts/floating_text.gd"))
+ popup.add_to_group("hero_combat_popup")
+ popup.set("damage_amount", value)
+ popup.set("heal", is_heal)
+ popup.set("lane_index", active_labels.size())
+ hero.add_child(popup)
+ popup.position = Vector3(0.0, 2.35, -0.28)
 
 func _hero_progression(slot: int) -> Dictionary:
  if team_formation == null or slot < 0 or slot >= team_formation.class_ids.size():
