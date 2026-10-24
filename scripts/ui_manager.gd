@@ -41,9 +41,12 @@ var loot_sell_button: Button
 var loot_downgrade_confirmation: ConfirmationDialog
 var pending_loot_downgrade_id: int = -1
 var pending_loot_downgrade_hero: int = -1
+var pending_loot_downgrade_target_id: int = -1
 var loot_transfer_confirmation: ConfirmationDialog
 var pending_loot_equip_id: int = -1
 var pending_loot_equip_hero: int = -1
+var pending_loot_source_hero: int = -1
+var pending_loot_target_item_id: int = -1
 var loot_sale_confirmation: ConfirmationDialog
 var pending_loot_sale_id: int = -1
 var weapon_upgrade_button: Button
@@ -634,6 +637,8 @@ func _equip_selected_loot() -> void:
  if worn_by >= 0 and worn_by != weapon_hero_slot:
   pending_loot_equip_id = item_id
   pending_loot_equip_hero = weapon_hero_slot
+  pending_loot_source_hero = worn_by
+  pending_loot_target_item_id = int(GameManager.equipped_loot[weapon_hero_slot][int(item["slot"])])
   var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, item_id)
   var downgrade_note: String = "\nAchtung: Für den Zielhelden ist dies schwächer." if float(comparison.get("difference", 0.0)) < -0.000001 else ""
   var transfer: Dictionary = GameManager.compare_loot_transfer(weapon_hero_slot, item_id)
@@ -644,6 +649,7 @@ func _equip_selected_loot() -> void:
  if float(comparison.get("difference", 0.0)) < -0.000001:
   pending_loot_downgrade_id = item_id
   pending_loot_downgrade_hero = weapon_hero_slot
+  pending_loot_downgrade_target_id = int(GameManager.equipped_loot[weapon_hero_slot][int(item["slot"])])
   loot_downgrade_confirmation.dialog_text = "%s ist um %.2f Prozentpunkte schwächer als deine aktuelle Ausrüstung. Trotzdem anlegen?" % [GameManager.loot_item_name(item), -100.0 * float(comparison["difference"])]
   loot_downgrade_confirmation.popup_centered()
   return
@@ -654,15 +660,21 @@ func _equip_selected_loot() -> void:
 func _cancel_loot_downgrade() -> void:
  pending_loot_downgrade_id = -1
  pending_loot_downgrade_hero = -1
+ pending_loot_downgrade_target_id = -1
 
 func _confirm_loot_downgrade() -> void:
  var item_id: int = pending_loot_downgrade_id
  var hero: int = pending_loot_downgrade_hero
+ var expected_target_id: int = pending_loot_downgrade_target_id
  _cancel_loot_downgrade()
  if hero < 0 or hero >= 4:
   return
  var item: Dictionary = GameManager.loot_item_by_id(item_id)
  if item.is_empty() or GameManager.loot_equipped_hero(item_id) >= 0:
+  _refresh()
+  return
+ var item_slot: int = int(item.get("slot", -1))
+ if item_slot < 0 or item_slot >= GameManager.LOOT_SLOTS.size() or int(GameManager.equipped_loot[hero][item_slot]) != expected_target_id:
   _refresh()
   return
  var comparison: Dictionary = GameManager.compare_loot(hero, item_id)
@@ -676,10 +688,14 @@ func _confirm_loot_downgrade() -> void:
 func _cancel_loot_transfer() -> void:
  pending_loot_equip_id = -1
  pending_loot_equip_hero = -1
+ pending_loot_source_hero = -1
+ pending_loot_target_item_id = -1
 
 func _confirm_loot_transfer() -> void:
  var item_id: int = pending_loot_equip_id
  var hero: int = pending_loot_equip_hero
+ var expected_source_hero: int = pending_loot_source_hero
+ var expected_target_id: int = pending_loot_target_item_id
  _cancel_loot_transfer()
  if hero < 0 or hero >= 4:
   return
@@ -688,8 +704,9 @@ func _confirm_loot_transfer() -> void:
   _refresh()
   return
  var worn_by: int = GameManager.loot_equipped_hero(item_id)
- if worn_by < 0 or worn_by == hero:
-  # State changed after the dialog opened; do not silently transfer.
+ var item_slot: int = int(item.get("slot", -1))
+ if worn_by != expected_source_hero or item_slot < 0 or item_slot >= GameManager.LOOT_SLOTS.size() or int(GameManager.equipped_loot[hero][item_slot]) != expected_target_id:
+  # Equipment changed since the comparison was shown; the user must review it again.
   _refresh()
   return
  if GameManager.equip_loot(hero, item_id):
