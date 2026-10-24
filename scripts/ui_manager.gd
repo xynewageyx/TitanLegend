@@ -38,6 +38,9 @@ var loot_select_button: Button
 var loot_equip_button: Button
 var loot_compare_label: Label
 var loot_sell_button: Button
+var loot_downgrade_confirmation: ConfirmationDialog
+var pending_loot_downgrade_id: int = -1
+var pending_loot_downgrade_hero: int = -1
 var loot_transfer_confirmation: ConfirmationDialog
 var pending_loot_equip_id: int = -1
 var pending_loot_equip_hero: int = -1
@@ -317,6 +320,11 @@ func _make_hud() -> void:
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
+ loot_downgrade_confirmation = ConfirmationDialog.new()
+ loot_downgrade_confirmation.title = "Schwächeren Gegenstand ausrüsten?"
+ loot_downgrade_confirmation.confirmed.connect(_confirm_loot_downgrade)
+ loot_downgrade_confirmation.canceled.connect(_cancel_loot_downgrade)
+ add_child(loot_downgrade_confirmation)
  loot_transfer_confirmation = ConfirmationDialog.new()
  loot_transfer_confirmation.title = "Ausrüstung übertragen?"
  loot_transfer_confirmation.confirmed.connect(_confirm_loot_transfer)
@@ -625,11 +633,42 @@ func _equip_selected_loot() -> void:
  if worn_by >= 0 and worn_by != weapon_hero_slot:
   pending_loot_equip_id = item_id
   pending_loot_equip_hero = weapon_hero_slot
-  loot_transfer_confirmation.dialog_text = "%s von Held %d auf Held %d übertragen?\\nHeld %d verliert damit diesen Gegenstand." % [GameManager.loot_item_name(item), worn_by + 1, weapon_hero_slot + 1, worn_by + 1]
+  var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, item_id)
+  var downgrade_note: String = "\\nAchtung: Für den Zielhelden ist dies schwächer." if float(comparison.get("difference", 0.0)) < -0.000001 else ""
+  loot_transfer_confirmation.dialog_text = "%s von Held %d auf Held %d übertragen?\\nHeld %d verliert damit diesen Gegenstand.%s" % [GameManager.loot_item_name(item), worn_by + 1, weapon_hero_slot + 1, worn_by + 1, downgrade_note]
   loot_transfer_confirmation.popup_centered()
+  return
+ var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, item_id)
+ if float(comparison.get("difference", 0.0)) < -0.000001:
+  pending_loot_downgrade_id = item_id
+  pending_loot_downgrade_hero = weapon_hero_slot
+  loot_downgrade_confirmation.dialog_text = "%s ist um %.2f Prozentpunkte schwächer als deine aktuelle Ausrüstung. Trotzdem anlegen?" % [GameManager.loot_item_name(item), -100.0 * float(comparison["difference"])]
+  loot_downgrade_confirmation.popup_centered()
   return
  if GameManager.equip_loot(weapon_hero_slot, item_id):
   _append("System", "Gegenstand ausgeruestet: " + GameManager.loot_item_name(item))
+ _refresh()
+
+func _cancel_loot_downgrade() -> void:
+ pending_loot_downgrade_id = -1
+ pending_loot_downgrade_hero = -1
+
+func _confirm_loot_downgrade() -> void:
+ var item_id: int = pending_loot_downgrade_id
+ var hero: int = pending_loot_downgrade_hero
+ _cancel_loot_downgrade()
+ if hero < 0 or hero >= 4:
+  return
+ var item: Dictionary = GameManager.loot_item_by_id(item_id)
+ if item.is_empty() or GameManager.loot_equipped_hero(item_id) >= 0:
+  _refresh()
+  return
+ var comparison: Dictionary = GameManager.compare_loot(hero, item_id)
+ if comparison.is_empty():
+  _refresh()
+  return
+ if GameManager.equip_loot(hero, item_id):
+  _append("System", "Ausrüstung bewusst gewechselt: " + GameManager.loot_item_name(item))
  _refresh()
 
 func _cancel_loot_transfer() -> void:
