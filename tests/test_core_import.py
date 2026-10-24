@@ -566,6 +566,24 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn('"GLEICH STARK"', ui)
         self.assertIn("Prozentpunkte", ui)
 
+    def test_equipment_transfer_between_heroes_requires_confirmation(self):
+        ui = source("ui_manager.gd")
+        game = source("game_manager.gd")
+        request = ui.split("func _equip_selected_loot(", 1)[1].split("\nfunc ", 1)[0]
+        confirm = ui.split("func _confirm_loot_transfer(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("if worn_by >= 0 and worn_by != weapon_hero_slot:", request)
+        self.assertIn("pending_loot_equip_id = item_id", request)
+        self.assertIn("pending_loot_equip_hero = weapon_hero_slot", request)
+        self.assertIn("loot_transfer_confirmation.popup_centered()", request)
+        self.assertIn("loot_transfer_confirmation.confirmed.connect(_confirm_loot_transfer)", ui)
+        self.assertIn("loot_transfer_confirmation.canceled.connect(_cancel_loot_transfer)", ui)
+        self.assertIn("var item_id: int = pending_loot_equip_id", confirm)
+        self.assertIn("var hero: int = pending_loot_equip_hero", confirm)
+        self.assertIn("GameManager.loot_item_by_id(item_id)", confirm)
+        self.assertIn("if worn_by < 0 or worn_by == hero:", confirm)
+        self.assertIn("GameManager.equip_loot(hero, item_id)", confirm)
+        self.assertIn("func loot_equipped_hero(item_id: int) -> int:", game)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
