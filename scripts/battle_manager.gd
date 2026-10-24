@@ -177,7 +177,7 @@ func _choose_routine_enemy_target() -> int:
 func _hero_dodge_chance(index: int) -> float:
  if index < 0 or index >= 4:
   return 0.0
- return 0.04
+ return minf(0.24, 0.04 + GameManager.hardening_bonus(index, 4))
 
 func _hero_dodges(index: int) -> bool:
  return randf() < _hero_dodge_chance(index)
@@ -607,7 +607,7 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
   # Normal mob waves use an aggregate HP pool, so distribute AoE once here.
   dealt *= mini(maxi(enemies_remaining, 1), 7)
  if is_boss:
-  dealt = TitanCombatBalance.damage_after_resistance(amount, boss_resistance, float(stats.get("penetration", 0.0)))
+  dealt = TitanCombatBalance.damage_after_resistance(amount, boss_resistance, float(stats.get("penetration", 0.0)) + GameManager.hardening_bonus(slot, 5))
  # Midgame minions can be targeted and removed before the main boss.
  if is_boss and not boss_minion_hp.is_empty():
   for index in range(2):
