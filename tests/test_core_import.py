@@ -480,6 +480,24 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("GameManager.reroll_hardening_attribute(", ui)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_six_weapon_rarity_tiers_and_promotions(self):
+        game = source("game_manager.gd")
+        save = source("save_manager.gd")
+        ui = source("ui_manager.gd")
+        battle = source("battle_manager.gd")
+        self.assertIn('const WEAPON_RARITIES := ["Weiss", "Gruen", "Blau", "Gelb", "Gold", "Lila"]', game)
+        self.assertIn("const WEAPON_RARITY_LEVELS := [0, 20, 50, 100, 180, 260]", game)
+        self.assertIn("var weapon_rarities: Array[int] = [0, 0, 0, 0]", game)
+        self.assertIn("func weapon_rarity_upgrade_cost(slot: int)", game)
+        self.assertIn("if current_gold < cost:", game)
+        self.assertIn("weapon_rarities[slot] += 1", game)
+        self.assertIn("WEAPON_RARITY_BONUS[weapon_rarities[slot]]", game)
+        self.assertIn('"weapon_rarities": GameManager.weapon_rarities.duplicate()', save)
+        self.assertIn('data.get("weapon_rarities", [])', save)
+        self.assertIn("GameManager.upgrade_weapon_rarity(weapon_hero_slot)", ui)
+        self.assertIn("GameManager.weapon_attack_bonus(slot)", battle)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
