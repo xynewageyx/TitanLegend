@@ -581,7 +581,7 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("var item_id: int = pending_loot_equip_id", confirm)
         self.assertIn("var hero: int = pending_loot_equip_hero", confirm)
         self.assertIn("GameManager.loot_item_by_id(item_id)", confirm)
-        self.assertIn("if worn_by < 0 or worn_by == hero:", confirm)
+        self.assertIn("if worn_by != expected_source_hero", confirm)
         self.assertIn("GameManager.equip_loot(hero, item_id)", confirm)
         self.assertIn("func loot_equipped_hero(item_id: int) -> int:", game)
 
@@ -618,6 +618,23 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn('transfer["target_gain"]', ui)
         self.assertIn('transfer["net_change"]', ui)
         self.assertIn("loot_transfer_confirmation.popup_centered()", ui)
+
+    def test_equipment_confirmations_reject_stale_comparisons(self):
+        ui = source("ui_manager.gd")
+        request = ui.split("func _equip_selected_loot(", 1)[1].split("\nfunc ", 1)[0]
+        downgrade = ui.split("func _confirm_loot_downgrade(", 1)[1].split("\nfunc ", 1)[0]
+        transfer = ui.split("func _confirm_loot_transfer(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("pending_loot_source_hero = worn_by", request)
+        self.assertIn('pending_loot_target_item_id = int(GameManager.equipped_loot[weapon_hero_slot][int(item["slot"])])', request)
+        self.assertIn('pending_loot_downgrade_target_id = int(GameManager.equipped_loot[weapon_hero_slot][int(item["slot"])])', request)
+        self.assertIn("var expected_target_id: int = pending_loot_downgrade_target_id", downgrade)
+        self.assertIn("int(GameManager.equipped_loot[hero][item_slot]) != expected_target_id", downgrade)
+        self.assertIn("var expected_source_hero: int = pending_loot_source_hero", transfer)
+        self.assertIn("var expected_target_id: int = pending_loot_target_item_id", transfer)
+        self.assertIn("worn_by != expected_source_hero", transfer)
+        self.assertIn("int(GameManager.equipped_loot[hero][item_slot]) != expected_target_id", transfer)
+        self.assertIn("pending_loot_source_hero = -1", ui)
+        self.assertIn("pending_loot_downgrade_target_id = -1", ui)
 
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
