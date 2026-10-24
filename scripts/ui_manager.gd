@@ -552,7 +552,8 @@ func _refresh(_unused: int = 0) -> void:
    var ownership: String = "Im Inventar" if worn_by < 0 else "Angelegt bei Held %d" % (worn_by + 1)
    loot_compare_label.text = "%s | %s\nAktuell: %s (+%.2f%%)\nAusgewaehlt: +%.2f%%\n%s: %+.2f Prozentpunkte" % [comparison["slot_name"], ownership, comparison["equipped_name"], 100.0 * float(comparison["equipped"]), 100.0 * float(comparison["candidate"]), verdict, 100.0 * difference]
    if worn_by >= 0 and worn_by != weapon_hero_slot:
-    loot_compare_label.text += "\\nACHTUNG: Held %d verliert diesen Gegenstand bei Übertragung." % (worn_by + 1)
+    var transfer: Dictionary = GameManager.compare_loot_transfer(weapon_hero_slot, int(selected_loot["id"]))
+    loot_compare_label.text += "\nÜbertragung: Held %d verliert %.2f Prozentpunkte.\nTeamdifferenz: %+.2f Prozentpunkte." % [worn_by + 1, 100.0 * float(transfer["source_loss"]), 100.0 * float(transfer["net_change"])]
    var equipped: bool = GameManager.is_loot_equipped(int(selected_loot["id"]))
    loot_sell_button.text = "Angelegten Gegenstand nicht verkaufen" if equipped else "Verkaufen: %d Gold" % GameManager.loot_sale_price(selected_loot)
    loot_sell_button.disabled = equipped
@@ -635,7 +636,8 @@ func _equip_selected_loot() -> void:
   pending_loot_equip_hero = weapon_hero_slot
   var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, item_id)
   var downgrade_note: String = "\nAchtung: Für den Zielhelden ist dies schwächer." if float(comparison.get("difference", 0.0)) < -0.000001 else ""
-  loot_transfer_confirmation.dialog_text = "%s von Held %d auf Held %d übertragen?\nHeld %d verliert damit diesen Gegenstand.%s" % [GameManager.loot_item_name(item), worn_by + 1, weapon_hero_slot + 1, worn_by + 1, downgrade_note]
+  var transfer: Dictionary = GameManager.compare_loot_transfer(weapon_hero_slot, item_id)
+  loot_transfer_confirmation.dialog_text = "%s von Held %d auf Held %d übertragen?\nHeld %d verliert %.2f Prozentpunkte.\nHeld %d gewinnt %+.2f Prozentpunkte.\nGesamtdifferenz: %+.2f Prozentpunkte.%s" % [GameManager.loot_item_name(item), worn_by + 1, weapon_hero_slot + 1, worn_by + 1, 100.0 * float(transfer["source_loss"]), weapon_hero_slot + 1, 100.0 * float(transfer["target_gain"]), 100.0 * float(transfer["net_change"]), downgrade_note]
   loot_transfer_confirmation.popup_centered()
   return
  var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, item_id)
