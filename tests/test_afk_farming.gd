@@ -142,8 +142,29 @@ func _run_tests() -> void:
  if battle.enemy_hp != remaining_hp:
   _fail("Duplicate walking callback reset boss health")
   return
+ # Defeat/retry wurde gerade geplant, als Android pausiert wurde.
+ # Nach Resume muss die gleiche Bosswelle ohne Doppelstart zurueckkehren.
+ battle.battle_active = false
+ battle._retry_pending = true
+ battle._notification(Node.NOTIFICATION_APPLICATION_PAUSED)
+ if battle._retry_pending or not battle._resume_walk_after_pause:
+  _fail("Pause did not preserve a pending defeat retry")
+  return
+ battle._notification(Node.NOTIFICATION_APPLICATION_RESUMED)
+ battle._start_queued_encounter(battle._encounter_request_id)
+ if not team.is_walking:
+  _fail("Defeat retry did not resume the boss walk after Android pause")
+  return
+ battle._retry_defeated_encounter()
+ if not team.is_walking:
+  _fail("Stale defeat retry canceled the resumed boss walk")
+  return
+ battle._on_walking_finished()
+ if not battle.battle_active or not battle.is_boss or battle.current_wave != 10:
+  _fail("Defeat retry resumed the wrong encounter")
+  return
  scene.queue_free()
- print("Titan Legends AFK integration passed: 5min, Gold+XP, no duplicate walking, Android resume, boss preserved")
+ print("Titan Legends AFK integration passed: 5min, Gold+XP, no duplicate walking, Android pause/retry, boss preserved")
  quit(0)
 
 func _fail(message: String) -> void:
