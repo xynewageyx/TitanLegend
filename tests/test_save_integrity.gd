@@ -8,7 +8,7 @@ func _initialize() -> void:
 
 func _run_tests() -> void:
     for suffix in ["", ".bak", ".tmp", ".bak.tmp"]:
-        var path := TEST_PATH + suffix
+        var path: String = TEST_PATH + str(suffix)
         if FileAccess.file_exists(path):
             DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
@@ -70,7 +70,7 @@ func _run_tests() -> void:
         return
 
     for suffix in ["", ".bak", ".tmp", ".bak.tmp"]:
-        var path := TEST_PATH + suffix
+        var path: String = TEST_PATH + str(suffix)
         if FileAccess.file_exists(path):
             DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
     print("Titan Legends automatic save integrity tests passed.")
