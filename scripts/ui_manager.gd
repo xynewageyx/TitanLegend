@@ -243,12 +243,18 @@ func _make_hud() -> void:
  action_panel.offset_left = 0
  action_panel.offset_right = 0
  action_panel.offset_top = 200
- action_panel.offset_bottom = 460
+ action_panel.offset_bottom = 790
  action_panel.add_theme_stylebox_override("panel", _style(Color(0.025, 0.045, 0.065, 0.97)))
  add_child(action_panel)
+ # Many upgrade buttons must remain accessible on portrait Android screens.
+ var action_scroll := ScrollContainer.new()
+ action_scroll.custom_minimum_size.y = 0
+ action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ action_panel.add_child(action_scroll)
  var modal := VBoxContainer.new()
- modal.add_theme_constant_override("separation", 14)
- action_panel.add_child(modal)
+ modal.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ modal.add_theme_constant_override("separation", 10)
+ action_scroll.add_child(modal)
  action_title = Label.new()
  _font(action_title, 24)
  action_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
