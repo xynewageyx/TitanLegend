@@ -496,7 +496,11 @@ func _refresh(_unused: int = 0) -> void:
    loot_equip_button.text = "Held %d ausruesten: %s" % [weapon_hero_slot + 1, GameManager.LOOT_SLOTS[int(selected_loot["slot"])]]
    loot_equip_button.disabled = int(GameManager.equipped_loot[weapon_hero_slot][int(selected_loot["slot"])]) == int(selected_loot["id"])
    var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, int(selected_loot["id"]))
-   loot_compare_label.text = "%s | Ausgeruestet: %s (+%.2f%%) | Neu: +%.2f%% | Differenz: %+.2f%%" % [comparison["slot_name"], comparison["equipped_name"], 100.0 * float(comparison["equipped"]), 100.0 * float(comparison["candidate"]), 100.0 * float(comparison["difference"])]
+   var difference: float = float(comparison["difference"])
+   var verdict: String = "BESSER" if difference > 0.000001 else ("SCHWAECHER" if difference < -0.000001 else "GLEICH STARK")
+   var worn_by: int = GameManager.loot_equipped_hero(int(selected_loot["id"]))
+   var ownership: String = "Im Inventar" if worn_by < 0 else "Angelegt bei Held %d" % (worn_by + 1)
+   loot_compare_label.text = "%s | %s\\nAktuell: %s (+%.2f%%)\\nAusgewaehlt: +%.2f%%\\n%s: %+.2f Prozentpunkte" % [comparison["slot_name"], ownership, comparison["equipped_name"], 100.0 * float(comparison["equipped"]), 100.0 * float(comparison["candidate"]), verdict, 100.0 * difference]
    var equipped: bool = GameManager.is_loot_equipped(int(selected_loot["id"]))
    loot_sell_button.text = "Angelegten Gegenstand nicht verkaufen" if equipped else "Verkaufen: %d Gold" % GameManager.loot_sale_price(selected_loot)
    loot_sell_button.disabled = equipped
