@@ -32,6 +32,8 @@ var weapon_hero_slot: int = 0
 var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
+var loot_compare_label: Label
+var loot_sell_button: Button
 var weapon_upgrade_button: Button
 var weapon_rarity_button: Button
 var weapon_hero_button: Button
@@ -274,6 +276,11 @@ func _make_hud() -> void:
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
+ loot_compare_label = Label.new()
+ loot_compare_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ loot_compare_label.add_theme_font_size_override("font_size", 17)
+ modal.add_child(loot_compare_label)
+ loot_sell_button = _make_button("Gegenstand verkaufen", modal, _sell_selected_loot, 17)
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
@@ -410,6 +417,8 @@ func _refresh(_unused: int = 0) -> void:
  weapon_rarity_button.visible = current_tab == "jewels"
  loot_select_button.visible = current_tab == "jewels"
  loot_equip_button.visible = current_tab == "jewels"
+ loot_compare_label.visible = current_tab == "jewels"
+ loot_sell_button.visible = current_tab == "jewels"
  hardening_select_button.visible = current_tab == "jewels"
  hardening_upgrade_button.visible = current_tab == "jewels"
  attribute_select_button.visible = current_tab == "jewels"
@@ -425,12 +434,20 @@ func _refresh(_unused: int = 0) -> void:
    loot_select_button.text = "Inventar: leer (Boss-Drops)"
    loot_equip_button.text = "Kein Gegenstand vorhanden"
    loot_equip_button.disabled = true
+   loot_compare_label.text = "Kein Gegenstand zum Vergleichen."
+   loot_sell_button.disabled = true
+   loot_sell_button.text = "Nichts verkaufen"
   else:
    loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
    var selected_loot: Dictionary = GameManager.equipment_inventory[loot_selected_index]
    loot_select_button.text = "Inventar %d/%d: %s" % [loot_selected_index + 1, GameManager.equipment_inventory.size(), GameManager.loot_item_name(selected_loot)]
    loot_equip_button.text = "Held %d ausruesten: %s" % [weapon_hero_slot + 1, GameManager.LOOT_SLOTS[int(selected_loot["slot"])]]
    loot_equip_button.disabled = int(GameManager.equipped_loot[weapon_hero_slot][int(selected_loot["slot"])]) == int(selected_loot["id"])
+   var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, int(selected_loot["id"]))
+   loot_compare_label.text = "%s | Ausgeruestet: %s (+%.2f%%) | Neu: +%.2f%% | Differenz: %+.2f%%" % [comparison["slot_name"], comparison["equipped_name"], 100.0 * float(comparison["equipped"]), 100.0 * float(comparison["candidate"]), 100.0 * float(comparison["difference"])]
+   var equipped: bool = GameManager.is_loot_equipped(int(selected_loot["id"]))
+   loot_sell_button.text = "Angelegten Gegenstand nicht verkaufen" if equipped else "Verkaufen: %d Gold" % GameManager.loot_sale_price(selected_loot)
+   loot_sell_button.disabled = equipped
   var weapon_rarity: int = GameManager.weapon_rarities[weapon_hero_slot]
   var rarity_cost: int = GameManager.weapon_rarity_upgrade_cost(weapon_hero_slot)
   var rarity_text: String = GameManager.WEAPON_RARITIES[weapon_rarity]
@@ -504,6 +521,20 @@ func _equip_selected_loot() -> void:
  var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
  if GameManager.equip_loot(weapon_hero_slot, int(item["id"])):
   _append("System", "Gegenstand ausgeruestet: " + GameManager.loot_item_name(item))
+ _refresh()
+
+func _sell_selected_loot() -> void:
+ if GameManager.equipment_inventory.is_empty():
+  return
+ loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
+ var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
+ var sale_price: int = GameManager.loot_sale_price(item)
+ if GameManager.sell_loot(int(item["id"])):
+  _append("System", "%s verkauft: +%d Gold" % [GameManager.loot_item_name(item), sale_price])
+  if not GameManager.equipment_inventory.is_empty():
+   loot_selected_index = mini(loot_selected_index, GameManager.equipment_inventory.size() - 1)
+  else:
+   loot_selected_index = 0
  _refresh()
 
 func _next_hardening_field() -> void:
