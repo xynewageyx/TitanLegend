@@ -1,5 +1,9 @@
 extends Node
 const SAVE_FILE_STORE = preload("res://scripts/save_file_store.gd")
+const OFFLINE_REWARDS = preload("res://scripts/offline_rewards.gd")
+signal offline_rewards_received(gold: int, seconds: int)
+var last_offline_gold: int = 0
+var last_offline_seconds: int = 0
 const SAVE_PATH: String = "user://save_data.json"
 var timer: Timer
 func _ready() -> void:
@@ -12,6 +16,7 @@ func _ready() -> void:
 func save_game() -> void:
  var data: Dictionary = {
   "version": 1, "astral_floor": 1, "astral_marks": 0, "gold": GameManager.current_gold,
+  "last_active_unix": int(Time.get_unix_time_from_system()),
   "tickets": GameManager.reincarnation_tickets,
   "gems": ShopManager.gems, "unlocked_skins": ShopManager.unlocked_skins.duplicate(), "equipped_skins": ShopManager.equipped_skins.duplicate(),
   "reincarnation": GameManager.current_reincarnation_level,
@@ -47,6 +52,7 @@ func load_game() -> void:
  var data: Dictionary = SAVE_FILE_STORE.load_latest(SAVE_PATH)
  if data.is_empty():
   return
+ data = _claim_offline_rewards(data)
  ShopManager.restore_state(data)
  GameManager.current_gold = maxi(0, int(data.get("gold", 10000)))
  GameManager.reincarnation_tickets = maxi(0, int(data.get("tickets", 500)))
@@ -127,6 +133,36 @@ func get_saved_battle_progress() -> Vector2i:
 func _notification(what: int) -> void:
  if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_PAUSED:
   save_game()
+ elif what == NOTIFICATION_APPLICATION_RESUMED:
+  _claim_offline_on_resume()
+
+func _claim_offline_rewards(data: Dictionary) -> Dictionary:
+ var now_unix: int = int(Time.get_unix_time_from_system())
+ var claim: Dictionary = OFFLINE_REWARDS.make_claim(data, now_unix)
+ var earned: Dictionary = claim.get("reward", {})
+ var gold: int = int(earned.get("gold", 0))
+ if gold <= 0:
+  return data
+ var updated: Dictionary = claim.get("save", {})
+ var error: Error = SAVE_FILE_STORE.save_atomic(SAVE_PATH, updated)
+ if error != OK:
+  push_warning("Offline reward could not be saved safely: " + str(error))
+  return data
+ last_offline_gold = gold
+ last_offline_seconds = int(earned.get("seconds", 0))
+ offline_rewards_received.emit(last_offline_gold, last_offline_seconds)
+ return updated
+
+func _claim_offline_on_resume() -> void:
+ var saved: Dictionary = SAVE_FILE_STORE.load_latest(SAVE_PATH)
+ if saved.is_empty():
+  return
+ var applied: Dictionary = _claim_offline_rewards(saved)
+ var earned: int = int(applied.get("gold", 0)) - int(saved.get("gold", 0))
+ if earned > 0:
+  # Wiederaufnahme ohne komplettes Neuladen von Skills, Formation oder Kampfstufe.
+  GameManager.current_gold = maxi(GameManager.current_gold, int(applied.get("gold", 0)))
+  GameManager.gold_changed.emit(GameManager.current_gold)
 
 func get_saved_skill_choices() -> Array[int]:
  var choices: Array[int] = [0, 0, 0, 0]
