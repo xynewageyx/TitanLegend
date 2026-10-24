@@ -459,6 +459,27 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("GameManager.upgrade_hardening(weapon_hero_slot, hardening_field)", ui)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_hardening_six_attributes_and_gold_rerolls(self):
+        game = source("game_manager.gd")
+        save = source("save_manager.gd")
+        battle = source("battle_manager.gd")
+        ui = source("ui_manager.gd")
+        self.assertIn('const HARDENING_NAMES := ["Angriff", "Ruestung", "Lebenspunkte", "Krit-Schaden", "Ausweichen", "Aufspiessen"]', game)
+        self.assertIn("var hardening_attributes: Array =", game)
+        self.assertIn("for field in range(4):", game)
+        self.assertIn("if int(hardening_attributes[hero][field]) == attribute:", game)
+        self.assertIn("func select_hardening_attribute(", game)
+        self.assertIn("func reroll_hardening_attribute(", game)
+        self.assertIn("if current_gold < cost:", game)
+        self.assertIn("add_gold(-cost)", game)
+        self.assertIn('"hardening_attributes": GameManager.hardening_attributes.duplicate(true)', save)
+        self.assertIn('data.get("hardening_attributes", [])', save)
+        self.assertIn("GameManager.hardening_bonus(index, 4)", battle)
+        self.assertIn("GameManager.hardening_bonus(slot, 5)", battle)
+        self.assertIn("GameManager.select_hardening_attribute(", ui)
+        self.assertIn("GameManager.reroll_hardening_attribute(", ui)
+        self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
