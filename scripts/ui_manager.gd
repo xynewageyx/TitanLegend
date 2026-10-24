@@ -30,6 +30,7 @@ var action_button: Button
 var astral_shop_button: Button
 var weapon_hero_slot: int = 0
 var weapon_upgrade_button: Button
+var weapon_rarity_button: Button
 var weapon_hero_button: Button
 var hardening_field: int = 0
 var hardening_select_button: Button
@@ -266,6 +267,7 @@ func _make_hud() -> void:
  action_button = _make_button("Ausführen", modal, _on_action_pressed, 19)
  weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
+ weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
@@ -399,6 +401,7 @@ func _refresh(_unused: int = 0) -> void:
  astral_shop_button.visible = current_tab == "astral"
  weapon_hero_button.visible = current_tab == "jewels"
  weapon_upgrade_button.visible = current_tab == "jewels"
+ weapon_rarity_button.visible = current_tab == "jewels"
  hardening_select_button.visible = current_tab == "jewels"
  hardening_upgrade_button.visible = current_tab == "jewels"
  attribute_select_button.visible = current_tab == "jewels"
@@ -410,6 +413,16 @@ func _refresh(_unused: int = 0) -> void:
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
   weapon_upgrade_button.text = "Waffe %d → %d | %d Gold" % [weapon_level, weapon_level + 1, weapon_cost] if weapon_cost > 0 else "Waffe MAX"
   weapon_upgrade_button.disabled = weapon_cost <= 0 or GameManager.current_gold < weapon_cost
+  var weapon_rarity: int = GameManager.weapon_rarities[weapon_hero_slot]
+  var rarity_cost: int = GameManager.weapon_rarity_upgrade_cost(weapon_hero_slot)
+  var rarity_text: String = GameManager.WEAPON_RARITIES[weapon_rarity]
+  if weapon_rarity >= GameManager.WEAPON_RARITIES.size() - 1:
+   weapon_rarity_button.text = "Qualitaet Lila – MAX"
+  elif rarity_cost <= 0:
+   weapon_rarity_button.text = "%s → %s ab Waffenlevel %d" % [rarity_text, GameManager.WEAPON_RARITIES[weapon_rarity + 1], GameManager.WEAPON_RARITY_LEVELS[weapon_rarity + 1]]
+  else:
+   weapon_rarity_button.text = "%s → %s: %d Gold" % [rarity_text, GameManager.WEAPON_RARITIES[weapon_rarity + 1], rarity_cost]
+  weapon_rarity_button.disabled = rarity_cost <= 0 or GameManager.current_gold < rarity_cost
   var hardening_level: int = int(GameManager.hardening_levels[weapon_hero_slot][hardening_field])
   var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
   var assigned_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][hardening_field])
@@ -452,6 +465,11 @@ func _next_weapon_hero() -> void:
 func _upgrade_current_weapon() -> void:
  if GameManager.upgrade_weapon(weapon_hero_slot):
   _append("System", "Waffe Held %d verbessert" % (weapon_hero_slot + 1))
+ _refresh()
+
+func _upgrade_current_weapon_rarity() -> void:
+ if GameManager.upgrade_weapon_rarity(weapon_hero_slot):
+  _append("System", "Waffenqualitaet fuer Held %d verbessert" % (weapon_hero_slot + 1))
  _refresh()
 
 func _next_hardening_field() -> void:
