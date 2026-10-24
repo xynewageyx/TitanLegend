@@ -34,6 +34,10 @@ var weapon_hero_button: Button
 var hardening_field: int = 0
 var hardening_select_button: Button
 var hardening_upgrade_button: Button
+var attribute_select_index: int = 0
+var attribute_select_button: Button
+var attribute_apply_button: Button
+var attribute_reroll_button: Button
 var skin_shop_menu: Control
 
 func _ready() -> void:
@@ -258,6 +262,9 @@ func _make_hud() -> void:
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
+ attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
+ attribute_apply_button = _make_button("Attribut setzen", modal, _apply_hardening_attribute, 17)
+ attribute_reroll_button = _make_button("Zufaellig neu", modal, _reroll_hardening_attribute, 17)
  astral_shop_button = _make_button("Astralshop: 30 Marken → 10 Tickets", modal, _buy_astral_reward, 17)
  astral_shop_button.hide()
  _make_button("Schließen", modal, func(): action_panel.hide(), 18)
@@ -388,6 +395,9 @@ func _refresh(_unused: int = 0) -> void:
  weapon_upgrade_button.visible = current_tab == "jewels"
  hardening_select_button.visible = current_tab == "jewels"
  hardening_upgrade_button.visible = current_tab == "jewels"
+ attribute_select_button.visible = current_tab == "jewels"
+ attribute_apply_button.visible = current_tab == "jewels"
+ attribute_reroll_button.visible = current_tab == "jewels"
  if current_tab == "jewels":
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
@@ -396,7 +406,14 @@ func _refresh(_unused: int = 0) -> void:
   weapon_upgrade_button.disabled = weapon_cost <= 0 or GameManager.current_gold < weapon_cost
   var hardening_level: int = int(GameManager.hardening_levels[weapon_hero_slot][hardening_field])
   var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
-  hardening_select_button.text = "Feld %d: %s (Rang %d)" % [hardening_field + 1, GameManager.HARDENING_NAMES[hardening_field], hardening_level]
+  var assigned_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][hardening_field])
+  var reroll_cost: int = GameManager.hardening_reroll_cost(weapon_hero_slot, hardening_field)
+  hardening_select_button.text = "Feld %d: %s (Rang %d)" % [hardening_field + 1, GameManager.HARDENING_NAMES[assigned_attribute], hardening_level]
+  attribute_select_button.text = "Waehlen: " + str(GameManager.HARDENING_NAMES[attribute_select_index])
+  attribute_apply_button.text = "Attribut setzen: %d Gold" % reroll_cost
+  attribute_apply_button.disabled = assigned_attribute == attribute_select_index or GameManager.current_gold < reroll_cost
+  attribute_reroll_button.text = "Zufall: %d Gold" % reroll_cost
+  attribute_reroll_button.disabled = GameManager.current_gold < reroll_cost
   hardening_upgrade_button.text = "Haerten %d Gold" % hardening_cost if hardening_cost > 0 else "Haertung am Level-Limit"
   hardening_upgrade_button.disabled = hardening_cost <= 0 or GameManager.current_gold < hardening_cost
  if current_tab == "astral" and battle_manager != null:
@@ -438,6 +455,20 @@ func _next_hardening_field() -> void:
 func _upgrade_current_hardening() -> void:
  if GameManager.upgrade_hardening(weapon_hero_slot, hardening_field):
   _append("System", "Haertung fuer Held %d verbessert" % (weapon_hero_slot + 1))
+ _refresh()
+
+func _next_hardening_attribute() -> void:
+ attribute_select_index = (attribute_select_index + 1) % GameManager.HARDENING_NAMES.size()
+ _refresh()
+
+func _apply_hardening_attribute() -> void:
+ if GameManager.select_hardening_attribute(weapon_hero_slot, hardening_field, attribute_select_index):
+  _append("System", "Haertungsattribut geaendert")
+ _refresh()
+
+func _reroll_hardening_attribute() -> void:
+ if GameManager.reroll_hardening_attribute(weapon_hero_slot, hardening_field):
+  _append("System", "Haertungsattribut neu gewuerfelt")
  _refresh()
 
 func _on_equipment_upgraded(_slot: int, _level: int) -> void:
