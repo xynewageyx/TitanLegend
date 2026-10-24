@@ -526,18 +526,32 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         game = source("game_manager.gd")
         ui = source("ui_manager.gd")
         self.assertIn("func sell_loot(item_id: int) -> bool:", game)
-        sale = game.split("func sell_loot(", 1)[1].split("\\nfunc ", 1)[0]
+        sale = game.split("func sell_loot(", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn("item.is_empty() or is_loot_equipped(item_id)", sale)
         self.assertIn("equipment_inventory.remove_at(i)", sale)
         self.assertIn("add_gold(price)", sale)
         self.assertIn("SaveManager.save_game()", sale)
-        comparison = game.split("func compare_loot(", 1)[1].split("\\nfunc ", 1)[0]
+        comparison = game.split("func compare_loot(", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn("equipped_loot[hero][slot]", comparison)
         self.assertIn('"difference": candidate_bonus - worn_bonus', comparison)
         self.assertIn("func _sell_selected_loot()", ui)
         self.assertIn("GameManager.is_loot_equipped(", ui)
         self.assertIn("GameManager.loot_sale_price(", ui)
         self.assertIn("GameManager.compare_loot(", ui)
+
+    def test_loot_sale_requires_id_bound_confirmation(self):
+        ui = source("ui_manager.gd")
+        action = ui.split("func _sell_selected_loot(", 1)[1].split("\nfunc ", 1)[0]
+        confirmation = ui.split("func _confirm_loot_sale(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("pending_loot_sale_id = item_id", action)
+        self.assertIn("loot_sale_confirmation.popup_centered()", action)
+        self.assertNotIn("GameManager.sell_loot(", action)
+        self.assertIn("var item_id: int = pending_loot_sale_id", confirmation)
+        self.assertIn("pending_loot_sale_id = -1", confirmation)
+        self.assertIn("GameManager.loot_item_by_id(item_id)", confirmation)
+        self.assertIn("item.is_empty() or GameManager.is_loot_equipped(item_id)", confirmation)
+        self.assertIn("GameManager.sell_loot(item_id)", confirmation)
+        self.assertIn("loot_sale_confirmation.confirmed.connect(_confirm_loot_sale)", ui)
 
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
