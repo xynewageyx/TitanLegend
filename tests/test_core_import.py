@@ -67,7 +67,8 @@ class ImportedCoreRegressionTests(unittest.TestCase):
     def test_original_ten_wave_boss_flow(self):
         text = source("battle_manager.gd")
         self.assertIn("const BOSS_WAVE: int = 10", text)
-        self.assertIn("is_boss = astral_active or current_wave == BOSS_WAVE", text)
+        self.assertIn("is_boss = AFK_POLICY.is_boss_encounter(afk_farming, astral_active, current_wave)", text)
+        self.assertIn("return not afk_active and (astral_active or current_wave == BOSS_WAVE)", source("afk_farming_policy.gd"))
         self.assertIn("enemies_remaining = 1 if is_boss else mini(2 + current_wave, 7)", text)
         self.assertIn("_spawn_enemy_visuals()", text)
         self.assertIn("enemy_spawn_node.add_child(mob)", text)
