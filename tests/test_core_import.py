@@ -603,6 +603,22 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("downgrade_note", request)
         self.assertIn("loot_transfer_confirmation.popup_centered()", request)
 
+    def test_transfer_comparison_counts_both_heroes(self):
+        game = source("game_manager.gd")
+        ui = source("ui_manager.gd")
+        section = game.split("func compare_loot_transfer(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("var comparison: Dictionary = compare_loot(hero, item_id)", section)
+        self.assertIn("var source_hero: int = loot_equipped_hero(item_id)", section)
+        self.assertIn("if source_hero >= 0 and source_hero != hero:", section)
+        self.assertIn("source_loss = loot_item_bonus(loot_item_by_id(item_id))", section)
+        self.assertIn('"target_gain": float(comparison["difference"])', section)
+        self.assertIn('"net_change": float(comparison["difference"]) - source_loss', section)
+        self.assertIn("GameManager.compare_loot_transfer(weapon_hero_slot, item_id)", ui)
+        self.assertIn('transfer["source_loss"]', ui)
+        self.assertIn('transfer["target_gain"]', ui)
+        self.assertIn('transfer["net_change"]', ui)
+        self.assertIn("loot_transfer_confirmation.popup_centered()", ui)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
