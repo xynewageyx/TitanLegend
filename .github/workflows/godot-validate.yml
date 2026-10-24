@@ -44,6 +44,10 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --script res://tests/test_offline_rewards.gd
+      - name: Test in-app AFK farming and safe return to boss checkpoint
+        shell: bash
+        run: |
+          godot --headless --path . --script res://tests/test_afk_farming.gd
       - name: Launch smoke test
         shell: bash
         run: |
