@@ -430,7 +430,7 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("var weapon_levels: Array[int] = [0, 0, 0, 0]", game)
         self.assertIn("const MAX_WEAPON_LEVEL: int = 300", game)
         self.assertIn("return 500 * (weapon_levels[slot] + 1)", game)
-        self.assertIn("return minf(0.15, float(weapon_levels[slot]) * 0.0005)", game)
+        self.assertIn("return minf(0.25, float(weapon_levels[slot]) * 0.0005 + float(WEAPON_RARITY_BONUS[weapon_rarities[slot]]))", game)
         self.assertIn("add_gold(-cost)", game)
         self.assertIn('"weapon_levels": GameManager.weapon_levels.duplicate()', save)
         self.assertIn('data.get("weapon_levels", [0, 0, 0, 0])', save)
