@@ -83,6 +83,7 @@ var _last_player_input_ms: int = -1
 var _app_paused: bool = false
 var _walking_for_encounter: bool = false
 var _encounter_request_id: int = 0
+var _resume_walk_after_pause: bool = false
 
 func _ready() -> void:
  _last_player_input_ms = Time.get_ticks_msec()
@@ -161,15 +162,24 @@ func _input(event: InputEvent) -> void:
 func _notification(what: int) -> void:
  if what == NOTIFICATION_APPLICATION_PAUSED:
   _app_paused = true
+  if _walking_for_encounter:
+   _resume_walk_after_pause = true
+   _cancel_pending_walk()
  elif what == NOTIFICATION_APPLICATION_RESUMED:
   _app_paused = false
   _last_player_input_ms = Time.get_ticks_msec()
   if afk_farming:
+   _resume_walk_after_pause = false
    _leave_afk_farming()
+  elif _resume_walk_after_pause:
+   # Walking-Tweens koennen waehrend der Android-Pause nicht sicher fortgesetzt werden.
+   _resume_walk_after_pause = false
+   _queue_next_encounter()
 
 func _enter_afk_farming(now_ms: int) -> void:
  if afk_farming or astral_active or _app_paused:
   return
+ _resume_walk_after_pause = false
  _cancel_pending_walk()
  _retry_pending = false
  afk_farming = true
@@ -186,6 +196,7 @@ func _enter_afk_farming(now_ms: int) -> void:
 func _leave_afk_farming() -> void:
  if not afk_farming:
   return
+ _resume_walk_after_pause = false
  _cancel_pending_walk()
  _retry_pending = false
  afk_farming = false
