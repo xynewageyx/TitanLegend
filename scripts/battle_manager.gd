@@ -81,6 +81,8 @@ var _afk_wave_pending: bool = false
 var _afk_next_reward_ms: int = 0
 var _last_player_input_ms: int = -1
 var _app_paused: bool = false
+var _walking_for_encounter: bool = false
+var _encounter_request_id: int = 0
 
 func _ready() -> void:
  _last_player_input_ms = Time.get_ticks_msec()
@@ -100,7 +102,7 @@ func _ready() -> void:
  skill_loadouts = SaveManager.get_saved_skill_loadouts()
  add_to_group("battle_manager")
  _reset_hero_health()
- call_deferred("start_next_encounter")
+ _queue_next_encounter()
 
 func _process(delta: float) -> void:
  var now_ms: int = Time.get_ticks_msec()
@@ -168,6 +170,8 @@ func _notification(what: int) -> void:
 func _enter_afk_farming(now_ms: int) -> void:
  if afk_farming or astral_active or _app_paused:
   return
+ _cancel_pending_walk()
+ _retry_pending = false
  afk_farming = true
  _afk_wave_pending = false
  _afk_next_reward_ms = now_ms + AFK_POLICY.AFK_REWARD_INTERVAL_MS
@@ -177,11 +181,13 @@ func _enter_afk_farming(now_ms: int) -> void:
  _finishing = false
  afk_mode_changed.emit(true)
  battle_status_changed.emit()
- call_deferred("start_next_encounter")
+ _queue_next_encounter()
 
 func _leave_afk_farming() -> void:
  if not afk_farming:
   return
+ _cancel_pending_walk()
+ _retry_pending = false
  afk_farming = false
  _afk_wave_pending = false
  _afk_next_reward_ms = 0
@@ -190,7 +196,7 @@ func _leave_afk_farming() -> void:
  afk_mode_changed.emit(false)
  battle_status_changed.emit()
  # Der echte Boss der gespeicherten Stage darf erst nach Rueckkehr starten.
- call_deferred("start_next_encounter")
+ _queue_next_encounter()
 
 func _pay_afk_wave(now_ms: int) -> void:
  if not afk_farming or not _afk_wave_pending:
@@ -204,7 +210,22 @@ func _pay_afk_wave(now_ms: int) -> void:
  SaveManager.save_game()
  afk_reward_received.emit(gold, xp)
  battle_status_changed.emit()
- call_deferred("start_next_encounter")
+ _queue_next_encounter()
+
+func _queue_next_encounter() -> void:
+ # Alte, noch nicht ausgefuehrte Startauftraege werden ungueltig.
+ _encounter_request_id += 1
+ call_deferred("_start_queued_encounter", _encounter_request_id)
+
+func _start_queued_encounter(request_id: int) -> void:
+ if request_id != _encounter_request_id or not is_inside_tree():
+  return
+ start_next_encounter()
+
+func _cancel_pending_walk() -> void:
+ _walking_for_encounter = false
+ if team_formation != null and team_formation.has_method("stop_walking"):
+  team_formation.call("stop_walking")
 
 func _sync_team_health() -> void:
  team_hp = 0
@@ -788,6 +809,9 @@ func _choose_automatic_skill(slot: int, _role: int) -> int:
 func enter_astral() -> void:
  if astral_active:
   return
+ if afk_farming:
+  _leave_afk_farming()
+ _cancel_pending_walk()
  world_progress = Vector2i(current_level, current_wave)
  astral_active = true
  current_level = maxi(1, astral_floor)
@@ -817,20 +841,25 @@ func buy_astral_reward() -> bool:
  return true
 
 func start_next_encounter() -> void:
- if _finishing or _afk_wave_pending:
+ if _finishing or _afk_wave_pending or _app_paused:
   return
+ _encounter_request_id += 1
+ _cancel_pending_walk()
  if team_hp <= 0:
   _reset_hero_health()
  clear_enemies()
  battle_active = false
- if team_formation.has_method("start_walking"):
-  team_formation.start_walking()
+ if team_formation != null and team_formation.has_method("start_walking"):
+  _walking_for_encounter = true
+  team_formation.call("start_walking")
  else:
   spawn_wave()
 
 func _on_walking_finished() -> void:
- if not _afk_wave_pending:
-  spawn_wave()
+ if not _walking_for_encounter or _finishing or _afk_wave_pending or _app_paused:
+  return
+ _walking_for_encounter = false
+ spawn_wave()
 
 func spawn_wave() -> void:
  if _finishing or _afk_wave_pending:
@@ -900,8 +929,10 @@ func _on_team_defeat(reason: String) -> void:
  get_tree().create_timer(2.0).timeout.connect(_retry_defeated_encounter)
 
 func _retry_defeated_encounter() -> void:
+ if not _retry_pending:
+  return
  _retry_pending = false
- if not is_inside_tree() or battle_active:
+ if not is_inside_tree() or battle_active or _app_paused:
   return
  _reset_hero_health()
  start_next_encounter()
@@ -951,7 +982,7 @@ func finish_wave() -> void:
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- call_deferred("start_next_encounter")
+ _queue_next_encounter()
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
