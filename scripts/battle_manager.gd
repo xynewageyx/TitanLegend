@@ -1,7 +1,10 @@
 extends Node3D
+const AFK_POLICY = preload("res://scripts/afk_farming_policy.gd")
 # TEMPORARY compatibility implementation.
 # Original Update 168 battle_manager.gd (36,410 bytes) must replace this file.
 signal battle_status_changed
+signal afk_mode_changed(active: bool)
+signal afk_reward_received(gold: int, xp: int)
 
 @export var team_formation: Node3D
 @export var biome_manager: Node3D
@@ -73,8 +76,14 @@ var _wave_hp_pool: int = 0
 var _finishing: bool = false
 var _retry_pending: bool = false
 var _enemy_unit_hp: int = 1
+var afk_farming: bool = false
+var _afk_wave_pending: bool = false
+var _afk_next_reward_ms: int = 0
+var _last_player_input_ms: int = -1
+var _app_paused: bool = false
 
 func _ready() -> void:
+ _last_player_input_ms = Time.get_ticks_msec()
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
  var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
@@ -94,6 +103,15 @@ func _ready() -> void:
  call_deferred("start_next_encounter")
 
 func _process(delta: float) -> void:
+ var now_ms: int = Time.get_ticks_msec()
+ if not afk_farming and AFK_POLICY.should_activate(_last_player_input_ms, now_ms, astral_active, _app_paused):
+  _enter_afk_farming(now_ms)
+ if _app_paused:
+  return
+ if afk_farming and _afk_wave_pending:
+  if AFK_POLICY.reward_ready(afk_farming, _afk_wave_pending, _app_paused, now_ms, _afk_next_reward_ms):
+   _pay_afk_wave(now_ms)
+  return
  if not battle_active:
   return
  enemy_animation_time += delta
@@ -121,6 +139,72 @@ func _process(delta: float) -> void:
   if hero_attack_elapsed[slot] >= ROLE_ATTACK_INTERVALS[role]:
    hero_attack_elapsed[slot] = 0.0
    _hero_attack(slot, role)
+
+func _input(event: InputEvent) -> void:
+ # Alle echten Touch-/Maus-/Tastatureingaben zaehlen, auch in Menues.
+ var interacting: bool = false
+ if event is InputEventScreenTouch:
+  interacting = event.pressed
+ elif event is InputEventMouseButton:
+  interacting = event.pressed
+ elif event is InputEventKey:
+  interacting = event.pressed and not event.echo
+ elif event is InputEventScreenDrag:
+  interacting = true
+ if interacting:
+  _last_player_input_ms = Time.get_ticks_msec()
+  if afk_farming:
+   _leave_afk_farming()
+
+func _notification(what: int) -> void:
+ if what == NOTIFICATION_APPLICATION_PAUSED:
+  _app_paused = true
+ elif what == NOTIFICATION_APPLICATION_RESUMED:
+  _app_paused = false
+  _last_player_input_ms = Time.get_ticks_msec()
+  if afk_farming:
+   _leave_afk_farming()
+
+func _enter_afk_farming(now_ms: int) -> void:
+ if afk_farming or astral_active or _app_paused:
+  return
+ afk_farming = true
+ _afk_wave_pending = false
+ _afk_next_reward_ms = now_ms + AFK_POLICY.AFK_REWARD_INTERVAL_MS
+ # Aktuellen Bosskampf abbrechen, nicht als offline besiegt werten.
+ battle_active = false
+ clear_enemies()
+ _finishing = false
+ afk_mode_changed.emit(true)
+ battle_status_changed.emit()
+ call_deferred("start_next_encounter")
+
+func _leave_afk_farming() -> void:
+ if not afk_farming:
+  return
+ afk_farming = false
+ _afk_wave_pending = false
+ _afk_next_reward_ms = 0
+ battle_active = false
+ clear_enemies()
+ afk_mode_changed.emit(false)
+ battle_status_changed.emit()
+ # Der echte Boss der gespeicherten Stage darf erst nach Rueckkehr starten.
+ call_deferred("start_next_encounter")
+
+func _pay_afk_wave(now_ms: int) -> void:
+ if not afk_farming or not _afk_wave_pending:
+  return
+ _afk_wave_pending = false
+ _afk_next_reward_ms = now_ms + AFK_POLICY.AFK_REWARD_INTERVAL_MS
+ var gold: int = clampi(current_level, 1, 1200) * 50
+ var xp: int = GameManager.EXPERIENCE.mob_wave_xp(current_level)
+ GameManager.add_gold(gold)
+ GameManager.gain_character_xp(xp)
+ SaveManager.save_game()
+ afk_reward_received.emit(gold, xp)
+ battle_status_changed.emit()
+ call_deferred("start_next_encounter")
 
 func _sync_team_health() -> void:
  team_hp = 0
@@ -733,7 +817,7 @@ func buy_astral_reward() -> bool:
  return true
 
 func start_next_encounter() -> void:
- if _finishing:
+ if _finishing or _afk_wave_pending:
   return
  if team_hp <= 0:
   _reset_hero_health()
@@ -745,10 +829,11 @@ func start_next_encounter() -> void:
   spawn_wave()
 
 func _on_walking_finished() -> void:
- spawn_wave()
+ if not _afk_wave_pending:
+  spawn_wave()
 
 func spawn_wave() -> void:
- if _finishing:
+ if _finishing or _afk_wave_pending:
   return
  clear_enemies()
  # Preserve surviving heroes' HP across normal waves.
@@ -767,7 +852,7 @@ func spawn_wave() -> void:
  hero_attack_elapsed.fill(0.0)
  _enemy_attack_elapsed = 0.0
  defeat_reason = ""
- is_boss = astral_active or current_wave == BOSS_WAVE
+ is_boss = AFK_POLICY.is_boss_encounter(afk_farming, astral_active, current_wave)
  is_fusion_boss = is_boss and current_level % 10 == 0
  boss_variant_id = TitanCombatBalance.boss_variant(current_level)
  boss_title = TitanCombatBalance.BOSS_TITLES[boss_variant_id]
@@ -826,6 +911,14 @@ func finish_wave() -> void:
   return
  battle_active = false
  _finishing = true
+ if afk_farming:
+  # Eine abgeschlossene AFK-Welle gibt maximal alle 60 Sekunden Belohnung.
+  # Niemals Bossloot vergeben oder die gespeicherte Stage/Welle erhoehen.
+  _finishing = false
+  _afk_wave_pending = true
+  clear_enemies()
+  battle_status_changed.emit()
+  return
  var gold_reward: int = current_level * (500 if is_fusion_boss else (250 if is_boss else 50))
  if team_formation != null and team_formation.has_formation_bonus():
   gold_reward = roundi(float(gold_reward) * 1.05)
