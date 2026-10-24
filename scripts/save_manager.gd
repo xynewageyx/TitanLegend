@@ -133,8 +133,12 @@ func get_saved_battle_progress() -> Vector2i:
 func _notification(what: int) -> void:
  if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_PAUSED:
   save_game()
+  if what == NOTIFICATION_APPLICATION_PAUSED and timer != null:
+   timer.stop()
  elif what == NOTIFICATION_APPLICATION_RESUMED:
   _claim_offline_on_resume()
+  if timer != null:
+   timer.start()
 
 func _claim_offline_rewards(data: Dictionary) -> Dictionary:
  var now_unix: int = int(Time.get_unix_time_from_system())
