@@ -36,6 +36,10 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --editor --import --quit
+      - name: Test automatic save integrity and backup recovery
+        shell: bash
+        run: |
+          godot --headless --path . --script res://tests/test_save_integrity.gd
       - name: Launch smoke test
         shell: bash
         run: |
