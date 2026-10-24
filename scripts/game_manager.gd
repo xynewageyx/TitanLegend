@@ -1,5 +1,8 @@
 extends Node
+const EXPERIENCE = preload("res://scripts/experience_system.gd")
 signal gold_changed(value: int)
+signal xp_changed(current_xp: int)
+signal character_level_changed(new_level: int)
 signal tickets_changed(value: int)
 signal reincarnation_performed(level: int)
 signal jewel_upgraded(level: int)
@@ -8,6 +11,7 @@ var current_gold: int = 10000
 var reincarnation_tickets: int = 500
 var current_reincarnation_level: int = 0
 var character_level: int = 1
+var character_xp: int = 0
 var jewel_level: int = 1
 # Initial weapon upgrade track, independently stored for each hero.
 var weapon_levels: Array[int] = [0, 0, 0, 0]
@@ -27,6 +31,27 @@ const MAX_R: int = 5
 func add_gold(amount: int) -> void:
  current_gold = maxi(0, current_gold + amount)
  gold_changed.emit(current_gold)
+func xp_for_next_level() -> int:
+ return EXPERIENCE.xp_for_next_level(character_level)
+
+func gain_character_xp(amount: int) -> int:
+ if amount <= 0:
+  return 0
+ var result: Dictionary = EXPERIENCE.apply_xp(character_level, character_xp, amount)
+ character_level = int(result["level"])
+ character_xp = int(result["xp"])
+ xp_changed.emit(character_xp)
+ var levels: int = int(result["levels_gained"])
+ if levels > 0:
+  character_level_changed.emit(character_level)
+ return levels
+
+func gain_boss_level() -> void:
+ # Erhaelt die bisherige Bossbelohnung von genau einem Charakterlevel.
+ character_level += 1
+ character_level_changed.emit(character_level)
+ xp_changed.emit(character_xp)
+
 func add_tickets(amount: int) -> void:
  reincarnation_tickets = maxi(0, reincarnation_tickets + amount)
  tickets_changed.emit(reincarnation_tickets)
