@@ -135,7 +135,7 @@ func _sync_team_health() -> void:
 func _reset_hero_health() -> void:
  for i in range(4):
   var pet_health: float = float(_pet_stats(i).get("health", 0.0))
-  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health + GameManager.hardening_bonus(i, 2))))
+  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health + GameManager.hardening_bonus(i, 2) + GameManager.loot_bonus(i, 0))))
   hero_hp[i] = hero_max_hp[i]
  tank_taunt_until.fill(0)
  tank_intercept_until.fill(0)
@@ -213,7 +213,7 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
   var incoming: int = amount
   if max_hp_fraction > 0.0:
    incoming = maxi(1, roundi(float(hero_max_hp[index]) * max_hp_fraction * TitanCombatBalance.enemy_damage_scale(current_level)))
-  var damage: int = maxi(1, roundi(float(incoming) * (1.0 - mitigation) * (1.0 - talent_defense) * (1.0 - GameManager.hardening_bonus(index, 1))))
+  var damage: int = maxi(1, roundi(float(incoming) * (1.0 - mitigation) * (1.0 - talent_defense) * (1.0 - GameManager.hardening_bonus(index, 1)) * (1.0 - GameManager.loot_bonus(index, 1))))
   var previous: int = hero_hp[index]
   hero_hp[index] = maxi(0, previous - damage)
   _show_hero_combat_number(index, previous - hero_hp[index], false)
@@ -585,7 +585,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
   if role == 2 and team_formation != null:
    damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
-  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0))))
+  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2))))
   _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
@@ -664,7 +664,7 @@ func _hero_attack(slot: int, role: int) -> void:
  var normal_damage: int = 35 + current_level * 6
  var multiplier: float = TitanSkillSystem.damage_multiplier(role)
  var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
- var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0)
+ var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)
  var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0)))
  _deal_damage_to_enemy(slot, actual_damage)
  if not battle_active:
@@ -830,6 +830,10 @@ func finish_wave() -> void:
  if team_formation != null and team_formation.has_formation_bonus():
   gold_reward = roundi(float(gold_reward) * 1.05)
  GameManager.add_gold(gold_reward)
+ if is_boss and not astral_active:
+  var found_loot: Dictionary = GameManager.grant_boss_loot(current_level, is_fusion_boss)
+  if not found_loot.is_empty():
+   last_ability = "Loot: " + GameManager.loot_item_name(found_loot)
  if astral_active:
   astral_marks += 5 + mini(astral_floor, 50)
   astral_floor += 1
