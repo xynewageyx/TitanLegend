@@ -69,23 +69,27 @@ func _run_tests() -> void:
  if battle.is_boss or not battle.battle_active:
   _fail("AFK wave 10 must spawn normal mobs instead of a boss")
   return
- var gold_before: int = GameManager.current_gold
- var level_before: int = GameManager.character_level
- var xp_before: int = GameManager.character_xp
+ var manager: Node = root.get_node_or_null("GameManager")
+ if manager == null:
+  _fail("Godot --script test could not resolve the game autoload")
+  return
+ var gold_before: int = int(manager.current_gold)
+ var level_before: int = int(manager.character_level)
+ var xp_before: int = int(manager.character_xp)
  battle.finish_wave()
  if not battle._afk_wave_pending or battle.current_level != 10 or battle.current_wave != 10:
   _fail("AFK mob victory changed the saved boss checkpoint")
   return
- if GameManager.current_gold != gold_before or GameManager.character_xp != xp_before:
+ if manager.current_gold != gold_before or manager.character_xp != xp_before:
   _fail("AFK payout was granted before the one-minute interval")
   return
  battle._afk_next_reward_ms = Time.get_ticks_msec() - 1
  battle._process(0.016)
- if GameManager.current_gold != gold_before + 500:
+ if manager.current_gold != gold_before + 500:
   _fail("AFK payout did not grant normal-wave gold")
   return
  var expected: Dictionary = EXPERIENCE.apply_xp(level_before, xp_before, 100)
- if GameManager.character_level != int(expected["level"]) or GameManager.character_xp != int(expected["xp"]):
+ if manager.character_level != int(expected["level"]) or manager.character_xp != int(expected["xp"]):
   _fail("AFK payout did not grant normal-wave XP")
   return
  if battle.current_level != 10 or battle.current_wave != 10 or battle._afk_wave_pending:
@@ -93,7 +97,7 @@ func _run_tests() -> void:
   return
  # Same frame cannot pay again.
  battle._process(0.016)
- if GameManager.current_gold != gold_before + 500:
+ if manager.current_gold != gold_before + 500:
   _fail("AFK gold paid twice during the same interval")
   return
  battle._leave_afk_farming()
