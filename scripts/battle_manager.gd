@@ -830,6 +830,13 @@ func finish_wave() -> void:
  if team_formation != null and team_formation.has_formation_bonus():
   gold_reward = roundi(float(gold_reward) * 1.05)
  GameManager.add_gold(gold_reward)
+ # Gleiche normale Mob-XP-Rate wie beim Offline-Farming.
+ # Bosskaempfe geben weiterhin ihr bisheriges direktes Charakterlevel.
+ if not astral_active:
+  var wave_xp: int = GameManager.EXPERIENCE.mob_wave_xp(current_level)
+  if is_boss:
+   wave_xp *= 5
+  GameManager.gain_character_xp(wave_xp)
  if is_boss and not astral_active:
   var found_loot: Dictionary = GameManager.grant_boss_loot(current_level, is_fusion_boss)
   if not found_loot.is_empty():
@@ -840,7 +847,7 @@ func finish_wave() -> void:
   current_level = astral_floor
   current_wave = BOSS_WAVE
  elif is_boss:
-  GameManager.character_level += 1
+  GameManager.gain_boss_level()
   current_level += 1
   current_wave = 1
   if biome_manager != null:
