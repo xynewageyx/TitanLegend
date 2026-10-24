@@ -162,9 +162,12 @@ func _input(event: InputEvent) -> void:
 func _notification(what: int) -> void:
  if what == NOTIFICATION_APPLICATION_PAUSED:
   _app_paused = true
-  if _walking_for_encounter:
+  # Auch ein ausstehender Encounter-Start bzw. der 2-Sekunden-Defeat-Retry
+  # darf im Hintergrund nicht stillschweigend verloren gehen.
+  if _walking_for_encounter or (not battle_active and not afk_farming):
    _resume_walk_after_pause = true
    _cancel_pending_walk()
+   _retry_pending = false
  elif what == NOTIFICATION_APPLICATION_RESUMED:
   _app_paused = false
   _last_player_input_ms = Time.get_ticks_msec()
