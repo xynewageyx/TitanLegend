@@ -571,6 +571,31 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("func save_game()", text)
         self.assertIn("func load_game()", text)
 
+    def test_online_and_offline_xp_share_progression_and_save(self):
+        experience = source("experience_system.gd")
+        offline = source("offline_rewards.gd")
+        game = source("game_manager.gd")
+        battle = source("battle_manager.gd")
+        saved = source("save_manager.gd")
+        ui = source("ui_manager.gd")
+        self.assertIn("static func mob_wave_xp(stage: int)", experience)
+        self.assertIn("static func xp_for_next_level(level: int)", experience)
+        self.assertIn("static func apply_xp(level: int, progress_xp: int, earned_xp: int)", experience)
+        self.assertIn("EXPERIENCE.mob_wave_xp(safe_stage) * waves", offline)
+        self.assertIn("EXPERIENCE.apply_xp(", offline)
+        self.assertIn("GameManager.gain_character_xp(wave_xp)", battle)
+        self.assertIn("GameManager.gain_boss_level()", battle)
+        self.assertIn('"character_xp": GameManager.character_xp', saved)
+        self.assertIn("GameManager.character_xp = clampi(", saved)
+        self.assertIn("GameManager.xp_changed.emit(", saved)
+        self.assertIn("GameManager.character_level_changed.emit(", saved)
+        self.assertIn("last_offline_xp", saved)
+        self.assertIn('xp_label.text = "Lv "', ui)
+        self.assertIn("offline_rewards_received(gold: int, seconds: int, xp: int, levels: int)", saved)
+        self.assertIn("var character_xp: int = 0", game)
+        self.assertIn("func gain_character_xp(amount: int)", game)
+        self.assertIn("func gain_boss_level()", game)
+
     def test_no_accidental_binary_commits(self):
         for forbidden in ("*.apk", "*.aab", "*.keystore", "*.jks"):
             self.assertEqual(list(ROOT.rglob(forbidden)), [])
