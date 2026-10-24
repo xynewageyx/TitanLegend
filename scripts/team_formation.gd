@@ -308,6 +308,7 @@ func set_class(slot: int, class_id: int) -> bool:
  _save_classes()
  _save_roles()
  create_team()
+ team_changed.emit()
  return true
 
 func _enforce_single_tank() -> void:
