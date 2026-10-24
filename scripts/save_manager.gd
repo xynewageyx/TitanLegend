@@ -18,6 +18,9 @@ func save_game() -> void:
   "jewel_level": GameManager.jewel_level,
   "weapon_levels": GameManager.weapon_levels.duplicate(),
   "weapon_rarities": GameManager.weapon_rarities.duplicate(),
+  "equipment_inventory": GameManager.equipment_inventory.duplicate(true),
+  "equipped_loot": GameManager.equipped_loot.duplicate(true),
+  "next_loot_id": GameManager.next_loot_id,
   "hardening_levels": GameManager.hardening_levels.duplicate(true),
   "hardening_attributes": GameManager.hardening_attributes.duplicate(true),
   "ads_watched": AdManager.ads_watched_today,
@@ -73,6 +76,39 @@ func load_game() -> void:
    while rarity > 0 and GameManager.weapon_levels[slot] < int(GameManager.WEAPON_RARITY_LEVELS[rarity]):
     rarity -= 1
    GameManager.weapon_rarities[slot] = rarity
+ # Validate old and modified saves. Unknown or duplicate IDs cannot be equipped.
+ GameManager.equipment_inventory = []
+ GameManager.equipped_loot = [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]
+ var known_ids: Dictionary = {}
+ var inventory_data: Variant = data.get("equipment_inventory", [])
+ var highest_id: int = 0
+ if inventory_data is Array:
+  for value in inventory_data:
+   if not value is Dictionary or GameManager.equipment_inventory.size() >= GameManager.MAX_LOOT_ITEMS:
+    continue
+   var item_id: int = int(value.get("id", -1))
+   var item_slot: int = int(value.get("slot", -1))
+   if item_id <= 0 or known_ids.has(item_id) or item_slot < 0 or item_slot >= 3:
+    continue
+   known_ids[item_id] = true
+   highest_id = maxi(highest_id, item_id)
+   GameManager.equipment_inventory.append({"id":item_id, "slot":item_slot, "rarity":clampi(int(value.get("rarity", 0)), 0, 5), "level":clampi(int(value.get("level", 1)), 1, 1200)})
+ GameManager.next_loot_id = maxi(highest_id + 1, 1)
+ var equipment_data: Variant = data.get("equipped_loot", [])
+ var worn: Dictionary = {}
+ if equipment_data is Array:
+  for hero in range(mini(4, equipment_data.size())):
+   if not equipment_data[hero] is Array:
+    continue
+   for slot in range(mini(3, equipment_data[hero].size())):
+    var item_id: int = int(equipment_data[hero][slot])
+    if not known_ids.has(item_id) or worn.has(item_id):
+     continue
+    var found: Dictionary = GameManager.loot_item_by_id(item_id)
+    if int(found.get("slot", -1)) != slot:
+     continue
+    GameManager.equipped_loot[hero][slot] = item_id
+    worn[item_id] = true
  var saved_hardening: Variant = data.get("hardening_levels", [])
  GameManager.hardening_levels = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
  if saved_hardening is Array:
