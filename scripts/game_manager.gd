@@ -312,6 +312,21 @@ func loot_item_name(item: Dictionary) -> String:
  var slot: int = clampi(int(item.get("slot", 0)), 0, 2)
  return "%s %s (Stufe %d)" % [WEAPON_RARITIES[quality], LOOT_SLOTS[slot], int(item.get("level", 1))]
 
+func compare_loot_transfer(hero: int, item_id: int) -> Dictionary:
+ var comparison: Dictionary = compare_loot(hero, item_id)
+ if comparison.is_empty():
+  return {}
+ var source_hero: int = loot_equipped_hero(item_id)
+ var source_loss: float = 0.0
+ if source_hero >= 0 and source_hero != hero:
+  source_loss = loot_item_bonus(loot_item_by_id(item_id))
+ return {
+  "source_hero": source_hero,
+  "target_gain": float(comparison["difference"]),
+  "source_loss": source_loss,
+  "net_change": float(comparison["difference"]) - source_loss
+ }
+
 func loot_equipped_hero(item_id: int) -> int:
  for hero in range(4):
   for slot in range(LOOT_SLOTS.size()):
