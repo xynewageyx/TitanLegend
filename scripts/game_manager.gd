@@ -246,9 +246,7 @@ func loot_bonus(hero: int, slot: int) -> float:
  var item: Dictionary = loot_item_by_id(int(equipped_loot[hero][slot]))
  if item.is_empty() or int(item.get("slot", -1)) != slot:
   return 0.0
- var rarity: int = clampi(int(item.get("rarity", 0)), 0, 5)
- var level: int = clampi(int(item.get("level", 1)), 1, 1200)
- return minf(0.12, float(rarity + 1) * 0.008 + float(level) * 0.000015)
+ return loot_item_bonus(item)
 
 func loot_item_bonus(item: Dictionary) -> float:
  if item.is_empty():
@@ -313,3 +311,10 @@ func loot_item_name(item: Dictionary) -> String:
  var quality: int = clampi(int(item.get("rarity", 0)), 0, 5)
  var slot: int = clampi(int(item.get("slot", 0)), 0, 2)
  return "%s %s (Stufe %d)" % [WEAPON_RARITIES[quality], LOOT_SLOTS[slot], int(item.get("level", 1))]
+
+func loot_equipped_hero(item_id: int) -> int:
+ for hero in range(4):
+  for slot in range(LOOT_SLOTS.size()):
+   if int(equipped_loot[hero][slot]) == item_id:
+    return hero
+ return -1
