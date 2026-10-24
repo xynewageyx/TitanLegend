@@ -522,6 +522,23 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("GameManager.loot_changed.connect(_refresh_loot)", ui)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
+    def test_loot_sale_rejects_equipped_items_and_comparison_uses_matching_slot(self):
+        game = source("game_manager.gd")
+        ui = source("ui_manager.gd")
+        self.assertIn("func sell_loot(item_id: int) -> bool:", game)
+        sale = game.split("func sell_loot(", 1)[1].split("\\nfunc ", 1)[0]
+        self.assertIn("item.is_empty() or is_loot_equipped(item_id)", sale)
+        self.assertIn("equipment_inventory.remove_at(i)", sale)
+        self.assertIn("add_gold(price)", sale)
+        self.assertIn("SaveManager.save_game()", sale)
+        comparison = game.split("func compare_loot(", 1)[1].split("\\nfunc ", 1)[0]
+        self.assertIn("equipped_loot[hero][slot]", comparison)
+        self.assertIn('"difference": candidate_bonus - worn_bonus', comparison)
+        self.assertIn("func _sell_selected_loot()", ui)
+        self.assertIn("GameManager.is_loot_equipped(", ui)
+        self.assertIn("GameManager.loot_sale_price(", ui)
+        self.assertIn("GameManager.compare_loot(", ui)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
