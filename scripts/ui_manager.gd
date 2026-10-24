@@ -9,6 +9,8 @@ var chat_lines: Array[Dictionary] = []
 var last_battle_signature: String = ""
 var last_gold: int = -1
 var last_stage: int = -1
+var offline_notice: Label
+var offline_notice_until: int = 0
 var last_ability_logged: String = ""
 var last_ability_time: int = -99999
 var chat_collapse_button: Button
@@ -60,12 +62,17 @@ func _ready() -> void:
  GameManager.jewel_upgraded.connect(_refresh)
  GameManager.equipment_upgraded.connect(_on_equipment_upgraded)
  GameManager.loot_changed.connect(_refresh_loot)
+ SaveManager.offline_rewards_received.connect(_on_offline_rewards_received)
  if battle_manager != null:
   battle_manager.battle_status_changed.connect(_on_battle_update)
  _append("System", "Willkommen bei Titan Legends!")
+ if SaveManager.last_offline_gold > 0:
+  _on_offline_rewards_received(SaveManager.last_offline_gold, SaveManager.last_offline_seconds)
  _refresh()
 
 func _process(_delta: float) -> void:
+ if offline_notice != null and offline_notice.visible and Time.get_ticks_msec() >= offline_notice_until:
+  offline_notice.hide()
  # Refresh only the clock each frame; the rest of the HUD remains event-driven.
  if battle_manager == null or boss_countdown == null:
   return
@@ -290,6 +297,22 @@ func _make_hud() -> void:
  astral_shop_button.hide()
  _make_button("Schließen", modal, func(): action_panel.hide(), 18)
  action_panel.hide()
+ # Kurz sichtbare Info beim erneuten Start nach laengerer Abwesenheit.
+ offline_notice = Label.new()
+ offline_notice.name = "OfflineGoldNotice"
+ offline_notice.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+ offline_notice.offset_left = 24
+ offline_notice.offset_right = -24
+ offline_notice.offset_top = -311
+ offline_notice.offset_bottom = -261
+ offline_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+ offline_notice.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ offline_notice.add_theme_font_size_override("font_size", 21)
+ offline_notice.add_theme_color_override("font_color", Color("#f9dc7a"))
+ offline_notice.add_theme_stylebox_override("normal", _style(Color(0.025, 0.045, 0.065, 0.94), 12))
+ offline_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ add_child(offline_notice)
+ offline_notice.hide()
  _select_chat("Alle")
  _apply_chat_visibility()
 
@@ -357,6 +380,18 @@ func _submit_chat(message: String) -> void:
 
 func _send_chat() -> void:
  _submit_chat(chat_input.text)
+
+func _on_offline_rewards_received(gold: int, seconds: int) -> void:
+ if gold <= 0 or seconds <= 0:
+  return
+ var hours: int = int(seconds / 3600)
+ var minutes: int = int(seconds / 60) % 60
+ var text_value := "Offline-Farming: +" + str(gold) + " Gold (" + str(hours) + " Std " + str(minutes) + " Min)"
+ _append("System", text_value + " – keine Offline-Bosskaempfe.")
+ if offline_notice != null:
+  offline_notice.text = text_value
+  offline_notice.show()
+  offline_notice_until = Time.get_ticks_msec() + 9000
 
 func _on_battle_update() -> void:
  if battle_manager == null: return
