@@ -17,6 +17,7 @@ func save_game() -> void:
   "character_level": GameManager.character_level,
   "jewel_level": GameManager.jewel_level,
   "weapon_levels": GameManager.weapon_levels.duplicate(),
+  "weapon_rarities": GameManager.weapon_rarities.duplicate(),
   "hardening_levels": GameManager.hardening_levels.duplicate(true),
   "hardening_attributes": GameManager.hardening_attributes.duplicate(true),
   "ads_watched": AdManager.ads_watched_today,
@@ -64,6 +65,14 @@ func load_game() -> void:
  if weapons is Array:
   for slot in range(mini(4, weapons.size())):
    GameManager.weapon_levels[slot] = clampi(int(weapons[slot]), 0, GameManager.MAX_WEAPON_LEVEL)
+ var rarity_data: Variant = data.get("weapon_rarities", [])
+ GameManager.weapon_rarities = [0, 0, 0, 0]
+ if rarity_data is Array:
+  for slot in range(mini(4, rarity_data.size())):
+   var rarity: int = clampi(int(rarity_data[slot]), 0, GameManager.WEAPON_RARITIES.size() - 1)
+   while rarity > 0 and GameManager.weapon_levels[slot] < int(GameManager.WEAPON_RARITY_LEVELS[rarity]):
+    rarity -= 1
+   GameManager.weapon_rarities[slot] = rarity
  var saved_hardening: Variant = data.get("hardening_levels", [])
  GameManager.hardening_levels = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
  if saved_hardening is Array:
