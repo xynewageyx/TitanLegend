@@ -22,6 +22,7 @@ var boss_name: Label
 var boss_hp: ProgressBar
 var boss_countdown: Label
 var team_status_label: Label
+var afk_status_label: Label
 var chat_panel: PanelContainer
 var chat_history: RichTextLabel
 var chat_input: LineEdit
@@ -73,7 +74,11 @@ func _ready() -> void:
  SaveManager.offline_rewards_received.connect(_on_offline_rewards_received)
  if battle_manager != null:
   battle_manager.battle_status_changed.connect(_on_battle_update)
+  battle_manager.afk_mode_changed.connect(_on_afk_mode_changed)
+  battle_manager.afk_reward_received.connect(_on_afk_reward_received)
  _append("System", "Willkommen bei Titan Legends!")
+ if battle_manager != null:
+  _on_afk_mode_changed(battle_manager.afk_farming)
  if SaveManager.last_offline_gold > 0 or SaveManager.last_offline_xp > 0:
   _on_offline_rewards_received(
    SaveManager.last_offline_gold, SaveManager.last_offline_seconds,
@@ -191,6 +196,23 @@ func _make_hud() -> void:
  team_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
  add_child(team_status_label)
  team_status_label.hide()
+
+ # Gut sichtbare AFK-Anzeige, ohne Boss- oder Teamstatus zu verdecken.
+ afk_status_label = Label.new()
+ afk_status_label.name = "AfkFarmingStatus"
+ afk_status_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+ afk_status_label.offset_left = 20
+ afk_status_label.offset_right = -20
+ afk_status_label.offset_top = 238
+ afk_status_label.offset_bottom = 288
+ afk_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+ afk_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ afk_status_label.add_theme_font_size_override("font_size", 20)
+ afk_status_label.add_theme_color_override("font_color", Color("#f9dc7a"))
+ afk_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ afk_status_label.text = "AFK-FARMING • Mobs | +Gold & +XP"
+ add_child(afk_status_label)
+ afk_status_label.hide()
 
  # Update 29: readable 4+3 icon navigation for narrow portrait screens.
  # Bottom nav anchored to portrait viewport.
@@ -402,6 +424,18 @@ func _submit_chat(message: String) -> void:
 
 func _send_chat() -> void:
  _submit_chat(chat_input.text)
+
+func _on_afk_mode_changed(active: bool) -> void:
+ if afk_status_label != null:
+  afk_status_label.visible = active
+ if active:
+  _append("System", "AFK-Farming aktiv: normale Gegner, maximal eine Belohnung pro Minute, keine Bosse.")
+ else:
+  _append("System", "AFK-Farming beendet: normaler Stage-Fortschritt wieder aktiv.")
+
+func _on_afk_reward_received(gold: int, xp: int) -> void:
+ _append("System", "AFK-Farming: +" + str(gold) + " Gold, +" + str(xp) + " XP")
+ _refresh()
 
 func _on_offline_rewards_received(gold: int, seconds: int, xp: int, levels: int) -> void:
  if gold <= 0 and xp <= 0:
