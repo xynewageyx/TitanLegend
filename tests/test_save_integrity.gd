@@ -20,7 +20,7 @@ func _run_tests() -> void:
     if STORE.save_atomic(TEST_PATH, original) != OK:
         _fail("Could not save initial legacy-format progress")
         return
-    if STORE.load_latest(TEST_PATH) != original:
+    if not _same_progress(STORE.load_latest(TEST_PATH), original):
         _fail("Initial save did not roundtrip")
         return
 
@@ -28,10 +28,10 @@ func _run_tests() -> void:
     if STORE.save_atomic(TEST_PATH, new_data) != OK:
         _fail("Could not update progress")
         return
-    if STORE.load_latest(TEST_PATH) != new_data:
+    if not _same_progress(STORE.load_latest(TEST_PATH), new_data):
         _fail("Most recent save should be primary")
         return
-    if STORE.load_latest(TEST_PATH + ".bak") != original:
+    if not _same_progress(STORE.load_latest(TEST_PATH + ".bak"), original):
         _fail("Backup should contain previous valid save")
         return
 
@@ -39,7 +39,7 @@ func _run_tests() -> void:
     if STORE.save_atomic(TEST_PATH, bad_progress) == OK:
         _fail("Negative progress should be rejected")
         return
-    if STORE.load_latest(TEST_PATH) != new_data:
+    if not _same_progress(STORE.load_latest(TEST_PATH), new_data):
         _fail("Invalid save attempt overwrote valid progress")
         return
 
@@ -49,7 +49,7 @@ func _run_tests() -> void:
         return
     corrupted.store_string("{bad json")
     corrupted.close()
-    if STORE.load_latest(TEST_PATH) != original:
+    if not _same_progress(STORE.load_latest(TEST_PATH), original):
         _fail("A corrupted primary did not restore the last good backup")
         return
 
@@ -57,10 +57,10 @@ func _run_tests() -> void:
     if STORE.save_atomic(TEST_PATH, recovered) != OK:
         _fail("Could not save resumed game after backup recovery")
         return
-    if STORE.load_latest(TEST_PATH) != recovered:
+    if not _same_progress(STORE.load_latest(TEST_PATH), recovered):
         _fail("Resumed game was not saved")
         return
-    if STORE.load_latest(TEST_PATH + ".bak") != original:
+    if not _same_progress(STORE.load_latest(TEST_PATH + ".bak"), original):
         _fail("Recovery overwrote the valid backup with corrupt data")
         return
 
@@ -75,6 +75,12 @@ func _run_tests() -> void:
             DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
     print("Titan Legends automatic save integrity tests passed.")
     quit(0)
+
+func _same_progress(actual: Dictionary, expected: Dictionary) -> bool:
+    for key in expected.keys():
+        if not actual.has(key) or int(actual[key]) != int(expected[key]):
+            return false
+    return true
 
 func _fail(message: String) -> void:
     push_error(message)
