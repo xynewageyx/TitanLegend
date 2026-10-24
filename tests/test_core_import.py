@@ -553,6 +553,19 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("GameManager.sell_loot(item_id)", confirmation)
         self.assertIn("loot_sale_confirmation.confirmed.connect(_confirm_loot_sale)", ui)
 
+    def test_loot_comparison_matches_combat_bonus_and_displays_owner(self):
+        game = source("game_manager.gd")
+        ui = source("ui_manager.gd")
+        loot_bonus = game.split("func loot_bonus(", 1)[1].split("\nfunc ", 1)[0]
+        self.assertIn("return loot_item_bonus(item)", loot_bonus)
+        self.assertIn("func loot_equipped_hero(item_id: int) -> int:", game)
+        self.assertIn("equipped_loot[hero][slot]", game)
+        self.assertIn('GameManager.loot_equipped_hero(int(selected_loot["id"]))', ui)
+        self.assertIn('"BESSER" if difference > 0.000001', ui)
+        self.assertIn('"SCHWAECHER" if difference < -0.000001', ui)
+        self.assertIn('"GLEICH STARK"', ui)
+        self.assertIn("Prozentpunkte", ui)
+
     def test_save_manager_is_present(self):
         text = source("save_manager.gd")
         self.assertIn("func save_game()", text)
