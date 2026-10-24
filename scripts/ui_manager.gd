@@ -29,6 +29,9 @@ var action_detail: Label
 var action_button: Button
 var astral_shop_button: Button
 var weapon_hero_slot: int = 0
+var loot_selected_index: int = 0
+var loot_select_button: Button
+var loot_equip_button: Button
 var weapon_upgrade_button: Button
 var weapon_rarity_button: Button
 var weapon_hero_button: Button
@@ -54,6 +57,7 @@ func _ready() -> void:
  GameManager.reincarnation_performed.connect(_refresh)
  GameManager.jewel_upgraded.connect(_refresh)
  GameManager.equipment_upgraded.connect(_on_equipment_upgraded)
+ GameManager.loot_changed.connect(_refresh_loot)
  if battle_manager != null:
   battle_manager.battle_status_changed.connect(_on_battle_update)
  _append("System", "Willkommen bei Titan Legends!")
@@ -268,6 +272,8 @@ func _make_hud() -> void:
  weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
+ loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
+ loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
@@ -402,6 +408,8 @@ func _refresh(_unused: int = 0) -> void:
  weapon_hero_button.visible = current_tab == "jewels"
  weapon_upgrade_button.visible = current_tab == "jewels"
  weapon_rarity_button.visible = current_tab == "jewels"
+ loot_select_button.visible = current_tab == "jewels"
+ loot_equip_button.visible = current_tab == "jewels"
  hardening_select_button.visible = current_tab == "jewels"
  hardening_upgrade_button.visible = current_tab == "jewels"
  attribute_select_button.visible = current_tab == "jewels"
@@ -413,6 +421,16 @@ func _refresh(_unused: int = 0) -> void:
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
   weapon_upgrade_button.text = "Waffe %d → %d | %d Gold" % [weapon_level, weapon_level + 1, weapon_cost] if weapon_cost > 0 else "Waffe MAX"
   weapon_upgrade_button.disabled = weapon_cost <= 0 or GameManager.current_gold < weapon_cost
+  if GameManager.equipment_inventory.is_empty():
+   loot_select_button.text = "Inventar: leer (Boss-Drops)"
+   loot_equip_button.text = "Kein Gegenstand vorhanden"
+   loot_equip_button.disabled = true
+  else:
+   loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
+   var selected_loot: Dictionary = GameManager.equipment_inventory[loot_selected_index]
+   loot_select_button.text = "Inventar %d/%d: %s" % [loot_selected_index + 1, GameManager.equipment_inventory.size(), GameManager.loot_item_name(selected_loot)]
+   loot_equip_button.text = "Held %d ausruesten: %s" % [weapon_hero_slot + 1, GameManager.LOOT_SLOTS[int(selected_loot["slot"])]]
+   loot_equip_button.disabled = int(GameManager.equipped_loot[weapon_hero_slot][int(selected_loot["slot"])]) == int(selected_loot["id"])
   var weapon_rarity: int = GameManager.weapon_rarities[weapon_hero_slot]
   var rarity_cost: int = GameManager.weapon_rarity_upgrade_cost(weapon_hero_slot)
   var rarity_text: String = GameManager.WEAPON_RARITIES[weapon_rarity]
@@ -470,6 +488,22 @@ func _upgrade_current_weapon() -> void:
 func _upgrade_current_weapon_rarity() -> void:
  if GameManager.upgrade_weapon_rarity(weapon_hero_slot):
   _append("System", "Waffenqualitaet fuer Held %d verbessert" % (weapon_hero_slot + 1))
+ _refresh()
+
+func _refresh_loot() -> void:
+ _refresh()
+
+func _next_loot_item() -> void:
+ if not GameManager.equipment_inventory.is_empty():
+  loot_selected_index = (loot_selected_index + 1) % GameManager.equipment_inventory.size()
+ _refresh()
+
+func _equip_selected_loot() -> void:
+ if GameManager.equipment_inventory.is_empty():
+  return
+ var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
+ if GameManager.equip_loot(weapon_hero_slot, int(item["id"])):
+  _append("System", "Gegenstand ausgeruestet: " + GameManager.loot_item_name(item))
  _refresh()
 
 func _next_hardening_field() -> void:
