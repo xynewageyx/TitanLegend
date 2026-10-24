@@ -36,6 +36,8 @@ var loot_select_button: Button
 var loot_equip_button: Button
 var loot_compare_label: Label
 var loot_sell_button: Button
+var loot_sale_confirmation: ConfirmationDialog
+var pending_loot_sale_id: int = -1
 var weapon_upgrade_button: Button
 var weapon_rarity_button: Button
 var weapon_hero_button: Button
@@ -288,6 +290,11 @@ func _make_hud() -> void:
  loot_compare_label.add_theme_font_size_override("font_size", 17)
  modal.add_child(loot_compare_label)
  loot_sell_button = _make_button("Gegenstand verkaufen", modal, _sell_selected_loot, 17)
+ loot_sale_confirmation = ConfirmationDialog.new()
+ loot_sale_confirmation.title = "Gegenstand verkaufen?"
+ loot_sale_confirmation.confirmed.connect(_confirm_loot_sale)
+ loot_sale_confirmation.canceled.connect(_cancel_loot_sale)
+ add_child(loot_sale_confirmation)
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
@@ -563,13 +570,29 @@ func _sell_selected_loot() -> void:
   return
  loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
  var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
+ var item_id: int = int(item.get("id", -1))
+ if GameManager.is_loot_equipped(item_id):
+  return
+ pending_loot_sale_id = item_id
+ loot_sale_confirmation.dialog_text = "%s wirklich für %d Gold verkaufen?\\nDiese Aktion kann nicht rückgängig gemacht werden." % [GameManager.loot_item_name(item), GameManager.loot_sale_price(item)]
+ loot_sale_confirmation.popup_centered()
+
+func _cancel_loot_sale() -> void:
+ pending_loot_sale_id = -1
+
+func _confirm_loot_sale() -> void:
+ var item_id: int = pending_loot_sale_id
+ pending_loot_sale_id = -1
+ if item_id <= 0:
+  return
+ var item: Dictionary = GameManager.loot_item_by_id(item_id)
+ if item.is_empty() or GameManager.is_loot_equipped(item_id):
+  _refresh()
+  return
  var sale_price: int = GameManager.loot_sale_price(item)
- if GameManager.sell_loot(int(item["id"])):
+ if GameManager.sell_loot(item_id):
   _append("System", "%s verkauft: +%d Gold" % [GameManager.loot_item_name(item), sale_price])
-  if not GameManager.equipment_inventory.is_empty():
-   loot_selected_index = mini(loot_selected_index, GameManager.equipment_inventory.size() - 1)
-  else:
-   loot_selected_index = 0
+  loot_selected_index = 0 if GameManager.equipment_inventory.is_empty() else mini(loot_selected_index, GameManager.equipment_inventory.size() - 1)
  _refresh()
 
 func _next_hardening_field() -> void:
