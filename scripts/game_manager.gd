@@ -225,6 +225,63 @@ func loot_bonus(hero: int, slot: int) -> float:
  var level: int = clampi(int(item.get("level", 1)), 1, 1200)
  return minf(0.12, float(rarity + 1) * 0.008 + float(level) * 0.000015)
 
+func loot_item_bonus(item: Dictionary) -> float:
+ if item.is_empty():
+  return 0.0
+ var rarity: int = clampi(int(item.get("rarity", 0)), 0, 5)
+ var level: int = clampi(int(item.get("level", 1)), 1, 1200)
+ return minf(0.12, float(rarity + 1) * 0.008 + float(level) * 0.000015)
+
+func loot_sale_price(item: Dictionary) -> int:
+ if item.is_empty():
+  return 0
+ var rarity: int = clampi(int(item.get("rarity", 0)), 0, 5)
+ var level: int = clampi(int(item.get("level", 1)), 1, 1200)
+ return level * (20 + 10 * rarity)
+
+func is_loot_equipped(item_id: int) -> bool:
+ for hero in range(4):
+  for slot in range(LOOT_SLOTS.size()):
+   if int(equipped_loot[hero][slot]) == item_id:
+    return true
+ return false
+
+func sell_loot(item_id: int) -> bool:
+ var item: Dictionary = loot_item_by_id(item_id)
+ if item.is_empty() or is_loot_equipped(item_id):
+  return false
+ var price: int = loot_sale_price(item)
+ if price <= 0:
+  return false
+ for i in range(equipment_inventory.size()):
+  if int(equipment_inventory[i].get("id", -1)) == item_id:
+   equipment_inventory.remove_at(i)
+   add_gold(price)
+   loot_changed.emit()
+   SaveManager.save_game()
+   return true
+ return false
+
+func compare_loot(hero: int, item_id: int) -> Dictionary:
+ if hero < 0 or hero >= 4:
+  return {}
+ var item: Dictionary = loot_item_by_id(item_id)
+ if item.is_empty():
+  return {}
+ var slot: int = int(item.get("slot", -1))
+ if slot < 0 or slot >= LOOT_SLOTS.size():
+  return {}
+ var current_item: Dictionary = loot_item_by_id(int(equipped_loot[hero][slot]))
+ var candidate_bonus: float = loot_item_bonus(item)
+ var worn_bonus: float = loot_item_bonus(current_item)
+ return {
+  "slot_name": LOOT_SLOTS[slot],
+  "candidate": candidate_bonus,
+  "equipped": worn_bonus,
+  "difference": candidate_bonus - worn_bonus,
+  "equipped_name": loot_item_name(current_item)
+ }
+
 func loot_item_name(item: Dictionary) -> String:
  if item.is_empty():
   return "Leer"
