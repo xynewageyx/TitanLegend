@@ -100,16 +100,50 @@ func _run_tests() -> void:
  if manager.current_gold != gold_before + 500:
   _fail("AFK gold paid twice during the same interval")
   return
- battle._leave_afk_farming()
- if battle.afk_farming:
-  _fail("AFK did not stop on user return")
+ # Ein laufender Lauf-Tween darf nach Verlassen des AFK-Modus keinen
+ # spaeten Mobkampf auf dem Bosscheckpoint erzwingen.
+ battle.start_next_encounter()
+ var team: Node = scene.get_node("TeamFormation")
+ if team == null or not team.is_walking or not battle._walking_for_encounter:
+  _fail("Could not start a walking animation before leaving AFK")
   return
- battle.spawn_wave()
- if not battle.is_boss:
+ battle._leave_afk_farming()
+ if battle.afk_farming or team.is_walking or battle._walking_for_encounter:
+  _fail("AFK exit failed to cancel a stale walking tween")
+  return
+ battle._on_walking_finished()
+ if battle.battle_active:
+  _fail("Old walking signal unexpectedly started a new encounter")
+  return
+ # Android pause/resume waehrend Laufanimation darf den Kampf nicht verlieren.
+ battle.start_next_encounter()
+ if not team.is_walking:
+  _fail("Normal boss walking did not begin after AFK exit")
+  return
+ battle._notification(Node.NOTIFICATION_APPLICATION_PAUSED)
+ if team.is_walking or not battle._resume_walk_after_pause:
+  _fail("Android pause did not cancel and remember pending walk")
+  return
+ battle._notification(Node.NOTIFICATION_APPLICATION_RESUMED)
+ if battle._resume_walk_after_pause:
+  _fail("Android resume did not schedule a new encounter")
+  return
+ battle._start_queued_encounter(battle._encounter_request_id)
+ if not team.is_walking or not battle._walking_for_encounter:
+  _fail("Boss walking was not restarted after Android resume")
+  return
+ battle._on_walking_finished()
+ if not battle.is_boss or battle.current_level != 10 or battle.current_wave != 10:
   _fail("Boss checkpoint did not resume after user returned")
   return
+ # Ein verspaeteter zweiter Walking-Callback darf den Boss nicht neu erzeugen.
+ var remaining_hp: int = battle.enemy_hp
+ battle._on_walking_finished()
+ if battle.enemy_hp != remaining_hp:
+  _fail("Duplicate walking callback reset boss health")
+  return
  scene.queue_free()
- print("Titan Legends AFK integration passed: 5min activation, boss protected, one payout/min, Gold+XP, return to boss")
+ print("Titan Legends AFK integration passed: 5min, Gold+XP, no duplicate walking, Android resume, boss preserved")
  quit(0)
 
 func _fail(message: String) -> void:
