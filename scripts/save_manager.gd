@@ -18,6 +18,7 @@ func save_game() -> void:
   "jewel_level": GameManager.jewel_level,
   "weapon_levels": GameManager.weapon_levels.duplicate(),
   "hardening_levels": GameManager.hardening_levels.duplicate(true),
+  "hardening_attributes": GameManager.hardening_attributes.duplicate(true),
   "ads_watched": AdManager.ads_watched_today,
   "ad_date": AdManager.last_watch_date,
   "stage": 1, "wave": 1, "skill_choices": [0, 0, 0, 0], "skill_loadouts": [[0,1,2,7],[0,1,2,7],[0,1,2,7],[0,1,2,7]], "talents": [[0,0,0],[0,0,0],[0,0,0],[0,0,0]], "talent_branches": [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]
@@ -70,6 +71,13 @@ func load_game() -> void:
    if saved_hardening[hero] is Array:
     for field in range(mini(4, saved_hardening[hero].size())):
      GameManager.hardening_levels[hero][field] = clampi(int(saved_hardening[hero][field]), 0, GameManager.character_level)
+ var saved_attributes: Variant = data.get("hardening_attributes", [])
+ GameManager.hardening_attributes = [[0,1,2,3],[0,1,2,3],[0,1,2,3],[0,1,2,3]]
+ if saved_attributes is Array:
+  for hero in range(mini(4, saved_attributes.size())):
+   if saved_attributes[hero] is Array:
+    for field in range(mini(4, saved_attributes[hero].size())):
+     GameManager.hardening_attributes[hero][field] = clampi(int(saved_attributes[hero][field]), 0, GameManager.HARDENING_NAMES.size() - 1)
  AdManager.ads_watched_today = clampi(int(data.get("ads_watched", 0)), 0, 3)
  AdManager.last_watch_date = str(data.get("ad_date", ""))
  AdManager.check_daily_reset()
