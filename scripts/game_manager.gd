@@ -12,6 +12,12 @@ var jewel_level: int = 1
 # Initial weapon upgrade track, independently stored for each hero.
 var weapon_levels: Array[int] = [0, 0, 0, 0]
 const MAX_WEAPON_LEVEL: int = 300
+# Six independent weapon qualities. Each promotion keeps the existing weapon level.
+const WEAPON_RARITIES := ["Weiss", "Gruen", "Blau", "Gelb", "Gold", "Lila"]
+const WEAPON_RARITY_BONUS := [0.0, 0.01, 0.025, 0.045, 0.07, 0.10]
+const WEAPON_RARITY_LEVELS := [0, 20, 50, 100, 180, 260]
+const WEAPON_RARITY_COSTS := [10000, 50000, 200000, 800000, 2000000]
+var weapon_rarities: Array[int] = [0, 0, 0, 0]
 # Four equipment-hardening fields per hero: attack, armor, max HP, critical damage.
 var hardening_levels: Array = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 const HARDENING_NAMES := ["Angriff", "Ruestung", "Lebenspunkte", "Krit-Schaden", "Ausweichen", "Aufspiessen"]
@@ -52,7 +58,7 @@ func weapon_upgrade_cost(slot: int) -> int:
 func weapon_attack_bonus(slot: int) -> float:
  if slot < 0 or slot >= weapon_levels.size():
   return 0.0
- return minf(0.15, float(weapon_levels[slot]) * 0.0005)
+ return minf(0.25, float(weapon_levels[slot]) * 0.0005 + float(WEAPON_RARITY_BONUS[weapon_rarities[slot]]))
 
 func upgrade_weapon(slot: int) -> bool:
  var cost: int = weapon_upgrade_cost(slot)
@@ -124,5 +130,25 @@ func upgrade_hardening(hero: int, field: int) -> bool:
  add_gold(-cost)
  hardening_levels[hero][field] = int(hardening_levels[hero][field]) + 1
  equipment_upgraded.emit(hero, int(hardening_levels[hero][field]))
+ SaveManager.save_game()
+ return true
+
+func weapon_rarity_upgrade_cost(slot: int) -> int:
+ if slot < 0 or slot >= weapon_rarities.size():
+  return 0
+ var current: int = weapon_rarities[slot]
+ if current >= WEAPON_RARITIES.size() - 1:
+  return 0
+ if weapon_levels[slot] < int(WEAPON_RARITY_LEVELS[current + 1]):
+  return 0
+ return int(WEAPON_RARITY_COSTS[current])
+
+func upgrade_weapon_rarity(slot: int) -> bool:
+ var cost: int = weapon_rarity_upgrade_cost(slot)
+ if cost <= 0 or current_gold < cost:
+  return false
+ add_gold(-cost)
+ weapon_rarities[slot] += 1
+ equipment_upgraded.emit(slot, weapon_levels[slot])
  SaveManager.save_game()
  return true
