@@ -129,7 +129,16 @@ func start_walking() -> void:
  walk_tween.tween_interval(1.25)
  walk_tween.tween_callback(_finish_walking)
 
+func stop_walking() -> void:
+ # Beim Wechsel zwischen aktiven Bossen und AFK-Mobs darf kein alter Tween
+ # spaeter ein zweites, unpassendes Encounter starten.
+ if walk_tween != null and walk_tween.is_running():
+  walk_tween.kill()
+ is_walking = false
+
 func _finish_walking() -> void:
+ if not is_walking:
+  return
  is_walking = false
  walking_finished.emit()
 
