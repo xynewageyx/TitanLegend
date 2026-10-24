@@ -1,8 +1,10 @@
 extends Node
 const SAVE_FILE_STORE = preload("res://scripts/save_file_store.gd")
 const OFFLINE_REWARDS = preload("res://scripts/offline_rewards.gd")
-signal offline_rewards_received(gold: int, seconds: int)
+signal offline_rewards_received(gold: int, seconds: int, xp: int, levels: int)
 var last_offline_gold: int = 0
+var last_offline_xp: int = 0
+var last_offline_levels: int = 0
 var last_offline_seconds: int = 0
 const SAVE_PATH: String = "user://save_data.json"
 var timer: Timer
@@ -21,6 +23,7 @@ func save_game() -> void:
   "gems": ShopManager.gems, "unlocked_skins": ShopManager.unlocked_skins.duplicate(), "equipped_skins": ShopManager.equipped_skins.duplicate(),
   "reincarnation": GameManager.current_reincarnation_level,
   "character_level": GameManager.character_level,
+  "character_xp": GameManager.character_xp,
   "jewel_level": GameManager.jewel_level,
   "weapon_levels": GameManager.weapon_levels.duplicate(),
   "weapon_rarities": GameManager.weapon_rarities.duplicate(),
@@ -58,6 +61,7 @@ func load_game() -> void:
  GameManager.reincarnation_tickets = maxi(0, int(data.get("tickets", 500)))
  GameManager.current_reincarnation_level = clampi(int(data.get("reincarnation", 0)), 0, 5)
  GameManager.character_level = maxi(1, int(data.get("character_level", 1)))
+ GameManager.character_xp = clampi(int(data.get("character_xp", 0)), 0, GameManager.xp_for_next_level() - 1)
  GameManager.jewel_level = maxi(1, int(data.get("jewel_level", 1)))
  var weapons: Variant = data.get("weapon_levels", [0, 0, 0, 0])
  GameManager.weapon_levels = [0, 0, 0, 0]
@@ -123,6 +127,8 @@ func load_game() -> void:
  AdManager.last_watch_date = str(data.get("ad_date", ""))
  AdManager.check_daily_reset()
  GameManager.gold_changed.emit(GameManager.current_gold)
+ GameManager.xp_changed.emit(GameManager.character_xp)
+ GameManager.character_level_changed.emit(GameManager.character_level)
  GameManager.tickets_changed.emit(GameManager.reincarnation_tickets)
  GameManager.reincarnation_performed.emit(GameManager.current_reincarnation_level)
 func get_saved_battle_progress() -> Vector2i:
@@ -145,16 +151,20 @@ func _claim_offline_rewards(data: Dictionary) -> Dictionary:
  var claim: Dictionary = OFFLINE_REWARDS.make_claim(data, now_unix)
  var earned: Dictionary = claim.get("reward", {})
  var gold: int = int(earned.get("gold", 0))
- if gold <= 0:
+ var xp: int = int(earned.get("xp", 0))
+ if gold <= 0 and xp <= 0:
   return data
  var updated: Dictionary = claim.get("save", {})
+ # XP, Gold, Charakterlevel und letzter Zeitstempel werden gemeinsam gesichert.
  var error: Error = SAVE_FILE_STORE.save_atomic(SAVE_PATH, updated)
  if error != OK:
-  push_warning("Offline reward could not be saved safely: " + str(error))
+  push_warning("Offline rewards could not be saved safely: " + str(error))
   return data
  last_offline_gold = gold
+ last_offline_xp = xp
+ last_offline_levels = int(earned.get("levels_gained", 0))
  last_offline_seconds = int(earned.get("seconds", 0))
- offline_rewards_received.emit(last_offline_gold, last_offline_seconds)
+ offline_rewards_received.emit(last_offline_gold, last_offline_seconds, last_offline_xp, last_offline_levels)
  return updated
 
 func _claim_offline_on_resume() -> void:
@@ -162,11 +172,20 @@ func _claim_offline_on_resume() -> void:
  if saved.is_empty():
   return
  var applied: Dictionary = _claim_offline_rewards(saved)
- var earned: int = int(applied.get("gold", 0)) - int(saved.get("gold", 0))
- if earned > 0:
+ var gold_gain: int = int(applied.get("gold", 0)) - int(saved.get("gold", 0))
+ var new_level: int = int(applied.get("character_level", GameManager.character_level))
+ var new_xp: int = int(applied.get("character_xp", GameManager.character_xp))
+ if gold_gain > 0:
   # Wiederaufnahme ohne komplettes Neuladen von Skills, Formation oder Kampfstufe.
   GameManager.current_gold = maxi(GameManager.current_gold, int(applied.get("gold", 0)))
   GameManager.gold_changed.emit(GameManager.current_gold)
+ if new_level > GameManager.character_level or new_xp != GameManager.character_xp:
+  var level_increased: bool = new_level > GameManager.character_level
+  GameManager.character_level = maxi(GameManager.character_level, new_level)
+  GameManager.character_xp = clampi(new_xp, 0, GameManager.xp_for_next_level() - 1)
+  GameManager.xp_changed.emit(GameManager.character_xp)
+  if level_increased:
+   GameManager.character_level_changed.emit(GameManager.character_level)
 
 func get_saved_skill_choices() -> Array[int]:
  var choices: Array[int] = [0, 0, 0, 0]
