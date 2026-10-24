@@ -16,6 +16,7 @@ var last_ability_time: int = -99999
 var chat_collapse_button: Button
 var gold_label: Label
 var tickets_label: Label
+var xp_label: Label
 var boss_panel: VBoxContainer
 var boss_name: Label
 var boss_hp: ProgressBar
@@ -59,6 +60,8 @@ func _ready() -> void:
  skin_shop_menu.set_script(load("res://scripts/skin_shop_menu.gd"))
  add_child(skin_shop_menu)
  GameManager.gold_changed.connect(_refresh)
+ GameManager.xp_changed.connect(_refresh)
+ GameManager.character_level_changed.connect(_refresh)
  GameManager.tickets_changed.connect(_refresh)
  GameManager.reincarnation_performed.connect(_refresh)
  GameManager.jewel_upgraded.connect(_refresh)
@@ -68,8 +71,11 @@ func _ready() -> void:
  if battle_manager != null:
   battle_manager.battle_status_changed.connect(_on_battle_update)
  _append("System", "Willkommen bei Titan Legends!")
- if SaveManager.last_offline_gold > 0:
-  _on_offline_rewards_received(SaveManager.last_offline_gold, SaveManager.last_offline_seconds)
+ if SaveManager.last_offline_gold > 0 or SaveManager.last_offline_xp > 0:
+  _on_offline_rewards_received(
+   SaveManager.last_offline_gold, SaveManager.last_offline_seconds,
+   SaveManager.last_offline_xp, SaveManager.last_offline_levels
+  )
  _refresh()
 
 func _process(_delta: float) -> void:
@@ -126,7 +132,7 @@ func _make_hud() -> void:
  resources.offset_bottom = 64
  resources.add_theme_constant_override("separation", 12)
  add_child(resources)
- for key in ["Gold", "Tickets"]:
+ for key in ["Gold", "Tickets", "XP"]:
   var p := PanelContainer.new()
   p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   p.add_theme_stylebox_override("panel", _style(Color(0.02, 0.045, 0.07, 0.88), 18))
@@ -134,10 +140,11 @@ func _make_hud() -> void:
   var l := Label.new()
   l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
   l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-  _font(l, 22)
+  _font(l, 17 if key == "XP" else 19)
   p.add_child(l)
   if key == "Gold": gold_label = l
-  else: tickets_label = l
+  elif key == "Tickets": tickets_label = l
+  else: xp_label = l
 
  # Boss-only display. Hidden for normal mobs.
  boss_panel = VBoxContainer.new()
@@ -388,17 +395,19 @@ func _submit_chat(message: String) -> void:
 func _send_chat() -> void:
  _submit_chat(chat_input.text)
 
-func _on_offline_rewards_received(gold: int, seconds: int) -> void:
- if gold <= 0 or seconds <= 0:
+func _on_offline_rewards_received(gold: int, seconds: int, xp: int, levels: int) -> void:
+ if gold <= 0 and xp <= 0:
   return
  var hours: int = int(seconds / 3600)
  var minutes: int = int(seconds / 60) % 60
- var text_value := "Offline-Farming: +" + str(gold) + " Gold (" + str(hours) + " Std " + str(minutes) + " Min)"
- _append("System", text_value + " – keine Offline-Bosskaempfe.")
+ var text_value := "Offline: +" + str(gold) + " Gold | +" + str(xp) + " XP"
+ var level_text := " | +" + str(levels) + " Level" if levels > 0 else ""
+ _append("System", text_value + level_text + " (" + str(hours) + " Std " + str(minutes) + " Min) – keine Offline-Bosskaempfe.")
  if offline_notice != null:
   offline_notice.text = text_value
   offline_notice.show()
   offline_notice_until = Time.get_ticks_msec() + 9000
+ _refresh()
 
 func _on_battle_update() -> void:
  if battle_manager == null: return
@@ -420,6 +429,7 @@ func _on_battle_update() -> void:
 func _refresh(_unused: int = 0) -> void:
  gold_label.text = "🟡 " + str(GameManager.current_gold)
  tickets_label.text = "Tickets: " + str(GameManager.reincarnation_tickets)
+ xp_label.text = "Lv " + str(GameManager.character_level) + "\n" + str(GameManager.character_xp) + "/" + str(GameManager.xp_for_next_level()) + " XP"
  if last_gold >= 0 and GameManager.current_gold > last_gold:
   _append("System", "+" + str(GameManager.current_gold - last_gold) + " Gold erhalten")
  last_gold = GameManager.current_gold
