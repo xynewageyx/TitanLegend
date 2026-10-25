@@ -19,9 +19,19 @@ def method_text(name: str) -> str:
 
 
 class RoleChangeSyncTests(unittest.TestCase):
-    def test_class_change_notifies_ui_after_rebuilding(self):
-        method = method_text("set_class")
-        self.assertRegex(method, r"create_team\(\)\s+team_changed\.emit\(\)\s+return true")
+    def test_class_and_role_changes_emit_once_via_team_rebuild(self):
+        rebuild = method_text("create_team")
+        self.assertEqual(rebuild.count("team_changed.emit()"), 1)
+        for method_name in ("set_class", "set_role"):
+            method = method_text(method_name)
+            self.assertIn("create_team()", method)
+            self.assertNotIn("team_changed.emit()", method)
+
+    def test_old_hero_nodes_detached_before_rebuilding(self):
+        rebuild = method_text("create_team")
+        self.assertIn("remove_child(hero)", rebuild)
+        self.assertLess(rebuild.index("remove_child(hero)"), rebuild.index("heroes.clear()"))
+        self.assertLess(rebuild.index("heroes.clear()"), rebuild.index('hero.name = "Hero" + str(i + 1)'))
 
     def test_second_tank_selection_is_rejected(self):
         method = method_text("set_role")
