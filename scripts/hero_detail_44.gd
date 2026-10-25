@@ -23,6 +23,7 @@ static func decorate(hero: Node3D, class_id: int) -> void:
   VisualFactory.sphere(hero, 0.16, Vector3(0.0, 2.25, 0.0), armor.lightened(0.30))
  else:
   VisualFactory.box(hero, Vector3(0.44, 0.12, 0.43), Vector3(0.0, 2.20, 0.0), armor.darkened(0.14))
+
  # Update 46: compact class emblems, reused static meshes only.
  var emblem_color: Color = armor.lightened(0.35)
  if class_id in [0, 1, 10]:
@@ -33,6 +34,7 @@ static func decorate(hero: Node3D, class_id: int) -> void:
   VisualFactory.box(hero, Vector3(0.17, 0.065, 0.06), Vector3(0, 1.29, -0.425), emblem_color)
  else:
   VisualFactory.sphere(hero, 0.095, Vector3(0, 1.38, -0.425), emblem_color)
+
  # Update 62: visible boots, gloves and class-colored shoulder insignia.
  for side in [-1.0, 1.0]:
   VisualFactory.box(hero, Vector3(0.32, 0.19, 0.48), Vector3(side * 0.2, 0.09, -0.11), armor.darkened(0.45))
