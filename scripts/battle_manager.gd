@@ -344,7 +344,8 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
  # Resolve the tank's protection once for the entire simultaneous hit.
  # A tank defeated during this attack still protects allies struck by it.
  var tank: int = _living_tank_slot()
- var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] >= skill_tick
+ var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] > skill_tick
+ var redirected_damage: int = 0
  for index in unique_targets:
   if index < 0 or index >= 4 or hero_hp[index] <= 0:
    continue
@@ -352,7 +353,8 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
    dodges.append(index)
    continue
   var mitigation: float = 0.30 if index == tank else 0.05
-  # Active interception reduces damage to allies during boss area attacks.
+  # Tank interception replaces part of the ally's received damage with
+  # real damage dealt to the tank after all simultaneous hits resolve.
   if intercept_active and index != tank:
    mitigation = 0.35
   # Talent defense is multiplicative and capped separately from tank mitigation.
@@ -360,13 +362,28 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
   var incoming: int = amount
   if max_hp_fraction > 0.0:
    incoming = maxi(1, roundi(float(hero_max_hp[index]) * max_hp_fraction * TitanCombatBalance.enemy_damage_scale(current_level)))
-  var damage: int = maxi(1, roundi(float(incoming) * (1.0 - mitigation) * (1.0 - talent_defense) * (1.0 - GameManager.hardening_bonus(index, 1)) * (1.0 - GameManager.loot_bonus(index, 1))))
+  var damage_multiplier: float = (1.0 - talent_defense) * (1.0 - GameManager.hardening_bonus(index, 1)) * (1.0 - GameManager.loot_bonus(index, 1))
+  var damage: int = maxi(1, roundi(float(incoming) * (1.0 - mitigation) * damage_multiplier))
+  if intercept_active and index != tank:
+   var unprotected_damage: int = maxi(1, roundi(float(incoming) * 0.95 * damage_multiplier))
+   redirected_damage += maxi(0, unprotected_damage - damage)
   var previous: int = hero_hp[index]
   hero_hp[index] = maxi(0, previous - damage)
   _show_hero_combat_number(index, previous - hero_hp[index], false)
   hits.append(index)
   if hero_hp[index] == 0 and team_formation != null:
    team_formation.play_hero_defeat(index)
+ # Apply the collected interception once, even if the tank was knocked out
+ # during the same attack. A defeated tank cannot protect later attacks.
+ if redirected_damage > 0 and tank >= 0:
+  var tank_before: int = hero_hp[tank]
+  hero_hp[tank] = maxi(0, tank_before - redirected_damage)
+  var tank_taken: int = tank_before - hero_hp[tank]
+  _show_hero_combat_number(tank, tank_taken, false)
+  if tank_taken > 0 and not hits.has(tank):
+   hits.append(tank)
+  if tank_before > 0 and hero_hp[tank] == 0 and team_formation != null:
+   team_formation.play_hero_defeat(tank)
  if team_formation != null:
   team_formation.play_hit_targets(hits)
   team_formation.play_dodge_targets(dodges)
