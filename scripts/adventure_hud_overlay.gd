@@ -249,6 +249,9 @@ func _process(_delta: float) -> void:
  var cosmetics: Variant = hud.get("skin_shop_menu")
  if cosmetics is Control and (cosmetics as Control).visible:
   modal_active = true
+ var actions: Variant = hud.get("action_panel")
+ if actions is Control and (actions as Control).visible:
+  modal_active = true
  if modal_active and visible:
   hide()
  elif not modal_active and not visible:
