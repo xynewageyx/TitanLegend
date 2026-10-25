@@ -7,11 +7,13 @@ var heal: bool = false
 var lane_index: int = 0
 
 func _ready() -> void:
+ # Defer animation until the spawner has assigned the world position.
  call_deferred("_animate")
 
 func _animate() -> void:
  billboard = BaseMaterial3D.BILLBOARD_ENABLED
  no_depth_test = true
+ # World-space labels scale with camera distance; fixed_size made them cover the mobile screen.
  fixed_size = false
  font_size = 30 if critical else (23 if heal else 24)
  outline_size = 5 if critical else 4
