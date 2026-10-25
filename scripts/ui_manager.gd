@@ -310,35 +310,54 @@ func _make_hud() -> void:
  # Do not let an Android keyboard obscure the chat input.
  chat_input.caret_blink = true
 
- # Small modal for existing jewel/reincarnation/shop controls.
+ # Responsive Android modal: fixed high-contrast header, scrolling actions.
+ # Keep the exit button visible even when the equipment list is long.
  action_panel = PanelContainer.new()
  action_panel.name = "ActionPanel"
- action_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
- action_panel.custom_minimum_size = Vector2(0, 260)
- action_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+ action_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  action_panel.anchor_left = 0.08
  action_panel.anchor_right = 0.92
+ action_panel.anchor_top = 0.12
+ action_panel.anchor_bottom = 0.55
  action_panel.offset_left = 0
  action_panel.offset_right = 0
- action_panel.offset_top = 200
- action_panel.offset_bottom = 790
+ action_panel.offset_top = 0
+ action_panel.offset_bottom = 0
  action_panel.add_theme_stylebox_override("panel", ADVENTURE_THEME.plaque(ADVENTURE_THEME.PAPER, ADVENTURE_THEME.WOOD, 20, 4))
  add_child(action_panel)
+ var action_content := VBoxContainer.new()
+ action_content.add_theme_constant_override("separation", 8)
+ action_panel.add_child(action_content)
+ var action_header := HBoxContainer.new()
+ action_header.add_theme_constant_override("separation", 8)
+ action_content.add_child(action_header)
+ action_title = Label.new()
+ _font(action_title, 24)
+ ADVENTURE_THEME.title(action_title, 24)
+ action_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+ action_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ action_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ action_header.add_child(action_title)
+ var action_close := _make_button("✕", action_header, func(): action_panel.hide(), 22)
+ action_close.name = "ActionClose"
+ action_close.custom_minimum_size = Vector2(58, 56)
+ action_close.size_flags_horizontal = Control.SIZE_SHRINK_END
+ action_close.tooltip_text = "Menü schließen"
  # Many upgrade buttons must remain accessible on portrait Android screens.
  var action_scroll := ScrollContainer.new()
+ action_scroll.name = "ActionScroll"
  action_scroll.custom_minimum_size.y = 0
  action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
- action_panel.add_child(action_scroll)
+ action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+ action_content.add_child(action_scroll)
  var modal := VBoxContainer.new()
  modal.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  modal.add_theme_constant_override("separation", 10)
  action_scroll.add_child(modal)
- action_title = Label.new()
- _font(action_title, 24)
- action_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- modal.add_child(action_title)
  action_detail = Label.new()
  _font(action_detail, 19)
+ action_detail.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
  action_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  modal.add_child(action_detail)
  action_button = _make_button("Ausführen", modal, _on_action_pressed, 19)
@@ -360,6 +379,7 @@ func _make_hud() -> void:
  loot_compare_label = Label.new()
  loot_compare_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  loot_compare_label.add_theme_font_size_override("font_size", 17)
+ loot_compare_label.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
  modal.add_child(loot_compare_label)
  loot_sell_button = _make_button("Gegenstand verkaufen", modal, _sell_selected_loot, 17)
  loot_sale_confirmation = ConfirmationDialog.new()
@@ -396,6 +416,8 @@ func _make_hud() -> void:
  _apply_chat_visibility()
 
 func _open_menu(target: String) -> void:
+ # Do not leave the previous modal visible behind a full-screen submenu.
+ action_panel.hide()
  if target == "shop":
   skin_shop_menu.open_menu()
   return
@@ -409,9 +431,10 @@ func _open_menu(target: String) -> void:
   $TalentMenu.open_menu()
   return
  current_tab = target
- if target == "combat":
-  action_panel.hide()
- else:
+ if target != "combat":
+  # The adventure HUD is created later than this panel. Move the action
+  # panel above it only while open, so its header and buttons stay touchable.
+  move_child(action_panel, get_child_count() - 1)
   action_panel.show()
   _refresh()
 
