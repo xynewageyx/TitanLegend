@@ -236,6 +236,24 @@ func _build_navigation() -> void:
   menu.add_child(button)
  more_panel.hide()
 
+func _process(_delta: float) -> void:
+ if hud == null:
+  return
+ # Submenus are siblings created earlier by the original scene. Temporarily
+ # hide this topmost overlay while one of them is open, then restore the dock.
+ var modal_active: bool = false
+ for menu_name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
+  var menu: Control = hud.get_node_or_null(menu_name) as Control
+  if menu != null and menu.visible:
+   modal_active = true
+ var cosmetics: Variant = hud.get("skin_shop_menu")
+ if cosmetics is Control and (cosmetics as Control).visible:
+  modal_active = true
+ if modal_active and visible:
+  hide()
+ elif not modal_active and not visible:
+  show()
+
 func _on_navigation(target: String) -> void:
  if target == "more":
   more_open = not more_open
@@ -248,6 +266,8 @@ func _on_navigation(target: String) -> void:
  _update_nav_selection()
  if hud != null:
   hud.call("_open_menu", target)
+  if target in ["team", "skills", "talents", "shop"]:
+   hide()
 
 func _update_nav_selection() -> void:
  for entry in NAV_ENTRIES:
