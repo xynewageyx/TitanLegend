@@ -1,0 +1,5 @@
+Titan Legends Update 96 – Niederlagenablauf ohne Wiederbelebung
+- Normale Teamniederlage: Todesposen bleiben 2 Sekunden sichtbar, HP werden erst beim nächsten Versuch zurückgesetzt.
+- Boss-Vernichtungsschlag: Helden bleiben während der Niederlagenanimation liegen.
+- Beim Zurücksetzen werden noch laufende Todes-Tweens beendet, damit sie die Formation nicht erneut verschieben.
+- Kein Wiederbeleben. Keine Änderung an 60-Sekunden-Limit oder Rollentempo.
