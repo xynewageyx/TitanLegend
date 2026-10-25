@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'export_presets.cfg'
+      - 'project.godot'
       - '.github/workflows/android-debug-apk.yml'
 
 permissions:
