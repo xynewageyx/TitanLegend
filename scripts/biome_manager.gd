@@ -40,9 +40,9 @@ func set_biome(biome: int) -> void:
  biome_changed.emit(current_biome)
 func generate_terrain() -> void:
  var ground_color: Color = COLORS[current_biome].darkened(0.4)
- VisualFactory.box(terrain, Vector3(38, 0.35, 75), Vector3(0, -0.3, -12), ground_color)
+ VisualFactory.box(terrain, Vector3(48, 0.35, 160), Vector3(0, -0.3, -36), ground_color)
  var path_color: Color = [Color("#51423d"), Color("#4c8798"), Color("#978267"), Color("#8e785b"), Color("#e2d7ad"), Color("#453b5a"), Color("#a4b8b8"), Color("#b9d9e8"), Color("#61688b"), Color("#62425b")][current_biome]
- VisualFactory.box(terrain, Vector3(7, 0.06, 75), Vector3(0, -0.08, -12), path_color)
+ VisualFactory.box(terrain, Vector3(7, 0.06, 160), Vector3(0, -0.08, -36), path_color)
  var rng: RandomNumberGenerator = RandomNumberGenerator.new()
  rng.seed = 241
  for i in range(44):
@@ -68,6 +68,30 @@ func generate_terrain() -> void:
  DesignDetails.scenery(terrain, current_biome)
  if current_biome == 3:
   NatureArt.forest(terrain)
+  _add_forest_depth()
+
+func _add_forest_depth() -> void:
+ # Fill distant forest edges without extra physics bodies or textures.
+ # Fixed random seed prevents scenery rearranging when returning to a zone.
+ var rng := RandomNumberGenerator.new()
+ rng.seed = 483721
+ for i in range(24):
+  var side: float = -1.0 if i % 2 == 0 else 1.0
+  var x: float = side * rng.randf_range(5.7, 22.0)
+  var z: float = rng.randf_range(-105.0, -46.0)
+  var size: float = rng.randf_range(0.85, 1.45)
+  var bark: Color = Color("#634a32").lerp(Color("#826041"), rng.randf())
+  var foliage: Color = Color("#1f5c37").lerp(Color("#419657"), rng.randf())
+  VisualFactory.cylinder(terrain, 2.9 * size, 0.29 * size, Vector3(x, 1.45 * size, z), bark)
+  VisualFactory.sphere(terrain, 1.4 * size, Vector3(x, 3.45 * size, z), foliage)
+  VisualFactory.sphere(terrain, 0.9 * size, Vector3(x + side * 0.55 * size, 3.05 * size, z + 0.35), foliage.lightened(0.08))
+ # Low-detail undergrowth creates depth without hiding the road or heroes.
+ for i in range(18):
+  var side: float = -1.0 if i % 2 == 0 else 1.0
+  var x: float = side * rng.randf_range(4.9, 18.0)
+  var z: float = rng.randf_range(-95.0, 14.0)
+  var radius: float = rng.randf_range(0.24, 0.56)
+  VisualFactory.sphere(terrain, radius, Vector3(x, radius * 0.7, z), Color("#286b39").lerp(Color("#55a14c"), rng.randf()))
 
 func _add_biome_details() -> void:
  var rng := RandomNumberGenerator.new()
