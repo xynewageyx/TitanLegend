@@ -54,6 +54,20 @@ class CompleteUpdate168ImportTests(unittest.TestCase):
         self.assertTrue((ROOT / "original_update168/scripts/battle_manager.gd").is_file())
         self.assertTrue((ROOT / "original_update168/scripts/team_formation.gd").is_file())
 
+    def test_preserved_original_core_scripts_match_manifest(self):
+        """Do not let later gameplay updates silently change the preserved originals."""
+        manifest_by_path = {item["path"]: item for item in self.files}
+        for name in ("team_formation", "battle_manager", "ui_manager", "boss_motion"):
+            original_name = f"scripts/{name}.gd"
+            preserved = ROOT / "original_update168" / original_name
+            with self.subTest(source=original_name):
+                self.assertTrue(preserved.is_file())
+                raw = preserved.read_bytes()
+                expected = manifest_by_path[original_name]
+                self.assertEqual(len(raw), expected["bytes"])
+                self.assertEqual(git_blob_sha1(raw), expected["git_sha"])
+                self.assertEqual(hashlib.sha256(raw).hexdigest(), expected["sha256"])
+
 
 if __name__ == "__main__":
     unittest.main()
