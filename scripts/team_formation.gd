@@ -8,7 +8,24 @@ const CLASS_NAMES := ["Krieger", "Paladin", "Druide", "Schamane", "Jaeger", "Sch
 const CLASS_COLORS := [Color("#aab6c5"), Color("#f5d16c"), Color("#4bb77d"), Color("#4ca8e8"), Color("#4f9b50"), Color("#5d567e"), Color("#5086ef"), Color("#a45cd0"), Color("#ba78db"), Color("#e9e2ae"), Color("#ba6e51")]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
 const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1]]
-const POSITIONS := [Vector3(-1.1, 0, -1.7), Vector3(-1.6, 0, 1.0), Vector3(0.0, 0, 1.0), Vector3(1.6, 0, 1.0)]
+# Deterministic rows: tanks and melee damage dealers in front; the rest behind.
+const MELEE_CLASSES := [0, 1, 5, 10] # Warrior, Paladin, Rogue, Brawler
+
+func _formation_position(slot: int) -> Vector3:
+ var front_slots: Array[int] = []
+ var back_slots: Array[int] = []
+ for i in range(4):
+  var melee: bool = role_ids[i] == 0 or (role_ids[i] == 1 and class_ids[i] in MELEE_CLASSES)
+  if melee:
+   front_slots.append(i)
+  else:
+   back_slots.append(i)
+ var in_front: bool = front_slots.has(slot)
+ var row: Array[int] = front_slots if in_front else back_slots
+ var index_in_row: int = row.find(slot)
+ var spacing: float = 1.25
+ var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
+ return Vector3(x, 0.0, -1.7 if in_front else 1.0)
 
 var class_ids: Array[int] = [0, 6, 4, 9]
 var role_ids: Array[int] = [0, 1, 1, 2]
@@ -80,7 +97,7 @@ func create_team() -> void:
  for i in range(4):
   var hero := Node3D.new()
   hero.name = "Hero" + str(i + 1)
-  hero.position = POSITIONS[i]
+  hero.position = _formation_position(i)
   add_child(hero)
   heroes.append(hero)
   _build_hero(hero, role_ids[i], CLASS_COLORS[class_ids[i]])
@@ -210,7 +227,7 @@ func reset_team_defeat_pose() -> void:
  fallen_heroes.clear()
  for i in range(heroes.size()):
   if is_instance_valid(heroes[i]):
-   heroes[i].position = POSITIONS[i]
+   heroes[i].position = _formation_position(i)
    heroes[i].rotation = Vector3.ZERO
 
 func set_team_protection_wall(enabled: bool) -> void:
