@@ -315,10 +315,12 @@ func _make_hud() -> void:
  action_panel = PanelContainer.new()
  action_panel.name = "ActionPanel"
  action_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- action_panel.anchor_left = 0.08
- action_panel.anchor_right = 0.92
- action_panel.anchor_top = 0.12
- action_panel.anchor_bottom = 0.55
+ # Give the portrait Android modal room for equipment, gems and loot,
+ # without making the close button scroll away.
+ action_panel.anchor_left = 0.06
+ action_panel.anchor_right = 0.94
+ action_panel.anchor_top = 0.075
+ action_panel.anchor_bottom = 0.77
  action_panel.offset_left = 0
  action_panel.offset_right = 0
  action_panel.offset_top = 0
@@ -334,6 +336,8 @@ func _make_hud() -> void:
  action_title = Label.new()
  _font(action_title, 24)
  ADVENTURE_THEME.title(action_title, 24)
+ # Explicit dark ink: white labels disappear against the parchment panel.
+ action_title.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
  action_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  action_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
  action_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
