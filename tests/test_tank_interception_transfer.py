@@ -57,5 +57,18 @@ class TankInterceptionTransferTests(unittest.TestCase):
         )
 
 
+    def test_original_shield_impact_is_triggered_on_real_interception(self):
+        damage = body("_damage_heroes")
+        self.assertIn('team_formation.has_method("play_team_protection_impact")', damage)
+        self.assertIn("team_formation.play_team_protection_impact(impact_element)", damage)
+        self.assertLess(damage.index("if redirected_damage > 0 and tank >= 0:"),
+                        damage.index("team_formation.play_team_protection_impact(impact_element)"))
+
+    def test_original_team_script_contains_shield_impact(self):
+        formation = (ROOT / "scripts" / "team_formation.gd").read_text(encoding="utf-8")
+        self.assertIn("func play_team_protection_impact(element_id: int = -1)", formation)
+        self.assertIn("wall_impact = 1.0", formation)
+
+
 if __name__ == "__main__":
     unittest.main()
