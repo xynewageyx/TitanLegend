@@ -17,6 +17,8 @@ var offline_notice_until: int = 0
 var last_ability_logged: String = ""
 var last_ability_time: int = -99999
 var chat_collapse_button: Button
+var chat_preview_button: Button
+var chat_tabs_row: HBoxContainer
 var gold_label: Label
 var tickets_label: Label
 var xp_label: Label
@@ -146,6 +148,7 @@ func _make_button(text_value: String, parent: Node, callback: Callable, px: int 
  b.text = text_value
  b.custom_minimum_size.y = 46
  b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ ADVENTURE_THEME.button(b, false, true)
  b.add_theme_font_size_override("font_size", px)
  parent.add_child(b)
  b.pressed.connect(callback)
@@ -211,8 +214,8 @@ func _make_hud() -> void:
  team_status_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
  team_status_label.offset_left = 30
  team_status_label.offset_right = -30
- team_status_label.offset_top = 202
- team_status_label.offset_bottom = 236
+ team_status_label.offset_top = 397
+ team_status_label.offset_bottom = 431
  team_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  team_status_label.add_theme_font_size_override("font_size", 16)
  team_status_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.36))
@@ -226,8 +229,8 @@ func _make_hud() -> void:
  afk_status_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
  afk_status_label.offset_left = 20
  afk_status_label.offset_right = -20
- afk_status_label.offset_top = 238
- afk_status_label.offset_bottom = 288
+ afk_status_label.offset_top = 433
+ afk_status_label.offset_bottom = 475
  afk_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  afk_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
  afk_status_label.add_theme_font_size_override("font_size", 20)
@@ -275,7 +278,11 @@ func _make_hud() -> void:
  var chat_box := VBoxContainer.new()
  chat_box.add_theme_constant_override("separation", 5)
  chat_panel.add_child(chat_box)
+ chat_preview_button = _make_button("☰  SYSTEM · Nachrichten anzeigen", chat_box, _toggle_chat, 18)
+ chat_preview_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+ chat_preview_button.clip_text = true
  var tabs := HBoxContainer.new()
+ chat_tabs_row = tabs
  chat_box.add_child(tabs)
  for tab_name in ["Alle", "Welt", "Team", "Gilde", "System"]:
   var b := _make_button(tab_name, tabs, _select_chat.bind(tab_name), 17)
@@ -413,11 +420,13 @@ func _toggle_chat() -> void:
  _apply_chat_visibility()
 
 func _apply_chat_visibility() -> void:
- chat_panel.offset_top = -464 if chat_open else -209
+ chat_panel.offset_top = -468 if chat_open else -209
  chat_panel.offset_bottom = -141
+ chat_preview_button.visible = not chat_open
+ chat_tabs_row.visible = chat_open
  chat_history.visible = chat_open
  chat_input.get_parent().visible = chat_open
- chat_collapse_button.text = "−" if chat_open else "+"
+ chat_collapse_button.text = "×" if chat_open else "+"
 
 func _select_chat(tab_name: String) -> void:
  chat_tab = tab_name
@@ -435,6 +444,9 @@ func _append(channel: String, message: String) -> void:
 
 func _render_chat() -> void:
  if chat_history == null: return
+ if chat_preview_button != null and not chat_lines.is_empty():
+  var last_line: Dictionary = chat_lines[chat_lines.size() - 1]
+  chat_preview_button.text = "☰  " + str(last_line.get("channel", "System")) + " · " + str(last_line.get("message", "")).substr(0, 48)
  chat_history.clear()
  var palette := {"System": "#ffb36b", "Welt": "#f5d37a", "Team": "#70ccff", "Gilde": "#79e89a"}
  for item in chat_lines:
