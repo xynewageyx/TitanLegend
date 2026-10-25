@@ -48,6 +48,10 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --script res://tests/test_afk_farming.gd
+      - name: Test tank interception damage and overkill edge cases
+        shell: bash
+        run: |
+          godot --headless --path . --script res://tests/test_tank_interception_math.gd
       - name: Launch smoke test
         shell: bash
         run: |
