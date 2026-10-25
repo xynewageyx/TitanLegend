@@ -8,6 +8,7 @@ static func decorate(parent: Node3D, biome: int, fusion: bool) -> void:
  var arena := Node3D.new()
  arena.name = "ElementalBossArena"
  parent.add_child(arena)
+ # Open ring: keeps the middle clear and avoids hiding the boss.
  var count: int = 12 if fusion else 8
  var radius: float = 4.9 if fusion else 4.3
  for i in range(count):
@@ -19,6 +20,7 @@ static func decorate(parent: Node3D, biome: int, fusion: bool) -> void:
   if i % 2 == 0:
    var crystal := VisualFactory.sphere(arena, 0.24 if fusion else 0.17, pos + Vector3(0, height + 0.18, 0), tint.lightened(0.35))
    crystal.name = "ArenaCrystal"
+ # Floor markers are thin, unlit geometry, with no collision or particles.
  for i in range(8):
   var angle: float = TAU * float(i) / 8.0
   var marker_pos := Vector3(cos(angle) * 3.15, 0.035, sin(angle) * 3.15)
