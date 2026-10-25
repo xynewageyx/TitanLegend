@@ -1,0 +1,36 @@
+name: Restore 98 original Update 168 documents
+
+on:
+  push:
+    paths:
+      - 'migration/update168/missing_docs.zlib.b64'
+      - 'tools/restore_original_update168_docs.py'
+      - '.github/workflows/import-update168-docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Restore only missing verified original files
+        run: python3 tools/restore_original_update168_docs.py
+      - name: Run source regression tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Commit restored source history without modifying active scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -A -- '*.md' '*.txt'
+          if git diff --cached --quiet; then
+            echo "All 98 originals already present"
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Restore 98 verified Update 168 root history files [skip ci]'
+          git push
