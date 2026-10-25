@@ -9,7 +9,7 @@ on:
       - '.github/workflows/android-debug-apk.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   export-android:
@@ -107,3 +107,19 @@ jobs:
           path: build/TitanLegends-debug.apk
           if-no-files-found: error
           retention-days: 7
+
+      - name: Publish direct APK download on GitHub Releases
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="android-preview"
+          apk="build/TitanLegends-debug.apk"
+          description="Development preview only. Godot 4.6 arm64 debug build; not a production release. Android device testing is still required. Each CI build uses a temporary debug signature, so replacing an older installed preview may require uninstalling it first."
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$apk" --clobber
+            gh release edit "$tag" --target "$GITHUB_SHA" --title "Titan Legends Android Preview" --notes "$description" --prerelease
+          else
+            gh release create "$tag" "$apk" --target "$GITHUB_SHA" --title "Titan Legends Android Preview" --notes "$description" --prerelease
+          fi
