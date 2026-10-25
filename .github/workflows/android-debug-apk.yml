@@ -163,8 +163,18 @@ jobs:
           apk="build/TitanLegends-debug.apk"
           description="Development preview only. Godot 4.6 arm64 debug build; not a production release. Android device testing is still required. Builds use a reusable debug signature only when the TITAN_DEBUG_KEYSTORE_BASE64 repository secret is configured. Without it, updates may require uninstalling an older preview, which can erase local saves."
           if gh release view "$tag" >/dev/null 2>&1; then
+            # Upload must succeed: only the optional metadata edit may be denied
+            # by GitHub App release permissions on an otherwise valid APK.
             gh release upload "$tag" "$apk" --clobber
-            gh release edit "$tag" --target "$GITHUB_SHA" --title "Titan Legends Android Preview" --notes "$description" --prerelease
+            if ! gh release edit "$tag" --target "$GITHUB_SHA" --title "Titan Legends Android Preview" --notes "$description" --prerelease; then
+              echo "::warning::Release metadata could not be updated (GitHub integration permissions). The APK asset upload succeeded."
+            fi
           else
             gh release create "$tag" "$apk" --target "$GITHUB_SHA" --title "Titan Legends Android Preview" --notes "$description" --prerelease
           fi
+          {
+            echo "### Titan Legends Android debug export"
+            echo "- Exported commit: \`$GITHUB_SHA\`"
+            echo "- [Direct APK on GitHub Releases](https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/TitanLegends-debug.apk)"
+            echo "- [CI artifact for this exact run](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)"
+          } >> "$GITHUB_STEP_SUMMARY"
