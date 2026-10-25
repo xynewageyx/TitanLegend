@@ -1,5 +1,8 @@
 extends Control
-# Update 27: portrait HUD, boss HP only, tabbed local chat.
+# Mobile portrait HUD with an original fantasy-adventure skin.
+const ADVENTURE_OVERLAY = preload("res://scripts/adventure_hud_overlay.gd")
+const ADVENTURE_THEME = preload("res://scripts/adventure_ui_theme.gd")
+# Boss HP only, tabbed local chat, and existing gameplay rules remain.
 @export var battle_manager: Node3D
 @export var biome_manager: Node3D
 var current_tab: String = "combat"
@@ -60,15 +63,28 @@ var attribute_select_button: Button
 var attribute_apply_button: Button
 var attribute_reroll_button: Button
 var skin_shop_menu: Control
+var adventure_overlay: Control
 
 func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_PASS
  # Hide the obsolete scene HUD. Keep it in the scene for backwards compatibility.
  $Margin.hide()
  _make_hud()
+ # Keep the legacy widgets for compatibility, but show the adventure overlay.
+ $ResourceBar.hide()
+ $BottomNav.hide()
+ adventure_overlay = Control.new()
+ adventure_overlay.set_script(ADVENTURE_OVERLAY)
+ adventure_overlay.call("initialize", self, battle_manager, biome_manager)
+ add_child(adventure_overlay)
  skin_shop_menu = Control.new()
  skin_shop_menu.set_script(load("res://scripts/skin_shop_menu.gd"))
  add_child(skin_shop_menu)
+ # Restyle all existing functional full-screen submenus.
+ for menu in [$ClassMenu, $SkillMenu, $TalentMenu, skin_shop_menu]:
+  ADVENTURE_THEME.style_menu_tree(menu)
+ if battle_manager != null and battle_manager.team_formation != null:
+  battle_manager.team_formation.team_changed.connect(_refresh)
  GameManager.gold_changed.connect(_refresh)
  GameManager.xp_changed.connect(_refresh)
  GameManager.character_level_changed.connect(_refresh)
@@ -164,14 +180,15 @@ func _make_hud() -> void:
  boss_panel = VBoxContainer.new()
  boss_panel.name = "BossHP"
  boss_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
- boss_panel.offset_left = 32
- boss_panel.offset_right = -32
- boss_panel.offset_top = 85
- boss_panel.offset_bottom = 195
+ boss_panel.offset_left = 216
+ boss_panel.offset_right = -19
+ boss_panel.offset_top = 240
+ boss_panel.offset_bottom = 385
  add_child(boss_panel)
  boss_name = Label.new()
  boss_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  _font(boss_name, 23)
+ boss_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  boss_panel.add_child(boss_name)
  boss_hp = ProgressBar.new()
  boss_hp.custom_minimum_size.y = 24
@@ -251,9 +268,9 @@ func _make_hud() -> void:
  chat_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
  chat_panel.offset_left = 12
  chat_panel.offset_right = -12
- chat_panel.offset_top = -245
- chat_panel.offset_bottom = -184
- chat_panel.add_theme_stylebox_override("panel", _style(Color(0.012, 0.025, 0.04, 0.88)))
+ chat_panel.offset_top = -209
+ chat_panel.offset_bottom = -141
+ chat_panel.add_theme_stylebox_override("panel", ADVENTURE_THEME.plaque(Color("#fff0d8f3"), ADVENTURE_THEME.WOOD, 17, 3))
  add_child(chat_panel)
  var chat_box := VBoxContainer.new()
  chat_box.add_theme_constant_override("separation", 5)
@@ -298,7 +315,7 @@ func _make_hud() -> void:
  action_panel.offset_right = 0
  action_panel.offset_top = 200
  action_panel.offset_bottom = 790
- action_panel.add_theme_stylebox_override("panel", _style(Color(0.025, 0.045, 0.065, 0.97)))
+ action_panel.add_theme_stylebox_override("panel", ADVENTURE_THEME.plaque(ADVENTURE_THEME.PAPER, ADVENTURE_THEME.WOOD, 20, 4))
  add_child(action_panel)
  # Many upgrade buttons must remain accessible on portrait Android screens.
  var action_scroll := ScrollContainer.new()
@@ -396,8 +413,8 @@ func _toggle_chat() -> void:
  _apply_chat_visibility()
 
 func _apply_chat_visibility() -> void:
- chat_panel.offset_top = -490 if chat_open else -245
- chat_panel.offset_bottom = -184
+ chat_panel.offset_top = -464 if chat_open else -209
+ chat_panel.offset_bottom = -141
  chat_history.visible = chat_open
  chat_input.get_parent().visible = chat_open
  chat_collapse_button.text = "−" if chat_open else "+"
@@ -604,6 +621,10 @@ func _refresh(_unused: int = 0) -> void:
    action_detail.text = "Werbung: " + str(AdManager.get_remaining_ads()) + "/3\nAdMob-Plugin nicht installiert"
    action_button.text = "Werbung nicht verfügbar"
    action_button.disabled = true
+
+ # Refresh the map plaque, hero status and resource ribbon from real game data.
+ if adventure_overlay != null:
+  adventure_overlay.call("refresh")
 
 func _next_weapon_hero() -> void:
  weapon_hero_slot = (weapon_hero_slot + 1) % 4
