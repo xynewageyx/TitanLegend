@@ -1,0 +1,68 @@
+name: Import verified Update 168 originals
+
+on:
+  push:
+    paths:
+      - 'migration/update168/*.zlib.b64'
+      - '.github/workflows/import-update168-originals.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify and restore GDScript originals
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import base64
+          import hashlib
+          from pathlib import Path
+          import zlib
+
+          CHECKSUMS = {
+              "team_formation": "19b26a83c256ed98613cc7ca958e54800ff4651d926a811f89508890e33e95e0",
+              "battle_manager": "a8466f771ae14906751043649b0b43936b5c004769760f45aa54b2f2e6b29f30",
+              "ui_manager": "724f9b9ec3e5a11d9efb14a85f234c300888a80f020a820d7b523050c9a48693",
+              "boss_art": "f3808b2ea01d1f650f66d66f3ba57c6c073750ec5e83c8a5da5e05ceb0d68e24",
+              "boss_motion": "54d8d22371d590d21542b779891191d122815e1233088a0014b114cd3616ddb1",
+          }
+          output = Path("original_update168/scripts")
+          output.mkdir(parents=True, exist_ok=True)
+          processed = 0
+          for name, expected_hash in CHECKSUMS.items():
+              input_file = Path("migration/update168") / (name + ".zlib.b64")
+              if not input_file.exists():
+                  continue
+              compressed = base64.b64decode(input_file.read_text(encoding="ascii"), validate=True)
+              decoder = zlib.decompressobj()
+              source = decoder.decompress(compressed, 100000)
+              source += decoder.flush()
+              if not decoder.eof or decoder.unused_data:
+                  raise ValueError(f"Invalid compressed input for {name}")
+              if hashlib.sha256(source).hexdigest() != expected_hash:
+                  raise ValueError(f"Update 168 SHA256 mismatch for {name}")
+              source.decode("utf-8")
+              (output / (name + ".gd")).write_bytes(source)
+              print(f"Verified original: {name}.gd ({len(source)} bytes)")
+              processed += 1
+          if processed == 0:
+              print("No new originals to import")
+          PY
+      - name: Commit original sources without replacing current modified game files
+        shell: bash
+        run: |
+          git add original_update168/scripts/
+          if git diff --cached --quiet; then
+            echo "No differences to commit"
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Import verified Update 168 original GDScript sources [skip ci]'
+          git push
