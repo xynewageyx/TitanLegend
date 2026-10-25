@@ -432,7 +432,7 @@ func create_team() -> void:
   add_child(hero)
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
-  _decorate_class(hero, class_ids[i])
+  _decorate_class(hero, class_ids[i], role_ids[i], i)
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
@@ -514,11 +514,13 @@ func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  torso.scale = Vector3(1.05, 1.38, 0.72)
  var waist: MeshInstance3D = VisualFactory.sphere(hero, 0.35, Vector3(0, 0.80, 0), color.darkened(0.16))
  waist.scale = Vector3(1.14, 0.65, 0.83)
- VisualFactory.sphere(hero, 0.29, Vector3(0, 1.94, 0), Color("#f0c3a0"))
+ var head: MeshInstance3D = VisualFactory.sphere(hero, 0.29, Vector3(0, 1.94, 0), Color("#f0c3a0"))
+ head.name = "HeroHead"
  # Update 121: readable facial features and layered silhouette in portrait view.
  # Reuse low-poly primitives; no texture or shader imports required on Android.
  var hair_color: Color = Color("#423329") if role == 0 else (Color("#61482e") if role == 1 else (Color("#313c34") if role == 2 else Color("#b5a16e")))
  var hair: MeshInstance3D = VisualFactory.sphere(hero, 0.295, Vector3(0, 2.075, 0.055), hair_color)
+ hair.name = "HeroHair"
  hair.scale = Vector3(1.04, 0.48, 0.90)
  for eye_side in [-1.0, 1.0]:
   VisualFactory.sphere(hero, 0.042, Vector3(eye_side * 0.105, 1.97, -0.272), Color("#1e2633"))
@@ -575,7 +577,7 @@ func start_walking() -> void:
  walk_tween.tween_property(self, "position:z", position.z - 2.0, 1.25)
  walk_tween.tween_callback(_finish_walking)
 
-func _decorate_class(hero: Node3D, class_id: int) -> void:
+func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int) -> void:
  var color: Color = CLASS_COLORS[class_id]
  var base_role: int = 0
  match class_id:
@@ -593,6 +595,8 @@ func _decorate_class(hero: Node3D, class_id: int) -> void:
  preload("res://scripts/hero_faces_hands_70.gd").decorate(hero, class_id)
  preload("res://scripts/hero_class_identity_125.gd").decorate(hero, class_id)
  preload("res://scripts/hero_body_profiles_126.gd").decorate(hero, class_id)
+ # Role-aware class silhouettes and individual face colors; visuals only.
+ preload("res://scripts/hero_visual_upgrade.gd").decorate(hero, class_id, selected_role, slot)
  var motion: Node3D = Node3D.new()
  motion.name = "HeroCombatMotion"
  motion.set_script(preload("res://scripts/hero_combat_motion.gd"))
