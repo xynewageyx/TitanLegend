@@ -556,6 +556,7 @@ func _begin_boss_cast() -> void:
  # This changes only the cast window, never the 60-second boss timer.
  boss_cast_ticks = 3 + maxi(0, boss_cc_required - 1) * 2
  boss_next_cast_tick = skill_tick + 9
+ _animate_boss_event("attack_windup")
  if boss_cc_required > 0:
   # Prepared hits were earned by the strict four-slot rotation earlier.
   # Each living hero can contribute at most one banked hit.
@@ -570,6 +571,7 @@ func _begin_boss_cast() -> void:
 func _resolve_boss_cast() -> void:
  if not battle_active or not is_boss:
   return
+ _animate_boss_event("attack_release")
  if boss_cast_kind == "self_heal":
   enemy_hp = mini(enemy_max_hp, enemy_hp + maxi(1, roundi(float(enemy_max_hp) * 0.05)))
   last_ability = "Boss: Selbstheilung"
@@ -796,6 +798,8 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
  # If an area skill hit adds, the remaining boss also takes one hit.
  var defense: float = 0.13 if boss_buff_active and boss_buff_kind == "defense" else 0.0
  var vulnerability: float = 1.0 + INTERRUPT_BOSS_DAMAGE_BONUS if is_boss and skill_tick < boss_vulnerable_until_tick else 1.0
+ if is_boss:
+  _animate_boss_event("react_to_hit")
  enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense) * vulnerability)))
  _update_enemy_casualties()
  if enemy_hp <= 0:
@@ -1062,6 +1066,19 @@ func _update_enemy_casualties() -> void:
   if is_instance_valid(mob):
    mob.visible = false
  enemies_remaining = survivors
+
+# Visual-only boss animation bridge. Combat decisions, damage and timing
+# remain entirely in BattleManager; the animation may be absent safely.
+func _animate_boss_event(event_name: String) -> void:
+ if not is_boss or enemy_visuals.is_empty():
+  return
+ var boss_node: Node3D = enemy_visuals[0] as Node3D
+ if not is_instance_valid(boss_node):
+  return
+ var motion: Node = boss_node.get_node_or_null("BossMotion")
+ if motion == null or not motion.has_method(event_name):
+  return
+ motion.call(event_name)
 
 func _spawn_enemy_visuals() -> void:
  if enemy_spawn_node == null:
