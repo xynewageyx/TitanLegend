@@ -32,7 +32,7 @@ class FormationRowsTests(unittest.TestCase):
 
     def test_rebuild_and_defeat_recovery_use_same_positions(self):
         self.assertIn("hero.position = _formation_position(i)", method("create_team"))
-        self.assertIn("heroes[i].position = _formation_position(i)", method("reset_team_defeat_pose"))
+        self.assertRegex(method("reset_team_defeat_pose"), r"(?:hero|heroes\[i\])\.position = _formation_position\(i\)")
         self.assertNotIn("POSITIONS[i]", SOURCE)
 
 
