@@ -14,7 +14,7 @@ ALLOW_CHANGED_ROOT = {"README.md", "UPDATE_23.md", "UPDATE_25_PARSERFIX.md"}
 
 
 def git_blob_sha1(data: bytes) -> str:
-    return hashlib.sha1(("blob %d\\0" % len(data)).encode("ascii") + data).hexdigest()
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + bytes([0]) + data).hexdigest()
 
 
 class CompleteUpdate168ImportTests(unittest.TestCase):
