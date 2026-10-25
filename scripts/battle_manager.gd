@@ -376,6 +376,10 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
  # Apply the collected interception once, even if the tank was knocked out
  # during the same attack. A defeated tank cannot protect later attacks.
  if redirected_damage > 0 and tank >= 0:
+  # Use Update 168's existing elemental shield impact on genuine interception.
+  if team_formation != null and team_formation.has_method("play_team_protection_impact"):
+   var impact_element: int = biome_manager.current_biome if is_boss and biome_manager != null else -1
+   team_formation.play_team_protection_impact(impact_element)
   var tank_before: int = hero_hp[tank]
   hero_hp[tank] = maxi(0, tank_before - redirected_damage)
   var tank_taken: int = tank_before - hero_hp[tank]
