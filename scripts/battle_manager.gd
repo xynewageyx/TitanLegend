@@ -388,6 +388,9 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
   team_formation.play_hit_targets(hits)
   team_formation.play_dodge_targets(dodges)
  _sync_team_health()
+ # Interception can kill the tank during this attack. Remove the protection
+ # wall immediately instead of showing a shield for a defeated hero.
+ _refresh_tank_defense_visuals()
  if team_hp <= 0:
   _on_team_defeat("normal")
  else:
