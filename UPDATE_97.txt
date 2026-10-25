@@ -1,0 +1,6 @@
+Titan Legends Update 97 – Niederlagenanzeige
+- Niederlagenstatus wird beim Team-Wipe und beim 60-Sekunden-Vernichtungsschlag gesetzt.
+- Boss-HUD zeigt eine Niederlage auch dann, wenn alle Helden vor Ablauf der 60 Sekunden fallen.
+- Normale Wellen zeigen eine eigene Niederlagenmeldung.
+- Der Status wird vor dem naechsten Versuch geloescht.
+- Keine Wiederbelebung; bestehende Todesanimationen und 60-Sekunden-Regel bleiben erhalten.
