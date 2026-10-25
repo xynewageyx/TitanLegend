@@ -161,7 +161,7 @@ jobs:
           set -euo pipefail
           tag="android-preview"
           apk="build/TitanLegends-debug.apk"
-          description="Development preview only. Godot 4.6 arm64 debug build; not a production release. Android device testing is still required. Each CI build uses a temporary debug signature, so replacing an older installed preview may require uninstalling it first."
+          description="Development preview only. Godot 4.6 arm64 debug build; not a production release. Android device testing is still required. Builds use a reusable debug signature only when the TITAN_DEBUG_KEYSTORE_BASE64 repository secret is configured. Without it, updates may require uninstalling an older preview, which can erase local saves."
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "$apk" --clobber
             gh release edit "$tag" --target "$GITHUB_SHA" --title "Titan Legends Android Preview" --notes "$description" --prerelease
