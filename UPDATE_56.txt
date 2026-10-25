@@ -1,0 +1,1 @@
+Update 56: Single-Target- und AoE-Schadensskills fuer Tank, DD und Heiler aller 11 Klassen. Auswahl pro Held im Skillmenue. Rolle bestimmt den Schadensfaktor: Tank 48%, DD 100%, Heiler 32%. AoE trifft bis zu 7 Gegner. Bestehende Saves behalten Skillwahl 0/1. CC, Talente und passive Begleiter unveraendert.

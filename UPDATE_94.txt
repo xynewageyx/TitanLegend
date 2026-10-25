@@ -1,0 +1,1 @@
+Update 94: Individual death poses, dead heroes no longer basic-attack or interrupt boss casts, healer revival with 30% HP and 12-tick cooldown if a healing skill is equipped. Boss 60-second finisher remains unavoidable. Android runtime test pending.

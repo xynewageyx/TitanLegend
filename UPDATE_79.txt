@@ -1,0 +1,1 @@
+Update 79: Nach 60 Sekunden Bosskampf fuehrt der Boss einen Vernichtungsschlag aus, der das gesamte Team sofort besiegt. Visueller Bossangriff und Trefferreaktion, kein Loot, gleicher Boss wird erneut versucht.

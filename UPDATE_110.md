@@ -1,0 +1,1 @@
+Update 110: Schutzwall-Schockwelle robust zurueckgesetzt; Farbmaterial sicher geprueft; Zeitphase begrenzt; fehlerhafte Einrueckung in Todesanimation korrigiert. Keine HP-Regeneration, keine Wiederbelebung. Boss-Vernichtungsschlag nach 60 Sekunden unveraendert.

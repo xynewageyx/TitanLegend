@@ -1,0 +1,6 @@
+TITAN LEGENDS - UPDATE 88
+Elementare Boss-Treffer zeigen jetzt kurz einen passenden Status-Effekt direkt am betroffenen Heldenmodell.
+Feuer: aufsteigende Glut; Eis: Kristalle; Blitz: Funken; andere Elemente: passende Farb-Aura.
+Effekte erscheinen nur bei getroffenen Helden, sind rein visuell und entfernen sich automatisch.
+Bosslimit 60 Sekunden, One-Hit-Finisher, Rollenangriffstempo und Skillreihenfolge bleiben unveraendert.
+Hinweis: ZIP-Integritaet geprueft; Godot-Laufzeittest nicht durchgefuehrt.

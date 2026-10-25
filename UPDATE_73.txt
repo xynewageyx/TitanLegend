@@ -1,0 +1,2 @@
+Titan Legends Update 73 - Dynamische Gewichtsverlagerung und Koerperdrehung
+Helden verlagern das Gewicht seitlich beim Laufen, drehen den Oberkoerper leicht gegen die Schrittrichtung und gleiten weich in die Ruhepose zurueck. Rein visuell; Skills, Schaden, Begleiter und Bosse unveraendert.

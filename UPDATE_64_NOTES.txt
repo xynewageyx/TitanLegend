@@ -1,0 +1,1 @@
+Titan Legends Update 64: Eleven class-specific procedural hero silhouettes. Visual-only additions to team_formation.gd using hero_class_silhouettes_64.gd. No gameplay changes. Requires Android Godot runtime testing.

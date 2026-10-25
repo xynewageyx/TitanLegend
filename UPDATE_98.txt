@@ -1,0 +1,1 @@
+Update 98: Heiler-KI heilt nur lebende verletzte Helden, Einzelheilung priorisiert niedrigste HP-Quote; Gruppenheilung bei mehreren Verletzten. Keine Wiederbelebung. Bosslimit 60 Sekunden bleibt erhalten.

@@ -1,0 +1,1 @@
+Update 68: Individuelle Boss-Angriffsposen fuer 10 Elemente und Trefferreaktionen. Rein visuell, ohne Schadens- oder Skill-Balancing-Aenderungen. Android-Laufzeittest ausstehend.

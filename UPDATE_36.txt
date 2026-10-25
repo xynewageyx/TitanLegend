@@ -1,0 +1,1 @@
+Update 36: Elementare Bossarenen mit ringfoermigen Obelisken und Kristallen; Fusionsbosse besitzen groessere Arenen. Keine Kollisionskoerper, keine Partikel. Die Arena ist am Boss-Node befestigt und wird mit diesem entfernt. Godot-Laufzeittest steht aus.

@@ -1,0 +1,1 @@
+Titan Legends Update 32: Animierte Klassenarme, Gehbewegung und sichtbare Zaubereffekte bei Angriffen. Rein visuell, Begleiter bleiben passiv. Hochformat und Chat unveraendert. Android-Laufzeittest noch ausstehend.

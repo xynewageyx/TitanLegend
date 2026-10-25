@@ -1,0 +1,1 @@
+Update 114: Einrueckung beim Aufbau der Schutzwall-Funken korrigiert; acht Funken animieren radial synchron mit dem 0,48-s-Trefferimpuls und verschwinden beim Schutzende. Keine HP-Regeneration, keine Wiederbelebung.

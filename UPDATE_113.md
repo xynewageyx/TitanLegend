@@ -1,0 +1,2 @@
+# Update 113 – Trefferfunken am Schutzwall
+Acht wiederverwendbare blaue Funken breiten sich bei tatsächlich abgefangenem Schaden radial über den Tank-Schutzwall aus. Sie verschwinden nach 0,48 Sekunden und werden beim Ende des Gruppenschutzes ausgeblendet. Keine Änderung der Kampfwerte. Keine HP-Regeneration und keine Wiederbelebung. Der Boss-Vernichtungsschlag nach 60 Sekunden bleibt unabwehrbar.

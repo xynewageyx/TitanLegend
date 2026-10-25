@@ -1,0 +1,1 @@
+Update 86: Boss-Trefferzonen wenden jetzt zeitlich begrenzte elementare Team-Status an. Feuer/Natur: periodischer Schaden; Eis/Blitz: gelegentlich ausgesetzte Skills; Erde/Schatten/Chaos: erhoehter eingehender Schaden. Effekte laufen nach 3 bzw. 5 Kampfticks aus. Bestehende Skillbelegung, Boss-60s-Limit und Finisher bleiben erhalten. Kein Godot-Laufzeittest erfolgt.

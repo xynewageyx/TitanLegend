@@ -1,0 +1,561 @@
+extends Node3D
+# Update 32: Android-friendly procedural character motion; purely cosmetic.
+var class_id: int = 0
+var clock: float = 0.0
+var attack_time: float = 0.0
+var left_arm: Node3D
+var right_arm: Node3D
+var halo: Node3D
+var weapon_fx: Node3D
+var strike_duration: float = 0.42
+var hit_time: float = 0.0
+var elemental_hit_time: float = 0.0
+var elemental_hit_id: int = -1
+var motion_blend: float = 0.0
+var rest_breath: float = 0.0
+var left_leg: Node3D
+var right_leg: Node3D
+var left_knee: Node3D
+var right_knee: Node3D
+var left_foot: Node3D
+var right_foot: Node3D
+var left_forearm: Node3D
+var right_forearm: Node3D
+var elbow_blend: float = 0.0
+var attack_trail: Node3D
+var impact_glow: Node3D
+# Update 49: reusable, purely visual ranged projectile.
+var ranged_projectile: Node3D
+var projectile_origin: Vector3 = Vector3(0.0, 1.48, -0.55)
+var gait_phase: float = 0.0
+# Update 122: continuous, eased foot contact without altering combat timers.
+var foot_plant_left: float = 0.0
+var foot_plant_right: float = 0.0
+var lean_amount: float = 0.0
+var class_rhythm: float = 1.0
+var class_stride: float = 1.0
+var class_bob: float = 1.0
+var class_attack_tempo: float = 1.0
+# Update 73: smoothed lateral weight shift and natural body counter-rotation.
+var weight_shift: float = 0.0
+var torso_turn: float = 0.0
+var stride_roll: float = 0.0
+# Update 74: short full-body attack anticipation and recoil, visual only.
+var attack_body_pitch: float = 0.0
+var attack_body_yaw: float = 0.0
+var attack_body_roll: float = 0.0
+var hit_recoil: float = 0.0
+# Update 128: class-weighted impact bracing and smooth recovery (visual only).
+var hit_brace: float = 0.0
+var hit_side: float = 1.0
+var hit_counter: int = 0
+
+func configure(id: int) -> void:
+ class_id = id
+ # Each class has a distinct procedural movement profile (visual only).
+ match id:
+  0: # Krieger: heavy, grounded
+   class_rhythm = 0.78
+   class_stride = 0.86
+   class_bob = 0.60
+   class_attack_tempo = 0.82
+  1: # Paladin: deliberate armored steps
+   class_rhythm = 0.82
+   class_stride = 0.80
+   class_bob = 0.52
+   class_attack_tempo = 0.88
+  2: # Druide: flowing nature magic
+   class_rhythm = 0.94
+   class_stride = 0.88
+   class_bob = 0.85
+   class_attack_tempo = 1.0
+  3: # Schamane: rhythmic totem invocation
+   class_rhythm = 0.91
+   class_stride = 0.82
+   class_bob = 0.9
+   class_attack_tempo = 0.95
+  4: # Jaeger: light and steady
+   class_rhythm = 1.14
+   class_stride = 1.08
+   class_bob = 0.72
+   class_attack_tempo = 1.13
+  5: # Schurke: quick steps and double strikes
+   class_rhythm = 1.35
+   class_stride = 1.14
+   class_bob = 0.62
+   class_attack_tempo = 1.34
+  6: # Magier: restrained gait, broad casting
+   class_rhythm = 0.88
+   class_stride = 0.75
+   class_bob = 0.95
+   class_attack_tempo = 0.98
+  7: # Hexer: asymmetric shadow gestures
+   class_rhythm = 0.93
+   class_stride = 0.80
+   class_bob = 0.80
+   class_attack_tempo = 1.02
+  8: # Beschwoerer: controlled invocation
+   class_rhythm = 0.85
+   class_stride = 0.74
+   class_bob = 0.86
+   class_attack_tempo = 0.9
+  9: # Priester: calm, upright movement
+   class_rhythm = 0.84
+   class_stride = 0.72
+   class_bob = 0.65
+   class_attack_tempo = 0.9
+  10: # Raufbold: compact, fast punches
+   class_rhythm = 1.19
+   class_stride = 1.05
+   class_bob = 0.85
+   class_attack_tempo = 1.24
+ left_arm = Node3D.new()
+ left_arm.name = "AnimatedLeftArm"
+ left_arm.position = Vector3(-0.48, 1.52, 0)
+ add_child(left_arm)
+ right_arm = Node3D.new()
+ right_arm.name = "AnimatedRightArm"
+ right_arm.position = Vector3(0.48, 1.52, 0)
+ add_child(right_arm)
+ var sleeve: Color = Color("#485d79")
+ if id in [1, 9]: sleeve = Color("#d6bb75")
+ elif id in [2, 4]: sleeve = Color("#4c9066")
+ elif id in [3, 6]: sleeve = Color("#478fc5")
+ elif id in [5, 7, 8]: sleeve = Color("#8659a2")
+ elif id == 10: sleeve = Color("#a06a4d")
+ for arm in [left_arm, right_arm]:
+  var upper: MeshInstance3D = VisualFactory.sphere(arm, 0.18, Vector3(0, -0.23, 0), sleeve)
+  upper.scale = Vector3(0.90, 1.90, 0.95)
+  var elbow: Node3D = Node3D.new()
+  elbow.name = "ElbowPivot71"
+  elbow.position = Vector3(0, -0.46, 0)
+  arm.add_child(elbow)
+  VisualFactory.sphere(elbow, 0.13, Vector3.ZERO, sleeve.darkened(0.15))
+  var forearm: MeshInstance3D = VisualFactory.sphere(elbow, 0.13, Vector3(0, -0.17, 0), sleeve)
+  forearm.scale = Vector3(0.88, 1.55, 0.9)
+  if arm == left_arm:
+   left_forearm = elbow
+  else:
+   right_forearm = elbow
+ # Update 124: class-dependent moving gauntlets and shoulder silhouettes.
+ # Attach to articulated pivots so equipment follows attacks and walking.
+ var armor_tint: Color = Color("#aebbc8") if id in [0, 1] else (Color("#7b9e84") if id in [2, 4] else (Color("#866ba9") if id in [5, 7, 8] else Color("#d1b47c"))
+ for arm in [left_arm, right_arm]:
+  var shoulder_guard: MeshInstance3D = VisualFactory.sphere(arm, 0.205, Vector3(0, -0.045, 0), armor_tint)
+  shoulder_guard.scale = Vector3(1.22 if id in [0, 1] else 0.95, 0.62, 1.08)
+ for forearm_pivot in [left_forearm, right_forearm]:
+  var bracer: MeshInstance3D = VisualFactory.sphere(forearm_pivot, 0.135, Vector3(0, -0.24, -0.015), armor_tint.darkened(0.12))
+  bracer.scale = Vector3(1.02, 1.15, 1.02)
+ HeroWeapons47.equip(right_forearm, class_id)
+ # Separate moving legs give readable strides without external animations.
+ left_leg = Node3D.new()
+ left_leg.name = "AnimatedLeftLeg"
+ left_leg.position = Vector3(-0.20, 0.61, 0)
+ add_child(left_leg)
+ right_leg = Node3D.new()
+ right_leg.name = "AnimatedRightLeg"
+ right_leg.position = Vector3(0.20, 0.61, 0)
+ add_child(right_leg)
+ for leg in [left_leg, right_leg]:
+  var thigh: MeshInstance3D = VisualFactory.sphere(leg, 0.20, Vector3(0, -0.19, 0), Color("#343c4a"))
+  thigh.scale = Vector3(0.93, 1.35, 1.04)
+  var knee: Node3D = Node3D.new()
+  knee.name = "KneePivot72"
+  knee.position = Vector3(0, -0.40, 0)
+  leg.add_child(knee)
+  VisualFactory.sphere(knee, 0.145, Vector3.ZERO, Color("#47515f"))
+  var shin: MeshInstance3D = VisualFactory.sphere(knee, 0.145, Vector3(0, -0.19, 0), Color("#343c4a"))
+  shin.scale = Vector3(0.91, 1.42, 0.94)
+  var foot: Node3D = Node3D.new()
+  foot.name = "AnklePivot72"
+  foot.position = Vector3(0, -0.38, 0)
+  knee.add_child(foot)
+  var boot: MeshInstance3D = VisualFactory.sphere(foot, 0.18, Vector3(0, -0.025, -0.11), Color("#28303b"))
+  boot.scale = Vector3(1.0, 0.68, 1.42)
+  if leg == left_leg:
+   left_knee = knee
+   left_foot = foot
+  else:
+   right_knee = knee
+   right_foot = foot
+ halo = Node3D.new()
+ halo.name = "AbilityFlash"
+ halo.position = Vector3(0, 1.5, -0.55)
+ add_child(halo)
+ var magic_color: Color = Color("#ffe39a") if id in [1, 9] else Color("#73cfff") if id in [3, 6] else Color("#a0e889") if id in [2, 4] else Color("#d6a0ff")
+ VisualFactory.sphere(halo, 0.22, Vector3.ZERO, magic_color)
+ halo.visible = false
+ weapon_fx = Node3D.new()
+ weapon_fx.name = "ClassAttackEffect"
+ weapon_fx.position = Vector3(0.65, 1.55, -0.75)
+ add_child(weapon_fx)
+ var fx_color: Color = Color("#f0e6c0")
+ match class_id:
+  0, 1, 10: fx_color = Color("#ffd47a")
+  2, 4: fx_color = Color("#78e6a0")
+  3, 6: fx_color = Color("#6fcaff")
+  5, 7, 8: fx_color = Color("#bd85ff")
+  9: fx_color = Color("#fff2b0")
+ if class_id in [0, 1, 5, 10]:
+  VisualFactory.box(weapon_fx, Vector3(0.11, 0.9, 0.11), Vector3.ZERO, fx_color)
+ elif class_id == 4:
+  VisualFactory.box(weapon_fx, Vector3(0.07, 0.07, 0.85), Vector3.ZERO, fx_color)
+ else:
+  VisualFactory.sphere(weapon_fx, 0.2, Vector3.ZERO, fx_color)
+ weapon_fx.visible = false
+ # Mobile-friendly silhouettes: one reused trail and impact marker per hero.
+ attack_trail = Node3D.new()
+ attack_trail.name = "AttackTrail46"
+ attack_trail.position = Vector3(0.62, 1.55, -0.85)
+ add_child(attack_trail)
+ if class_id in [0, 1, 5, 10]:
+  VisualFactory.box(attack_trail, Vector3(0.075, 1.15, 0.055), Vector3.ZERO, fx_color.lightened(0.25))
+ elif class_id == 4:
+  VisualFactory.box(attack_trail, Vector3(0.075, 0.075, 1.0), Vector3.ZERO, fx_color.lightened(0.2))
+ else:
+  VisualFactory.sphere(attack_trail, 0.17, Vector3.ZERO, fx_color.lightened(0.2))
+ attack_trail.visible = false
+ impact_glow = Node3D.new()
+ impact_glow.name = "ImpactGlow46"
+ impact_glow.position = Vector3(0, 1.4, -0.62)
+ add_child(impact_glow)
+ VisualFactory.sphere(impact_glow, 0.12, Vector3.ZERO, fx_color)
+ impact_glow.visible = false
+ # Ranged classes show a moving spell/arrow during the existing attack.
+ # The projectile is a single reused node and never deals damage.
+ if class_id not in [0, 1, 5, 10]:
+  ranged_projectile = Node3D.new()
+  ranged_projectile.name = "VisualProjectile49"
+  ranged_projectile.position = projectile_origin
+  add_child(ranged_projectile)
+  if class_id == 4:
+   VisualFactory.box(ranged_projectile, Vector3(0.045, 0.045, 0.65), Vector3.ZERO, fx_color)
+  else:
+   VisualFactory.sphere(ranged_projectile, 0.14, Vector3.ZERO, fx_color.lightened(0.18))
+  ranged_projectile.visible = false
+
+# Tank-only visual effects: independent of damage and skill timing.
+var tank_fx_root: Node3D
+var tank_fx_time: float = 0.0
+var tank_fx_kind: int = -1
+# Update 104: distinct tank postures, smoothed to avoid abrupt arm snapping.
+var tank_pose_blend: float = 0.0
+var tank_pose_kind: int = -1
+
+func play_tank_skill_fx(kind: int) -> void:
+ if tank_fx_root == null:
+  tank_fx_root = Node3D.new()
+  tank_fx_root.name = "TankSkillVisual"
+  add_child(tank_fx_root)
+ tank_fx_kind = kind
+ tank_fx_time = 1.25
+ for child in tank_fx_root.get_children():
+  child.queue_free()
+ if kind == 8: # Taunt: rotating gold challenge ring.
+  for i in range(8):
+   var angle: float = float(i) * TAU / 8.0
+   VisualFactory.box(tank_fx_root, Vector3(0.13, 0.08, 0.13), Vector3(cos(angle) * 0.78, 1.65, sin(angle) * 0.78), Color(1.0, 0.68, 0.12))
+ elif kind == 9: # Interception: wide blue protective ring.
+  for i in range(12):
+   var angle: float = float(i) * TAU / 12.0
+   VisualFactory.box(tank_fx_root, Vector3(0.17, 0.10, 0.17), Vector3(cos(angle) * 1.12, 1.1, sin(angle) * 1.12), Color(0.24, 0.70, 1.0))
+ tank_fx_root.visible = true
+
+# Refreshes aura for the duration of the actual combat status, without spawning duplicates.
+func set_tank_defense_state(kind: int) -> void:
+ if kind < 0:
+  tank_fx_time = 0.0
+  if tank_fx_root != null:
+   tank_fx_root.visible = false
+  tank_fx_kind = -1
+  return
+ if tank_fx_root == null or tank_fx_kind != kind:
+  play_tank_skill_fx(kind)
+ tank_fx_time = 1.5
+ if tank_fx_root != null:
+  tank_fx_root.visible = true
+
+func play_attack() -> void:
+ attack_time = strike_duration / class_attack_tempo
+
+func play_hit() -> void:
+ hit_time = 0.22
+ hit_recoil = 1.0
+ hit_brace = 1.0
+ hit_counter += 1
+ hit_side = -1.0 if hit_counter % 2 == 0 else 1.0
+ # Visual hit response is class-dependent; does not change HP or combat timers.
+ hit_time = 0.30 if class_id in [0, 1] else 0.22
+
+# Elemental flinches have different silhouettes and automatically decay.
+func play_elemental_hit(element: int) -> void:
+ play_hit()
+ elemental_hit_id = clampi(element, 0, 9)
+ elemental_hit_time = 0.48 if elemental_hit_id == 7 else 0.32
+
+func _process(delta: float) -> void:
+ clock += delta
+ if tank_fx_time > 0.0:
+  tank_fx_time = maxf(0.0, tank_fx_time - delta)
+  if tank_fx_root != null:
+   tank_fx_root.rotation.y += delta * (3.4 if tank_fx_kind == 8 else -1.9)
+   tank_fx_root.scale = Vector3.ONE * (0.85 + 0.15 * sin(clock * 9.0))
+   tank_fx_root.visible = tank_fx_time > 0.0
+ var walking: bool = false
+ var team: Node = get_parent().get_parent()
+ if team != null:
+  walking = bool(team.get("is_walking"))
+ hit_time = maxf(0.0, hit_time - delta)
+ elemental_hit_time = maxf(0.0, elemental_hit_time - delta)
+ var elemental_strength: float = elemental_hit_time / (0.48 if elemental_hit_id == 7 else 0.32) if elemental_hit_time > 0.0 else 0.0
+ hit_recoil = move_toward(hit_recoil, 0.0, delta * 5.0)
+ hit_brace = move_toward(hit_brace, 0.0, delta * (3.0 if class_id in [0, 1] else 4.5))
+ motion_blend = move_toward(motion_blend, 1.0 if walking else 0.0, delta * 4.0)
+ rest_breath = sin(clock * 2.1) * 0.018
+ position.y = rest_breath + absf(sin(clock * 9.0 * class_rhythm)) * 0.055 * motion_blend * class_bob
+ # Tank braces, DD leans into movement, healer remains more upright.
+ var team_role: int = 1
+ if team != null:
+  var slot: int = int(str(get_parent().name).trim_prefix("Hero")) - 1
+  var roles: Variant = team.get("role_ids")
+  if roles is Array and slot >= 0 and slot < roles.size():
+   team_role = int(roles[slot])
+ gait_phase += delta * lerpf(1.6, 8.6, motion_blend) * class_rhythm
+ lean_amount = move_toward(lean_amount, (0.075 if team_role == 1 else 0.035) * motion_blend, delta * 0.4)
+ rotation.x = lean_amount + sin(gait_phase * 2.0) * 0.012 * motion_blend + attack_body_pitch - hit_recoil * 0.075
+ # Lateral center-of-mass transfer follows alternating planted feet.
+ # Smoothed so stopping and starting do not cause visible snapping.
+ var lateral_target: float = sin(gait_phase) * 0.042 * motion_blend * class_stride
+ if team_role == 0:
+  lateral_target *= 0.65
+ elif team_role == 2:
+  lateral_target *= 0.8
+ weight_shift = move_toward(weight_shift, lateral_target, delta * 0.45)
+ # Impact weight transfers to the supporting foot, then returns to neutral.
+ var brace_strength: float = 0.032 if class_id in [0, 1] else 0.060
+ position.x = weight_shift + hit_side * hit_brace * brace_strength
+ stride_roll = move_toward(stride_roll, -sin(gait_phase) * 0.055 * motion_blend, delta * 0.6)
+ torso_turn = move_toward(torso_turn, sin(gait_phase) * 0.075 * motion_blend, delta * 0.7)
+ var stride: float = lerpf(0.018, 0.53, motion_blend) * class_stride
+ if team_role == 0: stride *= 0.7
+ if team_role == 2: stride *= 0.8
+ # Smooth both hip angles so the legs settle instead of snapping to idle.
+ var hip_target: float = sin(gait_phase) * stride
+ left_leg.rotation.x = lerpf(left_leg.rotation.x, hip_target, minf(1.0, delta * 13.0))
+ right_leg.rotation.x = lerpf(right_leg.rotation.x, -hip_target, minf(1.0, delta * 13.0))
+ left_leg.rotation.z = 0.035 * motion_blend
+ right_leg.rotation.z = -0.035 * motion_blend
+ # Swing leg bends during recovery; planted leg stays comparatively straight.
+ var left_phase: float = sin(gait_phase)
+ var right_phase: float = -left_phase
+ var left_bend: float = maxf(0.0, -left_phase) * 0.72 * motion_blend
+ var right_bend: float = maxf(0.0, -right_phase) * 0.72 * motion_blend
+ # A lifted foot rises on the return step; the planted foot remains lower.
+ foot_plant_left = lerpf(foot_plant_left, maxf(0.0, -left_phase) * motion_blend, minf(1.0, delta * 11.0))
+ foot_plant_right = lerpf(foot_plant_right, maxf(0.0, -right_phase) * motion_blend, minf(1.0, delta * 11.0))
+ left_leg.position.y = foot_plant_left * 0.045
+ right_leg.position.y = foot_plant_right * 0.045
+ # Knees briefly absorb the force of a hit without changing game physics.
+ var knee_brace: float = hit_brace * (0.10 if class_id in [0, 1] else 0.16)
+ left_knee.rotation.x = lerpf(left_knee.rotation.x, left_bend + knee_brace, minf(1.0, delta * 12.0))
+ right_knee.rotation.x = lerpf(right_knee.rotation.x, right_bend + knee_brace, minf(1.0, delta * 12.0))
+ # Ankles compensate for knee rotation and roll the toe forward on landing.
+ left_foot.rotation.x = -left_knee.rotation.x * 0.60 - maxf(0.0, left_phase) * 0.18 * motion_blend
+ right_foot.rotation.x = -right_knee.rotation.x * 0.60 - maxf(0.0, right_phase) * 0.18 * motion_blend
+ # Brief stagger on receiving damage, no permanent transform changes.
+ rotation.z = stride_roll + attack_body_roll + hit_side * hit_brace * 0.045 + (sin(hit_time * 27.0) * (hit_time / (0.30 if class_id in [0, 1] else 0.22)) * (0.10 if class_id in [0, 1] else 0.16) if hit_time > 0.0 else 0.0)
+ # Tank stance remains tied to active shield/taunt status, not the short cast animation.
+ var desired_tank_pose: int = tank_fx_kind if tank_fx_root != null and tank_fx_root.visible and team_role == 0 else -1
+ if desired_tank_pose != tank_pose_kind:
+  tank_pose_blend = move_toward(tank_pose_blend, 0.0, delta * 5.0)
+  if tank_pose_blend <= 0.01:
+   tank_pose_kind = desired_tank_pose
+ else:
+  tank_pose_blend = move_toward(tank_pose_blend, 1.0 if desired_tank_pose >= 0 else 0.0, delta * 5.0)
+ var swing: float = lerpf(0.045, 0.34, motion_blend)
+ if attack_time > 0.0:
+  attack_time = maxf(0.0, attack_time - delta)
+  var progress: float = 1.0 - attack_time / (strike_duration / class_attack_tempo)
+  var strike: float = sin(progress * PI)
+  # Wind-up, forward drive and recovery; role/class shapes the pose.
+  var anticipation: float = sin(clampf(progress / 0.32, 0.0, 1.0) * PI) * (1.0 - progress)
+  var drive: float = sin(clampf((progress - 0.18) / 0.82, 0.0, 1.0) * PI)
+  var melee: bool = class_id in [0, 1, 5, 10]
+  var force: float = 1.0 if class_id in [0, 1] else (0.72 if melee else 0.38)
+  attack_body_pitch = lerpf(attack_body_pitch, (-0.12 * anticipation + 0.16 * drive) * force, minf(1.0, delta * 14.0))
+  attack_body_yaw = lerpf(attack_body_yaw, (drive - anticipation * 0.4) * (0.16 if melee else 0.055), minf(1.0, delta * 13.0))
+  attack_body_roll = lerpf(attack_body_roll, sin(progress * PI) * (0.045 if melee else 0.018), minf(1.0, delta * 12.0))
+  rotation.y = torso_turn + attack_body_yaw
+  rotation.x = lean_amount + attack_body_pitch - hit_recoil * 0.075
+  rotation.z = stride_roll + attack_body_roll + hit_side * hit_brace * 0.045 + (sin(hit_time * 27.0) * (hit_time / (0.30 if class_id in [0, 1] else 0.22)) * (0.10 if class_id in [0, 1] else 0.16) if hit_time > 0.0 else 0.0)
+  # Independent elbows: hands lead the gesture rather than rigid arms swinging.
+  var bend: float = sin(progress * PI) * (0.78 if class_id in [4, 5, 10] else 0.48)
+  left_forearm.rotation.x = lerpf(left_forearm.rotation.x, -bend, minf(1.0, delta * 13.0))
+  right_forearm.rotation.x = lerpf(right_forearm.rotation.x, -bend * 1.25, minf(1.0, delta * 13.0))
+  match class_id:
+   0: # Krieger: two-handed overhead chop
+    left_arm.rotation.x = -strike * 0.85
+    right_arm.rotation.x = -strike * 1.85
+    right_arm.rotation.z = -strike * 0.35
+    rotation.y = torso_turn + attack_body_yaw + sin(progress * PI) * 0.10
+   1: # Paladin: shield brace and radiant hammer
+    left_arm.rotation.x = -0.65 * strike
+    left_arm.rotation.z = -0.35 * strike
+    right_arm.rotation.x = -1.55 * strike
+    right_arm.rotation.z = 0.20 * strike
+   2: # Druide: symmetrical, sweeping vine gesture
+    left_arm.rotation.x = -1.20 * strike
+    right_arm.rotation.x = -0.95 * strike
+    left_arm.rotation.z = -0.40 * strike
+    right_arm.rotation.z = 0.40 * strike
+   3: # Schamane: staff raise and totem beat
+    left_arm.rotation.x = -0.40 * strike
+    right_arm.rotation.x = -1.55 * strike
+    right_arm.rotation.y = sin(progress * TAU) * 0.22
+   4: # Jaeger: draw and release
+    left_arm.rotation.x = -0.90 * strike
+    right_arm.rotation.x = 0.82 * strike
+    right_arm.rotation.y = -0.52 * strike
+   5: # Schurke: alternating rapid strikes
+    left_arm.rotation.x = -absf(sin(progress * TAU)) * 1.5
+    right_arm.rotation.x = -absf(cos(progress * TAU)) * 1.5
+    rotation.y = torso_turn + attack_body_yaw + sin(progress * TAU) * 0.13
+   6: # Magier: wide arcane cast
+    left_arm.rotation.x = -1.10 * strike
+    right_arm.rotation.x = -1.40 * strike
+    right_arm.rotation.z = 0.52 * strike
+   7: # Hexer: asymmetric shadow grasp
+    left_arm.rotation.x = -0.45 * strike
+    left_arm.rotation.z = -0.45 * strike
+    right_arm.rotation.x = -1.62 * strike
+    right_arm.rotation.y = 0.50 * strike
+   8: # Beschwoerer: open both arms to invoke
+    left_arm.rotation.x = -0.72 * strike
+    right_arm.rotation.x = -0.72 * strike
+    left_arm.rotation.z = -0.72 * strike
+    right_arm.rotation.z = 0.72 * strike
+   9: # Priester: raised hands for blessing or shadow cast
+    left_arm.rotation.x = -1.35 * strike
+    right_arm.rotation.x = -1.35 * strike
+    left_arm.rotation.z = -0.22 * strike
+    right_arm.rotation.z = 0.22 * strike
+   10: # Raufbold: alternating close-range punches
+    left_arm.rotation.x = -absf(sin(progress * TAU)) * 1.35
+    right_arm.rotation.x = -absf(sin(progress * TAU + PI * 0.5)) * 1.65
+    rotation.y = torso_turn + attack_body_yaw + sin(progress * TAU) * 0.16
+  halo.visible = class_id in [1, 2, 3, 6, 7, 8, 9]
+  halo.scale = Vector3.ONE * (0.75 + strike * 2.0)
+  weapon_fx.visible = strike > 0.12
+  weapon_fx.scale = Vector3.ONE * (0.75 + strike * 1.65)
+  weapon_fx.rotation.z = strike * (1.5 if class_id in [0, 1, 5, 10] else 0.25)
+  attack_trail.visible = strike > 0.28
+  attack_trail.scale = Vector3.ONE * (0.65 + strike * 1.4)
+  attack_trail.rotation.z = -0.8 + progress * 2.2 if class_id in [0, 1, 5, 10] else 0.0
+  impact_glow.visible = progress > 0.42 and progress < 0.68
+  impact_glow.scale = Vector3.ONE * (1.0 + strike * 2.4)
+  if ranged_projectile != null:
+   # Launch halfway through the casting gesture, then travel forward.
+   var flight: float = clampf((progress - 0.28) / 0.66, 0.0, 1.0)
+   ranged_projectile.visible = progress >= 0.28 and progress <= 0.94
+   ranged_projectile.position = projectile_origin + Vector3(0.0, 0.12 * sin(flight * PI), -3.4 * flight)
+   ranged_projectile.scale = Vector3.ONE * (0.7 + 0.4 * sin(flight * PI))
+ else:
+  attack_body_pitch = move_toward(attack_body_pitch, 0.0, delta * 1.8)
+  attack_body_yaw = move_toward(attack_body_yaw, 0.0, delta * 2.1)
+  attack_body_roll = move_toward(attack_body_roll, 0.0, delta * 2.0)
+  # Ease joints back into a natural resting pose after each strike.
+  left_forearm.rotation.x = move_toward(left_forearm.rotation.x, -0.12, delta * 3.8)
+  right_forearm.rotation.x = move_toward(right_forearm.rotation.x, -0.12, delta * 3.8)
+  left_arm.rotation.x = -sin(gait_phase) * swing
+  right_arm.rotation.x = sin(gait_phase) * swing
+  # Update 127: class-specific idle guards and casting postures. Blend out
+  # while walking; tank defensive skill poses still take priority below.
+  var idle_weight: float = 1.0 - motion_blend
+  var left_guard: float = 0.0
+  var right_guard: float = 0.0
+  var left_spread: float = 0.0
+  var right_spread: float = 0.0
+  match class_id:
+   0, 1: # Armored front line: shield forward, weapon ready.
+    left_guard = -0.62
+    right_guard = -0.25
+    left_spread = -0.16
+   2, 3: # Nature and totem casters: one open palm.
+    left_guard = -0.34
+    right_guard = -0.56
+    right_spread = 0.20
+   4: # Archer: one arm extended, draw hand close.
+    left_guard = -0.42
+    right_guard = -0.70
+   5: # Rogue: compact low dual-weapon guard.
+    left_guard = -0.38
+    right_guard = -0.45
+    left_spread = -0.12
+    right_spread = 0.12
+   6, 7, 8: # Spellcasters: raised, asymmetric casting hands.
+    left_guard = -0.45
+    right_guard = -0.74
+    left_spread = -0.24
+    right_spread = 0.25
+   9: # Priest: calm open-handed blessing stance.
+    left_guard = -0.32
+    right_guard = -0.32
+    left_spread = -0.25
+    right_spread = 0.25
+   10: # Brawler: both fists high, elbows tucked.
+    left_guard = -0.95
+    right_guard = -0.95
+    left_spread = 0.12
+    right_spread = -0.12
+  var guard_blend: float = minf(1.0, delta * 6.0)
+  left_arm.rotation.x = lerpf(left_arm.rotation.x, left_arm.rotation.x + left_guard * idle_weight, guard_blend)
+  right_arm.rotation.x = lerpf(right_arm.rotation.x, right_arm.rotation.x + right_guard * idle_weight, guard_blend)
+  halo.visible = false
+  weapon_fx.visible = false
+  attack_trail.visible = false
+  impact_glow.visible = false
+  if ranged_projectile != null:
+   ranged_projectile.visible = false
+   ranged_projectile.position = projectile_origin
+  # Update 123: restore secondary joint rotations smoothly after each attack.
+  # Avoid a visible one-frame snap when switching from casting to running.
+  var recovery: float = minf(1.0, delta * 9.0)
+  right_arm.rotation.z = lerpf(right_arm.rotation.z, right_spread * idle_weight, recovery)
+  right_arm.rotation.y = lerpf(right_arm.rotation.y, 0.0, recovery)
+  rotation.y = torso_turn + attack_body_yaw
+  left_arm.rotation.z = lerpf(left_arm.rotation.z, left_spread * idle_weight, recovery)
+  left_arm.rotation.y = lerpf(left_arm.rotation.y, 0.0, recovery)
+  attack_trail.rotation.z = 0.0
+  weapon_fx.rotation.z = 0.0
+
+ # Blend tank-specific full-body stance over normal idle or attack animation.
+ # Taunt: squared shoulders, raised challenge arm. Intercept: shield-side arm
+ # forward, rear arm braced and knees bent. No combat statistics are changed.
+ if tank_pose_blend > 0.0 and team_role == 0:
+  var b: float = tank_pose_blend
+  if tank_pose_kind == 8:
+   left_arm.rotation.x = lerpf(left_arm.rotation.x, -0.28, b * 0.65)
+   right_arm.rotation.x = lerpf(right_arm.rotation.x, -1.10, b * 0.72)
+   right_arm.rotation.z = lerpf(right_arm.rotation.z, -0.38, b * 0.70)
+   rotation.x -= b * 0.055
+   rotation.y += b * 0.09
+  elif tank_pose_kind == 9:
+   left_arm.rotation.x = lerpf(left_arm.rotation.x, -1.24, b * 0.78)
+   left_arm.rotation.z = lerpf(left_arm.rotation.z, -0.32, b * 0.75)
+   right_arm.rotation.x = lerpf(right_arm.rotation.x, -0.48, b * 0.65)
+   left_knee.rotation.x += b * 0.14
+   right_knee.rotation.x += b * 0.14
+   rotation.x += b * 0.075
+ # Each element produces a recognizable but temporary impact pose.
+ if elemental_strength > 0.0:
+  match elemental_hit_id:
+   0: rotation.x -= elemental_strength * 0.15 # fire: recoil from heat
+   1: rotation.z += sin(clock * 22.0) * elemental_strength * 0.10 # water: sway
+   2: rotation.x += elemental_strength * 0.20 # earth: compression
+   3: rotation.z -= elemental_strength * 0.12 # nature: snagged by vines
+   4: rotation.x -= elemental_strength * 0.10 # light: pushed back
+   5: rotation.z += elemental_strength * 0.14 # shadow: off balance
+   6: rotation.x -= elemental_strength * 0.25 # wind: blown backwards
+   7: rotation.x += elemental_strength * 0.06 # ice: stiffened posture
+   8: rotation.z += sin(clock * 45.0) * elemental_strength * 0.18 # lightning: shock
+   9: rotation.z += sin(clock * 17.0) * elemental_strength * 0.16 # chaos: unstable
