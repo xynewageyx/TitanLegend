@@ -25,6 +25,17 @@ class FormationRowsTests(unittest.TestCase):
         self.assertIn("MELEE_CLASSES := [0, 1, 5, 10]", SOURCE)
         self.assertIn("-1.7 if in_front else 1.0", body)
 
+    def test_spacing_provides_room_for_companions_on_portrait_phones(self):
+        body = method("_formation_position")
+        self.assertIn(
+            "var spacing: float = 1.7 if row.size() <= 3 else 1.35",
+            body,
+        )
+        # Three rear-row heroes are evenly spread while an all-melee
+        # four-hero front row remains inside the path.
+        self.assertEqual([(i - 1) * 1.7 for i in range(3)], [-1.7, 0.0, 1.7])
+        self.assertAlmostEqual((3 - 1.5) * 1.35, 2.025)
+
     def test_companions_stay_children_of_owner(self):
         body = method("create_team")
         self.assertIn('pet.name = "PassivePet"', body)
