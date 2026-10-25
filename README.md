@@ -8,8 +8,8 @@ Godot-4-Projekt fuer Android (Hochformat). Die Entwicklung erfolgt direkt auf Gi
 Die Quelle ist `Titan_Legends_Update_168_Gegner_KI_Tank_Fix.zip`
 (SHA-256: `6a756b5c7f5d6bbf4c569632f932ac134fc6c35fa094d5dd71ab465618390072`).
 
-- 196 Dateien sind exakt byteidentisch mit dem Original (Git-Blob-SHA).
-- 17 aktive oder historisch aktualisierte Dateien weichen ab und wurden zum Schutz neuerer Korrekturen nicht blind ersetzt.
+- 198 Dateien sind exakt byteidentisch mit dem Original (Git-Blob-SHA).
+- 15 aktive oder historisch aktualisierte Dateien weichen ab und wurden zum Schutz neuerer Korrekturen nicht blind ersetzt.
 - Vier Original-Kernskripte sind separat unter `original_update168/scripts/` gesichert: `team_formation.gd`, `battle_manager.gd`, `ui_manager.gd` und `boss_motion.gd`.
 - Der Originalbestand wird in `docs/update_168_import_manifest.json` mit Dateilaenge, Git-Blob-SHA und SHA-256 dokumentiert. Die Tests pruefen alle Pfade und die vier gesicherten Originalskripte.
 
