@@ -5,6 +5,7 @@ class_name TitanAdventureHudOverlay
 # five prominent navigation slots and a compact overflow menu.
 const SKIN = preload("res://scripts/adventure_ui_theme.gd")
 const MAP_BADGE = preload("res://scripts/adventure_map_badge.gd")
+const NAV_ART = preload("res://scripts/adventure_nav_icon.gd")
 const NAV_ENTRIES := [
  ["⚔", "Kampf", "combat"],
  ["◆", "Helden", "jewels"],
@@ -178,17 +179,37 @@ func _build_party() -> void:
  SKIN.title(party_bonus, 13)
  strip.add_child(party_bonus)
 
-func _nav_button(parent: Container, icon_text: String, caption: String, key: String) -> Button:
+func _nav_button(parent: Container, _icon_text: String, caption: String, key: String) -> Button:
  var b := Button.new()
  b.name = "Nav_" + key
- b.text = icon_text + "\n" + caption
+ b.text = ""
  b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  b.custom_minimum_size.y = 88
- b.clip_text = true
  SKIN.button(b, key == active_page, true)
- b.add_theme_font_size_override("font_size", 19)
  b.pressed.connect(_on_navigation.bind(key))
  parent.add_child(b)
+ # Original illustrated vector emblems replace emoji-only/debug labels.
+ var contents := VBoxContainer.new()
+ contents.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ contents.offset_left = 3
+ contents.offset_right = -3
+ contents.add_theme_constant_override("separation", 0)
+ contents.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ b.add_child(contents)
+ var artwork := Control.new()
+ artwork.set_script(NAV_ART)
+ artwork.set("kind", key)
+ artwork.custom_minimum_size = Vector2(50, 54)
+ artwork.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ artwork.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ contents.add_child(artwork)
+ var title := Label.new()
+ title.text = caption
+ title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+ title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ SKIN.title(title, 16)
+ contents.add_child(title)
  nav_buttons[key] = b
  return b
 
