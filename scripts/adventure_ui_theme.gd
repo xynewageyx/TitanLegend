@@ -35,13 +35,13 @@ static func button(button_node: Button, chosen: bool = false, compact: bool = fa
  button_node.add_theme_stylebox_override("normal", plaque(normal_fill, GOLD if chosen else WOOD, 15, 3))
  button_node.add_theme_stylebox_override("hover", plaque(hover_fill, GOLD, 15, 3))
  button_node.add_theme_stylebox_override("pressed", plaque(GOLD, WOOD_DARK, 15, 3))
- button_node.add_theme_stylebox_override("disabled", plaque(Color("#c5b9a0"), Color("#9e9076"), 15, 2))
+ button_node.add_theme_stylebox_override("disabled", plaque(Color("#e8dec9"), Color("#9e9076"), 15, 2))
  button_node.add_theme_stylebox_override("focus", plaque(Color.TRANSPARENT, GOLD, 15, 2))
  button_node.add_theme_color_override("font_color", INK)
  button_node.add_theme_color_override("font_hover_color", INK)
  button_node.add_theme_color_override("font_pressed_color", WOOD_DARK)
  button_node.add_theme_color_override("font_focus_color", INK)
- button_node.add_theme_color_override("font_disabled_color", Color("#796e5c"))
+ button_node.add_theme_color_override("font_disabled_color", Color("#493b2c"))
  button_node.add_theme_font_size_override("font_size", 18 if compact else 20)
  button_node.custom_minimum_size.y = 56 if compact else 64
  button_node.clip_text = true
