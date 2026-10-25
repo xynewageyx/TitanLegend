@@ -122,7 +122,7 @@ jobs:
           preset = Path("export_presets.cfg")
           text = preset.read_text(encoding="utf-8")
           version = int(os.environ["GITHUB_RUN_NUMBER"])
-          changed, count = re.subn(r"(?m)^version/code=\\d+$", f"version/code={version}", text)
+          changed, count = re.subn(r"(?m)^version/code=\d+$", f"version/code={version}", text)
           if count != 1:
               raise SystemExit("Expected exactly one Android version/code setting")
           preset.write_text(changed, encoding="utf-8")
