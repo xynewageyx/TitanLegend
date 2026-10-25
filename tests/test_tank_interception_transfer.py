@@ -44,6 +44,17 @@ class TankInterceptionTransferTests(unittest.TestCase):
         self.assertIn("tank_intercept_until[tank] > skill_tick", damage)
         self.assertIn("tank_intercept_until[slot] > skill_tick", visuals)
 
+    def test_shield_visual_updates_after_damage_and_before_defeat_handling(self):
+        damage = body("_damage_heroes")
+        self.assertLess(
+            damage.index("_sync_team_health()"),
+            damage.index("_refresh_tank_defense_visuals()"),
+        )
+        self.assertLess(
+            damage.index("_refresh_tank_defense_visuals()"),
+            damage.index('if team_hp <= 0:'),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
