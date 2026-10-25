@@ -14,7 +14,9 @@ static func decorate(hero: Node3D, class_id: int) -> void:
  VisualFactory.sphere(hero, 0.065, Vector3(0.0, 1.91, -0.30), skin_tone)
  for side in [-1.0, 1.0]:
   VisualFactory.box(hero, Vector3(0.115, 0.025, 0.035), Vector3(side * 0.115, 2.045, -0.265), trim.darkened(0.55))
+  # Gloves and knuckles sit near the existing forearms.
   VisualFactory.sphere(hero, 0.145, Vector3(side * 0.49, 0.81, -0.06), trim.darkened(0.28))
   for finger in range(3):
    VisualFactory.sphere(hero, 0.045, Vector3(side * (0.42 + float(finger) * 0.065), 0.725, -0.175), trim.lightened(0.12))
+ # A subtle collar softens the head-to-body transition.
  VisualFactory.sphere(hero, 0.17, Vector3(0.0, 1.76, 0.02), trim.darkened(0.2))
