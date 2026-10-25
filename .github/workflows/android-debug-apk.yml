@@ -6,10 +6,18 @@ on:
     paths:
       - 'export_presets.cfg'
       - 'project.godot'
+      - 'scripts/**'
+      - 'scenes/**'
+      - 'assets/**'
       - '.github/workflows/android-debug-apk.yml'
 
 permissions:
   contents: write
+
+# Only one preview build may publish the moving android-preview release.
+concurrency:
+  group: titan-legends-android-preview
+  cancel-in-progress: true
 
 jobs:
   export-android:
