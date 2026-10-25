@@ -1,5 +1,7 @@
 extends Node3D
 const AFK_POLICY = preload("res://scripts/afk_farming_policy.gd")
+const BOSS_ART = preload("res://scripts/boss_art.gd")
+const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
 # TEMPORARY compatibility implementation.
 # Original Update 168 battle_manager.gd (36,410 bytes) must replace this file.
 signal battle_status_changed
@@ -1064,32 +1066,47 @@ func _update_enemy_casualties() -> void:
 func _spawn_enemy_visuals() -> void:
  if enemy_spawn_node == null:
   return
+ var element_id: int = 0
+ if biome_manager != null:
+  element_id = clampi(int(biome_manager.current_biome), 0, 9)
  for i in range(enemies_remaining):
   var mob := Node3D.new()
   mob.name = "Boss" if is_boss else "WaveMob" + str(i + 1)
   mob.position = Vector3((float(i) - float(enemies_remaining - 1) / 2.0) * 1.4, 0.0, -float(i % 2))
   enemy_spawn_node.add_child(mob)
   enemy_visuals.append(mob)
-  var tint := Color("#b84d5b") if is_boss else Color("#779f57")
+  var tint: Color = Color("#779f57")
   if biome_manager != null:
    tint = biome_manager.COLORS[biome_manager.current_biome]
-  var size := 2.2 if is_boss else 0.65
   if is_boss:
-   # Recognizable silhouettes; the tint remains the shared zone element.
-   size *= [1.05, 0.85, 0.95, 1.17][boss_variant_id]
-  VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
-  VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
-  VisualFactory.sphere(mob, 0.19 if not is_boss else 0.35, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
-  if is_boss:
+   # The old placeholder was an enormous solid sphere that covered the team
+   # on portrait screens. Reuse the already available elemental Titan model.
+   var scale_factor: float = [0.63, 0.57, 0.61, 0.68][clampi(boss_variant_id, 0, 3)]
+   mob.scale = Vector3.ONE * scale_factor
+   BOSS_ART.build(mob, element_id, is_fusion_boss)
+   # Keep all boss archetypes visually recognizable within one element.
    match boss_variant_id:
-    0:
-     VisualFactory.box(mob, Vector3(2.2, 0.42, 0.7), Vector3(0, size * 1.25, -0.25), tint.lightened(0.3))
-    1:
-     VisualFactory.sphere(mob, 0.75, Vector3(0, size * 2.0 + 0.35, 0), tint.lightened(0.48))
-    2:
-     VisualFactory.cylinder(mob, 1.25, 0.52, Vector3(0, size * 1.8, 0), tint.darkened(0.32))
-    3:
-     VisualFactory.box(mob, Vector3(2.6, 0.55, 1.1), Vector3(0, size * 1.65, 0), tint.darkened(0.2))
+    0: # Guardian: armored chest seal
+     VisualFactory.box(mob, Vector3(1.4, 0.28, 0.3), Vector3(0, 3.55, -0.95), tint.lightened(0.5))
+    1: # Stormcaller: charged side orbs
+     for side in [-1.0, 1.0]:
+      VisualFactory.sphere(mob, 0.34, Vector3(side * 2.05, 4.9, -0.25), tint.lightened(0.55))
+    2: # Runekeeper: glowing upper mark
+     VisualFactory.box(mob, Vector3(0.35, 1.1, 0.24), Vector3(0, 4.65, -0.9), tint.lightened(0.65))
+    3: # Ancient Titan: extra heavy shoulders
+     for side in [-1.0, 1.0]:
+      VisualFactory.box(mob, Vector3(1.0, 0.65, 1.05), Vector3(side * 1.65, 4.3, 0), tint.darkened(0.55))
+   var animation := Node3D.new()
+   animation.name = "BossMotion"
+   animation.set_script(BOSS_MOTION)
+   mob.add_child(animation)
+   animation.call("configure", mob, element_id, is_fusion_boss)
+   continue
+  # Normal mobs keep their inexpensive procedural body.
+  var size: float = 0.65
+  VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
+  VisualFactory.sphere(mob, 0.19, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
+  VisualFactory.sphere(mob, 0.19, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
 
 func _spawn_boss_minion_visuals() -> void:
  if not is_boss or boss_minion_max_hp <= 0 or enemy_spawn_node == null:
