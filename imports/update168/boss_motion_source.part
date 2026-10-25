@@ -348,3 +348,116 @@ func _process(delta: float) -> void:
    part.position.x += sin(elapsed * 10.0 + float(i) * 2.0) * 0.025
   part.scale = base_scales[i]
   if windup_remaining > 0.0:
+   var charge: float = sin((windup_duration - windup_remaining) / windup_duration * PI)
+   match element_id:
+    0: # Fire: compress, then rise like a flame.
+     part.position.y += charge * 0.22
+     part.rotation.x -= charge * 0.10
+    1: # Water: spiral toward the center.
+     part.rotation.y += charge * (0.24 if i % 2 == 0 else -0.24)
+     part.position.x += charge * (0.12 if i % 2 == 0 else -0.12)
+    2: # Earth: sink before a heavy slam.
+     part.position.y -= charge * 0.20
+     part.rotation.x += charge * 0.12
+    3: # Nature: spreading, upward growth.
+     part.position.y += charge * 0.17
+     part.rotation.z += charge * (0.15 if i % 2 == 0 else -0.15)
+    4: # Light: lift and focus energy overhead.
+     part.position.y += charge * 0.28
+    5: # Shadow: contract into a crouch.
+     part.position.y -= charge * 0.13
+     part.rotation.z -= charge * 0.18
+    6: # Wind: broad lateral sweep.
+     part.position.x += charge * (0.23 if i % 2 == 0 else -0.23)
+    7: # Ice: rigid raised spikes.
+     part.position.y += charge * 0.19
+     part.rotation.x -= charge * 0.16
+    8: # Lightning: sharp, alternating jolts.
+     part.rotation.z += charge * (0.27 if i % 2 == 0 else -0.27)
+     part.position.x += charge * (0.16 if i % 2 == 0 else -0.16)
+    9: # Chaos: opposing twisting movements.
+     part.rotation.y += charge * (0.33 if i % 2 == 0 else -0.33)
+     part.position.y += charge * (0.12 if i % 3 == 0 else -0.08)
+   if i % 2 == 0:
+    part.scale = base_scales[i] * (1.0 + charge * 0.09)
+
+  # Update 68: Element-specific attack and hit poses on decorative meshes only.
+  # Avoid moving the boss root: damage labels and telegraphs retain their anchors.
+  if strike_remaining > 0.0:
+   var attack_progress: float = 1.0 - strike_remaining / strike_duration
+   var attack_curve: float = sin(attack_progress * PI)
+   match element_id:
+    0, 2: # Fire/earth: heavy forward slam.
+     part.rotation.x -= attack_curve * 0.22 * energy
+     part.position.z -= attack_curve * 0.19
+    1, 6: # Water/wind: rolling sweeping attack.
+     part.rotation.y += attack_curve * (0.20 if i % 2 == 0 else -0.20)
+     part.position.x += attack_curve * (0.13 if i % 2 == 0 else -0.13)
+    3, 7: # Nature/ice: expanding rising strike.
+     part.position.y += attack_curve * 0.23
+     part.scale = base_scales[i] * (1.0 + attack_curve * 0.08)
+    4, 5: # Light/shadow: diagonal casting pose.
+     part.rotation.z += attack_curve * (0.20 if i % 2 == 0 else -0.12)
+    8, 9: # Lightning/chaos: abrupt asymmetric lunge.
+     part.position.z -= attack_curve * (0.26 if i % 2 == 0 else 0.09)
+     part.rotation.y += attack_curve * (0.18 if i % 2 == 0 else -0.14)
+  # Update 138: full-body-style weight transfer using the existing decorative
+  # meshes. The boss root and all combat timings remain untouched.
+  if strike_remaining > 0.0:
+   var impact_phase: float = clampf(1.0 - strike_remaining / maxf(strike_duration, 0.01), 0.0, 1.0)
+   var impact_weight: float = pow(maxf(0.0, 1.0 - absf(impact_phase - 0.52) / 0.52), 2.0)
+   if element_id == 2: # Earth: squat, heavy downward stomp and rebound.
+    part.position.y -= impact_weight * (0.30 if i % 2 == 0 else 0.19)
+    part.position.z -= impact_weight * 0.12
+    part.rotation.x += impact_weight * (0.17 if i % 2 == 0 else -0.12)
+    part.scale = base_scales[i] * Vector3(1.0 + impact_weight * 0.06, 1.0 - impact_weight * 0.09, 1.0 + impact_weight * 0.06)
+   elif element_id == 6: # Wind: fast sideways feint and floating recovery.
+    var sweep_direction: float = -1.0 if i % 2 == 0 else 1.0
+    part.position.x += sweep_direction * impact_weight * 0.31
+    part.position.y += impact_weight * 0.13
+    part.rotation.z -= sweep_direction * impact_weight * 0.23
+   elif element_id == 8: # Lightning: sharp two-beat body jolt.
+    var jolt: float = sin(impact_phase * TAU * 2.0) * (1.0 - impact_phase)
+    part.position.x += jolt * (0.13 if i % 2 == 0 else -0.13)
+    part.rotation.y += jolt * 0.15
+  # Update 139: seven distinct whole-body attack signatures. The envelope
+  # returns to zero at both ends, preventing snapping between idle and attack.
+  if strike_remaining > 0.0:
+   var phase_139: float = clampf(1.0 - strike_remaining / maxf(strike_duration, 0.01), 0.0, 1.0)
+   var weight_139: float = sin(phase_139 * PI)
+   var side_139: float = 1.0 if i % 2 == 0 else -1.0
+   match element_id:
+    0: # Fire: surging upper-body lunge.
+     part.position.y += weight_139 * 0.16
+     part.position.z -= weight_139 * 0.20
+     part.rotation.x -= weight_139 * 0.16
+    1: # Water: rolling lateral wave.
+     part.position.x += side_139 * weight_139 * 0.19
+     part.rotation.z += side_139 * weight_139 * 0.15
+     part.position.y += sin(phase_139 * TAU) * weight_139 * 0.07
+    3: # Nature: roots unfurl then retract.
+     part.position.y += weight_139 * (0.17 if i % 2 == 0 else 0.08)
+     part.rotation.z += side_139 * weight_139 * 0.20
+    4: # Light: radiant lift and forward release.
+     part.position.y += weight_139 * 0.22
+     part.rotation.x -= weight_139 * 0.13
+     part.scale = part.scale * (1.0 + weight_139 * 0.045)
+    5: # Shadow: low crouch followed by a sweeping slash.
+     part.position.y -= weight_139 * 0.17
+     part.position.x += side_139 * weight_139 * 0.12
+     part.rotation.y += side_139 * weight_139 * 0.18
+    7: # Ice: rigid downward crystal strike.
+     part.position.y += weight_139 * 0.10
+     part.rotation.x += weight_139 * 0.19
+     part.position.z -= weight_139 * 0.13
+    9: # Chaos: opposing twists with asymmetric lift.
+     part.rotation.y += side_139 * weight_139 * 0.27
+     part.rotation.z -= side_139 * weight_139 * 0.12
+     part.position.y += weight_139 * (0.14 if i % 3 == 0 else -0.08)
+  if recoil_remaining > 0.0:
+   var recoil_progress: float = 1.0 - recoil_remaining / recoil_duration
+   var recoil_curve: float = sin(recoil_progress * PI)
+   part.position.z += recoil_curve * 0.12 * recoil_strength
+   part.position.x += recoil_curve * 0.045 * recoil_strength * recoil_side
+   part.rotation.x += recoil_curve * (0.07 if i % 2 == 0 else -0.07) * recoil_strength
+   part.rotation.z += recoil_curve * 0.055 * recoil_side * recoil_strength
