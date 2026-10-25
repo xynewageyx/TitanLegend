@@ -137,7 +137,7 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("return 5 # Gruppenschaden abfangen", code)
         self.assertIn("if skill_tick % 4 == 0:", code)
         self.assertIn("_damage_heroes(damage, group_targets)", code)
-        self.assertIn("tank_intercept_until[tank] >= skill_tick", code)
+        self.assertIn("tank_intercept_until[tank] > skill_tick", code)
         self.assertIn('last_ability = "Gruppenschaden abfangen"', code)
         self.assertNotIn("hp_regeneration", code)
 
@@ -382,10 +382,12 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         battle = source("battle_manager.gd")
         damage = battle.split("func _damage_heroes(", 1)[1].split("\nfunc ", 1)[0]
         self.assertIn("var tank: int = _living_tank_slot()", damage)
-        self.assertIn("var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] >= skill_tick", damage)
+        self.assertIn("var intercept_active: bool = tank >= 0 and tank_intercept_until[tank] > skill_tick", damage)
         self.assertIn("if intercept_active and index != tank:", damage)
         self.assertEqual(damage.count("_living_tank_slot()"), 1)
-        self.assertLess(damage.index("var intercept_active:"), damage.index("for index in targets:"))
+        self.assertLess(damage.index("var intercept_active:"), damage.index("for index in unique_targets:"))
+        self.assertIn("for target_slot in targets:", damage)
+        self.assertIn("not unique_targets.has(target_slot)", damage)
         self.assertIn("_trigger_prepared_healing()", damage)
         self.assertIn("const BOSS_TIME_LIMIT: float = 60.0", battle)
 
