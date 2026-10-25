@@ -36,6 +36,10 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --editor --import --quit
+      - name: Test all hero class and role visual models
+        shell: bash
+        run: |
+          godot --headless --path . --script res://tests/test_hero_visual_upgrade.gd
       - name: Test fantasy adventure HUD and touch menus
         shell: bash
         run: |
