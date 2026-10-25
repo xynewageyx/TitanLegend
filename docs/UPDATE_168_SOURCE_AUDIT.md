@@ -1,5 +1,7 @@
 # Update 168 – geprüfter Originalabgleich (25.10.2026)
 
+> **Historischer Zwischenstand:** Die unten aufgeführten 33/46 exakten Skripte und 13 Abweichungen beschreiben den ursprünglichen Skriptvergleich, nicht den aktuellen Repository-Stand. Der vollständige manifestbasierte Abgleich vom 25.10.2026 bestätigt **213/213 Originalpfade vorhanden**, **198/213 byteidentisch** und **15 absichtlich abweichende Dateien**. Die Originalfassungen der vier Kernskripte sind unter `original_update168/scripts/` gesichert. Details siehe [vollständiger Importbericht](UPDATE_168_IMPORT_COMPLETE.md).
+
 Quelle: `Titan_Legends_Update_168_Gegner_KI_Tank_Fix.zip`, Verzeichnis `Titan_Legends_Complete_Android_Godot/scripts/`.
 
 - Originalarchiv: **213 Archiv-Einträge**, darunter **46 GDScript-Dateien**.
