@@ -92,6 +92,9 @@ func set_pet_element(slot: int, element: int) -> void:
 func create_team() -> void:
  for hero in heroes:
   if is_instance_valid(hero):
+   # Detach immediately so replacement heroes can keep stable Hero1..Hero4 names.
+   if hero.get_parent() == self:
+    remove_child(hero)
    hero.queue_free()
  heroes.clear()
  for i in range(4):
@@ -324,8 +327,7 @@ func set_class(slot: int, class_id: int) -> bool:
  _enforce_single_tank()
  _save_classes()
  _save_roles()
- create_team()
- team_changed.emit()
+ create_team() # create_team emits team_changed exactly once.
  return true
 
 func _enforce_single_tank() -> void:
@@ -348,8 +350,7 @@ func set_role(slot: int, role: int) -> bool:
     return false
  role_ids[slot] = role
  _save_roles()
- create_team()
- team_changed.emit()
+ create_team() # create_team emits team_changed exactly once.
  return true
 
 func has_formation_bonus() -> bool:
