@@ -13,7 +13,9 @@ func _formation_position(slot: int) -> Vector3:
  var in_front: bool = front_slots.has(slot)
  var row: Array[int] = front_slots if in_front else back_slots
  var index_in_row: int = row.find(slot)
- var spacing: float = 1.25
+ # Keep compact all-melee teams inside the path, but give mixed teams
+ # enough lateral room for large helmets, weapons and passive companions.
+ var spacing: float = 1.7 if row.size() <= 3 else 1.35
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
  return Vector3(x, 0.0, -1.7 if in_front else 1.0)
 var heroes: Array[Node3D] = []
