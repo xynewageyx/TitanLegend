@@ -28,7 +28,8 @@ class TankInterceptionTransferTests(unittest.TestCase):
 
     def test_transfer_occurs_after_simultaneous_hero_hits(self):
         damage = body("_damage_heroes")
-        self.assertIn("unprotected_damage - damage", damage)
+        self.assertIn("TitanTankInterceptionMath.prevented_hp_loss(previous, unprotected_damage, damage)", damage)
+        self.assertLess(damage.index("var previous: int = hero_hp[index]"), damage.index("TitanTankInterceptionMath.prevented_hp_loss("))
         self.assertLess(damage.index("for index in unique_targets:"), damage.index("if redirected_damage > 0 and tank >= 0:"))
         self.assertIn("hero_hp[tank] = maxi(0, tank_before - redirected_damage)", damage)
         self.assertIn("_show_hero_combat_number(tank, tank_taken, false)", damage)
