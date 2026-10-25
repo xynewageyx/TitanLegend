@@ -364,10 +364,10 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
    incoming = maxi(1, roundi(float(hero_max_hp[index]) * max_hp_fraction * TitanCombatBalance.enemy_damage_scale(current_level)))
   var damage_multiplier: float = (1.0 - talent_defense) * (1.0 - GameManager.hardening_bonus(index, 1)) * (1.0 - GameManager.loot_bonus(index, 1))
   var damage: int = maxi(1, roundi(float(incoming) * (1.0 - mitigation) * damage_multiplier))
+  var previous: int = hero_hp[index]
   if intercept_active and index != tank:
    var unprotected_damage: int = maxi(1, roundi(float(incoming) * 0.95 * damage_multiplier))
-   redirected_damage += maxi(0, unprotected_damage - damage)
-  var previous: int = hero_hp[index]
+   redirected_damage += TitanTankInterceptionMath.prevented_hp_loss(previous, unprotected_damage, damage)
   hero_hp[index] = maxi(0, previous - damage)
   _show_hero_combat_number(index, previous - hero_hp[index], false)
   hits.append(index)
