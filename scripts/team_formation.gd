@@ -16,11 +16,11 @@ func _formation_position(slot: int) -> Vector3:
  # Keep compact all-melee teams inside the path, but give mixed teams
  # enough lateral room for large helmets, weapons and passive companions.
  # Give rear casters more shoulder room and stagger their silhouettes.
- var spacing: float = (2.30 if not in_front else 2.05) if row.size() <= 3 else 1.58
+ var spacing: float = (1.82 if not in_front else 2.05) if row.size() <= 3 else 1.45
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
  var depth: float = -2.15 if in_front else 1.25
  if not in_front and row.size() >= 3:
-  depth += 0.35 if index_in_row == 1 else -0.12
+  depth += 0.60 if index_in_row == 1 else -0.18
  return Vector3(x, 0.0, depth)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
@@ -509,15 +509,15 @@ func _create_hero_health_bar(hero: Node3D) -> void:
  hero.add_child(bar)
  # Update 144: a larger, high-contrast health display for portrait screens.
  var frame: MeshInstance3D = _health_bar_piece(bar, "Frame", Color(0.02, 0.04, 0.08, 0.98), -0.012)
- (frame.mesh as QuadMesh).size = Vector2(1.10, 0.20)
+ (frame.mesh as QuadMesh).size = Vector2(0.88, 0.18)
  var background: MeshInstance3D = _health_bar_piece(bar, "Background", Color(0.18, 0.20, 0.24, 0.98), 0.0)
- (background.mesh as QuadMesh).size = Vector2(1.04, 0.14)
+ (background.mesh as QuadMesh).size = Vector2(0.82, 0.12)
  var fill: MeshInstance3D = _health_bar_piece(bar, "Fill", Color(0.25, 0.88, 0.43), 0.018)
- (fill.mesh as QuadMesh).size = Vector2(1.04, 0.14)
+ (fill.mesh as QuadMesh).size = Vector2(0.82, 0.12)
  var value_label: Label3D = Label3D.new()
  value_label.name = "HPValue"
  value_label.position = Vector3(0.0, 0.23, 0.04)
- value_label.font_size = 34
+ value_label.font_size = 30
  value_label.pixel_size = 0.004
  value_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
  value_label.no_depth_test = true
@@ -536,7 +536,7 @@ func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> v
    continue
   var ratio: float = clampf(float(hp_values[i]) / float(maxi(1, max_values[i])), 0.0, 1.0)
   fill.scale.x = maxf(0.0001, ratio)
-  fill.position.x = -0.52 * (1.0 - ratio)
+  fill.position.x = -0.41 * (1.0 - ratio)
   fill.visible = ratio > 0.0
   var hp_label: Label3D = bar.get_node_or_null("HPValue") as Label3D
   if hp_label != null:
