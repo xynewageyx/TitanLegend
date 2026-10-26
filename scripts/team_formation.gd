@@ -122,7 +122,7 @@ func _process(delta: float) -> void:
   var phase: float = animation_clock * speed + float(i) * 0.8
   var amplitude: float = (0.055 if role == 0 else 0.08 if role == 1 else 0.06) if is_walking else 0.018
   hero.position.y = sin(phase) * amplitude
-  hero.rotation.z = sin(phase * 0.5) * (0.038 if role == 0 else 0.055 if is_walking else 0.012)
+  hero.rotation.z = sin(phase * 0.5) * ((0.038 if role == 0 else 0.055) if is_walking else 0.012)
   if is_walking:
    hero.rotation.y = sin(phase * 0.5) * (0.035 if role == 0 else 0.06)
   elif not attack_tweens.has(i):
