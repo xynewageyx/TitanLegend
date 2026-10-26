@@ -20,8 +20,13 @@ class BossCameraTests(unittest.TestCase):
 
     def test_boss_framing_keeps_both_team_and_boss(self):
         self.assertIn("(team_position + boss_position) * 0.5", CAMERA)
-        self.assertIn("separation * 1.65", CAMERA)
-        self.assertIn("look_at(focus, Vector3.UP)", CAMERA)
+        self.assertIn("framing_distance * 1.65", CAMERA)
+        self.assertIn("look_at(_smoothed_focus, Vector3.UP)", CAMERA)
+
+    def test_frame_rate_independent_camera_smoothing(self):
+        self.assertIn("1.0 - exp(-maxf(smoothing", CAMERA)
+        self.assertIn("1.0 - exp(-maxf(aim_smoothing", CAMERA)
+        self.assertIn("_smoothed_focus = _smoothed_focus.lerp", CAMERA)
 
     def test_boss_camera_zoom_is_bounded_for_portrait(self):
         self.assertIn("clampf(framing_distance * 1.05, 12.5, 22.0)", CAMERA)
