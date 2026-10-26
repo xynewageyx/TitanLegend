@@ -131,8 +131,11 @@ func _process(delta: float) -> void:
    hero.position.x = _formation_position(i).x + sin(animation_clock * 1.35 + float(i) * 1.7) * 0.035
   var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
   if pet != null:
-   pet.position.y = 0.12 + sin(animation_clock * 3.4 + float(i)) * 0.15
-   pet.rotation.y += delta * 0.65
+   # Passive companion stays beside its hero; only its idle motion changes.
+   var pet_bob_speed: float = 5.2 if is_walking else 3.4
+   var pet_bob_height: float = 0.10 if is_walking else 0.15
+   pet.position.y = 0.12 + sin(animation_clock * pet_bob_speed + float(i)) * pet_bob_height
+   pet.rotation.y += delta * (0.85 if is_walking else 0.65)
  if attack_flash > 0.0:
   attack_flash = maxf(0.0, attack_flash - delta)
 
