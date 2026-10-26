@@ -64,6 +64,9 @@ func generate_terrain() -> void:
  # Geringe Anzahl zusaetzlicher Objekte, damit Android fluessig bleibt.
  _add_biome_details()
 
+ # Distinct, low-cost roadside accents for every element (outside the 7m path).
+ _add_element_roadside_accents()
+
  # Elementare Landmarken als sichtbare Unterscheidung der Gebiete.
  DesignDetails.scenery(terrain, current_biome)
  if current_biome == 3:
@@ -129,3 +132,36 @@ func _add_biome_details() -> void:
    BiomeType.CHAOS:
     var fragment := VisualFactory.box(terrain, Vector3(0.9, 1.2, 0.8), at + Vector3(0, 1.0, 0), Color("#b84d83"))
     fragment.rotation.z = 0.35
+
+func _add_element_roadside_accents() -> void:
+ # Shared geometry budget, distinct palette and silhouette per element.
+ var rng := RandomNumberGenerator.new()
+ rng.seed = 61200 + current_biome
+ for i in range(16):
+  var side: float = -1.0 if i % 2 == 0 else 1.0
+  var x: float = side * rng.randf_range(4.8, 8.8)
+  var z: float = rng.randf_range(-68.0, 12.0)
+  var at := Vector3(x, 0.18, z)
+  match current_biome:
+   BiomeType.NATURE:
+    VisualFactory.sphere(terrain, 0.38, at + Vector3(0.0, 0.18, 0.0), Color("#3d8948"))
+    VisualFactory.sphere(terrain, 0.22, at + Vector3(0.35, 0.13, 0.2), Color("#91b957"))
+   BiomeType.FIRE:
+    VisualFactory.box(terrain, Vector3(0.9, 0.14, 0.65), at, Color("#ec742e"))
+   BiomeType.WATER:
+    VisualFactory.sphere(terrain, 0.42, at, Color("#56c2d6"))
+   BiomeType.EARTH:
+    VisualFactory.box(terrain, Vector3(0.85, 0.48, 0.7), at, Color("#87755b"))
+   BiomeType.LIGHT:
+    VisualFactory.sphere(terrain, 0.36, at + Vector3(0.0, 0.48, 0.0), Color("#f2df9e"))
+   BiomeType.SHADOW:
+    VisualFactory.cylinder(terrain, 1.0, 0.26, at + Vector3(0.0, 0.4, 0.0), Color("#59416f"))
+   BiomeType.WIND:
+    VisualFactory.sphere(terrain, 0.3, at + Vector3(0.0, 0.9, 0.0), Color("#b1dde0"))
+   BiomeType.ICE:
+    VisualFactory.cylinder(terrain, 0.85, 0.27, at + Vector3(0.0, 0.35, 0.0), Color("#bdeaf5"))
+   BiomeType.LIGHTNING:
+    VisualFactory.box(terrain, Vector3(0.28, 1.1, 0.28), at + Vector3(0.0, 0.5, 0.0), Color("#829af0"))
+   BiomeType.CHAOS:
+    var shard := VisualFactory.box(terrain, Vector3(0.5, 0.8, 0.4), at + Vector3(0.0, 0.4, 0.0), Color("#c257a1"))
+    shard.rotation.z = 0.32
