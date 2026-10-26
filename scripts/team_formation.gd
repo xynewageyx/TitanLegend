@@ -826,11 +826,16 @@ func _load_pet_elements() -> void:
 func set_pet_element(slot: int, element: int) -> void:
  if slot < 0 or slot >= 4:
   return
- pet_element_ids[slot] = clampi(element, 0, 9)
+ var selected_element: int = clampi(element, 0, 9)
+ if pet_element_ids[slot] == selected_element:
+  return
+ # Element selection is independent per player: duplicate elements are allowed.
+ pet_element_ids[slot] = selected_element
  var file := FileAccess.open("user://pet_elements.json", FileAccess.WRITE)
  if file != null:
   file.store_string(JSON.stringify(pet_element_ids))
- team_changed.emit()
+ # Recreate the passive pet visual immediately; create_team emits the signal.
+ create_team()
 
 func _refresh_health_after_rebuild() -> void:
  var battle: Node = get_tree().get_first_node_in_group("battle_manager")
