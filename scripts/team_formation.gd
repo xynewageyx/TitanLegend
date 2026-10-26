@@ -23,6 +23,26 @@ var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
 var talent_ranks: Array = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]]
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
+# Until multiplayer joins are implemented, only slot 0 is human-controlled.
+var human_occupied: Array[bool] = [true, false, false, false]
+const ROSTER_POLICY = preload("res://scripts/team_roster_policy.gd")
+
+func is_bot(slot: int) -> bool:
+ return slot >= 0 and slot < 4 and not human_occupied[slot]
+
+func combat_power_multiplier(slot: int) -> float:
+ return ROSTER_POLICY.bot_multiplier(is_bot(slot))
+
+func set_human_occupied(slot: int, occupied: bool) -> bool:
+ if slot < 0 or slot >= 4:
+  return false
+ if not occupied and slot == 0:
+  return false
+ human_occupied[slot] = occupied
+ role_ids = ROSTER_POLICY.assign_roles(human_occupied, role_ids)
+ team_changed.emit()
+ return true
+
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
 const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1]]
