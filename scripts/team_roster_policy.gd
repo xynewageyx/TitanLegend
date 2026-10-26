@@ -2,6 +2,8 @@ extends RefCounted
 class_name TitanTeamRosterPolicy
 
 const TEAM_SIZE: int = 4
+## Bot strength applies to HP, normal attacks, skills and healing.
+## Human-controlled heroes retain full strength.
 const BOT_POWER: float = 0.80
 const HUMAN_POWER: float = 1.0
 const REQUIRED_ROLES := [0, 1, 1, 2] # Tank, damage, damage, healer.
