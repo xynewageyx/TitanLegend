@@ -13,12 +13,14 @@ class PetCreatureVisualTests(unittest.TestCase):
         for marker in ("muzzle", "foot", "horn", "tail", "crest"):
             self.assertIn(marker, PETS)
 
-    def test_five_distinct_animal_profiles(self):
-        self.assertIn("match clampi(species, 0, 4):", PETS)
+    def test_ten_distinct_animal_profiles(self):
+        self.assertIn("match clampi(species, 0, 9):", PETS)
         self.assertIn("var pet_species_ids: Array[int]", TEAM)
         self.assertIn("func set_pet_species(slot: int, species: int)", TEAM)
         self.assertIn("user://pet_species.json", TEAM)
-        for marker in ("fox_tail", "shell", "antler", "beak", "spine"):
+        self.assertIn("clampi(species, 0, 9)", TEAM)
+        self.assertIn("clampi(int(data[i]), 0, 9)", TEAM)
+        for marker in ("fox_tail", "shell", "antler", "beak", "spine", "wolf_tail", "golem_chest", "lynx_tail", "phoenix_wing", "serpent_body"):
             self.assertIn(marker, PETS)
 
     def test_ten_elements_and_passive_only(self):
