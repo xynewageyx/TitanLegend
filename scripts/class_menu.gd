@@ -7,7 +7,7 @@ var description: Label
 var role_selector: OptionButton
 var pet_species_selector: OptionButton
 var pet_element_selector: OptionButton
-const PET_SPECIES := ["Fuchs", "Schildkroete", "Hirsch", "Eule", "Drache"]
+const PET_SPECIES := ["Fuchs", "Schildkroete", "Hirsch", "Eule", "Drache", "Wolf", "Golem", "Luchs", "Phoenix", "Schlange"]
 const PET_ELEMENTS := ["Feuer", "Wasser", "Natur", "Licht", "Schatten", "Wind", "Eis", "Blitz", "Erde", "Chaos"]
 var bonus_label: Label
 const CLASS_ROLES := ["Tank / DD", "Tank / DD / Heilung", "Tank / DD / Heilung", "Tank / DD / Heilung", "DD", "DD", "DD", "DD", "DD", "Heilung / DD", "DD"]
