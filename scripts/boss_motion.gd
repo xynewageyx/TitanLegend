@@ -353,7 +353,10 @@ func _process(delta: float) -> void:
    part.position.x += sin(elapsed * 10.0 + float(i) * 2.0) * 0.025
   part.scale = base_scales[i]
   if windup_remaining > 0.0:
-   var charge: float = sin((windup_duration - windup_remaining) / windup_duration * PI)
+   # Ease into a held anticipation pose so the boss clearly signals danger
+   # right up until the attack is released (visual timing only).
+   var charge_progress: float = clampf(1.0 - windup_remaining / maxf(windup_duration, 0.01), 0.0, 1.0)
+   var charge: float = smoothstep(0.0, 0.82, charge_progress)
    match element_id:
     0: # Fire: compress, then rise like a flame.
      part.position.y += charge * 0.22
