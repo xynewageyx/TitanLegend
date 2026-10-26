@@ -1,7 +1,7 @@
 extends RefCounted
 # Lightweight original creature silhouettes, built once per companion.
 # Purely visual: no attacks, collision, timers or damage.
-static func decorate(pet: Node3D, element: int, slot: int) -> void:
+static func decorate(pet: Node3D, element: int, species: int) -> void:
  var palette: Array[Color] = [
   Color("#f27d43"), Color("#54bce2"), Color("#ae966d"),
   Color("#72c46c"), Color("#f3d87b"), Color("#9876cf"),
@@ -26,7 +26,7 @@ static func decorate(pet: Node3D, element: int, slot: int) -> void:
   crest.scale = Vector3(0.62, 1.5, 0.60)
  # Distinct animal profiles: fox, turtle, stag, owl and drake families.
  # All anatomy is static geometry; elemental affinity remains passive.
- match posmod(element, 5):
+ match clampi(species, 0, 4):
   0: # Fox: pointed ears, long snout and a full tail.
    for side in [-1.0, 1.0]:
     var ear := VisualFactory.cylinder(pet, 0.38, 0.13, Vector3(side * 0.22, 1.12, -0.19), tint.darkened(0.12))
@@ -60,5 +60,3 @@ static func decorate(pet: Node3D, element: int, slot: int) -> void:
    for ridge in range(3):
     var spine := VisualFactory.cylinder(pet, 0.20, 0.09, Vector3(0, 0.89, 0.34 + float(ridge) * 0.19), tint.lightened(0.36))
     spine.rotation.x = -0.30
- if slot % 2 == 1:
-  muzzle.scale.x *= 1.12
