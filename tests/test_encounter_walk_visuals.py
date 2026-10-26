@@ -13,6 +13,12 @@ class EncounterWalkTests(unittest.TestCase):
         self.assertIn('Tween.TRANS_SINE', TEAM)
         self.assertIn('Tween.EASE_IN_OUT', TEAM)
 
+    def test_passive_pets_have_walk_aware_idle_motion(self):
+        self.assertIn('hero.get_node_or_null("PassivePet")', TEAM)
+        self.assertIn("pet_bob_speed: float = 5.2 if is_walking else 3.4", TEAM)
+        self.assertIn("pet_bob_height: float = 0.10 if is_walking else 0.15", TEAM)
+        self.assertIn("pet.rotation.y += delta", TEAM)
+
     def test_cancelled_walk_does_not_finish(self):
         self.assertIn('func stop_walking()', TEAM)
         self.assertIn('walk_tween.kill()', TEAM)
