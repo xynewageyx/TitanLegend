@@ -54,6 +54,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_encounter_walk_visuals.py' -v
       - name: Check elemental transition visuals
         run: python3 -m unittest discover -s tests -p 'test_element_transition_visuals.py' -v
+      - name: Check class-specific walking animations
+        run: python3 -m unittest discover -s tests -p 'test_hero_gait_visuals.py' -v
       - name: Test all hero class and role visual models
         shell: bash
         run: |
