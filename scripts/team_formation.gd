@@ -611,6 +611,7 @@ func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int)
  # Role-aware class silhouettes and individual face colors; visuals only.
  preload("res://scripts/hero_visual_upgrade.gd").decorate(hero, class_id, selected_role, slot)
  preload("res://scripts/hero_silhouette_v2.gd").decorate(hero, class_id, selected_role, slot)
+ preload("res://scripts/hero_fantasy_costumes.gd").decorate(hero, class_id, selected_role, slot)
  var motion: Node3D = Node3D.new()
  motion.name = "HeroCombatMotion"
  motion.set_script(preload("res://scripts/hero_combat_motion.gd"))
