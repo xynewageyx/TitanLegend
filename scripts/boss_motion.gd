@@ -464,8 +464,10 @@ func _process(delta: float) -> void:
      part.position.y += weight_139 * (0.14 if i % 3 == 0 else -0.08)
   if recoil_remaining > 0.0:
    var recoil_progress: float = 1.0 - recoil_remaining / recoil_duration
-   var recoil_curve: float = sin(recoil_progress * PI)
-   part.position.z += recoil_curve * 0.12 * recoil_strength
+   # A fast initial jolt followed by a slower settle makes critical hits
+   # readable without shaking the boss root or combat UI.
+   var recoil_curve: float = pow(1.0 - recoil_progress, 2.0) * sin(recoil_progress * PI * 1.5)
+   part.position.z += recoil_curve * 0.16 * recoil_strength
    part.position.x += recoil_curve * 0.045 * recoil_strength * recoil_side
    part.rotation.x += recoil_curve * (0.07 if i % 2 == 0 else -0.07) * recoil_strength
    part.rotation.z += recoil_curve * 0.055 * recoil_side * recoil_strength
