@@ -76,6 +76,7 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
     ear.rotation.z = side * 0.25
    var fox_tail := VisualFactory.sphere(pet, 0.25, Vector3(0.0, 0.58, 0.70), tint.lightened(0.20))
    fox_tail.scale = Vector3(0.78, 0.84, 1.7)
+   fox_tail.name = "AnimatedTail"
   1: # Turtle: layered oval shell with a bright rim and visible feet.
    var shell := VisualFactory.sphere(pet, 0.43, Vector3(0, 0.52, 0.18), tint.darkened(0.28))
    shell.scale = Vector3(1.25, 0.55, 1.22)
@@ -93,6 +94,7 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
    for side in [-1.0, 1.0]:
     var wing := VisualFactory.sphere(pet, 0.25, Vector3(side * 0.33, 0.55, 0.13), tint.darkened(0.18))
     wing.scale = Vector3(0.52, 1.3, 0.82)
+    wing.name = "AnimatedWingLeft" if side < 0.0 else "AnimatedWingRight"
     VisualFactory.sphere(pet, 0.16, Vector3(side * 0.14, 0.80, -0.35), tint.lightened(0.44))
     VisualFactory.sphere(pet, 0.07, Vector3(side * 0.14, 0.81, -0.47), Color("#1c2731"))
    var beak := VisualFactory.sphere(pet, 0.10, Vector3(0, 0.66, -0.48), Color("#e5ba67"))
@@ -102,6 +104,7 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
     var wing := VisualFactory.sphere(pet, 0.32, Vector3(side * 0.43, 0.65, 0.19), tint.darkened(0.24))
     wing.scale = Vector3(1.45, 0.24, 0.95)
     wing.rotation.z = side * 0.23
+    wing.name = "AnimatedWingLeft" if side < 0.0 else "AnimatedWingRight"
    for ridge in range(3):
     var spine := VisualFactory.cylinder(pet, 0.20, 0.09, Vector3(0, 0.89, 0.34 + float(ridge) * 0.19), tint.lightened(0.36))
     spine.rotation.x = -0.30
@@ -114,6 +117,7 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
    wolf_muzzle.scale = Vector3(0.75, 0.54, 1.35)
    var wolf_tail := VisualFactory.sphere(pet, 0.24, Vector3(0, 0.60, 0.69), tint.darkened(0.15))
    wolf_tail.scale = Vector3(0.7, 0.9, 1.7)
+   wolf_tail.name = "AnimatedTail"
   6: # Golem: broad rocky shoulders and angular crown.
    var golem_chest := VisualFactory.box(pet, Vector3(0.80, 0.58, 0.65), Vector3(0, 0.52, 0.10), tint.darkened(0.25))
    for side in [-1.0, 1.0]:
@@ -127,11 +131,13 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
     cheek.scale = Vector3(1.2, 0.7, 0.8)
    var lynx_tail := VisualFactory.sphere(pet, 0.16, Vector3(0, 0.43, 0.57), tint.darkened(0.38))
    lynx_tail.scale = Vector3(0.9, 0.8, 0.85)
+   lynx_tail.name = "AnimatedTail"
   8: # Phoenix: raised feather crest, sweeping wings and fan tail.
    for side in [-1.0, 1.0]:
     var phoenix_wing := VisualFactory.sphere(pet, 0.34, Vector3(side * 0.48, 0.66, 0.06), tint.lightened(0.22))
     phoenix_wing.scale = Vector3(1.60, 0.25, 0.86)
     phoenix_wing.rotation.z = side * 0.35
+    phoenix_wing.name = "AnimatedWingLeft" if side < 0.0 else "AnimatedWingRight"
    for feather in range(3):
     var plume := VisualFactory.sphere(pet, 0.13, Vector3((float(feather) - 1.0) * 0.17, 1.14, -0.06), tint.lightened(0.45))
     plume.scale = Vector3(0.60, 2.0, 0.58)
