@@ -37,7 +37,19 @@ static func decorate(hero: Node3D, class_id: int, role_id: int, slot: int) -> vo
   ]
   var cloak_classes: Array[int] = [1, 2, 3, 4, 6, 7, 8, 9]
   var cloak: Color = cloak_colors[cloak_classes.find(class_id)]
-  _box(hero, Vector3(0.83, 1.23, 0.07), Vector3(0, 0.96, 0.43), cloak)
+  # Curved cloth panel replaces the conspicuous rectangular backpack silhouette.
+  var cape_mesh := CylinderMesh.new()
+  cape_mesh.height = 1.25
+  cape_mesh.top_radius = 0.32
+  cape_mesh.bottom_radius = 0.57
+  cape_mesh.radial_segments = 9
+  var cape := MeshInstance3D.new()
+  cape.name = "HeroCape"
+  cape.mesh = cape_mesh
+  cape.material_override = VisualFactory.material(cloak)
+  cape.position = Vector3(0, 0.99, 0.29)
+  cape.scale.z = 0.34
+  hero.add_child(cape)
   for side in [-1.0, 1.0]:
    _box(hero, Vector3(0.07, 0.9, 0.11), Vector3(side * 0.41, 0.91, 0.48), cloak.darkened(0.23))
  match class_id:
