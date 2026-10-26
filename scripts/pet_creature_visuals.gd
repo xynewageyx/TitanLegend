@@ -24,6 +24,13 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
  for i in range(3):
   var crest: MeshInstance3D = VisualFactory.sphere(pet, 0.14 - float(i) * 0.02, Vector3(0, 0.80 - float(i) * 0.10, 0.24 + float(i) * 0.20), tint.lightened(0.4))
   crest.scale = Vector3(0.62, 1.5, 0.60)
+ # High-contrast facial details remain readable at Android portrait scale.
+ # Place the nose and eye highlights in front of the muzzle, with no lighting effects.
+ var nose := VisualFactory.sphere(pet, 0.085, Vector3(0, 0.67, -0.55), tint.darkened(0.52))
+ nose.scale = Vector3(1.05, 0.70, 0.70)
+ for side in [-1.0, 1.0]:
+  var eye_highlight := VisualFactory.sphere(pet, 0.023, Vector3(side * 0.095 - 0.014, 0.80, -0.502), Color("#ffffff"))
+  eye_highlight.scale = Vector3(0.72, 0.95, 0.65)
  # Static elemental ornaments: no particles, attacks, timers or gameplay damage.
  # Reuse inexpensive low-poly geometry for Android portrait performance.
  match clampi(element, 0, 9):
