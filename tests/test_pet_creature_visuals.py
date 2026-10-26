@@ -13,9 +13,14 @@ class PetCreatureVisualTests(unittest.TestCase):
         for marker in ("muzzle", "foot", "horn", "tail", "crest"):
             self.assertIn(marker, PETS)
 
+    def test_five_distinct_animal_profiles(self):
+        self.assertIn("match posmod(element, 5):", PETS)
+        for marker in ("fox_tail", "shell", "antler", "beak", "spine"):
+            self.assertIn(marker, PETS)
+
     def test_ten_elements_and_passive_only(self):
         self.assertIn("clampi(element, 0, 9)", PETS)
-        self.assertEqual(PETS.count('Color("#'), 10 + 1)
+        self.assertEqual(PETS.count('Color("#'), 10 + 2)
         self.assertNotIn("play_attack(", PETS)
         self.assertNotIn("create_timer(", PETS)
 
