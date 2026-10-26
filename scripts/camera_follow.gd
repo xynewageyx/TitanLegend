@@ -8,6 +8,8 @@ extends Camera3D
 @export var camera_offset: Vector3 = Vector3(0.0, 10.8, 15.0)
 @export var look_ahead: Vector3 = Vector3(0.0, 1.2, -5.0)
 @export var smoothing: float = 3.0
+@export var aim_smoothing: float = 4.0
+var _smoothed_focus: Vector3 = Vector3.ZERO
 
 @onready var target: Node3D = get_node_or_null(target_path) as Node3D
 @onready var battle_manager: Node = get_node_or_null(battle_manager_path)
@@ -19,20 +21,21 @@ func _ready() -> void:
  if target != null:
   var view: Dictionary = _desired_view()
   global_position = view["position"]
-  look_at(view["focus"], Vector3.UP)
+  _smoothed_focus = view["focus"]
+  look_at(_smoothed_focus, Vector3.UP)
 
 func _process(delta: float) -> void:
  if target == null or not is_instance_valid(target):
   return
  var view: Dictionary = _desired_view()
- var alpha: float = clampf(delta * smoothing, 0.0, 1.0)
+ var alpha: float = 1.0 - exp(-maxf(smoothing, 0.0) * maxf(delta, 0.0))
  global_position = global_position.lerp(view["position"], alpha)
  # Smooth the aim as well as camera position to avoid snapping at boss spawn.
  var desired_focus: Vector3 = view["focus"]
- var previous_focus: Vector3 = global_position - global_transform.basis.z * 10.0
- var focus: Vector3 = previous_focus.lerp(desired_focus, alpha)
- if global_position.distance_squared_to(focus) > 0.01:
-  look_at(focus, Vector3.UP)
+ var aim_alpha: float = 1.0 - exp(-maxf(aim_smoothing, 0.0) * maxf(delta, 0.0))
+ _smoothed_focus = _smoothed_focus.lerp(desired_focus, aim_alpha)
+ if global_position.distance_squared_to(_smoothed_focus) > 0.01:
+  look_at(_smoothed_focus, Vector3.UP)
 
 func _desired_view() -> Dictionary:
  var team_position: Vector3 = target.global_position
@@ -45,9 +48,8 @@ func _desired_view() -> Dictionary:
   var boss_position: Vector3 = enemy_spawn.global_position
   # Frame the space between the heroes and the enemy, with extra headroom.
   focus = (team_position + boss_position) * 0.5 + Vector3(0.0, 2.2, 0.0)
-  var separation: float = team_position.distance_to(boss_position)
   # Use horizontal battlefield separation; vertical boss placement should not zoom the camera.
   var flat_separation: float = Vector2(team_position.x - boss_position.x, team_position.z - boss_position.z).length()
-  var framing_distance: float = maxf(separation, flat_separation)
+  var framing_distance: float = flat_separation
   offset = Vector3(0.0, clampf(framing_distance * 1.05, 12.5, 22.0), clampf(framing_distance * 1.65, 19.0, 34.0))
  return {"position": focus + offset, "focus": focus}
