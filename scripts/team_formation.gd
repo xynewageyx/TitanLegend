@@ -584,7 +584,7 @@ func start_walking() -> void:
   walk_tween.kill()
  walk_tween = create_tween()
  # Actually advance through the world while respecting AFK cancellation.
- walk_tween.tween_property(self, "position:z", position.z - 2.0, 1.25)
+ walk_tween.tween_property(self, "position:z", position.z - 2.0, 1.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
  walk_tween.tween_callback(_finish_walking)
 
 func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int) -> void:
