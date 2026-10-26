@@ -118,3 +118,10 @@ jobs:
           godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
           test -s build/TitanLegends-debug.apk
           unzip -tq build/TitanLegends-debug.apk
+      - name: Upload Android debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Android-debug
+          path: build/TitanLegends-debug.apk
+          if-no-files-found: error
+          retention-days: 14
