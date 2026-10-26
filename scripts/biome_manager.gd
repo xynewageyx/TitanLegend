@@ -59,7 +59,10 @@ func generate_terrain() -> void:
    if i % 4 == 0:
     VisualFactory.sphere(terrain, 0.52, Vector3(x + 1.3, 0.35, z + 0.5), Color("#777a69"))
   elif current_biome in [BiomeType.WATER, BiomeType.LIGHT, BiomeType.ICE, BiomeType.WIND, BiomeType.LIGHTNING]:
-   VisualFactory.box(terrain, Vector3(0.9, rng.randf_range(1.5, 3.5), 0.9), Vector3(x, 1.1, z), COLORS[current_biome].lightened(0.3))
+   var crystal_height: float = rng.randf_range(1.5, 3.5)
+   var crystal_width: float = rng.randf_range(0.55, 1.05)
+   var crystal_color: Color = COLORS[current_biome].lerp(Color.WHITE, rng.randf_range(0.12, 0.42))
+   VisualFactory.box(terrain, Vector3(crystal_width, crystal_height, crystal_width), Vector3(x, crystal_height * 0.5, z), crystal_color)
   else:
    VisualFactory.sphere(terrain, rng.randf_range(0.6, 1.5), Vector3(x, 0.5, z), COLORS[current_biome].lightened(0.15))
 
