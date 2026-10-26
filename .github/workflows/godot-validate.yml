@@ -72,3 +72,49 @@ jobs:
         shell: bash
         run: |
           timeout 20s godot --headless --path . --quit-after 120
+
+  android-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Godot 4.6 and Android export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=4.6-stable
+          base="https://github.com/godotengine/godot-builds/releases/download/$version"
+          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.6-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
+          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.6-stable_export_templates.tpz"
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.6.stable"
+          unzip -q /tmp/templates.tpz -d /tmp/godot-templates
+          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.6.stable/"
+      - name: Configure Android SDK and debug signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+          mkdir -p "$HOME/.android"
+          keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$HOME/.android/debug.keystore" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+      - name: Validate Android debug APK export
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          godot --headless --path . --editor --import --quit
+          godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
+          test -s build/TitanLegends-debug.apk
+          unzip -tq build/TitanLegends-debug.apk
