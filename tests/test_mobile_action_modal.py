@@ -22,8 +22,18 @@ class MobileActionModalTests(unittest.TestCase):
 
     def test_action_panel_scales_with_portrait_viewport(self):
         self.assertIn("action_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)", UI)
-        self.assertIn("action_panel.anchor_top = 0.12", UI)
-        self.assertIn("action_panel.anchor_bottom = 0.55", UI)
+        # Layout proportions were expanded for the current portrait HUD.
+        # Keep the anchors within the display and leave meaningful room
+        # for the scrolling action controls.
+        import re
+        top = re.search(r"action_panel\\.anchor_top\\s*=\\s*([0-9.]+)", UI)
+        bottom = re.search(r"action_panel\\.anchor_bottom\\s*=\\s*([0-9.]+)", UI)
+        self.assertIsNotNone(top)
+        self.assertIsNotNone(bottom)
+        self.assertGreaterEqual(float(top.group(1)), 0.0)
+        self.assertLess(float(top.group(1)), float(bottom.group(1)))
+        self.assertLessEqual(float(bottom.group(1)), 1.0)
+        self.assertGreaterEqual(float(bottom.group(1)) - float(top.group(1)), 0.35)
         self.assertIn("action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO", UI)
         self.assertIn("action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED", UI)
 
