@@ -209,7 +209,8 @@ func _process(delta: float) -> void:
    left_arm.rotation.x = -1.15 * swing
    right_arm.rotation.z = alternate * 0.12 * swing
   attack_lean = swing
-  magic_flash.visible = true
+  # Reveal the strike flash near contact, not during the anticipation pose.
+  magic_flash.visible = progress >= 0.20 and progress <= 0.78
   var fx_strength: float = 0.75 if class_id in [2, 4] else (1.25 if class_id in [0, 1, 10] else 1.0)
   magic_flash.scale = Vector3.ONE * (0.65 + 1.55 * swing * fx_strength)
   # Keep the impact flash close to the weapon for melee, but project
@@ -223,6 +224,10 @@ func _process(delta: float) -> void:
   right_arm.rotation.z = 0.0
   attack_pose_blend = move_toward(attack_pose_blend, 0.0, delta * 9.0)
   attack_lean = move_toward(attack_lean, 0.0, delta * 7.0)
+ # Settle the shoulders back into the idle pose after each swing.
+ if attack_remaining <= 0.0:
+  right_arm.rotation.x = move_toward(right_arm.rotation.x, 0.0, delta * 8.0)
+  left_arm.rotation.x = move_toward(left_arm.rotation.x, 0.0, delta * 8.0)
  var recoil: float = hit_remaining / hit_duration
  var hit_power: float = 1.55 if hit_critical else 1.0
  rotation.x = -recoil * 0.10 * hit_power + attack_lean * 0.06
