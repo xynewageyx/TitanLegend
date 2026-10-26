@@ -7,6 +7,9 @@ var gold: int = 0
 var _gold_label: Label
 var _grid: GridContainer
 var hero_index: int = 0
+var _hero_button: Button
+var _upgrade_button: Button
+var _notice: Label
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -19,12 +22,23 @@ func _ready() -> void:
 	heading.text = "AUSRÜSTUNG"
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(heading)
+	_hero_button = Button.new()
+	_hero_button.custom_minimum_size.y = 52
+	_hero_button.pressed.connect(_next_hero)
+	column.add_child(_hero_button)
 	_gold_label = Label.new()
 	column.add_child(_gold_label)
 	_grid = GridContainer.new()
 	_grid.columns = 2
 	_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_grid)
+	_upgrade_button = Button.new()
+	_upgrade_button.custom_minimum_size.y = 56
+	_upgrade_button.pressed.connect(_upgrade_weapon)
+	column.add_child(_upgrade_button)
+	_notice = Label.new()
+	_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(_notice)
 	refresh_from_game()
 
 func set_equipment(data: Dictionary, available_gold: int) -> void:
@@ -49,6 +63,10 @@ func refresh() -> void:
 	if _grid == null:
 		return
 	_gold_label.text = "Gold: %d" % gold
+	_hero_button.text = "Held %d von 4  ▶" % (hero_index + 1)
+	var cost: int = GameManager.weapon_upgrade_cost(hero_index)
+	_upgrade_button.disabled = cost <= 0 or gold < cost
+	_upgrade_button.text = "Waffe verbessern: %d Gold" % cost if cost > 0 else "Waffe: Maximum erreicht"
 	for child in _grid.get_children():
 		_grid.remove_child(child)
 		child.queue_free()
@@ -60,9 +78,21 @@ func refresh() -> void:
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(0, 92)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.text = "%s\n%s\nLv.%d  %s" % [slot_id, label, level, "★".repeat(stars)]
+		button.text = "%s\n%s\nLv.%d  %s" % [slot_id, label, level, "★".repeat(stars)] if not item.is_empty() else "%s\n%s" % [slot_id, "Noch nicht verfügbar" if slot_id in ["Handschuhe", "Stiefel", "Amulett", "Relikt"] else "Leer"]
 		button.pressed.connect(_select_slot.bind(slot_id))
 		_grid.add_child(button)
 
 func _select_slot(slot_id: String) -> void:
 	slot_selected.emit(slot_id)
+
+func _next_hero() -> void:
+	hero_index = (hero_index + 1) % 4
+	_notice.text = ""
+	refresh_from_game()
+
+func _upgrade_weapon() -> void:
+	if GameManager.upgrade_weapon(hero_index):
+		_notice.text = "Waffe erfolgreich verbessert."
+	else:
+		_notice.text = "Nicht genug Gold oder maximale Stufe erreicht."
+	refresh_from_game()
