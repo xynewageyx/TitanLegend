@@ -84,11 +84,16 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
    var fox_tail := VisualFactory.sphere(pet, 0.25, Vector3(0.0, 0.58, 0.70), tint.lightened(0.20))
    fox_tail.scale = Vector3(0.78, 0.84, 1.7)
    fox_tail.name = "AnimatedTail"
+   var fox_tip := VisualFactory.sphere(pet, 0.15, Vector3(0, 0.61, 0.98), tint.lightened(0.62))
+   fox_tip.scale = Vector3(0.78, 0.80, 1.35)
   1: # Turtle: layered oval shell with a bright rim and visible feet.
    var shell := VisualFactory.sphere(pet, 0.43, Vector3(0, 0.52, 0.18), tint.darkened(0.28))
    shell.scale = Vector3(1.25, 0.55, 1.22)
    var shell_rim := VisualFactory.sphere(pet, 0.40, Vector3(0, 0.42, 0.18), tint.lightened(0.14))
    shell_rim.scale = Vector3(1.34, 0.26, 1.32)
+   for offset in [-0.22, 0.22]:
+    var shell_plate := VisualFactory.sphere(pet, 0.19, Vector3(offset, 0.73, 0.19), tint.darkened(0.40))
+    shell_plate.scale = Vector3(1.15, 0.25, 1.50)
    for side in [-1.0, 1.0]:
     VisualFactory.sphere(pet, 0.14, Vector3(side * 0.34, 0.15, 0.43), tint)
   2: # Stag: forked antlers and narrow muzzle.
@@ -97,6 +102,8 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
     antler.rotation.z = side * 0.38
     var branch := VisualFactory.cylinder(pet, 0.24, 0.048, Vector3(side * 0.40, 1.36, -0.08), tint.lightened(0.38))
     branch.rotation.z = -side * 0.48
+    var antler_tip := VisualFactory.cylinder(pet, 0.21, 0.038, Vector3(side * 0.49, 1.49, -0.08), tint.lightened(0.44))
+    antler_tip.rotation.z = side * 0.19
   3: # Owl: round facial disk, wings and feather tufts.
    for side in [-1.0, 1.0]:
     var wing := VisualFactory.sphere(pet, 0.25, Vector3(side * 0.33, 0.55, 0.13), tint.darkened(0.18))
@@ -106,6 +113,8 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
     VisualFactory.sphere(pet, 0.07, Vector3(side * 0.14, 0.81, -0.47), Color("#1c2731"))
    var beak := VisualFactory.sphere(pet, 0.10, Vector3(0, 0.66, -0.48), Color("#e5ba67"))
    beak.scale = Vector3(0.64, 1.18, 1.1)
+   var owl_brow := VisualFactory.sphere(pet, 0.23, Vector3(0, 0.98, -0.29), tint.darkened(0.28))
+   owl_brow.scale = Vector3(1.45, 0.30, 0.50)
   4: # Drake: broad side wings and a ridged tail.
    for side in [-1.0, 1.0]:
     var wing := VisualFactory.sphere(pet, 0.32, Vector3(side * 0.43, 0.65, 0.19), tint.darkened(0.24))
@@ -125,8 +134,11 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
    var wolf_tail := VisualFactory.sphere(pet, 0.24, Vector3(0, 0.60, 0.69), tint.darkened(0.15))
    wolf_tail.scale = Vector3(0.7, 0.9, 1.7)
    wolf_tail.name = "AnimatedTail"
+   var wolf_chest := VisualFactory.sphere(pet, 0.24, Vector3(0, 0.48, -0.34), tint.lightened(0.42))
+   wolf_chest.scale = Vector3(0.88, 1.28, 0.55)
   6: # Golem: broad rocky shoulders and angular crown.
    var golem_chest := VisualFactory.box(pet, Vector3(0.80, 0.58, 0.65), Vector3(0, 0.52, 0.10), tint.darkened(0.25))
+   VisualFactory.box(pet, Vector3(0.24, 0.25, 0.08), Vector3(0, 0.61, -0.31), tint.lightened(0.58))
    for side in [-1.0, 1.0]:
     VisualFactory.box(pet, Vector3(0.30, 0.40, 0.32), Vector3(side * 0.49, 0.54, 0.10), tint.lightened(0.12))
    VisualFactory.box(pet, Vector3(0.44, 0.18, 0.33), Vector3(0, 1.04, -0.06), tint.lightened(0.25))
@@ -139,6 +151,8 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
    var lynx_tail := VisualFactory.sphere(pet, 0.16, Vector3(0, 0.43, 0.57), tint.darkened(0.38))
    lynx_tail.scale = Vector3(0.9, 0.8, 0.85)
    lynx_tail.name = "AnimatedTail"
+   for side in [-1.0, 1.0]:
+    var lynx_tuft := VisualFactory.cylinder(pet, 0.18, 0.045, Vector3(side * 0.25, 1.35, -0.20), tint.darkened(0.48))
   8: # Phoenix: raised feather crest, sweeping wings and fan tail.
    for side in [-1.0, 1.0]:
     var phoenix_wing := VisualFactory.sphere(pet, 0.34, Vector3(side * 0.48, 0.66, 0.06), tint.lightened(0.22))
@@ -157,3 +171,5 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
    serpent_neck.rotation.x = -0.22
    var hood := VisualFactory.sphere(pet, 0.31, Vector3(0, 0.95, -0.28), tint.lightened(0.16))
    hood.scale = Vector3(1.40, 1.08, 0.48)
+   for side in [-1.0, 1.0]:
+    VisualFactory.sphere(pet, 0.085, Vector3(side * 0.16, 1.02, -0.44), Color("#14232c"))
