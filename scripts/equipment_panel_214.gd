@@ -6,6 +6,7 @@ var equipment: Dictionary = {}
 var gold: int = 0
 var _gold_label: Label
 var _grid: GridContainer
+var hero_index: int = 0
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -24,13 +25,25 @@ func _ready() -> void:
 	_grid.columns = 2
 	_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_grid)
-	refresh()
+	refresh_from_game()
 
 func set_equipment(data: Dictionary, available_gold: int) -> void:
 	equipment = data.duplicate(true)
 	gold = maxi(0, available_gold)
 	if is_node_ready():
 		refresh()
+
+func refresh_from_game() -> void:
+	var hero := clampi(hero_index, 0, 3)
+	var data := {}
+	data["Waffe"] = {"name": "Waffe", "level": GameManager.weapon_levels[hero], "stars": GameManager.weapon_rarities[hero]}
+	for i in range(3):
+		var item_id := int(GameManager.equipped_loot[hero][i])
+		var item := GameManager.loot_item_by_id(item_id)
+		var slot_name: String = ["Helm", "Brust", "Ring"][i]
+		if not item.is_empty():
+			data[slot_name] = {"name": GameManager.LOOT_SLOTS[i], "level": item.get("level", 0), "stars": item.get("rarity", 0)}
+	set_equipment(data, GameManager.current_gold)
 
 func refresh() -> void:
 	if _grid == null:
