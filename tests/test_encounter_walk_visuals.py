@@ -17,7 +17,9 @@ class EncounterWalkTests(unittest.TestCase):
         self.assertIn('hero.get_node_or_null("PassivePet")', TEAM)
         self.assertIn("pet_bob_speed: float = 5.2 if is_walking else 3.4", TEAM)
         self.assertIn("pet_bob_height: float = 0.10 if is_walking else 0.15", TEAM)
-        self.assertIn("pet.rotation.y += delta", TEAM)
+        self.assertIn("pet.rotation.y = sin(animation_clock * 1.1 + float(i)) * 0.16", TEAM)
+        self.assertIn("pet.scale = Vector3(breath + wing_flutter, breath, breath)", TEAM)
+        self.assertIn("pet.rotation.z += serpent_sway", TEAM)
 
     def test_portrait_formation_spacing_and_hp_clearance(self):
         self.assertIn("var spacing: float = (1.82 if not in_front else 2.05) if row.size() <= 3 else 1.45", TEAM)
