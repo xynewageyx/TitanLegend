@@ -44,16 +44,18 @@ func generate_terrain() -> void:
  var path_color: Color = [Color("#51423d"), Color("#4c8798"), Color("#978267"), Color("#8e785b"), Color("#e2d7ad"), Color("#453b5a"), Color("#a4b8b8"), Color("#b9d9e8"), Color("#61688b"), Color("#62425b")][current_biome]
  VisualFactory.box(terrain, Vector3(7, 0.06, 160), Vector3(0, -0.08, -36), path_color)
  var rng: RandomNumberGenerator = RandomNumberGenerator.new()
- rng.seed = 241
+ rng.seed = 241 + current_biome * 997
  for i in range(44):
   var side: float = -1.0 if i % 2 == 0 else 1.0
   var x: float = side * rng.randf_range(5.5, 17.0)
   var z: float = rng.randf_range(-43.0, 18.0)
   if current_biome == BiomeType.NATURE:
-   VisualFactory.cylinder(terrain, 2.8, 0.35, Vector3(x, 1.4, z), Color("#68452c"))
-   VisualFactory.sphere(terrain, 1.55, Vector3(x, 3.55, z), Color("#277a40"))
-   VisualFactory.sphere(terrain, 1.1, Vector3(x - 0.75, 3.1, z), Color("#328c4a"))
-   VisualFactory.sphere(terrain, 1.1, Vector3(x + 0.75, 3.1, z), Color("#2c7540"))
+   var tree_scale: float = rng.randf_range(0.75, 1.3)
+   var leaf_tint: Color = Color("#277a40").lerp(Color("#489e54"), rng.randf())
+   VisualFactory.cylinder(terrain, 2.8 * tree_scale, 0.35 * tree_scale, Vector3(x, 1.4 * tree_scale, z), Color("#68452c"))
+   VisualFactory.sphere(terrain, 1.55 * tree_scale, Vector3(x, 3.55 * tree_scale, z), leaf_tint)
+   VisualFactory.sphere(terrain, 1.1 * tree_scale, Vector3(x - 0.75 * tree_scale, 3.1 * tree_scale, z), leaf_tint.lightened(0.1))
+   VisualFactory.sphere(terrain, 1.1 * tree_scale, Vector3(x + 0.75 * tree_scale, 3.1 * tree_scale, z), leaf_tint.darkened(0.08))
    if i % 4 == 0:
     VisualFactory.sphere(terrain, 0.52, Vector3(x + 1.3, 0.35, z + 0.5), Color("#777a69"))
   elif current_biome in [BiomeType.WATER, BiomeType.LIGHT, BiomeType.ICE, BiomeType.WIND, BiomeType.LIGHTNING]:
