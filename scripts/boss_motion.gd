@@ -13,6 +13,8 @@ var strike_duration: float = 0.36
 # Update 137: element-specific visual pacing (combat timing is unchanged).
 const STRIKE_VISUAL_DURATIONS: Array[float] = [0.43, 0.37, 0.58, 0.42, 0.35, 0.40, 0.29, 0.51, 0.25, 0.34]
 const IDLE_MOTION_SPEEDS: Array[float] = [1.30, 1.05, 0.68, 0.92, 1.18, 0.88, 1.85, 0.75, 2.20, 1.45]
+# Elemental recoil silhouettes: stone/ice resist movement, wind/lightning react sharply.
+const HIT_RECOIL_MULTIPLIERS: Array[float] = [1.05, 0.95, 0.65, 0.90, 1.0, 1.1, 1.35, 0.70, 1.4, 1.2]
 var recoil_duration: float = 0.24
 var recoil_strength: float = 1.0
 var recoil_side: float = 1.0
@@ -227,7 +229,7 @@ func react_to_hit(critical: bool = false) -> void:
  # A critical strike is easier to read, without changing combat calculations.
  recoil_hit_count += 1
  recoil_side = -1.0 if recoil_hit_count % 2 == 0 else 1.0
- recoil_strength = (1.65 if critical else 1.0) * (0.80 if fusion else 1.0)
+ recoil_strength = (1.65 if critical else 1.0) * (0.80 if fusion else 1.0) * HIT_RECOIL_MULTIPLIERS[clampi(element_id, 0, 9)]
  recoil_duration = 0.34 if critical else 0.24
  recoil_remaining = recoil_duration
 
