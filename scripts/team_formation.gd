@@ -116,10 +116,17 @@ func _process(delta: float) -> void:
    continue
   if fallen_heroes.has(i):
    continue
-  var speed: float = 10.0 if is_walking else 2.0
-  var amplitude: float = 0.075 if is_walking else 0.018
-  hero.position.y = sin(animation_clock * speed + float(i) * 0.8) * amplitude
-  hero.rotation.z = sin(animation_clock * speed * 0.5 + float(i)) * (0.055 if is_walking else 0.012)
+  var role: int = role_ids[i] if i < role_ids.size() else 1
+  var stride_speed: float = 9.0 if role == 0 else 11.0 if role == 1 else 8.0
+  var speed: float = stride_speed if is_walking else 2.0
+  var phase: float = animation_clock * speed + float(i) * 0.8
+  var amplitude: float = (0.055 if role == 0 else 0.08 if role == 1 else 0.06) if is_walking else 0.018
+  hero.position.y = sin(phase) * amplitude
+  hero.rotation.z = sin(phase * 0.5) * (0.038 if role == 0 else 0.055 if is_walking else 0.012)
+  if is_walking:
+   hero.rotation.y = sin(phase * 0.5) * (0.035 if role == 0 else 0.06)
+  elif not attack_tweens.has(i):
+   hero.rotation.y = lerpf(hero.rotation.y, 0.0, clampf(delta * 8.0, 0.0, 1.0))
   if not is_walking and not attack_tweens.has(i):
    hero.position.x = _formation_position(i).x + sin(animation_clock * 1.35 + float(i) * 1.7) * 0.035
   var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
