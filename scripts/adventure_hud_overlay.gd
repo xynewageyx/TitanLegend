@@ -129,26 +129,26 @@ func _build_party() -> void:
  strip.name = "AdventureTeam"
  strip.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
  strip.offset_left = 11
- strip.offset_right = 210
+ strip.offset_right = 190
  strip.offset_top = 94
- strip.offset_bottom = 404
- strip.add_theme_constant_override("separation", 5)
+ strip.offset_bottom = 360
+ strip.add_theme_constant_override("separation", 3)
  add_child(strip)
  for i in range(4):
   var tile := PanelContainer.new()
   tile.name = "PartySlot" + str(i + 1)
-  tile.custom_minimum_size.y = 61
+  tile.custom_minimum_size.y = 51
   tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0d7f3"), SKIN.WOOD, 15, 2))
   strip.add_child(tile)
   var line := HBoxContainer.new()
   line.add_theme_constant_override("separation", 7)
   tile.add_child(line)
   var icon_label := Label.new()
-  icon_label.custom_minimum_size = Vector2(38, 42)
+  icon_label.custom_minimum_size = Vector2(30, 34)
   icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
   icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
   icon_label.add_theme_stylebox_override("normal", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
-  SKIN.title(icon_label, 23)
+  SKIN.title(icon_label, 19)
   icon_label.text = "◆"
   line.add_child(icon_label)
   party_icons.append(icon_label)
@@ -157,13 +157,13 @@ func _build_party() -> void:
   column.add_theme_constant_override("separation", 0)
   line.add_child(column)
   var name_label := Label.new()
-  SKIN.title(name_label, 15)
+  SKIN.title(name_label, 14)
   name_label.clip_text = true
   name_label.text = "Held " + str(i + 1)
   column.add_child(name_label)
   party_names.append(name_label)
   var role_label := Label.new()
-  SKIN.title(role_label, 12)
+  SKIN.title(role_label, 11)
   role_label.add_theme_color_override("font_color", SKIN.MUTED)
   role_label.text = "Teammitglied"
   column.add_child(role_label)
@@ -171,7 +171,7 @@ func _build_party() -> void:
   var hp := ProgressBar.new()
   hp.max_value = 100
   hp.value = 100
-  hp.custom_minimum_size.y = 9
+  hp.custom_minimum_size.y = 8
   SKIN.small_bar(hp, SKIN.GREEN)
   column.add_child(hp)
   party_bars.append(hp)
