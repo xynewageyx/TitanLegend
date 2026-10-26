@@ -171,8 +171,18 @@ func _process(delta: float) -> void:
    var breath: float = 1.0 + 0.035 * sin(animation_clock * 2.2 + float(i))
    var wing_flutter: float = 0.055 * sin(animation_clock * 4.0 + float(i)) if pet_species in [3, 4, 8] else 0.0
    var serpent_sway: float = 0.08 * sin(animation_clock * 1.7 + float(i)) if pet_species == 9 else 0.0
-   pet.scale = Vector3(breath + wing_flutter, breath, breath)
+   pet.scale = Vector3(breath, breath, breath)
    pet.rotation.z += serpent_sway
+   # Animate individual mesh parts without adding timers or combat actions.
+   var wing_left: Node3D = pet.get_node_or_null("AnimatedWingLeft") as Node3D
+   var wing_right: Node3D = pet.get_node_or_null("AnimatedWingRight") as Node3D
+   if wing_left != null:
+    wing_left.rotation.z = -0.25 - wing_flutter * 5.0
+   if wing_right != null:
+    wing_right.rotation.z = 0.25 + wing_flutter * 5.0
+   var animated_tail: Node3D = pet.get_node_or_null("AnimatedTail") as Node3D
+   if animated_tail != null:
+    animated_tail.rotation.y = sin(animation_clock * 2.8 + float(i)) * 0.24
  if attack_flash > 0.0:
   attack_flash = maxf(0.0, attack_flash - delta)
 
