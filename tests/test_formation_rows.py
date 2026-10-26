@@ -28,13 +28,14 @@ class FormationRowsTests(unittest.TestCase):
     def test_spacing_provides_room_for_companions_on_portrait_phones(self):
         body = method("_formation_position")
         self.assertIn(
-            "var spacing: float = 2.05 if row.size() <= 3 else 1.48",
+            "var spacing: float = (1.82 if not in_front else 2.05) if row.size() <= 3 else 1.45",
             body,
         )
-        # Three rear-row heroes are evenly spread while an all-melee
+        # Three rear-row heroes are staggered in depth while an all-melee
         # four-hero front row remains inside the path.
-        self.assertEqual([(i - 1) * 2.05 for i in range(3)], [-2.05, 0.0, 2.05])
-        self.assertAlmostEqual((3 - 1.5) * 1.48, 2.22)
+        self.assertEqual([(i - 1) * 1.82 for i in range(3)], [-1.82, 0.0, 1.82])
+        self.assertAlmostEqual((3 - 1.5) * 1.45, 2.175)
+        self.assertIn("depth += 0.60 if index_in_row == 1 else -0.18", body)
 
     def test_companions_stay_children_of_owner(self):
         body = method("create_team")
