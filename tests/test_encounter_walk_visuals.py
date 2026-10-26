@@ -19,6 +19,12 @@ class EncounterWalkTests(unittest.TestCase):
         self.assertIn("pet_bob_height: float = 0.10 if is_walking else 0.15", TEAM)
         self.assertIn("pet.rotation.y += delta", TEAM)
 
+    def test_portrait_formation_spacing_and_hp_clearance(self):
+        self.assertIn("var spacing: float = 2.05 if row.size() <= 3 else 1.48", TEAM)
+        self.assertIn("return Vector3(x, 0.0, -2.15 if in_front else 1.25)", TEAM)
+        self.assertIn("pet.position = Vector3(pet_side * 1.12, 0.0, 0.12)", TEAM)
+        self.assertIn("bar.position = Vector3(0.0, 3.02, 0.0)", TEAM)
+
     def test_cancelled_walk_does_not_finish(self):
         self.assertIn('func stop_walking()', TEAM)
         self.assertIn('walk_tween.kill()', TEAM)
