@@ -22,17 +22,22 @@ func _ready() -> void:
  panel = PanelContainer.new()
  panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  panel.offset_left = 24.0
- panel.offset_top = 130.0
+ panel.offset_top = 95.0
  panel.offset_right = -24.0
- panel.offset_bottom = -130.0
+ panel.offset_bottom = -95.0
  panel.custom_minimum_size = Vector2.ZERO
  add_child(panel)
+ var scroll := ScrollContainer.new()
+ scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ panel.add_child(scroll)
  var v := VBoxContainer.new()
- v.add_theme_constant_override("separation", 14)
- panel.add_child(v)
+ v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ v.add_theme_constant_override("separation", 10)
+ scroll.add_child(v)
  var title := Label.new()
  title.text = "TEAM & KLASSEN"
- title.add_theme_font_size_override("font_size", 28)
+ title.add_theme_font_size_override("font_size", 25)
  v.add_child(title)
  slot_selector = OptionButton.new()
  for i in range(4):
@@ -66,11 +71,11 @@ func _ready() -> void:
  v.add_child(description)
  var apply := Button.new()
  apply.text = "Klasse, Rolle und Begleiter uebernehmen"
- apply.custom_minimum_size.y = 75
+ apply.custom_minimum_size.y = 60
  v.add_child(apply)
  var close := Button.new()
  close.text = "Schliessen"
- close.custom_minimum_size.y = 65
+ close.custom_minimum_size.y = 55
  v.add_child(close)
  apply.pressed.connect(_apply)
  close.pressed.connect(func(): visible = false)
@@ -102,7 +107,7 @@ func _refresh_description() -> void:
   if role_selector.get_item_id(idx) == current_role:
    role_selector.select(idx)
    break
- description.text = "Moegliche Rollen: " + CLASS_ROLES[selected_class] + "\nBegleiter bleiben passiv."
+ description.text = "Rollen: " + CLASS_ROLES[selected_class] + "\nBegleiter bleiben passiv. Gleiche Arten und Elemente sind erlaubt."
  bonus_label.text = "Teambonus +5%: " + ("AKTIV" if team_formation.has_formation_bonus() else "INAKTIV")
 func _apply() -> void:
  var chosen_role: int = role_selector.get_selected_id()
