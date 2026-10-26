@@ -423,7 +423,7 @@ func _trigger_prepared_healing() -> void:
    var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
    var modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
    modifier *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
-   var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier))
+   var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier * _member_power(slot)))
    _heal_heroes(amount, bool(skill.get("aoe", false)))
   last_ability = "Vorbereitete Heilung"
   if not _has_wounded_hero():
@@ -477,7 +477,7 @@ func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
  var class_id: int = int(team_formation.class_ids[_caster]) if team_formation != null else 9
  var hot_modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("hot", 1.0))
  hot_modifier *= 1.0 + float(_hero_progression(_caster).get("healing", 0.0))
- var new_amount: int = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier))
+ var new_amount: int = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier * _member_power(_caster)))
  # A weaker or shorter HoT must never erase stronger ongoing healing.
  if hero_hot_ticks[target] > 0:
   hero_hot_amount[target] = maxi(hero_hot_amount[target], new_amount)
@@ -750,7 +750,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
   healing *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
   if _has_wounded_hero():
-   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
+   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing * _member_power(slot))), bool(skill.get("aoe", false)))
   else:
    prepared_healing[slot] = choice
    last_ability = "Heilung vorbereitet"
@@ -760,7 +760,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
   if role == 2 and team_formation != null:
    damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
-  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2))))
+  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)) * _member_power(slot)))
   _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
@@ -831,6 +831,11 @@ func _boss_minions_attack() -> void:
   if target >= 0:
    # Each add deals ~2% of target max HP per enemy attack tick.
    _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.02 * TitanCombatBalance.enemy_damage_scale(current_level))), [target])
+
+func _member_power(slot: int) -> float:
+ if team_formation != null and team_formation.has_method("combat_power_multiplier"):
+  return float(team_formation.combat_power_multiplier(slot))
+ return 1.0
 
 func _hero_attack(slot: int, role: int) -> void:
  if not battle_active or enemy_hp <= 0:
