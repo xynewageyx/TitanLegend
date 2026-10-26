@@ -161,8 +161,18 @@ func _process(delta: float) -> void:
    # Passive companion stays beside its hero; only its idle motion changes.
    var pet_bob_speed: float = 5.2 if is_walking else 3.4
    var pet_bob_height: float = 0.10 if is_walking else 0.15
-   pet.position.y = 0.12 + sin(animation_clock * pet_bob_speed + float(i)) * pet_bob_height
-   pet.rotation.y += delta * (0.85 if is_walking else 0.65)
+   var pet_phase: float = animation_clock * pet_bob_speed + float(i) * 1.4
+   pet.position.y = 0.12 + sin(pet_phase) * pet_bob_height
+   # Keep the face oriented toward the camera instead of spinning endlessly.
+   pet.rotation.y = sin(animation_clock * 1.1 + float(i)) * 0.16
+   pet.rotation.z = sin(animation_clock * 2.0 + float(i)) * 0.055
+   # Gentle breathing and species-specific idle movement remain purely visual.
+   var pet_species: int = pet_species_ids[i] if i < pet_species_ids.size() else 0
+   var breath: float = 1.0 + 0.035 * sin(animation_clock * 2.2 + float(i))
+   var wing_flutter: float = 0.055 * sin(animation_clock * 4.0 + float(i)) if pet_species in [3, 4, 8] else 0.0
+   var serpent_sway: float = 0.08 * sin(animation_clock * 1.7 + float(i)) if pet_species == 9 else 0.0
+   pet.scale = Vector3(breath + wing_flutter, breath, breath)
+   pet.rotation.z += serpent_sway
  if attack_flash > 0.0:
   attack_flash = maxf(0.0, attack_flash - delta)
 
