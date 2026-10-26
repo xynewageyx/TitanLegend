@@ -15,9 +15,9 @@ func _formation_position(slot: int) -> Vector3:
  var index_in_row: int = row.find(slot)
  # Keep compact all-melee teams inside the path, but give mixed teams
  # enough lateral room for large helmets, weapons and passive companions.
- var spacing: float = 1.7 if row.size() <= 3 else 1.35
+ var spacing: float = 2.05 if row.size() <= 3 else 1.48
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
- return Vector3(x, 0.0, -1.7 if in_front else 1.0)
+ return Vector3(x, 0.0, -2.15 if in_front else 1.25)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
@@ -449,7 +449,7 @@ func create_team() -> void:
   # Place passive pets on the outer side of each row to avoid crowding.
   var anchor_x: float = _formation_position(i).x
   var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0
-  pet.position = Vector3(pet_side * 1.05, 0.0, 0.35)
+  pet.position = Vector3(pet_side * 1.12, 0.0, 0.12)
   hero.add_child(pet)
   preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
   DesignDetails.pet(pet, i)
@@ -480,7 +480,7 @@ func _create_hero_health_bar(hero: Node3D) -> void:
   old.queue_free()
  var bar: Node3D = Node3D.new()
  bar.name = "HeroHealthBar"
- bar.position = Vector3(0.0, 2.68, 0.0)
+ bar.position = Vector3(0.0, 3.02, 0.0)
  hero.add_child(bar)
  # Update 144: a larger, high-contrast health display for portrait screens.
  var frame: MeshInstance3D = _health_bar_piece(bar, "Frame", Color(0.02, 0.04, 0.08, 0.98), -0.012)
@@ -491,7 +491,7 @@ func _create_hero_health_bar(hero: Node3D) -> void:
  (fill.mesh as QuadMesh).size = Vector2(1.04, 0.14)
  var value_label: Label3D = Label3D.new()
  value_label.name = "HPValue"
- value_label.position = Vector3(0.0, 0.19, 0.04)
+ value_label.position = Vector3(0.0, 0.23, 0.04)
  value_label.font_size = 34
  value_label.pixel_size = 0.004
  value_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
