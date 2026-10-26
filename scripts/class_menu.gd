@@ -5,6 +5,10 @@ var slot_selector: OptionButton
 var class_selector: OptionButton
 var description: Label
 var role_selector: OptionButton
+var pet_species_selector: OptionButton
+var pet_element_selector: OptionButton
+const PET_SPECIES := ["Fuchs", "Schildkroete", "Hirsch", "Eule", "Drache"]
+const PET_ELEMENTS := ["Feuer", "Wasser", "Natur", "Licht", "Schatten", "Wind", "Eis", "Blitz", "Erde", "Chaos"]
 var bonus_label: Label
 const CLASS_ROLES := ["Tank / DD", "Tank / DD / Heilung", "Tank / DD / Heilung", "Tank / DD / Heilung", "DD", "DD", "DD", "DD", "DD", "Heilung / DD", "DD"]
 func _ready() -> void:
@@ -40,6 +44,18 @@ func _ready() -> void:
  v.add_child(class_selector)
  role_selector = OptionButton.new()
  v.add_child(role_selector)
+ var pet_heading := Label.new()
+ pet_heading.text = "PASSIVER BEGLEITER"
+ pet_heading.add_theme_font_size_override("font_size", 21)
+ v.add_child(pet_heading)
+ pet_species_selector = OptionButton.new()
+ for i in range(PET_SPECIES.size()):
+  pet_species_selector.add_item(PET_SPECIES[i], i)
+ v.add_child(pet_species_selector)
+ pet_element_selector = OptionButton.new()
+ for i in range(PET_ELEMENTS.size()):
+  pet_element_selector.add_item(PET_ELEMENTS[i], i)
+ v.add_child(pet_element_selector)
  bonus_label = Label.new()
  bonus_label.add_theme_font_size_override("font_size", 22)
  bonus_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -49,7 +65,7 @@ func _ready() -> void:
  description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  v.add_child(description)
  var apply := Button.new()
- apply.text = "Klasse und Rolle uebernehmen"
+ apply.text = "Klasse, Rolle und Begleiter uebernehmen"
  apply.custom_minimum_size.y = 75
  v.add_child(apply)
  var close := Button.new()
@@ -66,6 +82,8 @@ func open_menu() -> void:
  _sync_slot()
 func _sync_slot() -> void:
  class_selector.select(team_formation.class_ids[slot_selector.selected])
+ pet_species_selector.select(team_formation.pet_species_ids[slot_selector.selected])
+ pet_element_selector.select(team_formation.pet_element_ids[slot_selector.selected])
  _refresh_description()
 func _refresh_description() -> void:
  role_selector.clear()
@@ -98,4 +116,6 @@ func _apply() -> void:
  if not team_formation.set_role(slot, chosen_role):
   description.text = "Rollenwechsel abgelehnt: Tankplatz bereits belegt."
   return
+ team_formation.set_pet_species(slot, pet_species_selector.get_selected_id())
+ team_formation.set_pet_element(slot, pet_element_selector.get_selected_id())
  _refresh_description()
