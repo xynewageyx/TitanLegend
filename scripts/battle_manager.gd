@@ -256,7 +256,7 @@ func _sync_team_health() -> void:
 func _reset_hero_health() -> void:
  for i in range(4):
   var pet_health: float = float(_pet_stats(i).get("health", 0.0))
-  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health + GameManager.hardening_bonus(i, 2) + GameManager.loot_bonus(i, 0))))
+  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health + GameManager.hardening_bonus(i, 2) + GameManager.loot_bonus(i, 0)) * team_formation.combat_power_multiplier(i)))
   hero_hp[i] = hero_max_hp[i]
  tank_taunt_until.fill(0)
  tank_intercept_until.fill(0)
@@ -842,7 +842,7 @@ func _hero_attack(slot: int, role: int) -> void:
  var multiplier: float = TitanSkillSystem.damage_multiplier(role)
  var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
  var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)
- var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0)))
+ var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0) * team_formation.combat_power_multiplier(slot)))
  _deal_damage_to_enemy(slot, actual_damage)
  if not battle_active:
   return
