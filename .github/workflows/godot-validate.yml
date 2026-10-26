@@ -64,6 +64,10 @@ jobs:
         run: python3 tests/test_boss_warning_visuals.py
       - name: Check portrait exploration camera
         run: python3 tests/test_portrait_exploration_camera.py
+      - name: Check fantasy costume and elemental pet models
+        run: |
+          python3 tests/test_fantasy_costumes.py
+          python3 tests/test_pet_creature_visuals.py
       - name: Test all hero class and role visual models
         shell: bash
         run: |
