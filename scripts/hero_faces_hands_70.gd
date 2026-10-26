@@ -18,5 +18,13 @@ static func decorate(hero: Node3D, class_id: int) -> void:
   VisualFactory.sphere(hero, 0.145, Vector3(side * 0.49, 0.81, -0.06), trim.darkened(0.28))
   for finger in range(3):
    VisualFactory.sphere(hero, 0.045, Vector3(side * (0.42 + float(finger) * 0.065), 0.725, -0.175), trim.lightened(0.12))
+ # Stylized cheeks, ears and mouth add expression without texture assets.
+ for side in [-1.0, 1.0]:
+  var ear := VisualFactory.sphere(hero, 0.105, Vector3(side * 0.315, 1.94, 0.0), skin_tone)
+  ear.scale = Vector3(0.55, 1.18, 0.73)
+  var cheek := VisualFactory.sphere(hero, 0.115, Vector3(side * 0.18, 1.88, -0.251), skin_tone.lightened(0.08))
+  cheek.scale = Vector3(0.95, 0.48, 0.45)
+ var mouth := VisualFactory.sphere(hero, 0.07, Vector3(0.0, 1.82, -0.294), Color("#965e54"))
+ mouth.scale = Vector3(1.3, 0.24, 0.3)
  # A subtle collar softens the head-to-body transition.
  VisualFactory.sphere(hero, 0.17, Vector3(0.0, 1.76, 0.02), trim.darkened(0.2))
