@@ -18,16 +18,19 @@ func _ready() -> void:
  panel.add_child(center)
  var stack := VBoxContainer.new()
  stack.alignment = BoxContainer.ALIGNMENT_CENTER
+ stack.custom_minimum_size = Vector2(260, 130)
  stack.add_theme_constant_override("separation", 18)
  center.add_child(stack)
  headline = Label.new()
  headline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- headline.add_theme_font_size_override("font_size", 50)
+ headline.add_theme_font_size_override("font_size", 38)
+ headline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  headline.add_theme_color_override("font_color", Color(1.0, 0.81, 0.3))
  stack.add_child(headline)
  subtitle = Label.new()
  subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- subtitle.add_theme_font_size_override("font_size", 26)
+ subtitle.add_theme_font_size_override("font_size", 21)
+ subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  subtitle.add_theme_color_override("font_color", Color.WHITE)
  stack.add_child(subtitle)
 
@@ -40,8 +43,8 @@ func show_intro(boss: Node3D, element_name: String, fusion: bool) -> void:
  var enlarged_scale := initial_scale * (1.20 if fusion else 1.08)
  var intro := create_tween()
  intro.set_parallel(true)
- intro.tween_property(panel, "modulate:a", 1.0, 0.3)
- intro.tween_property(boss, "scale", enlarged_scale, 0.55).set_trans(Tween.TRANS_BACK)
+ intro.tween_property(panel, "modulate:a", 1.0, 0.3).set_trans(Tween.TR_CUBIC).set_ease(Tween.EASE_OUT)
+ intro.tween_property(boss, "scale", enlarged_scale, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
  await intro.finished
  if not is_instance_valid(boss):
   panel.visible = false
@@ -49,7 +52,7 @@ func show_intro(boss: Node3D, element_name: String, fusion: bool) -> void:
   return
  var outro := create_tween()
  outro.set_parallel(true)
- outro.tween_property(boss, "scale", initial_scale, 0.5)
+ outro.tween_property(boss, "scale", initial_scale, 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
  outro.tween_property(panel, "modulate:a", 0.0, 0.6).set_delay(0.55)
  await outro.finished
  panel.visible = false
