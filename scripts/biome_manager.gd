@@ -77,6 +77,7 @@ func generate_terrain() -> void:
  if current_biome == 3:
   NatureArt.forest(terrain)
   _add_forest_depth()
+  _add_forest_variation()
 
 func _add_forest_depth() -> void:
  # Fill distant forest edges without extra physics bodies or textures.
@@ -170,3 +171,21 @@ func _add_element_roadside_accents() -> void:
    BiomeType.CHAOS:
     var shard := VisualFactory.box(terrain, Vector3(0.5, 0.8, 0.4), at + Vector3(0.0, 0.4, 0.0), Color("#c257a1"))
     shard.rotation.z = 0.32
+
+func _add_forest_variation() -> void:
+ # Deterministic roadside stones and flower clusters, outside the walking lane.
+ var rng := RandomNumberGenerator.new()
+ rng.seed = 20261026
+ for i in range(18):
+  var side: float = -1.0 if i % 2 == 0 else 1.0
+  var x: float = side * rng.randf_range(5.2, 12.0)
+  var z: float = rng.randf_range(-80.0, 12.0)
+  if i % 3 == 0:
+   var rock := VisualFactory.sphere(terrain, rng.randf_range(0.32, 0.62), Vector3(x, 0.28, z), Color("#89927b"))
+   rock.scale = Vector3(1.3, 0.62, 0.9)
+  else:
+   var foliage := Color("#367d48").lerp(Color("#8dbd57"), rng.randf())
+   for leaf in range(3):
+    VisualFactory.sphere(terrain, 0.19, Vector3(x + float(leaf - 1) * 0.25, 0.19, z), foliage)
+   if i % 3 == 1:
+    VisualFactory.sphere(terrain, 0.11, Vector3(x, 0.42, z), Color("#f0d37e"))
