@@ -9,12 +9,15 @@ TEAM = (ROOT / "scripts/team_formation.gd").read_text(encoding="utf-8")
 
 class PetCreatureVisualTests(unittest.TestCase):
     def test_new_creature_shapes_are_used(self):
-        self.assertIn('preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)', TEAM)
+        self.assertIn('preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], pet_species_ids[i])', TEAM)
         for marker in ("muzzle", "foot", "horn", "tail", "crest"):
             self.assertIn(marker, PETS)
 
     def test_five_distinct_animal_profiles(self):
-        self.assertIn("match posmod(element, 5):", PETS)
+        self.assertIn("match clampi(species, 0, 4):", PETS)
+        self.assertIn("var pet_species_ids: Array[int]", TEAM)
+        self.assertIn("func set_pet_species(slot: int, species: int)", TEAM)
+        self.assertIn("user://pet_species.json", TEAM)
         for marker in ("fox_tail", "shell", "antler", "beak", "spine"):
             self.assertIn(marker, PETS)
 
