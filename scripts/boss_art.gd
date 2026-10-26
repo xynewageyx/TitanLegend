@@ -100,6 +100,8 @@ static func build(parent: Node3D, element: int, fused: bool) -> void:
  add_anatomy(parent, element, fused)
  add_element_identity(parent, element, fused)
  add_limb_profiles(parent, element, fused)
+ if element == 3:
+  add_forest_guardian(parent, fused)
 
 
 # Update 69: Additional silhouette-defining anatomy. Each element has its own
@@ -266,3 +268,32 @@ static func add_limb_profiles(parent: Node3D, element: int, fused: bool) -> void
  if fused:
   # A small extra fusion accent, without changing hitboxes.
   VisualFactory.sphere(parent, 0.3, Vector3(0, 2.75, -0.92), Color('#ff4ce2'))
+
+
+# A recognisable woodland guardian with an expressive face and branching crown.
+# Mesh-only embellishment: existing attack timings, health and collision remain intact.
+static func add_forest_guardian(parent: Node3D, fused: bool) -> void:
+ var bark := Color("#655038")
+ var leaves := Color("#368650")
+ var trunk := VisualFactory.cylinder(parent, 3.35, 1.04, Vector3(0, 2.72, 0.12), bark)
+ trunk.scale.z = 0.78
+ for side in [-1.0, 1.0]:
+  var root := VisualFactory.cylinder(parent, 2.1, 0.36, Vector3(side * 0.95, 0.90, 0.16), bark.darkened(0.13))
+  root.rotation.z = side * 0.43
+  var branch := VisualFactory.cylinder(parent, 2.35, 0.22, Vector3(side * 1.52, 5.05, 0.12), bark)
+  branch.rotation.z = side * 0.64
+  var twig := VisualFactory.cylinder(parent, 1.15, 0.12, Vector3(side * 2.13, 5.89, 0.14), bark.lightened(0.09))
+  twig.rotation.z = -side * 0.44
+  var crown := VisualFactory.sphere(parent, 1.02, Vector3(side * 1.42, 6.1, 0.15), leaves.lightened(0.06))
+  crown.scale = Vector3(1.1, 0.78, 0.82)
+  var eye := VisualFactory.sphere(parent, 0.23, Vector3(side * 0.44, 4.12, -0.77), Color("#b7f5a1"))
+  eye.scale.z = 0.45
+  VisualFactory.sphere(parent, 0.09, Vector3(side * 0.44, 4.12, -0.91), Color("#213b27"))
+ var brow := VisualFactory.sphere(parent, 0.81, Vector3(0, 4.55, -0.22), bark.darkened(0.20))
+ brow.scale = Vector3(1.18, 0.40, 0.85)
+ var jaw := VisualFactory.sphere(parent, 0.58, Vector3(0, 3.43, -0.69), bark.darkened(0.29))
+ jaw.scale = Vector3(1.2, 0.28, 0.45)
+ var center_crown := VisualFactory.sphere(parent, 1.1, Vector3(0, 6.42, 0.35), leaves)
+ center_crown.scale = Vector3(1.35, 0.85, 0.95)
+ if fused:
+  VisualFactory.sphere(parent, 0.42, Vector3(0, 5.45, -0.72), Color("#e19dff"))
