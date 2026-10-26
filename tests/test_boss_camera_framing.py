@@ -23,6 +23,11 @@ class BossCameraTests(unittest.TestCase):
         self.assertIn("separation * 1.65", CAMERA)
         self.assertIn("look_at(focus, Vector3.UP)", CAMERA)
 
+    def test_boss_camera_zoom_is_bounded_for_portrait(self):
+        self.assertIn("clampf(framing_distance * 1.05, 12.5, 22.0)", CAMERA)
+        self.assertIn("clampf(framing_distance * 1.65, 19.0, 34.0)", CAMERA)
+        self.assertIn("Vector2(team_position.x - boss_position.x", CAMERA)
+
     def test_scene_has_expected_nodes_and_procedural_boss(self):
         self.assertIn('[node name="TeamFormation"', SCENE)
         self.assertIn('[node name="EnemySpawn"', SCENE)
