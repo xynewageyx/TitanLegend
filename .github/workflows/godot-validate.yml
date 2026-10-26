@@ -96,7 +96,7 @@ jobs:
           mkdir -p "$HOME/.local/share/godot/export_templates/4.6.stable"
           unzip -q /tmp/templates.tpz -d /tmp/godot-templates
           cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.6.stable/"
-      - name: Configure Android SDK and debug signing
+      - name: Configure Android SDK and persistent debug signing
         shell: bash
         run: |
           set -euo pipefail
@@ -105,10 +105,34 @@ jobs:
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0" "platform-tools"
           mkdir -p "$HOME/.android"
-          keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          if [ -z "${{ secrets.TITAN_ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "::error::Set TITAN_ANDROID_KEYSTORE_BASE64 repository secret to a persistent base64-encoded debug keystore. Do not generate a fresh key on each run."
+            exit 1
+          fi
+          printf '%s' "${{ secrets.TITAN_ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > "$HOME/.android/debug.keystore"
+          keytool -list -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey >/dev/null
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$HOME/.android/debug.keystore" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+      - name: Increment Android version code for installable updates
+        shell: bash
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+          path = Path("export_presets.cfg")
+          content = path.read_text()
+          code = int(os.environ["BUILD_NUMBER"]) + 1
+          updated, count = re.subn(r'(?m)^version/code=\d+$', f'version/code={code}', content, count=1)
+          if count != 1:
+              raise SystemExit("Expected exactly one Android version/code entry")
+          path.write_text(updated)
+          print(f"Android versionCode: {code}")
+          PY
       - name: Validate Android debug APK export
         shell: bash
         run: |
