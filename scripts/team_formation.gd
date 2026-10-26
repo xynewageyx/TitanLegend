@@ -48,6 +48,9 @@ func set_human_occupied(slot: int, occupied: bool) -> bool:
  return true
 
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
+# Creature shape is selected independently from elemental affinity.
+# Duplicates across all four players are intentionally permitted.
+var pet_species_ids: Array[int] = [0, 1, 2, 3]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
 const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1]]
 signal team_changed
@@ -334,6 +337,7 @@ func _ready() -> void:
  _load_classes()
  _load_roles()
  _load_pet_elements()
+ _load_pet_species()
  talent_ranks = SaveManager.get_saved_talents()
  talent_branches = SaveManager.get_saved_talent_branches()
  create_team()
@@ -476,7 +480,7 @@ func create_team() -> void:
   # Keep passive pets beside their owner, away from the center of the row.
   pet.position = Vector3(pet_side * 1.30, 0.0, -0.35)
   hero.add_child(pet)
-  preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
+  preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], pet_species_ids[i])
   DesignDetails.pet(pet, i)
   HeroWeapons47.decorate_pet(pet, class_ids[i])
  _apply_equipped_skins()
@@ -822,6 +826,29 @@ func _load_pet_elements() -> void:
  if data is Array and data.size() == 4:
   for i in range(4):
    pet_element_ids[i] = clampi(int(data[i]), 0, 9)
+
+func _load_pet_species() -> void:
+ if not FileAccess.file_exists("user://pet_species.json"):
+  return
+ var file := FileAccess.open("user://pet_species.json", FileAccess.READ)
+ if file == null:
+  return
+ var data: Variant = JSON.parse_string(file.get_as_text())
+ if data is Array and data.size() == 4:
+  for i in range(4):
+   pet_species_ids[i] = clampi(int(data[i]), 0, 4)
+
+func set_pet_species(slot: int, species: int) -> void:
+ if slot < 0 or slot >= 4:
+  return
+ var selected_species: int = clampi(species, 0, 4)
+ if pet_species_ids[slot] == selected_species:
+  return
+ pet_species_ids[slot] = selected_species
+ var file := FileAccess.open("user://pet_species.json", FileAccess.WRITE)
+ if file != null:
+  file.store_string(JSON.stringify(pet_species_ids))
+ create_team()
 
 func set_pet_element(slot: int, element: int) -> void:
  if slot < 0 or slot >= 4:
