@@ -524,17 +524,18 @@ func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> v
 func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  # Update 66: rounded torso and articulated limbs replace the old rigid cubes.
  var torso: MeshInstance3D = VisualFactory.sphere(hero, 0.52, Vector3(0, 1.25, 0), color)
- torso.scale = Vector3(1.05, 1.38, 0.72)
+ torso.scale = Vector3(0.94, 1.26, 0.69)
  var waist: MeshInstance3D = VisualFactory.sphere(hero, 0.35, Vector3(0, 0.80, 0), color.darkened(0.16))
  waist.scale = Vector3(1.14, 0.65, 0.83)
  var head: MeshInstance3D = VisualFactory.sphere(hero, 0.29, Vector3(0, 1.94, 0), Color("#f0c3a0"))
  head.name = "HeroHead"
+ head.scale = Vector3(1.12, 1.16, 0.92)
  # Update 121: readable facial features and layered silhouette in portrait view.
  # Reuse low-poly primitives; no texture or shader imports required on Android.
  var hair_color: Color = Color("#423329") if role == 0 else (Color("#61482e") if role == 1 else (Color("#313c34") if role == 2 else Color("#b5a16e")))
  var hair: MeshInstance3D = VisualFactory.sphere(hero, 0.295, Vector3(0, 2.075, 0.055), hair_color)
  hair.name = "HeroHair"
- hair.scale = Vector3(1.04, 0.48, 0.90)
+ hair.scale = Vector3(1.12, 0.52, 0.94)
  for eye_side in [-1.0, 1.0]:
   VisualFactory.sphere(hero, 0.042, Vector3(eye_side * 0.105, 1.97, -0.272), Color("#1e2633"))
   VisualFactory.sphere(hero, 0.055, Vector3(eye_side * 0.105, 2.035, -0.267), hair_color)
