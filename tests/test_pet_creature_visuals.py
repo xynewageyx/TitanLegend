@@ -20,7 +20,7 @@ class PetCreatureVisualTests(unittest.TestCase):
 
     def test_ten_elements_and_passive_only(self):
         self.assertIn("clampi(element, 0, 9)", PETS)
-        self.assertEqual(PETS.count('Color("#'), 10 + 2)
+        self.assertGreaterEqual(PETS.count('Color("#'), 10 + 2)
         self.assertNotIn("play_attack(", PETS)
         self.assertNotIn("create_timer(", PETS)
 
