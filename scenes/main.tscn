@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 [ext_resource type="Script" path="res://scripts/biome_manager.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/team_formation.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/battle_manager.gd" id="3"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/skill_menu.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/talent_menu.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/world_transition.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/procedural_battle_lane.gd" id="10"]
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
 background_color = Color(0.04, 0.12, 0.08, 1)
@@ -27,6 +28,9 @@ script = ExtResource("5")
 script = ExtResource("1")
 environment_node = NodePath("../WorldEnvironment")
 sun_light = NodePath("../Sun")
+[node name="BattleLandscape" type="Node3D" parent="."]
+script = ExtResource("10")
+
 [node name="TeamFormation" type="Node3D" parent="."]
 position = Vector3(0, 0, 3)
 script = ExtResource("2")
