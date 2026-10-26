@@ -46,5 +46,8 @@ func _desired_view() -> Dictionary:
   # Frame the space between the heroes and the enemy, with extra headroom.
   focus = (team_position + boss_position) * 0.5 + Vector3(0.0, 2.2, 0.0)
   var separation: float = team_position.distance_to(boss_position)
-  offset = Vector3(0.0, maxf(12.5, separation * 1.05), maxf(19.0, separation * 1.65))
+  # Use horizontal battlefield separation; vertical boss placement should not zoom the camera.
+  var flat_separation: float = Vector2(team_position.x - boss_position.x, team_position.z - boss_position.z).length()
+  var framing_distance: float = maxf(separation, flat_separation)
+  offset = Vector3(0.0, clampf(framing_distance * 1.05, 12.5, 22.0), clampf(framing_distance * 1.65, 19.0, 34.0))
  return {"position": focus + offset, "focus": focus}
