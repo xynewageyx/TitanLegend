@@ -320,10 +320,13 @@ func _process(delta: float) -> void:
   warning_ring.visible = windup_remaining > 0.0
   if warning_ring.visible:
    var progress: float = clampf(1.0 - windup_remaining / maxf(windup_duration, 0.01), 0.0, 1.0)
-   var pulse: float = 1.0 + 0.10 * sin(progress * TAU * 3.0)
-   warning_ring.scale = Vector3(pulse, 1.0, pulse)
+   # The tell accelerates near release and remains distinct for fused titans.
+   var pulse_speed: float = lerpf(2.0, 6.0, progress)
+   var pulse: float = 1.0 + (0.08 + progress * 0.09) * sin(progress * TAU * pulse_speed)
+   var warning_size: float = 1.18 if fusion else 1.0
+   warning_ring.scale = Vector3(pulse * warning_size, 1.0, pulse * warning_size)
    var tint: Color = WARNING_COLORS[clampi(element_id, 0, 9)]
-   tint.a = 0.30 + progress * 0.65
+   tint.a = clampf(0.30 + progress * 0.60 + (0.08 if enraged else 0.0), 0.0, 1.0)
    warning_material.albedo_color = tint
  var energy: float = 1.55 if enraged else 1.0
  var amplitude: float = 0.07 * energy * (1.3 if fusion else 1.0)
