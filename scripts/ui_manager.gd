@@ -94,7 +94,7 @@ func _ready() -> void:
  equipment_close.offset_right = -12
  equipment_close.offset_top = 14
  equipment_close.offset_bottom = 66
- equipment_close.pressed.connect(func() -> void: equipment_panel_214.hide())
+ equipment_close.pressed.connect(_close_equipment_panel)
  equipment_panel_214.add_child(equipment_close)
  # Restyle all existing functional full-screen submenus.
  for menu in [$ClassMenu, $SkillMenu, $TalentMenu, skin_shop_menu]:
@@ -432,6 +432,10 @@ func _make_hud() -> void:
  offline_notice.hide()
  _select_chat("Alle")
  _apply_chat_visibility()
+
+func _close_equipment_panel() -> void:
+ if equipment_panel_214 != null:
+  equipment_panel_214.hide()
 
 func _open_menu(target: String) -> void:
  # Do not leave the previous modal visible behind a full-screen submenu.
