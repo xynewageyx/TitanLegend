@@ -836,12 +836,12 @@ func _load_pet_species() -> void:
  var data: Variant = JSON.parse_string(file.get_as_text())
  if data is Array and data.size() == 4:
   for i in range(4):
-   pet_species_ids[i] = clampi(int(data[i]), 0, 4)
+   pet_species_ids[i] = clampi(int(data[i]), 0, 9)
 
 func set_pet_species(slot: int, species: int) -> void:
  if slot < 0 or slot >= 4:
   return
- var selected_species: int = clampi(species, 0, 4)
+ var selected_species: int = clampi(species, 0, 9)
  if pet_species_ids[slot] == selected_species:
   return
  pet_species_ids[slot] = selected_species
