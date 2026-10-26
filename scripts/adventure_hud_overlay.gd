@@ -14,6 +14,7 @@ const NAV_ENTRIES := [
  ["⋯", "Mehr", "more"]
 ]
 const MORE_ENTRIES := [
+ ["▣ Ausrüstung", "equipment"],
  ["✥ Talente", "talents"],
  ["✧ Reinkarnation", "reincarnation"],
  ["✦ Astralprüfung", "astral"],
@@ -237,7 +238,7 @@ func _build_navigation() -> void:
  more_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
  more_panel.offset_left = -366
  more_panel.offset_right = -10
- more_panel.offset_top = -344
+ more_panel.offset_top = -430
  more_panel.offset_bottom = -140
  more_panel.mouse_filter = Control.MOUSE_FILTER_STOP
  more_panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 18, 4))
@@ -270,6 +271,9 @@ func _process(_delta: float) -> void:
  var cosmetics: Variant = hud.get("skin_shop_menu")
  if cosmetics is Control and (cosmetics as Control).visible:
   modal_active = true
+ var equipment_view: Variant = hud.get("equipment_panel_214")
+ if equipment_view is Control and (equipment_view as Control).visible:
+  modal_active = true
  var actions: Variant = hud.get("action_panel")
  if actions is Control and (actions as Control).visible:
   modal_active = true
@@ -290,7 +294,7 @@ func _on_navigation(target: String) -> void:
  _update_nav_selection()
  if hud != null:
   hud.call("_open_menu", target)
-  if target in ["team", "skills", "talents", "shop"]:
+  if target in ["team", "skills", "talents", "shop", "equipment"]:
    hide()
 
 func _update_nav_selection() -> void:
