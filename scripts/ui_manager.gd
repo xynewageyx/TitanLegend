@@ -66,6 +66,7 @@ var attribute_apply_button: Button
 var attribute_reroll_button: Button
 var skin_shop_menu: Control
 var adventure_overlay: Control
+var equipment_panel_214: Control
 
 func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_PASS
@@ -82,6 +83,19 @@ func _ready() -> void:
  skin_shop_menu = Control.new()
  skin_shop_menu.set_script(load("res://scripts/skin_shop_menu.gd"))
  add_child(skin_shop_menu)
+ equipment_panel_214 = Control.new()
+ equipment_panel_214.set_script(load("res://scripts/equipment_panel_214.gd"))
+ add_child(equipment_panel_214)
+ equipment_panel_214.hide()
+ var equipment_close := Button.new()
+ equipment_close.text = "✕ Schließen"
+ equipment_close.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+ equipment_close.offset_left = -175
+ equipment_close.offset_right = -12
+ equipment_close.offset_top = 14
+ equipment_close.offset_bottom = 66
+ equipment_close.pressed.connect(func() -> void: equipment_panel_214.hide())
+ equipment_panel_214.add_child(equipment_close)
  # Restyle all existing functional full-screen submenus.
  for menu in [$ClassMenu, $SkillMenu, $TalentMenu, skin_shop_menu]:
   ADVENTURE_THEME.style_menu_tree(menu)
@@ -422,6 +436,13 @@ func _make_hud() -> void:
 func _open_menu(target: String) -> void:
  # Do not leave the previous modal visible behind a full-screen submenu.
  action_panel.hide()
+ if equipment_panel_214 != null:
+  equipment_panel_214.hide()
+ if target == "equipment":
+  equipment_panel_214.call("refresh_from_game")
+  equipment_panel_214.show()
+  move_child(equipment_panel_214, get_child_count() - 1)
+  return
  if target == "shop":
   skin_shop_menu.open_menu()
   return
