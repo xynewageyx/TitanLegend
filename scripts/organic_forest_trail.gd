@@ -20,8 +20,8 @@ static func create(parent: Node3D) -> void:
   var right := Vector3(center + width, -0.038, z)
   var tint: Color = Color("#a18a68").lerp(Color("#77654d"), rng.randf_range(0.05, 0.6))
   if i > 0:
-   _triangle(surface, prev_left, prev_right, left, prev_tint, tint)
-   _triangle(surface, left, prev_right, right, tint, prev_tint)
+   _triangle(surface, prev_left, left, prev_right, prev_tint, tint)
+   _triangle(surface, left, right, prev_right, tint, prev_tint)
   prev_left = left
   prev_right = right
   prev_tint = tint
