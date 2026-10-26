@@ -210,8 +210,10 @@ func _process(delta: float) -> void:
   magic_flash.visible = true
   var fx_strength: float = 0.75 if class_id in [2, 4] else (1.25 if class_id in [0, 1, 10] else 1.0)
   magic_flash.scale = Vector3.ONE * (0.65 + 1.55 * swing * fx_strength)
-  magic_flash.position.z = -0.22 * swing
-  magic_flash.position.y = 0.12 * swing if class_id in [3, 6, 7, 8, 9] else 0.0
+  # Keep the impact flash close to the weapon for melee, but project
+  # ranged and spell effects slightly forward for better portrait readability.
+  magic_flash.position.z = (-0.55 if class_id in [4, 5] else (-0.42 if class_id in [2, 3, 6, 7, 8, 9] else -0.22)) * swing
+  magic_flash.position.y = (0.18 if class_id in [3, 6, 7, 8, 9] else (0.08 if class_id in [2, 4, 5] else 0.0)) * swing
  else:
   magic_flash.visible = false
   magic_flash.position.z = 0.0
