@@ -1119,36 +1119,13 @@ func _spawn_enemy_visuals() -> void:
    mob.add_child(animation)
    animation.call("configure", mob, element_id, is_fusion_boss)
    continue
-  # Three lightweight nature silhouettes cycle by wave and mob index.
-  # Purely cosmetic: HP, combat timing and element logic stay unchanged.
-  var size: float = 0.65
+  # Organic nature enemies use distinct silhouettes and visible anatomy.
   if element_id == 3:
-   var variant: int = (i + current_wave) % 3
-   var bark: Color = Color("#59432f")
-   match variant:
-    0: # Rootling: trunk, branch arms and leafy crown.
-     VisualFactory.cylinder(mob, 1.05, 0.36, Vector3(0, 0.54, 0), bark)
-     VisualFactory.sphere(mob, 0.55, Vector3(0, 1.16, 0), tint.lightened(0.14))
-     for side in [-1.0, 1.0]:
-      VisualFactory.cylinder(mob, 0.62, 0.12, Vector3(side * 0.36, 0.4, 0), bark)
-      VisualFactory.sphere(mob, 0.22, Vector3(side * 0.34, 1.58, 0), Color("#4da95b"))
-      VisualFactory.sphere(mob, 0.11, Vector3(side * 0.2, 1.22, -0.46), Color("#f3e7a2"))
-    1: # Forest spirit: compact floating body with bright eyes.
-     VisualFactory.sphere(mob, 0.52, Vector3(0, 0.96, 0), Color("#62b77c"))
-     VisualFactory.sphere(mob, 0.32, Vector3(0, 1.42, 0), Color("#a4d48a"))
-     for side in [-1.0, 1.0]:
-      VisualFactory.sphere(mob, 0.13, Vector3(side * 0.19, 1.43, -0.27), Color("#fff2b0"))
-      VisualFactory.sphere(mob, 0.20, Vector3(side * 0.48, 0.87, 0), Color("#4b9e65"))
-    2: # Thornbud: squat plant creature with a pointed leaf crest.
-     VisualFactory.sphere(mob, 0.64, Vector3(0, 0.69, 0), Color("#397d42"))
-     VisualFactory.cylinder(mob, 0.76, 0.22, Vector3(0, 1.42, 0), Color("#91bc50"))
-     for side in [-1.0, 1.0]:
-      VisualFactory.sphere(mob, 0.23, Vector3(side * 0.55, 0.47, 0), Color("#5c9d43"))
-      VisualFactory.sphere(mob, 0.11, Vector3(side * 0.21, 0.82, -0.57), Color("#f8d98a"))
+   preload("res://scripts/forest_enemy_art.gd").decorate(mob, (i + current_wave) % 3, tint)
   else:
-   VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
-   VisualFactory.sphere(mob, 0.19, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
-   VisualFactory.sphere(mob, 0.19, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
+   VisualFactory.sphere(mob, 0.65, Vector3(0, 0.65, 0), tint)
+   for side in [-1.0, 1.0]:
+    VisualFactory.sphere(mob, 0.19, Vector3(side * 0.23, 0.79, -0.52), Color("#f9ed9b"))
 
 func _spawn_boss_minion_visuals() -> void:
  if not is_boss or boss_minion_max_hp <= 0 or enemy_spawn_node == null:
