@@ -26,8 +26,8 @@ class MobileActionModalTests(unittest.TestCase):
         # Keep the anchors within the display and leave meaningful room
         # for the scrolling action controls.
         import re
-        top = re.search(r"action_panel\\.anchor_top\\s*=\\s*([0-9.]+)", UI)
-        bottom = re.search(r"action_panel\\.anchor_bottom\\s*=\\s*([0-9.]+)", UI)
+        top = re.search(r"action_panel[.]anchor_top[ ]*=[ ]*([0-9.]+)", UI)
+        bottom = re.search(r"action_panel[.]anchor_bottom[ ]*=[ ]*([0-9.]+)", UI)
         self.assertIsNotNone(top)
         self.assertIsNotNone(bottom)
         self.assertGreaterEqual(float(top.group(1)), 0.0)
