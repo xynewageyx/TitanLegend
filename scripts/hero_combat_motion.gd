@@ -25,6 +25,9 @@ var right_leg: Node3D
 var magic_flash: MeshInstance3D
 var attack_duration: float = 0.42
 var attack_variant: int = 0
+# Visual-only secondary motion (no new meshes or combat timers).
+var stride_blend: float = 0.0
+var attack_lean: float = 0.0
 var skill_flash_remaining: float = 0.0
 var skill_flash_duration: float = 0.55
 var skill_flash: MeshInstance3D
@@ -160,22 +163,33 @@ func _process(delta: float) -> void:
   var formation: Node = hero.get_parent()
   if formation != null:
    walking = bool(formation.get("is_walking"))
- var step_strength: float = 1.0 if walking else 0.0
+ # Smoothly ease between idle and walk to avoid snapping limbs on transitions.
+ stride_blend = move_toward(stride_blend, 1.0 if walking else 0.0, delta * 5.0)
+ var step_strength: float = stride_blend
  var speed: float = 8.0
  if class_id in [0, 1]:
   speed = 6.0
  elif class_id in [4, 5, 10]:
   speed = 10.0
  var step: float = sin(elapsed * speed)
- left_leg.rotation.x = step * 0.38 * step_strength
- right_leg.rotation.x = -step * 0.38 * step_strength
- left_arm.rotation.x = -step * 0.20 * step_strength
- right_arm.rotation.x = step * 0.20 * step_strength
+ # Foot lift follows the planted leg, reducing the sliding impression.
+ left_leg.rotation.x = step * 0.48 * step_strength
+ right_leg.rotation.x = -step * 0.48 * step_strength
+ left_arm.rotation.x = -step * 0.25 * step_strength
+ right_arm.rotation.x = step * 0.25 * step_strength
+ var foot_lift: float = maxf(0.0, step) * 0.07 * step_strength
+ left_leg.position.y = 0.60 + foot_lift
+ right_leg.position.y = 0.60 + maxf(0.0, -step) * 0.07 * step_strength
  if attack_remaining > 0.0:
   var progress: float = clampf(1.0 - attack_remaining / attack_duration, 0.0, 1.0)
-  var swing: float = sin(progress * PI)
+  # Short anticipation, fast strike and eased follow-through.
+  var windup: float = smoothstep(0.0, 0.22, progress)
+  var strike: float = smoothstep(0.22, 0.48, progress)
+  var recovery: float = 1.0 - smoothstep(0.48, 1.0, progress)
+  var swing: float = strike * recovery
   var alternate: float = -1.0 if attack_variant == 0 else 1.0
-  right_arm.rotation.x = -1.5 * swing
+  right_arm.rotation.x = 0.28 * windup * (1.0 - strike) - 1.65 * swing
+  attack_lean = swing
   right_arm.rotation.z = alternate * 0.28 * swing
   if class_id in [2, 3, 6, 7, 8, 9]:
    left_arm.rotation.x = -1.15 * swing
@@ -191,9 +205,10 @@ func _process(delta: float) -> void:
   magic_flash.position.z = 0.0
   magic_flash.position.y = 0.0
   right_arm.rotation.z = 0.0
+  attack_lean = move_toward(attack_lean, 0.0, delta * 7.0)
  var recoil: float = hit_remaining / hit_duration
  var hit_power: float = 1.55 if hit_critical else 1.0
- rotation.x = -recoil * 0.10 * hit_power
+ rotation.x = -recoil * 0.10 * hit_power + attack_lean * 0.06
  rotation.z = sin(elapsed * 22.0) * recoil * 0.09 * hit_power
  if hit_remaining > 0.0:
   left_arm.rotation.z = -0.32 * recoil * hit_power
@@ -207,7 +222,7 @@ func _process(delta: float) -> void:
  var dodge_amount: float = sin(dodge_progress * PI) if dodge_remaining > 0.0 else 0.0
  rotation.z += dodge_direction * dodge_amount * 0.24
  position.x = dodge_direction * dodge_amount * 0.22
- position.y = sin(elapsed * 2.1) * 0.015 + absf(step) * 0.035 * step_strength
+ position.y = sin(elapsed * 2.1) * 0.015 + absf(step) * 0.045 * step_strength
  defense_ring.visible = (defense_persistent or defense_remaining > 0.0) and defense_kind >= 0
  if defense_ring.visible:
   defense_ring.rotation.y += delta * (4.8 if defense_remaining > 0.0 else 2.5)
