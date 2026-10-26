@@ -56,6 +56,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_element_transition_visuals.py' -v
       - name: Check class-specific walking animations
         run: python3 -m unittest discover -s tests -p 'test_hero_gait_visuals.py' -v
+      - name: Verify hero attack animations
+        run: python3 tests/test_hero_attack_visuals.py
       - name: Test all hero class and role visual models
         shell: bash
         run: |
