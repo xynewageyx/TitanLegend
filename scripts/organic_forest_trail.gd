@@ -6,7 +6,7 @@ static func create(parent: Node3D) -> void:
  rng.seed = 20261029
  var surface := SurfaceTool.new()
  surface.begin(Mesh.PRIMITIVE_TRIANGLES)
- var strips: int = 48
+ var strips: int = 80
  var length: float = 160.0
  var z_start: float = -116.0
  var prev_left := Vector3.ZERO
@@ -14,8 +14,8 @@ static func create(parent: Node3D) -> void:
  var prev_tint := Color("#927d61")
  for i in range(strips + 1):
   var z: float = z_start + length * float(i) / float(strips)
-  var center: float = sin(float(i) * 0.31) * 0.13
-  var width: float = 3.5 + sin(float(i) * 0.71) * 0.22 + rng.randf_range(-0.12, 0.12)
+  var center: float = sin(float(i) * 0.16) * 0.22
+  var width: float = 2.88 + sin(float(i) * 0.39) * 0.23 + rng.randf_range(-0.16, 0.16)
   var left := Vector3(center - width, -0.038, z)
   var right := Vector3(center + width, -0.038, z)
   var tint: Color = Color("#a18a68").lerp(Color("#77654d"), rng.randf_range(0.05, 0.6))
