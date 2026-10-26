@@ -234,8 +234,12 @@ class ImportedCoreRegressionTests(unittest.TestCase):
         self.assertIn("const RESISTANCES:", balance)
         self.assertIn("match boss_variant_id:", battle)
         self.assertIn("tint = biome_manager.COLORS[biome_manager.current_biome]", battle)
-        self.assertIn("VisualFactory.cylinder(mob", battle)
-        self.assertIn("VisualFactory.box(mob", battle)
+        # Boss geometry was extracted into boss_art.gd; verify its shapes
+        # and the BattleManager reference rather than the old inline calls.
+        boss_art = source("boss_art.gd")
+        self.assertIn('preload("res://scripts/boss_art.gd")', battle)
+        self.assertIn("VisualFactory.cylinder(parent", boss_art)
+        self.assertIn("VisualFactory.box(parent", boss_art)
 
     def test_no_hero_attack_after_encounter_finishes(self):
         battle = source("battle_manager.gd")
