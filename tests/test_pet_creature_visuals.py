@@ -30,6 +30,12 @@ class PetCreatureVisualTests(unittest.TestCase):
             self.assertIn(marker, PETS)
         self.assertIn("Static elemental ornaments", PETS)
 
+    def test_portrait_facial_readability(self):
+        self.assertIn("High-contrast facial details", PETS)
+        self.assertIn("var nose :=", PETS)
+        self.assertIn("var eye_highlight :=", PETS)
+        self.assertIn('Color("#ffffff")', PETS)
+
     def test_android_menu_exposes_all_ten_species(self):
         for species in ("Fuchs", "Schildkroete", "Hirsch", "Eule", "Drache", "Wolf", "Golem", "Luchs", "Phoenix", "Schlange"):
             self.assertIn(species, MENU)
