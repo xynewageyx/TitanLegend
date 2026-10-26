@@ -329,7 +329,8 @@ func refresh() -> void:
   var class_id: int = clampi(int(team.class_ids[i]), 0, team.CLASS_NAMES.size() - 1)
   var role_id: int = clampi(int(team.role_ids[i]), 0, 2)
   party_names[i].text = str(team.CLASS_NAMES[class_id])
-  party_roles[i].text = ROLE_TEXT[role_id]
+  var bot: bool = team.has_method("is_bot") and team.is_bot(i)
+  party_roles[i].text = ROLE_TEXT[role_id] + (" · BOT 80%" if bot else " · SPIELER")
   party_icons[i].text = ROLE_ICONS[role_id]
   var hp: int = maxi(0, int(battle.hero_hp[i]))
   var max_hp: int = maxi(1, int(battle.hero_max_hp[i]))
