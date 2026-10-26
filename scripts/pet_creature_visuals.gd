@@ -33,9 +33,11 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
     ear.rotation.z = side * 0.25
    var fox_tail := VisualFactory.sphere(pet, 0.25, Vector3(0.0, 0.58, 0.70), tint.lightened(0.20))
    fox_tail.scale = Vector3(0.78, 0.84, 1.7)
-  1: # Turtle: low oval shell and four visible feet.
+  1: # Turtle: layered oval shell with a bright rim and visible feet.
    var shell := VisualFactory.sphere(pet, 0.43, Vector3(0, 0.52, 0.18), tint.darkened(0.28))
    shell.scale = Vector3(1.25, 0.55, 1.22)
+   var shell_rim := VisualFactory.sphere(pet, 0.40, Vector3(0, 0.42, 0.18), tint.lightened(0.14))
+   shell_rim.scale = Vector3(1.34, 0.26, 1.32)
    for side in [-1.0, 1.0]:
     VisualFactory.sphere(pet, 0.14, Vector3(side * 0.34, 0.15, 0.43), tint)
   2: # Stag: forked antlers and narrow muzzle.
