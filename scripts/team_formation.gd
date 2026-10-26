@@ -15,9 +15,13 @@ func _formation_position(slot: int) -> Vector3:
  var index_in_row: int = row.find(slot)
  # Keep compact all-melee teams inside the path, but give mixed teams
  # enough lateral room for large helmets, weapons and passive companions.
- var spacing: float = 2.05 if row.size() <= 3 else 1.48
+ # Give rear casters more shoulder room and stagger their silhouettes.
+ var spacing: float = (2.30 if not in_front else 2.05) if row.size() <= 3 else 1.58
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
- return Vector3(x, 0.0, -2.15 if in_front else 1.25)
+ var depth: float = -2.15 if in_front else 1.25
+ if not in_front and row.size() >= 3:
+  depth += 0.35 if index_in_row == 1 else -0.12
+ return Vector3(x, 0.0, depth)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
@@ -469,7 +473,8 @@ func create_team() -> void:
   # Place passive pets on the outer side of each row to avoid crowding.
   var anchor_x: float = _formation_position(i).x
   var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0
-  pet.position = Vector3(pet_side * 1.12, 0.0, 0.12)
+  # Keep passive pets beside their owner, away from the center of the row.
+  pet.position = Vector3(pet_side * 1.30, 0.0, -0.35)
   hero.add_child(pet)
   preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
   DesignDetails.pet(pet, i)
