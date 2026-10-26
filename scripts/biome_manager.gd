@@ -42,7 +42,9 @@ func generate_terrain() -> void:
  var ground_color: Color = COLORS[current_biome].darkened(0.4)
  VisualFactory.box(terrain, Vector3(48, 0.35, 160), Vector3(0, -0.3, -36), ground_color)
  var path_color: Color = [Color("#51423d"), Color("#4c8798"), Color("#978267"), Color("#8e785b"), Color("#e2d7ad"), Color("#453b5a"), Color("#a4b8b8"), Color("#b9d9e8"), Color("#61688b"), Color("#62425b")][current_biome]
- VisualFactory.box(terrain, Vector3(7, 0.06, 160), Vector3(0, -0.08, -36), path_color)
+ # Nature uses a narrower foundation; the irregular mesh above it defines the visible trail.
+ var path_width: float = 5.8 if current_biome == BiomeType.NATURE else 7.0
+ VisualFactory.box(terrain, Vector3(path_width, 0.06, 160), Vector3(0, -0.08, -36), path_color)
  var rng: RandomNumberGenerator = RandomNumberGenerator.new()
  rng.seed = 241 + current_biome * 997
  for i in range(44):
