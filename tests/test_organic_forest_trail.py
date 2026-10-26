@@ -16,6 +16,11 @@ class OrganicForestTrailTests(unittest.TestCase):
         for marker in ("SurfaceTool.new()", "Mesh.PRIMITIVE_TRIANGLES", "surface.generate_normals()", "material.vertex_color_use_as_albedo = true"):
             self.assertIn(marker, TRAIL)
 
+    def test_visible_irregular_edges(self):
+        self.assertIn("var path_width: float = 5.8 if current_biome == BiomeType.NATURE else 7.0", BIOME)
+        self.assertIn("var strips: int = 80", TRAIL)
+        self.assertIn("var width: float = 2.88", TRAIL)
+
     def test_visual_only(self):
         self.assertNotIn("CollisionShape3D", TRAIL)
         self.assertNotIn("CharacterBody3D", TRAIL)
