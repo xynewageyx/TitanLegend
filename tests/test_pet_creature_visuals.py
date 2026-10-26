@@ -5,6 +5,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 PETS = (ROOT / "scripts/pet_creature_visuals.gd").read_text(encoding="utf-8")
 TEAM = (ROOT / "scripts/team_formation.gd").read_text(encoding="utf-8")
+MENU = (ROOT / "scripts/class_menu.gd").read_text(encoding="utf-8")
 
 
 class PetCreatureVisualTests(unittest.TestCase):
@@ -22,6 +23,19 @@ class PetCreatureVisualTests(unittest.TestCase):
         self.assertIn("clampi(int(data[i]), 0, 9)", TEAM)
         for marker in ("fox_tail", "shell", "antler", "beak", "spine", "wolf_tail", "golem_chest", "lynx_tail", "phoenix_wing", "serpent_body"):
             self.assertIn(marker, PETS)
+
+    def test_elemental_ornaments_cover_all_ten_affinities(self):
+        self.assertIn("match clampi(element, 0, 9):", PETS)
+        for marker in ("flame", "drop", "leaf", "ray", "shadow_spike", "wind_fin", "ice_crystal", "bolt", "chaos_shard"):
+            self.assertIn(marker, PETS)
+        self.assertIn("Static elemental ornaments", PETS)
+
+    def test_android_menu_exposes_all_ten_species(self):
+        for species in ("Fuchs", "Schildkroete", "Hirsch", "Eule", "Drache", "Wolf", "Golem", "Luchs", "Phoenix", "Schlange"):
+            self.assertIn(species, MENU)
+        self.assertIn("pet_species_selector", MENU)
+        self.assertIn("pet_element_selector", MENU)
+        self.assertIn("ScrollContainer.new()", MENU)
 
     def test_ten_elements_and_passive_only(self):
         self.assertIn("clampi(element, 0, 9)", PETS)
