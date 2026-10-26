@@ -10,5 +10,10 @@ func _initialize() -> void:
 	assert(roles.count(2) == 1, "One healer required")
 	var full_team: Array[int] = POLICY.assign_roles([true, true, true, true], [0, 1, 1, 2])
 	assert(full_team == [0, 1, 1, 2])
+	# A new player takes the vacant damage slot; the first tank keeps it.
+	var joined: Array[int] = POLICY.assign_roles([true, true, false, false], [0, 1, 1, 2])
+	assert(joined == [0, 1, 1, 2], "Joining must not displace the tank")
+	var healer_joined: Array[int] = POLICY.assign_roles([true, false, false, true], [0, 1, 1, 2])
+	assert(healer_joined == [0, 1, 1, 2], "Missing damage roles must be filled by bots")
 	print("PASS: bot roster policy")
 	quit()
