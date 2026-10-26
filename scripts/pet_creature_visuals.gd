@@ -24,6 +24,49 @@ static func decorate(pet: Node3D, element: int, species: int) -> void:
  for i in range(3):
   var crest: MeshInstance3D = VisualFactory.sphere(pet, 0.14 - float(i) * 0.02, Vector3(0, 0.80 - float(i) * 0.10, 0.24 + float(i) * 0.20), tint.lightened(0.4))
   crest.scale = Vector3(0.62, 1.5, 0.60)
+ # Static elemental ornaments: no particles, attacks, timers or gameplay damage.
+ # Reuse inexpensive low-poly geometry for Android portrait performance.
+ match clampi(element, 0, 9):
+  0: # Fire: three warm flame-shaped dorsal crystals.
+   for n in range(3):
+    var flame := VisualFactory.cylinder(pet, 0.29 + float(n) * 0.05, 0.09, Vector3((float(n) - 1.0) * 0.20, 1.03, 0.17), tint.lightened(0.30))
+    flame.rotation.z = (float(n) - 1.0) * 0.25
+  1: # Water: translucent-looking blue droplets (opaque for mobile).
+   for n in range(3):
+    var drop := VisualFactory.sphere(pet, 0.12, Vector3((float(n) - 1.0) * 0.31, 0.91, 0.10), tint.lightened(0.38))
+    drop.scale = Vector3(0.65, 1.6, 0.65)
+  2: # Nature: paired leaf-like fins.
+   for side in [-1.0, 1.0]:
+    var leaf := VisualFactory.sphere(pet, 0.19, Vector3(side * 0.30, 0.87, 0.10), tint.lightened(0.25))
+    leaf.scale = Vector3(0.48, 1.6, 0.82)
+    leaf.rotation.z = side * 0.42
+  3: # Light: bright crown.
+   for side in [-1.0, 1.0]:
+    var ray := VisualFactory.cylinder(pet, 0.30, 0.06, Vector3(side * 0.20, 1.12, 0.03), tint.lightened(0.55))
+    ray.rotation.z = side * 0.35
+  4: # Shadow: dark shoulder spikes.
+   for side in [-1.0, 1.0]:
+    var shadow_spike := VisualFactory.cylinder(pet, 0.36, 0.10, Vector3(side * 0.34, 0.89, 0.06), tint.darkened(0.40))
+    shadow_spike.rotation.z = side * 0.52
+  5: # Wind: thin sweeping feather fins.
+   for side in [-1.0, 1.0]:
+    var wind_fin := VisualFactory.sphere(pet, 0.20, Vector3(side * 0.34, 0.78, 0.18), tint.lightened(0.45))
+    wind_fin.scale = Vector3(1.5, 0.24, 0.70)
+  6: # Ice: three tall frozen crystals.
+   for n in range(3):
+    var ice_crystal := VisualFactory.cylinder(pet, 0.30 + float(n % 2) * 0.13, 0.08, Vector3((float(n) - 1.0) * 0.23, 1.00, 0.08), tint.lightened(0.42))
+    ice_crystal.rotation.z = (float(n) - 1.0) * 0.20
+  7: # Lightning: angular bolt silhouette.
+   for side in [-1.0, 1.0]:
+    var bolt := VisualFactory.box(pet, Vector3(0.11, 0.35, 0.10), Vector3(side * 0.23, 1.01, 0.02), tint.lightened(0.48))
+    bolt.rotation.z = side * 0.45
+  8: # Earth: heavy shoulder stones.
+   for side in [-1.0, 1.0]:
+    VisualFactory.box(pet, Vector3(0.25, 0.28, 0.29), Vector3(side * 0.34, 0.84, 0.12), tint.darkened(0.25))
+  9: # Chaos: asymmetric violet shards.
+   for n in range(3):
+    var chaos_shard := VisualFactory.box(pet, Vector3(0.12, 0.28 + float(n) * 0.08, 0.11), Vector3((float(n) - 1.0) * 0.24, 1.03, 0.07), tint.lightened(0.24))
+    chaos_shard.rotation.z = float(n - 1) * 0.38
  # Distinct animal profiles: fox, turtle, stag, owl and drake families.
  # All anatomy is static geometry; elemental affinity remains passive.
  match clampi(species, 0, 9):
