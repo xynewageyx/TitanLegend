@@ -1119,11 +1119,21 @@ func _spawn_enemy_visuals() -> void:
    mob.add_child(animation)
    animation.call("configure", mob, element_id, is_fusion_boss)
    continue
-  # Normal mobs keep their inexpensive procedural body.
+  # Nature mobs use a small forest-creature silhouette instead of plain orbs.
+  # All other elements retain their current visuals until individually reviewed.
   var size: float = 0.65
-  VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
-  VisualFactory.sphere(mob, 0.19, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
-  VisualFactory.sphere(mob, 0.19, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
+  if element_id == 3:
+   var bark: Color = Color("#59432f")
+   VisualFactory.cylinder(mob, 1.05, 0.36, Vector3(0, 0.54, 0), bark)
+   VisualFactory.sphere(mob, 0.55, Vector3(0, 1.16, 0), tint.lightened(0.14))
+   for side in [-1.0, 1.0]:
+    VisualFactory.cylinder(mob, 0.62, 0.12, Vector3(side * 0.36, 0.4, 0), bark)
+    VisualFactory.sphere(mob, 0.22, Vector3(side * 0.34, 1.58, 0), Color("#4da95b"))
+    VisualFactory.sphere(mob, 0.11, Vector3(side * 0.2, 1.22, -0.46), Color("#f3e7a2"))
+  else:
+   VisualFactory.sphere(mob, size, Vector3(0, size, 0), tint)
+   VisualFactory.sphere(mob, 0.19, Vector3(-0.23, size + 0.14, -0.52), Color("#f9ed9b"))
+   VisualFactory.sphere(mob, 0.19, Vector3(0.23, size + 0.14, -0.52), Color("#f9ed9b"))
 
 func _spawn_boss_minion_visuals() -> void:
  if not is_boss or boss_minion_max_hp <= 0 or enemy_spawn_node == null:
