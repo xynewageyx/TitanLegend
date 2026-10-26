@@ -36,6 +36,14 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --editor --import --quit
+      - name: Test boss camera framing
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p 'test_boss_camera_framing.py' -v
+      - name: Test Android boss and equipment visuals
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p 'test_boss_visuals_and_equipment_menu.py' -v
       - name: Test all hero class and role visual models
         shell: bash
         run: |
