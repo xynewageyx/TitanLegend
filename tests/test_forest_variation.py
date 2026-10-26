@@ -17,6 +17,13 @@ class ForestVariationTests(unittest.TestCase):
         self.assertIn("crown.radial_segments = 7", BIOME)
         self.assertIn("rng.randf_range(8.0, 20.0)", BIOME)
 
+    def test_natural_path_details(self):
+        self.assertIn("func _add_forest_path_details() -> void:", BIOME)
+        self.assertIn("  _add_forest_path_details()", BIOME)
+        self.assertIn("rng.seed = 20261028", BIOME)
+        self.assertIn("rng.randf_range(-2.85, 2.85)", BIOME)
+        self.assertIn("rng.randf_range(3.8, 4.5)", BIOME)
+
     def test_deterministic_and_outside_path(self):
         self.assertIn("rng.seed = 20261026", BIOME)
         self.assertIn("rng.randf_range(5.2, 12.0)", BIOME)
