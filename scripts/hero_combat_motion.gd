@@ -193,13 +193,20 @@ func _process(delta: float) -> void:
   var recovery: float = 1.0 - smoothstep(0.48, 1.0, progress)
   var swing: float = strike * recovery
   var alternate: float = -1.0 if attack_variant == 0 else 1.0
-  right_arm.rotation.x = 0.28 * windup * (1.0 - strike) - 1.65 * swing
-  attack_lean = swing
-  right_arm.rotation.z = alternate * 0.28 * swing
-  if class_id in [2, 3, 6, 7, 8, 9]:
+  # Visual archetypes: heavy melee, quick strikes, ranged release, and casting.
+  if class_id in [0, 1, 10]:
+   right_arm.rotation.x = 0.42 * windup * (1.0 - strike) - 1.85 * swing
+   left_arm.rotation.x = -0.40 * swing
+   right_arm.rotation.z = alternate * 0.36 * swing
+  elif class_id in [4, 5]:
+   right_arm.rotation.x = -1.20 * swing
+   left_arm.rotation.x = -0.90 * swing
+   right_arm.rotation.z = alternate * 0.22 * swing
+  else:
+   right_arm.rotation.x = -0.78 * swing
    left_arm.rotation.x = -1.15 * swing
-  elif class_id in [5, 10]:
-   left_arm.rotation.x = -1.3 * sin(progress * TAU)
+   right_arm.rotation.z = alternate * 0.12 * swing
+  attack_lean = swing
   magic_flash.visible = true
   var fx_strength: float = 0.75 if class_id in [2, 4] else (1.25 if class_id in [0, 1, 10] else 1.0)
   magic_flash.scale = Vector3.ONE * (0.65 + 1.55 * swing * fx_strength)
