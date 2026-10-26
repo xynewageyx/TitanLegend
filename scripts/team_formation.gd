@@ -436,7 +436,10 @@ func create_team() -> void:
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
-  pet.position = Vector3(0.9, 0.0, 0.2)
+  # Place passive pets on the outer side of each row to avoid crowding.
+  var anchor_x: float = _formation_position(i).x
+  var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0
+  pet.position = Vector3(pet_side * 1.05, 0.0, 0.35)
   hero.add_child(pet)
   _build_pet(pet, i, CLASS_COLORS[class_ids[i]])
   DesignDetails.pet(pet, i)
