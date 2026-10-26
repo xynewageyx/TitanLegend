@@ -451,7 +451,7 @@ func create_team() -> void:
   var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0
   pet.position = Vector3(pet_side * 1.05, 0.0, 0.35)
   hero.add_child(pet)
-  _build_pet(pet, i, CLASS_COLORS[class_ids[i]])
+  preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
   DesignDetails.pet(pet, i)
   HeroWeapons47.decorate_pet(pet, class_ids[i])
  _apply_equipped_skins()
