@@ -44,6 +44,10 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -p 'test_boss_visuals_and_equipment_menu.py' -v
+      - name: Test ten-element landscape and single terrain wiring
+        shell: bash
+        run: |
+          python3 tests/test_biome_scene_wiring.py
       - name: Test all hero class and role visual models
         shell: bash
         run: |
