@@ -79,6 +79,7 @@ func generate_terrain() -> void:
   _add_forest_depth()
   _add_forest_variation()
   _add_forest_pines()
+  _add_forest_path_details()
 
 func _add_forest_depth() -> void:
  # Fill distant forest edges without extra physics bodies or textures.
@@ -212,3 +213,20 @@ func _add_forest_pines() -> void:
    canopy.material_override = VisualFactory.material(Color("#306d44").lightened(float(tier) * 0.06))
    canopy.position = Vector3(x, (2.55 + float(tier) * 0.70) * size, z)
    terrain.add_child(canopy)
+
+func _add_forest_path_details() -> void:
+ # Uneven soil and stepping stones break up the flat road without blocking movement.
+ var rng := RandomNumberGenerator.new()
+ rng.seed = 20261028
+ for i in range(28):
+  var x: float = rng.randf_range(-2.85, 2.85)
+  var z: float = rng.randf_range(-100.0, 17.0)
+  var width: float = rng.randf_range(0.32, 0.92)
+  var patch := VisualFactory.sphere(terrain, width, Vector3(x, -0.035, z), Color("#aa9271").lerp(Color("#77654f"), rng.randf()))
+  patch.scale = Vector3(1.4, 0.055, rng.randf_range(0.75, 1.5))
+ for i in range(18):
+  var side: float = -1.0 if i % 2 == 0 else 1.0
+  var x: float = side * rng.randf_range(3.8, 4.5)
+  var z: float = rng.randf_range(-95.0, 15.0)
+  var stone := VisualFactory.sphere(terrain, rng.randf_range(0.18, 0.42), Vector3(x, 0.04, z), Color("#9b9680"))
+  stone.scale = Vector3(1.25, 0.35, 0.85)
