@@ -171,15 +171,20 @@ func _process(delta: float) -> void:
   speed = 6.0
  elif class_id in [4, 5, 10]:
   speed = 10.0
+ # Tanks march with shorter, heavier steps; agile heroes run wider.
+ # Support casters use restrained arm swings to keep spell poses readable.
+ var leg_swing: float = 0.40 if class_id in [0, 1] else (0.58 if class_id in [4, 5, 10] else 0.46)
+ var arm_swing: float = 0.17 if class_id in [3, 6, 7, 8, 9] else (0.31 if class_id in [4, 5, 10] else 0.24)
+ var foot_height: float = 0.05 if class_id in [0, 1] else (0.09 if class_id in [4, 5, 10] else 0.07)
  var step: float = sin(elapsed * speed)
  # Foot lift follows the planted leg, reducing the sliding impression.
- left_leg.rotation.x = step * 0.48 * step_strength
- right_leg.rotation.x = -step * 0.48 * step_strength
- left_arm.rotation.x = -step * 0.25 * step_strength
- right_arm.rotation.x = step * 0.25 * step_strength
- var foot_lift: float = maxf(0.0, step) * 0.07 * step_strength
+ left_leg.rotation.x = step * leg_swing * step_strength
+ right_leg.rotation.x = -step * leg_swing * step_strength
+ left_arm.rotation.x = -step * arm_swing * step_strength
+ right_arm.rotation.x = step * arm_swing * step_strength
+ var foot_lift: float = maxf(0.0, step) * foot_height * step_strength
  left_leg.position.y = 0.60 + foot_lift
- right_leg.position.y = 0.60 + maxf(0.0, -step) * 0.07 * step_strength
+ right_leg.position.y = 0.60 + maxf(0.0, -step) * foot_height * step_strength
  if attack_remaining > 0.0:
   var progress: float = clampf(1.0 - attack_remaining / attack_duration, 0.0, 1.0)
   # Short anticipation, fast strike and eased follow-through.
