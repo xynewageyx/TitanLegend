@@ -78,6 +78,7 @@ func generate_terrain() -> void:
   NatureArt.forest(terrain)
   _add_forest_depth()
   _add_forest_variation()
+  _add_forest_pines()
 
 func _add_forest_depth() -> void:
  # Fill distant forest edges without extra physics bodies or textures.
@@ -189,3 +190,25 @@ func _add_forest_variation() -> void:
     VisualFactory.sphere(terrain, 0.19, Vector3(x + float(leaf - 1) * 0.25, 0.19, z), foliage)
    if i % 3 == 1:
     VisualFactory.sphere(terrain, 0.11, Vector3(x, 0.42, z), Color("#f0d37e"))
+
+func _add_forest_pines() -> void:
+ # Low-poly conifers add distinct tall silhouettes in the background.
+ var rng := RandomNumberGenerator.new()
+ rng.seed = 20261027
+ for i in range(12):
+  var side: float = -1.0 if i % 2 == 0 else 1.0
+  var x: float = side * rng.randf_range(8.0, 20.0)
+  var z: float = rng.randf_range(-100.0, 8.0)
+  var size: float = rng.randf_range(0.85, 1.35)
+  VisualFactory.cylinder(terrain, 2.8 * size, 0.25 * size, Vector3(x, 1.4 * size, z), Color("#725039"))
+  for tier in range(3):
+   var crown := CylinderMesh.new()
+   crown.height = (1.5 - float(tier) * 0.15) * size
+   crown.bottom_radius = (1.1 - float(tier) * 0.23) * size
+   crown.top_radius = 0.04 * size
+   crown.radial_segments = 7
+   var canopy := MeshInstance3D.new()
+   canopy.mesh = crown
+   canopy.material_override = VisualFactory.material(Color("#306d44").lightened(float(tier) * 0.06))
+   canopy.position = Vector3(x, (2.55 + float(tier) * 0.70) * size, z)
+   terrain.add_child(canopy)
