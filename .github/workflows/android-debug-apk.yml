@@ -135,6 +135,9 @@ jobs:
           set -euo pipefail
           godot --headless --path . --editor --import --quit
 
+      - name: Install Gradle Android build template
+        run: godot --headless --path . --install-android-build-template
+
       - name: Export Android arm64 debug APK
         shell: bash
         run: |
