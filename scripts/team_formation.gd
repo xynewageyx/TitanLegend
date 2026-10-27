@@ -15,15 +15,42 @@ func _formation_position(slot: int) -> Vector3:
  var index_in_row: int = row.find(slot)
  # Keep compact all-melee teams inside the path, but give mixed teams
  # enough lateral room for large helmets, weapons and passive companions.
- var spacing: float = 2.05 if row.size() <= 3 else 1.48
+ # Give rear casters more shoulder room and stagger their silhouettes.
+ var spacing: float = (1.82 if not in_front else 2.05) if row.size() <= 3 else 1.45
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
- return Vector3(x, 0.0, -2.15 if in_front else 1.25)
+ var depth: float = -2.15 if in_front else 1.25
+ if not in_front and row.size() >= 3:
+  depth += 0.60 if index_in_row == 1 else -0.18
+ return Vector3(x, 0.0, depth)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
 var talent_ranks: Array = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]]
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
+# Until multiplayer joins are implemented, only slot 0 is human-controlled.
+var human_occupied: Array[bool] = [true, false, false, false]
+const ROSTER_POLICY = preload("res://scripts/team_roster_policy.gd")
+
+func is_bot(slot: int) -> bool:
+ return slot >= 0 and slot < 4 and not human_occupied[slot]
+
+func combat_power_multiplier(slot: int) -> float:
+ return ROSTER_POLICY.bot_multiplier(is_bot(slot))
+
+func set_human_occupied(slot: int, occupied: bool) -> bool:
+ if slot < 0 or slot >= 4:
+  return false
+ if not occupied and slot == 0:
+  return false
+ human_occupied[slot] = occupied
+ role_ids = ROSTER_POLICY.assign_roles(human_occupied, role_ids)
+ team_changed.emit()
+ return true
+
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
+# Creature shape is selected independently from elemental affinity.
+# Duplicates across all four players are intentionally permitted.
+var pet_species_ids: Array[int] = [0, 1, 2, 3]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
 const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1]]
 signal team_changed
@@ -134,8 +161,31 @@ func _process(delta: float) -> void:
    # Passive companion stays beside its hero; only its idle motion changes.
    var pet_bob_speed: float = 5.2 if is_walking else 3.4
    var pet_bob_height: float = 0.10 if is_walking else 0.15
-   pet.position.y = 0.12 + sin(animation_clock * pet_bob_speed + float(i)) * pet_bob_height
-   pet.rotation.y += delta * (0.85 if is_walking else 0.65)
+   var pet_phase: float = animation_clock * pet_bob_speed + float(i) * 1.4
+   pet.position.y = 0.12 + sin(pet_phase) * pet_bob_height
+   # Small forward/back gait movement, without changing lateral formation spacing.
+   pet.position.z = -0.35 + (sin(pet_phase * 0.5) * 0.055 if is_walking else 0.0)
+   # Keep the face oriented toward the camera instead of spinning endlessly.
+   pet.rotation.y = sin(animation_clock * 1.1 + float(i)) * 0.16
+   pet.rotation.z = sin(animation_clock * 2.0 + float(i)) * 0.055
+   # Gentle breathing and species-specific idle movement remain purely visual.
+   var pet_species: int = pet_species_ids[i] if i < pet_species_ids.size() else 0
+   var breath: float = 1.0 + 0.035 * sin(animation_clock * 2.2 + float(i))
+   var wing_flutter: float = 0.055 * sin(animation_clock * 4.0 + float(i)) if pet_species in [3, 4, 8] else 0.0
+   var serpent_sway: float = 0.08 * sin(animation_clock * 1.7 + float(i)) if pet_species == 9 else 0.0
+   pet.scale = Vector3(breath, breath, breath)
+   pet.rotation.z += serpent_sway
+   # Animate individual mesh parts without adding timers or combat actions.
+   var wing_left: Node3D = pet.get_node_or_null("AnimatedWingLeft") as Node3D
+   var wing_right: Node3D = pet.get_node_or_null("AnimatedWingRight") as Node3D
+   if wing_left != null:
+    wing_left.rotation.z = -0.25 - wing_flutter * 5.0
+   if wing_right != null:
+    wing_right.rotation.z = 0.25 + wing_flutter * 5.0
+   var animated_tail: Node3D = pet.get_node_or_null("AnimatedTail") as Node3D
+   if animated_tail != null:
+    var tail_speed: float = 5.0 if is_walking else 2.8
+    animated_tail.rotation.y = sin(animation_clock * tail_speed + float(i)) * (0.32 if is_walking else 0.24)
  if attack_flash > 0.0:
   attack_flash = maxf(0.0, attack_flash - delta)
 
@@ -310,6 +360,7 @@ func _ready() -> void:
  _load_classes()
  _load_roles()
  _load_pet_elements()
+ _load_pet_species()
  talent_ranks = SaveManager.get_saved_talents()
  talent_branches = SaveManager.get_saved_talent_branches()
  create_team()
@@ -449,9 +500,13 @@ func create_team() -> void:
   # Place passive pets on the outer side of each row to avoid crowding.
   var anchor_x: float = _formation_position(i).x
   var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0
-  pet.position = Vector3(pet_side * 1.12, 0.0, 0.12)
+  # Keep passive pets beside their owner, away from the center of the row.
+  # Large winged silhouettes need extra lateral clearance on portrait screens.
+  var pet_species: int = pet_species_ids[i] if i < pet_species_ids.size() else 0
+  var pet_offset: float = 1.48 if pet_species in [3, 4, 8] else 1.30
+  pet.position = Vector3(pet_side * pet_offset, 0.0, -0.35)
   hero.add_child(pet)
-  preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
+  preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], pet_species_ids[i])
   DesignDetails.pet(pet, i)
   HeroWeapons47.decorate_pet(pet, class_ids[i])
  _apply_equipped_skins()
@@ -484,15 +539,15 @@ func _create_hero_health_bar(hero: Node3D) -> void:
  hero.add_child(bar)
  # Update 144: a larger, high-contrast health display for portrait screens.
  var frame: MeshInstance3D = _health_bar_piece(bar, "Frame", Color(0.02, 0.04, 0.08, 0.98), -0.012)
- (frame.mesh as QuadMesh).size = Vector2(1.10, 0.20)
+ (frame.mesh as QuadMesh).size = Vector2(0.88, 0.18)
  var background: MeshInstance3D = _health_bar_piece(bar, "Background", Color(0.18, 0.20, 0.24, 0.98), 0.0)
- (background.mesh as QuadMesh).size = Vector2(1.04, 0.14)
+ (background.mesh as QuadMesh).size = Vector2(0.82, 0.12)
  var fill: MeshInstance3D = _health_bar_piece(bar, "Fill", Color(0.25, 0.88, 0.43), 0.018)
- (fill.mesh as QuadMesh).size = Vector2(1.04, 0.14)
+ (fill.mesh as QuadMesh).size = Vector2(0.82, 0.12)
  var value_label: Label3D = Label3D.new()
  value_label.name = "HPValue"
  value_label.position = Vector3(0.0, 0.23, 0.04)
- value_label.font_size = 34
+ value_label.font_size = 30
  value_label.pixel_size = 0.004
  value_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
  value_label.no_depth_test = true
@@ -511,7 +566,7 @@ func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> v
    continue
   var ratio: float = clampf(float(hp_values[i]) / float(maxi(1, max_values[i])), 0.0, 1.0)
   fill.scale.x = maxf(0.0001, ratio)
-  fill.position.x = -0.52 * (1.0 - ratio)
+  fill.position.x = -0.41 * (1.0 - ratio)
   fill.visible = ratio > 0.0
   var hp_label: Label3D = bar.get_node_or_null("HPValue") as Label3D
   if hp_label != null:
@@ -580,7 +635,7 @@ func _on_reincarnation(level: int) -> void:
   if is_instance_valid(hero):
    hero.scale = Vector3.ONE * (1.0 + float(level) * 0.15)
  reset_team_defeat_pose()
-func start_walking() -> void:
+func start_walking(duration: float = 1.25) -> void:
  if is_walking:
   return
  is_walking = true
@@ -588,7 +643,7 @@ func start_walking() -> void:
   walk_tween.kill()
  walk_tween = create_tween()
  # Actually advance through the world while respecting AFK cancellation.
- walk_tween.tween_property(self, "position:z", position.z - 2.0, 1.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+ walk_tween.tween_property(self, "position:z", position.z - 7.0, maxf(0.2, duration)).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
  walk_tween.tween_callback(_finish_walking)
 
 func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int) -> void:
@@ -798,14 +853,42 @@ func _load_pet_elements() -> void:
   for i in range(4):
    pet_element_ids[i] = clampi(int(data[i]), 0, 9)
 
+func _load_pet_species() -> void:
+ if not FileAccess.file_exists("user://pet_species.json"):
+  return
+ var file := FileAccess.open("user://pet_species.json", FileAccess.READ)
+ if file == null:
+  return
+ var data: Variant = JSON.parse_string(file.get_as_text())
+ if data is Array and data.size() == 4:
+  for i in range(4):
+   pet_species_ids[i] = clampi(int(data[i]), 0, 9)
+
+func set_pet_species(slot: int, species: int) -> void:
+ if slot < 0 or slot >= 4:
+  return
+ var selected_species: int = clampi(species, 0, 9)
+ if pet_species_ids[slot] == selected_species:
+  return
+ pet_species_ids[slot] = selected_species
+ var file := FileAccess.open("user://pet_species.json", FileAccess.WRITE)
+ if file != null:
+  file.store_string(JSON.stringify(pet_species_ids))
+ create_team()
+
 func set_pet_element(slot: int, element: int) -> void:
  if slot < 0 or slot >= 4:
   return
- pet_element_ids[slot] = clampi(element, 0, 9)
+ var selected_element: int = clampi(element, 0, 9)
+ if pet_element_ids[slot] == selected_element:
+  return
+ # Element selection is independent per player: duplicate elements are allowed.
+ pet_element_ids[slot] = selected_element
  var file := FileAccess.open("user://pet_elements.json", FileAccess.WRITE)
  if file != null:
   file.store_string(JSON.stringify(pet_element_ids))
- team_changed.emit()
+ # Recreate the passive pet visual immediately; create_team emits the signal.
+ create_team()
 
 func _refresh_health_after_rebuild() -> void:
  var battle: Node = get_tree().get_first_node_in_group("battle_manager")

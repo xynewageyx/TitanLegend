@@ -15,6 +15,7 @@ signal afk_reward_received(gold: int, xp: int)
 const BOSS_TIME_LIMIT: float = 60.0
 const ROLE_ATTACK_INTERVALS: Array[float] = [1.25, 0.75, 1.5]
 const BOSS_WAVE: int = 10
+const MOB_WAVE_INTERVAL: float = 6.0
 var astral_active: bool = false
 var astral_floor: int = 1
 var astral_marks: int = 0
@@ -86,6 +87,8 @@ var _app_paused: bool = false
 var _walking_for_encounter: bool = false
 var _encounter_request_id: int = 0
 var _resume_walk_after_pause: bool = false
+var _next_mob_wave_delay: float = -1.0
+var _boss_start_requested: bool = false
 
 func _ready() -> void:
  _last_player_input_ms = Time.get_ticks_msec()
@@ -93,7 +96,7 @@ func _ready() -> void:
   team_formation.walking_finished.connect(_on_walking_finished)
  var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
  current_level = maxi(1, saved_progress.x)
- current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)
+ current_wave = clampi(saved_progress.y, 1, BOSS_WAVE - 1)
  world_progress = saved_progress
  # Restore the area's element before spawning bosses, including save-game loads.
  if biome_manager != null:
@@ -118,6 +121,11 @@ func _process(delta: float) -> void:
    _pay_afk_wave(now_ms)
   return
  if not battle_active:
+  if _next_mob_wave_delay >= 0.0 and not _finishing and not _retry_pending and not afk_farming:
+   _next_mob_wave_delay -= delta
+   if _next_mob_wave_delay <= 0.0:
+    _next_mob_wave_delay = -1.0
+    _queue_next_encounter()
   return
  enemy_animation_time += delta
  if is_boss:
@@ -179,6 +187,9 @@ func _notification(what: int) -> void:
   elif _resume_walk_after_pause:
    # Walking-Tweens koennen waehrend der Android-Pause nicht sicher fortgesetzt werden.
    _resume_walk_after_pause = false
+   # Keep a manually requested boss on resume; never infer it from the mob counter.
+   if is_boss:
+    _boss_start_requested = true
    _queue_next_encounter()
 
 func _enter_afk_farming(now_ms: int) -> void:
@@ -256,7 +267,7 @@ func _sync_team_health() -> void:
 func _reset_hero_health() -> void:
  for i in range(4):
   var pet_health: float = float(_pet_stats(i).get("health", 0.0))
-  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health + GameManager.hardening_bonus(i, 2) + GameManager.loot_bonus(i, 0))))
+  hero_max_hp[i] = maxi(1, roundi(300.0 * (1.0 + pet_health + GameManager.hardening_bonus(i, 2) + GameManager.loot_bonus(i, 0)) * team_formation.combat_power_multiplier(i)))
   hero_hp[i] = hero_max_hp[i]
  tank_taunt_until.fill(0)
  tank_intercept_until.fill(0)
@@ -423,7 +434,7 @@ func _trigger_prepared_healing() -> void:
    var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
    var modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
    modifier *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
-   var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier))
+   var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier * _member_power(slot)))
    _heal_heroes(amount, bool(skill.get("aoe", false)))
   last_ability = "Vorbereitete Heilung"
   if not _has_wounded_hero():
@@ -477,7 +488,7 @@ func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
  var class_id: int = int(team_formation.class_ids[_caster]) if team_formation != null else 9
  var hot_modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("hot", 1.0))
  hot_modifier *= 1.0 + float(_hero_progression(_caster).get("healing", 0.0))
- var new_amount: int = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier))
+ var new_amount: int = maxi(1, roundi(float(hero_max_hp[target]) * float(skill.get("hot", 0.075)) * hot_modifier * _member_power(_caster)))
  # A weaker or shorter HoT must never erase stronger ongoing healing.
  if hero_hot_ticks[target] > 0:
   hero_hot_amount[target] = maxi(hero_hot_amount[target], new_amount)
@@ -750,7 +761,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
   healing *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
   if _has_wounded_hero():
-   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
+   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing * _member_power(slot))), bool(skill.get("aoe", false)))
   else:
    prepared_healing[slot] = choice
    last_ability = "Heilung vorbereitet"
@@ -760,7 +771,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   var damage: int = TitanSkillSystem.damage_for_skill(skill, role, base_damage, enemies_remaining)
   if role == 2 and team_formation != null:
    damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
-  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2))))
+  damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)) * _member_power(slot)))
   _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
 
 func _pet_stats(slot: int) -> Dictionary:
@@ -832,6 +843,11 @@ func _boss_minions_attack() -> void:
    # Each add deals ~2% of target max HP per enemy attack tick.
    _damage_heroes(maxi(1, roundi(float(hero_max_hp[target]) * 0.02 * TitanCombatBalance.enemy_damage_scale(current_level))), [target])
 
+func _member_power(slot: int) -> float:
+ if team_formation != null and team_formation.has_method("combat_power_multiplier"):
+  return float(team_formation.combat_power_multiplier(slot))
+ return 1.0
+
 func _hero_attack(slot: int, role: int) -> void:
  if not battle_active or enemy_hp <= 0:
   return
@@ -842,7 +858,7 @@ func _hero_attack(slot: int, role: int) -> void:
  var multiplier: float = TitanSkillSystem.damage_multiplier(role)
  var critical: bool = randf() < minf(0.30, 0.10 + float(_pet_stats(slot).get("crit", 0.0)))
  var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)
- var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0)))
+ var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0) * team_formation.combat_power_multiplier(slot)))
  _deal_damage_to_enemy(slot, actual_damage)
  if not battle_active:
   return
@@ -915,6 +931,7 @@ func buy_astral_reward() -> bool:
 func start_next_encounter() -> void:
  if _finishing or _afk_wave_pending or _app_paused:
   return
+ _next_mob_wave_delay = -1.0
  _encounter_request_id += 1
  _cancel_pending_walk()
  if team_hp <= 0:
@@ -926,6 +943,18 @@ func start_next_encounter() -> void:
   team_formation.call("start_walking")
  else:
   spawn_wave()
+
+func request_boss_start() -> void:
+ if _finishing or afk_farming or _app_paused or astral_active or is_boss and battle_active:
+  return
+ _boss_start_requested = true
+ _next_mob_wave_delay = -1.0
+ _encounter_request_id += 1
+ _cancel_pending_walk()
+ clear_enemies()
+ battle_active = false
+ # The player requested the boss: spawn immediately, without a walking delay.
+ spawn_wave()
 
 func _on_walking_finished() -> void:
  if not _walking_for_encounter or _finishing or _afk_wave_pending or _app_paused:
@@ -953,7 +982,8 @@ func spawn_wave() -> void:
  hero_attack_elapsed.fill(0.0)
  _enemy_attack_elapsed = 0.0
  defeat_reason = ""
- is_boss = AFK_POLICY.is_boss_encounter(afk_farming, astral_active, current_wave)
+ is_boss = (not afk_farming and (_boss_start_requested or astral_active))
+ _boss_start_requested = false
  is_fusion_boss = is_boss and current_level % 10 == 0
  boss_variant_id = TitanCombatBalance.boss_variant(current_level)
  boss_title = TitanCombatBalance.BOSS_TITLES[boss_variant_id]
@@ -1014,6 +1044,9 @@ func finish_wave() -> void:
   return
  battle_active = false
  _finishing = true
+ # Remove defeated boss visuals immediately, before rewards and save operations.
+ if is_boss:
+  clear_enemies()
  if afk_farming:
   # Eine abgeschlossene AFK-Welle gibt maximal alle 60 Sekunden Belohnung.
   # Niemals Bossloot vergeben oder die gespeicherte Stage/Welle erhoehen.
@@ -1049,12 +1082,18 @@ func finish_wave() -> void:
   if biome_manager != null:
    biome_manager.call("update_biome_from_stage", current_level)
  else:
-  current_wave += 1
-  # Wave ten is always the boss; do not advance stage early.
+  # Normal farming loops independently of the manually started boss.
+  current_wave = 1 if current_wave >= BOSS_WAVE - 1 else current_wave + 1
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- _queue_next_encounter()
+ # Keep walking throughout the six-second interval between mob waves.
+ _next_mob_wave_delay = -1.0
+ if team_formation != null and team_formation.has_method("start_walking") and not astral_active:
+  _walking_for_encounter = true
+  team_formation.call("start_walking", MOB_WAVE_INTERVAL)
+ else:
+  _next_mob_wave_delay = MOB_WAVE_INTERVAL
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
@@ -1083,6 +1122,9 @@ func _animate_boss_event(event_name: String) -> void:
 func _spawn_enemy_visuals() -> void:
  if enemy_spawn_node == null:
   return
+ # Keep enemies ahead of the advancing team, never behind the formation.
+ if team_formation != null:
+  enemy_spawn_node.position.z = team_formation.position.z - 8.0
  var element_id: int = 0
  if biome_manager != null:
   element_id = clampi(int(biome_manager.current_biome), 0, 9)

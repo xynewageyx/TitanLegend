@@ -116,7 +116,9 @@ func _run_tests() -> void:
   _fail("Old walking signal unexpectedly started a new encounter")
   return
  # Android pause/resume waehrend Laufanimation darf den Kampf nicht verlieren.
- battle.start_next_encounter()
+ # Bosses require a manual request, independent of the current mob wave.
+ battle.request_boss_start()
+ battle._start_queued_encounter(battle._encounter_request_id)
  if not team.is_walking:
   _fail("Normal boss walking did not begin after AFK exit")
   return

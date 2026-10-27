@@ -14,6 +14,7 @@ const NAV_ENTRIES := [
  ["⋯", "Mehr", "more"]
 ]
 const MORE_ENTRIES := [
+ ["▣ Ausrüstung", "equipment"],
  ["✥ Talente", "talents"],
  ["✧ Reinkarnation", "reincarnation"],
  ["✦ Astralprüfung", "astral"],
@@ -30,6 +31,7 @@ var ticket_label: Label
 var xp_label: Label
 var stage_name: Label
 var stage_detail: Label
+var boss_start_button: Button
 var journey_progress: ProgressBar
 var map_control: Control
 var party_names: Array[Label] = []
@@ -122,32 +124,47 @@ func _build_journey() -> void:
  journey_progress.max_value = 10.0
  SKIN.small_bar(journey_progress, SKIN.GOLD)
  text_stack.add_child(journey_progress)
+ boss_start_button = Button.new()
+ boss_start_button.name = "StartBossButton"
+ boss_start_button.text = "BOSS STARTEN"
+ boss_start_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+ boss_start_button.offset_left = -274
+ boss_start_button.offset_right = -11
+ boss_start_button.offset_top = 229
+ boss_start_button.offset_bottom = 275
+ boss_start_button.visible = false
+ boss_start_button.pressed.connect(_on_boss_start_pressed)
+ add_child(boss_start_button)
+
+func _on_boss_start_pressed() -> void:
+ if battle != null and battle.has_method("request_boss_start"):
+  battle.call("request_boss_start")
 
 func _build_party() -> void:
  var strip := VBoxContainer.new()
  strip.name = "AdventureTeam"
  strip.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
  strip.offset_left = 11
- strip.offset_right = 210
+ strip.offset_right = 190
  strip.offset_top = 94
- strip.offset_bottom = 404
- strip.add_theme_constant_override("separation", 5)
+ strip.offset_bottom = 360
+ strip.add_theme_constant_override("separation", 3)
  add_child(strip)
  for i in range(4):
   var tile := PanelContainer.new()
   tile.name = "PartySlot" + str(i + 1)
-  tile.custom_minimum_size.y = 61
+  tile.custom_minimum_size.y = 51
   tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0d7f3"), SKIN.WOOD, 15, 2))
   strip.add_child(tile)
   var line := HBoxContainer.new()
   line.add_theme_constant_override("separation", 7)
   tile.add_child(line)
   var icon_label := Label.new()
-  icon_label.custom_minimum_size = Vector2(38, 42)
+  icon_label.custom_minimum_size = Vector2(30, 34)
   icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
   icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
   icon_label.add_theme_stylebox_override("normal", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
-  SKIN.title(icon_label, 23)
+  SKIN.title(icon_label, 19)
   icon_label.text = "◆"
   line.add_child(icon_label)
   party_icons.append(icon_label)
@@ -156,13 +173,13 @@ func _build_party() -> void:
   column.add_theme_constant_override("separation", 0)
   line.add_child(column)
   var name_label := Label.new()
-  SKIN.title(name_label, 15)
+  SKIN.title(name_label, 14)
   name_label.clip_text = true
   name_label.text = "Held " + str(i + 1)
   column.add_child(name_label)
   party_names.append(name_label)
   var role_label := Label.new()
-  SKIN.title(role_label, 12)
+  SKIN.title(role_label, 11)
   role_label.add_theme_color_override("font_color", SKIN.MUTED)
   role_label.text = "Teammitglied"
   column.add_child(role_label)
@@ -170,7 +187,7 @@ func _build_party() -> void:
   var hp := ProgressBar.new()
   hp.max_value = 100
   hp.value = 100
-  hp.custom_minimum_size.y = 9
+  hp.custom_minimum_size.y = 8
   SKIN.small_bar(hp, SKIN.GREEN)
   column.add_child(hp)
   party_bars.append(hp)
@@ -237,7 +254,7 @@ func _build_navigation() -> void:
  more_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
  more_panel.offset_left = -366
  more_panel.offset_right = -10
- more_panel.offset_top = -344
+ more_panel.offset_top = -430
  more_panel.offset_bottom = -140
  more_panel.mouse_filter = Control.MOUSE_FILTER_STOP
  more_panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 18, 4))
@@ -270,6 +287,9 @@ func _process(_delta: float) -> void:
  var cosmetics: Variant = hud.get("skin_shop_menu")
  if cosmetics is Control and (cosmetics as Control).visible:
   modal_active = true
+ var equipment_view: Variant = hud.get("equipment_panel_214")
+ if equipment_view is Control and (equipment_view as Control).visible:
+  modal_active = true
  var actions: Variant = hud.get("action_panel")
  if actions is Control and (actions as Control).visible:
   modal_active = true
@@ -290,7 +310,7 @@ func _on_navigation(target: String) -> void:
  _update_nav_selection()
  if hud != null:
   hud.call("_open_menu", target)
-  if target in ["team", "skills", "talents", "shop"]:
+  if target in ["team", "skills", "talents", "shop", "equipment"]:
    hide()
 
 func _update_nav_selection() -> void:
@@ -316,6 +336,9 @@ func refresh() -> void:
  else:
   stage_name.text = "ABENTEUER"
  stage_detail.text = "Stufe %d\nWelle %d/10" % [battle.current_level, battle.current_wave]
+ if boss_start_button != null:
+  boss_start_button.visible = not battle.is_boss and not battle.afk_farming and not battle.astral_active
+  boss_start_button.disabled = battle.is_boss or battle.afk_farming or battle.astral_active
  journey_progress.value = clampi(battle.current_wave, 1, 10)
  map_control.call("set_progress", battle.current_wave, element_id)
  var team: Node3D = battle.team_formation
@@ -325,7 +348,8 @@ func refresh() -> void:
   var class_id: int = clampi(int(team.class_ids[i]), 0, team.CLASS_NAMES.size() - 1)
   var role_id: int = clampi(int(team.role_ids[i]), 0, 2)
   party_names[i].text = str(team.CLASS_NAMES[class_id])
-  party_roles[i].text = ROLE_TEXT[role_id]
+  var bot: bool = team.has_method("is_bot") and team.is_bot(i)
+  party_roles[i].text = ROLE_TEXT[role_id] + (" · BOT" if bot else " · SPIELER")
   party_icons[i].text = ROLE_ICONS[role_id]
   var hp: int = maxi(0, int(battle.hero_hp[i]))
   var max_hp: int = maxi(1, int(battle.hero_max_hp[i]))

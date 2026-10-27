@@ -21,7 +21,8 @@ class LandscapeDepthTests(unittest.TestCase):
     def test_path_and_ground_extend_farther_than_original_scene(self):
         code = method("generate_terrain")
         self.assertIn("Vector3(48, 0.35, 160)", code)
-        self.assertIn("Vector3(7, 0.06, 160)", code)
+        self.assertIn("var path_width: float = 5.8 if current_biome == BiomeType.NATURE else 7.0", code)
+        self.assertIn("Vector3(path_width, 0.06, 160)", code)
         self.assertEqual(code.count("Vector3(0, -0.3, -36)"), 1)
         self.assertEqual(code.count("Vector3(0, -0.08, -36)"), 1)
 

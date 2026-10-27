@@ -353,7 +353,10 @@ func _process(delta: float) -> void:
    part.position.x += sin(elapsed * 10.0 + float(i) * 2.0) * 0.025
   part.scale = base_scales[i]
   if windup_remaining > 0.0:
-   var charge: float = sin((windup_duration - windup_remaining) / windup_duration * PI)
+   # Ease into a held anticipation pose so the boss clearly signals danger
+   # right up until the attack is released (visual timing only).
+   var charge_progress: float = clampf(1.0 - windup_remaining / maxf(windup_duration, 0.01), 0.0, 1.0)
+   var charge: float = smoothstep(0.0, 0.82, charge_progress)
    match element_id:
     0: # Fire: compress, then rise like a flame.
      part.position.y += charge * 0.22
@@ -461,8 +464,10 @@ func _process(delta: float) -> void:
      part.position.y += weight_139 * (0.14 if i % 3 == 0 else -0.08)
   if recoil_remaining > 0.0:
    var recoil_progress: float = 1.0 - recoil_remaining / recoil_duration
-   var recoil_curve: float = sin(recoil_progress * PI)
-   part.position.z += recoil_curve * 0.12 * recoil_strength
+   # A fast initial jolt followed by a slower settle makes critical hits
+   # readable without shaking the boss root or combat UI.
+   var recoil_curve: float = pow(1.0 - recoil_progress, 2.0) * sin(recoil_progress * PI * 1.5)
+   part.position.z += recoil_curve * 0.16 * recoil_strength
    part.position.x += recoil_curve * 0.045 * recoil_strength * recoil_side
    part.rotation.x += recoil_curve * (0.07 if i % 2 == 0 else -0.07) * recoil_strength
    part.rotation.z += recoil_curve * 0.055 * recoil_side * recoil_strength

@@ -27,6 +27,7 @@ var attack_duration: float = 0.42
 var attack_variant: int = 0
 # Visual-only secondary motion (no new meshes or combat timers).
 var stride_blend: float = 0.0
+var attack_pose_blend: float = 0.0
 var attack_lean: float = 0.0
 var skill_flash_remaining: float = 0.0
 var skill_flash_duration: float = 0.55
@@ -192,6 +193,7 @@ func _process(delta: float) -> void:
   var strike: float = smoothstep(0.22, 0.48, progress)
   var recovery: float = 1.0 - smoothstep(0.48, 1.0, progress)
   var swing: float = strike * recovery
+  attack_pose_blend = move_toward(attack_pose_blend, 1.0, delta * 14.0)
   var alternate: float = -1.0 if attack_variant == 0 else 1.0
   # Visual archetypes: heavy melee, quick strikes, ranged release, and casting.
   if class_id in [0, 1, 10]:
@@ -207,7 +209,8 @@ func _process(delta: float) -> void:
    left_arm.rotation.x = -1.15 * swing
    right_arm.rotation.z = alternate * 0.12 * swing
   attack_lean = swing
-  magic_flash.visible = true
+  # Reveal the strike flash near contact, not during the anticipation pose.
+  magic_flash.visible = progress >= 0.20 and progress <= 0.78
   var fx_strength: float = 0.75 if class_id in [2, 4] else (1.25 if class_id in [0, 1, 10] else 1.0)
   magic_flash.scale = Vector3.ONE * (0.65 + 1.55 * swing * fx_strength)
   # Keep the impact flash close to the weapon for melee, but project
@@ -219,10 +222,19 @@ func _process(delta: float) -> void:
   magic_flash.position.z = 0.0
   magic_flash.position.y = 0.0
   right_arm.rotation.z = 0.0
+  attack_pose_blend = move_toward(attack_pose_blend, 0.0, delta * 9.0)
   attack_lean = move_toward(attack_lean, 0.0, delta * 7.0)
+ # Settle the shoulders back into the idle pose after each swing.
+ if attack_remaining <= 0.0:
+  right_arm.rotation.x = move_toward(right_arm.rotation.x, 0.0, delta * 8.0)
+  left_arm.rotation.x = move_toward(left_arm.rotation.x, 0.0, delta * 8.0)
  var recoil: float = hit_remaining / hit_duration
  var hit_power: float = 1.55 if hit_critical else 1.0
  rotation.x = -recoil * 0.10 * hit_power + attack_lean * 0.06
+ # Brief body compression on impact makes attacks feel weighty without
+ # moving the character away from the formation anchor.
+ var impact_compression: float = attack_lean * (0.045 if class_id in [0, 1, 10] else 0.025)
+ scale.y = 1.0 - impact_compression
  rotation.z = sin(elapsed * 22.0) * recoil * 0.09 * hit_power
  if hit_remaining > 0.0:
   left_arm.rotation.z = -0.32 * recoil * hit_power
