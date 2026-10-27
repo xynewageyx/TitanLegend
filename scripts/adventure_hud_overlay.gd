@@ -337,7 +337,8 @@ func refresh() -> void:
   stage_name.text = "ABENTEUER"
  stage_detail.text = "Stufe %d\nWelle %d/10" % [battle.current_level, battle.current_wave]
  if boss_start_button != null:
-  boss_start_button.visible = battle.current_wave == 10 and not battle.battle_active and not battle.afk_farming
+  boss_start_button.visible = not battle.is_boss and not battle.afk_farming and not battle.astral_active
+  boss_start_button.disabled = battle.is_boss or battle.afk_farming or battle.astral_active
  journey_progress.value = clampi(battle.current_wave, 1, 10)
  map_control.call("set_progress", battle.current_wave, element_id)
  var team: Node3D = battle.team_formation
