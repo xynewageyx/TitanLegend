@@ -8,10 +8,16 @@ BATTLE = (ROOT / "scripts/battle_manager.gd").read_text(encoding="utf-8")
 
 
 class EncounterWalkTests(unittest.TestCase):
-    def test_walk_uses_eased_tween(self):
+    def test_walk_uses_constant_speed(self):
         self.assertIn('position.z - 7.0, maxf(0.2, duration)', TEAM)
-        self.assertIn('Tween.TRANS_SINE', TEAM)
-        self.assertIn('Tween.EASE_IN_OUT', TEAM)
+        self.assertIn('Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)', TEAM)
+        self.assertIn('func start_walking(duration: float = 1.25)', TEAM)
+
+    def test_boss_clears_visuals_before_reward_processing(self):
+        start = BATTLE.index("func finish_wave() -> void:")
+        end = BATTLE.index("func _update_enemy_casualties()", start)
+        finish = BATTLE[start:end]
+        self.assertLess(finish.index("if is_boss:\\n  clear_enemies()".replace("\\n", "\n")), finish.index("GameManager.add_gold(gold_reward)"))
 
     def test_passive_pets_have_walk_aware_idle_motion(self):
         self.assertIn('hero.get_node_or_null("PassivePet")', TEAM)
