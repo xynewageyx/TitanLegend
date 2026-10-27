@@ -443,9 +443,12 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
-  # Preview assets are opt-in until their animation and silhouette pass visual QA.
-  if ProjectSettings.get_setting("titan_legends/graphics/experimental_models", false):
-   _try_imported_visual(hero, "heroes/class_%d" % class_ids[i])
+  # Production GLB models activate automatically; experimental .tscn previews
+  # remain opt-in so unfinished placeholder figures never replace live art.
+  var hero_model_id: String = "heroes/class_%d" % class_ids[i]
+  var production_glb: String = "res://assets/models/" + hero_model_id + ".glb"
+  if ResourceLoader.exists(production_glb) or ProjectSettings.get_setting("titan_legends/graphics/experimental_models", false):
+   _try_imported_visual(hero, hero_model_id)
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
