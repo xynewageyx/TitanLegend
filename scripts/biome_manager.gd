@@ -12,6 +12,15 @@ func _ready() -> void:
  terrain.name = "GeneratedTerrain"
  add_child(terrain)
  set_biome(BiomeType.NATURE)
+func _process(_delta: float) -> void:
+ # Recycle the long terrain strip before the camera reaches its end.
+ # Moving it only occasionally preserves visible scenery motion while walking.
+ if terrain == null:
+  return
+ var team: Node3D = get_node_or_null("../TeamFormation") as Node3D
+ if team != null and team.position.z < terrain.position.z - 42.0:
+  terrain.position.z -= 42.0
+
 func update_biome_from_stage(stage: int) -> void:
  # 12 areas x 100 stages; ten elements intentionally repeat in areas 11 and 12.
  # Later areas remain distinct through stage-based enemy and boss progression.
