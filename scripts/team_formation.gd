@@ -163,6 +163,8 @@ func _process(delta: float) -> void:
    var pet_bob_height: float = 0.10 if is_walking else 0.15
    var pet_phase: float = animation_clock * pet_bob_speed + float(i) * 1.4
    pet.position.y = 0.12 + sin(pet_phase) * pet_bob_height
+   # Small forward/back gait movement, without changing lateral formation spacing.
+   pet.position.z = -0.35 + (sin(pet_phase * 0.5) * 0.055 if is_walking else 0.0)
    # Keep the face oriented toward the camera instead of spinning endlessly.
    pet.rotation.y = sin(animation_clock * 1.1 + float(i)) * 0.16
    pet.rotation.z = sin(animation_clock * 2.0 + float(i)) * 0.055
@@ -182,7 +184,8 @@ func _process(delta: float) -> void:
     wing_right.rotation.z = 0.25 + wing_flutter * 5.0
    var animated_tail: Node3D = pet.get_node_or_null("AnimatedTail") as Node3D
    if animated_tail != null:
-    animated_tail.rotation.y = sin(animation_clock * 2.8 + float(i)) * 0.24
+    var tail_speed: float = 5.0 if is_walking else 2.8
+    animated_tail.rotation.y = sin(animation_clock * tail_speed + float(i)) * (0.32 if is_walking else 0.24)
  if attack_flash > 0.0:
   attack_flash = maxf(0.0, attack_flash - delta)
 
