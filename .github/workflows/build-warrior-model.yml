@@ -1,0 +1,30 @@
+name: Build original warrior GLB
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/generate_warrior_glb.py'
+      - '.github/workflows/build-warrior-model.yml'
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Generate original armored warrior
+        run: |
+          blender -b --python tools/generate_warrior_glb.py
+          test -s build/class_0.glb
+      - name: Upload Godot-ready GLB model
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Warrior-GLB
+          path: build/class_0.glb
+          if-no-files-found: error
+          retention-days: 30
