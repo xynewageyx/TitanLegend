@@ -173,7 +173,33 @@ jobs:
           set -euo pipefail
           mkdir -p build
           godot --headless --path . --editor --import --quit
-          godot --headless --path . --install-android-build-template
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import shutil
+          template = Path.home() / ".local/share/godot/export_templates/4.7.2.stable/android_source.zip"
+          target = Path("android/build")
+          with ZipFile(template) as archive:
+              names = [n for n in archive.namelist() if not n.endswith("/")]
+              prefix = "android/build/" if any(n.startswith("android/build/") for n in names) else "build/"
+              if not any(n.startswith(prefix) for n in names):
+                  prefix = ""
+              for entry in archive.infolist():
+                  if entry.is_dir() or not entry.filename.startswith(prefix):
+                      continue
+                  relative = Path(entry.filename[len(prefix):])
+                  if not relative.parts or relative.is_absolute() or ".." in relative.parts:
+                      continue
+                  output = target / relative
+                  output.parent.mkdir(parents=True, exist_ok=True)
+                  with archive.open(entry) as source, output.open("wb") as dest:
+                      shutil.copyfileobj(source, dest)
+          wrapper = target / "gradlew"
+          if not wrapper.is_file():
+              raise SystemExit("Gradle wrapper missing")
+          wrapper.chmod(wrapper.stat().st_mode | 0o111)
+          (Path("android") / ".build_version").write_text("4.7.2.stable\n", encoding="utf-8")
+          PY
           godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
           test -s build/TitanLegends-debug.apk
           unzip -tq build/TitanLegends-debug.apk
