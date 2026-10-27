@@ -17,6 +17,8 @@ class EncounterWalkTests(unittest.TestCase):
         self.assertIn('hero.get_node_or_null("PassivePet")', TEAM)
         self.assertIn("pet_bob_speed: float = 5.2 if is_walking else 3.4", TEAM)
         self.assertIn("pet_bob_height: float = 0.10 if is_walking else 0.15", TEAM)
+        self.assertIn("pet.position.z = -0.35 + (sin(pet_phase * 0.5) * 0.055 if is_walking else 0.0)", TEAM)
+        self.assertIn("var tail_speed: float = 5.0 if is_walking else 2.8", TEAM)
         self.assertIn("pet.rotation.y = sin(animation_clock * 1.1 + float(i)) * 0.16", TEAM)
         self.assertIn("pet.scale = Vector3(breath, breath, breath)", TEAM)
         self.assertIn('pet.get_node_or_null("AnimatedWingLeft")', TEAM)
