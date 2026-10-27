@@ -498,7 +498,10 @@ func create_team() -> void:
   var anchor_x: float = _formation_position(i).x
   var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0
   # Keep passive pets beside their owner, away from the center of the row.
-  pet.position = Vector3(pet_side * 1.30, 0.0, -0.35)
+  # Large winged silhouettes need extra lateral clearance on portrait screens.
+  var pet_species: int = pet_species_ids[i] if i < pet_species_ids.size() else 0
+  var pet_offset: float = 1.48 if pet_species in [3, 4, 8] else 1.30
+  pet.position = Vector3(pet_side * pet_offset, 0.0, -0.35)
   hero.add_child(pet)
   preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], pet_species_ids[i])
   DesignDetails.pet(pet, i)
