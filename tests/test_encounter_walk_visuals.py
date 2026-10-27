@@ -9,7 +9,7 @@ BATTLE = (ROOT / "scripts/battle_manager.gd").read_text(encoding="utf-8")
 
 class EncounterWalkTests(unittest.TestCase):
     def test_walk_uses_eased_tween(self):
-        self.assertIn('position.z - 2.0, maxf(0.2, duration)', TEAM)
+        self.assertIn('position.z - 7.0, maxf(0.2, duration)', TEAM)
         self.assertIn('Tween.TRANS_SINE', TEAM)
         self.assertIn('Tween.EASE_IN_OUT', TEAM)
 
