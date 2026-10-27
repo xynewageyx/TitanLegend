@@ -443,6 +443,7 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
+  _try_imported_visual(hero, "heroes/class_%d" % class_ids[i])
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
@@ -454,10 +455,22 @@ func create_team() -> void:
   preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
   DesignDetails.pet(pet, i)
   HeroWeapons47.decorate_pet(pet, class_ids[i])
+  _try_imported_visual(pet, "pets/element_%d" % pet_element_ids[i])
  _apply_equipped_skins()
  _on_reincarnation(GameManager.current_reincarnation_level)
  team_changed.emit()
  call_deferred("_refresh_health_after_rebuild")
+# Update 215: optional imported GLB visuals; retain procedural fallback.
+# Only direct procedural mesh children are hidden. Gameplay nodes, motion,
+# health bars and passive pet logic remain untouched.
+func _try_imported_visual(host: Node3D, model_id: String) -> void:
+ var model: Node3D = TitanModelLoader.attach_model(host, model_id)
+ if model == null:
+  return
+ for child in host.get_children():
+  if child != model and child is MeshInstance3D:
+   child.visible = false
+
 func _health_bar_piece(parent: Node3D, name_value: String, tint: Color, depth: float) -> MeshInstance3D:
  var piece: MeshInstance3D = MeshInstance3D.new()
  piece.name = name_value
