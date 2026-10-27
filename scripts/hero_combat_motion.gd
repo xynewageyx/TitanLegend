@@ -5,6 +5,36 @@ extends Node3D
 # Original 144 implementation is archived in project root for comparison.
 
 var class_id: int = 0
+# Update 216: optional imported-model animation bridge.
+var imported_animation_player: AnimationPlayer
+var imported_animation_model: Node3D
+var imported_animation_state: StringName = &""
+
+func _find_imported_animation() -> void:
+ var hero := get_parent() as Node3D
+ if hero == null:
+  return
+ imported_animation_model = hero.get_node_or_null("TitanImportedModel") as Node3D
+ if imported_animation_model != null:
+  imported_animation_player = TitanModelLoader._find_animation_player(imported_animation_model)
+
+func _play_imported_state(state: StringName) -> void:
+ if imported_animation_player == null:
+  return
+ var names: Array[StringName] = []
+ match state:
+  &"Defeat": names = [&"Defeat", &"Death", &"Die", &"death"]
+  &"Hit": names = [&"Hit", &"Hurt", &"hit"]
+  &"Attack": names = [&"Attack", &"Attack_1", &"attack", &"Punch"]
+  &"Run": names = [&"Run", &"Walk", &"run", &"walk"]
+  _: names = [&"Idle", &"idle", &"Stand"]
+ for candidate in names:
+  if imported_animation_player.has_animation(candidate):
+   if imported_animation_state != candidate or not imported_animation_player.is_playing():
+    imported_animation_player.play(candidate)
+    imported_animation_state = candidate
+   return
+
 var elapsed: float = 0.0
 var attack_remaining: float = 0.0
 var hit_remaining: float = 0.0
@@ -143,6 +173,8 @@ func set_tank_defense_state(kind: int) -> void:
   defense_remaining = 0.0
 
 func _process(delta: float) -> void:
+ if imported_animation_player == null and imported_animation_model == null:
+  _find_imported_animation()
  if left_arm == null or right_arm == null:
   return
  elapsed += delta
@@ -163,6 +195,23 @@ func _process(delta: float) -> void:
   var formation: Node = hero.get_parent()
   if formation != null:
    walking = bool(formation.get("is_walking"))
+ # Imported skeleton clips mirror existing combat state, without changing combat.
+ var defeated: bool = false
+ if hero != null:
+  var formation_node: Node = hero.get_parent()
+  if formation_node != null:
+   var fallen: Dictionary = formation_node.get("fallen_heroes")
+   defeated = bool(fallen.get(hero.get_index(), false))
+ if defeated:
+  _play_imported_state(&"Defeat")
+ elif hit_remaining > 0.0:
+  _play_imported_state(&"Hit")
+ elif attack_remaining > 0.0:
+  _play_imported_state(&"Attack")
+ elif walking:
+  _play_imported_state(&"Run")
+ else:
+  _play_imported_state(&"Idle")
  # Smoothly ease between idle and walk to avoid snapping limbs on transitions.
  stride_blend = move_toward(stride_blend, 1.0 if walking else 0.0, delta * 5.0)
  var step_strength: float = stride_blend
