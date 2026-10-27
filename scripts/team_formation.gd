@@ -635,7 +635,7 @@ func _on_reincarnation(level: int) -> void:
   if is_instance_valid(hero):
    hero.scale = Vector3.ONE * (1.0 + float(level) * 0.15)
  reset_team_defeat_pose()
-func start_walking() -> void:
+func start_walking(duration: float = 1.25) -> void:
  if is_walking:
   return
  is_walking = true
@@ -643,7 +643,7 @@ func start_walking() -> void:
   walk_tween.kill()
  walk_tween = create_tween()
  # Actually advance through the world while respecting AFK cancellation.
- walk_tween.tween_property(self, "position:z", position.z - 2.0, 1.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+ walk_tween.tween_property(self, "position:z", position.z - 2.0, maxf(0.2, duration)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
  walk_tween.tween_callback(_finish_walking)
 
 func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int) -> void:
