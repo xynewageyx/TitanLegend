@@ -26,7 +26,8 @@ class EncounterWalkTests(unittest.TestCase):
     def test_portrait_formation_spacing_and_hp_clearance(self):
         self.assertIn("var spacing: float = (1.82 if not in_front else 2.05) if row.size() <= 3 else 1.45", TEAM)
         self.assertIn("return Vector3(x, 0.0, depth)", TEAM)
-        self.assertIn("pet.position = Vector3(pet_side * 1.30, 0.0, -0.35)", TEAM)
+        self.assertIn("var pet_offset: float = 1.48 if pet_species in [3, 4, 8] else 1.30", TEAM)
+        self.assertIn("pet.position = Vector3(pet_side * pet_offset, 0.0, -0.35)", TEAM)
         self.assertIn("bar.position = Vector3(0.0, 3.02, 0.0)", TEAM)
         self.assertIn("(fill.mesh as QuadMesh).size = Vector2(0.82, 0.12)", TEAM)
 
