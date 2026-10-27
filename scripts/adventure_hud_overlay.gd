@@ -31,6 +31,7 @@ var ticket_label: Label
 var xp_label: Label
 var stage_name: Label
 var stage_detail: Label
+var boss_start_button: Button
 var journey_progress: ProgressBar
 var map_control: Control
 var party_names: Array[Label] = []
@@ -123,6 +124,21 @@ func _build_journey() -> void:
  journey_progress.max_value = 10.0
  SKIN.small_bar(journey_progress, SKIN.GOLD)
  text_stack.add_child(journey_progress)
+ boss_start_button = Button.new()
+ boss_start_button.name = "StartBossButton"
+ boss_start_button.text = "BOSS STARTEN"
+ boss_start_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+ boss_start_button.offset_left = -274
+ boss_start_button.offset_right = -11
+ boss_start_button.offset_top = 229
+ boss_start_button.offset_bottom = 275
+ boss_start_button.visible = false
+ boss_start_button.pressed.connect(_on_boss_start_pressed)
+ add_child(boss_start_button)
+
+func _on_boss_start_pressed() -> void:
+ if battle != null and battle.has_method("request_boss_start"):
+  battle.call("request_boss_start")
 
 func _build_party() -> void:
  var strip := VBoxContainer.new()
@@ -320,6 +336,8 @@ func refresh() -> void:
  else:
   stage_name.text = "ABENTEUER"
  stage_detail.text = "Stufe %d\nWelle %d/10" % [battle.current_level, battle.current_wave]
+ if boss_start_button != null:
+  boss_start_button.visible = battle.current_wave == 10 and not battle.battle_active and not battle.afk_farming
  journey_progress.value = clampi(battle.current_wave, 1, 10)
  map_control.call("set_progress", battle.current_wave, element_id)
  var team: Node3D = battle.team_formation
