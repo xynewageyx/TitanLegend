@@ -949,7 +949,12 @@ func request_boss_start() -> void:
   return
  _boss_start_requested = true
  _next_mob_wave_delay = -1.0
- _queue_next_encounter()
+ _encounter_request_id += 1
+ _cancel_pending_walk()
+ clear_enemies()
+ battle_active = false
+ # The player requested the boss: spawn immediately, without a walking delay.
+ spawn_wave()
 
 func _on_walking_finished() -> void:
  if not _walking_for_encounter or _finishing or _afk_wave_pending or _app_paused:
@@ -1079,8 +1084,13 @@ func finish_wave() -> void:
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- # Six seconds between normal mob waves; bosses never auto-start.
- _next_mob_wave_delay = MOB_WAVE_INTERVAL
+ # Keep walking throughout the six-second interval between mob waves.
+ _next_mob_wave_delay = -1.0
+ if team_formation != null and team_formation.has_method("start_walking") and not astral_active:
+  _walking_for_encounter = true
+  team_formation.call("start_walking", MOB_WAVE_INTERVAL)
+ else:
+  _next_mob_wave_delay = MOB_WAVE_INTERVAL
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
@@ -1109,6 +1119,9 @@ func _animate_boss_event(event_name: String) -> void:
 func _spawn_enemy_visuals() -> void:
  if enemy_spawn_node == null:
   return
+ # Keep enemies ahead of the advancing team, never behind the formation.
+ if team_formation != null:
+  enemy_spawn_node.position.z = team_formation.position.z - 8.0
  var element_id: int = 0
  if biome_manager != null:
   element_id = clampi(int(biome_manager.current_biome), 0, 9)
