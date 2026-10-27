@@ -67,7 +67,7 @@ jobs:
           curl --fail --location --retry 3 --output /tmp/godot_templates.tpz \
             "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_export_templates.tpz"
           unzip -j -q /tmp/godot_templates.tpz \
-            'templates/android_debug.apk' 'templates/android_release.apk' \
+            'templates/android_debug.apk' 'templates/android_release.apk' 'templates/android_source.zip' \
             -d "$HOME/.local/share/godot/export_templates/4.6.stable"
           test -s "$HOME/.local/share/godot/export_templates/4.6.stable/android_debug.apk"
           rm -f /tmp/godot_templates.tpz
