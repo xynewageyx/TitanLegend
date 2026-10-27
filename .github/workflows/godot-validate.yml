@@ -24,14 +24,14 @@ jobs:
               exit 1
             fi
           done
-      - name: Install Godot 4.6
+      - name: Install Godot 4.7.2
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip"
+          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          chmod +x /tmp/Godot_v4.6-stable_linux.x86_64
-          sudo mv /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
+          sudo mv /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
       - name: Import assets and parse project
         shell: bash
         run: |
@@ -117,19 +117,19 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Install Godot 4.6 and Android export templates
+      - name: Install Godot 4.7.2 and Android export templates
         shell: bash
         run: |
           set -euo pipefail
-          version=4.6-stable
+          version=4.7.2-stable
           base="https://github.com/godotengine/godot-builds/releases/download/$version"
-          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.6-stable_linux.x86_64.zip"
+          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          sudo install -m 755 /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
-          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.6-stable_export_templates.tpz"
-          mkdir -p "$HOME/.local/share/godot/export_templates/4.6.stable"
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.7.2-stable_export_templates.tpz"
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           unzip -q /tmp/templates.tpz -d /tmp/godot-templates
-          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.6.stable/"
+          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
       - name: Configure Android SDK and persistent debug signing
         shell: bash
         run: |
