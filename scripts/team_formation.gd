@@ -443,7 +443,9 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
-  _try_imported_visual(hero, "heroes/class_%d" % class_ids[i])
+  # Preview assets are opt-in until their animation and silhouette pass visual QA.
+  if ProjectSettings.get_setting("titan_legends/graphics/experimental_models", false):
+   _try_imported_visual(hero, "heroes/class_%d" % class_ids[i])
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
