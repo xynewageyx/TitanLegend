@@ -472,9 +472,21 @@ func _try_imported_visual(host: Node3D, model_id: String) -> void:
  var model: Node3D = TitanModelLoader.attach_model(host, model_id)
  if model == null:
   return
- for child in host.get_children():
-  if child != model and child is MeshInstance3D:
-   child.visible = false
+ # Hide the complete procedural visual hierarchy, not just top-level meshes.
+ # Keep health UI, combat controller and passive pet nodes alive.
+ _hide_fallback_visuals(host, model)
+
+func _hide_fallback_visuals(root: Node, imported_model: Node3D) -> void:
+ for child in root.get_children():
+  if child == imported_model:
+   continue
+  if child.name == "HeroCombatMotion" or child.name == "PassivePet":
+   continue
+  if child is MeshInstance3D:
+   var mesh_node: MeshInstance3D = child as MeshInstance3D
+   mesh_node.visible = false
+  elif child is Node3D and not (child is CanvasItem):
+   _hide_fallback_visuals(child, imported_model)
 
 func _health_bar_piece(parent: Node3D, name_value: String, tint: Color, depth: float) -> MeshInstance3D:
  var piece: MeshInstance3D = MeshInstance3D.new()
