@@ -7,19 +7,22 @@ const COLORS = [Color("#a53e22"), Color("#297da8"), Color("#9b815e"), Color("#35
 @export var sun_light: DirectionalLight3D
 var current_biome: int = -1
 var terrain: Node3D
+const TERRAIN_RECYCLE_DISTANCE: float = 84.0
 func _ready() -> void:
  terrain = Node3D.new()
  terrain.name = "GeneratedTerrain"
  add_child(terrain)
  set_biome(BiomeType.NATURE)
 func _process(_delta: float) -> void:
- # Recycle the long terrain strip before the camera reaches its end.
- # Moving it only occasionally preserves visible scenery motion while walking.
+ # Recycle scenery only after the team has travelled a full terrain span.
+ # A 42-unit jump while the player is still inside the strip caused visible pops.
  if terrain == null:
   return
  var team: Node3D = get_node_or_null("../TeamFormation") as Node3D
- if team != null and team.position.z < terrain.position.z - 42.0:
-  terrain.position.z -= 42.0
+ if team == null:
+  return
+ if team.position.z < terrain.position.z - TERRAIN_RECYCLE_DISTANCE:
+  terrain.position.z -= TERRAIN_RECYCLE_DISTANCE
 
 func update_biome_from_stage(stage: int) -> void:
  # 12 areas x 100 stages; ten elements intentionally repeat in areas 11 and 12.
