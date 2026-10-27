@@ -15,6 +15,7 @@ signal afk_reward_received(gold: int, xp: int)
 const BOSS_TIME_LIMIT: float = 60.0
 const ROLE_ATTACK_INTERVALS: Array[float] = [1.25, 0.75, 1.5]
 const BOSS_WAVE: int = 10
+const MOB_WAVE_INTERVAL: float = 6.0
 var astral_active: bool = false
 var astral_floor: int = 1
 var astral_marks: int = 0
@@ -86,6 +87,8 @@ var _app_paused: bool = false
 var _walking_for_encounter: bool = false
 var _encounter_request_id: int = 0
 var _resume_walk_after_pause: bool = false
+var _next_mob_wave_delay: float = -1.0
+var _boss_start_requested: bool = false
 
 func _ready() -> void:
  _last_player_input_ms = Time.get_ticks_msec()
@@ -118,6 +121,11 @@ func _process(delta: float) -> void:
    _pay_afk_wave(now_ms)
   return
  if not battle_active:
+  if _next_mob_wave_delay >= 0.0 and not _finishing and not _retry_pending and not afk_farming:
+   _next_mob_wave_delay -= delta
+   if _next_mob_wave_delay <= 0.0:
+    _next_mob_wave_delay = -1.0
+    _queue_next_encounter()
   return
  enemy_animation_time += delta
  if is_boss:
@@ -920,6 +928,12 @@ func buy_astral_reward() -> bool:
 func start_next_encounter() -> void:
  if _finishing or _afk_wave_pending or _app_paused:
   return
+ if current_wave == BOSS_WAVE and not afk_farming and not astral_active and not _boss_start_requested:
+  battle_active = false
+  battle_status_changed.emit()
+  return
+ _boss_start_requested = false
+ _next_mob_wave_delay = -1.0
  _encounter_request_id += 1
  _cancel_pending_walk()
  if team_hp <= 0:
@@ -931,6 +945,13 @@ func start_next_encounter() -> void:
   team_formation.call("start_walking")
  else:
   spawn_wave()
+
+func request_boss_start() -> void:
+ if current_wave != BOSS_WAVE or battle_active or _finishing or afk_farming or _app_paused or astral_active:
+  return
+ _boss_start_requested = true
+ _next_mob_wave_delay = -1.0
+ _queue_next_encounter()
 
 func _on_walking_finished() -> void:
  if not _walking_for_encounter or _finishing or _afk_wave_pending or _app_paused:
@@ -1059,7 +1080,13 @@ func finish_wave() -> void:
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- _queue_next_encounter()
+ if current_wave == BOSS_WAVE and not astral_active:
+  # Boss waits for a player tap; never starts from the mob timer.
+  _next_mob_wave_delay = -1.0
+ else:
+  # Six seconds between normal mob waves (within the 5-7 second target).
+  _next_mob_wave_delay = MOB_WAVE_INTERVAL
+  _boss_start_requested = false
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
