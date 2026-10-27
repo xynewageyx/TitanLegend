@@ -23,18 +23,18 @@ class FormationRowsTests(unittest.TestCase):
         self.assertIn("role_ids[i] == 0", body)
         self.assertIn("role_ids[i] == 1 and class_ids[i] in MELEE_CLASSES", body)
         self.assertIn("MELEE_CLASSES := [0, 1, 5, 10]", SOURCE)
-        self.assertIn("-1.7 if in_front else 1.0", body)
+        self.assertIn("-2.15 if in_front else 1.25", body)
 
     def test_spacing_provides_room_for_companions_on_portrait_phones(self):
         body = method("_formation_position")
         self.assertIn(
-            "var spacing: float = 1.7 if row.size() <= 3 else 1.35",
+            "var spacing: float = 2.05 if row.size() <= 3 else 1.48",
             body,
         )
         # Three rear-row heroes are evenly spread while an all-melee
         # four-hero front row remains inside the path.
-        self.assertEqual([(i - 1) * 1.7 for i in range(3)], [-1.7, 0.0, 1.7])
-        self.assertAlmostEqual((3 - 1.5) * 1.35, 2.025)
+        self.assertEqual([(i - 1) * 2.05 for i in range(3)], [-2.05, 0.0, 2.05])
+        self.assertAlmostEqual((3 - 1.5) * 1.48, 2.22)
 
     def test_companions_stay_children_of_owner(self):
         body = method("create_team")
