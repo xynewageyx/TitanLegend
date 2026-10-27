@@ -96,7 +96,7 @@ func _ready() -> void:
   team_formation.walking_finished.connect(_on_walking_finished)
  var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
  current_level = maxi(1, saved_progress.x)
- current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)
+ current_wave = clampi(saved_progress.y, 1, BOSS_WAVE - 1)
  world_progress = saved_progress
  # Restore the area's element before spawning bosses, including save-game loads.
  if biome_manager != null:
@@ -928,11 +928,6 @@ func buy_astral_reward() -> bool:
 func start_next_encounter() -> void:
  if _finishing or _afk_wave_pending or _app_paused:
   return
- if current_wave == BOSS_WAVE and not afk_farming and not astral_active and not _boss_start_requested:
-  battle_active = false
-  battle_status_changed.emit()
-  return
- _boss_start_requested = false
  _next_mob_wave_delay = -1.0
  _encounter_request_id += 1
  _cancel_pending_walk()
@@ -947,7 +942,7 @@ func start_next_encounter() -> void:
   spawn_wave()
 
 func request_boss_start() -> void:
- if current_wave != BOSS_WAVE or battle_active or _finishing or afk_farming or _app_paused or astral_active:
+ if _finishing or afk_farming or _app_paused or astral_active or is_boss and battle_active:
   return
  _boss_start_requested = true
  _next_mob_wave_delay = -1.0
@@ -979,7 +974,8 @@ func spawn_wave() -> void:
  hero_attack_elapsed.fill(0.0)
  _enemy_attack_elapsed = 0.0
  defeat_reason = ""
- is_boss = AFK_POLICY.is_boss_encounter(afk_farming, astral_active, current_wave)
+ is_boss = (not afk_farming and (_boss_start_requested or astral_active))
+ _boss_start_requested = false
  is_fusion_boss = is_boss and current_level % 10 == 0
  boss_variant_id = TitanCombatBalance.boss_variant(current_level)
  boss_title = TitanCombatBalance.BOSS_TITLES[boss_variant_id]
@@ -1075,18 +1071,13 @@ func finish_wave() -> void:
   if biome_manager != null:
    biome_manager.call("update_biome_from_stage", current_level)
  else:
-  current_wave += 1
-  # Wave ten is always the boss; do not advance stage early.
+  # Normal farming loops independently of the manually started boss.
+  current_wave = 1 if current_wave >= BOSS_WAVE - 1 else current_wave + 1
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- if current_wave == BOSS_WAVE and not astral_active:
-  # Boss waits for a player tap; never starts from the mob timer.
-  _next_mob_wave_delay = -1.0
- else:
-  # Six seconds between normal mob waves (within the 5-7 second target).
-  _next_mob_wave_delay = MOB_WAVE_INTERVAL
-  _boss_start_requested = false
+ # Six seconds between normal mob waves; bosses never auto-start.
+ _next_mob_wave_delay = MOB_WAVE_INTERVAL
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
