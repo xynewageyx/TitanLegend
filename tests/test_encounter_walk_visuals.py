@@ -31,6 +31,17 @@ class EncounterWalkTests(unittest.TestCase):
         self.assertIn("bar.position = Vector3(0.0, 3.02, 0.0)", TEAM)
         self.assertIn("(fill.mesh as QuadMesh).size = Vector2(0.82, 0.12)", TEAM)
 
+    def test_pets_stay_on_outer_side_for_all_team_slots(self):
+        self.assertIn("var anchor_x: float = _formation_position(i).x", TEAM)
+        self.assertIn("var pet_side: float = -1.0 if anchor_x < 0.0 else 1.0", TEAM)
+        self.assertIn("pet.position = Vector3(pet_side * pet_offset, 0.0, -0.35)", TEAM)
+        for anchor_x in [-2.05, -1.025, 1.025, 2.05]:
+            pet_side = -1.0 if anchor_x < 0.0 else 1.0
+            for species in range(10):
+                pet_offset = 1.48 if species in (3, 4, 8) else 1.30
+                self.assertGreater(abs(anchor_x + pet_side * pet_offset), abs(anchor_x))
+                self.assertEqual((anchor_x + pet_side * pet_offset) > 0.0, anchor_x > 0.0)
+
     def test_cancelled_walk_does_not_finish(self):
         self.assertIn('func stop_walking()', TEAM)
         self.assertIn('walk_tween.kill()', TEAM)
