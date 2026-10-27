@@ -187,6 +187,9 @@ func _notification(what: int) -> void:
   elif _resume_walk_after_pause:
    # Walking-Tweens koennen waehrend der Android-Pause nicht sicher fortgesetzt werden.
    _resume_walk_after_pause = false
+   # Keep a manually requested boss on resume; never infer it from the mob counter.
+   if is_boss:
+    _boss_start_requested = true
    _queue_next_encounter()
 
 func _enter_afk_farming(now_ms: int) -> void:
