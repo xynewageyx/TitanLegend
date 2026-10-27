@@ -13,6 +13,8 @@ static func attach_model(host: Node3D, model_id: String, scale_factor: float = 1
 		return null
 	var path := MODEL_ROOT + model_id + ".glb"
 	if not ResourceLoader.exists(path):
+		path = MODEL_ROOT + model_id + ".tscn"
+	if not ResourceLoader.exists(path):
 		return null
 	var resource := load(path) as PackedScene
 	if resource == null:
