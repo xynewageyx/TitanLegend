@@ -173,6 +173,7 @@ jobs:
           set -euo pipefail
           mkdir -p build
           godot --headless --path . --editor --import --quit
+          godot --headless --path . --install-android-build-template
           godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
           test -s build/TitanLegends-debug.apk
           unzip -tq build/TitanLegends-debug.apk
