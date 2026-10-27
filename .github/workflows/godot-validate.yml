@@ -36,6 +36,8 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --editor --import --quit
+      - name: Check imported 3D model pipeline
+        run: python3 -m unittest discover -s tests -p 'test_imported_3d_pipeline.py' -v
       - name: Test boss camera framing
         shell: bash
         run: |
