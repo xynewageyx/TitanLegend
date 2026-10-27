@@ -28,11 +28,21 @@ func _play_imported_state(state: StringName) -> void:
   &"Attack": names = [&"Attack", &"Attack_1", &"attack", &"Punch"]
   &"Run": names = [&"Run", &"Walk", &"run", &"walk"]
   _: names = [&"Idle", &"idle", &"Stand"]
+ # Imported GLB animations may be namespaced (for example "Armature/Run").
+ # Prefer exact clips, then match the suffix without changing gameplay timing.
+ var available: PackedStringArray = imported_animation_player.get_animation_list()
  for candidate in names:
-  if imported_animation_player.has_animation(candidate):
-   if imported_animation_state != candidate or not imported_animation_player.is_playing():
-    imported_animation_player.play(candidate)
-    imported_animation_state = candidate
+  var resolved: StringName = candidate
+  if not imported_animation_player.has_animation(resolved):
+   resolved = &""
+   for clip in available:
+    if clip.get_slice("/", clip.get_slice_count("/") - 1).to_lower() == String(candidate).to_lower():
+     resolved = StringName(clip)
+     break
+  if resolved != &"":
+   if imported_animation_state != resolved or not imported_animation_player.is_playing():
+    imported_animation_player.play(resolved, 0.12 if imported_animation_state != &"" else 0.0)
+    imported_animation_state = resolved
    return
 
 var elapsed: float = 0.0
