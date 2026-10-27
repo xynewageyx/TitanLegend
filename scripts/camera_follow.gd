@@ -5,7 +5,7 @@ extends Camera3D
 @export var target_path: NodePath = NodePath("../TeamFormation")
 @export var battle_manager_path: NodePath = NodePath("../BattleManager")
 @export var enemy_spawn_path: NodePath = NodePath("../EnemySpawn")
-@export var camera_offset: Vector3 = Vector3(0.0, 8.8, 13.2)
+@export var camera_offset: Vector3 = Vector3(2.8, 8.8, 13.2)
 @export var look_ahead: Vector3 = Vector3(0.0, 1.45, -3.2)
 @export var smoothing: float = 3.0
 @export var aim_smoothing: float = 4.0
@@ -47,9 +47,10 @@ func _desired_view() -> Dictionary:
  if boss_active and enemy_spawn != null and is_instance_valid(enemy_spawn):
   var boss_position: Vector3 = enemy_spawn.global_position
   # Frame the space between the heroes and the enemy, with extra headroom.
+  # Preserve a slight three-quarter perspective instead of a flat rear view.
   focus = (team_position + boss_position) * 0.5 + Vector3(0.0, 2.2, 0.0)
   # Use horizontal battlefield separation; vertical boss placement should not zoom the camera.
   var flat_separation: float = Vector2(team_position.x - boss_position.x, team_position.z - boss_position.z).length()
   var framing_distance: float = flat_separation
-  offset = Vector3(0.0, clampf(framing_distance * 1.05, 12.5, 22.0), clampf(framing_distance * 1.65, 19.0, 34.0))
+  offset = Vector3(2.8, clampf(framing_distance * 1.05, 12.5, 22.0), clampf(framing_distance * 1.65, 19.0, 34.0))
  return {"position": focus + offset, "focus": focus}
