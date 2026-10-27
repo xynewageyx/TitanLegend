@@ -1044,6 +1044,9 @@ func finish_wave() -> void:
   return
  battle_active = false
  _finishing = true
+ # Remove defeated boss visuals immediately, before rewards and save operations.
+ if is_boss:
+  clear_enemies()
  if afk_farming:
   # Eine abgeschlossene AFK-Welle gibt maximal alle 60 Sekunden Belohnung.
   # Niemals Bossloot vergeben oder die gespeicherte Stage/Welle erhoehen.
