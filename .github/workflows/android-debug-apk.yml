@@ -140,8 +140,34 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 120s godot --headless --path . --editor --install-android-build-template --quit
-          test -f android/build/build.gradle || test -f android/build.gradle
+          # Avoid Godot's interactive template installer in headless CI.
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          template = Path.home() / ".local/share/godot/export_templates/4.6.stable/android_source.zip"
+          target = Path("android/build")
+          with ZipFile(template) as archive:
+              names = [n for n in archive.namelist() if not n.endswith("/")]
+              prefix = "android/build/" if any(n.startswith("android/build/") for n in names) else "build/"
+              if not any(n.startswith(prefix) for n in names):
+                  prefix = ""
+              extracted = 0
+              for entry in archive.infolist():
+                  if entry.is_dir() or not entry.filename.startswith(prefix):
+                      continue
+                  relative = Path(entry.filename[len(prefix):])
+                  if not relative.parts or ".." in relative.parts or relative.is_absolute():
+                      continue
+                  output = target / relative
+                  output.parent.mkdir(parents=True, exist_ok=True)
+                  with archive.open(entry) as source, output.open("wb") as dest:
+                      import shutil
+                      shutil.copyfileobj(source, dest)
+                  extracted += 1
+          print(f"Extracted {extracted} Gradle template files")
+          if not (target / "build.gradle").is_file() and not (target / "settings.gradle").is_file():
+              raise SystemExit("Android Gradle template missing build.gradle/settings.gradle")
+          PY
 
       - name: Export Android arm64 debug APK
         shell: bash
