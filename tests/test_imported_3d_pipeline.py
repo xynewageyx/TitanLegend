@@ -13,7 +13,10 @@ class Imported3DPipelineTests(unittest.TestCase):
         self.assertIn("if not ResourceLoader.exists(path):", LOADER)
         self.assertIn("return null", LOADER)
         self.assertIn("if model == null:", FORMATION)
-        self.assertIn("child.visible = false", FORMATION)
+        self.assertIn("_hide_fallback_visuals(host, model)", FORMATION)
+        self.assertIn("mesh_node.visible = false", FORMATION)
+        self.assertIn('child.name == "HeroCombatMotion"', FORMATION)
+        self.assertIn('child.name == "PassivePet"', FORMATION)
 
     def test_hero_and_passive_pet_models_have_separate_paths(self):
         self.assertIn('"heroes/class_%d"', FORMATION)
