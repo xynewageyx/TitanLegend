@@ -136,7 +136,12 @@ jobs:
           godot --headless --path . --editor --import --quit
 
       - name: Install Gradle Android build template
-        run: godot --headless --path . --install-android-build-template
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s godot --headless --path . --editor --install-android-build-template --quit
+          test -f android/build/build.gradle || test -f android/build.gradle
 
       - name: Export Android arm64 debug APK
         shell: bash
