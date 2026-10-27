@@ -24,7 +24,10 @@ class Imported3DPipelineTests(unittest.TestCase):
     def test_animation_states_are_connected(self):
         for state in ('&"Idle"', '&"Run"', '&"Attack"', '&"Hit"', '&"Defeat"'):
             self.assertIn(state, MOTION)
-        self.assertIn("imported_animation_player.play(candidate)", MOTION)
+        self.assertIn("imported_animation_player.play(resolved", MOTION)
+        self.assertIn("get_animation_list()", MOTION)
+        self.assertIn("clip.get_slice(", MOTION)
+        self.assertIn("0.12 if imported_animation_state", MOTION)
         self.assertIn("TitanImportedModel", MOTION)
 
     def test_loader_rejects_path_traversal(self):
