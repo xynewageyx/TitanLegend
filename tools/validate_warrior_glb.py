@@ -69,7 +69,22 @@ def inspect(path: Path) -> dict:
     if missing_rig:
         raise ValueError("Prototype armature missing from GLB: " + ", ".join(sorted(missing_rig)))
     print("Prototype rig exported: armature and 12 named bones.")
-    print("Skins in GLB:", len(document.get("skins", [])), "(zero means no mesh skinning yet)")
+    # Require a real skin and a mesh node using it; armature nodes alone are insufficient.
+    skins = document.get("skins", [])
+    if not skins:
+        raise ValueError("No glTF skin exported for the calibration mesh")
+    skinned_nodes = [node for node in nodes if "skin" in node and "mesh" in node]
+    if not skinned_nodes:
+        raise ValueError("No mesh node references an exported glTF skin")
+    calibration = [node for node in skinned_nodes
+                   if "RigCalibrationSkinnedMesh" in node.get("name", "")]
+    if not calibration:
+        raise ValueError("Calibration mesh is not exported with a skin")
+    spine_indices = {i for i, node in enumerate(nodes) if node.get("name") == "Spine"}
+    if not any(spine_indices.intersection(skin.get("joints", [])) for skin in skins):
+        raise ValueError("Skin has no Spine bone joint")
+    print(f"GLB skinning OK: {len(skins)} skins, {len(skinned_nodes)} skinned mesh nodes.")
+
     print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
 
