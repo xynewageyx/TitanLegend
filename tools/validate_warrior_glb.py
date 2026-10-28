@@ -33,6 +33,31 @@ def inspect(path: Path) -> dict:
     if not expected.issubset(clips):
         raise ValueError(f"Missing prototype motion clips: {sorted(expected - clips)}")
     print("Prototype motion clips:", ", ".join(sorted(clips)))
+    # Verify that animation channels target independent limb nodes.
+    # A valid clip name alone does not guarantee articulated movement.
+    required_joints = {"LeftArmPivot", "RightArmPivot", "LeftLegPivot", "RightLegPivot"}
+    joint_indices = {
+        index for index, node in enumerate(nodes)
+        if node.get("name") in required_joints
+    }
+    if len(joint_indices) != 4:
+        raise ValueError("Missing independent arm/leg animation pivots")
+    for animation in document.get("animations", []):
+        clip = animation.get("name", "").split("/")[-1]
+        if clip not in expected:
+            continue
+        animated_joints = {
+            channel.get("target", {}).get("node")
+            for channel in animation.get("channels", [])
+            if channel.get("target", {}).get("path") == "rotation"
+        }
+        if not joint_indices.issubset(animated_joints):
+            raise ValueError(
+                f"{clip} lacks independent limb rotation channels: "
+                f"{len(animated_joints & joint_indices)}/4"
+            )
+    print("All five clips include four articulated limb channels.")
+
     print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
 
