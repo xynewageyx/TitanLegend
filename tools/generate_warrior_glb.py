@@ -52,47 +52,6 @@ def sphere(name, pos, scale, mat, segments=16, rings=8):
     bpy.ops.object.shade_smooth()
     return obj
 
-# Forward is -Y; total height approximately 2.65 m.
-cube("Breastplate", (0, 0, 1.66), (.78, .43, .73), steel, .075)
-cube("Breastplate center ridge", (0, -.255, 1.69), (.13, .09, .72), edge)
-cube("Chest heraldry", (0, -.312, 1.83), (.24, .07, .30), gold)
-cube("Undershirt", (0, .01, 1.17), (.66, .38, .35), cloth)
-cube("Armored belt", (0, -.03, 1.12), (.84, .49, .16), leather)
-cube("Belt buckle", (0, -.305, 1.12), (.22, .08, .19), gold)
-cube("Front tabard", (0, -.27, .79), (.43, .12, .67), cloth, .025)
-cube("Tabard gold stripe", (0, -.342, .76), (.06, .02, .56), gold, .008)
-
-for side, sign in (("L", -1), ("R", 1)):
-    x = sign * .61
-    cube(side + " Pauldron", (x, 0, 1.91), (.49, .43, .23), steel, .075, (0, 0, sign*13))
-    cube(side + " Shoulder rim", (x, -.20, 1.89), (.65, .11, .13), gold)
-    cube(side + " Upper arm", (sign*.67, 0, 1.58), (.24, .28, .48), leather, .075)
-    cube(side + " Forearm plate", (sign*.70, -.04, 1.29), (.31, .35, .43), steel)
-    cube(side + " Gauntlet", (sign*.71, -.05, 1.03), (.28, .30, .25), dark)
-    cube(side + " Thigh", (sign*.24, 0, .83), (.31, .34, .62), steel, .065)
-    cube(side + " Knee cap", (sign*.24, -.21, .52), (.38, .17, .20), gold)
-    cube(side + " Greave", (sign*.24, 0, .30), (.32, .37, .48), steel)
-    cube(side + " Boot", (sign*.24, -.10, .10), (.34, .54, .21), dark, .055)
-
-cube("Helmet crown", (0, 0, 2.28), (.51, .52, .63), steel, .17)
-cube("Helmet faceplate", (0, -.29, 2.24), (.48, .13, .43), steel)
-cube("Helmet brow", (0, -.37, 2.46), (.65, .15, .12), gold)
-cube("Helmet central crest", (0, -.04, 2.66), (.12, .27, .30), gold)
-cube("Helmet eye slit", (0, -.365, 2.27), (.41, .03, .065), glow, .008)
-cube("Helmet nose guard", (0, -.395, 2.17), (.09, .10, .27), edge)
-
-# Distinct broad sword and left arm shield, geometry only.
-cube("Sword grip", (.72, -.12, .80), (.09, .11, .40), leather)
-cube("Sword pommel", (.72, -.12, .57), (.17, .17, .15), gold)
-cube("Sword guard", (.72, -.12, 1.04), (.48, .16, .11), gold)
-cube("Sword blade", (.72, -.12, 1.48), (.145, .055, .83), edge, .014)
-cube("Sword fuller", (.72, -.165, 1.50), (.045, .014, .61), steel, .005)
-cube("Shield face", (-.82, -.32, 1.28), (.68, .16, .89), steel, .11)
-cube("Shield boss", (-.82, -.44, 1.29), (.25, .10, .30), gold)
-cube("Shield center stripe", (-.82, -.42, 1.29), (.085, .04, .69), gold)
-
-# Update 255: armor silhouette pass. These are distinct plates, not an
-# enlarged collection of spherical placeholder limbs.
 def tapered_plate(name, z_low, z_high, width_low, width_high, depth, mat):
     vertices = [
         (-width_low/2, -depth, z_low), (width_low/2, -depth, z_low),
@@ -114,6 +73,47 @@ def tapered_plate(name, z_low, z_high, width_low, width_high, depth, mat):
     obj.modifiers.new("Weighted normals", "WEIGHTED_NORMAL")
     return obj
 
+# Forward is -Y; total height approximately 2.65 m.
+tapered_plate("Breastplate", 1.35, 2.02, .58, .92, .22, steel)
+cube("Breastplate center ridge", (0, -.255, 1.69), (.13, .09, .72), edge)
+cube("Chest heraldry", (0, -.312, 1.83), (.24, .07, .30), gold)
+cube("Undershirt", (0, .01, 1.17), (.66, .38, .35), cloth)
+cube("Armored belt", (0, -.03, 1.12), (.84, .49, .16), leather)
+cube("Belt buckle", (0, -.305, 1.12), (.22, .08, .19), gold)
+cube("Front tabard", (0, -.27, .79), (.43, .12, .67), cloth, .025)
+cube("Tabard gold stripe", (0, -.342, .76), (.06, .02, .56), gold, .008)
+
+for side, sign in (("L", -1), ("R", 1)):
+    x = sign * .61
+    cube(side + " Pauldron", (x, 0, 1.91), (.49, .43, .23), steel, .075, (0, 0, sign*13))
+    cube(side + " Shoulder rim", (x, -.20, 1.89), (.65, .11, .13), gold)
+    cube(side + " Upper arm", (sign*.67, 0, 1.58), (.24, .28, .48), leather, .075)
+    cube(side + " Forearm plate", (sign*.70, -.04, 1.29), (.31, .35, .43), steel)
+    cube(side + " Gauntlet", (sign*.71, -.05, 1.03), (.28, .30, .25), dark)
+    cube(side + " Thigh", (sign*.24, 0, .83), (.27, .31, .62), steel, .095)
+    cube(side + " Knee cap", (sign*.24, -.21, .52), (.38, .17, .20), gold)
+    cube(side + " Greave", (sign*.24, 0, .30), (.27, .32, .48), steel, .09)
+    cube(side + " Boot", (sign*.24, -.10, .10), (.34, .54, .21), dark, .055)
+
+cube("Helmet crown", (0, 0, 2.28), (.51, .52, .63), steel, .17)
+cube("Helmet faceplate", (0, -.29, 2.24), (.48, .13, .43), steel)
+cube("Helmet brow", (0, -.37, 2.46), (.65, .15, .12), gold)
+cube("Helmet central crest", (0, -.04, 2.66), (.12, .27, .30), gold)
+cube("Helmet eye slit", (0, -.365, 2.27), (.41, .03, .065), glow, .008)
+cube("Helmet nose guard", (0, -.395, 2.17), (.09, .10, .27), edge)
+
+# Distinct broad sword and left arm shield, geometry only.
+cube("Sword grip", (.72, -.12, .80), (.09, .11, .40), leather)
+cube("Sword pommel", (.72, -.12, .57), (.17, .17, .15), gold)
+cube("Sword guard", (.72, -.12, 1.04), (.48, .16, .11), gold)
+cube("Sword blade", (.72, -.12, 1.48), (.145, .055, .83), edge, .014)
+cube("Sword fuller", (.72, -.165, 1.50), (.045, .014, .61), steel, .005)
+cube("Shield face", (-.82, -.32, 1.28), (.68, .16, .89), steel, .11)
+cube("Shield boss", (-.82, -.44, 1.29), (.25, .10, .30), gold)
+cube("Shield center stripe", (-.82, -.42, 1.29), (.085, .04, .69), gold)
+
+# Update 255: armor silhouette pass. These are distinct plates, not an
+# enlarged collection of spherical placeholder limbs.
 # A tapered lower torso breaks up the old straight rectangular silhouette.
 tapered_plate("Waist tapered cuirass", 1.14, 1.49, .57, .79, .205, steel)
 cube("Upper breastplate silver band", (0, -.252, 1.94), (.69, .055, .075), edge, .018)
