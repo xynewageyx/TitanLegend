@@ -19,12 +19,12 @@ def material(name, rgb, metallic=0.0, roughness=0.48):
     bsdf.inputs["Roughness"].default_value = roughness
     return mat
 
-steel = material("Midnight forged steel", (.09, .16, .25), .78)
-edge = material("Silver armor edges", (.52, .67, .72), .85)
-gold = material("Brass accents", (.72, .42, .13), .7)
-leather = material("Worn brown leather", (.19, .095, .055))
-cloth = material("Royal crimson cloth", (.35, .035, .075))
-dark = material("Boot and glove leather", (.045, .05, .065))
+steel = material("Midnight forged steel", (.045, .085, .145), .88, .28)
+edge = material("Silver armor edges", (.62, .73, .78), .91, .22)
+gold = material("Brass accents", (.60, .32, .075), .82, .30)
+leather = material("Worn brown leather", (.14, .066, .034), .03, .82)
+cloth = material("Royal crimson cloth", (.25, .018, .045), 0.0, .95)
+dark = material("Boot and glove leather", (.028, .032, .045), .02, .88)
 glow = material("Arcane cyan gem", (.06, .75, .95), .25)
 
 def cube(name, pos, scale, mat, bevel=0.045, rot=None):
