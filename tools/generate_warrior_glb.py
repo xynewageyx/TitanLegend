@@ -85,8 +85,8 @@ cube("Tabard gold stripe", (0, -.342, .76), (.06, .02, .56), gold, .008)
 
 for side, sign in (("L", -1), ("R", 1)):
     x = sign * .61
-    cube(side + " Pauldron", (x, 0, 1.91), (.49, .43, .23), steel, .075, (0, 0, sign*13))
-    cube(side + " Shoulder rim", (x, -.20, 1.89), (.65, .11, .13), gold)
+    cube(side + " Pauldron", (x, 0, 1.91), (.48, .41, .20), steel, .045, (0, 0, sign*17))
+    cube(side + " Shoulder rim", (x, -.20, 1.89), (.55, .085, .095), gold, .025, (0, 0, sign*17))
     cube(side + " Upper arm", (sign*.67, 0, 1.58), (.24, .28, .48), leather, .075)
     cube(side + " Forearm plate", (sign*.70, -.04, 1.29), (.31, .35, .43), steel)
     cube(side + " Gauntlet", (sign*.71, -.05, 1.03), (.28, .30, .25), dark)
@@ -108,7 +108,7 @@ cube("Helmet nose guard", (0, -.395, 2.17), (.09, .10, .27), edge)
 # Distinct broad sword and left arm shield, geometry only.
 cube("Sword grip", (.72, -.12, .80), (.09, .11, .40), leather)
 cube("Sword pommel", (.72, -.12, .57), (.17, .17, .15), gold)
-cube("Sword guard", (.72, -.12, 1.04), (.48, .16, .11), gold)
+cube("Sword guard", (.72, -.12, 1.04), (.42, .13, .09), gold, .025)
 cube("Sword blade", (.72, -.12, 1.48), (.145, .055, .83), edge, .014)
 cube("Sword fuller", (.72, -.165, 1.50), (.045, .014, .61), steel, .005)
 cube("Shield face", (-.82, -.32, 1.28), (.68, .16, .89), steel, .11)
@@ -124,7 +124,7 @@ cube("Lower cuirass trim", (0, -.235, 1.37), (.61, .07, .07), gold, .02)
 for side, sign in (("L", -1), ("R", 1)):
     # Distinct overlapping shoulder and thigh plates add readable layering.
     cube(side + " Outer shoulder plate", (sign*.64, -.08, 1.96),
-         (.48, .43, .13), edge, .055, (0, 0, sign*13))
+         (.44, .40, .10), edge, .04, (0, 0, sign*17))
     cube(side + " Shoulder lower flange", (sign*.72, -.14, 1.77),
          (.40, .35, .12), steel, .03, (0, 0, sign*12))
     cube(side + " Thigh armor overlay", (sign*.24, -.235, .84),
@@ -141,6 +141,14 @@ cube("Sword extended blade", (.72, -.12, 1.94), (.13, .052, .35), edge, .01)
 cube("Sword blade tip", (.72, -.12, 2.15), (.09, .065, .16), edge, .008)
 cube("Shield outer rim", (-.82, -.425, 1.28), (.74, .055, .95), gold, .04)
 cube("Shield inset face", (-.82, -.464, 1.28), (.61, .04, .82), steel, .055)
+
+# Sword profile: a tapered, faceted tip reads as a blade rather than a rod.
+# Existing named blade remains for backward-compatible GLB validation.
+tapered_plate("Sword pointed tip", 2.18, 2.38, .13, .012, .032, edge)
+cube("Sword edge highlight", (.66, -.164, 1.63), (.025, .012, .98), edge, .004)
+for side, sign in (("L", -1), ("R", 1)):
+    cube(side + " Pauldron crest", (sign*.66, -.305, 1.96),
+         (.20, .05, .075), gold, .016, (0, 0, sign*17))
 
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
