@@ -59,6 +59,17 @@ def inspect(path: Path) -> dict:
             )
     print("All five clips include eight articulated joint channels.")
 
+    # Update 264: ensure the prototype armature survives Blender's GLB export.
+    # Bones may be exported as ordinary nodes until a mesh is skinned.
+    rig_nodes = {"WarriorDeformRigPrototype", "Root", "Spine", "Neck", "Head",
+                 "UpperArm.L", "Forearm.L", "UpperArm.R", "Forearm.R",
+                 "Thigh.L", "Shin.L", "Thigh.R", "Shin.R"}
+    exported_names = {node.get("name", "") for node in nodes}
+    missing_rig = rig_nodes - exported_names
+    if missing_rig:
+        raise ValueError("Prototype armature missing from GLB: " + ", ".join(sorted(missing_rig)))
+    print("Prototype rig exported: armature and 12 named bones.")
+    print("Skins in GLB:", len(document.get("skins", [])), "(zero means no mesh skinning yet)")
     print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
 
