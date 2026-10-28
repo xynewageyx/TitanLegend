@@ -91,6 +91,54 @@ cube("Shield face", (-.82, -.32, 1.28), (.68, .16, .89), steel, .11)
 cube("Shield boss", (-.82, -.44, 1.29), (.25, .10, .30), gold)
 cube("Shield center stripe", (-.82, -.42, 1.29), (.085, .04, .69), gold)
 
+# Update 255: armor silhouette pass. These are distinct plates, not an
+# enlarged collection of spherical placeholder limbs.
+def tapered_plate(name, z_low, z_high, width_low, width_high, depth, mat):
+    vertices = [
+        (-width_low/2, -depth, z_low), (width_low/2, -depth, z_low),
+        (-width_high/2, -depth, z_high), (width_high/2, -depth, z_high),
+        (-width_low/2, depth, z_low), (width_low/2, depth, z_low),
+        (-width_high/2, depth, z_high), (width_high/2, depth, z_high),
+    ]
+    faces = [(0,1,3,2), (4,6,7,5), (0,4,5,1),
+             (2,3,7,6), (0,2,6,4), (1,5,7,3)]
+    mesh = bpy.data.meshes.new(name + "Geometry")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    obj.data.materials.append(mat)
+    bevel = obj.modifiers.new("Forged plate edges", "BEVEL")
+    bevel.width = .035
+    bevel.segments = 2
+    obj.modifiers.new("Weighted normals", "WEIGHTED_NORMAL")
+    return obj
+
+# A tapered lower torso breaks up the old straight rectangular silhouette.
+tapered_plate("Waist tapered cuirass", 1.14, 1.49, .57, .79, .205, steel)
+cube("Upper breastplate silver band", (0, -.252, 1.94), (.69, .055, .075), edge, .018)
+cube("Lower cuirass trim", (0, -.235, 1.37), (.61, .07, .07), gold, .02)
+for side, sign in (("L", -1), ("R", 1)):
+    # Distinct overlapping shoulder and thigh plates add readable layering.
+    cube(side + " Outer shoulder plate", (sign*.64, -.08, 1.96),
+         (.48, .43, .13), edge, .055, (0, 0, sign*13))
+    cube(side + " Shoulder lower flange", (sign*.72, -.14, 1.77),
+         (.40, .35, .12), steel, .03, (0, 0, sign*12))
+    cube(side + " Thigh armor overlay", (sign*.24, -.235, .84),
+         (.28, .085, .44), edge, .035)
+    cube(side + " Greave front ridge", (sign*.24, -.21, .30),
+         (.085, .065, .36), gold, .025)
+
+# Faceguard framing, cheek protection and a longer recognizable sword.
+cube("Helmet left cheekguard", (-.255, -.315, 2.16), (.105, .13, .31), edge, .025)
+cube("Helmet right cheekguard", (.255, -.315, 2.16), (.105, .13, .31), edge, .025)
+cube("Helmet lower faceguard", (0, -.365, 2.075), (.42, .105, .085), steel, .025)
+cube("Helmet crest rear ridge", (0, .015, 2.64), (.095, .25, .31), edge, .025)
+cube("Sword extended blade", (.72, -.12, 1.94), (.15, .07, .35), edge, .015)
+cube("Sword blade tip", (.72, -.12, 2.15), (.09, .065, .16), edge, .008)
+cube("Shield outer rim", (-.82, -.425, 1.28), (.74, .055, .95), gold, .04)
+cube("Shield inset face", (-.82, -.464, 1.28), (.61, .04, .82), steel, .055)
+
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
