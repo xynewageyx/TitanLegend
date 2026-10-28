@@ -184,6 +184,27 @@ for name, parent_name, head, tail in bone_specs:
 bpy.ops.object.mode_set(mode="OBJECT")
 armature.hide_render = True
 
+# Update 272: dedicated armature test action, separate from the five game clips.
+# It moves only the skinned right forearm and is not used by the current game.
+bpy.context.view_layer.objects.active = armature
+bpy.ops.object.mode_set(mode="POSE")
+forearm_pose = armature.pose.bones["Forearm.R"]
+forearm_pose.rotation_mode = "XYZ"
+armature.animation_data_create()
+test_action = bpy.data.actions.new("RigForearmBendTest")
+armature.animation_data.action = test_action
+for frame, angle in ((1, 0.0), (8, -.55), (16, 0.0)):
+    forearm_pose.rotation_euler = (angle, 0.0, 0.0)
+    forearm_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
+test_track = armature.animation_data.nla_tracks.new()
+test_track.name = "RigForearmBendTest"
+test_strip = test_track.strips.new("RigForearmBendTest", 1, test_action)
+test_strip.action_frame_end = 16
+armature.animation_data.action = None
+forearm_pose.rotation_euler = (0.0, 0.0, 0.0)
+bpy.ops.object.mode_set(mode="OBJECT")
+
+
 # Update 265: a separately skinned, hidden calibration mesh validates glTF skin
 # export without changing the visible warrior or its existing pivot animations.
 # This is a rigging proof-of-concept, not final character skinning.
