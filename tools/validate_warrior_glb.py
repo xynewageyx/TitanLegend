@@ -28,8 +28,12 @@ def inspect(path: Path) -> dict:
     print(f"GLB OK: {len(meshes)} meshes, {len(nodes)} nodes, "
           f"{len(document.get('materials', []))} materials, "
           f"{len(document.get('animations', []))} animations")
-    if not document.get("animations"):
-        print("NOTICE: Static model only; rig and animations still required.")
+    clips = {a.get("name", "").split("/")[-1] for a in document.get("animations", [])}
+    expected = {"Idle", "Run", "Attack", "Hit", "Defeat"}
+    if not expected.issubset(clips):
+        raise ValueError(f"Missing prototype motion clips: {sorted(expected - clips)}")
+    print("Prototype motion clips:", ", ".join(sorted(clips)))
+    print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
 
 if __name__ == "__main__":
