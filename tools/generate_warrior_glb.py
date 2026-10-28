@@ -189,5 +189,5 @@ pivot.rotation_euler.x = 0.0
 
 output = Path("build/class_0.glb")
 output.parent.mkdir(parents=True, exist_ok=True)
-bpy.ops.export_scene.gltf(filepath=str(output), export_format="GLB", export_apply=True, export_nla_strips=True, export_nla_strips_merged_animation_name="TRACK")
+bpy.ops.export_scene.gltf(filepath=str(output), export_format="GLB", export_apply=True, export_animation_mode="NLA_TRACKS")
 print("Exported", output, output.stat().st_size, "bytes")
