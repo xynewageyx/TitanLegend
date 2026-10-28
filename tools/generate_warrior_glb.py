@@ -205,11 +205,29 @@ calibration_obj.parent = armature
 # It is a tiny patch positioned inside the torso, so it is not visible in previews.
 calibration_obj.hide_render = False
 
+# Update 270: add a second weighted calibration mesh for a limb bone.
+# This verifies multiple independent skin joints without altering the warrior.
+forearm_mesh = bpy.data.meshes.new("ForearmCalibrationGeometry")
+forearm_mesh.from_pydata(
+    [(.72, .11, 1.12), (.76, .11, 1.12),
+     (.72, .11, 1.30), (.76, .11, 1.30)],
+    [], [(0, 1, 3, 2)])
+forearm_mesh.update()
+forearm_obj = bpy.data.objects.new("ForearmCalibrationSkinnedMesh", forearm_mesh)
+bpy.context.collection.objects.link(forearm_obj)
+forearm_obj.data.materials.append(dark)
+forearm_group = forearm_obj.vertex_groups.new(name="Forearm.R")
+forearm_group.add([0, 1, 2, 3], 1.0, "REPLACE")
+forearm_modifier = forearm_obj.modifiers.new("Forearm bone deformation", "ARMATURE")
+forearm_modifier.object = armature
+forearm_obj.parent = armature
+
+
 
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
-    if obj.type == "MESH" and obj.name != "RigCalibrationSkinnedMesh":
+    if obj.type == "MESH" and obj.name not in {"RigCalibrationSkinnedMesh", "ForearmCalibrationSkinnedMesh"}:
         bpy.context.view_layer.objects.active = obj
         for mod in list(obj.modifiers):
             try:
