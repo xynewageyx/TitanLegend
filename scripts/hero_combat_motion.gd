@@ -51,6 +51,13 @@ func _play_imported_state(state: StringName) -> void:
      break
   if resolved != &"":
    if imported_animation_state != resolved or not imported_animation_player.is_playing():
+    var clip: Animation = imported_animation_player.get_animation(resolved)
+    if clip != null:
+     # Movement cycles loop, while impact/death clips keep their authored end.
+     if state == &"Idle" or state == &"Run":
+      clip.loop_mode = Animation.LOOP_LINEAR
+     else:
+      clip.loop_mode = Animation.LOOP_NONE
     imported_animation_player.play(resolved, 0.12 if imported_animation_state != &"" else 0.0)
     imported_animation_state = resolved
    return
