@@ -173,10 +173,10 @@ for obj in list(bpy.data.objects):
 # Articulated prototype: each limb has its own transform pivot. This is
 # rigid-part animation (not a deforming skinned armature yet).
 limb_groups = {
-    "LeftArm": ([-.61, 0, 1.85], ("L Pauldron", "L Shoulder rim", "L Upper arm", "L Forearm plate", "L Gauntlet", "Shield")),
-    "RightArm": ([.61, 0, 1.85], ("R Pauldron", "R Shoulder rim", "R Upper arm", "R Forearm plate", "R Gauntlet", "Sword")),
-    "LeftLeg": ([-.24, 0, 1.04], ("L Thigh", "L Knee cap", "L Greave", "L Boot")),
-    "RightLeg": ([.24, 0, 1.04], ("R Thigh", "R Knee cap", "R Greave", "R Boot")),
+    "LeftArm": ([-.61, 0, 1.85], ("L Pauldron", "L Shoulder rim", "L Outer shoulder plate", "L Shoulder lower flange", "L Upper arm", "L Forearm plate", "L Gauntlet", "Shield")),
+    "RightArm": ([.61, 0, 1.85], ("R Pauldron", "R Shoulder rim", "R Outer shoulder plate", "R Shoulder lower flange", "R Upper arm", "R Forearm plate", "R Gauntlet", "Sword")),
+    "LeftLeg": ([-.24, 0, 1.04], ("L Thigh", "L Thigh armor overlay", "L Knee cap", "L Greave", "L Greave front ridge", "L Boot")),
+    "RightLeg": ([.24, 0, 1.04], ("R Thigh", "R Thigh armor overlay", "R Knee cap", "R Greave", "R Greave front ridge", "R Boot")),
 }
 limbs = {}
 for group, (location, prefixes) in limb_groups.items():
@@ -197,8 +197,8 @@ for group, (location, prefixes) in limb_groups.items():
 secondary_specs = {
     "LeftElbow": ([-.70, 0, 1.45], ("L Forearm plate", "L Gauntlet", "Shield")),
     "RightElbow": ([.70, 0, 1.45], ("R Forearm plate", "R Gauntlet", "Sword")),
-    "LeftKnee": ([-.24, 0, .58], ("L Greave", "L Boot")),
-    "RightKnee": ([.24, 0, .58], ("R Greave", "R Boot")),
+    "LeftKnee": ([-.24, 0, .58], ("L Greave", "L Greave front ridge", "L Boot")),
+    "RightKnee": ([.24, 0, .58], ("R Greave", "R Greave front ridge", "R Boot")),
 }
 secondary = {}
 for joint_name, (position, prefixes) in secondary_specs.items():
