@@ -34,6 +34,27 @@ def inspect(path: Path) -> dict:
         raise ValueError(f"Missing prototype motion clips: {sorted(expected - clips)}")
     if "RigForearmBendTest" not in clips:
         raise ValueError("Missing independent rig forearm bend test clip")
+    # Update 273: a named rig clip must actually animate the skinned forearm bone.
+    right_forearm_nodes = {
+        index for index, node in enumerate(nodes)
+        if node.get("name") == "Forearm.R"
+    }
+    if len(right_forearm_nodes) != 1:
+        raise ValueError("Expected exactly one Forearm.R bone node")
+    bend_clips = [
+        animation for animation in document.get("animations", [])
+        if animation.get("name", "").split("/")[-1] == "RigForearmBendTest"
+    ]
+    if len(bend_clips) != 1:
+        raise ValueError("Expected exactly one forearm bend test animation")
+    bend_channels = [
+        channel for channel in bend_clips[0].get("channels", [])
+        if channel.get("target", {}).get("node") in right_forearm_nodes
+        and channel.get("target", {}).get("path") == "rotation"
+    ]
+    if not bend_channels:
+        raise ValueError("Forearm bend test has no rotation channel targeting Forearm.R")
+    print("Rig bend test targets the actual right forearm bone.")
     print("Prototype motion clips:", ", ".join(sorted(clips)))
     # Verify that animation channels target independent limb nodes.
     # A valid clip name alone does not guarantee articulated movement.
