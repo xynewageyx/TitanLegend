@@ -28,6 +28,8 @@ jobs:
         run: |
           LIBGL_ALWAYS_SOFTWARE=1 EGL_PLATFORM=surfaceless blender -b --python tools/render_warrior_preview.py
           test -s build/warrior_preview.png
+          test -s build/warrior_front.png
+          test -s build/warrior_side.png
       - name: Upload Godot-ready GLB model
         uses: actions/upload-artifact@v4
         with:
@@ -35,6 +37,8 @@ jobs:
           path: |
             build/class_0.glb
             build/warrior_preview.png
+            build/warrior_front.png
+            build/warrior_side.png
           if-no-files-found: error
           retention-days: 30
       - name: Integrate generated GLB into development branch
