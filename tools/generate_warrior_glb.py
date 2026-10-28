@@ -101,6 +101,43 @@ for obj in list(bpy.context.selected_objects):
                 bpy.ops.object.modifier_apply(modifier=mod.name)
             except RuntimeError:
                 pass
+# Prototype object-level clips (not yet a skinned Skeleton3D).
+# Parent meshes under one pivot, preserving their world-space positions.
+bpy.ops.object.empty_add(type="PLAIN_AXES", location=(0, 0, 0))
+pivot = bpy.context.object
+pivot.name = "WarriorMotionRoot"
+for obj in list(bpy.data.objects):
+    if obj.type == "MESH":
+        obj.parent = pivot
+        obj.matrix_parent_inverse.identity()
+
+# Separate NLA tracks export as distinct glTF animation clips.
+# Each clip has its own Action, so Godot can play it by name.
+clips = {
+    "Idle": [(1, 0.0, 0.0), (16, 0.025, 0.018), (31, 0.0, 0.0)],
+    "Run": [(1, 0.0, -0.06), (7, 0.09, 0.08), (13, 0.0, -0.06), (19, 0.09, 0.08), (25, 0.0, -0.06)],
+    "Attack": [(1, 0.0, 0.0), (6, -0.10, 0.32), (11, 0.10, -0.42), (19, 0.0, 0.0)],
+    "Hit": [(1, 0.0, 0.0), (5, -0.12, 0.20), (13, 0.0, 0.0)],
+    "Defeat": [(1, 0.0, 0.0), (20, -0.65, 1.12)],
+}
+pivot.animation_data_create()
+for name, keys in clips.items():
+    action = bpy.data.actions.new(name)
+    pivot.animation_data.action = action
+    for frame, z, pitch in keys:
+        pivot.location.z = z
+        pivot.rotation_euler.x = pitch
+        pivot.keyframe_insert(data_path="location", frame=frame, group="Movement")
+        pivot.keyframe_insert(data_path="rotation_euler", frame=frame, group="Movement")
+    track = pivot.animation_data.nla_tracks.new()
+    track.name = name
+    strip = track.strips.new(name, int(keys[0][0]), action)
+    strip.action_frame_start = keys[0][0]
+    strip.action_frame_end = keys[-1][0]
+    pivot.animation_data.action = None
+pivot.location.z = 0.0
+pivot.rotation_euler.x = 0.0
+
 output = Path("build/class_0.glb")
 output.parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.export_scene.gltf(filepath=str(output), export_format="GLB", export_apply=True)
