@@ -51,3 +51,17 @@ scene.world.color = (0.13, 0.13, 0.13)
 scene.camera.data.lens = 50
 bpy.ops.render.render(write_still=True)
 print("Rendered", scene.render.filepath)
+
+# Front orthographic reference exposes symmetry, sword visibility and armor proportions.
+camera.location = (0, -8.5, 3.0)
+point_at(camera, (0, 0, 1.35))
+scene.render.filepath = str(Path("build/warrior_front.png").resolve())
+bpy.ops.render.render(write_still=True)
+print("Rendered", scene.render.filepath)
+
+# Side view helps spot floating joints and overlapping armor layers.
+camera.location = (8.5, 0, 3.0)
+point_at(camera, (0, 0, 1.35))
+scene.render.filepath = str(Path("build/warrior_side.png").resolve())
+bpy.ops.render.render(write_still=True)
+print("Rendered", scene.render.filepath)
