@@ -32,6 +32,8 @@ def inspect(path: Path) -> dict:
     expected = {"Idle", "Run", "Attack", "Hit", "Defeat"}
     if not expected.issubset(clips):
         raise ValueError(f"Missing prototype motion clips: {sorted(expected - clips)}")
+    if "RigForearmBendTest" not in clips:
+        raise ValueError("Missing independent rig forearm bend test clip")
     print("Prototype motion clips:", ", ".join(sorted(clips)))
     # Verify that animation channels target independent limb nodes.
     # A valid clip name alone does not guarantee articulated movement.
