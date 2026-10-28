@@ -150,6 +150,40 @@ for side, sign in (("L", -1), ("R", 1)):
     cube(side + " Pauldron crest", (sign*.66, -.305, 1.96),
          (.20, .05, .075), gold, .016, (0, 0, sign*17))
 
+# V3 rig preparation: a named deform-bone skeleton for future weighted meshes.
+# The existing Empty-based animation hierarchy stays authoritative for now.
+# This armature is intentionally NOT skinned or animated in this update.
+bpy.ops.object.armature_add(enter_editmode=False, location=(0, 0, 0))
+armature = bpy.context.object
+armature.name = "WarriorDeformRigPrototype"
+armature.data.name = "WarriorDeformBones"
+bpy.context.view_layer.objects.active = armature
+bpy.ops.object.mode_set(mode="EDIT")
+root_bone = armature.data.edit_bones[0]
+root_bone.name = "Root"
+root_bone.head = (0, 0, .05)
+root_bone.tail = (0, 0, .95)
+bone_specs = [
+    ("Spine", "Root", (0, 0, .95), (0, 0, 1.8)),
+    ("Neck", "Spine", (0, 0, 1.8), (0, 0, 2.13)),
+    ("Head", "Neck", (0, 0, 2.13), (0, 0, 2.60)),
+    ("UpperArm.L", "Spine", (-.60, 0, 1.85), (-.70, 0, 1.45)),
+    ("Forearm.L", "UpperArm.L", (-.70, 0, 1.45), (-.71, 0, 1.02)),
+    ("UpperArm.R", "Spine", (.60, 0, 1.85), (.70, 0, 1.45)),
+    ("Forearm.R", "UpperArm.R", (.70, 0, 1.45), (.71, 0, 1.02)),
+    ("Thigh.L", "Root", (-.24, 0, 1.04), (-.24, 0, .58)),
+    ("Shin.L", "Thigh.L", (-.24, 0, .58), (-.24, 0, .12)),
+    ("Thigh.R", "Root", (.24, 0, 1.04), (.24, 0, .58)),
+    ("Shin.R", "Thigh.R", (.24, 0, .58), (.24, 0, .12)),
+]
+for name, parent_name, head, tail in bone_specs:
+    bone = armature.data.edit_bones.new(name)
+    bone.head, bone.tail = head, tail
+    bone.parent = armature.data.edit_bones[parent_name]
+    bone.use_connect = False
+bpy.ops.object.mode_set(mode="OBJECT")
+armature.hide_render = True
+
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
