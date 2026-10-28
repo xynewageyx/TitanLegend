@@ -33,6 +33,18 @@ class Imported3DPipelineTests(unittest.TestCase):
         self.assertIn("0.12 if imported_animation_state", MOTION)
         self.assertIn("TitanImportedModel", MOTION)
 
+    def test_imported_motion_loops_only_travel_states(self):
+        self.assertIn('state == &"Idle" or state == &"Run"', MOTION)
+        self.assertIn("clip.loop_mode = Animation.LOOP_LINEAR", MOTION)
+        self.assertIn("clip.loop_mode = Animation.LOOP_NONE", MOTION)
+        self.assertIn("imported_animation_player.get_animation(resolved)", MOTION)
+
+    def test_imported_model_hides_old_combat_parts(self):
+        self.assertIn("_hide_procedural_limbs()", MOTION)
+        self.assertIn("for part in [left_arm, right_arm, left_leg, right_leg]", MOTION)
+        self.assertIn("part.visible = false", MOTION)
+        self.assertIn('defense_ring.visible = false', MOTION)
+
     def test_loader_rejects_path_traversal(self):
         self.assertIn('model_id.contains("..")', LOADER)
         self.assertIn('model_id.begins_with("/")', LOADER)
