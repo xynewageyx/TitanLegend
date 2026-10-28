@@ -201,7 +201,9 @@ group.add([0, 1, 2, 3], 1.0, "REPLACE")
 arm_mod = calibration_obj.modifiers.new("Prototype bone deformation", "ARMATURE")
 arm_mod.object = armature
 calibration_obj.parent = armature
-calibration_obj.hide_render = True
+# Keep calibration geometry exportable: Blender glTF skips hide_render meshes.
+# It is a tiny patch positioned inside the torso, so it is not visible in previews.
+calibration_obj.hide_render = False
 
 
 # Apply modifiers to make the exported GLB independent of Blender.
