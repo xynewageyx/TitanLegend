@@ -224,10 +224,20 @@ forearm_obj.parent = armature
 
 
 
+# Update 271: skinned visible armor prototype (small steel forearm inlay).
+# The original forearm plate remains on its working pivot animation path.
+inlay = cube("RiggedRightForearmInlay", (.70, -.233, 1.29),
+             (.13, .035, .24), edge, .012)
+inlay_group = inlay.vertex_groups.new(name="Forearm.R")
+inlay_group.add(list(range(len(inlay.data.vertices))), 1.0, "REPLACE")
+inlay_modifier = inlay.modifiers.new("Forearm skin deformation", "ARMATURE")
+inlay_modifier.object = armature
+inlay.parent = armature
+
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
-    if obj.type == "MESH" and obj.name not in {"RigCalibrationSkinnedMesh", "ForearmCalibrationSkinnedMesh"}:
+    if obj.type == "MESH" and obj.name not in {"RigCalibrationSkinnedMesh", "ForearmCalibrationSkinnedMesh", "RiggedRightForearmInlay"}:
         bpy.context.view_layer.objects.active = obj
         for mod in list(obj.modifiers):
             try:
