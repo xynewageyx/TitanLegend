@@ -17,6 +17,16 @@ func _find_imported_animation() -> void:
  imported_animation_model = hero.get_node_or_null("TitanImportedModel") as Node3D
  if imported_animation_model != null:
   imported_animation_player = TitanModelLoader._find_animation_player(imported_animation_model)
+  if imported_animation_player != null:
+   _hide_procedural_limbs()
+
+func _hide_procedural_limbs() -> void:
+ # Keep combat flashes and tank status effects; only retire placeholder limbs
+ # and the procedural equipment attached to them.
+ for part in [left_arm, right_arm, left_leg, right_leg]:
+  if part != null:
+   part.visible = false
+
 
 func _play_imported_state(state: StringName) -> void:
  if imported_animation_player == null:
