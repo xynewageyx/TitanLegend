@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/generate_warrior_glb.py'
       - '.github/workflows/build-warrior-model.yml'
+      - 'tools/validate_warrior_glb.py'
 permissions:
   contents: write
 jobs:
@@ -21,6 +22,7 @@ jobs:
         run: |
           blender -b --python tools/generate_warrior_glb.py
           test -s build/class_0.glb
+          python3 tools/validate_warrior_glb.py build/class_0.glb
       - name: Upload Godot-ready GLB model
         uses: actions/upload-artifact@v4
         with:
