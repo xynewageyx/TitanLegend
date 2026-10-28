@@ -83,7 +83,14 @@ def inspect(path: Path) -> dict:
     spine_indices = {i for i, node in enumerate(nodes) if node.get("name") == "Spine"}
     if not any(spine_indices.intersection(skin.get("joints", [])) for skin in skins):
         raise ValueError("Skin has no Spine bone joint")
-    print(f"GLB skinning OK: {len(skins)} skins, {len(skinned_nodes)} skinned mesh nodes.")
+    forearm_calibration = [node for node in skinned_nodes
+                           if "ForearmCalibrationSkinnedMesh" in node.get("name", "")]
+    if not forearm_calibration:
+        raise ValueError("Forearm calibration mesh has no exported skin")
+    forearm_indices = {i for i, node in enumerate(nodes) if node.get("name") == "Forearm.R"}
+    if not any(forearm_indices.intersection(skin.get("joints", [])) for skin in skins):
+        raise ValueError("Skin has no right forearm joint")
+    print(f"GLB skinning OK: {len(skins)} skins, {len(skinned_nodes)} skinned mesh nodes; Spine and Forearm.R verified.")
 
     print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
