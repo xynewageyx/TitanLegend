@@ -95,10 +95,13 @@ for side, sign in (("L", -1), ("R", 1)):
     cube(side + " Greave", (sign*.24, 0, .30), (.27, .32, .48), steel, .09)
     cube(side + " Boot", (sign*.24, -.10, .10), (.34, .54, .21), dark, .055)
 
-cube("Helmet crown", (0, 0, 2.28), (.51, .52, .63), steel, .17)
+# Faceted crown gives the helmet a tapered medieval silhouette.
+tapered_plate("Helmet crown", 2.04, 2.56, .57, .34, .265, steel)
 cube("Helmet faceplate", (0, -.29, 2.24), (.48, .13, .43), steel)
 cube("Helmet brow", (0, -.37, 2.46), (.65, .15, .12), gold)
-cube("Helmet central crest", (0, -.04, 2.66), (.12, .27, .30), gold)
+cube("Helmet central crest", (0, -.04, 2.62), (.085, .27, .22), gold, .025)
+cube("Helmet visor upper ridge", (0, -.345, 2.38), (.52, .11, .065), edge, .02)
+cube("Helmet jaw plate", (0, -.315, 2.055), (.38, .14, .10), steel, .035)
 cube("Helmet eye slit", (0, -.365, 2.27), (.41, .03, .065), glow, .008)
 cube("Helmet nose guard", (0, -.395, 2.17), (.09, .10, .27), edge)
 
