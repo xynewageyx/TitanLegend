@@ -133,6 +133,57 @@ for group, (location, prefixes) in limb_groups.items():
             obj.matrix_world = world
     limbs[group] = joint
 
+# Secondary elbow and knee joints add articulation beyond rigid limb swing.
+# They pivot forearm/shin meshes while preserving their current world transforms.
+secondary_specs = {
+    "LeftElbow": ([-.70, 0, 1.45], ("L Forearm plate", "L Gauntlet", "Shield")),
+    "RightElbow": ([.70, 0, 1.45], ("R Forearm plate", "R Gauntlet", "Sword")),
+    "LeftKnee": ([-.24, 0, .58], ("L Greave", "L Boot")),
+    "RightKnee": ([.24, 0, .58], ("R Greave", "R Boot")),
+}
+secondary = {}
+for joint_name, (position, prefixes) in secondary_specs.items():
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=position)
+    joint = bpy.context.object
+    joint.name = joint_name + "Pivot"
+    primary = limbs["LeftArm" if joint_name == "LeftElbow" else
+                    "RightArm" if joint_name == "RightElbow" else
+                    "LeftLeg" if joint_name == "LeftKnee" else "RightLeg"]
+    joint.parent = primary
+    joint.matrix_parent_inverse = primary.matrix_world.inverted()
+    for obj in list(bpy.data.objects):
+        if obj.type == "MESH" and obj.name.startswith(prefixes):
+            world = obj.matrix_world.copy()
+            obj.parent = joint
+            obj.matrix_world = world
+    secondary[joint_name] = joint
+
+secondary_motion = {
+    "Idle": [(1, 0, 0, 0, 0), (16, .035, .035, .015, .015), (31, 0, 0, 0, 0)],
+    "Run": [(1, .38, .15, .62, .08), (7, .15, .38, .08, .62),
+            (13, .38, .15, .62, .08), (19, .15, .38, .08, .62),
+            (25, .38, .15, .62, .08)],
+    "Attack": [(1, .08, .20, .05, .05), (6, .15, 1.12, .18, .12),
+               (11, .25, .12, .08, .15), (19, .08, .20, .05, .05)],
+    "Hit": [(1, 0, 0, 0, 0), (5, .35, .35, .16, .16), (13, 0, 0, 0, 0)],
+    "Defeat": [(1, 0, 0, 0, 0), (20, .72, .72, .48, .48)],
+}
+for clip_name, frames in secondary_motion.items():
+    for index, joint_name in enumerate(("LeftElbow", "RightElbow", "LeftKnee", "RightKnee")):
+        joint = secondary[joint_name]
+        joint.animation_data_create()
+        action = bpy.data.actions.new(clip_name + "_" + joint_name)
+        joint.animation_data.action = action
+        for frame, *angles in frames:
+            joint.rotation_euler.x = angles[index]
+            joint.keyframe_insert(data_path="rotation_euler", frame=frame)
+        track = joint.animation_data.nla_tracks.new()
+        track.name = clip_name
+        strip = track.strips.new(clip_name, int(frames[0][0]), action)
+        strip.action_frame_end = frames[-1][0]
+        joint.animation_data.action = None
+        joint.rotation_euler.x = 0
+
 # Arm/leg swing in radians, keyed independently for each clip.
 limb_motion = {
     "Idle": [(1, 0, 0, 0, 0), (16, .025, -.025, .015, -.015), (31, 0, 0, 0, 0)],
