@@ -184,6 +184,26 @@ for name, parent_name, head, tail in bone_specs:
 bpy.ops.object.mode_set(mode="OBJECT")
 armature.hide_render = True
 
+# Update 265: a separately skinned, hidden calibration mesh validates glTF skin
+# export without changing the visible warrior or its existing pivot animations.
+# This is a rigging proof-of-concept, not final character skinning.
+calibration_mesh = bpy.data.meshes.new("RigCalibrationGeometry")
+calibration_mesh.from_pydata(
+    [(-.025, .12, 1.35), (.025, .12, 1.35),
+     (-.025, .12, 1.58), (.025, .12, 1.58)],
+    [], [(0, 1, 3, 2)])
+calibration_mesh.update()
+calibration_obj = bpy.data.objects.new("RigCalibrationSkinnedMesh", calibration_mesh)
+bpy.context.collection.objects.link(calibration_obj)
+calibration_obj.data.materials.append(dark)
+group = calibration_obj.vertex_groups.new(name="Spine")
+group.add([0, 1, 2, 3], 1.0, "REPLACE")
+arm_mod = calibration_obj.modifiers.new("Prototype bone deformation", "ARMATURE")
+arm_mod.object = armature
+calibration_obj.parent = armature
+calibration_obj.hide_render = True
+
+
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
