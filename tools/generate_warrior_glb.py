@@ -111,6 +111,55 @@ for obj in list(bpy.data.objects):
         obj.parent = pivot
         obj.matrix_parent_inverse.identity()
 
+# Articulated prototype: each limb has its own transform pivot. This is
+# rigid-part animation (not a deforming skinned armature yet).
+limb_groups = {
+    "LeftArm": ([-.61, 0, 1.85], ("L Pauldron", "L Shoulder rim", "L Upper arm", "L Forearm plate", "L Gauntlet", "Shield")),
+    "RightArm": ([.61, 0, 1.85], ("R Pauldron", "R Shoulder rim", "R Upper arm", "R Forearm plate", "R Gauntlet", "Sword")),
+    "LeftLeg": ([-.24, 0, 1.04], ("L Thigh", "L Knee cap", "L Greave", "L Boot")),
+    "RightLeg": ([.24, 0, 1.04], ("R Thigh", "R Knee cap", "R Greave", "R Boot")),
+}
+limbs = {}
+for group, (location, prefixes) in limb_groups.items():
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=location)
+    joint = bpy.context.object
+    joint.name = group + "Pivot"
+    joint.parent = pivot
+    joint.matrix_parent_inverse.identity()
+    for obj in list(bpy.data.objects):
+        if obj.type == "MESH" and obj.name.startswith(prefixes):
+            world = obj.matrix_world.copy()
+            obj.parent = joint
+            obj.matrix_world = world
+    limbs[group] = joint
+
+# Arm/leg swing in radians, keyed independently for each clip.
+limb_motion = {
+    "Idle": [(1, 0, 0, 0, 0), (16, .025, -.025, .015, -.015), (31, 0, 0, 0, 0)],
+    "Run": [(1, -.45, .45, .55, -.55), (7, .45, -.45, -.55, .55),
+            (13, -.45, .45, .55, -.55), (19, .45, -.45, -.55, .55),
+            (25, -.45, .45, .55, -.55)],
+    "Attack": [(1, 0, 0, 0, 0), (6, -.15, -1.05, -.20, .20),
+               (11, .20, .90, .15, -.15), (19, 0, 0, 0, 0)],
+    "Hit": [(1, 0, 0, 0, 0), (5, -.28, -.28, -.12, -.12), (13, 0, 0, 0, 0)],
+    "Defeat": [(1, 0, 0, 0, 0), (20, .55, .55, -.35, -.35)],
+}
+for clip_name, frames in limb_motion.items():
+    for index, limb_name in enumerate(("LeftArm", "RightArm", "LeftLeg", "RightLeg")):
+        joint = limbs[limb_name]
+        joint.animation_data_create()
+        action = bpy.data.actions.new(clip_name + "_" + limb_name)
+        joint.animation_data.action = action
+        for frame, *angles in frames:
+            joint.rotation_euler.x = angles[index]
+            joint.keyframe_insert(data_path="rotation_euler", frame=frame)
+        track = joint.animation_data.nla_tracks.new()
+        track.name = clip_name
+        strip = track.strips.new(clip_name, int(frames[0][0]), action)
+        strip.action_frame_end = frames[-1][0]
+        joint.animation_data.action = None
+        joint.rotation_euler.x = 0
+
 # Separate NLA tracks export as distinct glTF animation clips.
 # Each clip has its own Action, so Godot can play it by name.
 clips = {
