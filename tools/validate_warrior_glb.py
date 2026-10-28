@@ -35,13 +35,14 @@ def inspect(path: Path) -> dict:
     print("Prototype motion clips:", ", ".join(sorted(clips)))
     # Verify that animation channels target independent limb nodes.
     # A valid clip name alone does not guarantee articulated movement.
-    required_joints = {"LeftArmPivot", "RightArmPivot", "LeftLegPivot", "RightLegPivot"}
+    required_joints = {"LeftArmPivot", "RightArmPivot", "LeftLegPivot", "RightLegPivot",
+                       "LeftElbowPivot", "RightElbowPivot", "LeftKneePivot", "RightKneePivot"}
     joint_indices = {
         index for index, node in enumerate(nodes)
         if node.get("name") in required_joints
     }
-    if len(joint_indices) != 4:
-        raise ValueError("Missing independent arm/leg animation pivots")
+    if len(joint_indices) != 8:
+        raise ValueError("Missing independent shoulder, hip, elbow or knee pivots")
     for animation in document.get("animations", []):
         clip = animation.get("name", "").split("/")[-1]
         if clip not in expected:
@@ -54,9 +55,9 @@ def inspect(path: Path) -> dict:
         if not joint_indices.issubset(animated_joints):
             raise ValueError(
                 f"{clip} lacks independent limb rotation channels: "
-                f"{len(animated_joints & joint_indices)}/4"
+                f"{len(animated_joints & joint_indices)}/8"
             )
-    print("All five clips include four articulated limb channels.")
+    print("All five clips include eight articulated joint channels.")
 
     print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
