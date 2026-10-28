@@ -209,7 +209,7 @@ calibration_obj.hide_render = False
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
-    if obj.type == "MESH":
+    if obj.type == "MESH" and obj.name != "RigCalibrationSkinnedMesh":
         bpy.context.view_layer.objects.active = obj
         for mod in list(obj.modifiers):
             try:
@@ -222,7 +222,7 @@ bpy.ops.object.empty_add(type="PLAIN_AXES", location=(0, 0, 0))
 pivot = bpy.context.object
 pivot.name = "WarriorMotionRoot"
 for obj in list(bpy.data.objects):
-    if obj.type == "MESH":
+    if obj.type == "MESH" and obj.name != "RigCalibrationSkinnedMesh":
         obj.parent = pivot
         obj.matrix_parent_inverse.identity()
 
