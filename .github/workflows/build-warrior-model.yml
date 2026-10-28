@@ -18,7 +18,7 @@ jobs:
       - name: Install Blender
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender python3-numpy
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
       - name: Generate original armored warrior
         run: |
           blender -b --python tools/generate_warrior_glb.py
@@ -26,7 +26,7 @@ jobs:
           python3 tools/validate_warrior_glb.py build/class_0.glb
       - name: Render visual QA preview
         run: |
-          blender -b --python tools/render_warrior_preview.py
+          LIBGL_ALWAYS_SOFTWARE=1 EGL_PLATFORM=surfaceless blender -b --python tools/render_warrior_preview.py
           test -s build/warrior_preview.png
       - name: Upload Godot-ready GLB model
         uses: actions/upload-artifact@v4
