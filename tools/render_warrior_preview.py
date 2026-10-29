@@ -65,3 +65,25 @@ point_at(camera, (0, 0, 1.35))
 scene.render.filepath = str(Path("build/warrior_side.png").resolve())
 bpy.ops.render.render(write_still=True)
 print("Rendered", scene.render.filepath)
+
+# Update 279: export three snapshots from the independent skeletal attack test.
+# The old game Attack clip is intentionally not altered.
+armatures = [obj for obj in bpy.data.objects if obj.type == "ARMATURE"]
+rig = next((obj for obj in armatures if obj.name.startswith("WarriorDeformRigPrototype")), None)
+if rig is None or rig.animation_data is None:
+    raise RuntimeError("Imported deform rig missing for attack QA")
+attack_tracks = [
+    track for track in rig.animation_data.nla_tracks
+    if track.name == "RigRightArmAttackTest"
+]
+if len(attack_tracks) != 1:
+    raise RuntimeError("Expected exactly one imported RigRightArmAttackTest NLA track")
+for track in rig.animation_data.nla_tracks:
+    track.mute = track != attack_tracks[0]
+camera.location = (5.2, -7.8, 4.0)
+point_at(camera, (0, 0, 1.25))
+for frame, label in ((5, "windup"), (9, "strike"), (13, "recovery")):
+    scene.frame_set(frame)
+    scene.render.filepath = str(Path(f"build/warrior_attack_{label}.png").resolve())
+    bpy.ops.render.render(write_still=True)
+    print("Rendered attack frame", frame, scene.render.filepath)
