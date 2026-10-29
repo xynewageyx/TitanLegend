@@ -255,10 +255,19 @@ inlay_modifier = inlay.modifiers.new("Forearm skin deformation", "ARMATURE")
 inlay_modifier.object = armature
 inlay.parent = armature
 
+# Update 274: left forearm skin test without disrupting pivot-based combat.
+left_inlay = cube("RiggedLeftForearmInlay", (-.70, -.233, 1.29),
+                  (.13, .035, .24), edge, .012)
+left_group = left_inlay.vertex_groups.new(name="Forearm.L")
+left_group.add(list(range(len(left_inlay.data.vertices))), 1.0, "REPLACE")
+left_modifier = left_inlay.modifiers.new("Left forearm skin deformation", "ARMATURE")
+left_modifier.object = armature
+left_inlay.parent = armature
+
 # Apply modifiers to make the exported GLB independent of Blender.
 bpy.ops.object.select_all(action="SELECT")
 for obj in list(bpy.context.selected_objects):
-    if obj.type == "MESH" and obj.name not in {"RigCalibrationSkinnedMesh", "ForearmCalibrationSkinnedMesh", "RiggedRightForearmInlay"}:
+    if obj.type == "MESH" and obj.name not in {"RigCalibrationSkinnedMesh", "ForearmCalibrationSkinnedMesh", "RiggedRightForearmInlay", "RiggedLeftForearmInlay"}:
         bpy.context.view_layer.objects.active = obj
         for mod in list(obj.modifiers):
             try:
