@@ -92,16 +92,14 @@ def tapered_plate(name, z_low, z_high, width_low, width_high, depth, mat):
     return obj
 
 # Update 300: Anime-RPG silhouette pass. Rounded limb volumes and faceplate\n# replace prominent box primitives without changing animation object names.\n# Forward is -Y; total height approximately 2.65 m.
-# Update 301: convex anime-RPG chest shell, layered over the tapered core.
-# Ellipsoidal surface softens the flat breastplate while preserving its silhouette.
-tapered_plate("Breastplate", 1.35, 2.02, .58, .92, .22, steel)
-sphere("Anime chest curved shell", (0, -.115, 1.72),
-       (.43, .255, .365), steel, 32, 18)
+# Update 303: remove the bulbous overlapping ellipsoids from Update 301.
+# A single tapered torso shell restores a narrower anime-RPG waist silhouette.
+tapered_plate("Breastplate", 1.35, 2.02, .48, .80, .18, steel)
 for side, sign in (("L", -1), ("R", 1)):
-    sphere(side + " anime pectoral armor", (sign * .215, -.245, 1.79),
-           (.215, .10, .235), steel, 24, 14)
-    sphere(side + " anime lower rib plate", (sign * .20, -.195, 1.49),
-           (.19, .09, .115), edge, 20, 12)
+    cube(side + " anime pectoral inset", (sign * .195, -.19, 1.82),
+         (.30, .045, .23), edge, .045, (0, 0, sign * 9))
+    cube(side + " anime lower rib trim", (sign * .17, -.18, 1.49),
+         (.26, .045, .065), gold, .018)
 
 cube("Breastplate center ridge", (0, -.255, 1.69), (.13, .09, .72), edge)
 cube("Chest heraldry", (0, -.312, 1.83), (.24, .07, .30), gold)
