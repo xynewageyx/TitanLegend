@@ -115,3 +115,25 @@ sheet.filepath_raw = str(Path("build/warrior_attack_comparison.png").resolve())
 sheet.file_format = "PNG"
 sheet.save()
 print("Saved attack comparison sheet", sheet.filepath_raw)
+
+# Update 282: machine-readable QA report of the actual imported attack poses.
+import json
+report = {"clip": "RigRightArmAttackTest", "frames": []}
+for frame, phase in ((5, "windup"), (9, "strike"), (13, "recovery")):
+    scene.frame_set(frame)
+    bpy.context.view_layer.update()
+    bones = {}
+    for bone_name in ("Root", "Spine", "UpperArm.R", "Forearm.R"):
+        pose_bone = rig.pose.bones.get(bone_name)
+        if pose_bone is None:
+            raise RuntimeError(f"Attack QA missing bone: {bone_name}")
+        bones[bone_name] = {
+            "position": [round(float(v), 5) for v in pose_bone.matrix.translation],
+            "rotation_quaternion": [
+                round(float(v), 5) for v in pose_bone.matrix.to_quaternion()
+            ],
+        }
+    report["frames"].append({"frame": frame, "phase": phase, "bones": bones})
+report_path = Path("build/warrior_attack_qa.json")
+report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+print("Saved attack pose QA report", report_path)
