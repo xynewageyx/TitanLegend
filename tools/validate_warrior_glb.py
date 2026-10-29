@@ -117,7 +117,14 @@ def inspect(path: Path) -> dict:
                      if "RiggedRightForearmInlay" in node.get("name", "")]
     if not visible_inlay:
         raise ValueError("Visible forearm armor inlay is not exported as a skinned mesh")
-    print(f"GLB skinning OK: {len(skins)} skins, {len(skinned_nodes)} skinned mesh nodes; Spine, Forearm.R and visible armor inlay verified.")
+    left_inlay = [node for node in skinned_nodes
+                  if "RiggedLeftForearmInlay" in node.get("name", "")]
+    if not left_inlay:
+        raise ValueError("Left forearm armor inlay is not exported as a skinned mesh")
+    left_forearm_indices = {i for i, node in enumerate(nodes) if node.get("name") == "Forearm.L"}
+    if not any(left_forearm_indices.intersection(skin.get("joints", [])) for skin in skins):
+        raise ValueError("Skin has no left forearm joint")
+    print(f"GLB skinning OK: {len(skins)} skins, {len(skinned_nodes)} skinned mesh nodes; both forearms verified.")
 
     print("NOTICE: Object-level animations; skeletal rig and skinning still required.")
     return document
