@@ -91,7 +91,7 @@ def tapered_plate(name, z_low, z_high, width_low, width_high, depth, mat):
     obj.modifiers.new("Weighted normals", "WEIGHTED_NORMAL")
     return obj
 
-# Forward is -Y; total height approximately 2.65 m.
+# Update 300: Anime-RPG silhouette pass. Rounded limb volumes and faceplate\n# replace prominent box primitives without changing animation object names.\n# Forward is -Y; total height approximately 2.65 m.
 tapered_plate("Breastplate", 1.35, 2.02, .58, .92, .22, steel)
 cube("Breastplate center ridge", (0, -.255, 1.69), (.13, .09, .72), edge)
 cube("Chest heraldry", (0, -.312, 1.83), (.24, .07, .30), gold)
@@ -131,7 +131,7 @@ for side, sign in (("L", -1), ("R", 1)):
     sphere(side + " Pauldron center boss", (x, -.228, 1.96),
            (.095, .04, .095), gold, 20, 10)
 
-    cube(side + " Upper arm", (sign*.67, 0, 1.58), (.24, .28, .48), leather, .075)
+    sphere(side + " Upper arm", (sign*.67, 0, 1.58), (.135, .145, .285), leather, 20, 12)
     cube(side + " Forearm plate", (sign*.70, -.04, 1.29), (.31, .35, .43), steel)
     # Update 291: layered vambrace with a shaped central ridge and forged cuff.
     cube(side + " Vambrace upper cuff", (sign * .70, -.075, 1.47),
@@ -151,7 +151,7 @@ for side, sign in (("L", -1), ("R", 1)):
              (sign * .71 + offset, -.29, .96),
              (.042, .04, .105), edge, .01)
 
-    cube(side + " Thigh", (sign*.24, 0, .83), (.27, .31, .62), steel, .095)
+    sphere(side + " Thigh", (sign*.24, 0, .83), (.158, .177, .36), steel, 24, 14)
     cube(side + " Knee cap", (sign*.24, -.21, .52), (.38, .17, .20), gold)
     cube(side + " Greave", (sign*.24, 0, .30), (.27, .32, .48), steel, .09)
     # Update 290: overlapping shin armor and raised front blade.
@@ -172,7 +172,7 @@ for side, sign in (("L", -1), ("R", 1)):
 
 # Faceted crown gives the helmet a tapered medieval silhouette.
 tapered_plate("Helmet crown", 2.04, 2.56, .57, .34, .265, steel)
-cube("Helmet faceplate", (0, -.29, 2.24), (.48, .13, .43), steel)
+sphere("Helmet faceplate", (0, -.275, 2.24), (.255, .125, .235), steel, 24, 14)
 cube("Helmet brow", (0, -.37, 2.46), (.65, .15, .12), gold)
 cube("Helmet central crest", (0, -.04, 2.62), (.085, .27, .22), gold, .025)
 cube("Helmet visor upper ridge", (0, -.345, 2.38), (.52, .11, .065), edge, .02)
