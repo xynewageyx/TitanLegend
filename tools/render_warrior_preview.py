@@ -176,6 +176,37 @@ for bone_name, start_pose in neutral.items():
     if rotation_error > 0.02:
         raise RuntimeError(f"Attack QA: {bone_name} does not return to neutral rotation")
 
+# Update 285: check the temporal attack sequence, not just the endpoints.
+# The strike should be more extended than windup and recovery.
+def bone_rotation_at(frame, bone_name):
+    scene.frame_set(frame)
+    bpy.context.view_layer.update()
+    return [float(v) for v in rig.pose.bones[bone_name].matrix.to_quaternion()]
+
+def quaternion_distance(a, b):
+    return min(pose_distance(a, b), pose_distance(a, [-v for v in b]))
+
+neutral_arm = bone_rotation_at(1, "UpperArm.R")
+windup_arm = bone_rotation_at(5, "UpperArm.R")
+strike_arm = bone_rotation_at(9, "UpperArm.R")
+recovery_arm = bone_rotation_at(13, "UpperArm.R")
+windup_amount = quaternion_distance(neutral_arm, windup_arm)
+strike_amount = quaternion_distance(neutral_arm, strike_arm)
+recovery_amount = quaternion_distance(neutral_arm, recovery_arm)
+if not (strike_amount > windup_amount + 0.02 and
+        strike_amount > recovery_amount + 0.02):
+    raise RuntimeError(
+        "Attack QA: strike must have greater upper-arm rotation than windup/recovery"
+    )
+report["timing_validation"] = {
+    "passed": True,
+    "phase_frames": {"windup": 5, "strike": 9, "recovery": 13, "neutral": 18},
+    "upper_arm_rotation_from_neutral": {
+        "windup": round(windup_amount, 5),
+        "strike": round(strike_amount, 5),
+        "recovery": round(recovery_amount, 5),
+    },
+}
 report["motion_validation"] = {
     "passed": True,
     "rotation_bones": ["Spine", "UpperArm.R", "Forearm.R"],
