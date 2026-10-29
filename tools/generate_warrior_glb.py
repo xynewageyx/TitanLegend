@@ -209,8 +209,29 @@ for side, sign in (("L", -1), ("R", 1)):
 cube("Sword grip", (.72, -.12, .80), (.09, .11, .40), leather)
 cube("Sword pommel", (.72, -.12, .57), (.17, .17, .15), gold)
 cube("Sword guard", (.72, -.12, 1.04), (.42, .13, .09), gold, .025)
-cube("Sword blade", (.72, -.12, 1.48), (.145, .055, .83), edge, .014)
-cube("Sword fuller", (.72, -.165, 1.50), (.045, .014, .61), steel, .005)
+# Update 304: a tapered, diamond-section longsword instead of a box blade.
+# The blade remains a separate Sword mesh for the existing wrist hierarchy.
+blade_verts = [
+    (.72 + dx, -.12 + dy, z)
+    for z, half_width, half_depth in (
+        (1.08, .105, .025), (1.73, .075, .018), (1.96, .0, .0))
+    for dx, dy in ((-half_width, 0), (0, -half_depth),
+                   (half_width, 0), (0, half_depth))
+]
+blade_faces = []
+for section in range(2):
+    for side_idx in range(4):
+        blade_faces.append((section*4+side_idx, section*4+(side_idx+1)%4,
+                            (section+1)*4+(side_idx+1)%4, (section+1)*4+side_idx))
+blade_faces.append((3, 2, 1, 0))
+blade_mesh = bpy.data.meshes.new("Sword blade diamond section")
+blade_mesh.from_pydata(blade_verts, [], blade_faces)
+blade_mesh.update()
+blade_obj = bpy.data.objects.new("Sword blade", blade_mesh)
+bpy.context.collection.objects.link(blade_obj)
+blade_obj.data.materials.append(edge)
+blade_obj.modifiers.new("Sword weighted normals", "WEIGHTED_NORMAL")
+# Diamond-section blade uses its center ridge instead of a box-shaped fuller.
 cube("Shield face", (-.82, -.32, 1.28), (.68, .16, .89), steel, .11)
 cube("Shield boss", (-.82, -.44, 1.29), (.25, .10, .30), gold)
 cube("Shield center stripe", (-.82, -.42, 1.29), (.085, .04, .69), gold)
