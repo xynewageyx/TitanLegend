@@ -50,7 +50,7 @@ if background is not None:
     background.inputs["Color"].default_value = (0.11, 0.15, 0.22, 1.0)
     background.inputs["Strength"].default_value = 0.35
 scene.view_settings.view_transform = "AgX"
-scene.view_settings.look = "Medium High Contrast"
+scene.view_settings.look = "AgX - Medium High Contrast"
 scene.render.engine = "BLENDER_EEVEE"
 scene.render.resolution_x = 900
 scene.render.resolution_y = 900
