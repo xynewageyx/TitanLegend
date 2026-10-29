@@ -70,7 +70,23 @@ def inspect(path: Path) -> dict:
         for channel in left_bend_clips[0].get("channels", [])
     ):
         raise ValueError("Left forearm bend test does not animate Forearm.L rotation")
-    print("Rig bend tests target both forearm bones independently.")
+    attack_clips = [
+        animation for animation in document.get("animations", [])
+        if animation.get("name", "").split("/")[-1] == "RigRightArmAttackTest"
+    ]
+    if len(attack_clips) != 1:
+        raise ValueError("Missing unique coordinated right arm attack test")
+    required_arm_bones = {"UpperArm.R", "Forearm.R"}
+    targeted_arm_bones = {
+        nodes[channel["target"]["node"]].get("name")
+        for channel in attack_clips[0].get("channels", [])
+        if channel.get("target", {}).get("path") == "rotation"
+        and isinstance(channel.get("target", {}).get("node"), int)
+        and 0 <= channel["target"]["node"] < len(nodes)
+    }
+    if not required_arm_bones.issubset(targeted_arm_bones):
+        raise ValueError("Coordinated attack test must rotate both right arm bones")
+    print("Rig bend tests target both forearm bones independently; coordinated arm attack verified.")
     print("Prototype motion clips:", ", ".join(sorted(clips)))
     # Verify that animation channels target independent limb nodes.
     # A valid clip name alone does not guarantee articulated movement.
