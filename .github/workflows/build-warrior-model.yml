@@ -34,6 +34,9 @@ jobs:
           test -s build/warrior_attack_strike.png
           test -s build/warrior_attack_recovery.png
           test -s build/warrior_studio_warm_cool.png
+          test -s build/warrior_game_attack_windup.png
+          test -s build/warrior_game_attack_strike.png
+          test -s build/warrior_game_attack_recovery.png
           test -s build/warrior_attack_comparison.png
           test -s build/warrior_attack_qa.json
       - name: Upload Godot-ready GLB model
@@ -49,6 +52,9 @@ jobs:
             build/warrior_attack_strike.png
             build/warrior_attack_recovery.png
             build/warrior_studio_warm_cool.png
+            build/warrior_game_attack_windup.png
+            build/warrior_game_attack_strike.png
+            build/warrior_game_attack_recovery.png
             build/warrior_attack_comparison.png
             build/warrior_attack_qa.json
           if-no-files-found: error
