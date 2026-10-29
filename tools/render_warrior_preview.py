@@ -96,6 +96,32 @@ scene.render.filepath = str(Path("build/warrior_side.png").resolve())
 bpy.ops.render.render(write_still=True)
 print("Rendered", scene.render.filepath)
 
+# Update 296: render the ACTUAL game Attack animation on the visible
+# pivot hierarchy, separately from the prototype skeletal clip.
+# NLA tracks with the same name are enabled across all animated objects.
+animated_objects = [
+    obj for obj in bpy.data.objects
+    if obj.animation_data and obj.animation_data.nla_tracks
+]
+track_states = {
+    obj.name: [(track, track.mute) for track in obj.animation_data.nla_tracks]
+    for obj in animated_objects
+}
+for obj in animated_objects:
+    for track in obj.animation_data.nla_tracks:
+        track.mute = track.name != "Attack"
+camera.location = (5.2, -7.8, 4.0)
+point_at(camera, (0, 0, 1.25))
+for frame, phase in ((4, "windup"), (11, "strike"), (17, "recovery")):
+    scene.frame_set(frame)
+    scene.render.filepath = str(Path(f"build/warrior_game_attack_{phase}.png").resolve())
+    bpy.ops.render.render(write_still=True)
+    print("Rendered actual game Attack", phase, scene.render.filepath)
+for obj in animated_objects:
+    for track, was_muted in track_states[obj.name]:
+        track.mute = was_muted
+scene.frame_set(1)
+
 # Update 279: export three snapshots from the independent skeletal attack test.
 # The old game Attack clip is intentionally not altered.
 armatures = [obj for obj in bpy.data.objects if obj.type == "ARMATURE"]
