@@ -207,6 +207,23 @@ report["timing_validation"] = {
         "recovery": round(recovery_amount, 5),
     },
 }
+# Update 286: sample adjacent frames to detect extreme arm rotation jumps.
+arm_samples = [bone_rotation_at(frame, "UpperArm.R") for frame in range(1, 19)]
+arm_step_distances = [
+    quaternion_distance(a, b)
+    for a, b in zip(arm_samples, arm_samples[1:])
+]
+max_step = max(arm_step_distances)
+if max_step > 0.35:
+    raise RuntimeError(
+        f"Attack QA: abrupt upper-arm frame-to-frame rotation ({max_step:.4f})"
+    )
+report["continuity_validation"] = {
+    "passed": True,
+    "sampled_frames": [1, 18],
+    "maximum_adjacent_frame_rotation_delta": round(max_step, 5),
+    "maximum_allowed_delta": 0.35,
+}
 report["motion_validation"] = {
     "passed": True,
     "rotation_bones": ["Spine", "UpperArm.R", "Forearm.R"],
