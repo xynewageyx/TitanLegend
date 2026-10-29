@@ -150,11 +150,38 @@ root_first = phases[0]["bones"]["Root"]["position"]
 root_strike = phases[1]["bones"]["Root"]["position"]
 if pose_distance(root_first, root_strike) < 0.005:
     raise RuntimeError("Attack QA: Root has no meaningful weight shift")
+# Update 284: compare attack end pose to the neutral starting pose.
+scene.frame_set(1)
+bpy.context.view_layer.update()
+neutral = {}
+for bone_name in ("Root", "Spine", "UpperArm.R", "Forearm.R"):
+    pose_bone = rig.pose.bones[bone_name]
+    neutral[bone_name] = {
+        "position": [float(v) for v in pose_bone.matrix.translation],
+        "rotation_quaternion": [float(v) for v in pose_bone.matrix.to_quaternion()],
+    }
+scene.frame_set(18)
+bpy.context.view_layer.update()
+for bone_name, start_pose in neutral.items():
+    pose_bone = rig.pose.bones[bone_name]
+    end_position = [float(v) for v in pose_bone.matrix.translation]
+    end_rotation = [float(v) for v in pose_bone.matrix.to_quaternion()]
+    if pose_distance(start_pose["position"], end_position) > 0.02:
+        raise RuntimeError(f"Attack QA: {bone_name} does not return to neutral position")
+    # Quaternions q and -q encode the same orientation.
+    rotation_error = min(
+        pose_distance(start_pose["rotation_quaternion"], end_rotation),
+        pose_distance(start_pose["rotation_quaternion"], [-v for v in end_rotation]),
+    )
+    if rotation_error > 0.02:
+        raise RuntimeError(f"Attack QA: {bone_name} does not return to neutral rotation")
+
 report["motion_validation"] = {
     "passed": True,
     "rotation_bones": ["Spine", "UpperArm.R", "Forearm.R"],
     "root_weight_shift": True,
     "minimum_pose_difference": 0.005,
+    "neutral_return_verified": True,
 }
 report_path.write_text(json.dumps(report, indent=2) + "\\n", encoding="utf-8")
 print("Saved attack pose QA report", report_path)
