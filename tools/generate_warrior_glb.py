@@ -181,7 +181,13 @@ for side, sign in (("L", -1), ("R", 1)):
                (sign * .24 + offset, -.26, .48),
                (.025, .022, .025), gold, 12, 8)
 
-    cube(side + " Boot", (sign*.24, -.10, .10), (.34, .54, .21), dark, .055)
+    # Update 305: slender anime-RPG sabaton, narrower than the old block boot.
+    # Keep the same object name for the existing leg and knee pivot hierarchy.
+    cube(side + " Boot", (sign*.24, -.085, .105), (.265, .43, .17), dark, .055)
+    sphere(side + " Sabaton curved toe", (sign*.24, -.275, .09),
+           (.132, .145, .085), steel, 20, 12)
+    cube(side + " Sabaton instep plate", (sign*.24, -.195, .145),
+         (.235, .22, .052), steel, .025, (12, 0, 0))
 
 # Faceted crown gives the helmet a tapered medieval silhouette.
 tapered_plate("Helmet crown", 2.04, 2.56, .57, .34, .265, steel)
