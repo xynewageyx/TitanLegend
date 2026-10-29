@@ -115,7 +115,24 @@ for side, sign in (("L", -1), ("R", 1)):
 
     cube(side + " Upper arm", (sign*.67, 0, 1.58), (.24, .28, .48), leather, .075)
     cube(side + " Forearm plate", (sign*.70, -.04, 1.29), (.31, .35, .43), steel)
+    # Update 291: layered vambrace with a shaped central ridge and forged cuff.
+    cube(side + " Vambrace upper cuff", (sign * .70, -.075, 1.47),
+         (.35, .39, .085), edge, .025)
+    cube(side + " Vambrace central raised plate", (sign * .70, -.246, 1.29),
+         (.235, .07, .33), steel, .04)
+    cube(side + " Vambrace silver spine", (sign * .70, -.293, 1.29),
+         (.052, .028, .29), edge, .012)
+    cube(side + " Vambrace wrist band", (sign * .70, -.075, 1.105),
+         (.335, .37, .075), gold, .025)
+
     cube(side + " Gauntlet", (sign*.71, -.05, 1.03), (.28, .30, .25), dark)
+    cube(side + " Gauntlet knuckle armor", (sign * .71, -.245, 1.01),
+         (.275, .08, .12), steel, .025)
+    for offset in (-.08, 0, .08):
+        cube(side + " Gauntlet finger ridge " + str(offset),
+             (sign * .71 + offset, -.29, .96),
+             (.042, .04, .105), edge, .01)
+
     cube(side + " Thigh", (sign*.24, 0, .83), (.27, .31, .62), steel, .095)
     cube(side + " Knee cap", (sign*.24, -.21, .52), (.38, .17, .20), gold)
     cube(side + " Greave", (sign*.24, 0, .30), (.27, .32, .48), steel, .09)
