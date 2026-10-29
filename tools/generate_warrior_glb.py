@@ -26,6 +26,24 @@ leather = material("Worn brown leather", (.14, .066, .034), .03, .82)
 cloth = material("Royal crimson cloth", (.25, .018, .045), 0.0, .95)
 dark = material("Boot and glove leather", (.028, .032, .045), .02, .88)
 glow = material("Arcane cyan gem", (.06, .75, .95), .25)
+# Update 292: make material response more distinctive in game lighting.
+# These are glTF-compatible Principled BSDF inputs, not Blender-only shader nodes.
+def set_principled_input(mat, input_name, value):
+    node = mat.node_tree.nodes.get("Principled BSDF")
+    socket = node.inputs.get(input_name) if node else None
+    if socket is not None:
+        socket.default_value = value
+
+set_principled_input(steel, "Coat Weight", 0.22)
+set_principled_input(steel, "Coat Roughness", 0.20)
+set_principled_input(edge, "Coat Weight", 0.28)
+set_principled_input(edge, "Coat Roughness", 0.15)
+set_principled_input(gold, "Coat Weight", 0.20)
+set_principled_input(leather, "Roughness", 0.88)
+set_principled_input(cloth, "Roughness", 0.98)
+set_principled_input(glow, "Emission Color", (.015, .34, .52, 1.0))
+set_principled_input(glow, "Emission Strength", 1.2)
+
 
 def cube(name, pos, scale, mat, bevel=0.045, rot=None):
     bpy.ops.mesh.primitive_cube_add(size=1, location=pos)
