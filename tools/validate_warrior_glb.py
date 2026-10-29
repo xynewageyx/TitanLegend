@@ -86,7 +86,14 @@ def inspect(path: Path) -> dict:
     }
     if not required_arm_bones.issubset(targeted_arm_bones):
         raise ValueError("Coordinated attack test must rotate torso and both right arm bones")
-    print("Rig bend tests target both forearm bones independently; coordinated arm attack verified.")
+    root_indices = {i for i, node in enumerate(nodes) if node.get("name") == "Root"}
+    if not any(
+        channel.get("target", {}).get("node") in root_indices
+        and channel.get("target", {}).get("path") == "translation"
+        for channel in attack_clips[0].get("channels", [])
+    ):
+        raise ValueError("Coordinated attack test must translate Root for weight shift")
+    print("Coordinated skeletal attack: torso twist, both right arm bones, and root weight shift verified.")
     print("Prototype motion clips:", ", ".join(sorted(clips)))
     # Verify that animation channels target independent limb nodes.
     # A valid clip name alone does not guarantee articulated movement.
