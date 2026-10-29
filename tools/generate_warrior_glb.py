@@ -129,6 +129,11 @@ cube("Tabard gold stripe", (0, -.342, .76), (.06, .02, .56), gold, .008)
 
 for side, sign in (("L", -1), ("R", 1)):
     x = sign * .61
+    # Update 302: curved layered anime pauldrons over the existing shoulder.
+    sphere(side + " anime curved pauldron shell", (x, -.025, 1.965),
+           (.315, .265, .175), steel, 28, 16)
+    sphere(side + " anime outer shoulder wing", (sign * .82, -.045, 1.92),
+           (.155, .225, .18), edge, 20, 12)
     cube(side + " Pauldron", (x, 0, 1.91), (.48, .41, .20), steel, .045, (0, 0, sign*17))
     cube(side + " Shoulder rim", (x, -.20, 1.89), (.55, .085, .095), gold, .025, (0, 0, sign*17))
     # Update 288: layered pauldrons break up the former rectangular shoulder silhouette.
