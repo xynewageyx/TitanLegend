@@ -446,6 +446,20 @@ for group, (location, prefixes) in limb_groups.items():
             obj.matrix_world = world
     limbs[group] = joint
 
+# Update 299: independently articulate the sword wrist and blade.
+# The sword must follow the forearm but rotate around the grip rather than
+# behaving as a rigid extension of the elbow.
+bpy.ops.object.empty_add(type="PLAIN_AXES", location=(.72, -.12, 1.03))
+sword_wrist = bpy.context.object
+sword_wrist.name = "SwordWristPivot"
+sword_wrist.parent = limbs["RightArm"]
+sword_wrist.matrix_parent_inverse = limbs["RightArm"].matrix_world.inverted()
+for obj in list(bpy.data.objects):
+    if obj.type == "MESH" and obj.name.startswith("Sword"):
+        world = obj.matrix_world.copy()
+        obj.parent = sword_wrist
+        obj.matrix_world = world
+
 # Secondary elbow and knee joints add articulation beyond rigid limb swing.
 # They pivot forearm/shin meshes while preserving their current world transforms.
 secondary_specs = {
@@ -527,6 +541,29 @@ for clip_name, frames in limb_motion.items():
         strip.action_frame_end = frames[-1][0]
         joint.animation_data.action = None
         joint.rotation_euler.x = 0
+
+# Update 299: key sword wrist separately for a visible overhead-to-forward arc.
+wrist_motion = {
+    "Idle": [(1, 0.0), (31, 0.0)],
+    "Run": [(1, 0.0), (25, 0.0)],
+    "Attack": [(1, 0.0), (4, -.25), (7, -.45),
+               (10, .75), (13, .18), (19, 0.0)],
+    "Hit": [(1, 0.0), (13, 0.0)],
+    "Defeat": [(1, 0.0), (20, 0.0)],
+}
+for clip_name, frames in wrist_motion.items():
+    sword_wrist.animation_data_create()
+    action = bpy.data.actions.new(clip_name + "_SwordWrist")
+    sword_wrist.animation_data.action = action
+    for frame, angle in frames:
+        sword_wrist.rotation_euler.x = angle
+        sword_wrist.keyframe_insert(data_path="rotation_euler", frame=frame)
+    track = sword_wrist.animation_data.nla_tracks.new()
+    track.name = clip_name
+    strip = track.strips.new(clip_name, frames[0][0], action)
+    strip.action_frame_end = frames[-1][0]
+    sword_wrist.animation_data.action = None
+    sword_wrist.rotation_euler.x = 0.0
 
 # Separate NLA tracks export as distinct glTF animation clips.
 # Each clip has its own Action, so Godot can play it by name.
