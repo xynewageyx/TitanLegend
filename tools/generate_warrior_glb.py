@@ -227,19 +227,23 @@ upper_pose = armature.pose.bones["UpperArm.R"]
 lower_pose = armature.pose.bones["Forearm.R"]
 upper_pose.rotation_mode = "XYZ"
 lower_pose.rotation_mode = "XYZ"
+spine_pose = armature.pose.bones["Spine"]
+spine_pose.rotation_mode = "XYZ"
 combo_action = bpy.data.actions.new("RigRightArmAttackTest")
 armature.animation_data.action = combo_action
-for frame, upper_angle, lower_angle in (
-    (1, 0.0, 0.0),
-    (5, -.35, -.15),
-    (9, .85, -.55),
-    (13, .18, -.20),
-    (18, 0.0, 0.0),
+for frame, upper_angle, lower_angle, torso_twist in (
+    (1, 0.0, 0.0, 0.0),
+    (5, -.35, -.15, -.16),
+    (9, .85, -.55, .22),
+    (13, .18, -.20, .08),
+    (18, 0.0, 0.0, 0.0),
 ):
     upper_pose.rotation_euler = (upper_angle, 0.0, 0.0)
     lower_pose.rotation_euler = (lower_angle, 0.0, 0.0)
+    spine_pose.rotation_euler = (0.0, 0.0, torso_twist)
     upper_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
     lower_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
+    spine_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
 combo_track = armature.animation_data.nla_tracks.new()
 combo_track.name = "RigRightArmAttackTest"
 combo_strip = combo_track.strips.new("RigRightArmAttackTest", 1, combo_action)
@@ -247,6 +251,7 @@ combo_strip.action_frame_end = 18
 armature.animation_data.action = None
 upper_pose.rotation_euler = (0.0, 0.0, 0.0)
 lower_pose.rotation_euler = (0.0, 0.0, 0.0)
+spine_pose.rotation_euler = (0.0, 0.0, 0.0)
 
 # Update 265: a separately skinned, hidden calibration mesh validates glTF skin
 # export without changing the visible warrior or its existing pivot animations.
