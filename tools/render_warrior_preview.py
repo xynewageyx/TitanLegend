@@ -136,4 +136,25 @@ for frame, phase in ((5, "windup"), (9, "strike"), (13, "recovery")):
     report["frames"].append({"frame": frame, "phase": phase, "bones": bones})
 report_path = Path("build/warrior_attack_qa.json")
 report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+# Update 283: reject missing motion rather than accepting a named but static clip.
+def pose_distance(a, b):
+    return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5
+
+phases = report["frames"]
+for bone_name in ("Spine", "UpperArm.R", "Forearm.R"):
+    first = phases[0]["bones"][bone_name]["rotation_quaternion"]
+    strike = phases[1]["bones"][bone_name]["rotation_quaternion"]
+    if pose_distance(first, strike) < 0.005:
+        raise RuntimeError(f"Attack QA: {bone_name} has no meaningful windup-to-strike rotation")
+root_first = phases[0]["bones"]["Root"]["position"]
+root_strike = phases[1]["bones"]["Root"]["position"]
+if pose_distance(root_first, root_strike) < 0.005:
+    raise RuntimeError("Attack QA: Root has no meaningful weight shift")
+report["motion_validation"] = {
+    "passed": True,
+    "rotation_bones": ["Spine", "UpperArm.R", "Forearm.R"],
+    "root_weight_shift": True,
+    "minimum_pose_difference": 0.005,
+}
+report_path.write_text(json.dumps(report, indent=2) + "\\n", encoding="utf-8")
 print("Saved attack pose QA report", report_path)
