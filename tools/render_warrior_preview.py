@@ -87,3 +87,20 @@ for frame, label in ((5, "windup"), (9, "strike"), (13, "recovery")):
     scene.render.filepath = str(Path(f"build/warrior_attack_{label}.png").resolve())
     bpy.ops.render.render(write_still=True)
     print("Rendered attack frame", frame, scene.render.filepath)
+
+# Update 280: create a single comparison sheet for mobile QA.
+# Pillow is bundled with Blender's Python on supported CI builds.
+from PIL import Image, ImageDraw
+names = ("windup", "strike", "recovery")
+frames = [Image.open(Path(f"build/warrior_attack_{name}.png")).convert("RGB") for name in names]
+thumb_width = 600
+thumb_height = round(frames[0].height * thumb_width / frames[0].width)
+sheet = Image.new("RGB", (thumb_width * 3, thumb_height + 70), (24, 28, 36))
+draw = ImageDraw.Draw(sheet)
+for index, (name, frame_image) in enumerate(zip(names, frames)):
+    frame_image = frame_image.resize((thumb_width, thumb_height))
+    sheet.paste(frame_image, (index * thumb_width, 70))
+    draw.text((index * thumb_width + 22, 24), name.upper(), fill=(245, 245, 245))
+sheet_path = Path("build/warrior_attack_comparison.png")
+sheet.save(sheet_path)
+print("Rendered attack comparison sheet", sheet_path)
