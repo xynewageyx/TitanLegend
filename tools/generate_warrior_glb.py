@@ -221,6 +221,33 @@ armature.animation_data.action = None
 left_forearm_pose.rotation_euler = (0.0, 0.0, 0.0)
 
 
+# Update 276: coordinated upper-arm/forearm skeletal attack prototype.
+# This remains a standalone test clip and does not replace the game's Attack.
+upper_pose = armature.pose.bones["UpperArm.R"]
+lower_pose = armature.pose.bones["Forearm.R"]
+upper_pose.rotation_mode = "XYZ"
+lower_pose.rotation_mode = "XYZ"
+combo_action = bpy.data.actions.new("RigRightArmAttackTest")
+armature.animation_data.action = combo_action
+for frame, upper_angle, lower_angle in (
+    (1, 0.0, 0.0),
+    (5, -.35, -.15),
+    (9, .85, -.55),
+    (13, .18, -.20),
+    (18, 0.0, 0.0),
+):
+    upper_pose.rotation_euler = (upper_angle, 0.0, 0.0)
+    lower_pose.rotation_euler = (lower_angle, 0.0, 0.0)
+    upper_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
+    lower_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
+combo_track = armature.animation_data.nla_tracks.new()
+combo_track.name = "RigRightArmAttackTest"
+combo_strip = combo_track.strips.new("RigRightArmAttackTest", 1, combo_action)
+combo_strip.action_frame_end = 18
+armature.animation_data.action = None
+upper_pose.rotation_euler = (0.0, 0.0, 0.0)
+lower_pose.rotation_euler = (0.0, 0.0, 0.0)
+
 # Update 265: a separately skinned, hidden calibration mesh validates glTF skin
 # export without changing the visible warrior or its existing pivot animations.
 # This is a rigging proof-of-concept, not final character skinning.
