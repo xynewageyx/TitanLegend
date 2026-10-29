@@ -204,6 +204,22 @@ armature.animation_data.action = None
 forearm_pose.rotation_euler = (0.0, 0.0, 0.0)
 bpy.ops.object.mode_set(mode="OBJECT")
 
+# Update 275: independent left forearm bone motion test.
+bpy.context.view_layer.objects.active = armature
+left_forearm_pose = armature.pose.bones["Forearm.L"]
+left_forearm_pose.rotation_mode = "XYZ"
+left_action = bpy.data.actions.new("RigLeftForearmBendTest")
+armature.animation_data.action = left_action
+for frame, angle in ((1, 0.0), (8, .55), (16, 0.0)):
+    left_forearm_pose.rotation_euler = (angle, 0.0, 0.0)
+    left_forearm_pose.keyframe_insert(data_path="rotation_euler", frame=frame)
+left_track = armature.animation_data.nla_tracks.new()
+left_track.name = "RigLeftForearmBendTest"
+left_strip = left_track.strips.new("RigLeftForearmBendTest", 1, left_action)
+left_strip.action_frame_end = 16
+armature.animation_data.action = None
+left_forearm_pose.rotation_euler = (0.0, 0.0, 0.0)
+
 
 # Update 265: a separately skinned, hidden calibration mesh validates glTF skin
 # export without changing the visible warrior or its existing pivot animations.
