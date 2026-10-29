@@ -77,6 +77,22 @@ def tapered_plate(name, z_low, z_high, width_low, width_high, depth, mat):
 tapered_plate("Breastplate", 1.35, 2.02, .58, .92, .22, steel)
 cube("Breastplate center ridge", (0, -.255, 1.69), (.13, .09, .72), edge)
 cube("Chest heraldry", (0, -.312, 1.83), (.24, .07, .30), gold)
+# Update 287: raised, individually forged chest crest and symmetric armor rivets.
+# These remain ordinary meshes and are exported with the existing motion hierarchy.
+sphere("Chest crest ruby", (0, -.367, 1.84), (.075, .035, .105), glow, 24, 12)
+for side, sign in (("L", -1), ("R", 1)):
+    for height in (1.48, 1.65, 1.88):
+        sphere(
+            side + " breastplate brass rivet " + str(height),
+            (sign * (.235 if height < 1.8 else .30), -.252, height),
+            (.026, .023, .026), gold, 12, 8,
+        )
+    cube(
+        side + " chest etched chevron",
+        (sign * .19, -.276, 1.73),
+        (.038, .028, .27), edge, .012, (0, sign * 15, sign * 21),
+    )
+
 cube("Undershirt", (0, .01, 1.17), (.66, .38, .35), cloth)
 cube("Armored belt", (0, -.03, 1.12), (.84, .49, .16), leather)
 cube("Belt buckle", (0, -.305, 1.12), (.22, .08, .19), gold)
