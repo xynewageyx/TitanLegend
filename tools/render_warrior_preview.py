@@ -88,19 +88,30 @@ for frame, label in ((5, "windup"), (9, "strike"), (13, "recovery")):
     bpy.ops.render.render(write_still=True)
     print("Rendered attack frame", frame, scene.render.filepath)
 
-# Update 280: create a single comparison sheet for mobile QA.
-# Pillow is bundled with Blender's Python on supported CI builds.
-from PIL import Image, ImageDraw
+# Update 281: compose the comparison using Blender's built-in image API.
+# No Pillow dependency is required in the Blender runtime.
 names = ("windup", "strike", "recovery")
-frames = [Image.open(Path(f"build/warrior_attack_{name}.png")).convert("RGB") for name in names]
-thumb_width = 600
-thumb_height = round(frames[0].height * thumb_width / frames[0].width)
-sheet = Image.new("RGB", (thumb_width * 3, thumb_height + 70), (24, 28, 36))
-draw = ImageDraw.Draw(sheet)
-for index, (name, frame_image) in enumerate(zip(names, frames)):
-    frame_image = frame_image.resize((thumb_width, thumb_height))
-    sheet.paste(frame_image, (index * thumb_width, 70))
-    draw.text((index * thumb_width + 22, 24), name.upper(), fill=(245, 245, 245))
-sheet_path = Path("build/warrior_attack_comparison.png")
-sheet.save(sheet_path)
-print("Rendered attack comparison sheet", sheet_path)
+images = [
+    bpy.data.images.load(str(Path(f"build/warrior_attack_{name}.png").resolve()),
+                         check_existing=False)
+    for name in names
+]
+width, height = images[0].size
+if any(tuple(img.size) != (width, height) for img in images):
+    raise RuntimeError("Attack preview frames must have identical dimensions")
+sheet = bpy.data.images.new(
+    "WarriorAttackComparison", width=width * 3, height=height,
+    alpha=True, float_buffer=False)
+pixels = [0.0] * (width * 3 * height * 4)
+for index, img in enumerate(images):
+    source = list(img.pixels[:])
+    for y in range(height):
+        source_offset = y * width * 4
+        target_offset = (y * width * 3 + index * width) * 4
+        pixels[target_offset:target_offset + width * 4] = source[
+            source_offset:source_offset + width * 4]
+sheet.pixels.foreach_set(pixels)
+sheet.filepath_raw = str(Path("build/warrior_attack_comparison.png").resolve())
+sheet.file_format = "PNG"
+sheet.save()
+print("Saved attack comparison sheet", sheet.filepath_raw)
