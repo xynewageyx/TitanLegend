@@ -119,6 +119,20 @@ for side, sign in (("L", -1), ("R", 1)):
     cube(side + " Thigh", (sign*.24, 0, .83), (.27, .31, .62), steel, .095)
     cube(side + " Knee cap", (sign*.24, -.21, .52), (.38, .17, .20), gold)
     cube(side + " Greave", (sign*.24, 0, .30), (.27, .32, .48), steel, .09)
+    # Update 290: overlapping shin armor and raised front blade.
+    cube(side + " Greave upper cuff", (sign * .24, -.065, .485),
+         (.335, .36, .105), edge, .036)
+    cube(side + " Greave lower forged collar", (sign * .24, -.065, .135),
+         (.305, .34, .08), gold, .025)
+    cube(side + " Greave beveled front plate", (sign * .24, -.215, .305),
+         (.235, .075, .335), steel, .055)
+    cube(side + " Greave center fluting", (sign * .24, -.269, .315),
+         (.052, .025, .29), edge, .012)
+    for offset in (-.10, .10):
+        sphere(side + " Greave cuff rivet " + str(offset),
+               (sign * .24 + offset, -.26, .48),
+               (.025, .022, .025), gold, 12, 8)
+
     cube(side + " Boot", (sign*.24, -.10, .10), (.34, .54, .21), dark, .055)
 
 # Faceted crown gives the helmet a tapered medieval silhouette.
