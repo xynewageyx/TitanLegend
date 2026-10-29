@@ -103,6 +103,16 @@ for side, sign in (("L", -1), ("R", 1)):
     x = sign * .61
     cube(side + " Pauldron", (x, 0, 1.91), (.48, .41, .20), steel, .045, (0, 0, sign*17))
     cube(side + " Shoulder rim", (x, -.20, 1.89), (.55, .085, .095), gold, .025, (0, 0, sign*17))
+    # Update 288: layered pauldrons break up the former rectangular shoulder silhouette.
+    cube(side + " Pauldron raised crest", (x, -.025, 2.035),
+         (.36, .32, .13), edge, .055, (0, 0, sign * 18))
+    cube(side + " Pauldron outer wing", (sign * .845, -.015, 1.92),
+         (.18, .34, .23), steel, .065, (0, sign * 12, sign * 24))
+    cube(side + " Pauldron gold wing trim", (sign * .925, -.095, 1.90),
+         (.07, .31, .18), gold, .025, (0, sign * 12, sign * 24))
+    sphere(side + " Pauldron center boss", (x, -.228, 1.96),
+           (.095, .04, .095), gold, 20, 10)
+
     cube(side + " Upper arm", (sign*.67, 0, 1.58), (.24, .28, .48), leather, .075)
     cube(side + " Forearm plate", (sign*.70, -.04, 1.29), (.31, .35, .43), steel)
     cube(side + " Gauntlet", (sign*.71, -.05, 1.03), (.28, .30, .25), dark)
