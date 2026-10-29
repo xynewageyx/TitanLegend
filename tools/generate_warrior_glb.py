@@ -130,6 +130,18 @@ cube("Helmet visor upper ridge", (0, -.345, 2.38), (.52, .11, .065), edge, .02)
 cube("Helmet jaw plate", (0, -.315, 2.055), (.38, .14, .10), steel, .035)
 cube("Helmet eye slit", (0, -.365, 2.27), (.41, .03, .065), glow, .008)
 cube("Helmet nose guard", (0, -.395, 2.17), (.09, .10, .27), edge)
+# Update 289: layered visor and separated glowing eye apertures.
+# The original single visor slit is partially framed by dark recessed sockets.
+for side, sign in (("L", -1), ("R", 1)):
+    cube(side + " visor dark recess", (sign * .128, -.393, 2.29),
+         (.175, .045, .072), dark, .012, (0, 0, sign * 5))
+    cube(side + " visor cyan eye", (sign * .128, -.423, 2.29),
+         (.118, .025, .026), glow, .007, (0, 0, sign * 5))
+    cube(side + " visor upper eyelid", (sign * .13, -.425, 2.345),
+         (.205, .045, .042), edge, .014, (0, 0, sign * 6))
+    cube(side + " lower cheek fillet", (sign * .21, -.389, 2.135),
+         (.052, .055, .22), gold, .015, (0, 0, sign * 11))
+
 
 # Distinct broad sword and left arm shield, geometry only.
 cube("Sword grip", (.72, -.12, .80), (.09, .11, .40), leather)
