@@ -62,6 +62,26 @@ scene.camera.data.lens = 50
 bpy.ops.render.render(write_still=True)
 print("Rendered", scene.render.filepath)
 
+# Update 295: warm/cool lighting comparison to inspect metallic and cloth materials.
+# Keep the original hero thumbnail intact for before/after review.
+key_light = bpy.data.objects.get("Key")
+fill_light = bpy.data.objects.get("Fill")
+rim_light = bpy.data.objects.get("Rim")
+if not all((key_light, fill_light, rim_light)):
+    raise RuntimeError("Preview studio lights are missing")
+original_light_colors = {
+    light.name: tuple(light.data.color)
+    for light in (key_light, fill_light, rim_light)
+}
+key_light.data.color = (1.0, 0.78, 0.55)
+fill_light.data.color = (0.52, 0.72, 1.0)
+rim_light.data.color = (0.62, 0.85, 1.0)
+scene.render.filepath = str(Path("build/warrior_studio_warm_cool.png").resolve())
+bpy.ops.render.render(write_still=True)
+print("Rendered warm/cool lighting QA", scene.render.filepath)
+for light in (key_light, fill_light, rim_light):
+    light.data.color = original_light_colors[light.name]
+
 # Front orthographic reference exposes symmetry, sword visibility and armor proportions.
 camera.location = (0, -8.5, 3.0)
 point_at(camera, (0, 0, 1.35))
