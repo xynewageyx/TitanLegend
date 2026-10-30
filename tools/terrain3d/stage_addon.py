@@ -55,8 +55,8 @@ landscape.write_text(chr(10).join([
  'data_directory = "res://terrain_data"',
  '',
  '[node name="Camera3D" type="Camera3D" parent="."]',
- 'position = Vector3(32, 45, 105)',
- 'rotation_degrees = Vector3(-28, 0, 0)',
+ 'position = Vector3(64, 58, 158)',
+ 'rotation_degrees = Vector3(-35, 0, 0)',
  'current = true',
  '',
  '[node name="Sun" type="DirectionalLight3D" parent="."]',
@@ -96,6 +96,7 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '        data.update_maps()',
  '        data.save_directory("res://terrain_data")',
  '    print("GRASLAND_REGION_READY")',
+ '    print("GRASLAND_REGION_COUNT:", data.get_region_count())',
  '    print("GRASLAND_CAMERA_CONNECTED")',
  ''
 ]),encoding="utf-8")
