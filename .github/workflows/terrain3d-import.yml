@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/terrain3d-import.yml'
-      - 'tools/terrain3d/stage_addon.py'
+      - 'tools/terrain3d/**'
 jobs:
   import:
     runs-on: ubuntu-latest
