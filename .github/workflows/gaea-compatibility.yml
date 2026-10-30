@@ -1,0 +1,42 @@
+name: Gaea 2 Godot 4.8 compatibility test
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/blender-grasland-pipeline]
+    paths:
+      - '.github/workflows/gaea-compatibility.yml'
+jobs:
+  gaea-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download official Gaea 2.0 beta 6
+        run: |
+          curl -fL --retry 3 -o gaea.zip https://github.com/gaea-godot/gaea/archive/refs/tags/v2.0.0-beta6.zip
+          unzip -q gaea.zip
+          mkdir -p gaea-preview/addons
+          cp -a gaea-2.0.0-beta6/addons/gaea gaea-preview/addons/
+          printf '[application]\nconfig/name="Titan Legends Gaea Test"\nrun/main_scene="res://test.tscn"\n[editor_plugins]\nenabled=PackedStringArray("res://addons/gaea/plugin.cfg")\n[rendering]\nrenderer/rendering_method="gl_compatibility"\nrenderer/rendering_method.mobile="gl_compatibility"\n' > gaea-preview/project.godot
+          printf '[gd_scene format=3]\n[node name="GaeaTest" type="Node3D"]\n' > gaea-preview/test.tscn
+      - name: Download Godot 4.8 beta 2
+        run: |
+          curl -fL --retry 3 -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.8-beta2/Godot_v4.8-beta2_linux.x86_64.zip
+          unzip -q godot.zip
+          chmod +x Godot_v4.8-beta2_linux.x86_64
+      - name: Import Gaea addon
+        run: |
+          timeout 180 ./Godot_v4.8-beta2_linux.x86_64 --headless --path gaea-preview --editor --import 2>&1 | tee gaea-import.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Failed to load script' gaea-import.log
+      - name: Run smoke test
+        run: |
+          timeout 60 ./Godot_v4.8-beta2_linux.x86_64 --headless --path gaea-preview --quit-after 30 2>&1 | tee gaea-runtime.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Failed to load script' gaea-runtime.log
+      - name: Upload logs and Android test project
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gaea-godot48-test
+          path: |
+            gaea-preview/
+            gaea-import.log
+            gaea-runtime.log
+          retention-days: 7
