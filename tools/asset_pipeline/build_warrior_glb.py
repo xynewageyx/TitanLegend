@@ -107,7 +107,13 @@ def clip(name, frames, rotations):
             pb.rotation_mode = "XYZ"
             pb.rotation_euler[axis] = math.radians(degrees)
             pb.keyframe_insert(data_path="rotation_euler", frame=frame, group=bone_name)
-    for fc in action.fcurves:
+    # Blender 5 stores F-curves in a slot channelbag (legacy Action.fcurves was removed).
+    from bpy_extras import anim_utils
+    slot = rig.animation_data.action_slot
+    if slot is None:
+        raise RuntimeError('Animation action has no rig slot: ' + name)
+    channelbag = anim_utils.action_ensure_channelbag_for_slot(action, slot)
+    for fc in channelbag.fcurves:
         for kp in fc.keyframe_points:
             kp.interpolation = "LINEAR"
     track = rig.animation_data.nla_tracks.new()
