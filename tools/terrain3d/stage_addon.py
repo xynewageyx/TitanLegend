@@ -161,7 +161,7 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '    print("GRASLAND_PATH_AND_ARENA_READY")',
  '',
  '    print("GRASLAND_REGION_READY")',
- '    print("GRASLAND_REGION_COUNT:", data.get_region_count())',
+ '    print("GRASLAND_REGION_COUNT:", terrain.get_data().get_region_count())',
  '    print("GRASLAND_CAMERA_CONNECTED")',
  ''
 ]),encoding="utf-8")
