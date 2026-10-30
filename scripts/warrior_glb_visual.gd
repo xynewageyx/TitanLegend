@@ -6,6 +6,7 @@ extends Node3D
 var animation_player: AnimationPlayer
 var model_instance: Node3D
 var _hidden_meshes: Array[MeshInstance3D] = []
+var _active_clip: String = ""
 
 func _ready() -> void:
  if not ResourceLoader.exists(model_path):
@@ -30,20 +31,36 @@ func _ready() -> void:
 func play_clip(clip: String) -> void:
  if animation_player == null:
   return
+ if clip == _active_clip and animation_player.is_playing():
+  return
  for library_name in animation_player.get_animation_library_list():
   var library := animation_player.get_animation_library(library_name)
   if library.has_animation(clip):
    var full_name := clip if String(library_name).is_empty() else String(library_name) + "/" + clip
    animation_player.play(full_name)
+   _active_clip = clip
+   if clip != "idle" and clip != "walk":
+    var animation := library.get_animation(clip)
+    if animation != null and not animation.loop_mode:
+     get_tree().create_timer(animation.length).timeout.connect(_return_to_idle.bind(clip))
    return
+
+func _return_to_idle(previous_clip: String) -> void:
+ if not is_inside_tree() or _active_clip != previous_clip:
+  return
+ play_clip("walk" if _walking else "idle")
+
+var _walking: bool = false
 
 func play_attack() -> void:
  play_clip("attack")
 
 func play_walk() -> void:
+ _walking = true
  play_clip("walk")
 
 func play_idle() -> void:
+ _walking = false
  play_clip("idle")
 
 func play_hit() -> void:
@@ -74,7 +91,7 @@ func _hide_existing_meshes(node: Node) -> void:
  if node == null:
   return
  for child in node.get_children():
-  if child == self:
+  if child == self or child.name == "PassivePet" or child.name == "HeroHealthBar":
    continue
   if child is MeshInstance3D:
    if child.visible:
