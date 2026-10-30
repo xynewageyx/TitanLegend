@@ -45,6 +45,13 @@ jobs:
           print("Animations:", [a.get("name") for a in animations])
           print("Validated", p, len(data), "bytes")
           PY
+      - name: Upload Android-downloadable GLB
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Warrior-GLB
+          path: build/characters/titan_warrior.glb
+          if-no-files-found: error
+          retention-days: 14
       - name: Install available Godot 4.6 for GLB smoke test
         run: |
           curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip"
@@ -57,10 +64,3 @@ jobs:
           cp build/characters/titan_warrior.glb assets/characters/titan_warrior.glb
           godot --headless --path . --editor --import --quit
           godot --headless --path . --quit-after 10 res://scenes/warrior_glb_preview.tscn
-      - name: Upload Android-downloadable GLB
-        uses: actions/upload-artifact@v4
-        with:
-          name: TitanLegends-Warrior-GLB
-          path: build/characters/titan_warrior.glb
-          if-no-files-found: error
-          retention-days: 14
