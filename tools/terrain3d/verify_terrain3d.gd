@@ -7,7 +7,7 @@ func _initialize() -> void:
         push_error("Terrain3D extension did not register its native class")
         quit(1)
         return
-    var terrain := ClassDB.instantiate("Terrain3D")
+    var terrain: Object = ClassDB.instantiate("Terrain3D")
     if terrain == null:
         push_error("Terrain3D native class could not be instantiated")
         quit(2)
