@@ -13,6 +13,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Stage official Terrain3D addon
         run: python3 tools/terrain3d/stage_addon.py
+      - name: Verify generated scene structure
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("terrain3d-preview/scenes/terrain3d_node_test.tscn")
+          s=p.read_text()
+          print("Scene repr:",repr(s[:240]))
+          assert s.startswith("[gd_scene"), "Scene header missing"
+          assert '\\n' not in s, "Literal backslash-n sequences found"
+          assert s.count("\n") >= 4, "Scene has too few lines"
+          assert 'type="Terrain3D"' in s, "Terrain3D node missing"
+          PY
       - name: Download Godot 4.4.1
         run: |
           curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip
