@@ -11,12 +11,26 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Install Blender
+      - name: Install Blender and GLB dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y blender
+          sudo apt-get install -y blender python3-numpy
+      - name: Verify Blender Python dependencies
+        run: |
+          blender -b --python-expr "import numpy; print('NumPy available:', numpy.__version__)"
       - name: Generate model
-        run: blender -b --python tools/blender/generate_grasland.py
+        run: |
+          blender -b --python tools/blender/generate_grasland.py
+          test -s /tmp/grasland.glb
+          python3 - <<'PY'
+          import json, struct
+          p='/tmp/grasland.glb'
+          with open(p,'rb') as f:
+              header=f.read(12)
+          assert len(header)==12 and header[:4]==b'glTF', 'Invalid GLB header'
+          assert struct.unpack_from('<I',header,4)[0]==2, 'GLB version must be 2'
+          print('GLB export validated')
+          PY
       - name: Upload Godot-ready model
         uses: actions/upload-artifact@v4
         with:
