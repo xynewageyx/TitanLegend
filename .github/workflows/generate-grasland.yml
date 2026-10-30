@@ -37,3 +37,32 @@ jobs:
           name: TitanLegends-Grasland-GLB
           path: /tmp/grasland.glb
           if-no-files-found: error
+      - name: Assemble Godot preview project
+        run: |
+          mkdir -p preview/assets/worlds/grasland preview/scenes
+          cp /tmp/grasland.glb preview/assets/worlds/grasland/grasland.glb
+          cp scenes/grasland_preview.tscn preview/scenes/
+          cat > preview/project.godot <<'EOF'
+          config_version=5
+
+          [application]
+          config/name="Titan Legends Grasland Preview"
+          run/main_scene="res://scenes/grasland_preview.tscn"
+          config/features=PackedStringArray("4.2", "GL Compatibility")
+
+          [display]
+          window/size/viewport_width=720
+          window/size/viewport_height=1280
+          window/handheld/orientation=1
+
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          renderer/rendering_method.mobile="gl_compatibility"
+          EOF
+          test -s preview/assets/worlds/grasland/grasland.glb
+      - name: Upload standalone Godot preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Grasland-Godot-Preview
+          path: preview/
+          if-no-files-found: error
