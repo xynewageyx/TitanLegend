@@ -29,7 +29,24 @@ func _verify() -> void:
   if not found.has(expected):
    _fail("Missing animation %s; imported clips: %s" % [expected, str(found)])
    return
- print("PASS: warrior GLB imported with all six clips: ", found)
+ # Verify that Godot can actually select and advance each imported clip.
+ for expected in EXPECTED:
+  var qualified_name: StringName = &""
+  for library_name in player.get_animation_library_list():
+   var library := player.get_animation_library(library_name)
+   if library.has_animation(expected):
+    qualified_name = StringName(expected if String(library_name).is_empty() else String(library_name) + "/" + expected)
+    break
+  if String(qualified_name).is_empty():
+   _fail("Could not resolve animation path for " + expected)
+   return
+  player.play(qualified_name)
+  player.advance(0.016)
+  if not player.is_playing():
+   _fail("Animation did not start: " + expected)
+   return
+  player.stop()
+ print("PASS: warrior GLB imported and played all six clips: ", found)
  quit(0)
 
 func _find_player(node: Node) -> AnimationPlayer:
