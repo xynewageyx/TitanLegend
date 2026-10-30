@@ -16,6 +16,13 @@ bpy.ops.object.delete(use_global=False)
 def material(name, rgb):
     m = bpy.data.materials.new(name)
     m.diffuse_color = (*rgb, 1)
+    # glTF exports Principled BSDF node colors, not viewport-only diffuse_color.
+    m.use_nodes = True
+    bsdf = m.node_tree.nodes.get("Principled BSDF")
+    if bsdf is not None:
+        bsdf.inputs["Base Color"].default_value = (*rgb, 1)
+        bsdf.inputs["Metallic"].default_value = 0.12
+        bsdf.inputs["Roughness"].default_value = 0.72
     return m
 
 
