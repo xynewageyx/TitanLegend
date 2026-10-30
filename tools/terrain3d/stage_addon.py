@@ -190,7 +190,7 @@ def write_png(filename, base, seed, grain):
     pixels.append(max(0,min(255,int(ch+shade))))
  def chunk(kind,data):
   return struct.pack(">I",len(data))+kind+data+struct.pack(">I",zlib.crc32(kind+data)&0xffffffff)
- png=b"\\x89PNG\\r\\n\\x1a\\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",size,size,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(bytes(pixels),6))+chunk(b"IEND",b"")
+ png=b"\x89PNG\r\n\x1a\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",size,size,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(bytes(pixels),6))+chunk(b"IEND",b"")
  (texture_dir/filename).write_bytes(png)
 write_png("gras_albedo.png",(89,149,57),11,29)
 write_png("erde_albedo.png",(117,84,54),22,25)
