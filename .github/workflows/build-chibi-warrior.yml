@@ -1,0 +1,31 @@
+name: Build procedural chibi warrior GLB
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/asset_pipeline/build_warrior_glb.py'
+      - '.github/workflows/build-chibi-warrior.yml'
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+          blender --version
+      - name: Build rigged GLB
+        run: |
+          mkdir -p build
+          blender -b --python tools/asset_pipeline/build_warrior_glb.py -- build/titan_warrior_prototype.glb
+          test -s build/titan_warrior_prototype.glb
+      - name: Upload GLB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-warrior-rigged-prototype
+          path: build/titan_warrior_prototype.glb
+          if-no-files-found: error
