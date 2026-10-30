@@ -1,0 +1,21 @@
+name: Terrain3D Android Compatibility Check
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/terrain3d-check.yml'
+      - 'tools/terrain3d/**'
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pinned Terrain3D release
+        run: |
+          python3 tools/terrain3d/inspect_release.py
+      - name: Upload inspection report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Terrain3D-Android-Inspection
+          path: terrain3d-inspection/
