@@ -710,6 +710,10 @@ func _try_cast_charged_skill(slot: int, role: int) -> void:
  _execute_equipped_skill(slot, role, choice)
 
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
+ if team_formation != null and slot >= 0 and slot < team_formation.heroes.size():
+  var glb_visual: Node = team_formation.heroes[slot].get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null and glb_visual.has_method("play_cast"):
+   glb_visual.play_cast()
  if team_formation != null and slot < team_formation.heroes.size():
   var motion: Node = team_formation.heroes[slot].get_node_or_null("HeroCombatMotion")
   if motion != null and motion.has_method("play_skill_cast"):
