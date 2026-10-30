@@ -1,6 +1,11 @@
 name: Probe Rigify isolated
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/asset_pipeline/probe_rigify.py'
+      - '.github/workflows/probe-rigify.yml'
 jobs:
   rigify-probe:
     runs-on: ubuntu-latest
@@ -11,5 +16,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y blender
-      - name: Check Rigify in headless Blender
+      - name: Check Blender version
+        run: blender --background --factory-startup --python-expr 'import bpy; print("BLENDER:", bpy.app.version_string)'
+      - name: Generate a real Rigify rig in headless Blender
         run: blender --background --factory-startup --python tools/asset_pipeline/probe_rigify.py
