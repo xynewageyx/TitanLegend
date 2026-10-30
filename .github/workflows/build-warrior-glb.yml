@@ -1,0 +1,45 @@
+name: Build procedural warrior GLB
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/asset_pipeline/build_warrior_glb.py'
+      - '.github/workflows/build-warrior-glb.yml'
+permissions:
+  contents: read
+jobs:
+  build-warrior:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy
+          blender --version
+          blender --background --factory-startup --python-expr "import numpy; print('Blender NumPy:', numpy.__version__)"
+      - name: Generate warrior model
+        run: |
+          mkdir -p build/characters
+          blender --background --factory-startup --python tools/asset_pipeline/build_warrior_glb.py -- build/characters/titan_warrior.glb
+          test -s build/characters/titan_warrior.glb
+      - name: Validate GLB header
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          p = Path("build/characters/titan_warrior.glb")
+          data = p.read_bytes()
+          assert data[:4] == b"glTF", "Not a GLB file"
+          version, size = struct.unpack_from("<II", data, 4)
+          assert version == 2 and size == len(data), "Invalid GLB header"
+          print("Validated", p, len(data), "bytes")
+          PY
+      - name: Upload Android-downloadable GLB
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Warrior-GLB
+          path: build/characters/titan_warrior.glb
+          if-no-files-found: error
+          retention-days: 14
