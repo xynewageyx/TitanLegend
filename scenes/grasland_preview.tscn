@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/worlds/grasland/grasland.glb" id="1_gras"]
+
+[node name="GraslandPreview" type="Node3D"]
+
+[node name="Landscape" parent="." instance=ExtResource("1_gras")]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -25, 0)
+light_energy = 1.4
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, -0.211309, 0.906308, 0.365998, -0.453154, -0.422618, 0.784886, 0, 12, 23)
+current = true
+fov = 48.0
