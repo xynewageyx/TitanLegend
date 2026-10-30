@@ -244,6 +244,9 @@ func play_hit_targets(targets: Array[int], critical: bool = false) -> void:
   var hero: Node3D = heroes[index]
   if not is_instance_valid(hero):
    continue
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_hit()
   var motion: Node = hero.get_node_or_null("HeroCombatMotion")
   if motion != null and motion.has_method("play_hit"):
    motion.play_hit(critical)
@@ -255,6 +258,9 @@ func play_dodge_targets(targets: Array[int]) -> void:
   var hero: Node3D = heroes[index]
   if not is_instance_valid(hero):
    continue
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_dodge()
   var motion: Node = hero.get_node_or_null("HeroCombatMotion")
   if motion != null and motion.has_method("play_dodge"):
    motion.play_dodge()
@@ -263,6 +269,9 @@ func play_team_hit() -> void:
  for hero in heroes:
   if not is_instance_valid(hero):
    continue
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_hit()
   var motion: Node = hero.get_node_or_null("HeroCombatMotion")
   if motion != null and motion.has_method("play_hit"):
    motion.play_hit()
