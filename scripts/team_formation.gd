@@ -294,6 +294,9 @@ func play_attack_for_hero(i: int) -> void:
  tween.parallel().tween_property(hero, "position:z", anchor.z, 0.24).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
  tween.parallel().tween_property(hero, "rotation:y", 0.0, 0.24)
  tween.finished.connect(_on_attack_step_finished.bind(i))
+ var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+ if glb_visual != null:
+  glb_visual.play_attack()
  var motion: Node = hero.get_node_or_null("HeroCombatMotion")
  if motion != null and motion.has_method("play_attack"):
   # The body animation remains cosmetic and does not change attack timing.
@@ -443,6 +446,12 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
+  # Optional imported 3D warrior: only class 0, and only when the GLB exists.
+  if class_ids[i] == 0 and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
+   var warrior_visual := Node3D.new()
+   warrior_visual.name = "WarriorGLBVisual"
+   warrior_visual.set_script(preload("res://scripts/warrior_glb_visual.gd"))
+   hero.add_child(warrior_visual)
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
@@ -584,6 +593,10 @@ func start_walking() -> void:
  if is_walking:
   return
  is_walking = true
+ for hero in heroes:
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_walk()
  if walk_tween != null and walk_tween.is_running():
   walk_tween.kill()
  walk_tween = create_tween()
@@ -818,9 +831,17 @@ func stop_walking() -> void:
  if walk_tween != null and walk_tween.is_running():
   walk_tween.kill()
  is_walking = false
+ for hero in heroes:
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_idle()
 
 func _finish_walking() -> void:
  if not is_walking:
   return
  is_walking = false
+ for hero in heroes:
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_idle()
  walking_finished.emit()
