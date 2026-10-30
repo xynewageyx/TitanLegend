@@ -5,6 +5,9 @@ on:
     paths:
       - 'tools/asset_pipeline/build_warrior_glb.py'
       - '.github/workflows/build-warrior-glb.yml'
+      - 'tests/test_warrior_glb_import.gd'
+      - 'scripts/warrior_glb_preview.gd'
+      - 'scenes/warrior_glb_preview.tscn'
 permissions:
   contents: read
 jobs:
@@ -63,4 +66,5 @@ jobs:
           mkdir -p assets/characters
           cp build/characters/titan_warrior.glb assets/characters/titan_warrior.glb
           godot --headless --path . --editor --import --quit
+          godot --headless --path . --script res://tests/test_warrior_glb_import.gd
           godot --headless --path . --quit-after 10 res://scenes/warrior_glb_preview.tscn
