@@ -146,6 +146,9 @@ func play_hero_defeat(i: int) -> void:
  if not is_instance_valid(hero):
   return
  fallen_heroes[i] = true
+ var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+ if glb_visual != null:
+  glb_visual.play_hit()
  if attack_tweens.has(i):
   var active: Tween = attack_tweens[i] as Tween
   if active != null and active.is_running():
@@ -180,6 +183,9 @@ func play_team_defeat() -> void:
     active.kill()
   attack_tweens.erase(i)
   fallen_heroes[i] = true
+  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
+  if glb_visual != null:
+   glb_visual.play_hit()
   if defeat_tweens.has(i):
    var old_fall: Tween = defeat_tweens[i] as Tween
    if old_fall != null and old_fall.is_running():
