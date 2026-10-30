@@ -9,7 +9,7 @@ on:
       - 'scripts/warrior_glb_preview.gd'
       - 'scenes/warrior_glb_preview.tscn'
 permissions:
-  contents: read
+  contents: write
 jobs:
   build-warrior:
     runs-on: ubuntu-latest
@@ -48,6 +48,22 @@ jobs:
           print("Animations:", [a.get("name") for a in animations])
           print("Validated", p, len(data), "bytes")
           PY
+      - name: Install generated GLB into project assets
+        run: |
+          mkdir -p assets/characters
+          cp build/characters/titan_warrior.glb assets/characters/titan_warrior.glb
+      - name: Commit generated GLB to main for Android Godot
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/characters/titan_warrior.glb
+          if git diff --cached --quiet; then
+            echo "Warrior GLB unchanged"
+          else
+            git commit -m "assets: update generated animated warrior GLB"
+            git push origin HEAD:main
+          fi
       - name: Upload Android-downloadable GLB
         uses: actions/upload-artifact@v4
         with:
