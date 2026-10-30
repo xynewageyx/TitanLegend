@@ -97,6 +97,9 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '        data.save_directory("res://terrain_data")',
  '    # Overlay a textured winding path and a circular boss arena.',
  '    _build_path_and_arena()',
+ '    print("GRASLAND_REGION_READY")',
+ '    print("GRASLAND_REGION_EXISTS:", data.get_region(Vector2i(0, 0)) != null)',
+ '    print("GRASLAND_CAMERA_CONNECTED")',
  '',
  'func _height_at(fx: float, fz: float) -> float:',
  '    var h: float = 7.0 * sin(fx * 0.028) * cos(fz * 0.023)',
@@ -160,8 +163,5 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '    _add_surface("BossArena", vertices, uv, triangles, _surface_material("res://textures/terrain/fels_albedo.png", Color(0.48, 0.47, 0.43)))',
  '    print("GRASLAND_PATH_AND_ARENA_READY")',
  '',
- '    print("GRASLAND_REGION_READY")',
- '    print("GRASLAND_REGION_EXISTS:", terrain.get_data().get_region(Vector2i(0, 0)) != null)',
- '    print("GRASLAND_CAMERA_CONNECTED")',
  ''
 ]),encoding="utf-8")
