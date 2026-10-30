@@ -4,6 +4,8 @@ on:
     paths:
       - 'tools/asset_pipeline/**'
       - '.github/workflows/asset-toolchain.yml'
+      - 'tests/test_character_creator_consistency.py'
+      - 'tests/test_character_creator_consistency.py'
   pull_request:
     paths:
       - 'tools/asset_pipeline/**'
@@ -34,7 +36,9 @@ jobs:
           import json
           from pathlib import Path
           root = Path('tools/asset_pipeline/generated')
-          assert len(json.loads((root/'heroes.json').read_text())['heroes']) == 10
+          assert len(json.loads((root/'heroes.json').read_text())['heroes']) == 11
           assert len(json.loads((root/'biomes.json').read_text())['biomes']) == 12
           assert len(json.loads((root/'animations.json').read_text())['clips']) == 6
           PY
+      - name: Verify character class alignment
+        run: python3 -m unittest discover -s tests -p 'test_character_creator_consistency.py' -v
