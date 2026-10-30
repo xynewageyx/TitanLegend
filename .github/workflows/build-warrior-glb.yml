@@ -8,6 +8,8 @@ on:
       - 'tests/test_warrior_glb_import.gd'
       - 'scripts/warrior_glb_preview.gd'
       - 'scenes/warrior_glb_preview.tscn'
+      - 'scripts/warrior_glb_visual.gd'
+      - 'scripts/team_formation.gd'
 permissions:
   contents: write
 jobs:
@@ -57,7 +59,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/characters/titan_warrior.glb
+          git add -f assets/characters/titan_warrior.glb
           if git diff --cached --quiet; then
             echo "Warrior GLB unchanged"
           else
