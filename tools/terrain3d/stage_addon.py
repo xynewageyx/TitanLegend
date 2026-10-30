@@ -27,3 +27,7 @@ with zipfile.ZipFile(io.BytesIO(payload)) as z:
 scene=root/"scenes"/"terrain3d_test.tscn";scene.parent.mkdir(exist_ok=True)
 scene.write_text('[gd_scene format=3]\n\n[node name="Terrain3DTest" type="Node3D"]\n\n[node name="Camera3D" type="Camera3D" parent="."]\nposition = Vector3(0, 8, 14)\nrotation_degrees = Vector3(-25, 0, 0)\ncurrent = true\n\n[node name="Sun" type="DirectionalLight3D" parent="."]\nrotation_degrees = Vector3(-50, -30, 0)\n',encoding="utf-8")
 print(f"Staged {len(candidates)} addon entries from {asset['name']}; Terrain3D node intentionally not instantiated until compatibility verified")
+
+# Actual Terrain3D GDExtension registration smoke-test scene.
+terrain_scene=root/"scenes"/"terrain3d_node_test.tscn"
+terrain_scene.write_text('[gd_scene format=3]\\n\\n[node name="Terrain3DNodeTest" type="Node3D"]\\n\\n[node name="Terrain3D" type="Terrain3D" parent="."]\\n',encoding="utf-8")
