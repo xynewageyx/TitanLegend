@@ -4,6 +4,8 @@ extends Node3D
 @export var model_path: String = "res://assets/characters/titan_warrior.glb"
 @export var hide_existing_visuals: bool = false
 var animation_player: AnimationPlayer
+var model_instance: Node3D
+var _hidden_meshes: Array[MeshInstance3D] = []
 
 func _ready() -> void:
  if not ResourceLoader.exists(model_path):
@@ -14,8 +16,13 @@ func _ready() -> void:
   push_error("Warrior GLB could not be loaded")
   return
  var instance := scene.instantiate()
- add_child(instance)
- animation_player = _find_player(instance)
+ if not instance is Node3D:
+  push_error("Warrior GLB root is not Node3D")
+  instance.queue_free()
+  return
+ model_instance = instance as Node3D
+ add_child(model_instance)
+ animation_player = _find_player(model_instance)
  if hide_existing_visuals:
   _hide_existing_meshes(get_parent())
  play_clip("idle")
@@ -57,6 +64,12 @@ func _find_player(node: Node) -> AnimationPlayer:
    return result
  return null
 
+func _exit_tree() -> void:
+ for mesh in _hidden_meshes:
+  if is_instance_valid(mesh):
+   mesh.visible = true
+ _hidden_meshes.clear()
+
 func _hide_existing_meshes(node: Node) -> void:
  if node == null:
   return
@@ -64,6 +77,8 @@ func _hide_existing_meshes(node: Node) -> void:
   if child == self:
    continue
   if child is MeshInstance3D:
-   child.visible = false
+   if child.visible:
+    _hidden_meshes.append(child as MeshInstance3D)
+    child.visible = false
   else:
    _hide_existing_meshes(child)
