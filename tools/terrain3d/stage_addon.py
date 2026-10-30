@@ -70,17 +70,17 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '',
  'func _ready() -> void:',
  '    terrain.set_camera($Camera3D)',
- '    var data = terrain.get_data()
-    if data.get_region(Vector2i(0, 0)) == null:
-        data.add_region_blank(Vector2i(0, 0))
-        for x in range(-90, 91, 3):
-            for z in range(-90, 91, 3):
-                var h = 5.0 * sin(float(x) * 0.035) * cos(float(z) * 0.028)
-                h += 2.0 * sin(float(x + z) * 0.09)
-                data.set_height(Vector3(x, 0, z), h)
-        data.update_maps()
-        data.save_directory("res://terrain_data")
-    print("GRASLAND_REGION_READY")
-    print("GRASLAND_CAMERA_CONNECTED")',
+ '    var data = terrain.get_data()',
+ '    if data.get_region(Vector2i(0, 0)) == null:',
+ '        data.add_region_blank(Vector2i(0, 0))',
+ '        for x in range(-90, 91, 3):',
+ '            for z in range(-90, 91, 3):',
+ '                var h = 5.0 * sin(float(x) * 0.035) * cos(float(z) * 0.028)',
+ '                h += 2.0 * sin(float(x + z) * 0.09)',
+ '                data.set_height(Vector3(x, 0, z), h)',
+ '        data.update_maps()',
+ '        data.save_directory("res://terrain_data")',
+ '    print("GRASLAND_REGION_READY")',
+ '    print("GRASLAND_CAMERA_CONNECTED")',
  ''
 ]),encoding="utf-8")
