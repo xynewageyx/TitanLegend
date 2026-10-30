@@ -264,15 +264,15 @@ cube("Helmet left cheekguard", (-.255, -.315, 2.16), (.105, .13, .31), edge, .02
 cube("Helmet right cheekguard", (.255, -.315, 2.16), (.105, .13, .31), edge, .025)
 cube("Helmet lower faceguard", (0, -.365, 2.075), (.42, .105, .085), steel, .025)
 cube("Helmet crest rear ridge", (0, .015, 2.64), (.095, .25, .31), edge, .025)
-cube("Sword extended blade", (.72, -.12, 1.94), (.13, .052, .35), edge, .01)
-cube("Sword blade tip", (.72, -.12, 2.15), (.09, .065, .16), edge, .008)
+# Update 306: do not stack old box blades over the tapered diamond blade.
+# Keeping one continuous blade prevents a visibly squared-off sword tip.
 cube("Shield outer rim", (-.82, -.425, 1.28), (.74, .055, .95), gold, .04)
 cube("Shield inset face", (-.82, -.464, 1.28), (.61, .04, .82), steel, .055)
 
 # Sword profile: a tapered, faceted tip reads as a blade rather than a rod.
 # Existing named blade remains for backward-compatible GLB validation.
-tapered_plate("Sword pointed tip", 2.18, 2.38, .13, .012, .032, edge)
-cube("Sword edge highlight", (.66, -.164, 1.63), (.025, .012, .98), edge, .004)
+# The single diamond-section sword mesh already supplies the pointed tip.
+# Separate floating tip/highlight geometry is intentionally omitted.
 for side, sign in (("L", -1), ("R", 1)):
     cube(side + " Pauldron crest", (sign*.66, -.305, 1.96),
          (.20, .05, .075), gold, .016, (0, 0, sign*17))
