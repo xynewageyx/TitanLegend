@@ -54,18 +54,6 @@ jobs:
         run: |
           mkdir -p assets/characters
           cp build/characters/titan_warrior.glb assets/characters/titan_warrior.glb
-      - name: Commit generated GLB to main for Android Godot
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f assets/characters/titan_warrior.glb
-          if git diff --cached --quiet; then
-            echo "Warrior GLB unchanged"
-          else
-            git commit -m "assets: update generated animated warrior GLB"
-            git push origin HEAD:main
-          fi
       - name: Upload Android-downloadable GLB
         uses: actions/upload-artifact@v4
         with:
@@ -86,3 +74,15 @@ jobs:
           godot --headless --path . --editor --import --quit
           godot --headless --path . --script res://tests/test_warrior_glb_import.gd
           godot --headless --path . --quit-after 10 res://scenes/warrior_glb_preview.tscn
+      - name: Commit generated GLB to main for Android Godot
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f assets/characters/titan_warrior.glb
+          if git diff --cached --quiet; then
+            echo "Warrior GLB unchanged"
+          else
+            git commit -m "assets: update generated animated warrior GLB"
+            git push origin HEAD:main
+          fi
