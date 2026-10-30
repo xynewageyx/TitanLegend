@@ -1,0 +1,25 @@
+name: Generate Grasland 3D GLB
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/blender/**'
+      - '.github/workflows/generate-grasland.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+      - name: Generate model
+        run: blender -b --python tools/blender/generate_grasland.py
+      - name: Upload Godot-ready model
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Grasland-GLB
+          path: /tmp/grasland.glb
+          if-no-files-found: error
