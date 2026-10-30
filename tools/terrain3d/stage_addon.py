@@ -30,4 +30,11 @@ print(f"Staged {len(candidates)} addon entries from {asset['name']}; Terrain3D n
 
 # Actual Terrain3D GDExtension registration smoke-test scene.
 terrain_scene=root/"scenes"/"terrain3d_node_test.tscn"
-terrain_scene.write_text('[gd_scene format=3]\\n\\n[node name="Terrain3DNodeTest" type="Node3D"]\\n\\n[node name="Terrain3D" type="Terrain3D" parent="."]\\n',encoding="utf-8")
+terrain_scene.write_text(chr(10).join([
+ '[gd_scene format=3]',
+ '',
+ '[node name="Terrain3DNodeTest" type="Node3D"]',
+ '',
+ '[node name="Terrain3D" type="Terrain3D" parent="."]',
+ ''
+]), encoding="utf-8")
