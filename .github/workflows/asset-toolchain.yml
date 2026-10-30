@@ -5,11 +5,11 @@ on:
       - 'tools/asset_pipeline/**'
       - '.github/workflows/asset-toolchain.yml'
       - 'tests/test_character_creator_consistency.py'
-      - 'tests/test_character_creator_consistency.py'
   pull_request:
     paths:
       - 'tools/asset_pipeline/**'
       - '.github/workflows/asset-toolchain.yml'
+      - 'tests/test_character_creator_consistency.py'
   workflow_dispatch:
 permissions:
   contents: read
