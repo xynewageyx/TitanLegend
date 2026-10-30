@@ -38,3 +38,38 @@ terrain_scene.write_text(chr(10).join([
  '[node name="Terrain3D" type="Terrain3D" parent="."]',
  ''
 ]), encoding="utf-8")
+
+# Playable landscape prototype: camera, sun, environment and Terrain3D node.
+# Region generation is attempted by a separate script and must pass CI before claiming success.
+landscape=root/"scenes"/"grasland_terrain3d.tscn"
+landscape.write_text(chr(10).join([
+ '[gd_scene load_steps=2 format=3]',
+ '',
+ '[ext_resource type="Script" path="res://scripts/grasland_setup.gd" id="1"]',
+ '',
+ '[node name="Grasland" type="Node3D"]',
+ 'script = ExtResource("1")',
+ '',
+ '[node name="Terrain3D" type="Terrain3D" parent="."]',
+ '',
+ '[node name="Camera3D" type="Camera3D" parent="."]',
+ 'position = Vector3(0, 95, 145)',
+ 'rotation_degrees = Vector3(-32, 0, 0)',
+ 'current = true',
+ '',
+ '[node name="Sun" type="DirectionalLight3D" parent="."]',
+ 'rotation_degrees = Vector3(-55, -35, 0)',
+ 'light_energy = 1.3',
+ ''
+]),encoding="utf-8")
+scripts=root/"scripts";scripts.mkdir(exist_ok=True)
+(scripts/"grasland_setup.gd").write_text(chr(10).join([
+ 'extends Node3D',
+ '',
+ '@onready var terrain = $Terrain3D',
+ '',
+ 'func _ready() -> void:',
+ '    terrain.set_camera($Camera3D)',
+ '    print("GRASLAND_CAMERA_CONNECTED")',
+ ''
+]),encoding="utf-8")
