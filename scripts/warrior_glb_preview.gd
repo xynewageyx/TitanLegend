@@ -24,14 +24,15 @@ func _ready() -> void:
  if player == null:
   push_warning("Warrior GLB has no AnimationPlayer")
   return
- for name in player.get_animation_list():
-  clip_names.append(name)
  for library_name in player.get_animation_library_list():
   if library_name == &"":
    continue
   var lib := player.get_animation_library(library_name)
   for name in lib.get_animation_list():
    clip_names.append(String(library_name) + "/" + String(name))
+ if clip_names.is_empty():
+  for name in player.get_animation_list():
+   clip_names.append(name)
  if not clip_names.is_empty():
   _play_clip(0)
  print("Warrior GLB loaded, clips: ", clip_names)
