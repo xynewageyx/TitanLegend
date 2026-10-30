@@ -165,3 +165,35 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '',
  ''
 ]),encoding="utf-8")
+
+
+# Bundle seamless, reproducible terrain textures so Android users do not have
+# to copy PNG files into every newly downloaded test project.
+import math,random,struct,zlib
+texture_dir=root/"textures"/"terrain"
+texture_dir.mkdir(parents=True,exist_ok=True)
+def write_png(filename, base, seed, grain):
+ size=256
+ rng=random.Random(seed)
+ # Periodic low-frequency variations blend perfectly at tile edges.
+ phases=[rng.uniform(0,math.tau) for _ in range(4)]
+ pixels=bytearray()
+ for y in range(size):
+  pixels.append(0)
+  for x in range(size):
+   u=math.tau*x/size;v=math.tau*y/size
+   wave=(math.sin(u*3+phases[0])*math.cos(v*3+phases[1])*0.45+
+         math.sin(u*9+phases[2])*math.cos(v*9+phases[3])*0.25)
+   speck=rng.uniform(-1,1)*grain
+   shade=wave*24+speck
+   for ch in base:
+    pixels.append(max(0,min(255,int(ch+shade))))
+ def chunk(kind,data):
+  return struct.pack(">I",len(data))+kind+data+struct.pack(">I",zlib.crc32(kind+data)&0xffffffff)
+ png=b"\\x89PNG\\r\\n\\x1a\\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",size,size,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(bytes(pixels),6))+chunk(b"IEND",b"")
+ (texture_dir/filename).write_bytes(png)
+write_png("gras_albedo.png",(89,149,57),11,29)
+write_png("erde_albedo.png",(117,84,54),22,25)
+write_png("weg_albedo.png",(168,128,82),33,18)
+write_png("fels_albedo.png",(116,119,116),44,31)
+print("Bundled four tileable terrain PNGs in textures/terrain")
