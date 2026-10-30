@@ -77,6 +77,7 @@ jobs:
           "$GODOT" --headless --path terrain3d-preview --quit-after 5 res://scenes/grasland_terrain3d.tscn 2>&1 | tee /tmp/grasland.log
           grep -q GRASLAND_REGION_READY /tmp/grasland.log
           grep -q GRASLAND_PATH_AND_ARENA_READY /tmp/grasland.log
+          grep -q GRASLAND_PROPS_READY /tmp/grasland.log
           if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/grasland.log; then exit 1; fi
           test -d terrain3d-preview/terrain_data
       - name: Verify Terrain3D native extension registration
