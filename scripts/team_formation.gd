@@ -443,6 +443,12 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
+  # Production GLB models activate automatically; experimental .tscn previews
+  # remain opt-in so unfinished placeholder figures never replace live art.
+  var hero_model_id: String = "heroes/class_%d" % class_ids[i]
+  var production_glb: String = "res://assets/models/" + hero_model_id + ".glb"
+  if ResourceLoader.exists(production_glb) or ProjectSettings.get_setting("titan_legends/graphics/experimental_models", false):
+   _try_imported_visual(hero, hero_model_id)
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
@@ -454,10 +460,34 @@ func create_team() -> void:
   preload("res://scripts/pet_creature_visuals.gd").decorate(pet, pet_element_ids[i], i)
   DesignDetails.pet(pet, i)
   HeroWeapons47.decorate_pet(pet, class_ids[i])
+  _try_imported_visual(pet, "pets/element_%d" % pet_element_ids[i])
  _apply_equipped_skins()
  _on_reincarnation(GameManager.current_reincarnation_level)
  team_changed.emit()
  call_deferred("_refresh_health_after_rebuild")
+# Update 215: optional imported GLB visuals; retain procedural fallback.
+# Only direct procedural mesh children are hidden. Gameplay nodes, motion,
+# health bars and passive pet logic remain untouched.
+func _try_imported_visual(host: Node3D, model_id: String) -> void:
+ var model: Node3D = TitanModelLoader.attach_model(host, model_id)
+ if model == null:
+  return
+ # Hide the complete procedural visual hierarchy, not just top-level meshes.
+ # Keep health UI, combat controller and passive pet nodes alive.
+ _hide_fallback_visuals(host, model)
+
+func _hide_fallback_visuals(root: Node, imported_model: Node3D) -> void:
+ for child in root.get_children():
+  if child == imported_model:
+   continue
+  if child.name == "HeroCombatMotion" or child.name == "PassivePet":
+   continue
+  if child is MeshInstance3D:
+   var mesh_node: MeshInstance3D = child as MeshInstance3D
+   mesh_node.visible = false
+  elif child is Node3D and not (child is CanvasItem):
+   _hide_fallback_visuals(child, imported_model)
+
 func _health_bar_piece(parent: Node3D, name_value: String, tint: Color, depth: float) -> MeshInstance3D:
  var piece: MeshInstance3D = MeshInstance3D.new()
  piece.name = name_value

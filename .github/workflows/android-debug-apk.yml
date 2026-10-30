@@ -48,28 +48,28 @@ jobs:
           "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install "platform-tools" "build-tools;35.0.1" "platforms;android-35"
           test -x "$ANDROID_HOME/platform-tools/adb"
 
-      - name: Install Godot 4.6 stable
+      - name: Install Godot 4.7.2 stable
         shell: bash
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 --output /tmp/godot.zip \
-            "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip"
+            "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          chmod +x /tmp/Godot_v4.6-stable_linux.x86_64
-          sudo mv /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
+          sudo mv /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
           godot --version
 
       - name: Install Android export templates
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "$HOME/.local/share/godot/export_templates/4.6.stable"
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           curl --fail --location --retry 3 --output /tmp/godot_templates.tpz \
-            "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_export_templates.tpz"
+            "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz"
           unzip -j -q /tmp/godot_templates.tpz \
-            'templates/android_debug.apk' 'templates/android_release.apk' \
-            -d "$HOME/.local/share/godot/export_templates/4.6.stable"
-          test -s "$HOME/.local/share/godot/export_templates/4.6.stable/android_debug.apk"
+            'templates/android_debug.apk' 'templates/android_release.apk' 'templates/android_source.zip' \
+            -d "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          test -s "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_debug.apk"
           rm -f /tmp/godot_templates.tpz
 
       - name: Configure Android export paths and debug key
@@ -79,7 +79,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$HOME/.config/godot" "$HOME/.android"
-          cat > "$HOME/.config/godot/editor_settings-4.6.tres" <<EOF
+          cat > "$HOME/.config/godot/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
@@ -135,6 +135,47 @@ jobs:
           set -euo pipefail
           godot --headless --path . --editor --import --quit
 
+      - name: Install Gradle Android build template
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Avoid Godot's interactive template installer in headless CI.
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          template = Path.home() / ".local/share/godot/export_templates/4.7.2.stable/android_source.zip"
+          target = Path("android/build")
+          with ZipFile(template) as archive:
+              names = [n for n in archive.namelist() if not n.endswith("/")]
+              prefix = "android/build/" if any(n.startswith("android/build/") for n in names) else "build/"
+              if not any(n.startswith(prefix) for n in names):
+                  prefix = ""
+              extracted = 0
+              for entry in archive.infolist():
+                  if entry.is_dir() or not entry.filename.startswith(prefix):
+                      continue
+                  relative = Path(entry.filename[len(prefix):])
+                  if not relative.parts or ".." in relative.parts or relative.is_absolute():
+                      continue
+                  output = target / relative
+                  output.parent.mkdir(parents=True, exist_ok=True)
+                  with archive.open(entry) as source, output.open("wb") as dest:
+                      import shutil
+                      shutil.copyfileobj(source, dest)
+                  extracted += 1
+          print(f"Extracted {extracted} Gradle template files")
+          # Zip extraction does not preserve Unix executable bits for gradlew.
+          wrapper = target / "gradlew"
+          if not wrapper.is_file():
+              raise SystemExit("Gradle wrapper missing")
+          wrapper.chmod(wrapper.stat().st_mode | 0o111)
+          # Godot checks this marker against its compiled template version.
+          (Path("android") / ".build_version").write_text("4.7.2.stable\n", encoding="utf-8")
+          if not (target / "build.gradle").is_file() and not (target / "settings.gradle").is_file():
+              raise SystemExit("Android Gradle template missing build.gradle/settings.gradle")
+          PY
+
       - name: Export Android arm64 debug APK
         shell: bash
         run: |
@@ -161,7 +202,7 @@ jobs:
           set -euo pipefail
           tag="android-preview"
           apk="build/TitanLegends-debug.apk"
-          description="Development preview only. Godot 4.6 arm64 debug build; not a production release. Android device testing is still required. Builds use a reusable debug signature only when the TITAN_DEBUG_KEYSTORE_BASE64 repository secret is configured. Without it, updates may require uninstalling an older preview, which can erase local saves."
+          description="Development preview only. Godot 4.7.2 arm64 debug build; not a production release. Android device testing is still required. Builds use a reusable debug signature only when the TITAN_DEBUG_KEYSTORE_BASE64 repository secret is configured. Without it, updates may require uninstalling an older preview, which can erase local saves."
           if gh release view "$tag" >/dev/null 2>&1; then
             # Upload must succeed: only the optional metadata edit may be denied
             # by GitHub App release permissions on an otherwise valid APK.

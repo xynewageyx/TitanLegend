@@ -1,0 +1,93 @@
+name: Build original warrior GLB
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/generate_warrior_glb.py'
+      - '.github/workflows/build-warrior-model.yml'
+      - 'tools/validate_warrior_glb.py'
+      - 'tools/render_warrior_preview.py'
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Generate original armored warrior
+        run: |
+          blender -b --python tools/generate_warrior_glb.py
+          test -s build/class_0.glb
+          python3 tools/validate_warrior_glb.py build/class_0.glb
+      - name: Render visual QA preview
+        run: |
+          LIBGL_ALWAYS_SOFTWARE=1 EGL_PLATFORM=surfaceless blender -b --python tools/render_warrior_preview.py
+          test -s build/warrior_preview.png
+          test -s build/warrior_front.png
+          test -s build/warrior_side.png
+          test -s build/warrior_attack_windup.png
+          test -s build/warrior_attack_strike.png
+          test -s build/warrior_attack_recovery.png
+          test -s build/warrior_studio_warm_cool.png
+          test -s build/warrior_game_attack_windup.png
+          test -s build/warrior_game_attack_strike.png
+          test -s build/warrior_game_attack_recovery.png
+          test -s build/warrior_attack_comparison.png
+          test -s build/warrior_attack_qa.json
+      - name: Upload Godot-ready GLB model
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Warrior-GLB
+          path: |
+            build/class_0.glb
+            build/warrior_preview.png
+            build/warrior_front.png
+            build/warrior_side.png
+            build/warrior_attack_windup.png
+            build/warrior_attack_strike.png
+            build/warrior_attack_recovery.png
+            build/warrior_studio_warm_cool.png
+            build/warrior_game_attack_windup.png
+            build/warrior_game_attack_strike.png
+            build/warrior_game_attack_recovery.png
+            build/warrior_attack_comparison.png
+            build/warrior_attack_qa.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Integrate generated GLB into development branch
+        if: github.ref == 'refs/heads/feature/3d-model-pipeline-214'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/models/heroes
+          cp build/class_0.glb assets/models/heroes/class_0.glb
+          git add assets/models/heroes/class_0.glb
+          if git diff --cached --quiet; then
+            echo "Warrior GLB already matches the generated asset"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update 240: integrate generated armored warrior GLB"
+          # Rebase the generated binary commit onto the latest branch head.
+          # A concurrent workflow may have pushed while Blender was rendering.
+          for attempt in 1 2 3 4; do
+            git fetch origin feature/3d-model-pipeline-214
+            if git rebase -X ours origin/feature/3d-model-pipeline-214; then
+              if git push origin HEAD:feature/3d-model-pipeline-214; then
+                exit 0
+              fi
+            else
+              git rebase --abort || true
+              echo "Could not rebase generated GLB commit safely"
+              exit 1
+            fi
+            sleep 2
+          done
+          echo "Could not push generated GLB after four retries"
+          exit 1

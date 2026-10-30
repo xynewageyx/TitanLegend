@@ -24,18 +24,20 @@ jobs:
               exit 1
             fi
           done
-      - name: Install Godot 4.6
+      - name: Install Godot 4.7.2
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip"
+          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          chmod +x /tmp/Godot_v4.6-stable_linux.x86_64
-          sudo mv /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
+          sudo mv /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
       - name: Import assets and parse project
         shell: bash
         run: |
           godot --headless --path . --editor --import --quit
+      - name: Check imported 3D model pipeline
+        run: python3 -m unittest discover -s tests -p 'test_imported_3d_pipeline.py' -v
       - name: Test boss camera framing
         shell: bash
         run: |
@@ -115,19 +117,19 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Install Godot 4.6 and Android export templates
+      - name: Install Godot 4.7.2 and Android export templates
         shell: bash
         run: |
           set -euo pipefail
-          version=4.6-stable
+          version=4.7.2-stable
           base="https://github.com/godotengine/godot-builds/releases/download/$version"
-          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.6-stable_linux.x86_64.zip"
+          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          sudo install -m 755 /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
-          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.6-stable_export_templates.tpz"
-          mkdir -p "$HOME/.local/share/godot/export_templates/4.6.stable"
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.7.2-stable_export_templates.tpz"
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           unzip -q /tmp/templates.tpz -d /tmp/godot-templates
-          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.6.stable/"
+          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
       - name: Configure Android SDK and persistent debug signing
         shell: bash
         run: |
@@ -171,6 +173,33 @@ jobs:
           set -euo pipefail
           mkdir -p build
           godot --headless --path . --editor --import --quit
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import shutil
+          template = Path.home() / ".local/share/godot/export_templates/4.7.2.stable/android_source.zip"
+          target = Path("android/build")
+          with ZipFile(template) as archive:
+              names = [n for n in archive.namelist() if not n.endswith("/")]
+              prefix = "android/build/" if any(n.startswith("android/build/") for n in names) else "build/"
+              if not any(n.startswith(prefix) for n in names):
+                  prefix = ""
+              for entry in archive.infolist():
+                  if entry.is_dir() or not entry.filename.startswith(prefix):
+                      continue
+                  relative = Path(entry.filename[len(prefix):])
+                  if not relative.parts or relative.is_absolute() or ".." in relative.parts:
+                      continue
+                  output = target / relative
+                  output.parent.mkdir(parents=True, exist_ok=True)
+                  with archive.open(entry) as source, output.open("wb") as dest:
+                      shutil.copyfileobj(source, dest)
+          wrapper = target / "gradlew"
+          if not wrapper.is_file():
+              raise SystemExit("Gradle wrapper missing")
+          wrapper.chmod(wrapper.stat().st_mode | 0o111)
+          (Path("android") / ".build_version").write_text("4.7.2.stable\n", encoding="utf-8")
+          PY
           godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
           test -s build/TitanLegends-debug.apk
           unzip -tq build/TitanLegends-debug.apk

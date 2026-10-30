@@ -5,6 +5,63 @@ extends Node3D
 # Original 144 implementation is archived in project root for comparison.
 
 var class_id: int = 0
+# Update 216: optional imported-model animation bridge.
+var imported_animation_player: AnimationPlayer
+var imported_animation_model: Node3D
+var imported_animation_state: StringName = &""
+
+func _find_imported_animation() -> void:
+ var hero := get_parent() as Node3D
+ if hero == null:
+  return
+ imported_animation_model = hero.get_node_or_null("TitanImportedModel") as Node3D
+ if imported_animation_model != null:
+  imported_animation_player = TitanModelLoader._find_animation_player(imported_animation_model)
+  if imported_animation_player != null:
+   _hide_procedural_limbs()
+
+func _hide_procedural_limbs() -> void:
+ # Keep combat flashes and tank status effects; only retire placeholder limbs
+ # and the procedural equipment attached to them.
+ for part in [left_arm, right_arm, left_leg, right_leg]:
+  if part != null:
+   part.visible = false
+
+
+func _play_imported_state(state: StringName) -> void:
+ if imported_animation_player == null:
+  return
+ var names: Array[StringName] = []
+ match state:
+  &"Defeat": names = [&"Defeat", &"Death", &"Die", &"death"]
+  &"Hit": names = [&"Hit", &"Hurt", &"hit"]
+  &"Attack": names = [&"Attack", &"Attack_1", &"attack", &"Punch"]
+  &"Run": names = [&"Run", &"Walk", &"run", &"walk"]
+  _: names = [&"Idle", &"idle", &"Stand"]
+ # Imported GLB animations may be namespaced (for example "Armature/Run").
+ # Prefer exact clips, then match the suffix without changing gameplay timing.
+ var available: PackedStringArray = imported_animation_player.get_animation_list()
+ for candidate in names:
+  var resolved: StringName = candidate
+  if not imported_animation_player.has_animation(resolved):
+   resolved = &""
+   for clip in available:
+    if clip.get_slice("/", clip.get_slice_count("/") - 1).to_lower() == String(candidate).to_lower():
+     resolved = StringName(clip)
+     break
+  if resolved != &"":
+   if imported_animation_state != resolved or not imported_animation_player.is_playing():
+    var clip: Animation = imported_animation_player.get_animation(resolved)
+    if clip != null:
+     # Movement cycles loop, while impact/death clips keep their authored end.
+     if state == &"Idle" or state == &"Run":
+      clip.loop_mode = Animation.LOOP_LINEAR
+     else:
+      clip.loop_mode = Animation.LOOP_NONE
+    imported_animation_player.play(resolved, 0.12 if imported_animation_state != &"" else 0.0)
+    imported_animation_state = resolved
+   return
+
 var elapsed: float = 0.0
 var attack_remaining: float = 0.0
 var hit_remaining: float = 0.0
@@ -143,6 +200,8 @@ func set_tank_defense_state(kind: int) -> void:
   defense_remaining = 0.0
 
 func _process(delta: float) -> void:
+ if imported_animation_player == null and imported_animation_model == null:
+  _find_imported_animation()
  if left_arm == null or right_arm == null:
   return
  elapsed += delta
@@ -163,6 +222,23 @@ func _process(delta: float) -> void:
   var formation: Node = hero.get_parent()
   if formation != null:
    walking = bool(formation.get("is_walking"))
+ # Imported skeleton clips mirror existing combat state, without changing combat.
+ var defeated: bool = false
+ if hero != null:
+  var formation_node: Node = hero.get_parent()
+  if formation_node != null:
+   var fallen: Dictionary = formation_node.get("fallen_heroes")
+   defeated = bool(fallen.get(hero.get_index(), false))
+ if defeated:
+  _play_imported_state(&"Defeat")
+ elif hit_remaining > 0.0:
+  _play_imported_state(&"Hit")
+ elif attack_remaining > 0.0:
+  _play_imported_state(&"Attack")
+ elif walking:
+  _play_imported_state(&"Run")
+ else:
+  _play_imported_state(&"Idle")
  # Smoothly ease between idle and walk to avoid snapping limbs on transitions.
  stride_blend = move_toward(stride_blend, 1.0 if walking else 0.0, delta * 5.0)
  var step_strength: float = stride_blend
