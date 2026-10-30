@@ -32,6 +32,9 @@ trim = material("gold_trim", (0.92, 0.65, 0.17))
 hair = material("dark_hair", (0.13, 0.09, 0.10))
 leather = material("dark_leather", (0.24, 0.15, 0.12))
 eye = material("eyes", (0.04, 0.08, 0.13))
+eye_shine = material("eye_highlight", (0.98, 0.98, 1.0))
+cheek = material("soft_cheek", (0.92, 0.43, 0.38))
+silver = material("silver_blade", (0.73, 0.82, 0.91))
 
 
 def cube(name, pos, scale, mat, bone):
@@ -60,8 +63,16 @@ pieces = []
 cube("torso_armor", (0, 0, 1.32), (0.75, 0.46, 0.72), armor, "spine")
 sphere("head", (0, -0.02, 2.08), (0.52, 0.45, 0.50), skin, "head")
 sphere("hair_cap", (0, 0.04, 2.43), (0.52, 0.44, 0.20), hair, "head")
+# Distinctive swept fringe and rounded anime-style hair tufts, all head-weighted.
+for i, (x, z) in enumerate([(-0.35, 2.36), (-0.15, 2.40), (0.08, 2.42), (0.30, 2.37)]):
+    sphere("hair_fringe_%d" % i, (x, -0.35, z), (0.17, 0.16, 0.19), hair, "head")
+sphere("nose", (0, -0.468, 1.98), (0.055, 0.045, 0.045), skin, "head")
+sphere("mouth", (0, -0.462, 1.86), (0.12, 0.022, 0.026), leather, "head")
+cube("chest_crest", (0, -0.254, 1.43), (0.24, 0.055, 0.31), trim, "spine")
 for side, label in [(-1, "L"), (1, "R")]:
-    sphere("eye_" + label, (side * 0.18, -0.424, 2.11), (0.075, 0.025, 0.10), eye, "head")
+    sphere("eye_" + label, (side * 0.18, -0.424, 2.11), (0.105, 0.045, 0.14), eye, "head")
+    sphere("eye_glint_" + label, (side * 0.18 - 0.028, -0.466, 2.17), (0.027, 0.013, 0.035), eye_shine, "head")
+    sphere("cheek_" + label, (side * 0.32, -0.37, 1.96), (0.09, 0.025, 0.045), cheek, "head")
     sphere("shoulder_" + label, (side * 0.53, 0, 1.58), (0.27, 0.31, 0.27), trim, "upper_arm." + label)
     cube("arm_" + label, (side * 0.65, 0, 1.18), (0.27, 0.30, 0.55), armor, "upper_arm." + label)
     cube("glove_" + label, (side * 0.65, -0.02, 0.83), (0.32, 0.32, 0.27), leather, "upper_arm." + label)
@@ -70,8 +81,10 @@ for side, label in [(-1, "L"), (1, "R")]:
 cube("belt", (0, 0, 0.99), (0.78, 0.52, 0.16), leather, "spine")
 cube("belt_buckle", (0, -0.28, 0.99), (0.20, 0.06, 0.16), trim, "spine")
 cube("sword_grip", (0.65, -0.02, 0.51), (0.12, 0.12, 0.50), leather, "upper_arm.R")
-cube("sword_blade", (0.65, -0.02, 0.03), (0.15, 0.07, 0.66), trim, "upper_arm.R")
+cube("sword_blade", (0.65, -0.02, 0.03), (0.20, 0.075, 0.66), silver, "upper_arm.R")
+cube("sword_guard", (0.65, -0.02, 0.30), (0.39, 0.15, 0.11), trim, "upper_arm.R")
 cube("shield", (-0.65, -0.31, 1.00), (0.53, 0.16, 0.70), armor, "upper_arm.L")
+sphere("shield_boss", (-0.65, -0.413, 1.02), (0.18, 0.075, 0.18), trim, "upper_arm.L")
 
 bpy.ops.object.armature_add(enter_editmode=True, location=(0, 0, 0))
 rig = bpy.context.object
