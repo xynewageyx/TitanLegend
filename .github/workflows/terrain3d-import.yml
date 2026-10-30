@@ -55,6 +55,12 @@ jobs:
         run: |
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
           "$GODOT" --headless --path terrain3d-preview --quit-after 3 res://scenes/terrain3d_node_test.tscn
+      - name: Test procedural grassland scene
+        run: |
+          GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
+          "$GODOT" --headless --path terrain3d-preview --quit-after 5 res://scenes/grasland_terrain3d.tscn 2>&1 | tee /tmp/grasland.log
+          grep -q GRASLAND_REGION_READY /tmp/grasland.log
+          test -d terrain3d-preview/terrain_data
       - name: Upload isolated test project
         uses: actions/upload-artifact@v4
         with:
