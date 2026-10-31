@@ -31,21 +31,37 @@ func _ready() -> void:
  panel.offset_right = -16
  panel.offset_bottom = -24
  add_child(panel)
+ var frame := VBoxContainer.new()
+ panel.add_child(frame)
+ var header := HBoxContainer.new()
+ frame.add_child(header)
+ var heading := Label.new()
+ heading.text = "Heldentalente"
+ heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ header.add_child(heading)
+ var close_button := Button.new()
+ close_button.text = "Schliessen"
+ close_button.custom_minimum_size = Vector2(110, 48)
+ header.add_child(close_button)
+ close_button.pressed.connect(_toggle)
  var scroll := ScrollContainer.new()
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
- panel.add_child(scroll)
+ scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ frame.add_child(scroll)
  var column := VBoxContainer.new()
  column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- column.custom_minimum_size = Vector2(290, 0)
+ column.custom_minimum_size = Vector2(270, 0)
  scroll.add_child(column)
- var close_button := Button.new()
- close_button.text = "Schliessen"
- column.add_child(close_button)
- close_button.pressed.connect(_toggle)
  hero_picker = OptionButton.new()
  for i in range(4):
-  hero_picker.add_item("Held " + str(i + 1), i)
+  var class_name: String = "Held"
+  if team != null and i < team.class_ids.size():
+   var class_index: int = int(team.class_ids[i])
+   if class_index >= 0 and class_index < team.CLASS_NAMES.size():
+    class_name = str(team.CLASS_NAMES[class_index])
+  hero_picker.add_item("Held %d - %s" % [i + 1, class_name], i)
  column.add_child(hero_picker)
  hero_picker.item_selected.connect(func(index: int) -> void:
   selected_hero = index
@@ -79,8 +95,10 @@ func _refresh() -> void:
   return
  var level: int = GameManager.character_level
  var build: Array = team.get_talent_build_v2(selected_hero)
- if selected_hero < team.class_ids.size() and selected_hero < team.CLASS_NAMES.size():
-  hero_picker.set_item_text(selected_hero, "Held %d - %s" % [selected_hero + 1, team.CLASS_NAMES[int(team.class_ids[selected_hero])]])
+ if selected_hero < team.class_ids.size():
+  var class_index: int = int(team.class_ids[selected_hero])
+  if class_index >= 0 and class_index < team.CLASS_NAMES.size():
+   hero_picker.set_item_text(selected_hero, "Held %d - %s" % [selected_hero + 1, team.CLASS_NAMES[class_index]])
  points_label.text = "Level %d | Verfuegbar: %d | Maximal 225 investierbar" % [level, TREES.available_points(level, build)]
  var bonus: Dictionary = ADAPTER.bonuses(int(team.class_ids[selected_hero]), level, build)
  bonus_label.text = "ATK +%.1f%%  Schutz +%.1f%%  Heilung +%.1f%%" % [float(bonus["attack"]) * 100.0, float(bonus["defense"]) * 100.0, float(bonus["healing"]) * 100.0]
