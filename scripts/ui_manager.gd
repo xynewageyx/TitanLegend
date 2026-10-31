@@ -434,19 +434,36 @@ func _make_hud() -> void:
  _select_chat("Alle")
  _apply_chat_visibility()
 
+func _raise_fullscreen_menu(menu: Control) -> void:
+ if menu == null:
+  return
+ menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ menu.mouse_filter = Control.MOUSE_FILTER_STOP
+ move_child(menu, get_child_count() - 1)
+
 func _open_menu(target: String) -> void:
- # Do not leave the previous modal visible behind a full-screen submenu.
+ # Full-screen submenus must render above the HUD and block touches to the 3D scene.
  action_panel.hide()
+ for modal_name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
+  var modal: Control = get_node_or_null(modal_name) as Control
+  if modal != null:
+   modal.hide()
+ if skin_shop_menu != null:
+  skin_shop_menu.hide()
  if target == "shop":
+  _raise_fullscreen_menu(skin_shop_menu)
   skin_shop_menu.open_menu()
   return
  if target == "team":
+  _raise_fullscreen_menu($ClassMenu)
   $ClassMenu.open_menu()
   return
  if target == "skills":
+  _raise_fullscreen_menu($SkillMenu)
   $SkillMenu.open_menu()
   return
  if target == "talents":
+  _raise_fullscreen_menu($TalentMenu)
   $TalentMenu.open_menu()
   return
  current_tab = target
