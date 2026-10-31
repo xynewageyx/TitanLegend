@@ -95,10 +95,13 @@ func _refresh() -> void:
   return
  var level: int = GameManager.character_level
  var build: Array = team.get_talent_build_v2(selected_hero)
- if selected_hero < team.class_ids.size():
-  var class_index: int = int(team.class_ids[selected_hero])
-  if class_index >= 0 and class_index < team.CLASS_NAMES.size():
-   hero_picker.set_item_text(selected_hero, "Held %d - %s" % [selected_hero + 1, team.CLASS_NAMES[class_index]])
+ for hero_slot in range(hero_picker.item_count):
+  var class_label: String = "Held"
+  if hero_slot < team.class_ids.size():
+   var class_index: int = int(team.class_ids[hero_slot])
+   if class_index >= 0 and class_index < team.CLASS_NAMES.size():
+    class_label = str(team.CLASS_NAMES[class_index])
+  hero_picker.set_item_text(hero_slot, "Held %d - %s" % [hero_slot + 1, class_label])
  points_label.text = "Level %d | Verfuegbar: %d | Maximal 225 investierbar" % [level, TREES.available_points(level, build)]
  var bonus: Dictionary = ADAPTER.bonuses(int(team.class_ids[selected_hero]), level, build)
  bonus_label.text = "ATK +%.1f%%  Schutz +%.1f%%  Heilung +%.1f%%" % [float(bonus["attack"]) * 100.0, float(bonus["defense"]) * 100.0, float(bonus["healing"]) * 100.0]
