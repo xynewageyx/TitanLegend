@@ -36,6 +36,7 @@ var party_names: Array[Label] = []
 var party_roles: Array[Label] = []
 var party_icons: Array[Label] = []
 var party_portraits: Array[PanelContainer] = []
+var party_portrait_roles: Array[int] = []
 var party_bars: Array[ProgressBar] = []
 var party_bonus: Label
 var nav_buttons: Dictionary = {}
@@ -160,6 +161,7 @@ func _build_party() -> void:
   line.add_child(portrait)
   portrait.add_child(icon_label)
   party_portraits.append(portrait)
+  party_portrait_roles.append(-1)
   party_icons.append(icon_label)
   icon_label.add_theme_color_override("font_color", SKIN.WOOD_DARK)
   var column := VBoxContainer.new()
@@ -339,7 +341,10 @@ func refresh() -> void:
   party_roles[i].text = ROLE_TEXT[role_id]
   party_icons[i].text = ROLE_ICONS[role_id]
   var portrait_fill: Color = SKIN.SKY if role_id == 0 else (SKIN.CORAL if role_id == 1 else SKIN.GREEN)
-  party_portraits[i].add_theme_stylebox_override("panel", SKIN.plaque(portrait_fill, SKIN.GOLD, 13, 2))
+  # Rebuild the StyleBox only when the role changes, not on every HUD refresh.
+  if party_portrait_roles[i] != role_id:
+   party_portraits[i].add_theme_stylebox_override("panel", SKIN.plaque(portrait_fill, SKIN.GOLD, 13, 2))
+   party_portrait_roles[i] = role_id
   var hp: int = maxi(0, int(battle.hero_hp[i]))
   var max_hp: int = maxi(1, int(battle.hero_max_hp[i]))
   party_bars[i].value = 100.0 * float(hp) / float(max_hp)
