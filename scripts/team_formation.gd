@@ -373,6 +373,10 @@ func _ready() -> void:
  if restored_v2.size() == 4:
   set_meta("talent_builds_v2", restored_v2)
  create_team()
+ # Keep equipped loot visuals in sync with existing inventory and weapon upgrades.
+ GameManager.loot_changed.connect(_refresh_equipment_visuals)
+ GameManager.equipment_upgraded.connect(_on_equipment_visual_upgrade)
+ _refresh_equipment_visuals()
  ShopManager.skins_changed.connect(_apply_equipped_skins)
  _apply_equipped_skins()
  GameManager.reincarnation_performed.connect(_on_reincarnation)
@@ -487,6 +491,12 @@ func set_team_protection_wall(enabled: bool) -> void:
   protection_wall.position = Vector3(0.0, 1.15, -2.35)
  protection_wall.visible = enabled and not is_walking
 
+const EQUIPMENT_VISUAL_BRIDGE = preload("res://scripts/equipment/equipment_inventory_visual_bridge.gd")
+func _refresh_equipment_visuals() -> void:
+ EQUIPMENT_VISUAL_BRIDGE.sync_team(self)
+func _on_equipment_visual_upgrade(_slot: int, _level: int) -> void:
+ _refresh_equipment_visuals()
+
 func create_team() -> void:
  # Rebuild on class/role changes and remove old nodes immediately.
  for hero in heroes:
@@ -524,6 +534,7 @@ func create_team() -> void:
   HeroWeapons47.decorate_pet(pet, class_ids[i])
  _apply_equipped_skins()
  _on_reincarnation(GameManager.current_reincarnation_level)
+ _refresh_equipment_visuals()
  team_changed.emit()
  call_deferred("_refresh_health_after_rebuild")
 func _health_bar_piece(parent: Node3D, name_value: String, tint: Color, depth: float) -> MeshInstance3D:
