@@ -398,11 +398,25 @@ for region in regions:
    "    material.albedo_color = "+gd_color(region["terrain"]["rock_color"]),
    "    var accent := StandardMaterial3D.new()",
    "    accent.albedo_color = "+gd_color(region["terrain"]["grass_color"]),
+   "    accent.emission_enabled = true" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.emission_enabled = false",
+   "    accent.emission = accent.albedo_color",
+   "    accent.emission_energy_multiplier = 0.45",
+
    "    var spire := CylinderMesh.new()",
    "    spire.top_radius = 0.15" if key not in ("crystal_caverns","sky_islands","astral_citadel") else "    spire.top_radius = 0.0",
    "    spire.bottom_radius = 1.25",
    "    spire.height = "+("8.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "3.5" if key in ("mist_marsh","coral_archipelago") else "5.0"),
    "    spire.radial_segments = 6",
+   # Desert mesas, coral columns, ruins and crystalline spikes now have distinct profiles.
+   "    spire.top_radius = 1.8" if key=="sun_desert" else
+   "    spire.top_radius = 0.7" if key=="shadow_ruins" else
+   "    spire.top_radius = 0.45" if key=="coral_archipelago" else
+   "    spire.top_radius = 0.0" if key in ("crystal_caverns","astral_citadel") else
+   "    spire.top_radius = 0.15",
+   "    spire.bottom_radius = 2.2" if key=="sun_desert" else
+   "    spire.bottom_radius = 0.65" if key=="coral_archipelago" else
+   "    spire.bottom_radius = 1.25",
+
    "    var crown_mesh := SphereMesh.new()",
    "    crown_mesh.radius = "+("2.5" if key in ("whisper_forest","emerald_grassland") else "0.9" if key in ("sun_desert","shadow_ruins") else "1.4"),
    "    crown_mesh.height = "+("4.0" if key in ("whisper_forest","emerald_grassland") else "2.5"),
