@@ -13,6 +13,8 @@ const GOLD: Color = Color("#f5bf59")
 const GOLD_LIGHT: Color = Color("#ffe398")
 const TEAL: Color = Color("#4fae9e")
 const GREEN: Color = Color("#72be69")
+const SKY: Color = Color("#81d5ed")
+const CORAL: Color = Color("#f69b71")
 
 static func plaque(fill: Color = PAPER, border: Color = WOOD, radius: int = 17, border_size: int = 3) -> StyleBoxFlat:
  var box := StyleBoxFlat.new()
@@ -30,7 +32,7 @@ static func plaque(fill: Color = PAPER, border: Color = WOOD, radius: int = 17, 
  return box
 
 static func button(button_node: Button, chosen: bool = false, compact: bool = false) -> void:
- var normal_fill: Color = GOLD_LIGHT if chosen else PAPER
+ var normal_fill: Color = GOLD_LIGHT if chosen else Color("#fff4d9")
  var hover_fill: Color = Color("#ffedbf")
  button_node.add_theme_stylebox_override("normal", plaque(normal_fill, GOLD if chosen else WOOD, 15, 3))
  button_node.add_theme_stylebox_override("hover", plaque(hover_fill, GOLD, 15, 3))
@@ -45,6 +47,11 @@ static func button(button_node: Button, chosen: bool = false, compact: bool = fa
  button_node.add_theme_font_size_override("font_size", 18 if compact else 20)
  button_node.custom_minimum_size.y = 56 if compact else 64
  button_node.clip_text = true
+ button_node.pivot_offset = button_node.custom_minimum_size * 0.5
+ if not button_node.has_meta("titan_press_animation"):
+  button_node.set_meta("titan_press_animation", true)
+  button_node.button_down.connect(_animate_button.bind(button_node, Vector2(0.95, 0.95)))
+  button_node.button_up.connect(_animate_button.bind(button_node, Vector2.ONE))
 
 static func title(label: Label, px: int = 24) -> void:
  label.add_theme_color_override("font_color", INK)
@@ -80,3 +87,9 @@ static func style_menu_tree(node: Node) -> void:
   edit.add_theme_color_override("font_placeholder_color", MUTED)
  for child in node.get_children():
   style_menu_tree(child)
+
+static func _animate_button(button_node: Button, target: Vector2) -> void:
+ if not is_instance_valid(button_node):
+  return
+ var tween := button_node.create_tween()
+ tween.tween_property(button_node, "scale", target, 0.11).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
