@@ -29,7 +29,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "flower_meadow",
+          "ancient_tree",
+          "mossy_boulders",
+          "butterflies",
+          "wooden_bridge"
+        ],
+        "weather": [
+          "sunbeams",
+          "pollen"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 2,
@@ -56,7 +74,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "giant_mushrooms",
+          "glowing_ferns",
+          "ancient_roots",
+          "hollow_trees",
+          "fireflies"
+        ],
+        "weather": [
+          "forest_mist",
+          "floating_spores"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 3,
@@ -82,7 +118,25 @@
       "props": [
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "cacti",
+          "dune_grass",
+          "sandstone_ruins",
+          "buried_obelisks",
+          "oasis_palms"
+        ],
+        "weather": [
+          "sandstorm",
+          "heat_haze"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 4,
@@ -109,7 +163,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "ice_trees",
+          "snow_pines",
+          "frozen_flowers",
+          "ice_crystals",
+          "glacier_arch"
+        ],
+        "weather": [
+          "snowstorm",
+          "blowing_snow"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 5,
@@ -136,7 +208,26 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "fire_trees",
+          "burnt_trees",
+          "fire_plants",
+          "lava_crystals",
+          "volcano_cones"
+        ],
+        "weather": [
+          "ashfall",
+          "embers",
+          "volcanic_smoke"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 6,
@@ -163,7 +254,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "glowing_crystal_clusters",
+          "stalagmites",
+          "crystal_trees",
+          "underground_lake",
+          "geode_pillars"
+        ],
+        "weather": [
+          "magic_dust",
+          "crystal_glimmer"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 7,
@@ -190,7 +299,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "lightning_rods",
+          "storm_bent_trees",
+          "charged_crystals",
+          "rock_arches",
+          "scorched_ground"
+        ],
+        "weather": [
+          "thunderstorm",
+          "lightning_flashes"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 8,
@@ -217,7 +344,26 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "swamp_trees",
+          "poison_plants",
+          "reeds",
+          "luminous_fungi",
+          "sunken_ruins"
+        ],
+        "weather": [
+          "ground_fog",
+          "drizzle",
+          "swamp_bubbles"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 9,
@@ -244,7 +390,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "floating_rocks",
+          "wind_trees",
+          "sky_flowers",
+          "waterfalls",
+          "hanging_vines"
+        ],
+        "weather": [
+          "wind_gusts",
+          "cloud_streams"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 10,
@@ -271,7 +435,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "broken_towers",
+          "dead_trees",
+          "shadow_thorns",
+          "ancient_statues",
+          "cursed_altars"
+        ],
+        "weather": [
+          "dark_mist",
+          "shadow_motes"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 11,
@@ -298,7 +480,25 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "palms",
+          "coral_trees",
+          "sea_grass",
+          "shells",
+          "tidal_rocks"
+        ],
+        "weather": [
+          "sea_spray",
+          "tropical_rain"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     },
     {
       "id": 12,
@@ -325,7 +525,26 @@
         "trees",
         "rocks",
         "shrubs"
-      ]
+      ],
+      "special_features": {
+        "props": [
+          "astral_trees",
+          "floating_runes",
+          "light_crystals",
+          "celestial_pillars",
+          "magic_gardens"
+        ],
+        "weather": [
+          "stardust",
+          "aurora",
+          "magic_sparks"
+        ]
+      },
+      "performance": {
+        "max_active_weather_particles": 140,
+        "max_decorative_instances": 120,
+        "android_lod": true
+      }
     }
   ]
 }
