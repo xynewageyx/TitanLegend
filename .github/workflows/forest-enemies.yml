@@ -42,6 +42,16 @@ jobs:
           mkdir -p godot-import/assets/enemies/forest
           cp build/forest/*.glb godot-import/assets/enemies/forest/
           test "$(find godot-import/assets/enemies/forest -name '*.glb' | wc -l)" -eq 9
+      - name: Install Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.4.1
+          use-dotnet: false
+      - name: Import GLB assets with Godot
+        run: |
+          mkdir -p assets/enemies/forest
+          cp build/forest/*.glb assets/enemies/forest/
+          godot --headless --path . --editor --import --quit
       - uses: actions/upload-artifact@v4
         with:
           name: TitanLegends-Forest-Mobs-GLB
