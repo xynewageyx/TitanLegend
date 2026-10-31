@@ -30,7 +30,7 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: '1'
         run: |
           set -o pipefail
-          xvfb-run -a godot --rendering-driver opengl3 --headless --path . --editor --import --quit 2>&1 | tee godot-talent-import.log
+          xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee godot-talent-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' godot-talent-import.log; then
             echo 'Godot script/import diagnostics detected'
             exit 1
