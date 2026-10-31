@@ -28,14 +28,20 @@ jobs:
           test -s build/forest/forest_elite_02_moosbestie.glb
           test -s build/forest/forest_boss_01_wurzelkoenig.glb
           python3 - <<'PY'
-          import pathlib, struct
+          import pathlib, struct, json
           paths = sorted(pathlib.Path('build/forest').glob('*.glb'))
           assert len(paths) == 9, f'Expected 9 GLBs, got {len(paths)}'
           for path in paths:
               data = path.read_bytes()
               assert len(data) >= 20 and data[:4] == b'glTF', f'Invalid GLB: {path}'
               assert struct.unpack_from('<I', data, 8)[0] == len(data), f'Wrong GLB length: {path}'
-              print(path, len(data), 'bytes')
+              chunk_size, chunk_type = struct.unpack_from('<II', data, 12)
+              assert chunk_type == 0x4E4F534A, f'No JSON chunk: {path}'
+              doc = json.loads(data[20:20+chunk_size])
+              names = {a.get('name', '') for a in doc.get('animations', [])}
+              required = {'idle', 'attack', 'hit', 'death'}
+              assert required.issubset(names), f'Missing animation clips in {path}: {required - names}; found {names}'
+              print(path, len(data), 'bytes; animations:', sorted(names))
           PY
       - name: Package models at Godot resource paths
         run: |
