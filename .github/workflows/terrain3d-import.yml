@@ -221,6 +221,28 @@ jobs:
               cp "/tmp/$key-preview.log" "terrain3d-previews/$key.log"
             fi
           done
+      - name: Create biome comparison contact sheet
+        if: always()
+        continue-on-error: true
+        run: |
+          set -e
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+          root = Path('terrain3d-previews')
+          images = sorted(root.glob('*.png'))
+          if not images:
+              print('No PNG previews to combine')
+          else:
+              args = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y']
+              for image in images:
+                  args += ['-i', str(image)]
+              filters = ';'.join(f'[{i}:v]scale=320:180:force_original_aspect_ratio=decrease,pad=320:180:(ow-iw)/2:(oh-ih)/2[v{i}]' for i in range(len(images)))
+              filters += ';' + ''.join(f'[v{i}]' for i in range(len(images))) + f'xstack=inputs={len(images)}:layout=' + '|'.join(f'{i%3*320}_{i//3*180}' for i in range(len(images))) + '[out]'
+              args += ['-filter_complex', filters, '-map', '[out]', '-frames:v', '1', str(root / 'biome-comparison.png')]
+              subprocess.run(args, check=True)
+              print('Created comparison sheet from', len(images), 'images')
+          PY
       - name: Summarize biome preview capture
         if: always()
         run: |
