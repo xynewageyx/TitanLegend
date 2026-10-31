@@ -180,11 +180,15 @@ func upgrade_weapon_rarity(slot: int) -> bool:
 
 # Update 197: boss equipment drops. Weapons remain a separate upgrade track.
 signal loot_changed
-const LOOT_SLOTS := ["Helm", "Ruestung", "Zubehoer"]
-const MAX_LOOT_ITEMS: int = 60
+const LOOT_SLOTS := ["Helm", "Ruestung", "Zubehoer", "Schulter Links", "Schulter Rechts", "Arm Links", "Arm Rechts", "Handschuh Links", "Handschuh Rechts", "Bein Links", "Bein Rechts", "Stiefel Links", "Stiefel Rechts"]
+const MAX_LOOT_ITEMS: int = 120
 var equipment_inventory: Array = []
 # Each hero references item IDs, not inventory indices, so sorting cannot unequip items.
-var equipped_loot: Array = [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]
+var equipped_loot: Array = [[], [], [], []]
+func _init() -> void:
+ for hero in range(4):
+  equipped_loot[hero].resize(LOOT_SLOTS.size())
+  equipped_loot[hero].fill(-1)
 var next_loot_id: int = 1
 
 func boss_loot_rarity(stage: int) -> int:
@@ -309,7 +313,7 @@ func loot_item_name(item: Dictionary) -> String:
  if item.is_empty():
   return "Leer"
  var quality: int = clampi(int(item.get("rarity", 0)), 0, 5)
- var slot: int = clampi(int(item.get("slot", 0)), 0, 2)
+ var slot: int = clampi(int(item.get("slot", 0)), 0, LOOT_SLOTS.size() - 1)
  return "%s %s (Stufe %d)" % [WEAPON_RARITIES[quality], LOOT_SLOTS[slot], int(item.get("level", 1))]
 
 func compare_loot_transfer(hero: int, item_id: int) -> Dictionary:
