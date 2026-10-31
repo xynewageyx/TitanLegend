@@ -50,6 +50,41 @@ try:
                              "faces": len(obj.data.polygons)} for obj in meshes]
     if not meshes:
         raise RuntimeError("MPFB operator did not create a mesh")
+    # Experimental chibi morph on a duplicated mesh; preserve the original base mesh.
+    # Geometry-only proof of concept: no skeleton, face rig or clothing yet.
+    from mathutils import Vector
+    source = max(meshes, key=lambda obj: len(obj.data.vertices))
+    chibi = source.copy()
+    chibi.data = source.data.copy()
+    chibi.name = "Titan_Chibi_Prototype"
+    bpy.context.collection.objects.link(chibi)
+    coords = [v.co.copy() for v in chibi.data.vertices]
+    low = min(v.z for v in coords)
+    high = max(v.z for v in coords)
+    height = max(high - low, 0.001)
+    # Use normalized vertical bands to retain facial topology and soften proportions.
+    # Body height becomes shorter, while head grows in width and depth.
+    for vertex in chibi.data.vertices:
+        p = vertex.co
+        t = (p.z - low) / height
+        if t < 0.52:
+            p.z = low + height * (t * 0.70)
+        elif t < 0.78:
+            p.z = low + height * (0.364 + (t - 0.52) * 0.88)
+        else:
+            p.z = low + height * (0.5928 + (t - 0.78) * 1.08)
+            p.x *= 1.30
+            p.y *= 1.30
+    report["chibi_created"] = True
+    report["chibi_vertices"] = len(chibi.data.vertices)
+    report["chibi_note"] = "Experimental vertical-band morph; inspect visually before game use"
+    bpy.ops.object.select_all(action="DESELECT")
+    chibi.select_set(True)
+    bpy.context.view_layer.objects.active = chibi
+    bpy.ops.export_scene.gltf(filepath=str(out / "mpfb_chibi_prototype.glb"),
+                              export_format="GLB", use_selection=True)
+    report["chibi_glb_created"] = (out / "mpfb_chibi_prototype.glb").stat().st_size > 1024
+    bpy.ops.object.select_all(action="DESELECT")
     if bpy.context.object and bpy.context.object.mode != "OBJECT":
         bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
@@ -65,5 +100,5 @@ finally:
     report["objects"] = [o.name for o in bpy.data.objects]
     (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("MPFB_PROBE_REPORT:", json.dumps(report))
-if not report["human_created"] or not report.get("glb_created"):
+if not report["human_created"] or not report.get("glb_created") or not report.get("chibi_glb_created"):
     raise SystemExit("MPFB humanoid creation/export failed; see uploaded report.json")
