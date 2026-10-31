@@ -2,6 +2,7 @@ extends Node3D
 const AFK_POLICY = preload("res://scripts/afk_farming_policy.gd")
 const BOSS_ART = preload("res://scripts/boss_art.gd")
 const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
+const SKILL_VFX = preload("res://scripts/skill_vfx_3d_v1.gd")
 # TEMPORARY compatibility implementation.
 # Original Update 168 battle_manager.gd (36,410 bytes) must replace this file.
 signal battle_status_changed
@@ -37,6 +38,7 @@ var boss_buff_active: bool = false
 var boss_buff_kind: String = ""
 var boss_resistance: float = 0.18
 
+var skill_vfx_node: Node3D
 var attack_timer: Timer
 var hero_attack_elapsed: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var boss_elapsed: float = 0.0
@@ -88,6 +90,9 @@ var _encounter_request_id: int = 0
 var _resume_walk_after_pause: bool = false
 
 func _ready() -> void:
+ skill_vfx_node = SKILL_VFX.new()
+ skill_vfx_node.name = "SkillVFX3D"
+ add_child(skill_vfx_node)
  _last_player_input_ms = Time.get_ticks_msec()
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
@@ -709,7 +714,25 @@ func _try_cast_charged_skill(slot: int, role: int) -> void:
  next_skill_slot[slot] = (index + 1) % loadout.size()
  _execute_equipped_skill(slot, role, choice)
 
+func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
+ if skill_vfx_node == null or team_formation == null or slot < 0 or slot >= team_formation.heroes.size():
+  return
+ var hero: Node3D = team_formation.heroes[slot]
+ if not is_instance_valid(hero):
+  return
+ var effect_id: String = "precision_shot"
+ if role == 0:
+  effect_id = "group_guard" if choice == 9 or choice == 2 else "shield_bash"
+ elif role == 2:
+  effect_id = "healing_wave" if choice == 7 or choice == 8 else "holy_light"
+ elif choice == 4 or choice == 6:
+  effect_id = "meteor_rain"
+ elif choice == 7:
+  effect_id = "frost_nova"
+ skill_vfx_node.call("play_skill", effect_id, hero.global_position)
+
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
+ _play_equipped_skill_vfx(slot, role, choice)
  if team_formation != null and slot >= 0 and slot < team_formation.heroes.size():
   var glb_visual: Node = team_formation.heroes[slot].get_node_or_null("WarriorGLBVisual")
   if glb_visual != null and glb_visual.has_method("play_cast"):
