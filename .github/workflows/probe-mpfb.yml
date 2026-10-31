@@ -35,7 +35,10 @@ jobs:
           folder = Path("build/mpfb")
           report = json.loads((folder / "report.json").read_text())
           assert report.get("human_created") and report.get("chibi_glb_created"), report
-          assert report.get("preview_created"), report
+          assert report.get("preview_created") and report.get("side_preview_created"), report
+          assert report.get("rigged_glb_created"), report
+          assert set(("Root", "Torso", "Head")).issubset(report.get("rig_bones", [])), report
+          assert (folder / "mpfb_chibi_side.png").read_bytes().startswith(bytes.fromhex("89504e470d0a1a0a"))
           assert report.get("rigged_glb_created"), report
           assert set(report.get("rig_bones", [])) == {"Root", "Torso", "Head"}, report
           assert (folder / "mpfb_chibi_front.png").read_bytes()[:8] == bytes.fromhex("89504e470d0a1a0a")
@@ -48,6 +51,10 @@ jobs:
               assert kind == b"JSON", name
               gltf = json.loads(data[20:20+json_size])
               assert gltf.get("meshes"), name + " has no meshes"
+              if name == "mpfb_chibi_rigged.glb":
+                  assert gltf.get("skins"), "Rigged model has no exported skin"
+                  assert gltf.get("animations"), "Rigged model has no exported animation"
+                  assert len(gltf.get("nodes", [])) >= 3, "Rigged model missing skeleton nodes"
               if name == "mpfb_chibi_rigged.glb":
                   assert gltf.get("skins"), "Rigged GLB has no skin"
                   assert gltf.get("animations"), "Rigged GLB has no animations"
