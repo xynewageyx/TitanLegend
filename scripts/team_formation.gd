@@ -22,6 +22,29 @@ var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
 var talent_ranks: Array = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]]
+const TALENT_TREES_V2 = preload("res://scripts/talent_tree_v2.gd")
+# Optional V2 builds. No legacy talent values are overwritten.
+func set_talent_build_v2(hero_slot: int, level: int, proposed_build: Array) -> bool:
+ if hero_slot < 0 or hero_slot >= 4:
+  return false
+ var builds: Array = get_meta("talent_builds_v2", [])
+ if builds.size() != 4:
+  builds = []
+  for index in range(4):
+   builds.append(TALENT_TREES_V2.empty_build())
+ builds[hero_slot] = TALENT_TREES_V2.validate_build(level, proposed_build)
+ set_meta("talent_builds_v2", builds)
+ team_changed.emit()
+ return true
+
+func get_talent_build_v2(hero_slot: int) -> Array:
+ if hero_slot < 0 or hero_slot >= 4:
+  return TALENT_TREES_V2.empty_build()
+ var builds: Array = get_meta("talent_builds_v2", [])
+ if builds.size() != 4:
+  return TALENT_TREES_V2.empty_build()
+ return builds[hero_slot].duplicate(true)
+
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
