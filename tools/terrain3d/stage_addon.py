@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Prepare isolated Godot Terrain3D addon test project from pinned official release."""
-import io,json,pathlib,urllib.request,zipfile,shutil
+import io,json,os,pathlib,urllib.request,zipfile,shutil
 tag="v1.1.0-rc1"
 root=pathlib.Path("terrain3d-preview")
 root.mkdir(exist_ok=True)
 (root/"terrain_data").mkdir(exist_ok=True)
 headers={"User-Agent":"TitanLegends-CI","Accept":"application/vnd.github+json"}
+if os.environ.get("GH_TOKEN"):
+ headers["Authorization"]="Bearer "+os.environ["GH_TOKEN"]
 with urllib.request.urlopen(urllib.request.Request(f"https://api.github.com/repos/TokisanGames/Terrain3D/releases/tags/{tag}",headers=headers),timeout=30) as r: release=json.load(r)
 assets=[a for a in release["assets"] if a["name"].lower().endswith(".zip") and "terrain3d" in a["name"].lower()]
 if not assets: raise RuntimeError("No official Terrain3D zip")
