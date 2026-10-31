@@ -1099,6 +1099,20 @@ func _spawn_enemy_visuals() -> void:
   var tint: Color = Color("#779f57")
   if biome_manager != null:
    tint = biome_manager.COLORS[biome_manager.current_biome]
+  # Prefer imported forest GLBs, retain procedural visuals as a safe fallback.
+  if element_id == 3:
+   var forest_id: String = "forest_boss_01" if is_boss else "forest_0%d" % [1 + ((i + current_wave - 1) % 6)]
+   if not is_boss and current_wave >= 7 and i == 0:
+    forest_id = "forest_elite_01" if current_wave % 2 == 1 else "forest_elite_02"
+   var presenter := Node3D.new()
+   presenter.name = "ForestModel"
+   presenter.set_script(preload("res://scripts/forest_enemy_visual.gd"))
+   mob.add_child(presenter)
+   if presenter.call("show_enemy", forest_id):
+    if is_boss:
+     presenter.scale = Vector3.ONE * 0.72
+    continue
+   presenter.queue_free()
   if is_boss:
    # The old placeholder was an enormous solid sphere that covered the team
    # on portrait screens. Reuse the already available elemental Titan model.
