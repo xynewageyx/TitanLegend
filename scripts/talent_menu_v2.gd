@@ -80,7 +80,7 @@ func _ready() -> void:
  bonus_label = Label.new()
  column.add_child(bonus_label)
  talent_grid = GridContainer.new()
- talent_grid.columns = 3
+ talent_grid.columns = 2
  column.add_child(talent_grid)
  _refresh()
 
@@ -107,7 +107,7 @@ func _refresh() -> void:
   child.queue_free()
  for talent_index in range(15):
   var button := Button.new()
-  button.custom_minimum_size = Vector2(88, 58)
+  button.custom_minimum_size = Vector2(112, 64)
   button.text = "Talent %d\n%d/5" % [talent_index + 1, int(build[selected_branch][talent_index])]
   button.disabled = not TREES.can_upgrade(level, build, selected_branch, talent_index)
   talent_grid.add_child(button)
