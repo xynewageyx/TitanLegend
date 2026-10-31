@@ -229,6 +229,24 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
 ]),encoding="utf-8")
 
 
+# Install the official ProtonScatter editor addon into the isolated test project.
+# Download archive directly to avoid GitHub release API rate limits.
+scatter_url="https://github.com/HungryProton/scatter/archive/refs/heads/main.zip"
+with urllib.request.urlopen(urllib.request.Request(scatter_url,headers={"User-Agent":"TitanLegends-CI"}),timeout=120) as response:
+ scatter_zip=response.read()
+with zipfile.ZipFile(io.BytesIO(scatter_zip)) as archive:
+ addon_files=[n for n in archive.namelist() if "/addons/proton_scatter/" in n and not n.endswith("/")]
+ if not any(n.endswith("/addons/proton_scatter/plugin.cfg") for n in addon_files):
+  raise RuntimeError("ProtonScatter addon plugin.cfg missing in upstream archive")
+ for name in addon_files:
+  rel=name.split("/addons/proton_scatter/",1)[1]
+  if not rel or ".." in pathlib.PurePosixPath(rel).parts:
+   continue
+  dest=root/"addons"/"proton_scatter"/rel
+  dest.parent.mkdir(parents=True,exist_ok=True)
+  dest.write_bytes(archive.read(name))
+print("PROTON_SCATTER_STAGED",len(addon_files))
+
 # Generate independent scenes and terrain data directories for all 12 biomes.
 # Each scene has its own deterministic height profile and can be opened on Android.
 region_config=json.loads(pathlib.Path("tools/terrain3d/regions.json").read_text(encoding="utf-8"))
