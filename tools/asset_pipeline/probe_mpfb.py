@@ -239,6 +239,22 @@ try:
                               export_format="GLB", use_selection=True,
                               export_animations=True, export_skins=True)
     report["rigged_glb_created"] = (out / "mpfb_chibi_rigged.glb").stat().st_size > 1024
+    # Export walking as a separate GLB to avoid relying on Blender version-
+    # dependent multi-action/NLA export behavior. The idle GLB stays unchanged.
+    try:
+        arm.animation_data.action = walk_action
+        scene_walk_end = bpy.context.scene.frame_end
+        bpy.context.scene.frame_end = 33
+        bpy.context.scene.frame_set(1)
+        walk_file = out / "mpfb_chibi_walk.glb"
+        bpy.ops.export_scene.gltf(filepath=str(walk_file),
+                                  export_format="GLB", use_selection=True,
+                                  export_animations=True, export_skins=True)
+        report["walk_glb_created"] = walk_file.stat().st_size > 1024
+    finally:
+        arm.animation_data.action = action
+        bpy.context.scene.frame_end = scene_walk_end
+        bpy.context.scene.frame_set(1)
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
     report["rig_note"] = "Experimental 11-bone geometric skin with idle motion; not production rig"
     # Ten visually distinct material prototypes; not finished character designs.
