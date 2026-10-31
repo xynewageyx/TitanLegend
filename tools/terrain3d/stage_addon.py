@@ -406,6 +406,30 @@ for region in regions:
     "    crater.position = volcano.position + Vector3(0.0, 9.6, 0.0)",
     "    add_child(crater)",
    ])
+  extra.extend([
+   "    var rock_material := StandardMaterial3D.new()",
+   "    rock_material.albedo_color = Color(0.52, 0.82, 0.95)" if weather_snow else "    rock_material.albedo_color = Color(0.14, 0.12, 0.13)",
+   "    var rock_mesh := CylinderMesh.new()",
+   "    rock_mesh.top_radius = 0.0" if weather_snow else "    rock_mesh.top_radius = 0.65",
+   "    rock_mesh.bottom_radius = 1.25",
+   "    rock_mesh.height = 5.0",
+   "    rock_mesh.radial_segments = 5" if weather_snow else "    rock_mesh.radial_segments = 6",
+   "    for rock_index in range(12):",
+   "        var rx: float = 8.0 + float((rock_index * 43 + 29) % 110)",
+   "        var rz: float = 8.0 + float((rock_index * 61 + 41) % 110)",
+   "        var path_x: float = 63.0 + 16.0 * sin(rz * 0.036)",
+   "        if abs(rx - path_x) < 13.0 or Vector2(rx - 63.0, rz - 106.0).length() < 28.0:",
+   "            continue",
+   "        var rock := MeshInstance3D.new()",
+   '        rock.name = "ElementRock_%02d" % rock_index',
+   "        rock.mesh = rock_mesh",
+   "        rock.material_override = rock_material",
+   "        rock.rotation.y = float(rock_index % 6) * 0.42",
+   "        rock.rotation.z = float(rock_index % 3 - 1) * 0.12",
+   "        rock.scale = Vector3(0.75 + float(rock_index % 3) * 0.25, 0.65 + float(rock_index % 4) * 0.23, 0.8)",
+   "        rock.position = Vector3(rx, _height_at(rx, rz) + 2.5 * rock.scale.y, rz)",
+   "        add_child(rock)",
+  ])
   script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\n    _add_elemental_environment()")
   extra.append('    print("ELEMENTAL_ENVIRONMENT_READY")')
   script+="\n".join(extra)+"\n"
