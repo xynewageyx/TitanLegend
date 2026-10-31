@@ -426,8 +426,8 @@ for region in regions:
    "        crown.position = Vector3(px, _height_at(px, pz) + 5.6, pz)",
    "        add_child(crown)",
   ]
-  script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\\n    _add_biome_landmarks()")
-  script+="\\n".join(extra)+"\\n"
+  script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\n    _add_biome_landmarks()")
+  script+="\n".join(extra)+"\n"
  # Make object distribution vary deterministically by biome ID.
  seed_offset=int(region["terrain"]["seed"]) % 101
  script=script.replace("(i * 37 + 13)",f"(i * 37 + {13+seed_offset})")
