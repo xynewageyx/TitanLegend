@@ -36,8 +36,10 @@ jobs:
           report = json.loads((folder / "report.json").read_text())
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created"), report
+          assert report.get("rigged_glb_created"), report
+          assert set(report.get("rig_bones", [])) == {"Root", "Torso", "Head"}, report
           assert (folder / "mpfb_chibi_front.png").read_bytes()[:8] == bytes.fromhex("89504e470d0a1a0a")
-          for name in ("mpfb_basemesh.glb", "mpfb_chibi_prototype.glb"):
+          for name in ("mpfb_basemesh.glb", "mpfb_chibi_prototype.glb", "mpfb_chibi_rigged.glb"):
               data = (folder / name).read_bytes()
               assert data[:4] == b"glTF", name
               version, size = struct.unpack_from("<II", data, 4)
@@ -46,6 +48,9 @@ jobs:
               assert kind == b"JSON", name
               gltf = json.loads(data[20:20+json_size])
               assert gltf.get("meshes"), name + " has no meshes"
+              if name == "mpfb_chibi_rigged.glb":
+                  assert gltf.get("skins"), "Rigged GLB has no skin"
+                  assert gltf.get("animations"), "Rigged GLB has no animations"
               print(name, "meshes", len(gltf["meshes"]), "bytes", len(data))
           print("Chibi geometry validation passed")
           PY
