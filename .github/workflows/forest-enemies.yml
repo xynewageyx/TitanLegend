@@ -67,6 +67,13 @@ jobs:
             echo 'Godot reported import or script errors'
             exit 1
           fi
+      - name: Upload Godot import diagnostic log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Import-Log
+          path: godot-forest-import.log
+          if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         with:
           name: TitanLegends-Forest-Mobs-GLB
