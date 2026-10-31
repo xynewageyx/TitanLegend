@@ -110,6 +110,67 @@ try:
     bpy.ops.export_scene.gltf(filepath=str(out / "mpfb_chibi_prototype.glb"),
                               export_format="GLB", use_selection=True)
     report["chibi_glb_created"] = (out / "mpfb_chibi_prototype.glb").stat().st_size > 1024
+    # Independent lightweight skinning experiment: three deformation bones.
+    # Keep the static chibi export unchanged for comparison.
+    rigged = chibi.copy()
+    rigged.data = chibi.data.copy()
+    rigged.name = "Titan_Chibi_Rigged_Prototype"
+    bpy.context.collection.objects.link(rigged)
+    arm_data = bpy.data.armatures.new("Titan_Chibi_Armature")
+    arm = bpy.data.objects.new("Titan_Chibi_Rig", arm_data)
+    bpy.context.collection.objects.link(arm)
+    bpy.ops.object.select_all(action="DESELECT")
+    arm.select_set(True)
+    bpy.context.view_layer.objects.active = arm
+    bpy.ops.object.mode_set(mode="EDIT")
+    specs = [
+        ("Root", (0, 0, low), (0, 0, low + height * 0.36)),
+        ("Torso", (0, 0, low + height * 0.36), (0, 0, low + height * 0.59)),
+        ("Head", (0, 0, low + height * 0.59), (0, 0, low + height * 0.84)),
+    ]
+    for name, start, end in specs:
+        bone = arm_data.edit_bones.new(name)
+        bone.head = start
+        bone.tail = end
+        if name != "Root":
+            bone.parent = arm_data.edit_bones["Root" if name == "Torso" else "Torso"]
+            bone.use_connect = True
+    bpy.ops.object.mode_set(mode="OBJECT")
+    groups = {name: rigged.vertex_groups.new(name=name) for name, _, _ in specs}
+    for vertex in rigged.data.vertices:
+        t = (vertex.co.z - low) / height
+        # Blend weights across the shoulder and neck bands.
+        head_w = max(0.0, min(1.0, (t - 0.67) / 0.10))
+        root_w = max(0.0, min(1.0, (0.43 - t) / 0.12))
+        torso_w = max(0.0, 1.0 - root_w - head_w)
+        weights = {"Root": root_w, "Torso": torso_w, "Head": head_w}
+        total = sum(weights.values())
+        for name, weight in weights.items():
+            if weight > 0:
+                groups[name].add([vertex.index], weight / total, "REPLACE")
+    modifier = rigged.modifiers.new("ChibiSkin", "ARMATURE")
+    modifier.object = arm
+    rigged.parent = arm
+    bpy.context.scene.frame_set(1)
+    action = bpy.data.actions.new("idle")
+    arm.animation_data_create()
+    arm.animation_data.action = action
+    for frame, angle in [(1, 0.0), (16, 0.045), (31, 0.0)]:
+        arm.pose.bones["Torso"].rotation_mode = "XYZ"
+        arm.pose.bones["Torso"].rotation_euler[1] = angle
+        arm.pose.bones["Torso"].keyframe_insert(data_path="rotation_euler", frame=frame)
+    bpy.context.scene.frame_end = 31
+    bpy.context.scene.frame_set(1)
+    bpy.ops.object.select_all(action="DESELECT")
+    rigged.select_set(True)
+    arm.select_set(True)
+    bpy.context.view_layer.objects.active = arm
+    bpy.ops.export_scene.gltf(filepath=str(out / "mpfb_chibi_rigged.glb"),
+                              export_format="GLB", use_selection=True,
+                              export_animations=True, export_skins=True)
+    report["rigged_glb_created"] = (out / "mpfb_chibi_rigged.glb").stat().st_size > 1024
+    report["rig_bones"] = [bone.name for bone in arm_data.bones]
+    report["rig_note"] = "Experimental 3-bone skin with idle motion, not final hero rig"
     bpy.ops.object.select_all(action="DESELECT")
     if bpy.context.object and bpy.context.object.mode != "OBJECT":
         bpy.ops.object.mode_set(mode="OBJECT")
@@ -126,5 +187,5 @@ finally:
     report["objects"] = [o.name for o in bpy.data.objects]
     (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("MPFB_PROBE_REPORT:", json.dumps(report))
-if not report["human_created"] or not report.get("glb_created") or not report.get("chibi_glb_created"):
+if not report["human_created"] or not report.get("glb_created") or not report.get("chibi_glb_created") or not report.get("rigged_glb_created"):
     raise SystemExit("MPFB humanoid creation/export failed; see uploaded report.json")
