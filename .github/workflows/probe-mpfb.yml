@@ -16,7 +16,7 @@ jobs:
       - name: Install Blender and dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender python3-numpy git libegl1 libgl1 libopengl0 libxkbcommon0 libgl1-mesa-dri
+          sudo apt-get install -y blender python3-numpy git libegl1 libgl1 libopengl0 libxkbcommon0 libgl1-mesa-dri xvfb
           ldconfig -p | grep -F libEGL.so.1
           blender --version
       - name: Download MPFB source
@@ -26,7 +26,7 @@ jobs:
       - name: Probe MPFB registration and humanoid operators
         run: |
           mkdir -p build/mpfb
-          blender --background --factory-startup --python tools/asset_pipeline/probe_mpfb.py -- /tmp/mpfb2/src build/mpfb
+          xvfb-run -a -s '-screen 0 1280x1024x24' blender --background --factory-startup --python tools/asset_pipeline/probe_mpfb.py -- /tmp/mpfb2/src build/mpfb
       - name: Validate both GLB models and chibi proportions
         run: |
           python3 - <<'PY'
@@ -35,6 +35,8 @@ jobs:
           folder = Path("build/mpfb")
           report = json.loads((folder / "report.json").read_text())
           assert report.get("human_created") and report.get("chibi_glb_created"), report
+          assert report.get("preview_created"), report
+          assert (folder / "mpfb_chibi_front.png").read_bytes()[:8] == b"\\x89PNG\\r\\n\\x1a\\n"
           for name in ("mpfb_basemesh.glb", "mpfb_chibi_prototype.glb"):
               data = (folder / name).read_bytes()
               assert data[:4] == b"glTF", name
