@@ -35,6 +35,7 @@ var map_control: Control
 var party_names: Array[Label] = []
 var party_roles: Array[Label] = []
 var party_icons: Array[Label] = []
+var party_portraits: Array[PanelContainer] = []
 var party_bars: Array[ProgressBar] = []
 var party_bonus: Label
 var nav_buttons: Dictionary = {}
@@ -153,7 +154,12 @@ func _build_party() -> void:
   icon_label.add_theme_stylebox_override("normal", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
   SKIN.title(icon_label, 23)
   icon_label.text = "◆"
-  line.add_child(icon_label)
+  var portrait := PanelContainer.new()
+  portrait.custom_minimum_size = Vector2(44, 46)
+  portrait.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
+  line.add_child(portrait)
+  portrait.add_child(icon_label)
+  party_portraits.append(portrait)
   party_icons.append(icon_label)
   icon_label.add_theme_color_override("font_color", SKIN.WOOD_DARK)
   var column := VBoxContainer.new()
@@ -332,10 +338,13 @@ func refresh() -> void:
   party_names[i].text = str(team.CLASS_NAMES[class_id])
   party_roles[i].text = ROLE_TEXT[role_id]
   party_icons[i].text = ROLE_ICONS[role_id]
+  var portrait_fill: Color = SKIN.SKY if role_id == 0 else (SKIN.CORAL if role_id == 1 else SKIN.GREEN)
+  party_portraits[i].add_theme_stylebox_override("panel", SKIN.plaque(portrait_fill, SKIN.GOLD, 13, 2))
   var hp: int = maxi(0, int(battle.hero_hp[i]))
   var max_hp: int = maxi(1, int(battle.hero_max_hp[i]))
   party_bars[i].value = 100.0 * float(hp) / float(max_hp)
   party_bars[i].modulate = Color.WHITE if hp > 0 else Color("#a39a8e")
+  party_portraits[i].modulate = Color.WHITE if hp > 0 else Color("#8c807b")
  var formation: bool = team.has_formation_bonus()
  party_bonus.text = "✦ FORMATIONS-BONUS" if formation else "4 HELDEN · 1 TEAM"
  party_bonus.add_theme_color_override("font_color", Color("#3a845b") if formation else SKIN.MUTED)
