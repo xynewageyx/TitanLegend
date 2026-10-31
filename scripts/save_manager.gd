@@ -80,7 +80,12 @@ func load_game() -> void:
    GameManager.weapon_rarities[slot] = rarity
  # Validate old and modified saves. Unknown or duplicate IDs cannot be equipped.
  GameManager.equipment_inventory = []
- GameManager.equipped_loot = [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]
+ GameManager.equipped_loot = []
+ for hero in range(4):
+  var empty_slots: Array = []
+  empty_slots.resize(GameManager.LOOT_SLOTS.size())
+  empty_slots.fill(-1)
+  GameManager.equipped_loot.append(empty_slots)
  var known_ids: Dictionary = {}
  var inventory_data: Variant = data.get("equipment_inventory", [])
  var highest_id: int = 0
@@ -90,7 +95,7 @@ func load_game() -> void:
     continue
    var item_id: int = int(value.get("id", -1))
    var item_slot: int = int(value.get("slot", -1))
-   if item_id <= 0 or known_ids.has(item_id) or item_slot < 0 or item_slot >= 3:
+   if item_id <= 0 or known_ids.has(item_id) or item_slot < 0 or item_slot >= GameManager.LOOT_SLOTS.size():
     continue
    known_ids[item_id] = true
    highest_id = maxi(highest_id, item_id)
@@ -102,7 +107,7 @@ func load_game() -> void:
   for hero in range(mini(4, equipment_data.size())):
    if not equipment_data[hero] is Array:
     continue
-   for slot in range(mini(3, equipment_data[hero].size())):
+   for slot in range(mini(GameManager.LOOT_SLOTS.size(), equipment_data[hero].size())):
     var item_id: int = int(equipment_data[hero][slot])
     if not known_ids.has(item_id) or worn.has(item_id):
      continue
