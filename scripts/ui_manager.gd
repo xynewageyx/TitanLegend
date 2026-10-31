@@ -154,6 +154,16 @@ func _make_button(text_value: String, parent: Node, callback: Callable, px: int 
  b.pressed.connect(callback)
  return b
 
+func _equipment_heading(parent: VBoxContainer, caption: String) -> void:
+ var heading := Label.new()
+ heading.text = caption
+ heading.add_theme_color_override("font_color", ADVENTURE_THEME.WOOD_DARK)
+ heading.add_theme_font_size_override("font_size", 19)
+ heading.add_theme_stylebox_override("normal", ADVENTURE_THEME.plaque(ADVENTURE_THEME.PAPER_ALT, ADVENTURE_THEME.GOLD, 11, 2))
+ heading.custom_minimum_size.y = 42
+ heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ parent.add_child(heading)
+
 func _make_hud() -> void:
  # Resource bar at top.
  var resources := HBoxContainer.new()
@@ -367,9 +377,11 @@ func _make_hud() -> void:
  action_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  modal.add_child(action_detail)
  action_button = _make_button("Ausführen", modal, _on_action_pressed, 19)
+ _equipment_heading(modal, "HELD & WAFFE")
  weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
+ _equipment_heading(modal, "BEUTE & AUSRÜSTUNG")
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
  loot_downgrade_confirmation = ConfirmationDialog.new()
@@ -393,6 +405,7 @@ func _make_hud() -> void:
  loot_sale_confirmation.confirmed.connect(_confirm_loot_sale)
  loot_sale_confirmation.canceled.connect(_cancel_loot_sale)
  add_child(loot_sale_confirmation)
+ _equipment_heading(modal, "AUSRÜSTUNGSHÄRTUNG")
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
