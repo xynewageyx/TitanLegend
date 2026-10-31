@@ -211,7 +211,7 @@ jobs:
           set -u
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
           mkdir -p terrain3d-previews
-          for key in emerald_grassland frost_peaks ember_volcano; do
+          for key in emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel; do
             echo "Rendering optional preview: $key"
             timeout 35s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --write-movie "/tmp/$key.avi" --quit-after 3 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1 || true
             if test -s "/tmp/$key.avi"; then
