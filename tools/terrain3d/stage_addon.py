@@ -246,6 +246,10 @@ with zipfile.ZipFile(io.BytesIO(scatter_zip)) as archive:
   dest.parent.mkdir(parents=True,exist_ok=True)
   dest.write_bytes(archive.read(name))
 print("PROTON_SCATTER_STAGED",len(addon_files))
+project_file=root/"project.godot"
+project_text=project_file.read_text(encoding="utf-8")
+project_text+='\\n[editor_plugins]\\nenabled=PackedStringArray("res://addons/proton_scatter/plugin.cfg")\\n'
+project_file.write_text(project_text,encoding="utf-8")
 
 # Generate independent scenes and terrain data directories for all 12 biomes.
 # Each scene has its own deterministic height profile and can be opened on Android.
