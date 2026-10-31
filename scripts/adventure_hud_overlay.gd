@@ -42,9 +42,6 @@ var more_panel: PanelContainer
 var more_open: bool = false
 var active_page: String = "combat"
 var resource_tiles: Array[PanelContainer] = []
-var boss_status: PanelContainer
-var boss_title: Label
-var boss_hp_bar: ProgressBar
 
 func initialize(parent_hud: Control, battle_node: Node3D, biome_node: Node3D) -> void:
  hud = parent_hud
@@ -57,7 +54,6 @@ func _ready() -> void:
  _build_resources()
  _build_journey()
  _build_party()
- _build_boss_status()
  _build_navigation()
  _adapt_layout()
  refresh()
@@ -187,55 +183,6 @@ func _build_party() -> void:
  party_bonus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  SKIN.title(party_bonus, 13)
  strip.add_child(party_bonus)
-
-func _build_boss_status() -> void:
- boss_status = PanelContainer.new()
- boss_status.name = "AdventureBossStatus"
- boss_status.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
- boss_status.offset_left = 58
- boss_status.offset_right = -58
- boss_status.offset_top = 78
- boss_status.offset_bottom = 144
- boss_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
- boss_status.add_theme_stylebox_override("panel", SKIN.plaque(Color("#583424e8"), SKIN.GOLD, 15, 3))
- add_child(boss_status)
- var stack := VBoxContainer.new()
- stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
- boss_status.add_child(stack)
- boss_title = Label.new()
- boss_title.text = "BOSS"
- boss_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- boss_title.add_theme_color_override("font_color", SKIN.GOLD_LIGHT)
- boss_title.add_theme_font_size_override("font_size", 17)
- stack.add_child(boss_title)
- boss_hp_bar = ProgressBar.new()
- boss_hp_bar.custom_minimum_size.y = 13
- boss_hp_bar.max_value = 100.0
- boss_hp_bar.value = 100.0
- SKIN.small_bar(boss_hp_bar, SKIN.CORAL)
- stack.add_child(boss_hp_bar)
- boss_status.hide()
-
-func _refresh_boss_status() -> void:
- if boss_status == null or battle == null:
-  return
- # Only read existing boss properties; never change combat or enrage logic.
- var is_boss: bool = false
- for key in ["boss_active", "is_boss_fight", "is_boss_active"]:
-  var value: Variant = battle.get(key)
-  if value is bool and value:
-   is_boss = true
-   break
- boss_status.visible = is_boss
- if not is_boss:
-  return
- var hp: Variant = battle.get("boss_hp")
- var maximum: Variant = battle.get("boss_max_hp")
- if (hp is int or hp is float) and (maximum is int or maximum is float) and float(maximum) > 0.0:
-  boss_hp_bar.value = clampf(100.0 * float(hp) / float(maximum), 0.0, 100.0)
- else:
-  boss_hp_bar.value = 100.0
- boss_title.text = "BOSS · STUFE %d" % int(battle.current_level)
 
 func _nav_button(parent: Container, _icon_text: String, caption: String, key: String) -> Button:
  var b := Button.new()
@@ -367,7 +314,6 @@ func refresh() -> void:
  xp_label.text = "Lv " + str(GameManager.character_level) + "\n" + str(GameManager.character_xp) + " XP"
  if battle == null:
   return
- _refresh_boss_status()
  var element_id: int = 0
  if biome != null:
   element_id = int(biome.current_biome)
@@ -413,8 +359,5 @@ func _adapt_layout() -> void:
  if overflow != null:
   overflow.offset_left = -minf(366.0, screen_width - 20.0)
  var dock: Control = get_node_or_null("AdventureDock") as Control
- if boss_status != null:
-  boss_status.offset_left = minf(58.0, screen_width * 0.12)
-  boss_status.offset_right = -minf(58.0, screen_width * 0.12)
  if dock != null:
   dock.offset_top = -116.0 if screen_width < 430.0 else -126.0
