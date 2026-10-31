@@ -1,4 +1,5 @@
 extends Control
+const SKIN = preload("res://scripts/adventure_ui_theme.gd")
 @export var team_formation: Node3D
 @export var battle_manager: Node3D
 var hero_selector: OptionButton
@@ -14,15 +15,15 @@ func _ready() -> void:
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  mouse_filter = Control.MOUSE_FILTER_STOP
  var shade := ColorRect.new()
- shade.color = Color(0.02, 0.04, 0.08, 0.96)
+ shade.color = Color(0.10, 0.07, 0.04, 0.90)
  shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(shade)
  var margin := MarginContainer.new()
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  margin.add_theme_constant_override("margin_left", 24)
  margin.add_theme_constant_override("margin_right", 24)
- margin.add_theme_constant_override("margin_top", 105)
- margin.add_theme_constant_override("margin_bottom", 100)
+ margin.add_theme_constant_override("margin_top", 76)
+ margin.add_theme_constant_override("margin_bottom", 76)
  add_child(margin)
  var stack := VBoxContainer.new()
  stack.add_theme_constant_override("separation", 9)
@@ -33,9 +34,13 @@ func _ready() -> void:
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.add_child(stack)
  var title := Label.new()
- title.text = "SKILLS: PRIORITAET 1 BIS 4"
+ title.text = "HELDEN · SKILLS 1–4"
  title.add_theme_font_size_override("font_size", 27)
  stack.add_child(title)
+ var hint := Label.new()
+ hint.text = "Automatische Aktivierung · Reihenfolge 1 → 2 → 3 → 4"
+ hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ stack.add_child(hint)
  hero_selector = OptionButton.new()
  for i in range(4):
   hero_selector.add_item("Held " + str(i + 1), i)
@@ -83,6 +88,9 @@ func _ready() -> void:
  stack.add_child(close)
  apply.pressed.connect(_apply)
  close.pressed.connect(func(): visible = false)
+ SKIN.style_menu_tree(margin)
+ for bar in charge_bars:
+  SKIN.small_bar(bar, SKIN.GOLD)
  hero_selector.item_selected.connect(func(_idx: int): _refresh())
  _refresh()
 
