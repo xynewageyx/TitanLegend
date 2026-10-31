@@ -400,6 +400,37 @@ try:
         arm.animation_data.action = action
         bpy.context.scene.frame_end = hit_end
         bpy.context.scene.frame_set(1)
+    # Render a reproducible visual QA frame for each action.
+    # PNGs help reviewers inspect poses without installing Blender on Android.
+    pose_previews = {}
+    original_hidden = {obj.name: obj.hide_render for obj in bpy.data.objects
+                       if obj.type == "MESH"}
+    previous_action = arm.animation_data.action
+    previous_frame_end = scene.frame_end
+    try:
+        for obj in bpy.data.objects:
+            if obj.type == "MESH":
+                obj.hide_render = obj != rigged and obj not in socket_equipment
+        for label, pose_action, pose_frame in (
+            ("idle", action, 16),
+            ("walk", walk_action, 9),
+            ("melee_attack", attack_action, 12),
+            ("shield_block", block_action, 10),
+            ("hit_reaction", hit_action, 4),
+        ):
+            arm.animation_data.action = pose_action
+            scene.frame_set(pose_frame)
+            scene.render.filepath = str(out / ("pose_" + label + ".png"))
+            bpy.ops.render.render(write_still=True)
+            pose_previews[label] = (out / ("pose_" + label + ".png")).stat().st_size > 1024
+    finally:
+        arm.animation_data.action = previous_action
+        scene.frame_end = previous_frame_end
+        scene.frame_set(1)
+        for obj in bpy.data.objects:
+            if obj.type == "MESH" and obj.name in original_hidden:
+                obj.hide_render = original_hidden[obj.name]
+    report["animation_pose_previews"] = pose_previews
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
     report["rig_note"] = "Experimental 11-bone geometric skin with idle motion; not production rig"
     # Ten visually distinct material prototypes; not finished character designs.
