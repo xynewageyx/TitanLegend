@@ -205,8 +205,51 @@ try:
             principled.inputs["Base Color"].default_value = rgba
         variant.data.materials.clear()
         variant.data.materials.append(mat)
+        equipment = []
+        if hero_name == "warrior":
+            # First unique class silhouette: helmet, shoulder armor, shield and sword.
+            # Separate static accessories are intentionally not skinned yet.
+            metal = bpy.data.materials.new("Warrior_Steel")
+            metal.diffuse_color = (0.23, 0.36, 0.54, 1)
+            metal.use_nodes = True
+            gold = bpy.data.materials.new("Warrior_Gold")
+            gold.diffuse_color = (0.95, 0.66, 0.15, 1)
+            gold.use_nodes = True
+            zhead = low + height * 0.81
+            zshoulder = low + height * 0.60
+            def accessory(name, location, scale, material, shape="CUBE"):
+                if shape == "UV_SPHERE":
+                    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, location=location)
+                else:
+                    bpy.ops.mesh.primitive_cube_add(size=1, location=location)
+                obj = bpy.context.object
+                obj.name = name
+                obj.scale = scale
+                obj.data.materials.append(material)
+                equipment.append(obj)
+                return obj
+            accessory("Warrior_Helmet_Crest", (0, 0, zhead + height * 0.18),
+                      (height * 0.035, height * 0.12, height * 0.12), gold)
+            for side in (-1, 1):
+                accessory("Warrior_Pauldron_" + str(side),
+                          (side * height * 0.19, 0, zshoulder),
+                          (height * 0.13, height * 0.13, height * 0.085),
+                          metal, "UV_SPHERE")
+            accessory("Warrior_Shield", (-height * 0.29, -height * 0.12, low + height * 0.35),
+                      (height * 0.22, height * 0.045, height * 0.28), metal)
+            accessory("Warrior_Shield_Boss", (-height * 0.29, -height * 0.17, low + height * 0.35),
+                      (height * 0.07, height * 0.035, height * 0.07), gold, "UV_SPHERE")
+            accessory("Warrior_Sword_Blade", (height * 0.30, -height * 0.08, low + height * 0.42),
+                      (height * 0.045, height * 0.025, height * 0.44), metal)
+            accessory("Warrior_Sword_Guard", (height * 0.30, -height * 0.08, low + height * 0.22),
+                      (height * 0.17, height * 0.055, height * 0.035), gold)
+            accessory("Warrior_Sword_Grip", (height * 0.30, -height * 0.08, low + height * 0.15),
+                      (height * 0.035, height * 0.04, height * 0.14), gold)
+            report["warrior_equipment"] = [obj.name for obj in equipment]
         bpy.ops.object.select_all(action="DESELECT")
         variant.select_set(True)
+        for obj in equipment:
+            obj.select_set(True)
         bpy.context.view_layer.objects.active = variant
         filename = "hero_" + hero_name + "_prototype.glb"
         bpy.ops.export_scene.gltf(
@@ -215,9 +258,11 @@ try:
         report["hero_prototypes"].append({
             "class": hero_name, "file": filename,
             "bytes": (out / filename).stat().st_size,
-            "note": "Color-only chibi base prototype; class equipment and full rig pending",
+            "note": ("Static armor, shield and sword prototype; full rig pending" if hero_name == "warrior" else "Color-only chibi base prototype; class equipment and full rig pending"),
         })
         bpy.data.objects.remove(variant, do_unlink=True)
+        for obj in equipment:
+            bpy.data.objects.remove(obj, do_unlink=True)
     bpy.ops.object.select_all(action="DESELECT")
     if bpy.context.object and bpy.context.object.mode != "OBJECT":
         bpy.ops.object.mode_set(mode="OBJECT")
