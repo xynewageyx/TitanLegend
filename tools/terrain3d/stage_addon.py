@@ -353,7 +353,30 @@ for region in regions:
    "        crown.material_override = crown_material",
    "        crown.position = Vector3(px, _height_at(px, pz) + 5.2, pz)",
    "        add_child(crown)",
-  ])
+  ]
+  if key == "sun_desert":
+   # Two compact cactus arms per landmark: no imported assets or expensive shaders.
+   extra.extend([
+    "        var arm_mesh := CylinderMesh.new()",
+    "        arm_mesh.top_radius = 0.20",
+    "        arm_mesh.bottom_radius = 0.30",
+    "        arm_mesh.height = 1.9",
+    "        arm_mesh.radial_segments = 6",
+    "        for side in [-1, 1]:",
+    "            var arm := MeshInstance3D.new()",
+    '            arm.name = "CactusArm_%02d_%d" % [i, side]',
+    "            arm.mesh = arm_mesh",
+    "            arm.material_override = accent",
+    "            arm.rotation.z = float(side) * 0.95",
+    "            arm.position = Vector3(px + float(side) * 1.15, _height_at(px, pz) + 3.6, pz)",
+    "            add_child(arm)",
+   ])
+  if key == "whisper_forest":
+   # Flattened mushroom-like canopy on the same lightweight landmark mesh.
+   extra.extend([
+    "        crown.scale = Vector3(1.65, 0.40, 1.65)",
+    "        crown.position.y -= 0.7",
+   ]))
   if not weather_snow:
    extra.extend([
     "    var lava_material := StandardMaterial3D.new()",
