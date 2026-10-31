@@ -401,6 +401,9 @@ for region in regions:
    "    accent.emission_enabled = true" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.emission_enabled = false",
    "    accent.emission = accent.albedo_color",
    "    accent.emission_energy_multiplier = 0.45",
+   "    accent.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA" if key=="mist_marsh" else "    accent.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED",
+   "    accent.albedo_color.a = 0.78" if key=="mist_marsh" else "    accent.albedo_color.a = 1.0",
+
    "    accent.metallic = 0.35" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.metallic = 0.0",
    "    accent.roughness = 0.3" if key in ("crystal_caverns","astral_citadel") else "    accent.roughness = 0.85",
 
@@ -444,6 +447,8 @@ for region in regions:
    "        crown.mesh = crown_mesh",
    "        crown.material_override = accent",
    "        crown.rotation.y = float(i % 9) * 0.31",
+   "        crown.rotation.z = -0.20" if key=="thunder_plateau" else "        crown.rotation.z = 0.0",
+
    "        crown.scale = Vector3(0.85 + float(i % 3) * 0.18, 0.8 + float(i % 4) * 0.14, 0.85 + float(i % 3) * 0.18)",
 
    "        crown.position = Vector3(px, _height_at(px, pz) + "+("8.5" if key in ("crystal_caverns","sky_islands","astral_citadel") else "4.2" if key in ("mist_marsh","coral_archipelago") else "5.6")+", pz)",
