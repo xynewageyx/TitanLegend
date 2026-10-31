@@ -78,6 +78,32 @@ try:
     report["chibi_created"] = True
     report["chibi_vertices"] = len(chibi.data.vertices)
     report["chibi_note"] = "Experimental vertical-band morph; inspect visually before game use"
+    # Render an Android-friendly front preview for visual proportion review.
+    from mathutils import Vector
+    bounds = [chibi.matrix_world @ Vector(corner) for corner in chibi.bound_box]
+    center = sum(bounds, Vector()) / len(bounds)
+    span = max((max(v.z for v in bounds) - min(v.z for v in bounds)), 0.1)
+    bpy.ops.object.camera_add(location=(center.x, center.y - span * 2.5, center.z))
+    camera = bpy.context.object
+    camera.name = "MPFB_Chibi_Preview_Camera"
+    direction = center - camera.location
+    camera.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+    camera.data.type = "ORTHO"
+    camera.data.ortho_scale = span * 1.30
+    scene = bpy.context.scene
+    scene.camera = camera
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.render.resolution_x = 720
+    scene.render.resolution_y = 960
+    scene.render.resolution_percentage = 100
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = str(out / "mpfb_chibi_front.png")
+    source.hide_render = True
+    bpy.ops.render.render(write_still=True)
+    source.hide_render = False
+    report["preview_created"] = (out / "mpfb_chibi_front.png").stat().st_size > 1024
+    report["preview_camera"] = "front orthographic workbench"
+    # The camera must not be selected for GLB export.
     bpy.ops.object.select_all(action="DESELECT")
     chibi.select_set(True)
     bpy.context.view_layer.objects.active = chibi
