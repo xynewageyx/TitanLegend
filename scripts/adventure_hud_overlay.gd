@@ -279,11 +279,13 @@ func _animate_more_menu(open_menu: bool) -> void:
   more_panel.show()
   more_panel.modulate.a = 0.0
   more_panel.scale = Vector2(0.92, 0.92)
- more_tween = create_tween().set_parallel(true)
+ more_tween = create_tween()
+ more_tween.set_parallel(true)
  more_tween.tween_property(more_panel, "modulate:a", 1.0 if open_menu else 0.0, 0.16)
  more_tween.tween_property(more_panel, "scale", Vector2.ONE if open_menu else Vector2(0.94, 0.94), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
  if not open_menu:
-  more_tween.chain().tween_callback(more_panel.hide)
+  more_tween.set_parallel(false)
+  more_tween.tween_callback(more_panel.hide)
 
 func _process(_delta: float) -> void:
  if hud == null:
@@ -302,6 +304,12 @@ func _process(_delta: float) -> void:
  if actions is Control and (actions as Control).visible:
   modal_active = true
  if modal_active and visible:
+  more_open = false
+  if more_tween != null and more_tween.is_running():
+   more_tween.kill()
+  more_panel.hide()
+  more_panel.modulate.a = 1.0
+  more_panel.scale = Vector2.ONE
   hide()
  elif not modal_active and not visible:
   show()
@@ -387,6 +395,7 @@ func _adapt_layout() -> void:
   journey.offset_left = -minf(274.0, screen_width * 0.51)
  if overflow != null:
   overflow.offset_left = -minf(366.0, screen_width - 20.0)
+  overflow.pivot_offset = Vector2(overflow.size.x * 0.5, overflow.size.y)
  var dock: Control = get_node_or_null("AdventureDock") as Control
  if dock != null:
   dock.offset_top = -116.0 if screen_width < 430.0 else -126.0
