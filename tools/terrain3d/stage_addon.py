@@ -262,10 +262,32 @@ import re
 for region in regions:
  key=region["key"]
  amplitude=float(region["terrain"]["height_amplitude"])
- scale=amplitude/7.0
  # Scale the main ridgeline per biome; preserve the flattened trail and boss arena.
  script=base_script.replace("7.0 * sin(fx * 0.028)",f"{amplitude:.2f} * sin(fx * 0.028)")
- script=script.replace("7.0 * sin(fx * 0.028)",f"{amplitude:.2f} * sin(fx * 0.028)")
+ # Biome-specific vegetation and rock palettes; avoid identical scenery across all regions.
+ def gd_color(hex_color):
+  value=hex_color.lstrip("#")
+  return "Color(%s)" % ", ".join(f"{int(value[i:i+2],16)/255:.4f}" for i in (0,2,4))
+ foliage=gd_color(region["terrain"]["grass_color"])
+ rock=gd_color(region["terrain"]["rock_color"])
+ bark=gd_color(region["terrain"]["path_color"])
+ script=script.replace("Color(0.21, 0.49, 0.20)",foliage)
+ script=script.replace("Color(0.47, 0.49, 0.45)",rock)
+ script=script.replace("Color(0.39, 0.25, 0.15)",bark)
+ # Reduce trees in barren biomes; use crystals/stone formations instead.
+ barren=region["element"] in ("fire","ice","earth","arcane","lightning","dark","light")
+ if barren:
+  script=script.replace("for i in range(45):","for i in range(12):")
+  script=script.replace("for i in range(28):","for i in range(55):")
+ else:
+  script=script.replace("for i in range(45):","for i in range(65):")
+  script=script.replace("for i in range(28):","for i in range(24):")
+ # Make object distribution vary deterministically by biome ID.
+ seed_offset=int(region["terrain"]["seed"]) % 101
+ script=script.replace("(i * 37 + 13)",f"(i * 37 + {13+seed_offset})")
+ script=script.replace("(i * 53 + 17)",f"(i * 53 + {17+seed_offset})")
+ script=script.replace("(i * 41 + 21)",f"(i * 41 + {21+seed_offset})")
+ script=script.replace("(i * 47 + 29)",f"(i * 47 + {29+seed_offset})")
  script=script.replace('res://terrain_data',f'res://terrain_data/{key}')
  script=script.replace('GRASLAND_',f'{key.upper()}_')
  (scripts/f"{key}_setup.gd").write_text(script,encoding="utf-8")
