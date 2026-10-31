@@ -37,6 +37,9 @@ jobs:
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
           assert report.get("rigged_glb_created"), report
+          assert len(report.get("hero_prototypes", [])) == 10, report
+          for hero in report["hero_prototypes"]:
+              assert hero["bytes"] > 1024 and (folder / hero["file"]).is_file(), hero
           assert set(("Root", "Torso", "Head")).issubset(report.get("rig_bones", [])), report
           assert (folder / "mpfb_chibi_side.png").read_bytes().startswith(bytes.fromhex("89504e470d0a1a0a"))
           assert report.get("rigged_glb_created"), report
