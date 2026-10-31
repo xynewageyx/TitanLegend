@@ -11,10 +11,22 @@ out.mkdir(parents=True, exist_ok=True)
 report = {"blender": bpy.app.version_string, "source": str(src), "registration": False,
           "human_created": False, "objects": [], "errors": []}
 try:
-    sys.path.insert(0, str(src))
-    import mpfb
+    # MPFB 2 expects Blender extension package identity, not a bare import.
+    import shutil
+    import importlib
+    import addon_utils
+    extension_root = Path(bpy.utils.user_resource("EXTENSIONS", path="user_default", create=True))
+    installed = extension_root / "mpfb"
+    if installed.exists():
+        shutil.rmtree(installed)
+    shutil.copytree(src / "mpfb", installed)
+    report["installed_path"] = str(installed)
+    report["manifest_exists"] = (installed / "blender_manifest.toml").exists()
+    importlib.invalidate_caches()
+    addon_utils.modules(refresh=True)
+    bpy.ops.preferences.addon_enable(module="bl_ext.user_default.mpfb")
+    mpfb = importlib.import_module("bl_ext.user_default.mpfb")
     report["mpfb_module"] = str(mpfb.__file__)
-    mpfb.register()
     report["registration"] = True
     # Discover the available operators rather than guessing unstable API names.
     report["mpfb_operators"] = sorted(
