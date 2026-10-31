@@ -449,7 +449,7 @@ finally:
     lines.extend(["", "LOD models are static prototypes; rigging and visual QA remain pending.",
                   "", "## Errors", ""])
     lines.extend(report.get("errors") or ["None reported"])
-    (out / "BUILD_SUMMARY.md").write_text("\\n".join(lines) + "\\n", encoding="utf-8")
+    (out / "BUILD_SUMMARY.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("MPFB_PROBE_REPORT:", json.dumps(report))
 required_outputs = (
