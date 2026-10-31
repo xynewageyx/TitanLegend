@@ -183,28 +183,30 @@ func _make_hud() -> void:
  boss_panel = VBoxContainer.new()
  boss_panel.name = "BossHP"
  boss_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
- boss_panel.offset_left = 216
- boss_panel.offset_right = -19
- boss_panel.offset_top = 240
- boss_panel.offset_bottom = 385
+ boss_panel.offset_left = 18
+ boss_panel.offset_right = -18
+ boss_panel.offset_top = 435
+ boss_panel.offset_bottom = 544
+ boss_panel.add_theme_constant_override("separation", 4)
  add_child(boss_panel)
  boss_name = Label.new()
  boss_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- _font(boss_name, 23)
+ _font(boss_name, 19)
+ boss_name.add_theme_color_override("font_color", ADVENTURE_THEME.GOLD_LIGHT)
  boss_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  boss_panel.add_child(boss_name)
  boss_hp = ProgressBar.new()
- boss_hp.custom_minimum_size.y = 24
+ boss_hp.custom_minimum_size.y = 19
  boss_hp.max_value = 100
  boss_hp.show_percentage = true
- boss_hp.add_theme_stylebox_override("background", _style(Color(0.14, 0.035, 0.035, 0.93), 8))
- boss_hp.add_theme_stylebox_override("fill", _style(Color(0.92, 0.13, 0.09, 1.0), 8))
+ boss_hp.add_theme_stylebox_override("background", ADVENTURE_THEME.plaque(Color("#4b3027"), ADVENTURE_THEME.GOLD, 9, 2))
+ boss_hp.add_theme_stylebox_override("fill", ADVENTURE_THEME.plaque(ADVENTURE_THEME.CORAL, ADVENTURE_THEME.GOLD_LIGHT, 9, 1))
  boss_hp.add_theme_font_size_override("font_size", 18)
  boss_panel.add_child(boss_hp)
  boss_countdown = Label.new()
  boss_countdown.name = "BossCountdown"
  boss_countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- _font(boss_countdown, 22)
+ _font(boss_countdown, 17)
  boss_countdown.add_theme_color_override("font_color", Color(0.95, 0.94, 0.87))
  boss_panel.add_child(boss_countdown)
  boss_panel.hide()
