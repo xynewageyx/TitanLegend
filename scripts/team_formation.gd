@@ -520,6 +520,7 @@ func create_team() -> void:
    var warrior_visual := Node3D.new()
    warrior_visual.name = "WarriorGLBVisual"
    warrior_visual.set_script(preload("res://scripts/warrior_glb_visual.gd"))
+   warrior_visual.set("hide_existing_visuals", true)
    hero.add_child(warrior_visual)
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
