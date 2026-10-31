@@ -3,6 +3,7 @@ const AFK_POLICY = preload("res://scripts/afk_farming_policy.gd")
 const BOSS_ART = preload("res://scripts/boss_art.gd")
 const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
 const SKILL_VFX = preload("res://scripts/skill_vfx_3d_v1.gd")
+const TALENT_COMBAT_V2 = preload("res://scripts/talent_combat_adapter_v2.gd")
 # TEMPORARY compatibility implementation.
 # Original Update 168 battle_manager.gd (36,410 bytes) must replace this file.
 signal battle_status_changed
@@ -337,7 +338,16 @@ func _show_hero_combat_number(slot: int, value: int, is_heal: bool) -> void:
 func _hero_progression(slot: int) -> Dictionary:
  if team_formation == null or slot < 0 or slot >= team_formation.class_ids.size():
   return {"attack":0.0, "defense":0.0, "healing":0.0}
- return TitanCombatBalance.hero_progression(int(team_formation.class_ids[slot]), team_formation.talent_ranks[slot], GameManager.jewel_level)
+ var stats: Dictionary = TitanCombatBalance.hero_progression(int(team_formation.class_ids[slot]), team_formation.talent_ranks[slot], GameManager.jewel_level)
+ # V2 builds are optional. Legacy saves continue to use the existing ranks.
+ if team_formation.has_meta("talent_builds_v2"):
+  var builds: Variant = team_formation.get_meta("talent_builds_v2")
+  if builds is Array and slot < builds.size() and builds[slot] is Array:
+   var extra: Dictionary = TALENT_COMBAT_V2.bonuses(int(team_formation.class_ids[slot]), GameManager.character_level, builds[slot])
+   stats["attack"] = minf(1.5, float(stats.get("attack", 0.0)) + float(extra.get("attack", 0.0)))
+   stats["defense"] = minf(0.70, float(stats.get("defense", 0.0)) + float(extra.get("defense", 0.0)))
+   stats["healing"] = minf(1.5, float(stats.get("healing", 0.0)) + float(extra.get("healing", 0.0)))
+ return stats
 
 func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0.0) -> void:
  var hits: Array[int] = []
