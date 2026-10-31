@@ -15,6 +15,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 tools/terrain3d/stage_addon.py
+      - name: Verify ProtonScatter addon installation
+        run: |
+          test -f terrain3d-preview/addons/proton_scatter/plugin.cfg
+          grep -q 'res://addons/proton_scatter/plugin.cfg' terrain3d-preview/project.godot
+          echo "ProtonScatter installed and enabled"
       - name: Verify all twelve generated biome scenes
         run: |
           python3 - <<'PY'
