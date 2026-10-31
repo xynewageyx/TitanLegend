@@ -57,6 +57,27 @@ jobs:
           print("Verified 1200 stages, biome features, and Android budgets")
           print("Verified 12 independent Terrain3D biomes")
           PY
+      - name: Verify generated biome landmark and weather hooks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("terrain3d-preview")
+          regions = json.loads((root / "regions.json").read_text())["regions"]
+          for region in regions:
+              key = region["key"]
+              script = (root / "scripts" / f"{key}_setup.gd").read_text()
+              if key in ("frost_peaks", "ember_volcano"):
+                  assert "func _add_elemental_environment()" in script, key
+                  assert "_add_elemental_environment()" in script.split("func _add_elemental_environment()")[0], key
+                  assert ("Snowstorm" if key == "frost_peaks" else "Ashfall") in script, key
+              else:
+                  assert "func _add_biome_landmarks()" in script, key
+                  assert "_add_biome_landmarks()" in script.split("func _add_biome_landmarks()")[0], key
+                  assert "Landmark_%02d" in script, key
+              assert "\\n" not in script, f"Literal escaped newline in {key}"
+              print("BIOME_HOOK_VALID", key)
+          PY
       - name: Verify bundled terrain textures
         run: |
           python3 - <<'PY'
