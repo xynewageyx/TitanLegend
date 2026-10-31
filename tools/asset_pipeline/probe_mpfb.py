@@ -142,8 +142,35 @@ try:
         if name != "Root":
             bone.parent = arm_data.edit_bones["Root" if name == "Torso" else "Torso"]
             bone.use_connect = True
+    # Experimental limb joints: preserve the existing 3-bone baseline and
+    # add separate, non-connected arm/leg chains for future combat animations.
+    limb_specs = []
+    for side, suffix in ((-1, "L"), (1, "R")):
+        limb_specs.extend([
+            ("UpperArm_" + suffix,
+             (side * height * 0.17, 0, low + height * 0.57),
+             (side * height * 0.29, 0, low + height * 0.46), "Torso"),
+            ("Forearm_" + suffix,
+             (side * height * 0.29, 0, low + height * 0.46),
+             (side * height * 0.33, 0, low + height * 0.35),
+             "UpperArm_" + suffix),
+            ("Thigh_" + suffix,
+             (side * height * 0.09, 0, low + height * 0.35),
+             (side * height * 0.09, 0, low + height * 0.20), "Root"),
+            ("Shin_" + suffix,
+             (side * height * 0.09, 0, low + height * 0.20),
+             (side * height * 0.09, 0, low + height * 0.055),
+             "Thigh_" + suffix),
+        ])
+    for name, start, end, parent in limb_specs:
+        bone = arm_data.edit_bones.new(name)
+        bone.head, bone.tail = start, end
+        bone.parent = arm_data.edit_bones[parent]
+        bone.use_connect = False
     bpy.ops.object.mode_set(mode="OBJECT")
-    groups = {name: rigged.vertex_groups.new(name=name) for name, _, _ in specs}
+    groups = {name: rigged.vertex_groups.new(name=name)
+              for name in [spec[0] for spec in specs] +
+              [spec[0] for spec in limb_specs]}
     for vertex in rigged.data.vertices:
         t = (vertex.co.z - low) / height
         # Blend weights across the shoulder and neck bands.
@@ -151,6 +178,23 @@ try:
         root_w = max(0.0, min(1.0, (0.43 - t) / 0.12))
         torso_w = max(0.0, 1.0 - root_w - head_w)
         weights = {"Root": root_w, "Torso": torso_w, "Head": head_w}
+        # Approximate geometric skinning, not anatomical MPFB weights.
+        # Separate left/right vertices and transition smoothly at elbows/knees.
+        x = vertex.co.x / height
+        if abs(x) > 0.19 and 0.33 < t < 0.65:
+            side = "L" if x < 0 else "R"
+            influence = min(0.9, max(0.0, (abs(x) - 0.19) * 9.0))
+            forearm = max(0.0, min(1.0, (0.47 - t) / 0.10))
+            weights = {key: val * (1.0 - influence) for key, val in weights.items()}
+            weights["UpperArm_" + side] = influence * (1.0 - forearm)
+            weights["Forearm_" + side] = influence * forearm
+        elif t < 0.36 and abs(x) > 0.025:
+            side = "L" if x < 0 else "R"
+            influence = min(0.95, max(0.0, (0.36 - t) * 7.0))
+            shin = max(0.0, min(1.0, (0.22 - t) / 0.09))
+            weights = {key: val * (1.0 - influence) for key, val in weights.items()}
+            weights["Thigh_" + side] = influence * (1.0 - shin)
+            weights["Shin_" + side] = influence * shin
         total = sum(weights.values())
         for name, weight in weights.items():
             if weight > 0:
@@ -177,7 +221,7 @@ try:
                               export_animations=True, export_skins=True)
     report["rigged_glb_created"] = (out / "mpfb_chibi_rigged.glb").stat().st_size > 1024
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
-    report["rig_note"] = "Experimental 3-bone skin with idle motion, not final hero rig"
+    report["rig_note"] = "Experimental 11-bone geometric skin with idle motion; not production rig"
     # Ten visually distinct material prototypes; not finished character designs.
     hero_palettes = [
         ("warrior", (0.60, 0.17, 0.12, 1)),
