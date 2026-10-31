@@ -78,6 +78,15 @@ for side, label in [(-1, "L"), (1, "R")]:
     cube("glove_" + label, (side * 0.65, -0.02, 0.83), (0.32, 0.32, 0.27), leather, "upper_arm." + label)
     cube("leg_" + label, (side * 0.22, 0, 0.56), (0.30, 0.35, 0.70), leather, "leg." + label)
     cube("boot_" + label, (side * 0.22, -0.12, 0.17), (0.36, 0.56, 0.33), armor, "leg." + label)
+# Layered armor silhouette with contrasting chest plates and side guards.
+cube("breastplate_upper", (0, -0.258, 1.53), (0.63, 0.075, 0.22), armor, "spine")
+cube("breastplate_lower", (0, -0.255, 1.25), (0.52, 0.07, 0.20), armor, "spine")
+for side, label in [(-1, "L"), (1, "R")]:
+    cube("pauldron_trim_" + label, (side * 0.55, -0.19, 1.67), (0.36, 0.11, 0.11), trim, "upper_arm." + label)
+    cube("bracer_" + label, (side * 0.65, -0.175, 1.03), (0.30, 0.065, 0.20), trim, "upper_arm." + label)
+    cube("knee_guard_" + label, (side * 0.22, -0.205, 0.54), (0.33, 0.085, 0.19), armor, "leg." + label)
+    cube("boot_trim_" + label, (side * 0.22, -0.402, 0.24), (0.34, 0.055, 0.08), trim, "leg." + label)
+    sphere("brow_" + label, (side * 0.18, -0.421, 2.28), (0.13, 0.035, 0.034), hair, "head")
 cube("belt", (0, 0, 0.99), (0.78, 0.52, 0.16), leather, "spine")
 cube("belt_buckle", (0, -0.28, 0.99), (0.20, 0.06, 0.16), trim, "spine")
 cube("sword_grip", (0.65, -0.02, 0.51), (0.12, 0.12, 0.50), leather, "upper_arm.R")
