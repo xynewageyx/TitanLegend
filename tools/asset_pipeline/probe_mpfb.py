@@ -321,6 +321,19 @@ try:
         bpy.ops.export_scene.gltf(
             filepath=str(out / filename), export_format="GLB",
             use_selection=True, export_materials="EXPORT")
+        # Mobile profiling: record actual exported triangle count and mesh objects.
+        # The high-poly MPFB source is a prototype, not an Android-ready LOD.
+        hero_triangles = sum(len(poly.vertices) - 2
+                             for mesh_obj in [variant] + equipment
+                             for poly in mesh_obj.data.polygons)
+        hero_mesh_count = len(equipment) + 1
+        report.setdefault("mobile_mesh_budget", []).append({
+            "class": hero_name,
+            "triangles": hero_triangles,
+            "mesh_objects": hero_mesh_count,
+            "target_triangles": 10000,
+            "within_target": hero_triangles <= 10000,
+        })
         report["hero_prototypes"].append({
             "class": hero_name, "file": filename,
             "bytes": (out / filename).stat().st_size,
