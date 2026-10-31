@@ -78,6 +78,17 @@ for i, (x, z) in enumerate([(-0.35, 2.36), (-0.15, 2.40), (0.08, 2.42), (0.30, 2
 sphere("nose", (0, -0.468, 1.98), (0.055, 0.045, 0.045), skin, "head")
 sphere("mouth", (0, -0.462, 1.86), (0.12, 0.022, 0.026), leather, "head")
 cube("chest_crest", (0, -0.254, 1.43), (0.24, 0.055, 0.31), trim, "spine")
+
+# Layered fantasy armor: readable silhouette at mobile portrait scale.
+cube("breastplate_upper", (0, -0.255, 1.57), (0.69, 0.11, 0.25), silver, "spine")
+cube("breastplate_lower", (0, -0.252, 1.24), (0.60, 0.10, 0.28), armor, "spine")
+for side, label in [(-1, "L"), (1, "R")]:
+    cube("chest_gold_rib_" + label, (side * 0.25, -0.317, 1.40), (0.055, 0.065, 0.46), trim, "spine")
+    sphere("pauldron_plate_" + label, (side * 0.56, -0.045, 1.62), (0.33, 0.33, 0.20), armor, "upper_arm." + label)
+    sphere("pauldron_rivet_" + label, (side * 0.56, -0.342, 1.64), (0.065, 0.035, 0.065), trim, "upper_arm." + label)
+    cube("knee_guard_" + label, (side * 0.22, -0.22, 0.52), (0.34, 0.12, 0.22), silver, "leg." + label)
+    cube("boot_gold_toe_" + label, (side * 0.22, -0.40, 0.16), (0.32, 0.11, 0.10), trim, "leg." + label)
+
 for side, label in [(-1, "L"), (1, "R")]:
     sphere("eye_" + label, (side * 0.18, -0.424, 2.11), (0.105, 0.045, 0.14), eye, "head")
     sphere("eye_glint_" + label, (side * 0.18 - 0.028, -0.466, 2.17), (0.027, 0.013, 0.035), eye_shine, "head")
