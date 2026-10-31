@@ -210,6 +210,25 @@ try:
         arm.pose.bones["Torso"].rotation_mode = "XYZ"
         arm.pose.bones["Torso"].rotation_euler[1] = angle
         arm.pose.bones["Torso"].keyframe_insert(data_path="rotation_euler", frame=frame)
+    # Add a short in-place walking cycle to the experimental limb rig.
+    # Animation is intentionally in-place for Godot-controlled movement.
+    walk_action = bpy.data.actions.new("walk_in_place")
+    arm.animation_data.action = walk_action
+    import math
+    for frame, phase in ((1, 0.0), (9, math.pi / 2),
+                         (17, math.pi), (25, 3 * math.pi / 2),
+                         (33, 2 * math.pi)):
+        for suffix, direction in (("L", 1.0), ("R", -1.0)):
+            for bone_name, amplitude in (("Thigh_", 0.32),
+                                         ("Shin_", 0.18),
+                                         ("UpperArm_", -0.22),
+                                         ("Forearm_", -0.10)):
+                bone = arm.pose.bones[bone_name + suffix]
+                bone.rotation_mode = "XYZ"
+                bone.rotation_euler[0] = math.sin(phase) * direction * amplitude
+                bone.keyframe_insert(data_path="rotation_euler", frame=frame)
+    # Keep idle as the active export action until multi-action export is verified.
+    arm.animation_data.action = action
     bpy.context.scene.frame_end = 31
     bpy.context.scene.frame_set(1)
     bpy.ops.object.select_all(action="DESELECT")
