@@ -20,9 +20,15 @@ jobs:
         run: |
           test -s build/forest/forest_01_mooshuepfer.glb
           test -s build/forest/forest_02_pilzling.glb
+          test -s build/forest/forest_03_wurzelkrabbler.glb
+          test -s build/forest/forest_04_blattfuchs.glb
+          test -s build/forest/forest_05_dorneneber.glb
+          test -s build/forest/forest_06_rankenwerfer.glb
           python3 - <<'PY'
           import pathlib, struct
-          for path in sorted(pathlib.Path('build/forest').glob('*.glb')):
+          paths = sorted(pathlib.Path('build/forest').glob('*.glb'))
+          assert len(paths) == 6, f'Expected 6 GLBs, got {len(paths)}'
+          for path in paths:
               data = path.read_bytes()
               assert len(data) >= 20 and data[:4] == b'glTF', f'Invalid GLB: {path}'
               assert struct.unpack_from('<I', data, 8)[0] == len(data), f'Wrong GLB length: {path}'
