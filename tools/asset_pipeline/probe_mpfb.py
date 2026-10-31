@@ -310,6 +310,21 @@ try:
         socket.parent_bone = bone_name
         socket.location = (0.0, 0.0, 0.0)
         weapon_sockets.append(socket)
+    # Lightweight test equipment follows the forearm sockets in every
+    # animated export. Final warrior equipment remains separately generated.
+    socket_equipment = []
+    for name, socket, dimensions, offset in (
+        ("Rig_Test_Sword", weapon_sockets[0], (0.06, 0.05, 0.65), (0.0, 0.0, 0.32)),
+        ("Rig_Test_Shield", weapon_sockets[1], (0.38, 0.07, 0.48), (0.0, -0.10, 0.0)),
+    ):
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        part = bpy.context.object
+        part.name = name
+        part.parent = socket
+        part.location = offset
+        part.scale = dimensions
+        socket_equipment.append(part)
+    report["socket_equipment_names"] = [obj.name for obj in socket_equipment]
     report["weapon_socket_names"] = [obj.name for obj in weapon_sockets]
     # Keep idle as the active export action until multi-action export is verified.
     arm.animation_data.action = action
@@ -320,6 +335,8 @@ try:
     arm.select_set(True)
     for socket in weapon_sockets:
         socket.select_set(True)
+    for part in socket_equipment:
+        part.select_set(True)
     bpy.context.view_layer.objects.active = arm
     bpy.ops.export_scene.gltf(filepath=str(out / "mpfb_chibi_rigged.glb"),
                               export_format="GLB", use_selection=True,
