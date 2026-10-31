@@ -401,6 +401,8 @@ for region in regions:
    "    accent.emission_enabled = true" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.emission_enabled = false",
    "    accent.emission = accent.albedo_color",
    "    accent.emission_energy_multiplier = 0.45",
+   "    accent.metallic = 0.35" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.metallic = 0.0",
+   "    accent.roughness = 0.3" if key in ("crystal_caverns","astral_citadel") else "    accent.roughness = 0.85",
 
    "    var spire := CylinderMesh.new()",
    "    spire.top_radius = 0.15" if key not in ("crystal_caverns","sky_islands","astral_citadel") else "    spire.top_radius = 0.0",
@@ -432,11 +434,17 @@ for region in regions:
    '        landmark.name = "Landmark_%02d" % i',
    "        landmark.mesh = spire",
    "        landmark.material_override = material",
+   "        landmark.rotation.y = float(i % 7) * 0.42",
+   "        landmark.scale = Vector3(0.75 + float(i % 4) * 0.15, 0.85 + float(i % 5) * 0.12, 0.75 + float(i % 4) * 0.15)",
+
    "        landmark.position = Vector3(px, _height_at(px, pz) + "+("4.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "1.75" if key in ("mist_marsh","coral_archipelago") else "2.5")+", pz)",
    "        add_child(landmark)",
    "        var crown := MeshInstance3D.new()",
    "        crown.mesh = crown_mesh",
    "        crown.material_override = accent",
+   "        crown.rotation.y = float(i % 9) * 0.31",
+   "        crown.scale = Vector3(0.85 + float(i % 3) * 0.18, 0.8 + float(i % 4) * 0.14, 0.85 + float(i % 3) * 0.18)",
+
    "        crown.position = Vector3(px, _height_at(px, pz) + "+("8.5" if key in ("crystal_caverns","sky_islands","astral_citadel") else "4.2" if key in ("mist_marsh","coral_archipelago") else "5.6")+", pz)",
    "        add_child(crown)",
   ]
