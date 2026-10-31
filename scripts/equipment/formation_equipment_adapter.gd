@@ -37,10 +37,10 @@ static func install(hero: Node3D) -> Node3D:
     return controller
 static func apply_weapon(hero: Node3D, weapon_type: int, rarity: int) -> bool:
     var controller := install(hero)
-    return controller.equip_weapon(weapon_type, rarity) if controller != null else false
+    return controller.call("equip_weapon", weapon_type, rarity) if controller != null else false
 static func apply_chest(hero: Node3D, armor_class: int, rarity: int) -> bool:
     var controller := install(hero)
-    return controller.equip_armor_slot("ChestSocket", armor_class, rarity) if controller != null else false
+    return controller.call("equip_armor_slot", "ChestSocket", armor_class, rarity) if controller != null else false
 
 static func apply_full_armor(hero: Node3D, class_id: int, rarity: int) -> int:
     var controller := install(hero)
@@ -50,6 +50,6 @@ static func apply_full_armor(hero: Node3D, class_id: int, rarity: int) -> int:
     for slot in SOCKETS.keys():
         if slot == "RightHandSocket" or slot == "LeftHandSocket":
             continue
-        if controller.equip_armor_slot(slot, class_id, rarity):
+        if controller.call("equip_armor_slot", slot, class_id, rarity):
             count += 1
     return count
