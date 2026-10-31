@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "stages_per_region": 100,
+  "boss_every_stages": 10,
+  "total_stages": 1200,
+  "regions": [
+    {
+      "id": 1,
+      "key": "emerald_grassland",
+      "name_de": "Smaragdgrasland",
+      "element": "nature",
+      "stage_start": 1,
+      "stage_end": 100,
+      "terrain": {
+        "grass_color": "#70bb57",
+        "path_color": "#a47d51",
+        "rock_color": "#73816b",
+        "height_amplitude": 7,
+        "seed": 1200
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 2,
+      "key": "whisper_forest",
+      "name_de": "Flüsterwald",
+      "element": "nature",
+      "stage_start": 101,
+      "stage_end": 200,
+      "terrain": {
+        "grass_color": "#3b8656",
+        "path_color": "#72513c",
+        "rock_color": "#596b5a",
+        "height_amplitude": 11,
+        "seed": 1301
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 3,
+      "key": "sun_desert",
+      "name_de": "Sonnenwüste",
+      "element": "earth",
+      "stage_start": 201,
+      "stage_end": 300,
+      "terrain": {
+        "grass_color": "#d9b26a",
+        "path_color": "#ad794c",
+        "rock_color": "#987b62",
+        "height_amplitude": 5,
+        "seed": 1402
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 4,
+      "key": "frost_peaks",
+      "name_de": "Frostgipfel",
+      "element": "ice",
+      "stage_start": 301,
+      "stage_end": 400,
+      "terrain": {
+        "grass_color": "#c4e7e9",
+        "path_color": "#8aaec1",
+        "rock_color": "#778e9b",
+        "height_amplitude": 17,
+        "seed": 1503
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 5,
+      "key": "ember_volcano",
+      "name_de": "Glutvulkan",
+      "element": "fire",
+      "stage_start": 401,
+      "stage_end": 500,
+      "terrain": {
+        "grass_color": "#574b4b",
+        "path_color": "#aa5534",
+        "rock_color": "#3d373c",
+        "height_amplitude": 15,
+        "seed": 1604
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 6,
+      "key": "crystal_caverns",
+      "name_de": "Kristallhöhlen",
+      "element": "arcane",
+      "stage_start": 501,
+      "stage_end": 600,
+      "terrain": {
+        "grass_color": "#6673aa",
+        "path_color": "#9078bf",
+        "rock_color": "#4e5578",
+        "height_amplitude": 12,
+        "seed": 1705
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 7,
+      "key": "thunder_plateau",
+      "name_de": "Donnerplateau",
+      "element": "lightning",
+      "stage_start": 601,
+      "stage_end": 700,
+      "terrain": {
+        "grass_color": "#8d9b69",
+        "path_color": "#b9a363",
+        "rock_color": "#6d7281",
+        "height_amplitude": 10,
+        "seed": 1806
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 8,
+      "key": "mist_marsh",
+      "name_de": "Nebelmoor",
+      "element": "water",
+      "stage_start": 701,
+      "stage_end": 800,
+      "terrain": {
+        "grass_color": "#668a75",
+        "path_color": "#6b6756",
+        "rock_color": "#626e72",
+        "height_amplitude": 4,
+        "seed": 1907
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 9,
+      "key": "sky_islands",
+      "name_de": "Himmelsinseln",
+      "element": "wind",
+      "stage_start": 801,
+      "stage_end": 900,
+      "terrain": {
+        "grass_color": "#a1c67d",
+        "path_color": "#d0b58b",
+        "rock_color": "#879baa",
+        "height_amplitude": 14,
+        "seed": 2008
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 10,
+      "key": "shadow_ruins",
+      "name_de": "Schattenruinen",
+      "element": "dark",
+      "stage_start": 901,
+      "stage_end": 1000,
+      "terrain": {
+        "grass_color": "#51566b",
+        "path_color": "#82716e",
+        "rock_color": "#474957",
+        "height_amplitude": 9,
+        "seed": 2109
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 11,
+      "key": "coral_archipelago",
+      "name_de": "Korallenarchipel",
+      "element": "water",
+      "stage_start": 1001,
+      "stage_end": 1100,
+      "terrain": {
+        "grass_color": "#65b6a2",
+        "path_color": "#d8bd89",
+        "rock_color": "#799e9e",
+        "height_amplitude": 5,
+        "seed": 2210
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    },
+    {
+      "id": 12,
+      "key": "astral_citadel",
+      "name_de": "Astralzitadelle",
+      "element": "light",
+      "stage_start": 1101,
+      "stage_end": 1200,
+      "terrain": {
+        "grass_color": "#8e88c4",
+        "path_color": "#c6b6dc",
+        "rock_color": "#6e6b96",
+        "height_amplitude": 13,
+        "seed": 2311
+      },
+      "boss_arena": {
+        "radius": 18,
+        "center": [
+          63,
+          106
+        ]
+      },
+      "props": [
+        "trees",
+        "rocks",
+        "shrubs"
+      ]
+    }
+  ]
+}
