@@ -258,6 +258,7 @@ func _build_navigation() -> void:
  more_panel.hide()
 
 func _process(_delta: float) -> void:
+ _adapt_layout()
  if hud == null:
   return
  # Submenus are siblings created earlier by the original scene. Temporarily
@@ -334,3 +335,18 @@ func refresh() -> void:
  var formation: bool = team.has_formation_bonus()
  party_bonus.text = "✦ FORMATIONS-BONUS" if formation else "4 HELDEN · 1 TEAM"
  party_bonus.add_theme_color_override("font_color", Color("#3a845b") if formation else SKIN.MUTED)
+
+func _adapt_layout() -> void:
+ # Fit the four-hero HUD and overflow panel on narrow portrait screens.
+ var screen_width: float = size.x
+ if screen_width <= 0.0:
+  return
+ var team_strip: Control = get_node_or_null("AdventureTeam") as Control
+ var journey: Control = get_node_or_null("JourneyPlaque") as Control
+ var overflow: Control = get_node_or_null("MoreAdventures") as Control
+ if team_strip != null:
+  team_strip.offset_right = minf(210.0, screen_width * 0.47)
+ if journey != null:
+  journey.offset_left = -minf(274.0, screen_width * 0.51)
+ if overflow != null:
+  overflow.offset_left = -minf(366.0, screen_width - 20.0)
