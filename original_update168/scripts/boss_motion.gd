@@ -1,3 +1,4 @@
+class_name TitanBossMotion
 extends Node3D
 # Update 42: cosmetic animation only; does not change damage, HP or cooldowns.
 var boss: Node3D
