@@ -1,6 +1,6 @@
 """Isolated Rigify availability probe. Never modifies the production warrior rig."""
 import bpy
-import importlib.util
+from pathlib import Path
 print("BLENDER_VERSION:", bpy.app.version_string)
 try:
     bpy.ops.preferences.addon_enable(module="rigify")
@@ -24,4 +24,24 @@ try:
 except Exception as exc:
     print("RIGIFY_GENERATION_FAILED:", type(exc).__name__, str(exc))
     raise SystemExit(2)
+# Export only the isolated generated rig as a GLB for inspection.
+# This is NOT a skinned production character; no existing warrior file is touched.
+try:
+    output = Path("build/rigify_probe.glb")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.object.select_all(action="DESELECT")
+    for obj in generated:
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = generated[0]
+    bpy.ops.export_scene.gltf(
+        filepath=str(output.resolve()),
+        export_format="GLB",
+        use_selection=True,
+        export_animations=False,
+    )
+    assert output.is_file() and output.stat().st_size > 100, "GLB missing or empty"
+    print("RIGIFY_PROBE_GLB_BYTES:", output.stat().st_size)
+except Exception as exc:
+    print("RIGIFY_EXPORT_FAILED:", type(exc).__name__, str(exc))
+    raise SystemExit(3)
 print("PRODUCTION_WARRIOR_UNCHANGED: true")
