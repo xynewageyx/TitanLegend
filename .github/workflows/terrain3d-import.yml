@@ -171,6 +171,11 @@ jobs:
               cat /tmp/biome-smoke.log
               exit 1
             }
+            if [[ "$name" == "frost_peaks_terrain3d.tscn" || "$name" == "ember_volcano_terrain3d.tscn" ]]; then
+              grep -q ELEMENTAL_ENVIRONMENT_READY /tmp/biome-smoke.log || { cat /tmp/biome-smoke.log; exit 1; }
+            else
+              grep -q BIOME_LANDMARKS_READY /tmp/biome-smoke.log || { cat /tmp/biome-smoke.log; exit 1; }
+            fi
             if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid assignment' /tmp/biome-smoke.log; then
               cat /tmp/biome-smoke.log
               exit 1
