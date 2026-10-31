@@ -384,6 +384,7 @@ for region in regions:
     "    add_child(crater)",
    ])
   script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\n    _add_elemental_environment()")
+  extra.append('    print("ELEMENTAL_ENVIRONMENT_READY")')
   script+="\n".join(extra)+"\n"
  # Procedural biome-specific landmark prototypes for the other ten regions.
  if key not in ("frost_peaks", "ember_volcano"):
