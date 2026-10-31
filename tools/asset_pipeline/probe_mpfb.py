@@ -321,6 +321,48 @@ try:
         bpy.ops.export_scene.gltf(
             filepath=str(out / filename), export_format="GLB",
             use_selection=True, export_materials="EXPORT")
+        # Independent mobile LOD: keep the detailed hero untouched.
+        # Blender's collapse decimator targets approximately 9k body triangles.
+        lod_objects = []
+        try:
+            lod_body = variant.copy()
+            lod_body.data = variant.data.copy()
+            lod_body.name = "Titan_" + hero_name.title() + "_Mobile_LOD"
+            bpy.context.collection.objects.link(lod_body)
+            bpy.ops.object.select_all(action="DESELECT")
+            lod_body.select_set(True)
+            bpy.context.view_layer.objects.active = lod_body
+            body_triangles = sum(len(p.vertices) - 2 for p in lod_body.data.polygons)
+            if body_triangles > 9000:
+                modifier = lod_body.modifiers.new("Mobile_LOD_Decimate", "DECIMATE")
+                modifier.ratio = min(1.0, 9000.0 / body_triangles)
+                bpy.ops.object.modifier_apply(modifier=modifier.name)
+            lod_objects.append(lod_body)
+            for part in equipment:
+                copy = part.copy()
+                copy.data = part.data.copy()
+                copy.name = part.name + "_LOD"
+                bpy.context.collection.objects.link(copy)
+                lod_objects.append(copy)
+            bpy.ops.object.select_all(action="DESELECT")
+            for obj in lod_objects:
+                obj.select_set(True)
+            bpy.context.view_layer.objects.active = lod_body
+            lod_filename = "hero_" + hero_name + "_mobile_lod.glb"
+            bpy.ops.export_scene.gltf(
+                filepath=str(out / lod_filename), export_format="GLB",
+                use_selection=True, export_materials="EXPORT")
+            lod_triangles = sum(len(poly.vertices) - 2
+                                for obj in lod_objects for poly in obj.data.polygons)
+            report.setdefault("mobile_lod", []).append({
+                "class": hero_name, "file": lod_filename,
+                "triangles": lod_triangles,
+                "bytes": (out / lod_filename).stat().st_size,
+                "note": "Static experimental LOD; inspect silhouettes and facial details",
+            })
+        finally:
+            for obj in lod_objects:
+                bpy.data.objects.remove(obj, do_unlink=True)
         # Mobile profiling: record actual exported triangle count and mesh objects.
         # The high-poly MPFB source is a prototype, not an Android-ready LOD.
         hero_triangles = sum(len(poly.vertices) - 2
