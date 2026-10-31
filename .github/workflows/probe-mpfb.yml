@@ -53,6 +53,15 @@ jobs:
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
           assert report.get("rigged_glb_created"), report
+          assert report.get("shield_block_glb_created"), "Shield block GLB export missing"
+          block_blob = (folder / "mpfb_chibi_shield_block.glb").read_bytes()
+          assert block_blob[:4] == b"glTF"
+          assert struct.unpack_from("<I", block_blob, 8)[0] == len(block_blob)
+          block_json_len, block_chunk = struct.unpack_from("<I4s", block_blob, 12)
+          assert block_chunk == b"JSON"
+          block_gltf = json.loads(block_blob[20:20 + block_json_len])
+          assert block_gltf.get("skins") and block_gltf.get("animations"), (
+              "Shield block GLB missing skin or animation")
           assert report.get("melee_attack_glb_created"), "Melee attack GLB export missing"
           attack_blob = (folder / "mpfb_chibi_melee_attack.glb").read_bytes()
           assert attack_blob[:4] == b"glTF"
