@@ -53,6 +53,16 @@ jobs:
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
           assert report.get("rigged_glb_created"), report
+          assert report.get("walk_glb_created"), "Walking GLB export missing"
+          walk_blob = (folder / "mpfb_chibi_walk.glb").read_bytes()
+          assert walk_blob[:4] == b"glTF"
+          assert struct.unpack_from("<I", walk_blob, 8)[0] == len(walk_blob)
+          walk_json_length, walk_json_type = struct.unpack_from("<I4s", walk_blob, 12)
+          assert walk_json_type == b"JSON"
+          walk_gltf = json.loads(walk_blob[20:20 + walk_json_length])
+          assert walk_gltf.get("skins"), "Walk GLB has no skeleton skin"
+          assert walk_gltf.get("animations"), "Walk GLB has no animation"
+          print("Separate walking GLB animation and skin verified")
           rig_path = folder / "mpfb_chibi_rigged.glb"
           rig_blob = rig_path.read_bytes()
           assert rig_blob[:4] == b"glTF", "Rigged model is not GLB"
