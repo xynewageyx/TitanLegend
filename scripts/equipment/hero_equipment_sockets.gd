@@ -3,8 +3,8 @@ extends Node3D
 ## Expected optional Marker3D children: RightHandSocket, LeftHandSocket,
 ## HeadSocket, ChestSocket, BackSocket. Works with animated markers.
 const WEAPON_PREVIEW = preload("res://scripts/weapons/procedural_weapon_preview.gd")
-const ARMOR_PREVIEW = preload("res://scripts/armor/procedural_armor_preview.gd")
-const SLOT_NAMES := ["HeadSocket", "ChestSocket", "BackSocket"]
+const ARMOR_PREVIEW = preload("res://scripts/equipment/chibi_armor_piece.gd")
+const SLOT_NAMES := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSocket", "ShoulderRightSocket", "ArmLeftSocket", "ArmRightSocket", "GloveLeftSocket", "GloveRightSocket", "LegLeftSocket", "LegRightSocket", "BootLeftSocket", "BootRightSocket"]
 var equipped_nodes: Dictionary = {}
 func _socket(name: String) -> Node3D:
     var found := find_child(name, true, false)
@@ -33,16 +33,9 @@ func equip_armor_slot(slot: String, hero_class: int, rarity: int) -> bool:
     _clear(slot)
     var visual := Node3D.new()
     visual.set_script(ARMOR_PREVIEW)
-    visual.set("armor_class", clampi(hero_class, 0, 5))
+    visual.set("slot_index", SLOT_NAMES.find(slot))
+    visual.set("class_id", clampi(hero_class, 0, 10))
     visual.set("rarity", clampi(rarity, 0, 5))
-    visual.set("show_helmet", slot == "HeadSocket")
-    visual.set("show_chest", slot == "ChestSocket")
-    visual.set("show_shoulders", slot == "ChestSocket")
-    visual.set("show_arms", slot == "ChestSocket")
-    visual.set("show_gloves", false)
-    visual.set("show_legs", false)
-    visual.set("show_boots", false)
-    visual.set("show_back", slot == "BackSocket")
     socket.add_child(visual)
     equipped_nodes[slot] = visual
     return true
