@@ -478,6 +478,22 @@ for region in regions:
     "        crown.scale = Vector3(1.65, 0.40, 1.65)",
     "        crown.position.y -= 0.7",
    ])
+  if key == "mist_marsh":
+   extra.extend([
+    "        var reed_mesh := CylinderMesh.new()",
+    "        reed_mesh.top_radius = 0.07",
+    "        reed_mesh.bottom_radius = 0.11",
+    "        reed_mesh.height = 2.8",
+    "        reed_mesh.radial_segments = 5",
+    "        for reed_index in range(2):",
+    "            var reed := MeshInstance3D.new()",
+    '            reed.name = "MarshReed_%02d_%d" % [i, reed_index]',
+    "            reed.mesh = reed_mesh",
+    "            reed.material_override = accent",
+    "            reed.rotation.z = -0.16 if reed_index == 0 else 0.20",
+    "            reed.position = Vector3(px + float(reed_index) * 1.1 - 0.55, _height_at(px, pz) + 1.4, pz + 0.7)",
+    "            add_child(reed)",
+   ])
   script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\n    _add_biome_landmarks()")
   extra.append('    print("BIOME_LANDMARKS_READY")')
   script+="\n".join(extra)+"\n"
