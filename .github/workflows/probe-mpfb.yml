@@ -64,7 +64,7 @@ jobs:
           for pose in expected_poses:
               assert pose_previews[pose], "Pose preview missing: " + pose
               pose_file = folder / ("pose_" + pose + ".png")
-              assert pose_file.read_bytes()[:8] == b"\\x89PNG\\r\\n\\x1a\\n", pose_file
+              assert pose_file.read_bytes()[:8] == bytes.fromhex("89504e470d0a1a0a"), pose_file
           assert report.get("rigged_glb_created"), report
           assert report.get("hit_reaction_glb_created"), "Hit reaction GLB export missing"
           hit_blob = (folder / "mpfb_chibi_hit_reaction.glb").read_bytes()
