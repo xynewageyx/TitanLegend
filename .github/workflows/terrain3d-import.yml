@@ -264,7 +264,18 @@ jobs:
                   return False
               width = int.from_bytes(header[16:20], 'big')
               height = int.from_bytes(header[20:24], 'big')
-              return width >= 320 and height >= 180
+              if width < 320 or height < 180:
+                  return False
+              # Reject effectively black captures even when the PNG header is valid.
+              import subprocess
+              probe = subprocess.run(
+                  ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-i', str(path),
+                   '-vf', 'scale=32:18,format=gray', '-f', 'rawvideo', '-frames:v', '1', '-'],
+                  capture_output=True, check=False, timeout=15)
+              if probe.returncode != 0 or len(probe.stdout) != 32 * 18:
+                  return False
+              pixels = probe.stdout
+              return sum(pixels) / len(pixels) >= 12 and max(pixels) - min(pixels) >= 8
           status = {key: {'png': valid_png(root / (key + '.png')), 'log': (root / (key + '.log')).is_file()} for key in keys}
           (root / 'status.json').write_text(json.dumps(status, indent=2))
           lines = ['### Terrain3D preview capture', '', '| Biome | Result |', '|---|---|']
