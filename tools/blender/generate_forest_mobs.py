@@ -213,6 +213,27 @@ def expressive_details():
         sphere("eye_glint", (center.x - .035, center.y - .055, center.z + .055),
                (.035, .018, .041), iris, 12, 8)
 
+def sculpt_organic_silhouettes():
+    """Non-destructive-to-rig vertex sculpting: asymmetry without new dependencies."""
+    body_terms = ("body", "torso", "trunk", "head", "cap", "muzzle", "snout",
+                  "canopy", "tail", "shoulder", "fist", "leg")
+    excluded = ("eye", "pupil", "mouth", "spot", "glint")
+    for obj in bpy.context.scene.objects:
+        if obj.type != "MESH" or not any(t in obj.name.lower() for t in body_terms):
+            continue
+        if any(t in obj.name.lower() for t in excluded):
+            continue
+        if len(obj.data.vertices) < 24:
+            continue
+        # Vertex offsets are local to each mesh and therefore export cleanly to GLB.
+        for vertex in obj.data.vertices:
+            x, y, z = vertex.co
+            ripple = (math.sin(3.1*x + 2.3*z) * math.cos(2.7*y - 1.4*z)
+                      + .45*math.sin(5.2*y + 1.8*x))
+            strength = .035 if "head" in obj.name.lower() else .065
+            vertex.co *= 1.0 + strength * ripple
+        obj.data.update()
+
 def organic_finish():
     """Export-safe organic shading and bevels, no runtime add-on dependency."""
     for obj in list(bpy.context.scene.objects):
@@ -326,7 +347,7 @@ def animate_creature():
     return root
 
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);expressive_details();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);expressive_details();sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
