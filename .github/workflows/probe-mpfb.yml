@@ -63,10 +63,12 @@ jobs:
           assert rig_gltf.get("skins"), "Chibi GLB is missing skin bindings"
           assert rig_gltf.get("animations"), "Chibi GLB is missing idle animation"
           rig_nodes = {node.get("name", "") for node in rig_gltf.get("nodes", [])}
-          assert {"Root", "Torso", "Head"}.issubset(rig_nodes), (
+          assert {"Root", "Torso", "Head",
+                  "UpperArm_L", "UpperArm_R", "Forearm_L", "Forearm_R",
+                  "Thigh_L", "Thigh_R", "Shin_L", "Shin_R"}.issubset(rig_nodes), (
               "Missing chibi bones", rig_nodes)
-          assert len(rig_gltf["skins"][0].get("joints", [])) >= 3, (
-              "Chibi skin has fewer than three joints")
+          assert len(rig_gltf["skins"][0].get("joints", [])) >= 11, (
+              "Chibi skin has fewer than eleven joints")
           print("Rigged GLB: bones, skin joints and idle animation verified")
           assert report.get("warrior_preview_created"), report
           assert report.get("warrior_side_preview_created"), report
