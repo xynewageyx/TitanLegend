@@ -252,7 +252,7 @@ for region in regions:
  scene_text=scene_text.replace('res://terrain_data',f'res://terrain_data/{key}')
  (root/"scenes"/f"{key}_terrain3d.tscn").write_text(scene_text,encoding="utf-8")
  (root/"terrain_data"/key).mkdir(parents=True,exist_ok=True)
-(root/"regions.json").write_text(json.dumps(region_config,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+(root/"regions.json").write_text(json.dumps(region_config,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print("REGIONS_GENERATED:",len(regions))
 
 # Bundle seamless, reproducible terrain textures so Android users do not have
