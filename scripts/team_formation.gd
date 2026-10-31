@@ -38,6 +38,18 @@ func set_talent_build_v2(hero_slot: int, level: int, proposed_build: Array) -> b
  team_changed.emit()
  return true
 
+func upgrade_talent_v2(hero_slot: int, branch: int, talent_index: int) -> bool:
+ if hero_slot < 0 or hero_slot >= 4:
+  return false
+ var level: int = GameManager.character_level
+ var build: Array = get_talent_build_v2(hero_slot)
+ if not TALENT_TREES_V2.upgrade(level, build, branch, talent_index):
+  return false
+ if not set_talent_build_v2(hero_slot, level, build):
+  return false
+ SaveManager.save_game()
+ return true
+
 func get_talent_build_v2(hero_slot: int) -> Array:
  if hero_slot < 0 or hero_slot >= 4:
   return TALENT_TREES_V2.empty_build()
