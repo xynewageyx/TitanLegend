@@ -46,7 +46,8 @@ func play_clip(clip: String) -> bool:
  if _player == null:
   return false
  for animation_name in _player.get_animation_list():
-  if animation_name == clip or animation_name.ends_with("/" + clip):
+  var short_name: String = animation_name.get_slice("/", animation_name.get_slice_count("/") - 1).get_slice(".", 0)
+  if short_name == clip:
    _player.play(animation_name)
    return true
  return false
