@@ -503,6 +503,8 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
+  # Optional chibi equipment attachment markers; no visuals equipped by default.
+  preload("res://scripts/equipment/formation_equipment_adapter.gd").install(hero)
   # Optional imported 3D warrior: only class 0, and only when the GLB exists.
   if class_ids[i] == 0 and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
    var warrior_visual := Node3D.new()
