@@ -79,6 +79,15 @@ jobs:
           }.items():
               for marker in required:
                   assert marker in scripts[key], f"{key}: missing {marker}"
+          for region in regions:
+              key = region["key"]
+              script = scripts[key]
+              barren = region["element"] in ("fire", "ice", "earth", "arcane", "lightning", "dark", "light")
+              expected_trees = 8 if barren else 20
+              expected_rocks = 20 if barren else 16
+              assert "for i in range(%d):" % expected_trees in script, key
+              assert "for i in range(%d):" % expected_rocks in script, key
+          print("Verified mobile decoration density in all 12 biomes")
           print("Verified biome-specific vegetation and elemental rocks")
           print("Verified 12 unique biome scripts, textures, terrain paths and geometry")
           print("Verified 1200 stages, biome features, and Android budgets")
