@@ -122,7 +122,7 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '        asset.name = names[i]',
  '        asset.albedo_texture = tex',
  '        asset.uv_scale = 0.1',
- '        terrain.assets.set_texture(i, asset)',
+ '        terrain.assets.set_texture_asset(i, asset)',
  '    print("TERRAIN_TEXTURE_ASSETS_READY:", terrain.assets.get_texture_count())',
  '',
  'func _scatter_grassland_props() -> void:',
