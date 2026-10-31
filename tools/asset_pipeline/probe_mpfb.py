@@ -251,6 +251,29 @@ try:
         torso.rotation_mode = "XYZ"
         torso.rotation_euler = (0.0, torso_y, 0.0)
         torso.keyframe_insert(data_path="rotation_euler", frame=frame)
+    # Shield guard prototype: raise the left arm, brace the torso, then recover.
+    # Shield attachment to the arm remains a separate integration task.
+    block_action = bpy.data.actions.new("shield_block")
+    arm.animation_data.action = block_action
+    for frame, upper_x, upper_z, forearm_x, torso_y in (
+        (1, 0.0, 0.0, 0.0, 0.0),
+        (5, -0.45, 0.45, -0.65, -0.08),
+        (10, -0.65, 0.55, -0.85, -0.12),
+        (19, -0.65, 0.55, -0.85, -0.12),
+        (27, 0.0, 0.0, 0.0, 0.0),
+    ):
+        upper = arm.pose.bones["UpperArm_L"]
+        upper.rotation_mode = "XYZ"
+        upper.rotation_euler = (upper_x, 0.0, upper_z)
+        upper.keyframe_insert(data_path="rotation_euler", frame=frame)
+        forearm = arm.pose.bones["Forearm_L"]
+        forearm.rotation_mode = "XYZ"
+        forearm.rotation_euler = (forearm_x, 0.0, 0.0)
+        forearm.keyframe_insert(data_path="rotation_euler", frame=frame)
+        torso = arm.pose.bones["Torso"]
+        torso.rotation_mode = "XYZ"
+        torso.rotation_euler = (0.0, torso_y, 0.0)
+        torso.keyframe_insert(data_path="rotation_euler", frame=frame)
     # Keep idle as the active export action until multi-action export is verified.
     arm.animation_data.action = action
     bpy.context.scene.frame_end = 31
@@ -292,6 +315,20 @@ try:
     finally:
         arm.animation_data.action = action
         bpy.context.scene.frame_end = attack_end
+        bpy.context.scene.frame_set(1)
+    try:
+        arm.animation_data.action = block_action
+        block_end = bpy.context.scene.frame_end
+        bpy.context.scene.frame_end = 27
+        bpy.context.scene.frame_set(1)
+        block_file = out / "mpfb_chibi_shield_block.glb"
+        bpy.ops.export_scene.gltf(filepath=str(block_file),
+                                  export_format="GLB", use_selection=True,
+                                  export_animations=True, export_skins=True)
+        report["shield_block_glb_created"] = block_file.stat().st_size > 1024
+    finally:
+        arm.animation_data.action = action
+        bpy.context.scene.frame_end = block_end
         bpy.context.scene.frame_set(1)
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
     report["rig_note"] = "Experimental 11-bone geometric skin with idle motion; not production rig"
