@@ -29,6 +29,10 @@ jobs:
           assert len(regions)==12
           for r in regions:
               key=r["key"]
+              for filename in ("gras_albedo.png","erde_albedo.png","weg_albedo.png","fels_albedo.png"):
+                  texture=root/"textures"/"terrain"/key/filename
+                  assert texture.is_file(),texture
+                  assert texture.read_bytes().startswith(bytes.fromhex("89504e470d0a1a0a")),texture
               scene=root/"scenes"/f"{key}_terrain3d.tscn"
               script=root/"scripts"/f"{key}_setup.gd"
               assert scene.is_file() and script.is_file(),key
