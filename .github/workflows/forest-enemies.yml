@@ -37,7 +37,16 @@ jobs:
               assert struct.unpack_from('<I', data, 8)[0] == len(data), f'Wrong GLB length: {path}'
               print(path, len(data), 'bytes')
           PY
+      - name: Package models at Godot resource paths
+        run: |
+          mkdir -p godot-import/assets/enemies/forest
+          cp build/forest/*.glb godot-import/assets/enemies/forest/
       - uses: actions/upload-artifact@v4
         with:
           name: TitanLegends-Forest-Mobs-GLB
           path: build/forest/*.glb
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Godot-Import
+          path: godot-import/assets/enemies/forest/*.glb
