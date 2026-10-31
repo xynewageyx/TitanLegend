@@ -26,6 +26,35 @@ jobs:
         run: |
           mkdir -p build/mpfb
           blender --background --factory-startup --python tools/asset_pipeline/probe_mpfb.py -- /tmp/mpfb2/src build/mpfb
+      - name: Validate both GLB models and chibi proportions
+        run: |
+          python3 - <<'PY'
+          import json, struct
+          from pathlib import Path
+          folder = Path("build/mpfb")
+          report = json.loads((folder / "report.json").read_text())
+          assert report.get("human_created") and report.get("chibi_glb_created"), report
+          for name in ("mpfb_basemesh.glb", "mpfb_chibi_prototype.glb"):
+              data = (folder / name).read_bytes()
+              assert data[:4] == b"glTF", name
+              version, size = struct.unpack_from("<II", data, 4)
+              assert version == 2 and size == len(data), name
+              json_size, kind = struct.unpack_from("<I4s", data, 12)
+              assert kind == b"JSON", name
+              gltf = json.loads(data[20:20+json_size])
+              assert gltf.get("meshes"), name + " has no meshes"
+              print(name, "meshes", len(gltf["meshes"]), "bytes", len(data))
+          print("Chibi geometry validation passed")
+          PY
+      - name: Verify GLB import in Godot 4.7.2
+        run: |
+          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d /tmp
+          chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
+          mkdir -p build/mpfb/godot_check
+          printf '[application]\\nconfig/name="MPFB Import Probe"\\n' > build/mpfb/godot_check/project.godot
+          cp build/mpfb/*.glb build/mpfb/godot_check/
+          /tmp/Godot_v4.7.2-stable_linux.x86_64 --headless --path build/mpfb/godot_check --editor --import --quit
       - name: Upload diagnostic report
         if: always()
         uses: actions/upload-artifact@v4
