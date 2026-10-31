@@ -152,6 +152,17 @@ def root_king():
     sphere("mouth",(0,-1.05,2.66),(.35,.11,.11),bark)
     king_bark_details()
 
+def expressive_details():
+    """Distinct facial highlights and small sculptural accents for every creature."""
+    iris = material("iris_highlight", (.96, .99, .92))
+    for obj in list(bpy.context.scene.objects):
+        if obj.type != "MESH" or not (obj.name.startswith("pupil") or obj.name.startswith("glowing_eye")):
+            continue
+        center = obj.location.copy()
+        # Small eye glints stay parented with the creature's animation root.
+        sphere("eye_glint", (center.x - .035, center.y - .055, center.z + .055),
+               (.035, .018, .041), iris, 12, 8)
+
 def organic_finish():
     """Export-safe organic shading and bevels, no runtime add-on dependency."""
     for obj in list(bpy.context.scene.objects):
@@ -165,7 +176,6 @@ def organic_finish():
             bevel = obj.modifiers.new("soft_sculpted_edges", "BEVEL")
             bevel.width = 0.045
             bevel.segments = 2
-            bevel.affect = 'EDGES'
             try:
                 bpy.context.view_layer.objects.active = obj
                 bpy.ops.object.modifier_apply(modifier=bevel.name)
@@ -227,7 +237,7 @@ def animate_creature():
     return root
 
 def export(name,fn,out):
-    clear();fn();organic_finish();animate_creature()
+    clear();fn();expressive_details();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
