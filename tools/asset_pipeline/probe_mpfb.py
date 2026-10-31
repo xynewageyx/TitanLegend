@@ -225,6 +225,21 @@ try:
                 obj = bpy.context.object
                 obj.name = name
                 obj.scale = scale
+                if shape == "CUBE":
+                    # Apply scale before bevel so the edge width is predictable.
+                    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+                    bevel = obj.modifiers.new("Soft_Armor_Edges", "BEVEL")
+                    bevel.width = max(0.002, min(abs(v) for v in scale) * 0.18)
+                    bevel.segments = 3
+                    bpy.context.view_layer.objects.active = obj
+                    bpy.ops.object.modifier_apply(modifier=bevel.name)
+                    for polygon in obj.data.polygons:
+                        polygon.use_smooth = True
+                    weighted = obj.modifiers.new("Weighted_Normals", "WEIGHTED_NORMAL")
+                    bpy.ops.object.modifier_apply(modifier=weighted.name)
+                else:
+                    for polygon in obj.data.polygons:
+                        polygon.use_smooth = True
                 obj.data.materials.append(material)
                 equipment.append(obj)
                 return obj
