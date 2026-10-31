@@ -9,6 +9,7 @@ on:
       - 'scripts/**'
       - 'scenes/**'
       - 'assets/**'
+      - 'tools/blender/generate_forest_mobs.py'
       - '.github/workflows/android-debug-apk.yml'
 
 permissions:
@@ -127,6 +128,34 @@ jobs:
               raise SystemExit("Expected exactly one Android version/code setting")
           preset.write_text(changed, encoding="utf-8")
           print(f"Debug APK versionCode: {version}")
+          PY
+
+      - name: Generate nine forest enemy GLBs for Android export
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+          blender --background --python tools/blender/generate_forest_mobs.py -- --output assets/enemies/forest
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          import struct
+          models = sorted(Path("assets/enemies/forest").glob("*.glb"))
+          if len(models) != 9:
+              raise SystemExit(f"Expected 9 forest models for Android APK, found {len(models)}")
+          for model in models:
+              data = model.read_bytes()
+              if data[:4] != b"glTF" or struct.unpack_from("<I", data, 8)[0] != len(data):
+                  raise SystemExit(f"Invalid GLB: {model}")
+              chunk_length, chunk_type = struct.unpack_from("<II", data, 12)
+              if chunk_type != 0x4E4F534A:
+                  raise SystemExit(f"Missing GLB JSON chunk: {model}")
+              doc = json.loads(data[20:20 + chunk_length])
+              clips = {item.get("name", "").split(".")[0] for item in doc.get("animations", [])}
+              if not {"idle", "attack", "hit", "death"}.issubset(clips):
+                  raise SystemExit(f"Missing forest animations in {model}: {clips}")
+              print(f"Android forest asset ready: {model}")
           PY
 
       - name: Import game resources
