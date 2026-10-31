@@ -302,7 +302,7 @@ for region in regions:
    "func _add_elemental_environment() -> void:",
    "    var sky_particles := CPUParticles3D.new()",
   ]
-  extra[3]='    sky_particles.name = "'+('Snowstorm' if weather_snow else 'Ashfall')+'"'
+  extra.append('    sky_particles.name = "'+('Snowstorm' if weather_snow else 'Ashfall')+'"')
   extra.extend([
    "    sky_particles.amount = 140",
    "    sky_particles.lifetime = 7.0",
