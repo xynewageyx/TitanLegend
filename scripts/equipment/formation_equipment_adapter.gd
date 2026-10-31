@@ -6,7 +6,17 @@ const SOCKETS := {
     "LeftHandSocket": Vector3(-0.49, 0.80, -0.04),
     "HeadSocket": Vector3(0, 1.52, 0),
     "ChestSocket": Vector3(0, 1.02, 0),
-    "BackSocket": Vector3(0, 1.07, 0.25)
+    "BackSocket": Vector3(0, 1.07, 0.25),
+    "ShoulderLeftSocket": Vector3(-0.42, 1.16, 0),
+    "ShoulderRightSocket": Vector3(0.42, 1.16, 0),
+    "ArmLeftSocket": Vector3(-0.44, 0.84, 0),
+    "ArmRightSocket": Vector3(0.44, 0.84, 0),
+    "GloveLeftSocket": Vector3(-0.44, 0.61, 0),
+    "GloveRightSocket": Vector3(0.44, 0.61, 0),
+    "LegLeftSocket": Vector3(-0.17, 0.38, 0),
+    "LegRightSocket": Vector3(0.17, 0.38, 0),
+    "BootLeftSocket": Vector3(-0.17, 0.13, -0.07),
+    "BootRightSocket": Vector3(0.17, 0.13, -0.07)
 }
 const CONTROLLER = preload("res://scripts/equipment/hero_equipment_sockets.gd")
 static func install(hero: Node3D) -> Node3D:
@@ -31,3 +41,15 @@ static func apply_weapon(hero: Node3D, weapon_type: int, rarity: int) -> bool:
 static func apply_chest(hero: Node3D, armor_class: int, rarity: int) -> bool:
     var controller := install(hero)
     return controller.equip_armor_slot("ChestSocket", armor_class, rarity) if controller != null else false
+
+static func apply_full_armor(hero: Node3D, class_id: int, rarity: int) -> int:
+    var controller := install(hero)
+    if controller == null:
+        return 0
+    var count := 0
+    for slot in SOCKETS.keys():
+        if slot == "RightHandSocket" or slot == "LeftHandSocket":
+            continue
+        if controller.equip_armor_slot(slot, class_id, rarity):
+            count += 1
+    return count
