@@ -44,17 +44,26 @@ def cube(name, pos, scale, mat, bone):
     obj.dimensions = scale
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
     obj.data.materials.append(mat)
+    # Apply a restrained bevel to replace toy-like sharp box silhouettes.
+    bevel = obj.modifiers.new("Soft armor edges", "BEVEL")
+    bevel.width = min(scale) * 0.14
+    bevel.segments = 3
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.modifier_apply(modifier=bevel.name)
+    # No weighted-normal modifier: keeps exported GLB mesh simple and portable.
     pieces.append((obj, bone))
     return obj
 
 
 def sphere(name, pos, scale, mat, bone):
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=1, location=pos)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=1, location=pos)
     obj = bpy.context.object
     obj.name = name
     obj.scale = scale
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
     obj.data.materials.append(mat)
+    for polygon in obj.data.polygons:
+        polygon.use_smooth = True
     pieces.append((obj, bone))
     return obj
 
@@ -144,7 +153,9 @@ def clip(name, frames, rotations):
     channelbag = anim_utils.action_ensure_channelbag_for_slot(action, slot)
     for fc in channelbag.fcurves:
         for kp in fc.keyframe_points:
-            kp.interpolation = "LINEAR"
+            kp.interpolation = "BEZIER"
+            kp.handle_left_type = "AUTO_CLAMPED"
+            kp.handle_right_type = "AUTO_CLAMPED"
     track = rig.animation_data.nla_tracks.new()
     track.name = name
     strip = track.strips.new(name, int(frames[0]), action)
