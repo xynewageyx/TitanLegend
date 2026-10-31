@@ -103,6 +103,13 @@ try:
     source.hide_render = False
     report["preview_created"] = (out / "mpfb_chibi_front.png").stat().st_size > 1024
     report["preview_camera"] = "front orthographic workbench"
+    # Also render a profile view to expose deformation artifacts invisible from front.
+    camera.location = (center.x + span * 2.5, center.y, center.z)
+    direction = center - camera.location
+    camera.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+    scene.render.filepath = str(out / "mpfb_chibi_side.png")
+    bpy.ops.render.render(write_still=True)
+    report["side_preview_created"] = (out / "mpfb_chibi_side.png").stat().st_size > 1024
     # The camera must not be selected for GLB export.
     bpy.ops.object.select_all(action="DESELECT")
     chibi.select_set(True)
