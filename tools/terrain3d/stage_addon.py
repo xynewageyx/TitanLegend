@@ -455,6 +455,7 @@ for region in regions:
    "        add_child(crown)",
   ]
   script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\n    _add_biome_landmarks()")
+  extra.append('    print("BIOME_LANDMARKS_READY")')
   script+="\n".join(extra)+"\n"
  # Make object distribution vary deterministically by biome ID.
  seed_offset=int(region["terrain"]["seed"]) % 101
