@@ -41,6 +41,7 @@ var weapon_hero_slot: int = 0
 var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
+var loot_equipped_overview: Label
 var loot_compare_label: Label
 var loot_sell_button: Button
 var loot_downgrade_confirmation: ConfirmationDialog
@@ -368,6 +369,11 @@ func _make_hud() -> void:
  weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
+ loot_equipped_overview = Label.new()
+ loot_equipped_overview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ loot_equipped_overview.add_theme_font_size_override("font_size", 15)
+ loot_equipped_overview.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
+ modal.add_child(loot_equipped_overview)
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
  loot_downgrade_confirmation = ConfirmationDialog.new()
@@ -576,6 +582,7 @@ func _refresh(_unused: int = 0) -> void:
  weapon_hero_button.visible = current_tab == "jewels"
  weapon_upgrade_button.visible = current_tab == "jewels"
  weapon_rarity_button.visible = current_tab == "jewels"
+ loot_equipped_overview.visible = current_tab == "jewels"
  loot_select_button.visible = current_tab == "jewels"
  loot_equip_button.visible = current_tab == "jewels"
  loot_compare_label.visible = current_tab == "jewels"
@@ -586,6 +593,16 @@ func _refresh(_unused: int = 0) -> void:
  attribute_apply_button.visible = current_tab == "jewels"
  attribute_reroll_button.visible = current_tab == "jewels"
  if current_tab == "jewels":
+  var equipped_lines: PackedStringArray = []
+  var occupied_count: int = 0
+  for slot in range(GameManager.LOOT_SLOTS.size()):
+   var equipped_id: int = int(GameManager.equipped_loot[weapon_hero_slot][slot])
+   var equipped_item: Dictionary = GameManager.loot_item_by_id(equipped_id)
+   var item_text: String = "Leer" if equipped_item.is_empty() else GameManager.WEAPON_RARITIES[clampi(int(equipped_item.get("rarity", 0)), 0, 5)] + " Stufe " + str(int(equipped_item.get("level", 1)))
+   if not equipped_item.is_empty():
+    occupied_count += 1
+   equipped_lines.append("%s: %s" % [GameManager.LOOT_SLOTS[slot], item_text])
+  loot_equipped_overview.text = "Held %d – Ausrüstung %d/%d | Inventar %d/%d\n%s" % [weapon_hero_slot + 1, occupied_count, GameManager.LOOT_SLOTS.size(), GameManager.equipment_inventory.size(), GameManager.MAX_LOOT_ITEMS, "\n".join(equipped_lines)]
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
