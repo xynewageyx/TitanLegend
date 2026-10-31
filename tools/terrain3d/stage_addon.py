@@ -285,13 +285,13 @@ for region in regions:
  # Distinct silhouettes for rocky, frozen, magical and desert biomes.
  if region["element"] in ("ice","arcane","lightning","light"):
   script=script.replace("var rock_mesh := SphereMesh.new()","var rock_mesh := CylinderMesh.new()")
-  script=script.replace("rock_mesh.radius = 1.0","rock_mesh.top_radius = 0.0\\n    rock_mesh.bottom_radius = 0.85")
+  script=script.replace("rock_mesh.radius = 1.0","rock_mesh.top_radius = 0.0\n    rock_mesh.bottom_radius = 0.85")
   script=script.replace("rock_mesh.height = 1.6","rock_mesh.height = 3.2")
   script=script.replace("rock_mesh.radial_segments = 8","rock_mesh.radial_segments = 5")
   script=script.replace("rock_mesh.rings = 4","")
  elif region["element"]=="earth":
   script=script.replace("var canopy_mesh := SphereMesh.new()","var canopy_mesh := CylinderMesh.new()")
-  script=script.replace("canopy_mesh.radius = 2.2","canopy_mesh.top_radius = 0.55\\n    canopy_mesh.bottom_radius = 0.7")
+  script=script.replace("canopy_mesh.radius = 2.2","canopy_mesh.top_radius = 0.55\n    canopy_mesh.bottom_radius = 0.7")
   script=script.replace("canopy_mesh.height = 3.4","canopy_mesh.height = 3.4")
   script=script.replace("canopy_mesh.rings = 4","")
  # Make object distribution vary deterministically by biome ID.
