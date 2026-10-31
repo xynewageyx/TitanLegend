@@ -56,12 +56,12 @@ func _ready() -> void:
  scroll.add_child(column)
  hero_picker = OptionButton.new()
  for i in range(4):
-  var class_name: String = "Held"
+  var hero_class_label: String = "Held"
   if team != null and i < team.class_ids.size():
    var class_index: int = int(team.class_ids[i])
    if class_index >= 0 and class_index < team.CLASS_NAMES.size():
-    class_name = str(team.CLASS_NAMES[class_index])
-  hero_picker.add_item("Held %d - %s" % [i + 1, class_name], i)
+    hero_class_label = str(team.CLASS_NAMES[class_index])
+  hero_picker.add_item("Held %d - %s" % [i + 1, hero_class_label], i)
  column.add_child(hero_picker)
  hero_picker.item_selected.connect(func(index: int) -> void:
   selected_hero = index
