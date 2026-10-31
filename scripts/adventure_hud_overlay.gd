@@ -42,6 +42,7 @@ var party_bonus: Label
 var nav_buttons: Dictionary = {}
 var more_panel: PanelContainer
 var more_open: bool = false
+var more_tween: Tween
 var active_page: String = "combat"
 var resource_tiles: Array[PanelContainer] = []
 
@@ -270,6 +271,20 @@ func _build_navigation() -> void:
   menu.add_child(button)
  more_panel.hide()
 
+func _animate_more_menu(open_menu: bool) -> void:
+ if more_tween != null and more_tween.is_running():
+  more_tween.kill()
+ more_panel.pivot_offset = Vector2(more_panel.size.x * 0.5, more_panel.size.y)
+ if open_menu:
+  more_panel.show()
+  more_panel.modulate.a = 0.0
+  more_panel.scale = Vector2(0.92, 0.92)
+ more_tween = create_tween().set_parallel(true)
+ more_tween.tween_property(more_panel, "modulate:a", 1.0 if open_menu else 0.0, 0.16)
+ more_tween.tween_property(more_panel, "scale", Vector2.ONE if open_menu else Vector2(0.94, 0.94), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+ if not open_menu:
+  more_tween.chain().tween_callback(more_panel.hide)
+
 func _process(_delta: float) -> void:
  if hud == null:
   return
@@ -294,11 +309,11 @@ func _process(_delta: float) -> void:
 func _on_navigation(target: String) -> void:
  if target == "more":
   more_open = not more_open
-  more_panel.visible = more_open
+  _animate_more_menu(more_open)
   _update_nav_selection()
   return
  more_open = false
- more_panel.hide()
+ _animate_more_menu(false)
  active_page = target
  _update_nav_selection()
  if hud != null:
