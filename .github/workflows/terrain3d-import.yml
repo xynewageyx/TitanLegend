@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Stage official Terrain3D addon
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 tools/terrain3d/stage_addon.py
       - name: Verify bundled terrain textures
         run: |
