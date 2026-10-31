@@ -293,6 +293,24 @@ try:
             upper.rotation_mode = "XYZ"
             upper.rotation_euler = (arm_x, 0.0, 0.0)
             upper.keyframe_insert(data_path="rotation_euler", frame=frame)
+    # Stable weapon sockets, parented to animated forearm bones.
+    # They are exported as transform nodes; the final hand-grip offset
+    # needs visual tuning when warrior weapons are integrated.
+    weapon_sockets = []
+    for socket_name, bone_name in (
+        ("Socket_Weapon_R", "Forearm_R"),
+        ("Socket_Shield_L", "Forearm_L"),
+    ):
+        socket = bpy.data.objects.new(socket_name, None)
+        bpy.context.collection.objects.link(socket)
+        socket.empty_display_type = "SPHERE"
+        socket.empty_display_size = 0.04
+        socket.parent = arm
+        socket.parent_type = "BONE"
+        socket.parent_bone = bone_name
+        socket.location = (0.0, 0.0, 0.0)
+        weapon_sockets.append(socket)
+    report["weapon_socket_names"] = [obj.name for obj in weapon_sockets]
     # Keep idle as the active export action until multi-action export is verified.
     arm.animation_data.action = action
     bpy.context.scene.frame_end = 31
@@ -300,6 +318,8 @@ try:
     bpy.ops.object.select_all(action="DESELECT")
     rigged.select_set(True)
     arm.select_set(True)
+    for socket in weapon_sockets:
+        socket.select_set(True)
     bpy.context.view_layer.objects.active = arm
     bpy.ops.export_scene.gltf(filepath=str(out / "mpfb_chibi_rigged.glb"),
                               export_format="GLB", use_selection=True,
