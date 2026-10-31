@@ -72,7 +72,7 @@ func _refresh() -> void:
   return
  var level: int = GameManager.character_level
  var build: Array = team.get_talent_build_v2(selected_hero)
- points_label.text = "Level %d | Verfuegbar: %d" % [level, TREES.available_points(level, build)]
+ points_label.text = "Level %d | Verfuegbar: %d | Maximal 225 investierbar" % [level, TREES.available_points(level, build)]
  var bonus: Dictionary = ADAPTER.bonuses(int(team.class_ids[selected_hero]), level, build)
  bonus_label.text = "ATK +%.1f%%  Schutz +%.1f%%  Heilung +%.1f%%" % [float(bonus["attack"]) * 100.0, float(bonus["defense"]) * 100.0, float(bonus["healing"]) * 100.0]
  for child in talent_grid.get_children():
@@ -87,10 +87,6 @@ func _refresh() -> void:
   button.pressed.connect(_upgrade.bind(talent_index))
 
 func _upgrade(talent_index: int) -> void:
- var level: int = GameManager.character_level
- var build: Array = team.get_talent_build_v2(selected_hero)
- if not TREES.upgrade(level, build, selected_branch, talent_index):
-  return
- if team.set_talent_build_v2(selected_hero, level, build):
-  SaveManager.save_game()
+ if team.has_method("upgrade_talent_v2"):
+  team.upgrade_talent_v2(selected_hero, selected_branch, talent_index)
  _refresh()
