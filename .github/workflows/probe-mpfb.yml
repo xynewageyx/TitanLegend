@@ -36,7 +36,7 @@ jobs:
           report = json.loads((folder / "report.json").read_text())
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created"), report
-          assert (folder / "mpfb_chibi_front.png").read_bytes()[:8] == b"\\x89PNG\\r\\n\\x1a\\n"
+          assert (folder / "mpfb_chibi_front.png").read_bytes()[:8] == bytes.fromhex("89504e470d0a1a0a")
           for name in ("mpfb_basemesh.glb", "mpfb_chibi_prototype.glb"):
               data = (folder / name).read_bytes()
               assert data[:4] == b"glTF", name
@@ -55,7 +55,7 @@ jobs:
           unzip -q /tmp/godot.zip -d /tmp
           chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
           mkdir -p build/mpfb/godot_check
-          printf '[application]\\nconfig/name="MPFB Import Probe"\\n' > build/mpfb/godot_check/project.godot
+          printf '[application]\nconfig/name="MPFB Import Probe"\n' > build/mpfb/godot_check/project.godot
           cp build/mpfb/*.glb build/mpfb/godot_check/
           /tmp/Godot_v4.7.2-stable_linux.x86_64 --headless --path build/mpfb/godot_check --editor --import --quit
       - name: Upload diagnostic report
