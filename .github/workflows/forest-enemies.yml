@@ -38,7 +38,7 @@ jobs:
               chunk_size, chunk_type = struct.unpack_from('<II', data, 12)
               assert chunk_type == 0x4E4F534A, f'No JSON chunk: {path}'
               doc = json.loads(data[20:20+chunk_size])
-              names = {a.get('name', '') for a in doc.get('animations', [])}
+              names = {a.get('name', '').split('.')[0] for a in doc.get('animations', [])}
               required = {'idle', 'attack', 'hit', 'death'}
               assert required.issubset(names), f'Missing animation clips in {path}: {required - names}; found {names}'
               print(path, len(data), 'bytes; animations:', sorted(names))
