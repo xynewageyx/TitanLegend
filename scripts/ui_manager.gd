@@ -42,6 +42,8 @@ var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
 var loot_equipped_overview: Label
+var loot_slot_buttons: Array[Button] = []
+var loot_selected_slot: int = 0
 var loot_compare_label: Label
 var loot_sell_button: Button
 var loot_downgrade_confirmation: ConfirmationDialog
@@ -374,6 +376,21 @@ func _make_hud() -> void:
  loot_equipped_overview.add_theme_font_size_override("font_size", 15)
  loot_equipped_overview.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
  modal.add_child(loot_equipped_overview)
+ var loot_grid := GridContainer.new()
+ loot_grid.columns = 2
+ loot_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ loot_grid.add_theme_constant_override("h_separation", 8)
+ loot_grid.add_theme_constant_override("v_separation", 8)
+ modal.add_child(loot_grid)
+ for slot_index in range(GameManager.LOOT_SLOTS.size()):
+  var slot_button := Button.new()
+  slot_button.custom_minimum_size = Vector2(0, 68)
+  slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+  slot_button.add_theme_font_size_override("font_size", 14)
+  slot_button.clip_text = true
+  slot_button.pressed.connect(_select_loot_slot.bind(slot_index))
+  loot_grid.add_child(slot_button)
+  loot_slot_buttons.append(slot_button)
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
  loot_downgrade_confirmation = ConfirmationDialog.new()
@@ -602,7 +619,15 @@ func _refresh(_unused: int = 0) -> void:
    if not equipped_item.is_empty():
     occupied_count += 1
    equipped_lines.append("%s: %s" % [GameManager.LOOT_SLOTS[slot], item_text])
-  loot_equipped_overview.text = "Held %d – Ausrüstung %d/%d | Inventar %d/%d\n%s" % [weapon_hero_slot + 1, occupied_count, GameManager.LOOT_SLOTS.size(), GameManager.equipment_inventory.size(), GameManager.MAX_LOOT_ITEMS, "\n".join(equipped_lines)]
+  loot_equipped_overview.text = "Held %d – Ausrüstung %d/%d | Inventar %d/%d" % [weapon_hero_slot + 1, occupied_count, GameManager.LOOT_SLOTS.size(), GameManager.equipment_inventory.size(), GameManager.MAX_LOOT_ITEMS]
+  var rarity_colors := [Color("#aab0b5"), Color("#64c45c"), Color("#4aa8ff"), Color("#ffce54"), Color("#ff8840"), Color("#c47bff")]
+  for slot in range(loot_slot_buttons.size()):
+   var tile: Button = loot_slot_buttons[slot]
+   var worn: Dictionary = GameManager.loot_item_by_id(int(GameManager.equipped_loot[weapon_hero_slot][slot]))
+   var tier: int = clampi(int(worn.get("rarity", 0)), 0, 5)
+   tile.text = GameManager.LOOT_SLOTS[slot] + "\n" + ("Leer" if worn.is_empty() else GameManager.WEAPON_RARITIES[tier] + " Lv." + str(worn.get("level", 1)))
+   tile.modulate = Color.WHITE if worn.is_empty() else rarity_colors[tier]
+   tile.button_pressed = slot == loot_selected_slot if tile.toggle_mode else false
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
@@ -695,6 +720,14 @@ func _upgrade_current_weapon_rarity() -> void:
  if GameManager.upgrade_weapon_rarity(weapon_hero_slot):
   _append("System", "Waffenqualitaet fuer Held %d verbessert" % (weapon_hero_slot + 1))
  _refresh()
+
+func _select_loot_slot(slot_index: int) -> void:
+ loot_selected_slot = clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
+ for index in range(GameManager.equipment_inventory.size()):
+  if int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
+   loot_selected_index = index
+   break
+ _refresh_loot()
 
 func _refresh_loot() -> void:
  _refresh()
