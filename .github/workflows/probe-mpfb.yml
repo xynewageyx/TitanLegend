@@ -62,6 +62,14 @@ jobs:
           assert len(warrior_gltf.get("meshes", [])) >= 15, "Warrior accessories missing"
           print("Warrior face, equipment, previews and GLB nodes verified")
           assert len(report.get("hero_prototypes", [])) == 10, report
+          lods = report.get("mobile_lod", [])
+          assert len(lods) == 10, "Missing mobile LOD exports"
+          for lod in lods:
+              lod_path = folder / lod["file"]
+              assert lod["bytes"] > 1024 and lod_path.is_file(), lod
+              blob = lod_path.read_bytes()
+              assert blob[:4] == b"glTF" and struct.unpack_from("<I", blob, 8)[0] == len(blob), lod
+              assert lod["triangles"] > 0, lod
           budgets = report.get("mobile_mesh_budget", [])
           assert len(budgets) == 10, "Missing Android mesh budgets"
           for entry in budgets:
