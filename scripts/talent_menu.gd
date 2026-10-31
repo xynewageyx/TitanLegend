@@ -23,10 +23,12 @@ func _ready() -> void:
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  mouse_filter = Control.MOUSE_FILTER_STOP
  var shade := ColorRect.new()
- shade.color = Color(0.11, 0.075, 0.04, 0.94)
+ shade.color = Color("#f3e4bf")
+ shade.mouse_filter = Control.MOUSE_FILTER_STOP
  shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(shade)
  var margin := MarginContainer.new()
+ margin.mouse_filter = Control.MOUSE_FILTER_STOP
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  margin.add_theme_constant_override("margin_left", 18)
  margin.add_theme_constant_override("margin_right", 18)
@@ -60,6 +62,7 @@ func _ready() -> void:
  outer.add_child(summary)
  var scroll := ScrollContainer.new()
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  outer.add_child(scroll)
  var stack := VBoxContainer.new()
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -87,6 +90,7 @@ func _ready() -> void:
 
 func _create_tree_card(stack: VBoxContainer, tree: int) -> void:
  var panel := PanelContainer.new()
+ panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  stack.add_child(panel)
  panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 18, 3))
  var card := VBoxContainer.new()
