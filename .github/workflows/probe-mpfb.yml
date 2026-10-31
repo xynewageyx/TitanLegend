@@ -124,6 +124,15 @@ jobs:
           printf '[application]\nconfig/name="MPFB Import Probe"\n' > build/mpfb/godot_check/project.godot
           cp build/mpfb/*.glb build/mpfb/godot_check/
           /tmp/Godot_v4.7.2-stable_linux.x86_64 --headless --path build/mpfb/godot_check --editor --import --quit
+      - name: Publish character build summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f build/mpfb/BUILD_SUMMARY.md ]; then
+            cat build/mpfb/BUILD_SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '## Titan Legends MPFB build\\n\\nNo build summary was generated. Inspect the failed step logs.\\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Upload diagnostic report
         if: always()
         uses: actions/upload-artifact@v4
