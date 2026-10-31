@@ -57,7 +57,12 @@ jobs:
         run: |
           mkdir -p assets/enemies/forest
           cp build/forest/*.glb assets/enemies/forest/
-          godot --headless --path . --editor --import --quit
+          set -o pipefail
+          godot --headless --path . --editor --import --quit 2>&1 | tee godot-forest-import.log
+          if grep -E 'ERROR: Parameter "t" is null|SCRIPT ERROR:|Parse Error:|Failed to load script' godot-forest-import.log; then
+            echo 'Godot reported import or script errors'
+            exit 1
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: TitanLegends-Forest-Mobs-GLB
