@@ -13,6 +13,15 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - name: Validate Blender generator Python syntax
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          source = Path("tools/asset_pipeline/probe_mpfb.py")
+          ast.parse(source.read_text(encoding="utf-8"), filename=str(source))
+          print("MPFB generator Python syntax OK")
+          PY
       - name: Install Blender and dependencies
         run: |
           sudo apt-get update -qq
@@ -34,6 +43,13 @@ jobs:
           from pathlib import Path
           folder = Path("build/mpfb")
           report = json.loads((folder / "report.json").read_text())
+          summary = (folder / "BUILD_SUMMARY.md").read_text(encoding="utf-8")
+          assert summary.startswith("# Titan Legends"), "Build summary missing header"
+          assert "| Class |" in summary, "Build summary missing comparison table"
+          assert not report.get("errors"), report.get("errors")
+          for hero_name in ("warrior", "rogue", "shaman", "hunter", "druid",
+                            "paladin", "priest", "mage", "warlock", "summoner"):
+              assert "| " + hero_name + " |" in summary, hero_name
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
           assert report.get("rigged_glb_created"), report
