@@ -230,7 +230,17 @@ jobs:
           root = Path('terrain3d-previews')
           root.mkdir(exist_ok=True)
           keys = 'emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel'.split()
-          status = {key: {'png': (root / (key + '.png')).is_file(), 'log': (root / (key + '.log')).is_file()} for key in keys}
+          def valid_png(path):
+              if not path.is_file() or path.stat().st_size < 1024:
+                  return False
+              with path.open('rb') as stream:
+                  header = stream.read(24)
+              if header[:8] != bytes.fromhex('89504e470d0a1a0a') or header[12:16] != b'IHDR':
+                  return False
+              width = int.from_bytes(header[16:20], 'big')
+              height = int.from_bytes(header[20:24], 'big')
+              return width >= 320 and height >= 180
+          status = {key: {'png': valid_png(root / (key + '.png')), 'log': (root / (key + '.log')).is_file()} for key in keys}
           (root / 'status.json').write_text(json.dumps(status, indent=2))
           lines = ['### Terrain3D preview capture', '', '| Biome | Result |', '|---|---|']
           for key, result in status.items():
