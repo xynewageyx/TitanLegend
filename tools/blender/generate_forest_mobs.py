@@ -54,8 +54,39 @@ def mushroom():
     eyes(1.04,.22,white,black)
     sphere("mouth",(0,-.449,.73),(.12,.03,.055),black)
 
+def animate_creature():
+    """Create simple object-level idle and attack clips for all mesh parts."""
+    root=bpy.data.objects.new("CreatureRoot",None)
+    bpy.context.collection.objects.link(root)
+    meshes=[o for o in bpy.context.scene.objects if o.type=="MESH"]
+    for obj in meshes:
+        obj.parent=root
+        obj.matrix_parent_inverse=root.matrix_world.inverted()
+    # Distinct glTF actions are attached through NLA strips.
+    for clip,frames in (
+        ("idle",[(1,0.0,1.0),(13,0.0,1.07),(25,0.0,1.0)]),
+        ("attack",[(1,0.0,1.0),(7,-0.22,0.92),(13,0.30,1.12),(22,0.0,1.0)]),
+        ("hit",[(1,0.0,1.0),(5,-0.16,0.94),(12,0.0,1.0)]),
+        ("death",[(1,0.0,1.0),(16,0.0,0.10)]),
+    ):
+        root.animation_data_clear()
+        for frame,y,scale in frames:
+            root.location=(0,y,0)
+            root.scale=(1,1,scale)
+            root.keyframe_insert(data_path="location",frame=frame)
+            root.keyframe_insert(data_path="scale",frame=frame)
+        action=root.animation_data.action
+        action.name=clip
+        track=root.animation_data.nla_tracks.new()
+        track.name=clip
+        strip=track.strips.new(clip,1,action)
+        strip.action_frame_start=1
+        strip.action_frame_end=frames[-1][0]
+        root.animation_data.action=None
+    return root
+
 def export(name,fn,out):
-    clear();fn()
+    clear();fn();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.gltf(filepath=os.path.join(out,name+".glb"),export_format="GLB",use_selection=True)
     print("EXPORTED",name)
