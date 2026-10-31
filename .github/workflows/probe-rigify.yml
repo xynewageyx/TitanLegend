@@ -20,3 +20,10 @@ jobs:
         run: blender --background --factory-startup --python-expr 'import bpy; print("BLENDER:", bpy.app.version_string)'
       - name: Generate a real Rigify rig in headless Blender
         run: blender --background --factory-startup --python tools/asset_pipeline/probe_rigify.py
+      - name: Upload isolated Rigify rig for inspection
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Rigify-Probe
+          path: build/rigify_probe.glb
+          if-no-files-found: error
