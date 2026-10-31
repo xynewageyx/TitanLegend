@@ -260,6 +260,27 @@ try:
             "bytes": (out / filename).stat().st_size,
             "note": ("Static armor, shield and sword prototype; full rig pending" if hero_name == "warrior" else "Color-only chibi base prototype; class equipment and full rig pending"),
         })
+        if hero_name == "warrior":
+            # Render the actual class-specific mesh, not the generic chibi body.
+            hidden = {obj.name: obj.hide_render for obj in bpy.data.objects if obj.type == "MESH"}
+            try:
+                for obj in bpy.data.objects:
+                    if obj.type == "MESH":
+                        obj.hide_render = obj != variant and obj not in equipment
+                camera.location = (center.x, center.y - span * 2.5, center.z)
+                camera.rotation_euler = (center - camera.location).to_track_quat("-Z", "Y").to_euler()
+                scene.render.filepath = str(out / "hero_warrior_front.png")
+                bpy.ops.render.render(write_still=True)
+                report["warrior_preview_created"] = (out / "hero_warrior_front.png").stat().st_size > 1024
+                camera.location = (center.x + span * 2.5, center.y, center.z)
+                camera.rotation_euler = (center - camera.location).to_track_quat("-Z", "Y").to_euler()
+                scene.render.filepath = str(out / "hero_warrior_side.png")
+                bpy.ops.render.render(write_still=True)
+                report["warrior_side_preview_created"] = (out / "hero_warrior_side.png").stat().st_size > 1024
+            finally:
+                for obj in bpy.data.objects:
+                    if obj.type == "MESH" and obj.name in hidden:
+                        obj.hide_render = hidden[obj.name]
         bpy.data.objects.remove(variant, do_unlink=True)
         for obj in equipment:
             bpy.data.objects.remove(obj, do_unlink=True)
