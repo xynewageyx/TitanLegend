@@ -49,6 +49,11 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO", MENU)
         self.assertIn("scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED", MENU)
 
+    def test_portrait_talent_grid_has_touch_sized_buttons(self):
+        self.assertIn("talent_grid.columns = 2", MENU)
+        self.assertIn("button.custom_minimum_size = Vector2(112, 64)", MENU)
+        self.assertNotIn("talent_grid.columns = 3", MENU)
+
     def test_hero_class_labels_guard_class_indices(self):
         self.assertIn("class_index >= 0 and class_index < team.CLASS_NAMES.size()", MENU)
         self.assertIn("hero_picker.set_item_text(", MENU)
