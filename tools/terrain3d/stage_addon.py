@@ -354,6 +354,107 @@ for region in regions:
    "        crown.position = Vector3(px, _height_at(px, pz) + 5.2, pz)",
    "        add_child(crown)",
   ]
+  if not weather_snow:
+   extra.extend([
+    "    var lava_material := StandardMaterial3D.new()",
+    "    lava_material.albedo_color = Color(0.95, 0.19, 0.02)",
+    "    lava_material.emission_enabled = true",
+    "    lava_material.emission = Color(1.0, 0.23, 0.02)",
+    "    lava_material.emission_energy_multiplier = 1.8",
+    "    var volcano := MeshInstance3D.new()",
+    '    volcano.name = "VolcanoCone"',
+    "    var cone := CylinderMesh.new()",
+    "    cone.top_radius = 2.0",
+    "    cone.bottom_radius = 13.0",
+    "    cone.height = 19.0",
+    "    cone.radial_segments = 16",
+    "    volcano.mesh = cone",
+    "    volcano.material_override = trunk_material",
+    "    volcano.position = Vector3(16.0, _height_at(16.0, 20.0) + 9.5, 20.0)",
+    "    add_child(volcano)",
+    "    var crater := MeshInstance3D.new()",
+    '    crater.name = "LavaCrater"',
+    "    var disk := CylinderMesh.new()",
+    "    disk.top_radius = 2.0",
+    "    disk.bottom_radius = 2.0",
+    "    disk.height = 0.2",
+    "    crater.mesh = disk",
+    "    crater.material_override = lava_material",
+    "    crater.position = volcano.position + Vector3(0.0, 9.6, 0.0)",
+    "    add_child(crater)",
+   ])
+  script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\n    _add_elemental_environment()")
+  extra.append('    print("ELEMENTAL_ENVIRONMENT_READY")')
+  script+="\n".join(extra)+"\n"
+ # Procedural biome-specific landmark prototypes for the other ten regions.
+ if key not in ("frost_peaks", "ember_volcano"):
+  props=region["special_features"]["props"]
+  weather=region["special_features"]["weather"]
+  extra=[
+   "",
+   "func _add_biome_landmarks() -> void:",
+   "    # Themes: "+", ".join(props),
+   "    # Weather planned: "+", ".join(weather),
+   "    var material := StandardMaterial3D.new()",
+   "    material.albedo_color = "+gd_color(region["terrain"]["rock_color"]),
+   "    var accent := StandardMaterial3D.new()",
+   "    accent.albedo_color = "+gd_color(region["terrain"]["grass_color"]),
+   "    accent.emission_enabled = true" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.emission_enabled = false",
+   "    accent.emission = accent.albedo_color",
+   "    accent.emission_energy_multiplier = 0.45",
+   "    accent.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA" if key=="mist_marsh" else "    accent.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED",
+   "    accent.albedo_color.a = 0.78" if key=="mist_marsh" else "    accent.albedo_color.a = 1.0",
+
+   "    accent.metallic = 0.35" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.metallic = 0.0",
+   "    accent.roughness = 0.3" if key in ("crystal_caverns","astral_citadel") else "    accent.roughness = 0.85",
+
+   "    var spire := CylinderMesh.new()",
+   "    spire.top_radius = 0.15" if key not in ("crystal_caverns","sky_islands","astral_citadel") else "    spire.top_radius = 0.0",
+   "    spire.bottom_radius = 1.25",
+   "    spire.height = "+("8.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "3.5" if key in ("mist_marsh","coral_archipelago") else "5.0"),
+   "    spire.radial_segments = 6",
+   # Desert mesas, coral columns, ruins and crystalline spikes now have distinct profiles.
+   "    spire.top_radius = 1.8" if key=="sun_desert" else
+   "    spire.top_radius = 0.7" if key=="shadow_ruins" else
+   "    spire.top_radius = 0.45" if key=="coral_archipelago" else
+   "    spire.top_radius = 0.0" if key in ("crystal_caverns","astral_citadel") else
+   "    spire.top_radius = 0.15",
+   "    spire.bottom_radius = 2.2" if key=="sun_desert" else
+   "    spire.bottom_radius = 0.65" if key=="coral_archipelago" else
+   "    spire.bottom_radius = 1.25",
+
+   # Forest and marsh use fuller canopies, desert and ruins favor angular crowns.
+   "    var crown_mesh := SphereMesh.new()" if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    var crown_mesh := CylinderMesh.new()",
+   "    crown_mesh.radius = "+("2.5" if key in ("whisper_forest","emerald_grassland") else "1.4") if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.top_radius = 0.2",
+   "    crown_mesh.bottom_radius = 1.2" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.height = "+("4.0" if key in ("whisper_forest","emerald_grassland") else "2.5"),
+   "    crown_mesh.height = 2.5" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.radial_segments = "+("5" if key in ("crystal_caverns","astral_citadel") else "8"),
+   "    crown_mesh.radial_segments = 6" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.rings = 4",
+   "    for i in range("+("12" if key in ("sun_desert","sky_islands") else "20" if key in ("shadow_ruins","thunder_plateau") else "26")+"):",
+   "        var px: float = 8.0 + float((i * 37 + 11) % 110)",
+   "        var pz: float = 8.0 + float((i * 47 + 31) % 110)",
+   "        var trail: float = 63.0 + 16.0 * sin(pz * 0.036)",
+   "        if abs(px - trail) < 13.0 or Vector2(px - 63.0, pz - 106.0).length() < 28.0:",
+   "            continue",
+   "        var landmark := MeshInstance3D.new()",
+   '        landmark.name = "Landmark_%02d" % i',
+   "        landmark.mesh = spire",
+   "        landmark.material_override = material",
+   "        landmark.rotation.y = float(i % 7) * 0.42",
+   "        landmark.scale = Vector3(0.75 + float(i % 4) * 0.15, 0.85 + float(i % 5) * 0.12, 0.75 + float(i % 4) * 0.15)",
+
+   "        landmark.position = Vector3(px, _height_at(px, pz) + "+("4.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "1.75" if key in ("mist_marsh","coral_archipelago") else "2.5")+", pz)",
+   "        add_child(landmark)",
+   "        var crown := MeshInstance3D.new()",
+   "        crown.mesh = crown_mesh",
+   "        crown.material_override = accent",
+   "        crown.rotation.y = float(i % 9) * 0.31",
+   "        crown.rotation.z = -0.20" if key=="thunder_plateau" else "        crown.rotation.z = 0.0",
+
+   "        crown.scale = Vector3(0.85 + float(i % 3) * 0.18, 0.8 + float(i % 4) * 0.14, 0.85 + float(i % 3) * 0.18)",
+
+   "        crown.position = Vector3(px, _height_at(px, pz) + "+("8.5" if key in ("crystal_caverns","sky_islands","astral_citadel") else "4.2" if key in ("mist_marsh","coral_archipelago") else "5.6")+", pz)",
+   "        add_child(crown)",
+  ]
   if key == "sun_desert":
    # Two compact cactus arms per landmark: no imported assets or expensive shaders.
    extra.extend([
@@ -371,306 +472,12 @@ for region in regions:
     "            arm.position = Vector3(px + float(side) * 1.15, _height_at(px, pz) + 3.6, pz)",
     "            add_child(arm)",
    ])
-  if key == "mist_marsh":
-   # Reed clusters provide a readable marsh silhouette with only two small meshes per landmark.
-   extra.extend([
-    "        var reed_mesh := CylinderMesh.new()",
-    "        reed_mesh.top_radius = 0.07",
-    "        reed_mesh.bottom_radius = 0.11",
-    "        reed_mesh.height = 2.8",
-    "        reed_mesh.radial_segments = 5",
-    "        for reed_index in range(2):",
-    "            var reed := MeshInstance3D.new()",
-    '            reed.name = "MarshReed_%02d_%d" % [i, reed_index]',
-    "            reed.mesh = reed_mesh",
-    "            reed.material_override = accent",
-    "            reed.rotation.z = -0.16 if reed_index == 0 else 0.20",
-    "            reed.position = Vector3(px + float(reed_index) * 1.1 - 0.55, _height_at(px, pz) + 1.4, pz + 0.7)",
-    "            add_child(reed)",
-   ])
   if key == "whisper_forest":
    # Flattened mushroom-like canopy on the same lightweight landmark mesh.
    extra.extend([
     "        crown.scale = Vector3(1.65, 0.40, 1.65)",
     "        crown.position.y -= 0.7",
-   ]))
-  if not weather_snow:
-   extra.extend([
-    "    var lava_material := StandardMaterial3D.new()",
-    "    lava_material.albedo_color = Color(0.95, 0.19, 0.02)",
-    "    lava_material.emission_enabled = true",
-    "    lava_material.emission = Color(1.0, 0.23, 0.02)",
-    "    lava_material.emission_energy_multiplier = 1.8",
-    "    var volcano := MeshInstance3D.new()",
-    '    volcano.name = "VolcanoCone"',
-    "    var cone := CylinderMesh.new()",
-    "    cone.top_radius = 2.0",
-    "    cone.bottom_radius = 13.0",
-    "    cone.height = 19.0",
-    "    cone.radial_segments = 16",
-    "    volcano.mesh = cone",
-    "    volcano.material_override = trunk_material",
-    "    volcano.position = Vector3(16.0, _height_at(16.0, 20.0) + 9.5, 20.0)",
-    "    add_child(volcano)",
-    "    var crater := MeshInstance3D.new()",
-    '    crater.name = "LavaCrater"',
-    "    var disk := CylinderMesh.new()",
-    "    disk.top_radius = 2.0",
-    "    disk.bottom_radius = 2.0",
-    "    disk.height = 0.2",
-    "    crater.mesh = disk",
-    "    crater.material_override = lava_material",
-    "    crater.position = volcano.position + Vector3(0.0, 9.6, 0.0)",
-    "    add_child(crater)",
    ])
-  script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\n    _add_elemental_environment()")
-  extra.append('    print("ELEMENTAL_ENVIRONMENT_READY")')
-  script+="\n".join(extra)+"\n"
- # Procedural biome-specific landmark prototypes for the other ten regions.
- if key not in ("frost_peaks", "ember_volcano"):
-  props=region["special_features"]["props"]
-  weather=region["special_features"]["weather"]
-  extra=[
-   "",
-   "func _add_biome_landmarks() -> void:",
-   "    # Themes: "+", ".join(props),
-   "    # Weather planned: "+", ".join(weather),
-   "    var material := StandardMaterial3D.new()",
-   "    material.albedo_color = "+gd_color(region["terrain"]["rock_color"]),
-   "    var accent := StandardMaterial3D.new()",
-   "    accent.albedo_color = "+gd_color(region["terrain"]["grass_color"]),
-   "    accent.emission_enabled = true" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.emission_enabled = false",
-   "    accent.emission = accent.albedo_color",
-   "    accent.emission_energy_multiplier = 0.45",
-   "    accent.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA" if key=="mist_marsh" else "    accent.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED",
-   "    accent.albedo_color.a = 0.78" if key=="mist_marsh" else "    accent.albedo_color.a = 1.0",
-
-   "    accent.metallic = 0.35" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.metallic = 0.0",
-   "    accent.roughness = 0.3" if key in ("crystal_caverns","astral_citadel") else "    accent.roughness = 0.85",
-
-   "    var spire := CylinderMesh.new()",
-   "    spire.top_radius = 0.15" if key not in ("crystal_caverns","sky_islands","astral_citadel") else "    spire.top_radius = 0.0",
-   "    spire.bottom_radius = 1.25",
-   "    spire.height = "+("8.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "3.5" if key in ("mist_marsh","coral_archipelago") else "5.0"),
-   "    spire.radial_segments = 6",
-   # Desert mesas, coral columns, ruins and crystalline spikes now have distinct profiles.
-   "    spire.top_radius = 1.8" if key=="sun_desert" else
-   "    spire.top_radius = 0.7" if key=="shadow_ruins" else
-   "    spire.top_radius = 0.45" if key=="coral_archipelago" else
-   "    spire.top_radius = 0.0" if key in ("crystal_caverns","astral_citadel") else
-   "    spire.top_radius = 0.15",
-   "    spire.bottom_radius = 2.2" if key=="sun_desert" else
-   "    spire.bottom_radius = 0.65" if key=="coral_archipelago" else
-   "    spire.bottom_radius = 1.25",
-
-   # Forest and marsh use fuller canopies, desert and ruins favor angular crowns.
-   "    var crown_mesh := SphereMesh.new()" if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    var crown_mesh := CylinderMesh.new()",
-   "    crown_mesh.radius = "+("2.5" if key in ("whisper_forest","emerald_grassland") else "1.4") if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.top_radius = 0.2",
-   "    crown_mesh.bottom_radius = 1.2" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.height = "+("4.0" if key in ("whisper_forest","emerald_grassland") else "2.5"),
-   "    crown_mesh.height = 2.5" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.radial_segments = "+("5" if key in ("crystal_caverns","astral_citadel") else "8"),
-   "    crown_mesh.radial_segments = 6" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.rings = 4",
-   "    for i in range("+("12" if key in ("sun_desert","sky_islands") else "20" if key in ("shadow_ruins","thunder_plateau") else "26")+"):",
-   "        var px: float = 8.0 + float((i * 37 + 11) % 110)",
-   "        var pz: float = 8.0 + float((i * 47 + 31) % 110)",
-   "        var trail: float = 63.0 + 16.0 * sin(pz * 0.036)",
-   "        if abs(px - trail) < 13.0 or Vector2(px - 63.0, pz - 106.0).length() < 28.0:",
-   "            continue",
-   "        var landmark := MeshInstance3D.new()",
-   '        landmark.name = "Landmark_%02d" % i',
-   "        landmark.mesh = spire",
-   "        landmark.material_override = material",
-   "        landmark.rotation.y = float(i % 7) * 0.42",
-   "        landmark.scale = Vector3(0.75 + float(i % 4) * 0.15, 0.85 + float(i % 5) * 0.12, 0.75 + float(i % 4) * 0.15)",
-
-   "        landmark.position = Vector3(px, _height_at(px, pz) + "+("4.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "1.75" if key in ("mist_marsh","coral_archipelago") else "2.5")+", pz)",
-   "        add_child(landmark)",
-   "        var crown := MeshInstance3D.new()",
-   "        crown.mesh = crown_mesh",
-   "        crown.material_override = accent",
-   "        crown.rotation.y = float(i % 9) * 0.31",
-   "        crown.rotation.z = -0.20" if key=="thunder_plateau" else "        crown.rotation.z = 0.0",
-
-   "        crown.scale = Vector3(0.85 + float(i % 3) * 0.18, 0.8 + float(i % 4) * 0.14, 0.85 + float(i % 3) * 0.18)",
-
-   "        crown.position = Vector3(px, _height_at(px, pz) + "+("8.5" if key in ("crystal_caverns","sky_islands","astral_citadel") else "4.2" if key in ("mist_marsh","coral_archipelago") else "5.6")+", pz)",
-   "        add_child(crown)",
-  ]
-  script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\n    _add_biome_landmarks()")
-  extra.append('    print("BIOME_LANDMARKS_READY")')
-  script+="\n".join(extra)+"\n"
- # Make object distribution vary deterministically by biome ID.
- seed_offset=int(region["terrain"]["seed"]) % 101
- script=script.replace("(i * 37 + 13)",f"(i * 37 + {13+seed_offset})")
- script=script.replace("(i * 53 + 17)",f"(i * 53 + {17+seed_offset})")
- script=script.replace("(i * 41 + 21)",f"(i * 41 + {21+seed_offset})")
- script=script.replace("(i * 47 + 29)",f"(i * 47 + {29+seed_offset})")
- script=script.replace('res://terrain_data',f'res://terrain_data/{key}')
- script=script.replace('GRASLAND_',f'{key.upper()}_')
- script=script.replace("res://textures/terrain/",f"res://textures/terrain/{key}/")
- (scripts/f"{key}_setup.gd").write_text(script,encoding="utf-8")
- scene_text=base_scene.replace("res://scripts/grasland_setup.gd",f"res://scripts/{key}_setup.gd")
- scene_text=scene_text.replace('name="Grasland"',f'name="{key}"')
- scene_text=scene_text.replace('res://terrain_data',f'res://terrain_data/{key}')
- (root/"scenes"/f"{key}_terrain3d.tscn").write_text(scene_text,encoding="utf-8")
- (root/"terrain_data"/key).mkdir(parents=True,exist_ok=True)
-(root/"regions.json").write_text(json.dumps(region_config,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-print("REGIONS_GENERATED:",len(regions))
-
-# Bundle seamless, reproducible terrain textures so Android users do not have
-# to copy PNG files into every newly downloaded test project.
-import math,random,struct,zlib
-texture_dir=root/"textures"/"terrain"
-texture_dir.mkdir(parents=True,exist_ok=True)
-def write_png(filename, base, seed, grain):
- size=256
- rng=random.Random(seed)
- # Periodic low-frequency variations blend perfectly at tile edges.
- phases=[rng.uniform(0,math.tau) for _ in range(4)]
- pixels=bytearray()
- for y in range(size):
-  pixels.append(0)
-  for x in range(size):
-   u=math.tau*x/size;v=math.tau*y/size
-   wave=(math.sin(u*3+phases[0])*math.cos(v*3+phases[1])*0.45+
-         math.sin(u*9+phases[2])*math.cos(v*9+phases[3])*0.25)
-   speck=rng.uniform(-1,1)*grain
-   shade=wave*24+speck
-   for ch in base:
-    pixels.append(max(0,min(255,int(ch+shade))))
- def chunk(kind,data):
-  return struct.pack(">I",len(data))+kind+data+struct.pack(">I",zlib.crc32(kind+data)&0xffffffff)
- png=b"\x89PNG\r\n\x1a\n"+chunk(b"IHDR",struct.pack(">IIBBBBB",size,size,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(bytes(pixels),6))+chunk(b"IEND",b"")
- (texture_dir/filename).write_bytes(png)
-write_png("gras_albedo.png",(89,149,57),11,29)
-write_png("erde_albedo.png",(117,84,54),22,25)
-write_png("weg_albedo.png",(168,128,82),33,18)
-write_png("fels_albedo.png",(116,119,116),44,31)
-print("Bundled four tileable terrain PNGs in textures/terrain")
-# Give each biome its own deterministic terrain textures, including path and stone.
-for region in regions:
- key=region["key"]
- biome_dir=texture_dir/key
- biome_dir.mkdir(parents=True,exist_ok=True)
- palette=region["terrain"]
- for filename,color_name,offset,grain in [
-  ("gras_albedo.png","grass_color",1,22),
-  ("erde_albedo.png","path_color",2,24),
-  ("weg_albedo.png","path_color",3,16),
-  ("fels_albedo.png","rock_color",4,27),
- ]:
-  color=palette[color_name].lstrip("#")
-  rgb=tuple(int(color[i:i+2],16) for i in (0,2,4))
-  # write_png writes into texture_dir; copy its reproducible result into biome directory.
-  write_png(filename,rgb,int(palette["seed"])+offset,grain)
-  shutil.copyfile(texture_dir/filename,biome_dir/filename)
-  # Restore base grassland texture after biome variants are written.
-# Keep the shared grassland set unchanged for the original scene.
-write_png("gras_albedo.png",(89,149,57),11,29)
-write_png("erde_albedo.png",(117,84,54),22,25)
-write_png("weg_albedo.png",(168,128,82),33,18)
-write_png("fels_albedo.png",(116,119,116),44,31)
-print("BIOME_TEXTURES_READY",len(regions)*4)
-  if not weather_snow:
-   extra.extend([
-    "    var lava_material := StandardMaterial3D.new()",
-    "    lava_material.albedo_color = Color(0.95, 0.19, 0.02)",
-    "    lava_material.emission_enabled = true",
-    "    lava_material.emission = Color(1.0, 0.23, 0.02)",
-    "    lava_material.emission_energy_multiplier = 1.8",
-    "    var volcano := MeshInstance3D.new()",
-    '    volcano.name = "VolcanoCone"',
-    "    var cone := CylinderMesh.new()",
-    "    cone.top_radius = 2.0",
-    "    cone.bottom_radius = 13.0",
-    "    cone.height = 19.0",
-    "    cone.radial_segments = 16",
-    "    volcano.mesh = cone",
-    "    volcano.material_override = trunk_material",
-    "    volcano.position = Vector3(16.0, _height_at(16.0, 20.0) + 9.5, 20.0)",
-    "    add_child(volcano)",
-    "    var crater := MeshInstance3D.new()",
-    '    crater.name = "LavaCrater"',
-    "    var disk := CylinderMesh.new()",
-    "    disk.top_radius = 2.0",
-    "    disk.bottom_radius = 2.0",
-    "    disk.height = 0.2",
-    "    crater.mesh = disk",
-    "    crater.material_override = lava_material",
-    "    crater.position = volcano.position + Vector3(0.0, 9.6, 0.0)",
-    "    add_child(crater)",
-   ])
-  script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\n    _add_elemental_environment()")
-  extra.append('    print("ELEMENTAL_ENVIRONMENT_READY")')
-  script+="\n".join(extra)+"\n"
- # Procedural biome-specific landmark prototypes for the other ten regions.
- if key not in ("frost_peaks", "ember_volcano"):
-  props=region["special_features"]["props"]
-  weather=region["special_features"]["weather"]
-  extra=[
-   "",
-   "func _add_biome_landmarks() -> void:",
-   "    # Themes: "+", ".join(props),
-   "    # Weather planned: "+", ".join(weather),
-   "    var material := StandardMaterial3D.new()",
-   "    material.albedo_color = "+gd_color(region["terrain"]["rock_color"]),
-   "    var accent := StandardMaterial3D.new()",
-   "    accent.albedo_color = "+gd_color(region["terrain"]["grass_color"]),
-   "    accent.emission_enabled = true" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.emission_enabled = false",
-   "    accent.emission = accent.albedo_color",
-   "    accent.emission_energy_multiplier = 0.45",
-   "    accent.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA" if key=="mist_marsh" else "    accent.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED",
-   "    accent.albedo_color.a = 0.78" if key=="mist_marsh" else "    accent.albedo_color.a = 1.0",
-
-   "    accent.metallic = 0.35" if key in ("crystal_caverns","astral_citadel","coral_archipelago") else "    accent.metallic = 0.0",
-   "    accent.roughness = 0.3" if key in ("crystal_caverns","astral_citadel") else "    accent.roughness = 0.85",
-
-   "    var spire := CylinderMesh.new()",
-   "    spire.top_radius = 0.15" if key not in ("crystal_caverns","sky_islands","astral_citadel") else "    spire.top_radius = 0.0",
-   "    spire.bottom_radius = 1.25",
-   "    spire.height = "+("8.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "3.5" if key in ("mist_marsh","coral_archipelago") else "5.0"),
-   "    spire.radial_segments = 6",
-   # Desert mesas, coral columns, ruins and crystalline spikes now have distinct profiles.
-   "    spire.top_radius = 1.8" if key=="sun_desert" else
-   "    spire.top_radius = 0.7" if key=="shadow_ruins" else
-   "    spire.top_radius = 0.45" if key=="coral_archipelago" else
-   "    spire.top_radius = 0.0" if key in ("crystal_caverns","astral_citadel") else
-   "    spire.top_radius = 0.15",
-   "    spire.bottom_radius = 2.2" if key=="sun_desert" else
-   "    spire.bottom_radius = 0.65" if key=="coral_archipelago" else
-   "    spire.bottom_radius = 1.25",
-
-   # Forest and marsh use fuller canopies, desert and ruins favor angular crowns.
-   "    var crown_mesh := SphereMesh.new()" if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    var crown_mesh := CylinderMesh.new()",
-   "    crown_mesh.radius = "+("2.5" if key in ("whisper_forest","emerald_grassland") else "1.4") if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.top_radius = 0.2",
-   "    crown_mesh.bottom_radius = 1.2" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.height = "+("4.0" if key in ("whisper_forest","emerald_grassland") else "2.5"),
-   "    crown_mesh.height = 2.5" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.radial_segments = "+("5" if key in ("crystal_caverns","astral_citadel") else "8"),
-   "    crown_mesh.radial_segments = 6" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.rings = 4",
-   "    for i in range("+("12" if key in ("sun_desert","sky_islands") else "20" if key in ("shadow_ruins","thunder_plateau") else "26")+"):",
-   "        var px: float = 8.0 + float((i * 37 + 11) % 110)",
-   "        var pz: float = 8.0 + float((i * 47 + 31) % 110)",
-   "        var trail: float = 63.0 + 16.0 * sin(pz * 0.036)",
-   "        if abs(px - trail) < 13.0 or Vector2(px - 63.0, pz - 106.0).length() < 28.0:",
-   "            continue",
-   "        var landmark := MeshInstance3D.new()",
-   '        landmark.name = "Landmark_%02d" % i',
-   "        landmark.mesh = spire",
-   "        landmark.material_override = material",
-   "        landmark.rotation.y = float(i % 7) * 0.42",
-   "        landmark.scale = Vector3(0.75 + float(i % 4) * 0.15, 0.85 + float(i % 5) * 0.12, 0.75 + float(i % 4) * 0.15)",
-
-   "        landmark.position = Vector3(px, _height_at(px, pz) + "+("4.0" if key in ("crystal_caverns","sky_islands","astral_citadel") else "1.75" if key in ("mist_marsh","coral_archipelago") else "2.5")+", pz)",
-   "        add_child(landmark)",
-   "        var crown := MeshInstance3D.new()",
-   "        crown.mesh = crown_mesh",
-   "        crown.material_override = accent",
-   "        crown.rotation.y = float(i % 9) * 0.31",
-   "        crown.rotation.z = -0.20" if key=="thunder_plateau" else "        crown.rotation.z = 0.0",
-
-   "        crown.scale = Vector3(0.85 + float(i % 3) * 0.18, 0.8 + float(i % 4) * 0.14, 0.85 + float(i % 3) * 0.18)",
-
-   "        crown.position = Vector3(px, _height_at(px, pz) + "+("8.5" if key in ("crystal_caverns","sky_islands","astral_citadel") else "4.2" if key in ("mist_marsh","coral_archipelago") else "5.6")+", pz)",
-   "        add_child(crown)",
-  ]
   script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\n    _add_biome_landmarks()")
   extra.append('    print("BIOME_LANDMARKS_READY")')
   script+="\n".join(extra)+"\n"
