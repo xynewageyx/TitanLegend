@@ -178,6 +178,46 @@ try:
     report["rigged_glb_created"] = (out / "mpfb_chibi_rigged.glb").stat().st_size > 1024
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
     report["rig_note"] = "Experimental 3-bone skin with idle motion, not final hero rig"
+    # Ten visually distinct material prototypes; not finished character designs.
+    hero_palettes = [
+        ("warrior", (0.60, 0.17, 0.12, 1)),
+        ("rogue", (0.18, 0.18, 0.27, 1)),
+        ("shaman", (0.12, 0.55, 0.54, 1)),
+        ("hunter", (0.23, 0.43, 0.18, 1)),
+        ("druid", (0.34, 0.57, 0.20, 1)),
+        ("paladin", (0.83, 0.66, 0.22, 1)),
+        ("priest", (0.84, 0.82, 0.75, 1)),
+        ("mage", (0.25, 0.36, 0.80, 1)),
+        ("warlock", (0.45, 0.20, 0.62, 1)),
+        ("summoner", (0.70, 0.38, 0.67, 1)),
+    ]
+    report["hero_prototypes"] = []
+    for hero_name, rgba in hero_palettes:
+        variant = chibi.copy()
+        variant.data = chibi.data.copy()
+        variant.name = "Titan_" + hero_name.title() + "_Prototype"
+        bpy.context.collection.objects.link(variant)
+        mat = bpy.data.materials.new("Titan_" + hero_name + "_Color")
+        mat.diffuse_color = rgba
+        mat.use_nodes = True
+        principled = mat.node_tree.nodes.get("Principled BSDF")
+        if principled:
+            principled.inputs["Base Color"].default_value = rgba
+        variant.data.materials.clear()
+        variant.data.materials.append(mat)
+        bpy.ops.object.select_all(action="DESELECT")
+        variant.select_set(True)
+        bpy.context.view_layer.objects.active = variant
+        filename = "hero_" + hero_name + "_prototype.glb"
+        bpy.ops.export_scene.gltf(
+            filepath=str(out / filename), export_format="GLB",
+            use_selection=True, export_materials="EXPORT")
+        report["hero_prototypes"].append({
+            "class": hero_name, "file": filename,
+            "bytes": (out / filename).stat().st_size,
+            "note": "Color-only chibi base prototype; class equipment and full rig pending",
+        })
+        bpy.data.objects.remove(variant, do_unlink=True)
     bpy.ops.object.select_all(action="DESELECT")
     if bpy.context.object and bpy.context.object.mode != "OBJECT":
         bpy.ops.object.mode_set(mode="OBJECT")
