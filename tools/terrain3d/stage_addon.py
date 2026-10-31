@@ -294,6 +294,97 @@ for region in regions:
   script=script.replace("canopy_mesh.radius = 2.2","canopy_mesh.top_radius = 0.55\n    canopy_mesh.bottom_radius = 0.7")
   script=script.replace("canopy_mesh.height = 3.4","canopy_mesh.height = 3.4")
   script=script.replace("canopy_mesh.rings = 4","")
+ # Special biome props and weather, implemented with built-in Godot meshes and CPU particles.
+ if key in ("frost_peaks","ember_volcano"):
+  weather_snow=key=="frost_peaks"
+  extra=[
+   "",
+   "func _add_elemental_environment() -> void:",
+   "    var sky_particles := CPUParticles3D.new()",
+  ]
+  extra[3]='    sky_particles.name = "'+('Snowstorm' if weather_snow else 'Ashfall')+'"'
+  extra.extend([
+   "    sky_particles.amount = 140",
+   "    sky_particles.lifetime = 7.0",
+   "    sky_particles.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX",
+   "    sky_particles.emission_box_extents = Vector3(58.0, 3.0, 58.0)",
+   "    sky_particles.position = Vector3(63.0, 28.0, 65.0)",
+   "    sky_particles.direction = Vector3(0.25, -1.0, 0.12)",
+   "    sky_particles.spread = 12.0",
+   "    sky_particles.gravity = Vector3(0.0, -3.0, 0.0)",
+   "    sky_particles.initial_velocity_min = 1.5",
+   "    sky_particles.initial_velocity_max = 3.5",
+   "    var weather_mesh := SphereMesh.new()",
+   "    weather_mesh.radius = 0.13",
+   "    weather_mesh.height = 0.24",
+   "    sky_particles.mesh = weather_mesh",
+   "    add_child(sky_particles)",
+   "    sky_particles.emitting = true",
+   "    var trunk_material := StandardMaterial3D.new()",
+   "    trunk_material.albedo_color = Color(0.60, 0.86, 0.96)" if weather_snow else "    trunk_material.albedo_color = Color(0.17, 0.13, 0.12)",
+   "    var crown_material := StandardMaterial3D.new()",
+   "    crown_material.albedo_color = Color(0.72, 0.94, 1.0)" if weather_snow else "    crown_material.albedo_color = Color(1.0, 0.28, 0.04)",
+   "    crown_material.emission_enabled = true",
+   "    crown_material.emission = crown_material.albedo_color",
+   "    crown_material.emission_energy_multiplier = 0.6",
+   "    var branch_mesh := CylinderMesh.new()",
+   "    branch_mesh.top_radius = 0.10",
+   "    branch_mesh.bottom_radius = 0.40",
+   "    branch_mesh.height = 4.5",
+   "    var crown_mesh := CylinderMesh.new()",
+   "    crown_mesh.top_radius = 0.0",
+   "    crown_mesh.bottom_radius = 1.9",
+   "    crown_mesh.height = 4.5",
+   "    crown_mesh.radial_segments = 7",
+   "    for i in range(22):",
+   "        var px: float = 7.0 + float((i * 37 + 19) % 112)",
+   "        var pz: float = 7.0 + float((i * 43 + 23) % 112)",
+   "        var route_x: float = 63.0 + 16.0 * sin(pz * 0.036)",
+   "        if abs(px - route_x) < 12.0 or Vector2(px - 63.0, pz - 106.0).length() < 27.0:",
+   "            continue",
+   "        var tree := MeshInstance3D.new()",
+   '        tree.name = "IceTree_%02d" % i' if weather_snow else '        tree.name = "FireTree_%02d" % i',
+   "        tree.mesh = branch_mesh",
+   "        tree.material_override = trunk_material",
+   "        tree.position = Vector3(px, _height_at(px, pz) + 2.25, pz)",
+   "        add_child(tree)",
+   "        var crown := MeshInstance3D.new()",
+   "        crown.mesh = crown_mesh",
+   "        crown.material_override = crown_material",
+   "        crown.position = Vector3(px, _height_at(px, pz) + 5.2, pz)",
+   "        add_child(crown)",
+  ])
+  if not weather_snow:
+   extra.extend([
+    "    var lava_material := StandardMaterial3D.new()",
+    "    lava_material.albedo_color = Color(0.95, 0.19, 0.02)",
+    "    lava_material.emission_enabled = true",
+    "    lava_material.emission = Color(1.0, 0.23, 0.02)",
+    "    lava_material.emission_energy_multiplier = 1.8",
+    "    var volcano := MeshInstance3D.new()",
+    '    volcano.name = "VolcanoCone"',
+    "    var cone := CylinderMesh.new()",
+    "    cone.top_radius = 2.0",
+    "    cone.bottom_radius = 13.0",
+    "    cone.height = 19.0",
+    "    cone.radial_segments = 16",
+    "    volcano.mesh = cone",
+    "    volcano.material_override = trunk_material",
+    "    volcano.position = Vector3(16.0, _height_at(16.0, 20.0) + 9.5, 20.0)",
+    "    add_child(volcano)",
+    "    var crater := MeshInstance3D.new()",
+    '    crater.name = "LavaCrater"',
+    "    var disk := CylinderMesh.new()",
+    "    disk.top_radius = 2.0",
+    "    disk.bottom_radius = 2.0",
+    "    disk.height = 0.2",
+    "    crater.mesh = disk",
+    "    crater.material_override = lava_material",
+    "    crater.position = volcano.position + Vector3(0.0, 9.6, 0.0)",
+    "    add_child(crater)",
+   ])
+  script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\\n    _add_elemental_environment()")
+  script+="\\n".join(extra)+"\\n"
  # Make object distribution vary deterministically by biome ID.
  seed_offset=int(region["terrain"]["seed"]) % 101
  script=script.replace("(i * 37 + 13)",f"(i * 37 + {13+seed_offset})")
