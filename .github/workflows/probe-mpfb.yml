@@ -52,6 +52,9 @@ jobs:
               assert "| " + hero_name + " |" in summary, hero_name
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
+          assert set(report.get("socket_equipment_names", [])) == {
+              "Rig_Test_Sword", "Rig_Test_Shield"
+          }, "Socket equipment creation missing"
           assert set(report.get("weapon_socket_names", [])) == {
               "Socket_Weapon_R", "Socket_Shield_L"
           }, "Weapon socket creation missing"
@@ -97,7 +100,7 @@ jobs:
               ("hit", hit_gltf),
           ):
               names = {node.get("name") for node in gltf_doc.get("nodes", [])}
-              required = {"Socket_Weapon_R", "Socket_Shield_L"}
+              required = {"Socket_Weapon_R", "Socket_Shield_L", "Rig_Test_Sword", "Rig_Test_Shield"}
               assert required <= names, (
                   label + " GLB missing weapon sockets: " + str(required - names))
           assert walk_gltf.get("skins"), "Walk GLB has no skeleton skin"
