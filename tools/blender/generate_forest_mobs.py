@@ -213,6 +213,26 @@ def expressive_details():
         sphere("eye_glint", (center.x - .035, center.y - .055, center.z + .055),
                (.035, .018, .041), iris, 12, 8)
 
+def sculpted_face_features(creature):
+    """Add dimensional brows and cheek forms to improve expression in game camera."""
+    dark = material("expression_shadow", (.16, .19, .10))
+    blush = material("expression_warm", (.72, .42, .25))
+    if creature == "forest_01_mooshuepfer":
+        for side in (-1, 1):
+            brow = sphere("arched_brow", (side*.31, -.555, 1.44), (.22,.085,.075), dark, 16, 10)
+            brow.rotation_euler[1] = -side*.22
+            sphere("soft_cheek", (side*.49,-.49,.98),(.20,.12,.15),blush,16,10)
+    elif creature == "forest_02_pilzling":
+        for side in (-1, 1):
+            sphere("round_cheek", (side*.35,-.405,.83),(.15,.075,.11),blush,16,10)
+            brow = sphere("mushroom_brow", (side*.22,-.465,1.30),(.17,.06,.055),dark,16,10)
+            brow.rotation_euler[1] = side*.12
+    elif creature == "forest_boss_01_wurzelkoenig":
+        for side in (-1, 1):
+            brow = sphere("king_heavy_brow", (side*.43,-1.02,3.49),(.40,.16,.13),dark,16,10)
+            brow.rotation_euler[1] = side*.22
+            sphere("king_cheek_plate", (side*.61,-.92,2.88),(.24,.17,.32),dark,16,10)
+
 def sculpt_organic_silhouettes():
     """Non-destructive-to-rig vertex sculpting: asymmetry without new dependencies."""
     body_terms = ("body", "torso", "trunk", "head", "cap", "muzzle", "snout",
@@ -347,7 +367,7 @@ def animate_creature():
     return root
 
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);expressive_details();sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
