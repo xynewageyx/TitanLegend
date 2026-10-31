@@ -371,6 +371,23 @@ for region in regions:
     "            arm.position = Vector3(px + float(side) * 1.15, _height_at(px, pz) + 3.6, pz)",
     "            add_child(arm)",
    ])
+  if key == "mist_marsh":
+   # Reed clusters provide a readable marsh silhouette with only two small meshes per landmark.
+   extra.extend([
+    "        var reed_mesh := CylinderMesh.new()",
+    "        reed_mesh.top_radius = 0.07",
+    "        reed_mesh.bottom_radius = 0.11",
+    "        reed_mesh.height = 2.8",
+    "        reed_mesh.radial_segments = 5",
+    "        for reed_index in range(2):",
+    "            var reed := MeshInstance3D.new()",
+    '            reed.name = "MarshReed_%02d_%d" % [i, reed_index]',
+    "            reed.mesh = reed_mesh",
+    "            reed.material_override = accent",
+    "            reed.rotation.z = -0.16 if reed_index == 0 else 0.20",
+    "            reed.position = Vector3(px + float(reed_index) * 1.1 - 0.55, _height_at(px, pz) + 1.4, pz + 0.7)",
+    "            add_child(reed)",
+   ])
   if key == "whisper_forest":
    # Flattened mushroom-like canopy on the same lightweight landmark mesh.
    extra.extend([
