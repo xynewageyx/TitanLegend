@@ -150,6 +150,49 @@ def root_king():
     for x,y,z in ((-1.10,-.20,4.68),(.95,-.08,4.80),(0,.68,4.75)):
         sphere("leaf_cluster",(x,y,z),(.75,.66,.56),leaf)
     sphere("mouth",(0,-1.05,2.66),(.35,.11,.11),bark)
+    king_bark_details()
+
+def organic_finish():
+    """Export-safe organic shading and bevels, no runtime add-on dependency."""
+    for obj in list(bpy.context.scene.objects):
+        if obj.type != "MESH":
+            continue
+        if obj.name.startswith(("eye", "pupil", "mouth", "smile")):
+            continue
+        for polygon in obj.data.polygons:
+            polygon.use_smooth = True
+        if obj.type == "MESH" and len(obj.data.vertices) > 6:
+            bevel = obj.modifiers.new("soft_sculpted_edges", "BEVEL")
+            bevel.width = 0.045
+            bevel.segments = 2
+            bevel.affect = 'EDGES'
+            try:
+                bpy.context.view_layer.objects.active = obj
+                bpy.ops.object.modifier_apply(modifier=bevel.name)
+            except (RuntimeError, AttributeError):
+                obj.modifiers.remove(bevel)
+
+def king_bark_details():
+    """Sculptural raised bark ridges and root-like branching, not a flat trunk."""
+    bark = material("king_bark_ridges", (.22, .13, .075))
+    highlight = material("king_bark_edges", (.57, .37, .19))
+    for i in range(14):
+        angle = 2 * math.pi * i / 14
+        x = math.cos(angle) * 1.08
+        y = math.sin(angle) * .82
+        z = 1.35 + (i % 5) * .49
+        ridge = sphere("raised_bark_ridge", (x, y, z), (.10, .11, .43), bark, 12, 8)
+        ridge.rotation_euler[1] = .18 * math.sin(angle * 3)
+    for side in (-1, 1):
+        for i in range(3):
+            x = side * (1.0 + i * .32)
+            z = 3.8 + i * .29
+            branch = cone("branch_antler", (x, .12, z), .21, .025, 1.15 - .15 * i, highlight, 12)
+            branch.rotation_euler[1] = side * (.48 + i * .17)
+        for i in range(4):
+            x = side * (.35 + i * .31)
+            root = sphere("exposed_root", (x, -.22, .30), (.16, .35, .44), bark, 12, 8)
+            root.rotation_euler[1] = side * .34
 
 def animate_creature():
     """Create simple object-level idle and attack clips for all mesh parts."""
@@ -184,7 +227,7 @@ def animate_creature():
     return root
 
 def export(name,fn,out):
-    clear();fn();animate_creature()
+    clear();fn();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
