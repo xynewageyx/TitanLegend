@@ -206,14 +206,14 @@ jobs:
           echo "All twelve biome scenes loaded without reported script errors"
       - name: Capture optional biome preview frames
         continue-on-error: true
-        timeout-minutes: 3
+        timeout-minutes: 9
         run: |
           set -u
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
           mkdir -p terrain3d-previews
           for key in emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel; do
             echo "Rendering optional preview: $key"
-            timeout 35s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --write-movie "/tmp/$key.avi" --quit-after 3 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1 || true
+            timeout 30s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --write-movie "/tmp/$key.avi" --quit-after 3 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1 || true
             if test -s "/tmp/$key.avi"; then
               ffmpeg -hide_banner -loglevel error -y -i "/tmp/$key.avi" -frames:v 1 "terrain3d-previews/$key.png" || true
             fi
@@ -221,6 +221,24 @@ jobs:
               cp "/tmp/$key-preview.log" "terrain3d-previews/$key.log"
             fi
           done
+      - name: Summarize biome preview capture
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path('terrain3d-previews')
+          root.mkdir(exist_ok=True)
+          keys = 'emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel'.split()
+          status = {key: {'png': (root / (key + '.png')).is_file(), 'log': (root / (key + '.log')).is_file()} for key in keys}
+          (root / 'status.json').write_text(json.dumps(status, indent=2))
+          lines = ['### Terrain3D preview capture', '', '| Biome | Result |', '|---|---|']
+          for key, result in status.items():
+              lines.append('| ' + key + ' | ' + ('PNG available' if result['png'] else 'No PNG; inspect log') + ' |')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write('\n'.join(lines) + '\n')
+          print('Captured', sum(item['png'] for item in status.values()), 'of', len(keys), 'preview PNGs')
+          PY
       - name: Upload optional biome previews
         if: always()
         uses: actions/upload-artifact@v4
