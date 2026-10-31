@@ -4,6 +4,8 @@ Run: python -m unittest tests/test_fantasy_ui_regression.py
 These checks do not replace a Godot import or Android build.
 """
 from pathlib import Path
+import hashlib
+import json
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,6 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 class FantasyUIRegression(unittest.TestCase):
     def read_script(self, name):
         return (ROOT / "scripts" / name).read_text(encoding="utf-8")
+
+    def test_preserved_update168_boss_motion_matches_manifest(self):
+        manifest = json.loads((ROOT / 'docs/update_168_import_manifest.json').read_text(encoding='utf-8'))
+        expected = next(item for item in manifest['files'] if item['path'] == 'scripts/boss_motion.gd')
+        original = (ROOT / 'original_update168/scripts/boss_motion.gd').read_bytes()
+        self.assertEqual(len(original), expected['bytes'])
+        self.assertEqual(hashlib.sha256(original).hexdigest(), expected['sha256'])
 
     def test_single_canonical_boss_panel(self):
         hud = self.read_script("adventure_hud_overlay.gd")
