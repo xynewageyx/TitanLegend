@@ -15,6 +15,22 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 tools/terrain3d/stage_addon.py
+      - name: Verify all twelve generated biome scenes
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          root=pathlib.Path("terrain3d-preview")
+          regions=json.loads((root/"regions.json").read_text())["regions"]
+          assert len(regions)==12
+          for r in regions:
+              key=r["key"]
+              scene=root/"scenes"/f"{key}_terrain3d.tscn"
+              script=root/"scripts"/f"{key}_setup.gd"
+              assert scene.is_file() and script.is_file(),key
+              assert f"res://terrain_data/{key}" in scene.read_text(),key
+              assert f"res://terrain_data/{key}" in script.read_text(),key
+          print("Verified 12 independent Terrain3D biomes")
+          PY
       - name: Verify bundled terrain textures
         run: |
           python3 - <<'PY'
