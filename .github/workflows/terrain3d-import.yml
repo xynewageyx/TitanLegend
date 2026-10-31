@@ -11,6 +11,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - name: Validate Terrain3D generator Python syntax
+        run: python3 -m py_compile tools/terrain3d/stage_addon.py
       - name: Stage official Terrain3D addon
         env:
           GH_TOKEN: ${{ github.token }}
@@ -68,6 +70,16 @@ jobs:
                   assert "func _add_biome_landmarks()" in script, key
                   assert "landmark.mesh = spire" in script, key
                   assert "crown.mesh = crown_mesh" in script, key
+          for key, required in {
+              "frost_peaks": ("FrostPineTip_", "ElementRock_"),
+              "ember_volcano": ("EmberBranch_", "ElementRock_"),
+              "sun_desert": ("CactusArm_",),
+              "whisper_forest": ("crown.scale = Vector3(1.65, 0.40, 1.65)",),
+              "mist_marsh": ("MarshReed_",),
+          }.items():
+              for marker in required:
+                  assert marker in scripts[key], f"{key}: missing {marker}"
+          print("Verified biome-specific vegetation and elemental rocks")
           print("Verified 12 unique biome scripts, textures, terrain paths and geometry")
           print("Verified 1200 stages, biome features, and Android budgets")
           print("Verified 12 independent Terrain3D biomes")
