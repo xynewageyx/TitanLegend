@@ -229,6 +229,32 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
 ]),encoding="utf-8")
 
 
+# Generate independent scenes and terrain data directories for all 12 biomes.
+# Each scene has its own deterministic height profile and can be opened on Android.
+region_config=json.loads(pathlib.Path("tools/terrain3d/regions.json").read_text(encoding="utf-8"))
+regions=region_config["regions"]
+assert len(regions)==12 and all(r["stage_end"]-r["stage_start"]==99 for r in regions)
+base_scene=landscape.read_text(encoding="utf-8")
+base_script=(scripts/"grasland_setup.gd").read_text(encoding="utf-8")
+import re
+for region in regions:
+ key=region["key"]
+ amplitude=float(region["terrain"]["height_amplitude"])
+ scale=amplitude/7.0
+ # Scale the main ridgeline per biome; preserve the flattened trail and boss arena.
+ script=base_script.replace("7.0 * sin(fx * 0.028)",f"{amplitude:.2f} * sin(fx * 0.028)")
+ script=script.replace("7.0 * sin(fx * 0.028)",f"{amplitude:.2f} * sin(fx * 0.028)")
+ script=script.replace('res://terrain_data',f'res://terrain_data/{key}')
+ script=script.replace('GRASLAND_',f'{key.upper()}_')
+ (scripts/f"{key}_setup.gd").write_text(script,encoding="utf-8")
+ scene_text=base_scene.replace("res://scripts/grasland_setup.gd",f"res://scripts/{key}_setup.gd")
+ scene_text=scene_text.replace('name="Grasland"',f'name="{key}"')
+ scene_text=scene_text.replace('res://terrain_data',f'res://terrain_data/{key}')
+ (root/"scenes"/f"{key}_terrain3d.tscn").write_text(scene_text,encoding="utf-8")
+ (root/"terrain_data"/key).mkdir(parents=True,exist_ok=True)
+(root/"regions.json").write_text(json.dumps(region_config,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+print("REGIONS_GENERATED:",len(regions))
+
 # Bundle seamless, reproducible terrain textures so Android users do not have
 # to copy PNG files into every newly downloaded test project.
 import math,random,struct,zlib
