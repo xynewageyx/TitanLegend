@@ -434,6 +434,22 @@ except Exception:
     report["errors"].append(traceback.format_exc())
 finally:
     report["objects"] = [o.name for o in bpy.data.objects]
+    # Human-readable report for inspecting all ten mobile assets on Android.
+    lines = ["# Titan Legends – MPFB Character Build", "",
+             "Status: " + ("FAILED" if report.get("errors") else "Generated"),
+             "", "| Class | Original triangles | LOD triangles | Body reduction | LOD size |",
+             "|---|---:|---:|---:|---:|"]
+    originals = {entry["class"]: entry for entry in report.get("mobile_mesh_budget", [])}
+    for entry in report.get("mobile_lod", []):
+        original = originals.get(entry["class"], {})
+        lines.append("| {name} | {before:,} | {after:,} | {pct:.1f}% | {kb:.0f} KB |".format(
+            name=entry["class"], before=original.get("triangles", 0),
+            after=entry["triangles"], pct=entry.get("reduction_percent", 0),
+            kb=entry["bytes"] / 1024))
+    lines.extend(["", "LOD models are static prototypes; rigging and visual QA remain pending.",
+                  "", "## Errors", ""])
+    lines.extend(report.get("errors") or ["None reported"])
+    (out / "BUILD_SUMMARY.md").write_text("\\n".join(lines) + "\\n", encoding="utf-8")
     (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("MPFB_PROBE_REPORT:", json.dumps(report))
 required_outputs = (
