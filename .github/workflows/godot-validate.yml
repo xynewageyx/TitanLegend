@@ -35,7 +35,15 @@ jobs:
       - name: Import assets and parse project
         shell: bash
         run: |
-          godot --headless --path . --editor --import --quit
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+          export LIBGL_ALWAYS_SOFTWARE=1
+          xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee godot-validation-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' godot-validation-import.log; then
+            echo 'Godot import or script errors detected'
+            exit 1
+          fi
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
