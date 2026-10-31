@@ -274,6 +274,25 @@ try:
         torso.rotation_mode = "XYZ"
         torso.rotation_euler = (0.0, torso_y, 0.0)
         torso.keyframe_insert(data_path="rotation_euler", frame=frame)
+    # Short hit reaction: torso recoils and both arms absorb the impact.
+    hit_action = bpy.data.actions.new("hit_reaction")
+    arm.animation_data.action = hit_action
+    for frame, torso_x, torso_y, arm_x in (
+        (1, 0.0, 0.0, 0.0),
+        (4, -0.24, 0.10, -0.20),
+        (8, -0.12, -0.05, -0.10),
+        (15, 0.05, 0.0, 0.05),
+        (22, 0.0, 0.0, 0.0),
+    ):
+        torso = arm.pose.bones["Torso"]
+        torso.rotation_mode = "XYZ"
+        torso.rotation_euler = (torso_x, torso_y, 0.0)
+        torso.keyframe_insert(data_path="rotation_euler", frame=frame)
+        for suffix in ("L", "R"):
+            upper = arm.pose.bones["UpperArm_" + suffix]
+            upper.rotation_mode = "XYZ"
+            upper.rotation_euler = (arm_x, 0.0, 0.0)
+            upper.keyframe_insert(data_path="rotation_euler", frame=frame)
     # Keep idle as the active export action until multi-action export is verified.
     arm.animation_data.action = action
     bpy.context.scene.frame_end = 31
@@ -329,6 +348,20 @@ try:
     finally:
         arm.animation_data.action = action
         bpy.context.scene.frame_end = block_end
+        bpy.context.scene.frame_set(1)
+    try:
+        arm.animation_data.action = hit_action
+        hit_end = bpy.context.scene.frame_end
+        bpy.context.scene.frame_end = 22
+        bpy.context.scene.frame_set(1)
+        hit_file = out / "mpfb_chibi_hit_reaction.glb"
+        bpy.ops.export_scene.gltf(filepath=str(hit_file),
+                                  export_format="GLB", use_selection=True,
+                                  export_animations=True, export_skins=True)
+        report["hit_reaction_glb_created"] = hit_file.stat().st_size > 1024
+    finally:
+        arm.animation_data.action = action
+        bpy.context.scene.frame_end = hit_end
         bpy.context.scene.frame_set(1)
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
     report["rig_note"] = "Experimental 11-bone geometric skin with idle motion; not production rig"
