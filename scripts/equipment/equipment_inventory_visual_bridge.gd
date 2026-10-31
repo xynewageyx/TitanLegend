@@ -5,11 +5,13 @@ const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd"
 const ARMOR_SLOTS := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSocket", "ShoulderRightSocket", "ArmLeftSocket", "ArmRightSocket", "GloveLeftSocket", "GloveRightSocket", "LegLeftSocket", "LegRightSocket", "BootLeftSocket", "BootRightSocket"]
 const CLASS_WEAPONS := [1,0,9,8,6,4,8,8,8,9,11]
 static func sync_team(team: Node3D) -> int:
-    if team == null or not ("heroes" in team) or not ("class_ids" in team):
+    if team == null:
         return 0
+    var heroes: Array = team.get("heroes")
+    var classes: Array = team.get("class_ids")
     var updated := 0
-    for i in range(mini(4, team.heroes.size())):
-        if sync_hero(team.heroes[i], i, int(team.class_ids[i])):
+    for i in range(mini(4, mini(heroes.size(), classes.size()))):
+        if sync_hero(heroes[i], i, int(classes[i])):
             updated += 1
     return updated
 static func sync_hero(hero: Node3D, hero_slot: int, class_id: int) -> bool:
