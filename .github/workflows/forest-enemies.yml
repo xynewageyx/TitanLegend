@@ -11,13 +11,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Blender
-        run: sudo apt-get update && sudo apt-get install -y blender
+        run: sudo apt-get update && sudo apt-get install -y blender python3-numpy
+      - name: Verify Blender Python NumPy dependency
+        run: blender --background --python-expr "import numpy; print('NumPy OK', numpy.__version__)"
       - name: Generate forest GLBs
         run: blender --background --python tools/blender/generate_forest_mobs.py -- --output build/forest
       - name: Check generated files
         run: |
           test -s build/forest/forest_01_mooshuepfer.glb
           test -s build/forest/forest_02_pilzling.glb
+          python3 - <<'PY'
+          import pathlib, struct
+          for path in sorted(pathlib.Path('build/forest').glob('*.glb')):
+              data = path.read_bytes()
+              assert len(data) >= 20 and data[:4] == b'glTF', f'Invalid GLB: {path}'
+              assert struct.unpack_from('<I', data, 8)[0] == len(data), f'Wrong GLB length: {path}'
+              print(path, len(data), 'bytes')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: TitanLegends-Forest-Mobs-GLB
