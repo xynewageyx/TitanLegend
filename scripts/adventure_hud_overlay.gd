@@ -41,6 +41,7 @@ var nav_buttons: Dictionary = {}
 var more_panel: PanelContainer
 var more_open: bool = false
 var active_page: String = "combat"
+var resource_tiles: Array[PanelContainer] = []
 
 func initialize(parent_hud: Control, battle_node: Node3D, biome_node: Node3D) -> void:
  hud = parent_hud
@@ -54,6 +55,7 @@ func _ready() -> void:
  _build_journey()
  _build_party()
  _build_navigation()
+ _adapt_layout()
  refresh()
 
 func _resource_tile(parent: Container, heading: String) -> Label:
@@ -61,10 +63,12 @@ func _resource_tile(parent: Container, heading: String) -> Label:
  tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#ffefd2f4"), SKIN.WOOD, 16, 3))
  parent.add_child(tile)
+ resource_tiles.append(tile)
  var value := Label.new()
  value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  value.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
  SKIN.title(value, 17)
+ value.add_theme_color_override("font_color", SKIN.INK)
  value.text = heading
  tile.add_child(value)
  return value
@@ -151,6 +155,7 @@ func _build_party() -> void:
   icon_label.text = "◆"
   line.add_child(icon_label)
   party_icons.append(icon_label)
+  icon_label.add_theme_color_override("font_color", SKIN.WOOD_DARK)
   var column := VBoxContainer.new()
   column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   column.add_theme_constant_override("separation", 0)
@@ -258,7 +263,6 @@ func _build_navigation() -> void:
  more_panel.hide()
 
 func _process(_delta: float) -> void:
- _adapt_layout()
  if hud == null:
   return
  # Submenus are siblings created earlier by the original scene. Temporarily
@@ -336,6 +340,10 @@ func refresh() -> void:
  party_bonus.text = "✦ FORMATIONS-BONUS" if formation else "4 HELDEN · 1 TEAM"
  party_bonus.add_theme_color_override("font_color", Color("#3a845b") if formation else SKIN.MUTED)
 
+func _notification(what: int) -> void:
+ if what == NOTIFICATION_RESIZED and is_node_ready():
+  _adapt_layout()
+
 func _adapt_layout() -> void:
  # Fit the four-hero HUD and overflow panel on narrow portrait screens.
  var screen_width: float = size.x
@@ -350,3 +358,6 @@ func _adapt_layout() -> void:
   journey.offset_left = -minf(274.0, screen_width * 0.51)
  if overflow != null:
   overflow.offset_left = -minf(366.0, screen_width - 20.0)
+ var dock: Control = get_node_or_null("AdventureDock") as Control
+ if dock != null:
+  dock.offset_top = -116.0 if screen_width < 430.0 else -126.0
