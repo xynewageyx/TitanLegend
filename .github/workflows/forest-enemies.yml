@@ -41,7 +41,11 @@ jobs:
               names = {a.get('name', '').split('.')[0] for a in doc.get('animations', [])}
               required = {'idle', 'attack', 'hit', 'death'}
               assert required.issubset(names), f'Missing animation clips in {path}: {required - names}; found {names}'
-              print(path, len(data), 'bytes; animations:', sorted(names))
+              meshes = doc.get('meshes', [])
+              assert len(meshes) >= 8, f'Unexpectedly simple or empty mesh scene: {path} ({len(meshes)} meshes)'
+              nodes = doc.get('nodes', [])
+              assert nodes, f'No scene nodes: {path}'
+              print(path, len(data), 'bytes; meshes:', len(meshes), 'nodes:', len(nodes), 'animations:', sorted(names))
           PY
       - name: Package models at Godot resource paths
         run: |
