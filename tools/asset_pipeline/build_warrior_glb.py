@@ -115,6 +115,19 @@ cube("sword_guard", (0.65, -0.02, 0.30), (0.39, 0.15, 0.11), trim, "upper_arm.R"
 cube("shield", (-0.65, -0.31, 1.00), (0.53, 0.16, 0.70), armor, "upper_arm.L")
 sphere("shield_boss", (-0.65, -0.413, 1.02), (0.18, 0.075, 0.18), trim, "upper_arm.L")
 
+# Blade silhouette: tapered spear-like point and a jewel in the pommel.
+cube("blade_ridge", (0.65, -0.069, -0.06), (0.045, 0.035, 0.48), trim, "upper_arm.R")
+sphere("blade_tip", (0.65, -0.02, -0.36), (0.105, 0.042, 0.16), silver, "upper_arm.R")
+sphere("pommel_gem", (0.65, -0.02, 0.78), (0.105, 0.105, 0.105), trim, "upper_arm.R")
+# Shield border and heraldic crest are bound to the shield arm.
+for edge_x in [-0.91, -0.39]:
+    cube("shield_edge_%.2f" % edge_x, (edge_x, -0.418, 1.00), (0.07, 0.065, 0.75), trim, "upper_arm.L")
+for edge_z in [0.66, 1.34]:
+    cube("shield_edge_%.2f" % edge_z, (-0.65, -0.418, edge_z), (0.54, 0.065, 0.07), trim, "upper_arm.L")
+cube("shield_crest_vertical", (-0.65, -0.503, 1.02), (0.07, 0.045, 0.36), silver, "upper_arm.L")
+cube("shield_crest_cross", (-0.65, -0.505, 1.07), (0.28, 0.045, 0.07), silver, "upper_arm.L")
+
+
 bpy.ops.object.armature_add(enter_editmode=True, location=(0, 0, 0))
 rig = bpy.context.object
 rig.name = "WarriorRig"
