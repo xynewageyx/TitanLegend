@@ -40,6 +40,27 @@ jobs:
           assert report.get("warrior_preview_created"), report
           assert report.get("warrior_side_preview_created"), report
           assert len(report.get("warrior_equipment", [])) >= 7, report
+          assert report.get("warrior_hair_parts") == 4, report
+          assert report.get("warrior_face_parts") == 9, report
+          for preview in ("hero_warrior_front.png", "hero_warrior_side.png"):
+              png = (folder / preview).read_bytes()
+              assert png[:8] == bytes.fromhex("89504e470d0a1a0a") and len(png) > 1024, preview
+          warrior_data = (folder / "hero_warrior_prototype.glb").read_bytes()
+          assert warrior_data[:4] == b"glTF", "Warrior GLB invalid header"
+          assert struct.unpack_from("<I", warrior_data, 8)[0] == len(warrior_data)
+          warrior_json_len, warrior_chunk = struct.unpack_from("<I4s", warrior_data, 12)
+          assert warrior_chunk == b"JSON"
+          warrior_gltf = json.loads(warrior_data[20:20+warrior_json_len])
+          warrior_nodes = {node.get("name", "") for node in warrior_gltf.get("nodes", [])}
+          required_parts = {
+              "Warrior_Shield", "Warrior_Sword_Blade", "Warrior_Helmet_Crest",
+              "Warrior_Hair_Crown", "Warrior_Hair_Fringe",
+              "Warrior_Eye_-1", "Warrior_Eye_1",
+              "Warrior_Iris_-1", "Warrior_Iris_1",
+          }
+          assert required_parts.issubset(warrior_nodes), sorted(required_parts - warrior_nodes)
+          assert len(warrior_gltf.get("meshes", [])) >= 15, "Warrior accessories missing"
+          print("Warrior face, equipment, previews and GLB nodes verified")
           assert len(report.get("hero_prototypes", [])) == 10, report
           for hero in report["hero_prototypes"]:
               assert hero["bytes"] > 1024 and (folder / hero["file"]).is_file(), hero
