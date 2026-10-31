@@ -124,6 +124,23 @@ jobs:
           grep -q GRASLAND_PROPS_READY /tmp/grasland.log
           if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/grasland.log; then exit 1; fi
           test -d terrain3d-preview/terrain_data
+      - name: Smoke-test all twelve biome scripts in Godot
+        run: |
+          set -euo pipefail
+          GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
+          for scene in terrain3d-preview/scenes/*_terrain3d.tscn; do
+            name="$(basename "$scene")"
+            echo "Testing biome: $name"
+            "$GODOT" --headless --path terrain3d-preview --quit-after 5 "res://scenes/$name" > /tmp/biome-smoke.log 2>&1 || {
+              cat /tmp/biome-smoke.log
+              exit 1
+            }
+            if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid assignment' /tmp/biome-smoke.log; then
+              cat /tmp/biome-smoke.log
+              exit 1
+            fi
+          done
+          echo "All twelve biome scenes loaded without reported script errors"
       - name: Verify Terrain3D native extension registration
         run: |
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
