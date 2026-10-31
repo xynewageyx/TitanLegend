@@ -52,6 +52,9 @@ jobs:
               assert "| " + hero_name + " |" in summary, hero_name
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
+          assert set(report.get("weapon_socket_names", [])) == {
+              "Socket_Weapon_R", "Socket_Shield_L"
+          }, "Weapon socket creation missing"
           assert report.get("rigged_glb_created"), report
           assert report.get("hit_reaction_glb_created"), "Hit reaction GLB export missing"
           hit_blob = (folder / "mpfb_chibi_hit_reaction.glb").read_bytes()
@@ -87,6 +90,16 @@ jobs:
           walk_json_length, walk_json_type = struct.unpack_from("<I4s", walk_blob, 12)
           assert walk_json_type == b"JSON"
           walk_gltf = json.loads(walk_blob[20:20 + walk_json_length])
+          for label, gltf_doc in (
+              ("walk", walk_gltf),
+              ("attack", attack_gltf),
+              ("block", block_gltf),
+              ("hit", hit_gltf),
+          ):
+              names = {node.get("name") for node in gltf_doc.get("nodes", [])}
+              required = {"Socket_Weapon_R", "Socket_Shield_L"}
+              assert required <= names, (
+                  label + " GLB missing weapon sockets: " + str(required - names))
           assert walk_gltf.get("skins"), "Walk GLB has no skeleton skin"
           assert walk_gltf.get("animations"), "Walk GLB has no animation"
           print("Separate walking GLB animation and skin verified")
