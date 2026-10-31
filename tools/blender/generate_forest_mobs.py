@@ -166,7 +166,8 @@ def animate_creature():
         ("hit",[(1,0.0,1.0),(5,-0.16,0.94),(12,0.0,1.0)]),
         ("death",[(1,0.0,1.0),(16,0.0,0.10)]),
     ):
-        root.animation_data_clear()
+        root.animation_data_create()
+        root.animation_data.action = bpy.data.actions.new(name=clip)
         for frame,y,scale in frames:
             root.location=(0,y,0)
             root.scale=(1,1,scale)
