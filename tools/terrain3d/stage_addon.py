@@ -98,7 +98,7 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '    # Overlay a textured winding path and a circular boss arena.',
  '    _build_path_and_arena()',
  '    _scatter_grassland_props()',
- '';
+ '',
  'func _scatter_grassland_props() -> void:',
  '    # Low-poly environmental props; deterministic and mobile-friendly.',
  '    var foliage := StandardMaterial3D.new()',
@@ -156,7 +156,7 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '        rock.scale = Vector3(1.1, 0.7, 0.85)',
  '        add_child(rock)',
  '    print("GRASLAND_PROPS_READY")',
- '';
+ '',
  '    print("GRASLAND_REGION_READY")',
  '    print("GRASLAND_REGION_EXISTS:", data.get_region(Vector2i(0, 0)) != null)',
  '    print("GRASLAND_CAMERA_CONNECTED")',
