@@ -16,6 +16,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y blender
+      - name: Install glTF exporter Python dependencies
+        run: |
+          sudo apt-get install -y python3-numpy
+          blender --background --factory-startup --python-expr 'import numpy; print("NUMPY:", numpy.__version__)'
       - name: Check Blender version
         run: blender --background --factory-startup --python-expr 'import bpy; print("BLENDER:", bpy.app.version_string)'
       - name: Generate a real Rigify rig in headless Blender
