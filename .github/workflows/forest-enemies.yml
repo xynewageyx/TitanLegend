@@ -1,0 +1,24 @@
+name: Forest enemy GLB generator
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/blender/generate_forest_mobs.py'
+      - '.github/workflows/forest-enemies.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Generate forest GLBs
+        run: blender --background --python tools/blender/generate_forest_mobs.py -- --output build/forest
+      - name: Check generated files
+        run: |
+          test -s build/forest/forest_01_mooshuepfer.glb
+          test -s build/forest/forest_02_pilzling.glb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Mobs-GLB
+          path: build/forest/*.glb
