@@ -1,4 +1,5 @@
 extends Control
+const SKIN = preload("res://scripts/adventure_ui_theme.gd")
 @export var team_formation: Node3D
 var panel: PanelContainer
 var slot_selector: OptionButton
@@ -12,22 +13,29 @@ func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_STOP
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  var dim := ColorRect.new()
- dim.color = Color(0.02, 0.04, 0.06, 0.88)
+ dim.color = Color(0.10, 0.07, 0.04, 0.86)
  dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(dim)
  panel = PanelContainer.new()
  panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  panel.offset_left = 24.0
- panel.offset_top = 130.0
+ panel.offset_top = 82.0
  panel.offset_right = -24.0
- panel.offset_bottom = -130.0
+ panel.offset_bottom = -82.0
  panel.custom_minimum_size = Vector2.ZERO
+ panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 20, 4))
  add_child(panel)
+ var scroll := ScrollContainer.new()
+ scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ panel.add_child(scroll)
  var v := VBoxContainer.new()
+ v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ scroll.add_child(v)
  v.add_theme_constant_override("separation", 14)
  panel.add_child(v)
  var title := Label.new()
- title.text = "TEAM & KLASSEN"
+ title.text = "HELDEN · TEAM & KLASSEN"
  title.add_theme_font_size_override("font_size", 28)
  v.add_child(title)
  slot_selector = OptionButton.new()
@@ -56,6 +64,7 @@ func _ready() -> void:
  close.text = "Schliessen"
  close.custom_minimum_size.y = 65
  v.add_child(close)
+ SKIN.style_menu_tree(panel)
  apply.pressed.connect(_apply)
  close.pressed.connect(func(): visible = false)
  class_selector.item_selected.connect(func(_id: int): _refresh_description())
