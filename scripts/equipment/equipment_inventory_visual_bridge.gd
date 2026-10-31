@@ -19,15 +19,15 @@ static func sync_hero(hero: Node3D, hero_slot: int, class_id: int) -> bool:
     if controller == null:
         return false
     var weapon_rarity := clampi(int(GameManager.weapon_rarities[hero_slot]),0,5)
-    controller.equip_weapon(CLASS_WEAPONS[clampi(class_id,0,10)],weapon_rarity)
+    controller.call("equip_weapon", CLASS_WEAPONS[clampi(class_id,0,10)],weapon_rarity)
     # All thirteen loot slots map to separate visual anchors.
     for loot_slot in range(ARMOR_SLOTS.size()):
         var anchor: String = ARMOR_SLOTS[loot_slot]
         var item_id := int(GameManager.equipped_loot[hero_slot][loot_slot])
         var item: Dictionary = GameManager.loot_item_by_id(item_id)
         if item.is_empty() or int(item.get("slot",-1)) != loot_slot:
-            controller.unequip(anchor)
+            controller.call("unequip", anchor)
             continue
         var rarity := clampi(int(item.get("rarity",0)),0,5)
-        controller.equip_armor_slot(anchor,clampi(class_id,0,10),rarity)
+        controller.call("equip_armor_slot", anchor,clampi(class_id,0,10),rarity)
     return true
