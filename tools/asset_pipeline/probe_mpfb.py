@@ -276,6 +276,41 @@ try:
                                (height * 0.11, height * 0.045, height * 0.075), hair, "UV_SPHERE")
             fringe.rotation_euler[1] = -0.30
             report["warrior_hair_parts"] = 4
+            # Lightweight anime-style face overlays. Positioned relative to the
+            # current procedural head; final placement requires visual QA.
+            eye_white = bpy.data.materials.new("Warrior_Eye_White")
+            eye_white.diffuse_color = (0.96, 0.95, 0.91, 1)
+            eye_white.use_nodes = True
+            iris = bpy.data.materials.new("Warrior_Iris_Amber")
+            iris.diffuse_color = (0.64, 0.29, 0.065, 1)
+            iris.use_nodes = True
+            pupil = bpy.data.materials.new("Warrior_Pupil")
+            pupil.diffuse_color = (0.018, 0.023, 0.042, 1)
+            pupil.use_nodes = True
+            for side in (-1, 1):
+                x = side * height * 0.065
+                accessory("Warrior_Eye_" + str(side),
+                          (x, -height * 0.198, zhead - height * 0.012),
+                          (height * 0.042, height * 0.014, height * 0.053),
+                          eye_white, "UV_SPHERE")
+                accessory("Warrior_Iris_" + str(side),
+                          (x - side * height * 0.005, -height * 0.212, zhead - height * 0.017),
+                          (height * 0.023, height * 0.009, height * 0.035),
+                          iris, "UV_SPHERE")
+                accessory("Warrior_Pupil_" + str(side),
+                          (x - side * height * 0.005, -height * 0.221, zhead - height * 0.017),
+                          (height * 0.012, height * 0.005, height * 0.023),
+                          pupil, "UV_SPHERE")
+                brow = accessory("Warrior_Eyebrow_" + str(side),
+                          (x, -height * 0.208, zhead + height * 0.065),
+                          (height * 0.057, height * 0.012, height * 0.014),
+                          hair)
+                brow.rotation_euler[1] = side * 0.14
+            accessory("Warrior_Nose", (0, -height * 0.201, zhead - height * 0.080),
+                      (height * 0.015, height * 0.012, height * 0.012),
+                      gold, "UV_SPHERE")
+            report["warrior_face_parts"] = 9
+
             report["warrior_equipment"] = [obj.name for obj in equipment]
         bpy.ops.object.select_all(action="DESELECT")
         variant.select_set(True)
