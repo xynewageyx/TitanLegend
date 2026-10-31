@@ -354,6 +354,29 @@ for region in regions:
    "        crown.position = Vector3(px, _height_at(px, pz) + 5.2, pz)",
    "        add_child(crown)",
   ])
+  if weather_snow:
+   extra.extend([
+    "        var ice_tip := MeshInstance3D.new()",
+    '        ice_tip.name = "FrostPineTip_%02d" % i',
+    "        ice_tip.mesh = crown_mesh",
+    "        ice_tip.material_override = crown_material",
+    "        ice_tip.scale = Vector3(0.65, 0.72, 0.65)",
+    "        ice_tip.position = Vector3(px, _height_at(px, pz) + 7.7, pz)",
+    "        add_child(ice_tip)",
+   ])
+  else:
+   extra.extend([
+    "        crown.scale = Vector3(0.72, 1.22, 0.72)",
+    "        crown.rotation.z = -0.18 if i % 2 == 0 else 0.18",
+    "        var ember_branch := MeshInstance3D.new()",
+    '        ember_branch.name = "EmberBranch_%02d" % i',
+    "        ember_branch.mesh = branch_mesh",
+    "        ember_branch.material_override = trunk_material",
+    "        ember_branch.scale = Vector3(0.48, 0.60, 0.48)",
+    "        ember_branch.rotation.z = -0.72 if i % 2 == 0 else 0.72",
+    "        ember_branch.position = Vector3(px + 0.8, _height_at(px, pz) + 4.1, pz)",
+    "        add_child(ember_branch)",
+   ])
   if not weather_snow:
    extra.extend([
     "    var lava_material := StandardMaterial3D.new()",
