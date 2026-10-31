@@ -164,7 +164,8 @@ jobs:
         run: |
           set -euo pipefail
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
-          for scene in terrain3d-preview/scenes/*_terrain3d.tscn; do
+          for key in $(python3 -c 'import json; print(" ".join(r["key"] for r in json.load(open("terrain3d-preview/regions.json"))["regions"]))'); do
+            scene="terrain3d-preview/scenes/${key}_terrain3d.tscn"
             name="$(basename "$scene")"
             echo "Testing biome: $name"
             "$GODOT" --headless --path terrain3d-preview --quit-after 5 "res://scenes/$name" > /tmp/biome-smoke.log 2>&1 || {
