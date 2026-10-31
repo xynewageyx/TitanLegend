@@ -59,11 +59,13 @@ landscape.write_text(chr(10).join([
  '[node name="Camera3D" type="Camera3D" parent="."]',
  'position = Vector3(64, 58, 158)',
  'rotation_degrees = Vector3(-35, 0, 0)',
+ 'fov = 62.0',
  'current = true',
  '',
  '[node name="Sun" type="DirectionalLight3D" parent="."]',
  'rotation_degrees = Vector3(-55, -35, 0)',
  'light_energy = 1.3',
+ 'shadow_enabled = true',
  ''
 ]),encoding="utf-8")
 scripts=root/"scripts";scripts.mkdir(exist_ok=True)
