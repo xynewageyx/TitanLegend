@@ -436,5 +436,13 @@ finally:
     report["objects"] = [o.name for o in bpy.data.objects]
     (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("MPFB_PROBE_REPORT:", json.dumps(report))
-if not report["human_created"] or not report.get("glb_created") or not report.get("chibi_glb_created") or not report.get("rigged_glb_created"):
+required_outputs = (
+    "human_created", "glb_created", "chibi_glb_created",
+    "rigged_glb_created", "warrior_preview_created",
+    "warrior_side_preview_created",
+)
+if (report.get("errors")
+        or any(not report.get(field) for field in required_outputs)
+        or len(report.get("hero_prototypes", [])) != 10
+        or len(report.get("mobile_lod", [])) != 10):
     raise SystemExit("MPFB humanoid creation/export failed; see uploaded report.json")
