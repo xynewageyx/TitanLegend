@@ -127,7 +127,13 @@ jobs:
           assert set(("Root", "Torso", "Head")).issubset(report.get("rig_bones", [])), report
           assert (folder / "mpfb_chibi_side.png").read_bytes().startswith(bytes.fromhex("89504e470d0a1a0a"))
           assert report.get("rigged_glb_created"), report
-          assert set(report.get("rig_bones", [])) == {"Root", "Torso", "Head"}, report
+          expected_rig_bones = {
+              "Root", "Torso", "Head",
+              "UpperArm_L", "UpperArm_R", "Forearm_L", "Forearm_R",
+              "Thigh_L", "Thigh_R", "Shin_L", "Shin_R",
+          }
+          assert set(report.get("rig_bones", [])) == expected_rig_bones, (
+              "Unexpected rig bones", report.get("rig_bones", []))
           assert (folder / "mpfb_chibi_front.png").read_bytes()[:8] == bytes.fromhex("89504e470d0a1a0a")
           for name in ("mpfb_basemesh.glb", "mpfb_chibi_prototype.glb", "mpfb_chibi_rigged.glb"):
               data = (folder / name).read_bytes()
