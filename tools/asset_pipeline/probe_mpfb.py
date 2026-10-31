@@ -260,6 +260,22 @@ try:
                       (height * 0.17, height * 0.055, height * 0.035), gold)
             accessory("Warrior_Sword_Grip", (height * 0.30, -height * 0.08, low + height * 0.15),
                       (height * 0.035, height * 0.04, height * 0.14), gold)
+            # Original stylized dark-hair silhouette: rounded crown and asymmetric locks.
+            hair = bpy.data.materials.new("Warrior_Deep_Navy_Hair")
+            hair.diffuse_color = (0.055, 0.075, 0.14, 1)
+            hair.use_nodes = True
+            hair.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = hair.diffuse_color
+            accessory("Warrior_Hair_Crown", (0, 0, zhead + height * 0.075),
+                      (height * 0.22, height * 0.19, height * 0.115), hair, "UV_SPHERE")
+            for side, offset in [(-1, 0.015), (1, -0.025)]:
+                accessory("Warrior_Hair_Side_" + str(side),
+                          (side * height * 0.16, -height * 0.035, zhead + height * offset),
+                          (height * 0.065, height * 0.10, height * 0.12), hair, "UV_SPHERE")
+            fringe = accessory("Warrior_Hair_Fringe",
+                               (height * 0.055, -height * 0.18, zhead + height * 0.035),
+                               (height * 0.11, height * 0.045, height * 0.075), hair, "UV_SPHERE")
+            fringe.rotation_euler[1] = -0.30
+            report["warrior_hair_parts"] = 4
             report["warrior_equipment"] = [obj.name for obj in equipment]
         bpy.ops.object.select_all(action="DESELECT")
         variant.select_set(True)
