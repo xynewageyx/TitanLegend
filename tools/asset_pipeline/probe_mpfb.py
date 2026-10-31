@@ -36,13 +36,34 @@ try:
         cls.__name__ for cls in bpy.types.Operator.__subclasses__()
         if "mpfb" in cls.__module__.lower()
     )[:150]
-    # A reliable humanoid creation API requires a separate validated integration.
-    # Never claim that a registered addon already generated a skinned GLB.
+    # MPFB's documented operator creates an actual MakeHuman base mesh.
+    bpy.ops.object.select_all(action="SELECT")
+    bpy.ops.object.delete(use_global=False)
+    report["create_operator_available"] = hasattr(bpy.ops.mpfb, "create_human")
+    if not report["create_operator_available"]:
+        raise RuntimeError("MPFB create_human operator was not registered")
+    result = bpy.ops.mpfb.create_human()
+    report["create_operator_result"] = sorted(result)
+    meshes = [obj for obj in bpy.data.objects if obj.type == "MESH"]
+    report["human_created"] = bool(meshes)
+    report["mesh_stats"] = [{"name": obj.name, "vertices": len(obj.data.vertices),
+                             "faces": len(obj.data.polygons)} for obj in meshes]
+    if not meshes:
+        raise RuntimeError("MPFB operator did not create a mesh")
+    if bpy.context.object and bpy.context.object.mode != "OBJECT":
+        bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.select_all(action="DESELECT")
+    for obj in meshes:
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = meshes[0]
+    bpy.ops.export_scene.gltf(filepath=str(out / "mpfb_basemesh.glb"),
+                              export_format="GLB", use_selection=True)
+    report["glb_created"] = (out / "mpfb_basemesh.glb").stat().st_size > 1024
 except Exception:
     report["errors"].append(traceback.format_exc())
 finally:
     report["objects"] = [o.name for o in bpy.data.objects]
     (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print("MPFB_PROBE_REPORT:", json.dumps(report))
-if not report["registration"]:
-    raise SystemExit("MPFB registration failed; see uploaded report.json")
+if not report["human_created"] or not report.get("glb_created"):
+    raise SystemExit("MPFB humanoid creation/export failed; see uploaded report.json")
