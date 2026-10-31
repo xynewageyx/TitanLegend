@@ -1,0 +1,36 @@
+name: Probe MPFB character creator
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/probe-mpfb.yml'
+      - 'tools/asset_pipeline/probe_mpfb.py'
+permissions:
+  contents: read
+jobs:
+  mpfb-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy git
+          blender --version
+      - name: Download MPFB source
+        run: |
+          git clone --depth 1 https://github.com/makehumancommunity/mpfb2.git /tmp/mpfb2
+          test -f /tmp/mpfb2/src/mpfb/__init__.py
+      - name: Probe MPFB registration and humanoid operators
+        run: |
+          mkdir -p build/mpfb
+          blender --background --factory-startup --python tools/asset_pipeline/probe_mpfb.py -- /tmp/mpfb2/src build/mpfb
+      - name: Upload diagnostic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-MPFB-Probe
+          path: build/mpfb/
+          if-no-files-found: warn
+          retention-days: 14
