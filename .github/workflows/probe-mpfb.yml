@@ -58,6 +58,13 @@ jobs:
           assert set(report.get("weapon_socket_names", [])) == {
               "Socket_Weapon_R", "Socket_Shield_L"
           }, "Weapon socket creation missing"
+          expected_poses = {"idle", "walk", "melee_attack", "shield_block", "hit_reaction"}
+          pose_previews = report.get("animation_pose_previews", {})
+          assert set(pose_previews) == expected_poses, pose_previews
+          for pose in expected_poses:
+              assert pose_previews[pose], "Pose preview missing: " + pose
+              pose_file = folder / ("pose_" + pose + ".png")
+              assert pose_file.read_bytes()[:8] == b"\\x89PNG\\r\\n\\x1a\\n", pose_file
           assert report.get("rigged_glb_created"), report
           assert report.get("hit_reaction_glb_created"), "Hit reaction GLB export missing"
           hit_blob = (folder / "mpfb_chibi_hit_reaction.glb").read_bytes()
