@@ -353,6 +353,9 @@ func _ready() -> void:
  _load_pet_elements()
  talent_ranks = SaveManager.get_saved_talents()
  talent_branches = SaveManager.get_saved_talent_branches()
+ var restored_v2: Array = SaveManager.get_saved_talent_builds_v2()
+ if restored_v2.size() == 4:
+  set_meta("talent_builds_v2", restored_v2)
  create_team()
  ShopManager.skins_changed.connect(_apply_equipped_skins)
  _apply_equipped_skins()
