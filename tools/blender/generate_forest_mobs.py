@@ -108,6 +108,49 @@ def vine_thrower():
         sphere("root_foot",(x,.03,.16),(.35,.31,.17),stalk)
     sphere("mouth",(0,-.58,1.25),(.25,.06,.10),dark)
 
+
+def bark_guardian():
+    bark=material("guardian_bark",(.39,.25,.14));moss=material("guardian_moss",(.20,.53,.22))
+    gold=material("guardian_eyes",(.98,.75,.21));dark=material("guardian_pupil",(.08,.08,.05))
+    sphere("massive_torso",(0,0,1.60),(.94,.62,1.05),bark)
+    sphere("shoulder_canopy",(0,0,2.48),(1.10,.73,.35),moss)
+    sphere("head",(0,-.20,2.43),(.56,.50,.55),bark)
+    for x in (-1.08,1.08):
+        sphere("heavy_arm",(x,0,1.64),(.35,.40,.75),bark)
+        sphere("fist",(x,-.10,.98),(.43,.44,.39),bark)
+    for x in (-.48,.48):
+        sphere("root_leg",(x,.12,.54),(.35,.42,.62),bark)
+        sphere("eye",(x*.51,-.68,2.50),(.16,.075,.18),gold)
+    sphere("nose",(0,-.70,2.24),(.19,.15,.18),dark)
+
+def moss_beast():
+    fur=material("beast_moss",(.24,.48,.25));bark=material("beast_bark",(.36,.24,.15))
+    eye=material("beast_eye",(.95,.82,.32))
+    sphere("hulking_body",(0,.25,1.20),(1.03,1.28,.80),fur)
+    sphere("broad_head",(0,-.80,1.37),(.80,.66,.67),bark)
+    sphere("muzzle",(0,-1.35,1.08),(.53,.29,.33),fur)
+    for x in (-.77,.77):
+        for y in (-.50,.95):
+            sphere("thick_leg",(x,y,.55),(.33,.38,.62),bark)
+        sphere("glowing_eye",(x*.56,-1.35,1.55),(.15,.07,.18),eye)
+    for x in (-.55,0,.55):
+        cone("moss_spike",(x,.18,2.03),.28,0,.63,fur)
+
+def root_king():
+    bark=material("king_bark",(.34,.22,.13));wood=material("king_wood",(.49,.32,.17))
+    leaf=material("king_leaves",(.17,.55,.24));eye=material("king_eyes",(.96,.82,.29))
+    sphere("ancient_trunk",(0,0,2.50),(1.18,.87,1.75),bark)
+    sphere("face_plate",(0,-.72,3.02),(.79,.30,.84),wood)
+    for x in (-1.48,1.48):
+        sphere("root_arm",(x,0,2.22),(.48,.55,1.15),bark)
+        sphere("giant_fist",(x,-.18,1.27),(.60,.61,.50),wood)
+        sphere("root_leg",(x*.49,.12,.73),(.52,.61,.90),bark)
+        sphere("eye",(x*.29,-1.04,3.22),(.19,.09,.21),eye)
+    sphere("crown",(0,0,4.26),(1.65,1.20,.75),leaf)
+    for x,y,z in ((-1.10,-.20,4.68),(.95,-.08,4.80),(0,.68,4.75)):
+        sphere("leaf_cluster",(x,y,z),(.75,.66,.56),leaf)
+    sphere("mouth",(0,-1.05,2.66),(.35,.11,.11),bark)
+
 def animate_creature():
     """Create simple object-level idle and attack clips for all mesh parts."""
     root=bpy.data.objects.new("CreatureRoot",None)
@@ -161,5 +204,8 @@ def main():
     export("forest_04_blattfuchs",leaf_fox,out)
     export("forest_05_dorneneber",thorn_boar,out)
     export("forest_06_rankenwerfer",vine_thrower,out)
+    export("forest_elite_01_rindenwaechter",bark_guardian,out)
+    export("forest_elite_02_moosbestie",moss_beast,out)
+    export("forest_boss_01_wurzelkoenig",root_king,out)
 
 if __name__=="__main__":main()
