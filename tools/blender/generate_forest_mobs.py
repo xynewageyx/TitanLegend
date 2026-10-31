@@ -54,6 +54,60 @@ def mushroom():
     eyes(1.04,.22,white,black)
     sphere("mouth",(0,-.449,.73),(.12,.03,.055),black)
 
+
+def root_crawler():
+    bark=material("root_bark",(.36,.23,.13));leaf=material("root_leaves",(.22,.54,.20))
+    white=material("root_eyes",(.96,.92,.75));dark=material("root_pupils",(.06,.08,.04))
+    sphere("gnarled_body",(0,0,.88),(.82,.60,.48),bark)
+    for x in (-.58,0,.58):
+        for y in (-.37,.37):
+            sphere("root_leg",(x,y,.32),(.19,.20,.37),bark)
+    for x in (-.44,.44):
+        cone("leaf_antenna",(x,0,1.45),.19,0,.52,leaf)
+    eyes(.96,.31,white,dark)
+
+def leaf_fox():
+    fur=material("fox_fur",(.73,.44,.18));leaf=material("fox_leaf",(.23,.67,.28))
+    cream=material("fox_cream",(.97,.86,.62));dark=material("fox_dark",(.09,.10,.08))
+    sphere("fox_body",(0,.20,.81),(.52,.81,.44),fur)
+    sphere("fox_head",(0,-.48,1.13),(.55,.48,.51),fur)
+    for x in (-.38,.38):
+        cone("pointed_ear",(x,-.42,1.69),.21,0,.54,leaf)
+        for y in (-.38,.61):
+            sphere("fox_paw",(x,y,.30),(.17,.22,.33),fur)
+    sphere("leaf_tail",(0,1.07,1.08),(.34,.64,.24),leaf)
+    sphere("snout",(0,-.90,.93),(.28,.16,.19),cream)
+    for x in (-.23,.23):
+        sphere("eye",(x,-.885,1.24),(.105,.06,.14),dark)
+    sphere("nose",(0,-1.065,.96),(.12,.08,.08),dark)
+
+def thorn_boar():
+    brown=material("boar_brown",(.44,.28,.18));thorn=material("boar_thorn",(.22,.41,.18))
+    ivory=material("boar_tusk",(.95,.88,.63));dark=material("boar_eye",(.07,.06,.05))
+    sphere("barrel_body",(0,.14,.94),(.80,.94,.65),brown)
+    sphere("big_head",(0,-.64,1.00),(.62,.55,.51),brown)
+    sphere("snout",(0,-1.15,.82),(.39,.22,.27),brown)
+    for x in (-.53,.53):
+        for y in (-.40,.63):
+            sphere("short_leg",(x,y,.31),(.25,.28,.32),brown)
+        cone("tusk",(x*.78,-1.08,.74),.14,0,.38,ivory)
+        sphere("eye",(x*.66,-1.055,1.18),(.10,.06,.12),dark)
+    for x in (-.45,0,.45):
+        for y in (-.35,.18,.65):
+            cone("back_thorn",(x,y,1.59),.19,0,.47,thorn)
+
+def vine_thrower():
+    stalk=material("vine_stalk",(.23,.54,.22));bud=material("vine_bud",(.70,.32,.55))
+    leaf=material("vine_leaf",(.39,.72,.25));dark=material("vine_eye",(.06,.08,.05))
+    cone("stem",(0,0,.72),.26,.15,1.20,stalk)
+    sphere("flower_head",(0,-.08,1.47),(.62,.53,.53),bud)
+    for x in (-.50,.50):
+        sphere("leaf_arm",(x,0,.84),(.52,.20,.18),leaf)
+        sphere("eye",(x*.47,-.57,1.53),(.12,.07,.15),dark)
+    for x in (-.35,.35):
+        sphere("root_foot",(x,.03,.16),(.35,.31,.17),stalk)
+    sphere("mouth",(0,-.58,1.25),(.25,.06,.10),dark)
+
 def animate_creature():
     """Create simple object-level idle and attack clips for all mesh parts."""
     root=bpy.data.objects.new("CreatureRoot",None)
@@ -103,5 +157,9 @@ def main():
     out=os.path.abspath(args.output);os.makedirs(out,exist_ok=True)
     export("forest_01_mooshuepfer",moss,out)
     export("forest_02_pilzling",mushroom,out)
+    export("forest_03_wurzelkrabbler",root_crawler,out)
+    export("forest_04_blattfuchs",leaf_fox,out)
+    export("forest_05_dorneneber",thorn_boar,out)
+    export("forest_06_rankenwerfer",vine_thrower,out)
 
 if __name__=="__main__":main()
