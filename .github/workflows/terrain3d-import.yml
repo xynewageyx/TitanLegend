@@ -38,6 +38,23 @@ jobs:
               assert scene.is_file() and script.is_file(),key
               assert f"res://terrain_data/{key}" in scene.read_text(),key
               assert f"res://terrain_data/{key}" in script.read_text(),key
+          expected_keys = {
+              "emerald_grassland", "whisper_forest", "sun_desert",
+              "frost_peaks", "ember_volcano", "crystal_caverns",
+              "thunder_plateau", "mist_marsh", "sky_islands",
+              "shadow_ruins", "coral_archipelago", "astral_citadel",
+          }
+          assert {r["key"] for r in regions} == expected_keys
+          for index, region in enumerate(regions):
+              assert region["stage_start"] == index * 100 + 1, region
+              assert region["stage_end"] == (index + 1) * 100, region
+              assert region["terrain"]["height_amplitude"] > 0, region
+              assert len(region["special_features"]["props"]) >= 5, region
+              assert len(region["special_features"]["weather"]) >= 2, region
+              assert region["performance"]["android_lod"] is True, region
+              assert region["performance"]["max_decorative_instances"] <= 120, region
+              assert region["performance"]["max_active_weather_particles"] <= 140, region
+          print("Verified 1200 stages, biome features, and Android budgets")
           print("Verified 12 independent Terrain3D biomes")
           PY
       - name: Verify bundled terrain textures
