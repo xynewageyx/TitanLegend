@@ -62,6 +62,15 @@ jobs:
           assert len(warrior_gltf.get("meshes", [])) >= 15, "Warrior accessories missing"
           print("Warrior face, equipment, previews and GLB nodes verified")
           assert len(report.get("hero_prototypes", [])) == 10, report
+          budgets = report.get("mobile_mesh_budget", [])
+          assert len(budgets) == 10, "Missing Android mesh budgets"
+          for entry in budgets:
+              assert entry["triangles"] > 0 and entry["mesh_objects"] > 0, entry
+              if not entry["within_target"]:
+                  print("ANDROID LOD WARNING:", entry["class"],
+                        entry["triangles"], "triangles exceeds target",
+                        entry["target_triangles"])
+          print("Android prototype mesh budgets:", budgets)
           for hero in report["hero_prototypes"]:
               assert hero["bytes"] > 1024 and (folder / hero["file"]).is_file(), hero
           assert set(("Root", "Torso", "Head")).issubset(report.get("rig_bones", [])), report
