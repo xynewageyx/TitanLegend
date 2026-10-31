@@ -302,6 +302,7 @@ for region in regions:
  script=script.replace("(i * 47 + 29)",f"(i * 47 + {29+seed_offset})")
  script=script.replace('res://terrain_data',f'res://terrain_data/{key}')
  script=script.replace('GRASLAND_',f'{key.upper()}_')
+ script=script.replace("res://textures/terrain/",f"res://textures/terrain/{key}/")
  (scripts/f"{key}_setup.gd").write_text(script,encoding="utf-8")
  scene_text=base_scene.replace("res://scripts/grasland_setup.gd",f"res://scripts/{key}_setup.gd")
  scene_text=scene_text.replace('name="Grasland"',f'name="{key}"')
@@ -341,3 +342,28 @@ write_png("erde_albedo.png",(117,84,54),22,25)
 write_png("weg_albedo.png",(168,128,82),33,18)
 write_png("fels_albedo.png",(116,119,116),44,31)
 print("Bundled four tileable terrain PNGs in textures/terrain")
+# Give each biome its own deterministic terrain textures, including path and stone.
+for region in regions:
+ key=region["key"]
+ biome_dir=texture_dir/key
+ biome_dir.mkdir(parents=True,exist_ok=True)
+ palette=region["terrain"]
+ for filename,color_name,offset,grain in [
+  ("gras_albedo.png","grass_color",1,22),
+  ("erde_albedo.png","path_color",2,24),
+  ("weg_albedo.png","path_color",3,16),
+  ("fels_albedo.png","rock_color",4,27),
+ ]:
+  color=palette[color_name].lstrip("#")
+  rgb=tuple(int(color[i:i+2],16) for i in (0,2,4))
+  # write_png writes into texture_dir; copy its reproducible result into biome directory.
+  write_png(filename,rgb,int(palette["seed"])+offset,grain)
+  shutil.copyfile(texture_dir/filename,biome_dir/filename)
+  # Restore base grassland texture after biome variants are written.
+# Keep the shared grassland set unchanged for the original scene.
+write_png("gras_albedo.png",(89,149,57),11,29)
+write_png("erde_albedo.png",(117,84,54),22,25)
+write_png("weg_albedo.png",(168,128,82),33,18)
+write_png("fels_albedo.png",(116,119,116),44,31)
+print("BIOME_TEXTURES_READY",len(regions)*4)
+
