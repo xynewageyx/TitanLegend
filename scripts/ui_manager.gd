@@ -43,7 +43,7 @@ var loot_select_button: Button
 var loot_equip_button: Button
 var loot_equipped_overview: Label
 var loot_slot_buttons: Array[Button] = []
-var loot_selected_slot: int = 0
+var loot_selected_slot: int = -1
 var loot_compare_label: Label
 var loot_sell_button: Button
 var loot_downgrade_confirmation: ConfirmationDialog
@@ -388,6 +388,7 @@ func _make_hud() -> void:
   slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   slot_button.add_theme_font_size_override("font_size", 14)
   slot_button.clip_text = true
+  slot_button.toggle_mode = true
   slot_button.pressed.connect(_select_loot_slot.bind(slot_index))
   loot_grid.add_child(slot_button)
   loot_slot_buttons.append(slot_button)
@@ -625,9 +626,10 @@ func _refresh(_unused: int = 0) -> void:
    var tile: Button = loot_slot_buttons[slot]
    var worn: Dictionary = GameManager.loot_item_by_id(int(GameManager.equipped_loot[weapon_hero_slot][slot]))
    var tier: int = clampi(int(worn.get("rarity", 0)), 0, 5)
-   tile.text = GameManager.LOOT_SLOTS[slot] + "\n" + ("Leer" if worn.is_empty() else GameManager.WEAPON_RARITIES[tier] + " Lv." + str(worn.get("level", 1)))
+   var slot_icons := ["◉", "▣", "◆", "◈", "◈", "▰", "▰", "✦", "✦", "▾", "▾", "▿", "▿"]
+   tile.text = slot_icons[slot] + " " + GameManager.LOOT_SLOTS[slot] + "\n" + ("Leer" if worn.is_empty() else GameManager.WEAPON_RARITIES[tier] + " Lv." + str(worn.get("level", 1)))
    tile.modulate = Color.WHITE if worn.is_empty() else rarity_colors[tier]
-   tile.button_pressed = slot == loot_selected_slot if tile.toggle_mode else false
+   tile.button_pressed = slot == loot_selected_slot
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
@@ -722,7 +724,7 @@ func _upgrade_current_weapon_rarity() -> void:
  _refresh()
 
 func _select_loot_slot(slot_index: int) -> void:
- loot_selected_slot = clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
+ loot_selected_slot = -1 if loot_selected_slot == slot_index else clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
  for index in range(GameManager.equipment_inventory.size()):
   if int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
    loot_selected_index = index
