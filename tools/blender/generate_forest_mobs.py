@@ -88,8 +88,14 @@ def animate_creature():
 def export(name,fn,out):
     clear();fn();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
-    bpy.ops.export_scene.gltf(filepath=os.path.join(out,name+".glb"),export_format="GLB",use_selection=True)
-    print("EXPORTED",name)
+    target=os.path.join(out,name+".glb")
+    result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
+    if "FINISHED" not in result or not os.path.isfile(target) or os.path.getsize(target)<20:
+        raise RuntimeError("GLB export failed: "+target)
+    with open(target,"rb") as stream:
+        if stream.read(4)!=b"glTF":
+            raise RuntimeError("Invalid GLB magic: "+target)
+    print("EXPORTED",name,os.path.getsize(target),"bytes")
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--output",default="assets/enemies/forest")
