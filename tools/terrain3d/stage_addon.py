@@ -353,7 +353,7 @@ for region in regions:
    "        crown.material_override = crown_material",
    "        crown.position = Vector3(px, _height_at(px, pz) + 5.2, pz)",
    "        add_child(crown)",
-  ]
+  ])
   if not weather_snow:
    extra.extend([
     "    var lava_material := StandardMaterial3D.new()",
