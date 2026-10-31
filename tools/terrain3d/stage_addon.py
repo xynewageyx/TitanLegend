@@ -385,6 +385,49 @@ for region in regions:
    ])
   script=script.replace("    _scatter_grassland_props()","    _scatter_grassland_props()\n    _add_elemental_environment()")
   script+="\n".join(extra)+"\n"
+ # Procedural biome-specific landmark prototypes for the other ten regions.
+ if key not in ("frost_peaks", "ember_volcano"):
+  props=region["special_features"]["props"]
+  weather=region["special_features"]["weather"]
+  extra=[
+   "",
+   "func _add_biome_landmarks() -> void:",
+   "    # Themes: "+", ".join(props),
+   "    # Weather planned: "+", ".join(weather),
+   "    var material := StandardMaterial3D.new()",
+   "    material.albedo_color = "+gd_color(region["terrain"]["rock_color"]),
+   "    var accent := StandardMaterial3D.new()",
+   "    accent.albedo_color = "+gd_color(region["terrain"]["grass_color"]),
+   "    var spire := CylinderMesh.new()",
+   "    spire.top_radius = 0.15",
+   "    spire.bottom_radius = 1.25",
+   "    spire.height = 5.0",
+   "    spire.radial_segments = 6",
+   "    var crown_mesh := SphereMesh.new()",
+   "    crown_mesh.radius = 1.4",
+   "    crown_mesh.height = 2.5",
+   "    crown_mesh.radial_segments = 8",
+   "    crown_mesh.rings = 4",
+   "    for i in range(26):",
+   "        var px: float = 8.0 + float((i * 37 + 11) % 110)",
+   "        var pz: float = 8.0 + float((i * 47 + 31) % 110)",
+   "        var trail: float = 63.0 + 16.0 * sin(pz * 0.036)",
+   "        if abs(px - trail) < 13.0 or Vector2(px - 63.0, pz - 106.0).length() < 28.0:",
+   "            continue",
+   "        var landmark := MeshInstance3D.new()",
+   '        landmark.name = "Landmark_%02d" % i',
+   "        landmark.mesh = spire",
+   "        landmark.material_override = material",
+   "        landmark.position = Vector3(px, _height_at(px, pz) + 2.5, pz)",
+   "        add_child(landmark)",
+   "        var crown := MeshInstance3D.new()",
+   "        crown.mesh = crown_mesh",
+   "        crown.material_override = accent",
+   "        crown.position = Vector3(px, _height_at(px, pz) + 5.6, pz)",
+   "        add_child(crown)",
+  ]
+  script=script.replace("    _scatter_grassland_props()", "    _scatter_grassland_props()\\n    _add_biome_landmarks()")
+  script+="\\n".join(extra)+"\\n"
  # Make object distribution vary deterministically by biome ID.
  seed_offset=int(region["terrain"]["seed"]) % 101
  script=script.replace("(i * 37 + 13)",f"(i * 37 + {13+seed_offset})")
