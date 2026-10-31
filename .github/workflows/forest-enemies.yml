@@ -41,6 +41,7 @@ jobs:
         run: |
           mkdir -p godot-import/assets/enemies/forest
           cp build/forest/*.glb godot-import/assets/enemies/forest/
+          test "$(find godot-import/assets/enemies/forest -name '*.glb' | wc -l)" -eq 9
       - uses: actions/upload-artifact@v4
         with:
           name: TitanLegends-Forest-Mobs-GLB
