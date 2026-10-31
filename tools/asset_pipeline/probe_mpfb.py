@@ -227,6 +227,30 @@ try:
                 bone.rotation_mode = "XYZ"
                 bone.rotation_euler[0] = math.sin(phase) * direction * amplitude
                 bone.keyframe_insert(data_path="rotation_euler", frame=frame)
+    # Experimental right-handed melee swing: wind-up, strike, recovery.
+    # This only animates the armature; the static warrior sword is not yet
+    # attached to a hand socket and must be integrated separately.
+    attack_action = bpy.data.actions.new("melee_swing")
+    arm.animation_data.action = attack_action
+    for frame, upper_x, upper_z, forearm_x, torso_y in (
+        (1, 0.0, 0.0, 0.0, 0.0),
+        (7, -0.70, -0.38, -0.50, -0.12),
+        (12, 0.95, 0.30, 0.18, 0.18),
+        (19, 0.12, 0.05, 0.05, 0.04),
+        (25, 0.0, 0.0, 0.0, 0.0),
+    ):
+        upper = arm.pose.bones["UpperArm_R"]
+        upper.rotation_mode = "XYZ"
+        upper.rotation_euler = (upper_x, 0.0, upper_z)
+        upper.keyframe_insert(data_path="rotation_euler", frame=frame)
+        forearm = arm.pose.bones["Forearm_R"]
+        forearm.rotation_mode = "XYZ"
+        forearm.rotation_euler = (forearm_x, 0.0, 0.0)
+        forearm.keyframe_insert(data_path="rotation_euler", frame=frame)
+        torso = arm.pose.bones["Torso"]
+        torso.rotation_mode = "XYZ"
+        torso.rotation_euler = (0.0, torso_y, 0.0)
+        torso.keyframe_insert(data_path="rotation_euler", frame=frame)
     # Keep idle as the active export action until multi-action export is verified.
     arm.animation_data.action = action
     bpy.context.scene.frame_end = 31
@@ -254,6 +278,20 @@ try:
     finally:
         arm.animation_data.action = action
         bpy.context.scene.frame_end = scene_walk_end
+        bpy.context.scene.frame_set(1)
+    try:
+        arm.animation_data.action = attack_action
+        attack_end = bpy.context.scene.frame_end
+        bpy.context.scene.frame_end = 25
+        bpy.context.scene.frame_set(1)
+        attack_file = out / "mpfb_chibi_melee_attack.glb"
+        bpy.ops.export_scene.gltf(filepath=str(attack_file),
+                                  export_format="GLB", use_selection=True,
+                                  export_animations=True, export_skins=True)
+        report["melee_attack_glb_created"] = attack_file.stat().st_size > 1024
+    finally:
+        arm.animation_data.action = action
+        bpy.context.scene.frame_end = attack_end
         bpy.context.scene.frame_set(1)
     report["rig_bones"] = [bone.name for bone in arm_data.bones]
     report["rig_note"] = "Experimental 11-bone geometric skin with idle motion; not production rig"
