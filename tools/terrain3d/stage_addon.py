@@ -279,11 +279,11 @@ for region in regions:
  # Reduce trees in barren biomes; use crystals/stone formations instead.
  barren=region["element"] in ("fire","ice","earth","arcane","lightning","dark","light")
  if barren:
-  script=script.replace("for i in range(45):","for i in range(12):")
-  script=script.replace("for i in range(28):","for i in range(55):")
+  script=script.replace("for i in range(45):","for i in range(8):")
+  script=script.replace("for i in range(28):","for i in range(20):")
  else:
-  script=script.replace("for i in range(45):","for i in range(65):")
-  script=script.replace("for i in range(28):","for i in range(24):")
+  script=script.replace("for i in range(45):","for i in range(20):")
+  script=script.replace("for i in range(28):","for i in range(16):")
  # Distinct silhouettes for rocky, frozen, magical and desert biomes.
  if region["element"] in ("ice","arcane","lightning","light"):
   script=script.replace("var rock_mesh := SphereMesh.new()","var rock_mesh := CylinderMesh.new()")
