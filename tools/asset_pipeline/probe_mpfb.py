@@ -336,11 +336,12 @@ try:
             # duplicate is static, so bake the Basis coordinates into its mesh
             # and remove keys ONLY from the duplicate.
             if lod_body.data.shape_keys:
-                basis = lod_body.data.shape_keys.key_blocks[0]
-                for vertex, key_vertex in zip(lod_body.data.vertices, basis.data):
-                    vertex.co = key_vertex.co
+                # Remove non-Basis keys first. Blender requires Basis to be
+                # removed last, and shape_key_remove works on the active object.
                 while lod_body.data.shape_keys:
-                    lod_body.shape_key_remove(lod_body.data.shape_keys.key_blocks[-1])
+                    key = lod_body.data.shape_keys.key_blocks[-1]
+                    lod_body.shape_key_remove(key)
+            assert lod_body.data.shape_keys is None, "LOD still has shape keys"
             body_triangles = sum(len(p.vertices) - 2 for p in lod_body.data.polygons)
             if body_triangles > 9000:
                 modifier = lod_body.modifiers.new("Mobile_LOD_Decimate", "DECIMATE")
