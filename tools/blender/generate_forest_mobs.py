@@ -182,6 +182,41 @@ def organic_finish():
             except (RuntimeError, AttributeError):
                 obj.modifiers.remove(bevel)
 
+def branching_root(name, points, radius, mat, sides=9):
+    """Continuous tapered branch mesh; substantially more organic than stacked cones."""
+    vertices, faces = [], []
+    for i, point in enumerate(points):
+        center = Vector(point)
+        direction = Vector(points[min(i + 1, len(points)-1)]) - Vector(points[max(i-1, 0)])
+        if direction.length < 1e-5:
+            direction = Vector((0, 0, 1))
+        direction.normalize()
+        axis = direction.cross(Vector((0, 1, 0)))
+        if axis.length < 1e-5:
+            axis = direction.cross(Vector((1, 0, 0)))
+        axis.normalize()
+        other = direction.cross(axis).normalized()
+        taper = max(.10, 1.0 - .84 * i / (len(points) - 1))
+        for j in range(sides):
+            a = 2 * math.pi * j / sides
+            offset = radius * taper * (axis * math.cos(a) + other * math.sin(a))
+            vertices.append(tuple(center + offset))
+        if i:
+            for j in range(sides):
+                a = (i-1)*sides+j
+                b = (i-1)*sides+(j+1)%sides
+                c = i*sides+(j+1)%sides
+                d = i*sides+j
+                faces.append((a,b,c,d))
+    faces.extend([tuple(reversed(range(sides))), tuple((len(points)-1)*sides+j for j in range(sides))])
+    mesh = bpy.data.meshes.new(name + "_mesh")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    obj.data.materials.append(mat)
+    return obj
+
 def king_bark_details():
     """Sculptural raised bark ridges and root-like branching, not a flat trunk."""
     bark = material("king_bark_ridges", (.22, .13, .075))
@@ -197,12 +232,16 @@ def king_bark_details():
         for i in range(3):
             x = side * (1.0 + i * .32)
             z = 3.8 + i * .29
-            branch = cone("branch_antler", (x, .12, z), .21, .025, 1.15 - .15 * i, highlight, 12)
-            branch.rotation_euler[1] = side * (.48 + i * .17)
+            branching_root("forked_branch", [(side*.78,.12,3.42),
+                (side*(1.08+i*.12),.10,3.88),
+                (side*(1.36+i*.22),.08,4.30+i*.10),
+                (side*(1.51+i*.27),.03,4.72+i*.16)], .22, highlight)
         for i in range(4):
             x = side * (.35 + i * .31)
-            root = sphere("exposed_root", (x, -.22, .30), (.16, .35, .44), bark, 12, 8)
-            root.rotation_euler[1] = side * .34
+            branching_root("curved_ground_root", [(side*.43,-.05,1.02),
+                (side*(.48+i*.12),-.20,.60),
+                (x,-.34,.20),
+                (side*(.56+i*.39),-.47,.08)], .20, bark)
 
 def animate_creature():
     """Create simple object-level idle and attack clips for all mesh parts."""
