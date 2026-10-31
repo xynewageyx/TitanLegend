@@ -48,6 +48,8 @@ func save_game() -> void:
  if team != null:
   data["talents"] = team.talent_ranks
   data["talent_branches"] = team.talent_branches
+  if team.has_meta("talent_builds_v2"):
+   data["talent_builds_v2"] = team.get_meta("talent_builds_v2").duplicate(true)
  var result: Error = SAVE_FILE_STORE.save_atomic(SAVE_PATH, data)
  if result != OK:
   push_warning("Automatic save failed (code " + str(result) + ")")
@@ -233,3 +235,15 @@ func get_saved_astral() -> Dictionary:
  if not data.is_empty():
   return {"floor": maxi(1, int(data.get("astral_floor", 1))), "marks": maxi(0, int(data.get("astral_marks", 0)))}
  return {"floor": 1, "marks": 0}
+
+# Optional V2 builds are stored separately; old talent ranks are never migrated implicitly.
+func get_saved_talent_builds_v2() -> Array:
+ var data: Dictionary = SAVE_FILE_STORE.load_latest(SAVE_PATH)
+ var saved: Variant = data.get("talent_builds_v2", [])
+ if not saved is Array or saved.size() != 4:
+  return []
+ var tree_script = preload("res://scripts/talent_tree_v2.gd")
+ var result: Array = []
+ for slot in range(4):
+  result.append(tree_script.validate_build(GameManager.character_level, saved[slot]))
+ return result
