@@ -53,6 +53,21 @@ jobs:
           assert report.get("human_created") and report.get("chibi_glb_created"), report
           assert report.get("preview_created") and report.get("side_preview_created"), report
           assert report.get("rigged_glb_created"), report
+          rig_path = folder / "mpfb_chibi_rigged.glb"
+          rig_blob = rig_path.read_bytes()
+          assert rig_blob[:4] == b"glTF", "Rigged model is not GLB"
+          assert struct.unpack_from("<I", rig_blob, 8)[0] == len(rig_blob), "Rigged GLB length mismatch"
+          rig_json_length, rig_json_type = struct.unpack_from("<I4s", rig_blob, 12)
+          assert rig_json_type == b"JSON", "Rigged GLB has no JSON chunk"
+          rig_gltf = json.loads(rig_blob[20:20 + rig_json_length])
+          assert rig_gltf.get("skins"), "Chibi GLB is missing skin bindings"
+          assert rig_gltf.get("animations"), "Chibi GLB is missing idle animation"
+          rig_nodes = {node.get("name", "") for node in rig_gltf.get("nodes", [])}
+          assert {"Root", "Torso", "Head"}.issubset(rig_nodes), (
+              "Missing chibi bones", rig_nodes)
+          assert len(rig_gltf["skins"][0].get("joints", [])) >= 3, (
+              "Chibi skin has fewer than three joints")
+          print("Rigged GLB: bones, skin joints and idle animation verified")
           assert report.get("warrior_preview_created"), report
           assert report.get("warrior_side_preview_created"), report
           assert len(report.get("warrior_equipment", [])) >= 7, report
