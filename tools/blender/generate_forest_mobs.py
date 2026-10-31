@@ -152,6 +152,56 @@ def root_king():
     sphere("mouth",(0,-1.05,2.66),(.35,.11,.11),bark)
     king_bark_details()
 
+def forest_surface_details(creature):
+    """Add distinct lightweight sculptural accents without external asset licenses."""
+    leaf = material("detail_leaf", (.19, .48, .17))
+    bark = material("detail_bark", (.30, .18, .09))
+    cream = material("detail_cream", (.94, .84, .59))
+    if creature == "forest_01_mooshuepfer":
+        for i in range(11):
+            a = 2*math.pi*i/11
+            sphere("moss_curl", (.56*math.cos(a), .43*math.sin(a), 1.38+.14*math.sin(i*2)),
+                   (.16,.13,.12), leaf, 12, 8)
+    elif creature == "forest_02_pilzling":
+        for i in range(12):
+            a = 2*math.pi*i/12
+            sphere("cap_rim_scallop", (.83*math.cos(a), .63*math.sin(a), 1.56),
+                   (.20,.15,.095), cream, 12, 8)
+    elif creature == "forest_03_wurzelkrabbler":
+        for side in (-1,1):
+            for j in range(2):
+                branching_root("crawler_root_horn", [(side*.30,0,1.14),
+                    (side*(.45+j*.16),.02,1.42),
+                    (side*(.60+j*.20),.08,1.68)], .13, bark)
+    elif creature == "forest_04_blattfuchs":
+        for side in (-1,1):
+            for j in range(3):
+                sphere("cheek_fur_tuft", (side*(.40+j*.075),-.73+j*.07,1.03+j*.07),
+                       (.18,.12,.09), cream, 12, 8)
+    elif creature == "forest_05_dorneneber":
+        for side in (-1,1):
+            for j in range(3):
+                branching_root("boar_curved_tusk", [(side*.31,-1.08,.72),
+                    (side*(.41+j*.05),-1.18,.85),
+                    (side*(.48+j*.05),-1.16,1.05)], .11, cream)
+    elif creature == "forest_06_rankenwerfer":
+        for side in (-1,1):
+            branching_root("thrower_vine", [(side*.35,0,.93),
+                (side*.68,-.06,1.11),
+                (side*.84,-.16,1.45),
+                (side*.70,-.20,1.65)], .11, leaf)
+    elif creature == "forest_elite_01_rindenwaechter":
+        for side in (-1,1):
+            for j in range(3):
+                branching_root("guardian_shoulder_branch", [(side*.65,.0,2.20),
+                    (side*(.93+j*.12),.05,2.48),
+                    (side*(1.02+j*.18),.08,2.80)], .16, bark)
+    elif creature == "forest_elite_02_moosbestie":
+        for side in (-1,1):
+            for j in range(4):
+                sphere("beast_moss_shag", (side*(.45+j*.12),-.35+j*.22,1.85),
+                       (.19,.21,.25), leaf, 12, 8)
+
 def expressive_details():
     """Distinct facial highlights and small sculptural accents for every creature."""
     iris = material("iris_highlight", (.96, .99, .92))
@@ -276,7 +326,7 @@ def animate_creature():
     return root
 
 def export(name,fn,out):
-    clear();fn();expressive_details();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);expressive_details();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
