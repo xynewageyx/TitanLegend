@@ -103,6 +103,19 @@ jobs:
               required = {"Socket_Weapon_R", "Socket_Shield_L", "Rig_Test_Sword", "Rig_Test_Shield"}
               assert required <= names, (
                   label + " GLB missing weapon sockets: " + str(required - names))
+              indexed_nodes = gltf_doc.get("nodes", [])
+              by_name = {node.get("name"): i for i, node in enumerate(indexed_nodes)}
+              for socket_name, mesh_name in (
+                  ("Socket_Weapon_R", "Rig_Test_Sword"),
+                  ("Socket_Shield_L", "Rig_Test_Shield"),
+              ):
+                  socket_node = indexed_nodes[by_name[socket_name]]
+                  mesh_index = by_name[mesh_name]
+                  assert mesh_index in socket_node.get("children", []), (
+                      label + ": " + mesh_name + " is not parented to " + socket_name)
+                  assert "mesh" in indexed_nodes[mesh_index], (
+                      label + ": " + mesh_name + " has no mesh")
+              print(label + ": weapon and shield mesh hierarchy verified")
           assert walk_gltf.get("skins"), "Walk GLB has no skeleton skin"
           assert walk_gltf.get("animations"), "Walk GLB has no animation"
           print("Separate walking GLB animation and skin verified")
