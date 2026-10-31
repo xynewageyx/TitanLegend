@@ -38,6 +38,21 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("ScrollContainer.new()", MENU)
         self.assertIn("panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)", MENU)
 
+    def test_close_button_stays_outside_scroll_area(self):
+        header = MENU.index("var header := HBoxContainer.new()")
+        close = MENU.index('close_button.text = "Schliessen"')
+        scroll = MENU.index("var scroll := ScrollContainer.new()")
+        grid = MENU.index("talent_grid = GridContainer.new()")
+        self.assertLess(header, close)
+        self.assertLess(close, scroll)
+        self.assertLess(scroll, grid)
+        self.assertIn("scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO", MENU)
+        self.assertIn("scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED", MENU)
+
+    def test_hero_class_labels_guard_class_indices(self):
+        self.assertIn("class_index >= 0 and class_index < team.CLASS_NAMES.size()", MENU)
+        self.assertIn("hero_picker.set_item_text(", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
