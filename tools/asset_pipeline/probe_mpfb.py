@@ -367,6 +367,11 @@ try:
             report.setdefault("mobile_lod", []).append({
                 "class": hero_name, "file": lod_filename,
                 "triangles": lod_triangles,
+                "body_triangles_before": body_triangles,
+                "body_triangles_after": sum(len(p.vertices) - 2 for p in lod_body.data.polygons),
+                "reduction_percent": round(100.0 * (1.0 - (
+                    sum(len(p.vertices) - 2 for p in lod_body.data.polygons)
+                    / max(1, body_triangles))), 1),
                 "bytes": (out / lod_filename).stat().st_size,
                 "note": "Static experimental LOD; inspect silhouettes and facial details",
             })
