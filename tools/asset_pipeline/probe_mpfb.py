@@ -332,6 +332,15 @@ try:
             bpy.ops.object.select_all(action="DESELECT")
             lod_body.select_set(True)
             bpy.context.view_layer.objects.active = lod_body
+            # Shape keys prevent applying Decimate in Blender. The mobile
+            # duplicate is static, so bake the Basis coordinates into its mesh
+            # and remove keys ONLY from the duplicate.
+            if lod_body.data.shape_keys:
+                basis = lod_body.data.shape_keys.key_blocks[0]
+                for vertex, key_vertex in zip(lod_body.data.vertices, basis.data):
+                    vertex.co = key_vertex.co
+                while lod_body.data.shape_keys:
+                    lod_body.shape_key_remove(lod_body.data.shape_keys.key_blocks[-1])
             body_triangles = sum(len(p.vertices) - 2 for p in lod_body.data.polygons)
             if body_triangles > 9000:
                 modifier = lod_body.modifiers.new("Mobile_LOD_Decimate", "DECIMATE")
