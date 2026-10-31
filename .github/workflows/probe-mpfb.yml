@@ -70,6 +70,16 @@ jobs:
               blob = lod_path.read_bytes()
               assert blob[:4] == b"glTF" and struct.unpack_from("<I", blob, 8)[0] == len(blob), lod
               assert lod["triangles"] > 0, lod
+              assert 0 <= lod["reduction_percent"] <= 100, lod
+              assert 0 < lod["body_triangles_after"] <= lod["body_triangles_before"], lod
+              # Every MPFB base mesh starts above the 9k-body target.
+              assert lod["body_triangles_after"] < lod["body_triangles_before"], (
+                  "LOD decimation did not reduce geometry", lod)
+              assert lod["body_triangles_after"] <= 10000, (
+                  "Mobile LOD body exceeds tolerance", lod)
+              print("MOBILE LOD", lod["class"],
+                    lod["body_triangles_before"], "->", lod["body_triangles_after"],
+                    "triangles; reduction", str(lod["reduction_percent"]) + "%")
           budgets = report.get("mobile_mesh_budget", [])
           assert len(budgets) == 10, "Missing Android mesh budgets"
           for entry in budgets:
