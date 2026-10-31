@@ -215,7 +215,7 @@ jobs:
             echo "Rendering optional preview: $key"
             timeout 30s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --resolution 960x540 --write-movie "/tmp/$key.avi" --fixed-fps 30 --quit-after 90 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1 || true
             if test -s "/tmp/$key.avi"; then
-              ffmpeg -hide_banner -loglevel error -y -sseof -0.2 -i "/tmp/$key.avi" -frames:v 1 "terrain3d-previews/$key.png" || true
+              ffmpeg -hide_banner -loglevel error -y -sseof -0.2 -i "/tmp/$key.avi" -frames:v 1 "terrain3d-previews/$key.png" || ffmpeg -hide_banner -loglevel error -y -i "/tmp/$key.avi" -frames:v 1 "terrain3d-previews/$key.png" || true
             fi
             if ! test -s "terrain3d-previews/$key.png"; then
               cp "/tmp/$key-preview.log" "terrain3d-previews/$key.log"
