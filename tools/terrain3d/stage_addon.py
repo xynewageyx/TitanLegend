@@ -419,11 +419,12 @@ for region in regions:
    "    spire.bottom_radius = 0.65" if key=="coral_archipelago" else
    "    spire.bottom_radius = 1.25",
 
-   "    var crown_mesh := SphereMesh.new()",
-   "    crown_mesh.radius = "+("2.5" if key in ("whisper_forest","emerald_grassland") else "0.9" if key in ("sun_desert","shadow_ruins") else "1.4"),
-   "    crown_mesh.height = "+("4.0" if key in ("whisper_forest","emerald_grassland") else "2.5"),
-   "    crown_mesh.radial_segments = "+("5" if key in ("crystal_caverns","astral_citadel") else "8"),
-   "    crown_mesh.rings = 4",
+   # Forest and marsh use fuller canopies, desert and ruins favor angular crowns.
+   "    var crown_mesh := SphereMesh.new()" if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    var crown_mesh := CylinderMesh.new()",
+   "    crown_mesh.radius = "+("2.5" if key in ("whisper_forest","emerald_grassland") else "1.4") if key not in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.top_radius = 0.2",
+   "    crown_mesh.bottom_radius = 1.2" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.height = "+("4.0" if key in ("whisper_forest","emerald_grassland") else "2.5"),
+   "    crown_mesh.height = 2.5" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.radial_segments = "+("5" if key in ("crystal_caverns","astral_citadel") else "8"),
+   "    crown_mesh.radial_segments = 6" if key in ("sun_desert","shadow_ruins","thunder_plateau") else "    crown_mesh.rings = 4",
    "    for i in range("+("12" if key in ("sun_desert","sky_islands") else "20" if key in ("shadow_ruins","thunder_plateau") else "26")+"):",
    "        var px: float = 8.0 + float((i * 37 + 11) % 110)",
    "        var pz: float = 8.0 + float((i * 47 + 31) % 110)",
