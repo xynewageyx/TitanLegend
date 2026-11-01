@@ -289,7 +289,9 @@ func _process(delta: float) -> void:
   left_arm.rotation.z = -0.32 * recoil * hit_power
   right_arm.rotation.z += 0.32 * recoil * hit_power
  else:
-  left_arm.rotation.z = 0.0
+  # Preserve the attack follow-through; clear the arm only outside an attack.
+  if attack_remaining <= 0.0:
+   left_arm.rotation.z = 0.0
  if element_remaining > 0.0 and element_id == 8:
   rotation.z += sin(elapsed * 42.0) * 0.06
  # Brief sideways lean and step, then automatically return to the anchor.
