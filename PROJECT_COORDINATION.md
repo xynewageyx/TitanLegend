@@ -34,8 +34,16 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - Landschaften: Gebiete, Terrain, Vegetation, Beleuchtung, Performance.
 - Ausrüstung: Waffen, Rüstungen, Seltenheitsstufen, visuelle Eskalation.
 - UI: Android-Hochformat, Bedienbarkeit, HUD, Menüs.
-- Gameplay: XP, Talentbäume, Skills, Teamrollen, Kampf, Progression.
+- Gameplay: XP, Talentbäume, Teamrollen, Kampfregeln und Progression; Schnittstelle zur Skill-Ausführung.
+- Skills und Skill-Animationen (eigener Fach-Chat): Klassenfähigkeiten, Skill-Eigenschaften, Unterbrechen, Zielauswahl, Flächenschaden, Heilungslogik sowie Skill-VFX und Animationen. Keine eigenständigen Änderungen an Teamrollen, XP oder Talentbaum ohne Abstimmung.
 - Integration: Import, Ressourcenpfade, Godot-Validierung, Android-Build.
+
+## Schnittstellen für den Skills-und-Animationen-Chat
+- Jeder Klasse stehen unterbrechende Fähigkeiten zur Verfügung; eine Unterbrechung wird ausschließlich durch einen entsprechenden Skill ausgelöst.
+- Die Eigenschaft des einzelnen Skills legt fest, ob er Einzelziel- oder Flächenschaden verursacht; keine Skill-Kombinationsmechanik.
+- Der Spieler legt die Skills fest; die bestehende automatische Kampfsteuerung führt sie gemäß Priorität aus.
+- Einzelziel-Heilung wählt automatisch den lebenden Verbündeten mit den niedrigsten aktuellen Lebenspunkten.
+- Abstimmung mit Charakter-Chat (Rigging/Animation), Gegner-/Boss-Chat (Trefferreaktion/Unterbrechung), Gameplay-Chat (Kampf-API) und UI-Chat (Skill-Anzeigen).
 
 ## Ablauf für jede Änderung
 1. Vor Beginn aktuellen Repository-Stand und relevante Dateien prüfen.
