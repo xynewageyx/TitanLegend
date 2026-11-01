@@ -26,7 +26,7 @@ def rig_and_animate():
  """Lightweight rigid skinning with named bones and five reusable action clips."""
  bpy.ops.object.armature_add(enter_editmode=True,location=(0,0,0))
  arm=bpy.context.object;arm.name="ChibiRig"
- arm.data.edit_bones.remove(arm.data.edit_bones[0])
+ for initial_bone in list(arm.data.edit_bones):\n  arm.data.edit_bones.remove(initial_bone)
  specs=[
   ("Root",None,(0,0,.1),(0,0,.5)),
   ("Hips","Root",(0,0,.5),(0,0,1.0)),
@@ -68,8 +68,14 @@ def rig_and_animate():
     if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
     if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
     bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
+  # NLA strips must not keep an active action that overrides them.
+  arm.animation_data.action=None
   track=arm.animation_data.nla_tracks.new();track.name=clip
-  track.strips.new(clip,start,action)
+  strip=track.strips.new(clip,start,action)
+  strip.action_frame_start=start
+  strip.action_frame_end=end
+  strip.frame_end=start+(end-start)
+  track.mute=False
  arm.animation_data.action=None
  return arm
 
