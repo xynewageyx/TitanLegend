@@ -51,6 +51,9 @@ jobs:
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
+      - name: Test optional eleven-class chibi GLB integration
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_chibi_glb_integration.py' -v
       - name: Test boss camera framing
         shell: bash
         run: |
