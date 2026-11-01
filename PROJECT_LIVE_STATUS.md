@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:27 UTC**
-Git-Stand: **f2c2d5e3b58c7d1fc399787bb094a29feccbc03e** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:28 UTC**
+Git-Stand: **739d317af743acffcd8c0601b34ac2076462b369** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -36,10 +36,10 @@ Git-Stand: **f2c2d5e3b58c7d1fc399787bb094a29feccbc03e** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- \`739d317\` (2026-11-01): Verify generated hero GLBs round-trip through Blender with armatures and skinning
 - \`b4d2417\` (2026-11-01): ci: add event-driven shared project coordination
 - \`4e98e04\` (2026-11-01): docs: add shared Android visual quality gate
 - \`f2a3669\` (2026-11-01): assets: update generated animated warrior GLB
-- \`1ce2f92\` (2026-11-01): docs: establish shared Titan Legends coordination rules
 
 ## Regeln für alle Fach-Chats
 
