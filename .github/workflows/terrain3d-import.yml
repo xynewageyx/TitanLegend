@@ -27,12 +27,15 @@ jobs:
           assert manifests, "No native GDExtension manifests staged"
           report = ["# Native extension compatibility audit", ""]
           android_found = False
+          missing_android = []
+          manifest_results = []
           for manifest in manifests:
               parser = configparser.ConfigParser(interpolation=None)
               parser.optionxform = str
               parser.read(manifest, encoding="utf-8")
               assert parser.has_section("libraries"), f"No [libraries] section: {manifest}"
               report.append(f"## {manifest.relative_to(root)}")
+              android_for_manifest = False
               for feature, relative in parser.items("libraries"):
                   relative = relative.strip().strip('"')
                   binary = (manifest.parent / relative).resolve()
@@ -42,11 +45,15 @@ jobs:
                       android_found |= exists
                       if not exists:
                           print(f"::warning::Android ARM64 native library missing: {binary}")
+              manifest_results.append((str(manifest.relative_to(root)), android_for_manifest))
+              android_found |= android_for_manifest
+              report.append(f"Android ARM64 binary for this extension: {android_for_manifest}")
               report.append("")
-          report.append(f"Android ARM64 library available: {android_found}")
-          Path("terrain3d-native-audit.md").write_text("\\n".join(report) + "\\n")
-          print("\\n".join(report))
-          if not android_found:
+          report.append(f"Android ARM64 library available in any extension: {android_found}")
+          report.append(f"All extensions Android ARM64 ready: {all(ready for _, ready in manifest_results)}")
+          Path("terrain3d-native-audit.md").write_text(chr(10).join(report) + chr(10))
+          print(chr(10).join(report))
+          if not all(ready for _, ready in manifest_results):
               print("::warning::Terrain3D Android ARM64 support not confirmed. Do not assume the isolated preview is APK-ready.")
           PY
       - name: Upload native library compatibility audit
