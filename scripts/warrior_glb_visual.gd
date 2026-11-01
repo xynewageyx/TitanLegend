@@ -9,6 +9,7 @@ var _hidden_meshes: Array[MeshInstance3D] = []
 var _active_clip: String = ""
 var _walking: bool = false
 var _one_shot_generation: int = 0
+var _defeated: bool = false
 
 func _ready() -> void:
  if not ResourceLoader.exists(model_path):
@@ -31,6 +32,8 @@ func _ready() -> void:
  play_clip("idle")
 
 func play_clip(clip: String) -> void:
+ if _defeated and clip != "hit":
+  return
  if animation_player == null:
   return
  if clip == _active_clip and animation_player.is_playing() and (clip == "idle" or clip == "walk"):
@@ -66,6 +69,17 @@ func play_idle() -> void:
 
 func play_hit() -> void:
  play_clip("hit")
+
+func play_defeat() -> void:
+ _defeated = true
+ _one_shot_generation += 1
+ if animation_player != null:
+  animation_player.stop()
+
+func reset_defeat() -> void:
+ _defeated = false
+ _active_clip = ""
+ play_clip("walk" if _walking else "idle")
 
 func play_dodge() -> void:
  play_clip("dodge")
