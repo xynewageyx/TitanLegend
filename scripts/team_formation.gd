@@ -702,6 +702,7 @@ func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int)
  preload("res://scripts/hero_visual_upgrade.gd").decorate(hero, class_id, selected_role, slot)
  preload("res://scripts/hero_silhouette_v2.gd").decorate(hero, class_id, selected_role, slot)
  preload("res://scripts/hero_fantasy_costumes.gd").decorate(hero, class_id, selected_role, slot)
+ preload("res://scripts/hero_storybook_faces.gd").decorate(hero, class_id, slot)
  var motion: Node3D = Node3D.new()
  motion.name = "HeroCombatMotion"
  motion.set_script(preload("res://scripts/hero_combat_motion.gd"))
