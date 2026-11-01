@@ -96,6 +96,10 @@ func _toggle() -> void:
 func _refresh() -> void:
  if team == null or not team.has_method("get_talent_build_v2"):
   return
+ if team.class_ids.is_empty():
+  return
+ selected_hero = clampi(selected_hero, 0, mini(3, team.class_ids.size() - 1))
+ selected_branch = clampi(selected_branch, 0, 2)
  var level: int = GameManager.character_level
  var build: Array = team.get_talent_build_v2(selected_hero)
  for hero_slot in range(hero_picker.item_count):
@@ -121,6 +125,10 @@ func _refresh() -> void:
   button.pressed.connect(_upgrade.bind(talent_index))
 
 func _upgrade(talent_index: int) -> void:
+ if team == null or not is_instance_valid(team):
+  return
+ if talent_index < 0 or talent_index >= 15:
+  return
  if team.has_method("upgrade_talent_v2"):
   team.upgrade_talent_v2(selected_hero, selected_branch, talent_index)
  _refresh()
