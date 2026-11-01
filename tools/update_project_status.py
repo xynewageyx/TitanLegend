@@ -14,6 +14,7 @@ AREAS = {
     "Ausrüstung": ("scripts/equipment", "assets/weapons/", "assets/armor/"),
     "UI": ("scripts/ui", "scenes/ui/", "assets/ui/"),
     "Gameplay": ("scripts/team", "scripts/battle", "scripts/talent", "scripts/save", "scripts/game_manager"),
+    "Skills und Animationen": ("scripts/skill", "scripts/ability", "assets/skills/", "assets/vfx/", "scenes/skills/", "tools/skills/", "tests/test_skill"),
     "Integration/CI": (".github/workflows/", "project.godot", "export_presets.cfg", "tests/"),
 }
 OWNERS = {
@@ -23,6 +24,7 @@ OWNERS = {
     "Ausrüstung": "Ausrüstungs-Chat",
     "UI": "UI-Chat",
     "Gameplay": "Gameplay-/Talent-Chat",
+    "Skills und Animationen": "Skills-und-Animationen-Chat",
     "Integration/CI": "GitHub-/Integrations-Chat",
 }
 
