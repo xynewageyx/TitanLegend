@@ -5,12 +5,12 @@ class_name TitanAdventureUITheme
 # All components are generated in Godot: no paid fonts, textures or plugins.
 const INK: Color = Color("#493321")
 const MUTED: Color = Color("#82664c")
-const PAPER: Color = Color("#fff2d1")
+const PAPER: Color = Color("#fff4d8")
 const PAPER_ALT: Color = Color("#f4deae")
-const WOOD: Color = Color("#8e5a35")
+const WOOD: Color = Color("#a46a3f")
 const WOOD_DARK: Color = Color("#55351f")
-const GOLD: Color = Color("#f5bf59")
-const GOLD_LIGHT: Color = Color("#ffe398")
+const GOLD: Color = Color("#f3c45f")
+const GOLD_LIGHT: Color = Color("#ffe7a7")
 const TEAL: Color = Color("#4fae9e")
 const GREEN: Color = Color("#72be69")
 const SKY: Color = Color("#81d5ed")
@@ -27,16 +27,16 @@ static func plaque(fill: Color = PAPER, border: Color = WOOD, radius: int = 17, 
  box.content_margin_top = 8
  box.content_margin_bottom = 8
  box.shadow_color = Color(0.12, 0.07, 0.03, 0.30)
- box.shadow_size = 5
- box.shadow_offset = Vector2(0, 3)
+ box.shadow_size = 7
+ box.shadow_offset = Vector2(0, 4)
  return box
 
 static func button(button_node: Button, chosen: bool = false, compact: bool = false) -> void:
- var normal_fill: Color = GOLD_LIGHT if chosen else Color("#fff4d9")
+ var normal_fill: Color = GOLD_LIGHT if chosen else Color("#fff5db")
  var hover_fill: Color = Color("#ffedbf")
- button_node.add_theme_stylebox_override("normal", plaque(normal_fill, GOLD if chosen else WOOD, 15, 3))
- button_node.add_theme_stylebox_override("hover", plaque(hover_fill, GOLD, 15, 3))
- button_node.add_theme_stylebox_override("pressed", plaque(GOLD, WOOD_DARK, 15, 3))
+ button_node.add_theme_stylebox_override("normal", plaque(normal_fill, GOLD if chosen else WOOD, 20, 3))
+ button_node.add_theme_stylebox_override("hover", plaque(hover_fill, GOLD, 20, 3))
+ button_node.add_theme_stylebox_override("pressed", plaque(GOLD, WOOD_DARK, 20, 3))
  button_node.add_theme_stylebox_override("disabled", plaque(Color("#e8dec9"), Color("#9e9076"), 15, 2))
  button_node.add_theme_stylebox_override("focus", plaque(Color.TRANSPARENT, GOLD, 15, 2))
  button_node.add_theme_color_override("font_color", INK)
