@@ -686,8 +686,52 @@ def premium_creature_details(creature):
                 (side*.77,-.22,4.84),(side*.84,-.20,5.20)],.13,gold)
             sphere("king_fist_guard",(side*1.48,-.65,1.29),(.47,.12,.31),shade,20,14)
 
+def cartoon_material_finish():
+    """Soft storybook materials using GLB-compatible Principled settings."""
+    for mat in bpy.data.materials:
+        if not mat.use_nodes:
+            continue
+        shader = mat.node_tree.nodes.get("Principled BSDF")
+        if shader is None:
+            continue
+        for key,value in (("Roughness",.78),("Metallic",0.0),("Coat Weight",.08),("Coat Roughness",.32)):
+            if key in shader.inputs:
+                shader.inputs[key].default_value=value
+        if any(token in mat.name.lower() for token in ("shine","glint","gold","iris_highlight","heartwood")):
+            if "Roughness" in shader.inputs:
+                shader.inputs["Roughness"].default_value=.32
+            if "Emission Color" in shader.inputs:
+                shader.inputs["Emission Color"].default_value=shader.inputs["Base Color"].default_value
+            if "Emission Strength" in shader.inputs:
+                shader.inputs["Emission Strength"].default_value=.16
+
+def facial_depth_finish(creature):
+    """Species-specific dimensional cheek and chin geometry."""
+    cream=material("face_soft_cream",(.94,.81,.60))
+    bark=material("face_warm_bark",(.40,.26,.16))
+    moss=material("face_deep_green",(.20,.41,.19))
+    settings={
+        "forest_01_mooshuepfer":(.99,-.58,.32,.12,moss),
+        "forest_02_pilzling":(.84,-.43,.27,.10,cream),
+        "forest_03_wurzelkrabbler":(.86,-.53,.35,.12,bark),
+        "forest_04_blattfuchs":(1.00,-.85,.39,.15,cream),
+        "forest_05_dorneneber":(1.06,-1.02,.43,.13,bark),
+        "forest_06_rankenwerfer":(1.31,-.55,.31,.10,moss),
+        "forest_elite_01_rindenwaechter":(2.27,-.64,.45,.19,bark),
+        "forest_elite_02_moosbestie":(1.36,-1.28,.55,.18,moss),
+        "forest_boss_01_wurzelkoenig":(2.91,-1.02,.61,.21,bark),
+    }
+    z,front,spread,depth,mat=settings[creature]
+    for sign in (-1,1):
+        cheek=sphere("sculpted_cheek_%s"%("L" if sign<0 else "R"),
+                     (sign*spread,front,z),(.22+depth*.25,depth,.16+depth*.35),
+                     mat,20,14)
+        cheek.rotation_euler[1]=sign*.13
+    sphere("sculpted_chin",(0,front-.02,z-.23),(.21+depth*.30,depth*.65,.12+depth*.18),
+           mat,20,14)
+
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);facial_depth_finish(name);sculpt_organic_silhouettes();organic_finish();cartoon_material_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
