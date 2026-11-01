@@ -19,6 +19,8 @@ jobs:
         run: |
           test "$(find assets/heroes/chibi -name '*.glb' -type f | wc -l)" -eq 11
           find assets/heroes/chibi -name '*.glb' -type f -size +1k | wc -l | grep -qx 11
+      - name: Validate skeletons and animations
+        run: python3 tools/validate_chibi_glb.py
       - name: Commit generated GLBs
         run: |
           git config user.name 'github-actions[bot]'
