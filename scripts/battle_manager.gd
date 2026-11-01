@@ -565,16 +565,6 @@ func _begin_boss_cast() -> void:
  boss_cast_ticks = 3 + maxi(0, boss_cc_required - 1) * 2
  boss_next_cast_tick = skill_tick + 9
  _animate_boss_event("attack_windup")
- if boss_cc_required > 0:
-  # Prepared hits were earned by the strict four-slot rotation earlier.
-  # Each living hero can contribute at most one banked hit.
-  for slot in range(4):
-   if prepared_cc[slot] <= 0 or hero_hp[slot] <= 0:
-    continue
-   prepared_cc[slot] = 0
-   _apply_boss_cc_hit()
-   if boss_cast_ticks <= 0:
-    break
 
 func _resolve_boss_cast() -> void:
  if not battle_active or not is_boss:
@@ -694,8 +684,8 @@ func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
  if role == 2 and choice == 8:
   return true
  if choice == 7:
-  # The fourth slot must not deadlock on mobs or between boss casts.
-  return true
+  # Interrupt can only be used while a boss is actively casting.
+  return is_boss and boss_cast_ticks > 0 and boss_cc_required > 0
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  # Fully healed teams may prepare the healing portion of this slot.
  return true
@@ -704,18 +694,19 @@ func _try_cast_charged_skill(slot: int, role: int) -> void:
  var loadout: Array = skill_loadouts[slot]
  if loadout.is_empty():
   return
- # Strict order: slot 1 -> 2 -> 3 -> 4 -> slot 1.
- # Do not skip a slot because it is charging or its condition is unmet.
- var index: int = next_skill_slot[slot] % loadout.size()
- var choice: int = int(loadout[index])
- var required_hits: int = _skill_hit_cost(role, choice)
- if skill_hit_charge[slot] < required_hits:
+ # Traverse equipped slots in priority order; unavailable interrupt skills
+ # do not block other skills and never consume charge.
+ for offset in range(loadout.size()):
+  var index: int = (next_skill_slot[slot] + offset) % loadout.size()
+  var choice: int = int(loadout[index])
+  if skill_hit_charge[slot] < _skill_hit_cost(role, choice):
+   continue
+  if not _skill_is_usable(slot, role, choice):
+   continue
+  skill_hit_charge[slot] = 0
+  next_skill_slot[slot] = (index + 1) % loadout.size()
+  _execute_equipped_skill(slot, role, choice)
   return
- if not _skill_is_usable(slot, role, choice):
-  return
- skill_hit_charge[slot] = 0
- next_skill_slot[slot] = (index + 1) % loadout.size()
- _execute_equipped_skill(slot, role, choice)
 
 func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
  if skill_vfx_node == null or team_formation == null or slot < 0 or slot >= team_formation.heroes.size():
@@ -758,12 +749,9 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   _refresh_tank_defense_visuals()
   return
  if choice == 7:
-  if not is_boss or boss_cast_ticks <= 0 or boss_cc_required <= 0:
-   # This slot was genuinely charged and used in order; bank at most one hit.
-   prepared_cc[slot] = 1
-   last_ability = "Kontrolle vorbereitet"
-   return
-  _apply_boss_cc_hit()
+  # An actual equipped interrupt must hit during the cast.
+  if is_boss and boss_cast_ticks > 0 and boss_cc_required > 0:
+   _apply_boss_cc_hit()
   return
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  last_ability = str(skill.get("name", "Skill"))
