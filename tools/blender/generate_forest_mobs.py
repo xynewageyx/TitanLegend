@@ -314,6 +314,19 @@ def sculpted_limb_details(creature):
         "forest_elite_02_moosbestie":(.88,1.43,.40,green),
         "forest_boss_01_wurzelkoenig":(1.42,3.05,.51,wood),
     }
+    # Remove old primitive appendages only where the connected sculpted
+    # geometry is an intentional replacement. Keep paws/fists and facial
+    # details, which define each creature's readable silhouette.
+    replaced={
+        "forest_02_pilzling": ("tiny_hand",),
+        "forest_06_rankenwerfer": ("leaf_arm",),
+        "forest_elite_01_rindenwaechter": ("heavy_arm","root_leg"),
+        "forest_boss_01_wurzelkoenig": ("root_arm","root_leg"),
+    }
+    names=set(replaced.get(creature, ()))
+    for obj in list(bpy.context.scene.objects):
+        if obj.type=="MESH" and obj.name.split(".")[0] in names:
+            bpy.data.objects.remove(obj, do_unlink=True)
     reach,height,radius,mat=specs[creature]
     for sign in (-1,1):
         tapered_limb("sculpted_arm_%s"%("L" if sign<0 else "R"),
