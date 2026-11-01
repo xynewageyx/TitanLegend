@@ -1,4 +1,5 @@
 extends Control
+const SKIN = preload("res://scripts/adventure_ui_theme.gd")
 # Update 21: touchfreundlicher, verzweigter Talentbaum mit Rang-Meilensteinen.
 @export var team_formation: Node3D
 @export var battle_manager: Node3D
@@ -22,10 +23,12 @@ func _ready() -> void:
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  mouse_filter = Control.MOUSE_FILTER_STOP
  var shade := ColorRect.new()
- shade.color = Color(0.025, 0.04, 0.075, 0.98)
+ shade.color = Color("#f3e4bf")
+ shade.mouse_filter = Control.MOUSE_FILTER_STOP
  shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(shade)
  var margin := MarginContainer.new()
+ margin.mouse_filter = Control.MOUSE_FILTER_STOP
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  margin.add_theme_constant_override("margin_left", 18)
  margin.add_theme_constant_override("margin_right", 18)
@@ -38,7 +41,7 @@ func _ready() -> void:
  var top := HBoxContainer.new()
  outer.add_child(top)
  var heading := Label.new()
- heading.text = "TALENTBAEUME"
+ heading.text = "HELDEN · TALENTBÄUME"
  heading.add_theme_font_size_override("font_size", 28)
  heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  top.add_child(heading)
@@ -59,6 +62,7 @@ func _ready() -> void:
  outer.add_child(summary)
  var scroll := ScrollContainer.new()
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  outer.add_child(scroll)
  var stack := VBoxContainer.new()
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -71,6 +75,9 @@ func _ready() -> void:
  reset_button.add_theme_font_size_override("font_size", 21)
  reset_button.pressed.connect(_request_reset)
  outer.add_child(reset_button)
+ SKIN.style_menu_tree(margin)
+ for bar in progress_bars:
+  SKIN.small_bar(bar, SKIN.GOLD)
  reset_confirm = ConfirmationDialog.new()
  reset_confirm.title = "Talente zuruecksetzen"
  reset_confirm.confirmed.connect(_confirm_reset)
@@ -83,7 +90,9 @@ func _ready() -> void:
 
 func _create_tree_card(stack: VBoxContainer, tree: int) -> void:
  var panel := PanelContainer.new()
+ panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  stack.add_child(panel)
+ panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 18, 3))
  var card := VBoxContainer.new()
  card.add_theme_constant_override("separation", 10)
  panel.add_child(card)
