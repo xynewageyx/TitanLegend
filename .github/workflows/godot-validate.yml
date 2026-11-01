@@ -40,6 +40,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb libgl1-mesa-dri
           export LIBGL_ALWAYS_SOFTWARE=1
+          # Archived scripts must retain their original checksums but are not game resources.
+          # Exclude them only in the CI checkout to prevent duplicate global class registration.
+          rm -rf original_update168
           xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee godot-validation-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' godot-validation-import.log; then
             echo 'Godot import or script errors detected'
@@ -185,6 +188,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb libgl1-mesa-dri
           export LIBGL_ALWAYS_SOFTWARE=1
+          # Archived scripts must retain their original checksums but are not game resources.
+          # Exclude them only in the CI checkout to prevent duplicate global class registration.
+          rm -rf original_update168
           xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee build/android-godot-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' build/android-godot-import.log; then
             echo 'Android resource import failed'
