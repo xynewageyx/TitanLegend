@@ -169,11 +169,26 @@ jobs:
             mv original_update168 "${RUNNER_TEMP}/titan_original_update168"
           fi
 
-      - name: Import game resources
+      - name: Import game resources and verify forest model loading
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --editor --import --quit
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/titan-android-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/titan-android-import.log; then
+            echo "::error::Godot reported a GDScript import error"
+            exit 1
+          fi
+          python3 - <<'PY'
+          from pathlib import Path
+          models = sorted(Path("assets/enemies/forest").glob("*.glb"))
+          assert len(models) == 9, f"Expected 9 forest GLBs, found {len(models)}"
+          for model in models:
+              sidecar = Path(str(model) + ".import")
+              assert sidecar.is_file(), f"Godot did not create import metadata for {model}"
+              text = sidecar.read_text(encoding="utf-8")
+              assert "dest_files" in text or "path=" in text, f"Missing import target for {model}"
+              print(f"Godot import metadata OK: {model.name}")
+          PY
 
       - name: Export Android arm64 debug APK
         shell: bash
