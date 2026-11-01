@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 19:59 UTC**
-Git-Stand: **cd45980c48921f75c2bfac7f05f9cbbdd2f34376** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 20:00 UTC**
+Git-Stand: **0755bcd8fe5b41c972a60e9bdca4376ce9e004ff** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,10 +9,9 @@ Git-Stand: **cd45980c48921f75c2bfac7f05f9cbbdd2f34376** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - \`dcc9150\` (2026-11-01): Correct left-right limb skinning by mesh coordinates and parent generated meshes to rig
-- \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
+- Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Landschaften — Landschaften-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
@@ -24,8 +23,9 @@ Git-Stand: **cd45980c48921f75c2bfac7f05f9cbbdd2f34376** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
+- \`92ac368\` (2026-11-01): test compatibility: retain explicit earned-point guard before talent capacity guard
+- \`17bc5f8\` (2026-11-01): feat(talents): expose remaining talent rank capacity without losing earned-point accounting
 - \`a246df6\` (2026-11-01): fix(talents): reject invalid negative ranks before spending earned talent points
-- \`d15182f\` (2026-11-01): ui(talents): enlarge hero and branch selectors and follow focused talent buttons on Android
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
