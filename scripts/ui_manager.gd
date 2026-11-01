@@ -635,17 +635,19 @@ func _refresh(_unused: int = 0) -> void:
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
   weapon_upgrade_button.text = "Waffe %d → %d | %d Gold" % [weapon_level, weapon_level + 1, weapon_cost] if weapon_cost > 0 else "Waffe MAX"
   weapon_upgrade_button.disabled = weapon_cost <= 0 or GameManager.current_gold < weapon_cost
-  if GameManager.equipment_inventory.is_empty():
-   loot_select_button.text = "Inventar: leer (Boss-Drops)"
+  var filtered_loot := _matching_loot_indices()
+  if filtered_loot.is_empty():
+   loot_select_button.text = "Keine Gegenstände für diesen Platz" if loot_selected_slot >= 0 else "Inventar: leer (Boss-Drops)"
    loot_equip_button.text = "Kein Gegenstand vorhanden"
    loot_equip_button.disabled = true
    loot_compare_label.text = "Kein Gegenstand zum Vergleichen."
    loot_sell_button.disabled = true
    loot_sell_button.text = "Nichts verkaufen"
   else:
-   loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
+   if not filtered_loot.has(loot_selected_index):
+    loot_selected_index = filtered_loot[0]
    var selected_loot: Dictionary = GameManager.equipment_inventory[loot_selected_index]
-   loot_select_button.text = "Inventar %d/%d: %s" % [loot_selected_index + 1, GameManager.equipment_inventory.size(), GameManager.loot_item_name(selected_loot)]
+   loot_select_button.text = "Inventar %d/%d: %s" % [filtered_loot.find(loot_selected_index) + 1, filtered_loot.size(), GameManager.loot_item_name(selected_loot)]
    loot_equip_button.text = "Held %d ausruesten: %s" % [weapon_hero_slot + 1, GameManager.LOOT_SLOTS[int(selected_loot["slot"])]]
    loot_equip_button.disabled = int(GameManager.equipped_loot[weapon_hero_slot][int(selected_loot["slot"])]) == int(selected_loot["id"])
    var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, int(selected_loot["id"]))
@@ -723,26 +725,36 @@ func _upgrade_current_weapon_rarity() -> void:
   _append("System", "Waffenqualitaet fuer Held %d verbessert" % (weapon_hero_slot + 1))
  _refresh()
 
+func _matching_loot_indices() -> Array[int]:
+ var matches: Array[int] = []
+ for index in range(GameManager.equipment_inventory.size()):
+  if loot_selected_slot < 0 or int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
+   matches.append(index)
+ return matches
+
 func _select_loot_slot(slot_index: int) -> void:
  loot_selected_slot = -1 if loot_selected_slot == slot_index else clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
- for index in range(GameManager.equipment_inventory.size()):
-  if int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
-   loot_selected_index = index
-   break
+ var matches := _matching_loot_indices()
+ if not matches.is_empty():
+  loot_selected_index = matches[0]
  _refresh_loot()
 
 func _refresh_loot() -> void:
  _refresh()
 
 func _next_loot_item() -> void:
- if not GameManager.equipment_inventory.is_empty():
-  loot_selected_index = (loot_selected_index + 1) % GameManager.equipment_inventory.size()
+ var matches := _matching_loot_indices()
+ if not matches.is_empty():
+  var current := matches.find(loot_selected_index)
+  loot_selected_index = matches[(current + 1) % matches.size()]
  _refresh()
 
 func _equip_selected_loot() -> void:
- if GameManager.equipment_inventory.is_empty():
+ var matches := _matching_loot_indices()
+ if matches.is_empty():
   return
- loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
+ if not matches.has(loot_selected_index):
+  loot_selected_index = matches[0]
  var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
  var item_id: int = int(item.get("id", -1))
  var worn_by: int = GameManager.loot_equipped_hero(item_id)
