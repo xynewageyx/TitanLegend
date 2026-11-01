@@ -41,9 +41,6 @@ var weapon_hero_slot: int = 0
 var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
-var loot_equipped_overview: Label
-var loot_slot_buttons: Array[Button] = []
-var loot_selected_slot: int = -1
 var loot_compare_label: Label
 var loot_sell_button: Button
 var loot_downgrade_confirmation: ConfirmationDialog
@@ -157,6 +154,16 @@ func _make_button(text_value: String, parent: Node, callback: Callable, px: int 
  b.pressed.connect(callback)
  return b
 
+func _equipment_heading(parent: VBoxContainer, caption: String) -> void:
+ var heading := Label.new()
+ heading.text = caption
+ heading.add_theme_color_override("font_color", ADVENTURE_THEME.WOOD_DARK)
+ heading.add_theme_font_size_override("font_size", 19)
+ heading.add_theme_stylebox_override("normal", ADVENTURE_THEME.plaque(ADVENTURE_THEME.PAPER_ALT, ADVENTURE_THEME.GOLD, 11, 2))
+ heading.custom_minimum_size.y = 42
+ heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ parent.add_child(heading)
+
 func _make_hud() -> void:
  # Resource bar at top.
  var resources := HBoxContainer.new()
@@ -186,28 +193,30 @@ func _make_hud() -> void:
  boss_panel = VBoxContainer.new()
  boss_panel.name = "BossHP"
  boss_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
- boss_panel.offset_left = 216
- boss_panel.offset_right = -19
- boss_panel.offset_top = 240
- boss_panel.offset_bottom = 385
+ boss_panel.offset_left = 18
+ boss_panel.offset_right = -18
+ boss_panel.offset_top = 435
+ boss_panel.offset_bottom = 544
+ boss_panel.add_theme_constant_override("separation", 4)
  add_child(boss_panel)
  boss_name = Label.new()
  boss_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- _font(boss_name, 23)
+ _font(boss_name, 19)
+ boss_name.add_theme_color_override("font_color", ADVENTURE_THEME.GOLD_LIGHT)
  boss_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  boss_panel.add_child(boss_name)
  boss_hp = ProgressBar.new()
- boss_hp.custom_minimum_size.y = 24
+ boss_hp.custom_minimum_size.y = 19
  boss_hp.max_value = 100
  boss_hp.show_percentage = true
- boss_hp.add_theme_stylebox_override("background", _style(Color(0.14, 0.035, 0.035, 0.93), 8))
- boss_hp.add_theme_stylebox_override("fill", _style(Color(0.92, 0.13, 0.09, 1.0), 8))
+ boss_hp.add_theme_stylebox_override("background", ADVENTURE_THEME.plaque(Color("#4b3027"), ADVENTURE_THEME.GOLD, 9, 2))
+ boss_hp.add_theme_stylebox_override("fill", ADVENTURE_THEME.plaque(ADVENTURE_THEME.CORAL, ADVENTURE_THEME.GOLD_LIGHT, 9, 1))
  boss_hp.add_theme_font_size_override("font_size", 18)
  boss_panel.add_child(boss_hp)
  boss_countdown = Label.new()
  boss_countdown.name = "BossCountdown"
  boss_countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- _font(boss_countdown, 22)
+ _font(boss_countdown, 17)
  boss_countdown.add_theme_color_override("font_color", Color(0.95, 0.94, 0.87))
  boss_panel.add_child(boss_countdown)
  boss_panel.hide()
@@ -368,30 +377,11 @@ func _make_hud() -> void:
  action_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  modal.add_child(action_detail)
  action_button = _make_button("Ausführen", modal, _on_action_pressed, 19)
+ _equipment_heading(modal, "HELD & WAFFE")
  weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
  weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
  weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
- loot_equipped_overview = Label.new()
- loot_equipped_overview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
- loot_equipped_overview.add_theme_font_size_override("font_size", 15)
- loot_equipped_overview.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
- modal.add_child(loot_equipped_overview)
- var loot_grid := GridContainer.new()
- loot_grid.columns = 2
- loot_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- loot_grid.add_theme_constant_override("h_separation", 8)
- loot_grid.add_theme_constant_override("v_separation", 8)
- modal.add_child(loot_grid)
- for slot_index in range(GameManager.LOOT_SLOTS.size()):
-  var slot_button := Button.new()
-  slot_button.custom_minimum_size = Vector2(0, 68)
-  slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  slot_button.add_theme_font_size_override("font_size", 14)
-  slot_button.clip_text = true
-  slot_button.toggle_mode = true
-  slot_button.pressed.connect(_select_loot_slot.bind(slot_index))
-  loot_grid.add_child(slot_button)
-  loot_slot_buttons.append(slot_button)
+ _equipment_heading(modal, "BEUTE & AUSRÜSTUNG")
  loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
  loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
  loot_downgrade_confirmation = ConfirmationDialog.new()
@@ -415,6 +405,7 @@ func _make_hud() -> void:
  loot_sale_confirmation.confirmed.connect(_confirm_loot_sale)
  loot_sale_confirmation.canceled.connect(_cancel_loot_sale)
  add_child(loot_sale_confirmation)
+ _equipment_heading(modal, "AUSRÜSTUNGSHÄRTUNG")
  hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
  hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
  attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
@@ -443,19 +434,36 @@ func _make_hud() -> void:
  _select_chat("Alle")
  _apply_chat_visibility()
 
+func _raise_fullscreen_menu(menu: Control) -> void:
+ if menu == null:
+  return
+ menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ menu.mouse_filter = Control.MOUSE_FILTER_STOP
+ move_child(menu, get_child_count() - 1)
+
 func _open_menu(target: String) -> void:
- # Do not leave the previous modal visible behind a full-screen submenu.
+ # Full-screen submenus must render above the HUD and block touches to the 3D scene.
  action_panel.hide()
+ for modal_name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
+  var modal: Control = get_node_or_null(modal_name) as Control
+  if modal != null:
+   modal.hide()
+ if skin_shop_menu != null:
+  skin_shop_menu.hide()
  if target == "shop":
+  _raise_fullscreen_menu(skin_shop_menu)
   skin_shop_menu.open_menu()
   return
  if target == "team":
+  _raise_fullscreen_menu($ClassMenu)
   $ClassMenu.open_menu()
   return
  if target == "skills":
+  _raise_fullscreen_menu($SkillMenu)
   $SkillMenu.open_menu()
   return
  if target == "talents":
+  _raise_fullscreen_menu($TalentMenu)
   $TalentMenu.open_menu()
   return
  current_tab = target
@@ -600,7 +608,6 @@ func _refresh(_unused: int = 0) -> void:
  weapon_hero_button.visible = current_tab == "jewels"
  weapon_upgrade_button.visible = current_tab == "jewels"
  weapon_rarity_button.visible = current_tab == "jewels"
- loot_equipped_overview.visible = current_tab == "jewels"
  loot_select_button.visible = current_tab == "jewels"
  loot_equip_button.visible = current_tab == "jewels"
  loot_compare_label.visible = current_tab == "jewels"
@@ -611,25 +618,6 @@ func _refresh(_unused: int = 0) -> void:
  attribute_apply_button.visible = current_tab == "jewels"
  attribute_reroll_button.visible = current_tab == "jewels"
  if current_tab == "jewels":
-  var equipped_lines: PackedStringArray = []
-  var occupied_count: int = 0
-  for slot in range(GameManager.LOOT_SLOTS.size()):
-   var equipped_id: int = int(GameManager.equipped_loot[weapon_hero_slot][slot])
-   var equipped_item: Dictionary = GameManager.loot_item_by_id(equipped_id)
-   var item_text: String = "Leer" if equipped_item.is_empty() else GameManager.WEAPON_RARITIES[clampi(int(equipped_item.get("rarity", 0)), 0, 5)] + " Stufe " + str(int(equipped_item.get("level", 1)))
-   if not equipped_item.is_empty():
-    occupied_count += 1
-   equipped_lines.append("%s: %s" % [GameManager.LOOT_SLOTS[slot], item_text])
-  loot_equipped_overview.text = "Held %d – Ausrüstung %d/%d | Inventar %d/%d" % [weapon_hero_slot + 1, occupied_count, GameManager.LOOT_SLOTS.size(), GameManager.equipment_inventory.size(), GameManager.MAX_LOOT_ITEMS]
-  var rarity_colors := [Color("#aab0b5"), Color("#64c45c"), Color("#4aa8ff"), Color("#ffce54"), Color("#ff8840"), Color("#c47bff")]
-  for slot in range(loot_slot_buttons.size()):
-   var tile: Button = loot_slot_buttons[slot]
-   var worn: Dictionary = GameManager.loot_item_by_id(int(GameManager.equipped_loot[weapon_hero_slot][slot]))
-   var tier: int = clampi(int(worn.get("rarity", 0)), 0, 5)
-   var slot_icons := ["◉", "▣", "◆", "◈", "◈", "▰", "▰", "✦", "✦", "▾", "▾", "▿", "▿"]
-   tile.text = slot_icons[slot] + " " + GameManager.LOOT_SLOTS[slot] + "\n" + ("Leer" if worn.is_empty() else GameManager.WEAPON_RARITIES[tier] + " Lv." + str(worn.get("level", 1)))
-   tile.modulate = Color.WHITE if worn.is_empty() else rarity_colors[tier]
-   tile.button_pressed = slot == loot_selected_slot
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
@@ -722,14 +710,6 @@ func _upgrade_current_weapon_rarity() -> void:
  if GameManager.upgrade_weapon_rarity(weapon_hero_slot):
   _append("System", "Waffenqualitaet fuer Held %d verbessert" % (weapon_hero_slot + 1))
  _refresh()
-
-func _select_loot_slot(slot_index: int) -> void:
- loot_selected_slot = -1 if loot_selected_slot == slot_index else clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
- for index in range(GameManager.equipment_inventory.size()):
-  if int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
-   loot_selected_index = index
-   break
- _refresh_loot()
 
 func _refresh_loot() -> void:
  _refresh()
