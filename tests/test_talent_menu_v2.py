@@ -58,6 +58,17 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("class_index >= 0 and class_index < team.CLASS_NAMES.size()", MENU)
         self.assertIn("hero_picker.set_item_text(", MENU)
 
+    def test_invalid_talent_ranks_are_rejected(self):
+        self.assertIn("if current_rank < 0 or current_rank >= MAX_RANK:", TREE)
+        self.assertIn("if available_points(level, build) <= 0:", TREE)
+
+    def test_android_talent_navigation_remains_touch_friendly(self):
+        self.assertIn("scroll.follow_focus = true", MENU)
+        self.assertIn("hero_picker.custom_minimum_size = Vector2(0, 52)", MENU)
+        self.assertIn("branch_picker.custom_minimum_size = Vector2(0, 52)", MENU)
+        self.assertIn("button.size_flags_horizontal = Control.SIZE_EXPAND_FILL", MENU)
+        self.assertIn("points_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
