@@ -73,3 +73,22 @@ static func decorate(hero: Node3D, class_id: int, slot: int) -> void:
    for index in range(5):
     var spike: MeshInstance3D = _orb(face, "BrawlerSpikes", 0.09, Vector3((index - 2) * 0.115, 2.18 + (index % 2) * 0.06, -0.035), hair_color, Vector3(0.68, 1.55, 0.75))
     spike.rotation.z = (index - 2) * -0.17
+
+ # Coordinated rounded boots, oversized gloves and chest badge improve chibi readability.
+ # They are cosmetic children and never alter collision, stats or combat animations.
+ var cloth_tints: Array[Color] = [
+  Color("#526d9b"), Color("#e5bb55"), Color("#478f65"),
+  Color("#4087b7"), Color("#648447"), Color("#64527e"),
+  Color("#4965c7"), Color("#8747a3"), Color("#9b70b5"),
+  Color("#d4c88d"), Color("#965842")
+ ]
+ var cloth: Color = cloth_tints[clampi(class_id, 0, cloth_tints.size() - 1)]
+ var trim: Color = cloth.lightened(0.30)
+ var leather: Color = Color("#574032") if class_id in [0, 4, 5, 10] else cloth.darkened(0.24)
+ for side in [-1.0, 1.0]:
+  _orb(face, "OversizedBoot", 0.22, Vector3(side * 0.27, 0.23, -0.12), leather, Vector3(1.14, 0.75, 1.34))
+  _orb(face, "BootToeCap", 0.14, Vector3(side * 0.27, 0.18, -0.32), trim, Vector3(1.20, 0.48, 0.85))
+  _orb(face, "RoundedGlove", 0.18, Vector3(side * 0.57, 1.09, -0.12), leather, Vector3(1.10, 0.91, 1.13))
+  _orb(face, "GloveCuff", 0.14, Vector3(side * 0.55, 1.27, -0.10), trim, Vector3(1.05, 0.42, 1.04))
+ _orb(face, "ChestEmblemBase", 0.19, Vector3(0, 1.40, -0.38), cloth.darkened(0.22), Vector3(0.90, 0.90, 0.30))
+ _orb(face, "ChestEmblem", 0.12, Vector3(0, 1.40, -0.44), trim, Vector3(0.82, 1.12, 0.38))
