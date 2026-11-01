@@ -1,18 +1,20 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:30 UTC**
-Git-Stand: **e987497945e04fd83a23bdb082db1352b848d17e** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:31 UTC**
+Git-Stand: **8c72e7b73898ea63ec17fdbb0694298dd57c468a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
 - \`07c83e8\` (2026-11-01): Correct Blender armature cleanup and explicit NLA strip frame ranges
 - \`804bd81\` (2026-11-01): art(forest): sculpt species-specific asymmetric primary body silhouettes
 - \`9ac4060\` (2026-11-01): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
 - \`804bd81\` (2026-11-01): art(forest): sculpt species-specific asymmetric primary body silhouettes
 
 ### Landschaften — Landschaften-Chat
@@ -37,8 +39,6 @@ Git-Stand: **e987497945e04fd83a23bdb082db1352b848d17e** auf Branch **main**
 
 - \`739d317\` (2026-11-01): Verify generated hero GLBs round-trip through Blender with armatures and skinning
 - \`b4d2417\` (2026-11-01): ci: add event-driven shared project coordination
-- \`4e98e04\` (2026-11-01): docs: add shared Android visual quality gate
-- \`f2a3669\` (2026-11-01): assets: update generated animated warrior GLB
 
 ## Regeln für alle Fach-Chats
 
