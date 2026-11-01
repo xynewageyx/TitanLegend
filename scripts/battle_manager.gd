@@ -784,6 +784,8 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   else:
    prepared_healing[slot] = choice
    last_ability = "Heilung vorbereitet"
+  # Healing is exclusive: never apply legacy damage on the same cast.
+  return
  var power: float = float(skill.get("power", 0.0))
  if power > 0.0:
   var base_damage: int = 35 + current_level * 6
