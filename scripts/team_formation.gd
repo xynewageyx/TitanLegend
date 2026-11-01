@@ -608,8 +608,22 @@ func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> v
 
 func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  # Update 66: rounded torso and articulated limbs replace the old rigid cubes.
- var torso: MeshInstance3D = VisualFactory.sphere(hero, 0.52, Vector3(0, 1.25, 0), color)
- torso.scale = Vector3(0.94, 1.26, 0.69)
+ # Connected capsule torso: less like stacked spheres and more like a compact stylized body.
+ var torso: MeshInstance3D = MeshInstance3D.new()
+ torso.name = "HeroSculptedTorso"
+ var torso_mesh: CapsuleMesh = CapsuleMesh.new()
+ torso_mesh.radius = 0.43
+ torso_mesh.height = 1.16
+ torso_mesh.radial_segments = 20
+ torso_mesh.rings = 8
+ torso.mesh = torso_mesh
+ torso.position = Vector3(0.0, 1.22, 0.0)
+ torso.scale = Vector3(1.10, 1.0, 0.82)
+ var torso_material: StandardMaterial3D = StandardMaterial3D.new()
+ torso_material.albedo_color = color
+ torso_material.roughness = 0.82
+ torso.material_override = torso_material
+ hero.add_child(torso)
  var waist: MeshInstance3D = VisualFactory.sphere(hero, 0.35, Vector3(0, 0.80, 0), color.darkened(0.16))
  waist.scale = Vector3(1.14, 0.65, 0.83)
  var head: MeshInstance3D = VisualFactory.sphere(hero, 0.29, Vector3(0, 1.94, 0), Color("#f0c3a0"))
