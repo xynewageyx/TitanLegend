@@ -228,7 +228,7 @@ jobs:
                 exit 1
               fi
             done
-            if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid assignment' /tmp/biome-smoke.log; then
+            if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid assignment|TERRAIN_MIPMAP_GENERATION_FAILED|TERRAIN_TEXTURE_MISSING|ERROR:.*Terrain3D' /tmp/biome-smoke.log; then
               cat /tmp/biome-smoke.log
               exit 1
             fi
