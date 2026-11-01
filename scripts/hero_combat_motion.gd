@@ -203,10 +203,15 @@ func _process(delta: float) -> void:
  var foot_height: float = 0.05 if class_id in [0, 1] else (0.09 if class_id in [4, 5, 10] else 0.07)
  var step: float = sin(elapsed * speed)
  # Foot lift follows the planted leg, reducing the sliding impression.
+ # Independent gait phases and gentle idle sway avoid mechanical mirror motion.
+ var idle_weight: float = 1.0 - step_strength
+ var idle_phase: float = elapsed * (1.75 + float(class_id % 3) * 0.13)
  left_leg.rotation.x = step * leg_swing * step_strength
  right_leg.rotation.x = -step * leg_swing * step_strength
- left_arm.rotation.x = -step * arm_swing * step_strength
- right_arm.rotation.x = step * arm_swing * step_strength
+ left_arm.rotation.x = -step * arm_swing * step_strength + sin(idle_phase) * 0.045 * idle_weight
+ right_arm.rotation.x = step * arm_swing * step_strength - sin(idle_phase + 0.35) * 0.04 * idle_weight
+ left_leg.rotation.z = -0.025 * idle_weight
+ right_leg.rotation.z = 0.025 * idle_weight
  var foot_lift: float = maxf(0.0, step) * foot_height * step_strength
  left_leg.position.y = 0.60 + foot_lift
  right_leg.position.y = 0.60 + maxf(0.0, -step) * foot_height * step_strength
@@ -231,6 +236,10 @@ func _process(delta: float) -> void:
    right_arm.rotation.x = -0.78 * swing
    left_arm.rotation.x = -1.15 * swing
    right_arm.rotation.z = alternate * 0.12 * swing
+  # Weight transfer during windup and strike makes attacks less rigid.
+  left_leg.rotation.x += 0.15 * windup * (1.0 - strike)
+  right_leg.rotation.x -= 0.22 * swing
+  left_arm.rotation.z = -0.12 * swing
   attack_lean = swing
   magic_flash.visible = true
   var fx_strength: float = 0.75 if class_id in [2, 4] else (1.25 if class_id in [0, 1, 10] else 1.0)
