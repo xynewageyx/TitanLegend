@@ -66,16 +66,41 @@ def root_crawler():
         cone("leaf_antenna",(x,0,1.45),.19,0,.52,leaf)
     eyes(.96,.31,white,dark)
 
+def leaf_mesh(name, center, length, width, mat, bend=0.0):
+    """Hand-built pointed, curved leaf silhouette with a raised central vein."""
+    cx, cy, cz = center
+    vertices = [
+        (cx,cy,cz),
+        (cx-width*.72,cy-.035,cz+length*.35),
+        (cx,cy-.10-bend*.25,cz+length*.48),
+        (cx+width*.72,cy-.035,cz+length*.35),
+        (cx-width*.46,cy+.02,cz+length*.70),
+        (cx,cy-.09-bend*.55,cz+length*.79),
+        (cx+width*.46,cy+.02,cz+length*.70),
+        (cx+bend,cy-.04,cz+length),
+    ]
+    faces = [(0,1,2),(0,2,3),(1,4,5,2),(2,5,6,3),(4,7,5),(5,7,6)]
+    mesh=bpy.data.meshes.new(name+"_mesh")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    obj=bpy.data.objects.new(name,mesh)
+    bpy.context.collection.objects.link(obj)
+    mesh.materials.append(mat)
+    for face in mesh.polygons:
+        face.use_smooth=True
+    return obj
+
 def leaf_fox():
     fur=material("fox_fur",(.73,.44,.18));leaf=material("fox_leaf",(.23,.67,.28))
     cream=material("fox_cream",(.97,.86,.62));dark=material("fox_dark",(.09,.10,.08))
     sphere("fox_body",(0,.20,.81),(.52,.81,.44),fur)
     sphere("fox_head",(0,-.48,1.13),(.55,.48,.51),fur)
     for x in (-.38,.38):
-        cone("pointed_ear",(x,-.42,1.69),.21,0,.54,leaf)
+        leaf_mesh("sculpted_leaf_ear", (x,-.42,1.42), .72, .31, leaf, bend=x*.35)
         for y in (-.38,.61):
             sphere("fox_paw",(x,y,.30),(.17,.22,.33),fur)
-    sphere("leaf_tail",(0,1.07,1.08),(.34,.64,.24),leaf)
+    sphere("tail_base",(0,1.07,1.08),(.26,.48,.20),fur)
+    leaf_mesh("tail_leaf_blade", (0,1.10,.95), .91, .48, leaf, bend=.25)
     sphere("snout",(0,-.90,.93),(.28,.16,.19),cream)
     for x in (-.23,.23):
         sphere("eye",(x,-.885,1.24),(.105,.06,.14),dark)
