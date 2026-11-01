@@ -1,20 +1,20 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:34 UTC**
-Git-Stand: **6a3204b32aa1eb49e9e4159a1ea6526956be0aa7** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:37 UTC**
+Git-Stand: **42ae25dca321b968a72adc5829778ead84d177b7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
 - \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
 - \`07c83e8\` (2026-11-01): Correct Blender armature cleanup and explicit NLA strip frame ranges
-- \`804bd81\` (2026-11-01): art(forest): sculpt species-specific asymmetric primary body silhouettes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
 - \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
-- \`804bd81\` (2026-11-01): art(forest): sculpt species-specific asymmetric primary body silhouettes
 
 ### Landschaften — Landschaften-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
@@ -32,7 +32,6 @@ Git-Stand: **6a3204b32aa1eb49e9e4159a1ea6526956be0aa7** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - \`e23c106\` (2026-11-01): Add Blender round-trip import verification step to chibi workflow
 - \`d6441d2\` (2026-11-01): ci: add event-driven shared project coordination
-- \`ace0b1e\` (2026-11-01): ci: run eleven-class chibi GLB integration regressions on every validation
 
 ## Bereichsübergreifende Änderungen
 
