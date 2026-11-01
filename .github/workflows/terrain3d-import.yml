@@ -17,6 +17,45 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 tools/terrain3d/stage_addon.py
+      - name: Audit native GDExtension libraries for Android ARM64
+        run: |
+          python3 - <<'PY'
+          import configparser
+          from pathlib import Path
+          root = Path("terrain3d-preview")
+          manifests = sorted(root.rglob("*.gdextension"))
+          assert manifests, "No native GDExtension manifests staged"
+          report = ["# Native extension compatibility audit", ""]
+          android_found = False
+          for manifest in manifests:
+              parser = configparser.ConfigParser(interpolation=None)
+              parser.optionxform = str
+              parser.read(manifest, encoding="utf-8")
+              assert parser.has_section("libraries"), f"No [libraries] section: {manifest}"
+              report.append(f"## {manifest.relative_to(root)}")
+              for feature, relative in parser.items("libraries"):
+                  relative = relative.strip().strip('"')
+                  binary = (manifest.parent / relative).resolve()
+                  exists = binary.is_file()
+                  report.append(f"- {feature}: {relative} ({'present' if exists else 'MISSING'})")
+                  if "android" in feature.lower() and ("arm64" in feature.lower() or "arm64-v8a" in feature.lower()):
+                      android_found |= exists
+                      if not exists:
+                          print(f"::warning::Android ARM64 native library missing: {binary}")
+              report.append("")
+          report.append(f"Android ARM64 library available: {android_found}")
+          Path("terrain3d-native-audit.md").write_text("\\n".join(report) + "\\n")
+          print("\\n".join(report))
+          if not android_found:
+              print("::warning::Terrain3D Android ARM64 support not confirmed. Do not assume the isolated preview is APK-ready.")
+          PY
+      - name: Upload native library compatibility audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Terrain3D-Native-Library-Audit
+          path: terrain3d-native-audit.md
+          if-no-files-found: ignore
       - name: Verify ProtonScatter addon installation
         run: |
           test -f terrain3d-preview/addons/proton_scatter/plugin.cfg
