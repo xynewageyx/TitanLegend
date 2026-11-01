@@ -211,6 +211,17 @@ jobs:
             else
               grep -q BIOME_LANDMARKS_READY /tmp/biome-smoke.log || { cat /tmp/biome-smoke.log; exit 1; }
             fi
+            if ! grep -Eq 'TERRAIN_TEXTURE_ASSETS_READY:[[:space:]]*4' /tmp/biome-smoke.log; then
+              echo "::error::Biome $key did not register all four Terrain3D textures"
+              cat /tmp/biome-smoke.log
+              exit 1
+            fi
+            for surface in gras erde weg fels; do
+              if ! test -s "terrain3d-preview/textures/terrain/$key/${surface}_albedo.png"; then
+                echo "::error::Missing $surface terrain texture for $key"
+                exit 1
+              fi
+            done
             if grep -E 'SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid assignment' /tmp/biome-smoke.log; then
               cat /tmp/biome-smoke.log
               exit 1
