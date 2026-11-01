@@ -22,6 +22,58 @@ def loft(name,levels,mat):
 def oval(name,pos,scale,mat):
  bpy.ops.mesh.primitive_uv_sphere_add(segments=16,ring_count=10,location=pos)
  o=bpy.context.object;o.name=name;o.scale=scale;o.data.materials.append(mat)
+def rig_and_animate():
+ """Lightweight rigid skinning with named bones and five reusable action clips."""
+ bpy.ops.object.armature_add(enter_editmode=True,location=(0,0,0))
+ arm=bpy.context.object;arm.name="ChibiRig"
+ arm.data.edit_bones.remove(arm.data.edit_bones[0])
+ specs=[
+  ("Root",None,(0,0,.1),(0,0,.5)),
+  ("Hips","Root",(0,0,.5),(0,0,1.0)),
+  ("Spine","Hips",(0,0,1.0),(0,0,1.53)),
+  ("Head","Spine",(0,0,1.53),(0,0,2.12)),
+  ("Arm_L","Spine",(-.3,0,1.40),(-.48,0,.92)),
+  ("Arm_R","Spine",(.3,0,1.40),(.48,0,.92)),
+  ("Leg_L","Hips",(-.18,0,.66),(-.19,0,.23)),
+  ("Leg_R","Hips",(.18,0,.66),(.19,0,.23))]
+ for name,parent,head,tail in specs:
+  bone=arm.data.edit_bones.new(name);bone.head=head;bone.tail=tail
+  if parent:bone.parent=arm.data.edit_bones[parent]
+ bpy.ops.object.mode_set(mode="OBJECT")
+ for obj in list(bpy.context.scene.objects):
+  if obj.type!="MESH":continue
+  name=obj.name
+  target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")) else
+          "Arm_L" if name.endswith(".001") and ("Hand" in name) else
+          "Arm_R" if "Hand" in name else
+          "Leg_L" if name.endswith(".001") and "Foot" in name else
+          "Leg_R" if "Foot" in name else "Spine")
+  group=obj.vertex_groups.new(name=target)
+  group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
+  mod=obj.modifiers.new("Skin","ARMATURE");mod.object=arm
+ clips={"Idle":(1,32),"Walk":(40,63),"Attack":(70,91),"Hit":(100,113),"Dodge":(120,139)}
+ for clip,(start,end) in clips.items():
+  action=bpy.data.actions.new(name=clip)
+  arm.animation_data_create();arm.animation_data.action=action
+  for frame in (start,(start+end)//2,end):
+   phase=(frame-start)/max(1,end-start)
+   for bone in arm.pose.bones:
+    bone.rotation_mode="XYZ";bone.rotation_euler=(0,0,0)
+    if clip=="Idle" and bone.name=="Head":bone.rotation_euler.z=.06*math.sin(phase*math.tau)
+    if clip=="Walk" and bone.name in ("Leg_L","Leg_R","Arm_L","Arm_R"):
+     sign=1 if bone.name.endswith("L") else -1
+     if bone.name.startswith("Arm"):sign=-sign
+     bone.rotation_euler.x=.48*sign*math.sin(phase*math.tau)
+    if clip=="Attack" and bone.name=="Arm_R":bone.rotation_euler.x=-1.1*math.sin(phase*math.pi)
+    if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
+    if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
+    bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
+  action.frame_range=(start,end)
+  track=arm.animation_data.nla_tracks.new();track.name=clip
+  track.strips.new(clip,start,action)
+ arm.animation_data.action=None
+ return arm
+
 for idx,name in enumerate(NAMES):
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
  skin=material("skin",(.92,.69,.51));hair=material("hair",COLORS[idx])
@@ -42,6 +94,7 @@ for idx,name in enumerate(NAMES):
   lock.location.x=x
  oval("Nose",(0,-.42,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40,1.71),(.10,.018,.02),dark)
+ rig_and_animate()
  bpy.ops.object.select_all(action="SELECT")
- bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_apply=True)
+ bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_animations=True,export_nla_strips=True)
  print("Generated",name)
