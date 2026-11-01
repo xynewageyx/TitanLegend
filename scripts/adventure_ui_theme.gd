@@ -71,7 +71,8 @@ static func style_menu_tree(node: Node) -> void:
  if node is ColorRect:
   (node as ColorRect).color = Color("#f3e4bf")
  elif node is PanelContainer:
-  (node as PanelContainer).add_theme_stylebox_override("panel", plaque(PAPER, WOOD, 17, 3))
+  if not (node as PanelContainer).has_theme_stylebox_override("panel"):
+   (node as PanelContainer).add_theme_stylebox_override("panel", plaque(PAPER, WOOD, 17, 3))
  elif node is OptionButton:
   button(node as Button, false, true)
  elif node is Button:
