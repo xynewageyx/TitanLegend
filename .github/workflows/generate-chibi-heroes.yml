@@ -1,0 +1,30 @@
+name: Generate Chibi Hero GLBs
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/generate_chibi.py'
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Generate all eleven hero models
+        run: blender -b --python tools/generate_chibi.py
+      - name: Verify GLB outputs
+        run: |
+          test "$(find assets/heroes/chibi -name '*.glb' -type f | wc -l)" -eq 11
+          find assets/heroes/chibi -name '*.glb' -type f -size +1k | wc -l | grep -qx 11
+      - name: Commit generated GLBs
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/heroes/chibi/*.glb
+          if ! git diff --cached --quiet; then
+            git commit -m 'Generate eleven original chibi hero GLB assets'
+            git push
+          fi
