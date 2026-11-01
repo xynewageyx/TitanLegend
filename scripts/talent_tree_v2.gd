@@ -32,7 +32,10 @@ static func can_upgrade(level: int, build: Array, branch: int, talent: int) -> b
   return false
  if build.size() != BRANCH_COUNT or not build[branch] is Array or build[branch].size() != TALENTS_PER_BRANCH:
   return false
- if available_points(level, build) <= 0 or int(build[branch][talent]) >= MAX_RANK:
+ var current_rank: int = int(build[branch][talent])
+ if current_rank < 0 or current_rank >= MAX_RANK:
+  return false
+ if available_points(level, build) <= 0:
   return false
  # Every row has three talents; unlock a new row after 5 ranks in earlier rows.
  var row: int = int(talent / 3)
