@@ -58,6 +58,8 @@ var weapon_upgrade_button: Button
 var weapon_rarity_button: Button
 var weapon_hero_button: Button
 var hardening_field: int = 0
+var hardening_slot_buttons: Array[Button] = []
+var hardening_slot_grid: GridContainer
 var hardening_select_button: Button
 var hardening_upgrade_button: Button
 var attribute_select_index: int = 0
@@ -419,6 +421,15 @@ func _make_hud() -> void:
  loot_sale_confirmation.canceled.connect(_cancel_loot_sale)
  add_child(loot_sale_confirmation)
  _equipment_heading(modal, "✦ AUSRÜSTUNGSHÄRTUNG")
+ hardening_slot_grid = GridContainer.new()
+ hardening_slot_grid.columns = 4
+ hardening_slot_grid.add_theme_constant_override("h_separation", 5)
+ modal.add_child(hardening_slot_grid)
+ for field_index in range(4):
+  var slot_button := _make_button("◆ %d" % (field_index + 1), hardening_slot_grid, _choose_hardening_field.bind(field_index), 16)
+  slot_button.custom_minimum_size.y = 78
+  slot_button.tooltip_text = "Härtungsfeld %d auswählen" % (field_index + 1)
+  hardening_slot_buttons.append(slot_button)
  var hardening_grid := GridContainer.new()
  hardening_grid.columns = 2
  hardening_grid.add_theme_constant_override("h_separation", 8)
@@ -655,6 +666,7 @@ func _refresh(_unused: int = 0) -> void:
  loot_equip_button.visible = current_tab == "jewels"
  loot_compare_label.visible = current_tab == "jewels"
  loot_sell_button.visible = current_tab == "jewels"
+ hardening_slot_grid.visible = current_tab == "jewels"
  hardening_select_button.visible = current_tab == "jewels"
  hardening_upgrade_button.visible = current_tab == "jewels"
  attribute_select_button.visible = current_tab == "jewels"
@@ -705,6 +717,13 @@ func _refresh(_unused: int = 0) -> void:
   var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
   var assigned_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][hardening_field])
   var reroll_cost: int = GameManager.hardening_reroll_cost(weapon_hero_slot, hardening_field)
+  for field_index in range(hardening_slot_buttons.size()):
+   var field_level: int = int(GameManager.hardening_levels[weapon_hero_slot][field_index])
+   var field_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][field_index])
+   var slot_button: Button = hardening_slot_buttons[field_index]
+   slot_button.text = "◆ %d\\nLv %d" % [field_index + 1, field_level]
+   slot_button.tooltip_text = str(GameManager.HARDENING_NAMES[field_attribute])
+   ADVENTURE_THEME.button(slot_button, field_index == hardening_field, true)
   hardening_select_button.text = "Feld %d: %s (Rang %d)" % [hardening_field + 1, GameManager.HARDENING_NAMES[assigned_attribute], hardening_level]
   attribute_select_button.text = "Waehlen: " + str(GameManager.HARDENING_NAMES[attribute_select_index])
   attribute_apply_button.text = "Attribut setzen: %d Gold" % reroll_cost
@@ -876,6 +895,10 @@ func _confirm_loot_sale() -> void:
  if GameManager.sell_loot(item_id):
   _append("System", "%s verkauft: +%d Gold" % [GameManager.loot_item_name(item), sale_price])
   loot_selected_index = 0 if GameManager.equipment_inventory.is_empty() else mini(loot_selected_index, GameManager.equipment_inventory.size() - 1)
+ _refresh()
+
+func _choose_hardening_field(field_index: int) -> void:
+ hardening_field = clampi(field_index, 0, 3)
  _refresh()
 
 func _next_hardening_field() -> void:
