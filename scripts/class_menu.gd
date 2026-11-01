@@ -28,12 +28,13 @@ func _ready() -> void:
  var scroll := ScrollContainer.new()
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  panel.add_child(scroll)
  var v := VBoxContainer.new()
  v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.add_child(v)
  v.add_theme_constant_override("separation", 14)
- panel.add_child(v)
+ # Keep all content inside the ScrollContainer; a second PanelContainer child overlaps it.
  var title := Label.new()
  title.text = "HELDEN · TEAM & KLASSEN"
  title.add_theme_font_size_override("font_size", 28)
