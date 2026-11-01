@@ -76,11 +76,14 @@ func _ready() -> void:
   _refresh()
  )
  points_label = Label.new()
+ points_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  column.add_child(points_label)
  bonus_label = Label.new()
+ bonus_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  column.add_child(bonus_label)
  talent_grid = GridContainer.new()
  talent_grid.columns = 2
+ talent_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  column.add_child(talent_grid)
  _refresh()
 
@@ -111,6 +114,7 @@ func _refresh() -> void:
  for talent_index in range(15):
   var button := Button.new()
   button.custom_minimum_size = Vector2(112, 64)
+  button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   button.text = "Talent %d\n%d/5" % [talent_index + 1, int(build[selected_branch][talent_index])]
   button.disabled = not TREES.can_upgrade(level, build, selected_branch, talent_index)
   talent_grid.add_child(button)
