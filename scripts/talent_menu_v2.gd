@@ -48,6 +48,7 @@ func _ready() -> void:
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+ scroll.follow_focus = true
  scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  frame.add_child(scroll)
  var column := VBoxContainer.new()
@@ -55,6 +56,7 @@ func _ready() -> void:
  column.custom_minimum_size = Vector2(270, 0)
  scroll.add_child(column)
  hero_picker = OptionButton.new()
+ hero_picker.custom_minimum_size = Vector2(0, 52)
  for i in range(4):
   var hero_class_label: String = "Held"
   if team != null and i < team.class_ids.size():
@@ -68,6 +70,7 @@ func _ready() -> void:
   _refresh()
  )
  branch_picker = OptionButton.new()
+ branch_picker.custom_minimum_size = Vector2(0, 52)
  for i in range(3):
   branch_picker.add_item(["Angriff", "Schutz", "Heilung"][i], i)
  column.add_child(branch_picker)
