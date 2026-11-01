@@ -661,10 +661,7 @@ func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  for shoulder_side in [-1.0, 1.0]:
   var shoulder: MeshInstance3D = VisualFactory.sphere(hero, 0.20, Vector3(shoulder_side * 0.50, 1.58, 0), color.lightened(0.16))
   shoulder.scale = Vector3(1.15, 0.70, 1.15)
- # Rounded connected-looking limbs; keep original face and equipment anchor positions.
- for side in [-1.0, 1.0]:
-  _rounded_limb(hero, "ChibiUpperArm", Vector3(side * 0.54, 1.36, 0.0), 0.17, 0.56, color.darkened(0.09), -side * 0.16)
-  _rounded_limb(hero, "ChibiLowerLeg", Vector3(side * 0.25, 0.47, 0.0), 0.20, 0.68, color.darkened(0.18), side * 0.06)
+ # Limbs are rendered exclusively by HeroCombatMotion so they animate without duplicates.
  if role == 0: # Krieger: Helm, Schild und Schwert
   VisualFactory.box(hero, Vector3(0.66, 0.22, 0.65), Vector3(0, 2.19, 0), Color("#9ea9b7"))
   VisualFactory.box(hero, Vector3(0.58, 0.75, 0.15), Vector3(-0.65, 1.2, -0.2), Color("#66798c"))
