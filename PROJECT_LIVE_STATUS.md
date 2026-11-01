@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 18:08 UTC**
-Git-Stand: **b5d6c3a9b0edc989f38658b4b4863d807498b263** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 19:59 UTC**
+Git-Stand: **cd45980c48921f75c2bfac7f05f9cbbdd2f34376** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,13 +26,12 @@ Git-Stand: **b5d6c3a9b0edc989f38658b4b4863d807498b263** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - \`a246df6\` (2026-11-01): fix(talents): reject invalid negative ranks before spending earned talent points
 - \`d15182f\` (2026-11-01): ui(talents): enlarge hero and branch selectors and follow focused talent buttons on Android
-- \`6a3204b\` (2026-11-01): fix(talents): guard invalid hero selection and stale upgrade callbacks in Android menu
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine passenden Änderungen in den letzten 15 Commits.
+- \`cd45980\` (2026-11-01): test(talents): guard invalid rank rejection and Android talent navigation regressions
 
 ## Bereichsübergreifende Änderungen
 
