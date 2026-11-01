@@ -112,7 +112,9 @@ func _refresh() -> void:
    if class_index >= 0 and class_index < team.CLASS_NAMES.size():
     class_label = str(team.CLASS_NAMES[class_index])
   hero_picker.set_item_text(hero_slot, "Held %d - %s" % [hero_slot + 1, class_label])
- points_label.text = "Level %d | Verfuegbar: %d | Maximal 225 investierbar" % [level, TREES.available_points(level, build)]
+ points_label.text = "Level %d | Frei: %d | Investiert: %d/225" % [level, TREES.available_points(level, build), TREES.spent_points(build)]
+ if TREES.remaining_rank_capacity(build) == 0:
+  points_label.text += " | Talentbaum voll"
  var bonus: Dictionary = ADAPTER.bonuses(int(team.class_ids[selected_hero]), level, build)
  bonus_label.text = "ATK +%.1f%%  Schutz +%.1f%%  Heilung +%.1f%%" % [float(bonus["attack"]) * 100.0, float(bonus["defense"]) * 100.0, float(bonus["healing"]) * 100.0]
  for child in talent_grid.get_children():
