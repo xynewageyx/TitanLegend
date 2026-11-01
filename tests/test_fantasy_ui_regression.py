@@ -37,7 +37,7 @@ class FantasyUIRegression(unittest.TestCase):
     def test_obsolete_talent_shortcut_hidden(self):
         ui = self.read_script("ui_manager.gd")
         self.assertIn('func _suppress_legacy_shortcut()', ui)
-        self.assertIn('text.strip_edges() == "Talente +"', ui)
+        self.assertIn('text.strip_edges().begins_with("Talente +")', ui)
         self.assertIn('call_deferred("_suppress_legacy_shortcut")', ui)
 
     def test_class_menu_uses_single_scroll_container(self):
