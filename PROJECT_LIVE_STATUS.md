@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:37 UTC**
-Git-Stand: **42ae25dca321b968a72adc5829778ead84d177b7** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:51 UTC**
+Git-Stand: **d15182f8125fca73ccbef053bdb6fb878df06c35** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,17 +26,16 @@ Git-Stand: **42ae25dca321b968a72adc5829778ead84d177b7** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
+- \`d15182f\` (2026-11-01): ui(talents): enlarge hero and branch selectors and follow focused talent buttons on Android
 - \`6a3204b\` (2026-11-01): fix(talents): guard invalid hero selection and stale upgrade callbacks in Android menu
 - \`e987497\` (2026-11-01): ui(talents): wrap long stats and expand two-column touch targets on narrow Android screens
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - \`e23c106\` (2026-11-01): Add Blender round-trip import verification step to chibi workflow
-- \`d6441d2\` (2026-11-01): ci: add event-driven shared project coordination
 
 ## Bereichsübergreifende Änderungen
 
 - \`739d317\` (2026-11-01): Verify generated hero GLBs round-trip through Blender with armatures and skinning
-- \`b4d2417\` (2026-11-01): ci: add event-driven shared project coordination
 
 ## Regeln für alle Fach-Chats
 
