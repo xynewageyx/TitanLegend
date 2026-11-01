@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:28 UTC**
-Git-Stand: **739d317af743acffcd8c0601b34ac2076462b369** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:30 UTC**
+Git-Stand: **e987497945e04fd83a23bdb082db1352b848d17e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -25,14 +25,13 @@ Git-Stand: **739d317af743acffcd8c0601b34ac2076462b369** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
-- \`626d625\` (2026-11-01): Prevent overlapping imported warrior GLBs when new chibi model exists
+- \`e987497\` (2026-11-01): ui(talents): wrap long stats and expand two-column touch targets on narrow Android screens
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - \`e23c106\` (2026-11-01): Add Blender round-trip import verification step to chibi workflow
 - \`d6441d2\` (2026-11-01): ci: add event-driven shared project coordination
 - \`ace0b1e\` (2026-11-01): ci: run eleven-class chibi GLB integration regressions on every validation
 - \`5614d01\` (2026-11-01): ci: install numpy for Blender chibi GLB exporter
-- \`993d5bd\` (2026-11-01): Make Blender generation self-triggering and upload GLB artifacts for inspection
 
 ## Bereichsübergreifende Änderungen
 
