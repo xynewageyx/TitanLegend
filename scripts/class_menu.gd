@@ -13,15 +13,16 @@ func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_STOP
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  var dim := ColorRect.new()
- dim.color = Color(0.10, 0.07, 0.04, 0.86)
+ dim.color = SKIN.PAPER
+ dim.mouse_filter = Control.MOUSE_FILTER_STOP
  dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(dim)
  panel = PanelContainer.new()
  panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- panel.offset_left = 24.0
- panel.offset_top = 82.0
- panel.offset_right = -24.0
- panel.offset_bottom = -82.0
+ panel.offset_left = 14.0
+ panel.offset_top = 18.0
+ panel.offset_right = -14.0
+ panel.offset_bottom = -18.0
  panel.custom_minimum_size = Vector2.ZERO
  panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 20, 4))
  add_child(panel)
@@ -36,27 +37,47 @@ func _ready() -> void:
  v.add_theme_constant_override("separation", 14)
  # Keep all content inside the ScrollContainer; a second PanelContainer child overlaps it.
  var title := Label.new()
- title.text = "HELDEN · TEAM & KLASSEN"
+ title.text = "✦ HELDEN & KLASSEN"
  title.add_theme_font_size_override("font_size", 28)
  v.add_child(title)
+ var hero_heading := Label.new()
+ hero_heading.text = "◆ HELDENPLATZ"
+ v.add_child(hero_heading)
  slot_selector = OptionButton.new()
  for i in range(4):
   slot_selector.add_item("Held " + str(i + 1), i)
  v.add_child(slot_selector)
+ var class_heading := Label.new()
+ class_heading.text = "⚔ KLASSE"
+ v.add_child(class_heading)
  class_selector = OptionButton.new()
  for i in range(team_formation.CLASS_NAMES.size()):
   class_selector.add_item(team_formation.CLASS_NAMES[i], i)
  v.add_child(class_selector)
+ var role_heading := Label.new()
+ role_heading.text = "✦ KAMPFROLLE"
+ v.add_child(role_heading)
  role_selector = OptionButton.new()
  v.add_child(role_selector)
+ var formation_card := PanelContainer.new()
+ formation_card.name = "FormationBonusCard"
+ v.add_child(formation_card)
+ var formation_body := VBoxContainer.new()
+ formation_card.add_child(formation_body)
+ var formation_heading := Label.new()
+ formation_heading.text = "★ TEAMFORMATION"
+ formation_body.add_child(formation_heading)
  bonus_label = Label.new()
  bonus_label.add_theme_font_size_override("font_size", 22)
  bonus_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
- v.add_child(bonus_label)
+ formation_body.add_child(bonus_label)
+ var class_card := PanelContainer.new()
+ class_card.name = "ClassDescriptionCard"
+ v.add_child(class_card)
  description = Label.new()
  description.add_theme_font_size_override("font_size", 22)
  description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
- v.add_child(description)
+ class_card.add_child(description)
  var apply := Button.new()
  apply.text = "Klasse und Rolle uebernehmen"
  apply.custom_minimum_size.y = 75
@@ -66,6 +87,8 @@ func _ready() -> void:
  close.custom_minimum_size.y = 65
  v.add_child(close)
  SKIN.style_menu_tree(panel)
+ formation_card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 18, 3))
+ class_card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 18, 3))
  apply.pressed.connect(_apply)
  close.pressed.connect(func(): visible = false)
  class_selector.item_selected.connect(func(_id: int): _refresh_description())
