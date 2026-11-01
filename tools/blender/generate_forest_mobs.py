@@ -391,8 +391,48 @@ def animate_creature():
         root.animation_data.action=None
     return root
 
+def storybook_creature_finish(creature):
+    """Original expressive chibi finish: large readable eyes, layered color and clear silhouettes."""
+    palettes = {
+        "forest_01_mooshuepfer": (1.14, -.54, .30, (.48,.82,.35)),
+        "forest_02_pilzling": (.99, -.46, .23, (.98,.66,.34)),
+        "forest_03_wurzelkrabbler": (.94, -.54, .30, (.67,.84,.39)),
+        "forest_04_blattfuchs": (1.23, -.89, .23, (.97,.75,.40)),
+        "forest_05_dorneneber": (1.18, -1.07, .31, (.88,.57,.40)),
+        "forest_06_rankenwerfer": (1.51, -.58, .25, (.89,.62,.78)),
+        "forest_elite_01_rindenwaechter": (2.50, -.67, .31, (.71,.89,.48)),
+        "forest_elite_02_moosbestie": (1.55, -1.32, .39, (.84,.94,.45)),
+        "forest_boss_01_wurzelkoenig": (3.22, -1.08, .43, (.96,.83,.43)),
+    }
+    z, front, spread, tint = palettes[creature]
+    scl = 1.35 if "boss" in creature else (1.15 if "elite" in creature else 1.0)
+    ivory = material("storybook_eye_ivory", (.99,.96,.87))
+    iris = material("storybook_iris", (.15,.26,.20))
+    pupil = material("storybook_pupil", (.035,.055,.065))
+    shine = material("storybook_eye_shine", (1.0,1.0,.96))
+    cheek = material("storybook_cheek", tint)
+    # A forward-facing eye layer makes expression legible from the portrait game camera.
+    for side in (-1, 1):
+        x = side * spread
+        sphere("storybook_eye_sclera", (x,front-.025,z), (.155*scl,.095*scl,.20*scl), ivory,24,16)
+        sphere("storybook_iris", (x-side*.018,front-.111*scl,z-.012*scl),
+               (.103*scl,.045*scl,.145*scl),iris,20,14)
+        sphere("storybook_pupil", (x-side*.018,front-.145*scl,z-.013*scl),
+               (.067*scl,.027*scl,.108*scl),pupil,20,14)
+        sphere("storybook_catchlight", (x-side*.052,front-.173*scl,z+.055*scl),
+               (.034*scl,.018*scl,.045*scl),shine,12,8)
+        sphere("storybook_cheek_patch", (side*(spread+.20*scl),front+.025,z-.23*scl),
+               (.15*scl,.048*scl,.09*scl),cheek,16,10)
+    # Distinct small leaf badges give each creature a cohesive forest-fantasy identity.
+    if "boss" not in creature:
+        leaf = material("storybook_leaf_badge", (.28,.72,.43))
+        for side in (-1,1):
+            badge = sphere("storybook_leaf_badge", (side*(spread+.33*scl),front+.12,z+.30*scl),
+                           (.09*scl,.045*scl,.18*scl),leaf,14,10)
+            badge.rotation_euler[1] = side*.48
+
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
