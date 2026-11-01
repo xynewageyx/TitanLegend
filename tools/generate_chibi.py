@@ -43,14 +43,21 @@ def rig_and_animate():
  for obj in list(bpy.context.scene.objects):
   if obj.type!="MESH":continue
   name=obj.name
-  target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")) else
-          "Arm_L" if name.endswith(".001") and ("Hand" in name) else
-          "Arm_R" if "Hand" in name else
-          "Leg_L" if name.endswith(".001") and "Foot" in name else
-          "Leg_R" if "Foot" in name else "Spine")
+  # Blender adds .001 to repeated names; side is determined by world X, not suffix.
+  center_x=sum((obj.matrix_world @ vertex.co).x for vertex in obj.data.vertices)/max(1,len(obj.data.vertices))
+  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")):
+   target="Head"
+  elif "Hand" in name:
+   target="Arm_L" if center_x < 0 else "Arm_R"
+  elif "Foot" in name:
+   target="Leg_L" if center_x < 0 else "Leg_R"
+  else:
+   target="Spine"
   group=obj.vertex_groups.new(name=target)
   group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
   mod=obj.modifiers.new("Skin","ARMATURE");mod.object=arm
+  obj.parent=arm
+  obj.matrix_parent_inverse=arm.matrix_world.inverted()
  clips={"Idle":(1,32),"Walk":(40,63),"Attack":(70,91),"Hit":(100,113),"Dodge":(120,139)}
  for clip,(start,end) in clips.items():
   action=bpy.data.actions.new(name=clip)
