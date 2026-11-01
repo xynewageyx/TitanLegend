@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 20:00 UTC**
-Git-Stand: **0755bcd8fe5b41c972a60e9bdca4376ce9e004ff** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 20:03 UTC**
+Git-Stand: **ca52481913eb080131a8a30e9ece2be02f04e03c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,6 +23,7 @@ Git-Stand: **0755bcd8fe5b41c972a60e9bdca4376ce9e004ff** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
+- \`ca52481\` (2026-11-01): ui(talents): show invested rank progress and completed talent trees on Android
 - \`92ac368\` (2026-11-01): test compatibility: retain explicit earned-point guard before talent capacity guard
 - \`17bc5f8\` (2026-11-01): feat(talents): expose remaining talent rank capacity without losing earned-point accounting
 - \`a246df6\` (2026-11-01): fix(talents): reject invalid negative ranks before spending earned talent points
