@@ -521,7 +521,7 @@ func create_team() -> void:
   # Optional chibi equipment attachment markers; no visuals equipped by default.
   preload("res://scripts/equipment/formation_equipment_adapter.gd").install(hero)
   # Optional imported 3D warrior: only class 0, and only when the GLB exists.
-  if class_ids[i] == 0 and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
+  if class_ids[i] == 0 and not ResourceLoader.exists("res://assets/heroes/chibi/warrior.glb") and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
    var warrior_visual := Node3D.new()
    warrior_visual.name = "WarriorGLBVisual"
    warrior_visual.set_script(preload("res://scripts/warrior_glb_visual.gd"))
