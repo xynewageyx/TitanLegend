@@ -15,5 +15,11 @@ for name in NAMES:
   raise RuntimeError(name+": insufficient skeleton bones")
  if not any(o.modifiers and any(m.type=="ARMATURE" for m in o.modifiers) for o in meshes):
   raise RuntimeError(name+": no skinned mesh")
+ expected={"Root","Hips","Spine","Head","Arm_L","Arm_R","Leg_L","Leg_R"}
+ if not expected.issubset({b.name for b in arm.data.bones}):
+  raise RuntimeError(name+": required animation bones missing")
+ for side in ("Arm_L","Arm_R","Leg_L","Leg_R"):
+  if not any(side in o.vertex_groups for o in meshes):
+   raise RuntimeError(name+": no skin weights for "+side)
  print("PASS",name,len(arm.data.bones),"bones",len(meshes),"meshes")
 print("All eleven GLBs imported successfully")
