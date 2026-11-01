@@ -1,0 +1,2 @@
+# Historical Update 168 snapshot. Exclude archived GDScript from Godot's global class scan.
+# Original archived source bytes remain unchanged for checksum tests.
