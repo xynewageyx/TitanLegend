@@ -211,7 +211,7 @@ jobs:
             else
               grep -q BIOME_LANDMARKS_READY /tmp/biome-smoke.log || { cat /tmp/biome-smoke.log; exit 1; }
             fi
-            region_marker="${key^^}_REGION_EXISTS: true"
+            region_marker="${key^^}_REGION_EXISTS:true"
             if ! grep -Fq "$region_marker" /tmp/biome-smoke.log; then
               echo "::error::Biome $key did not confirm a generated Terrain3D region"
               cat /tmp/biome-smoke.log
