@@ -185,6 +185,7 @@ func play_hero_defeat(i: int) -> void:
  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
  if glb_visual != null:
   glb_visual.play_hit()
+  glb_visual.play_defeat()
  if attack_tweens.has(i):
   var active: Tween = attack_tweens[i] as Tween
   if active != null and active.is_running():
@@ -206,6 +207,9 @@ func reset_individual_defeat_poses() -> void:
   if is_instance_valid(heroes[i]):
    heroes[i].position = _formation_position(i)
    heroes[i].rotation = Vector3.ZERO
+   var glb_visual: Node = heroes[i].get_node_or_null("WarriorGLBVisual")
+   if glb_visual != null:
+    glb_visual.reset_defeat()
 
 # Update 81: cinematic team defeat, purely visual; anchors are restored on retry.
 func play_team_defeat() -> void:
@@ -222,6 +226,7 @@ func play_team_defeat() -> void:
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
+   glb_visual.play_defeat()
   if defeat_tweens.has(i):
    var old_fall: Tween = defeat_tweens[i] as Tween
    if old_fall != null and old_fall.is_running():
