@@ -527,6 +527,14 @@ func create_team() -> void:
    warrior_visual.set_script(preload("res://scripts/warrior_glb_visual.gd"))
    warrior_visual.set("hide_existing_visuals", true)
    hero.add_child(warrior_visual)
+  # Prefer generated sculpted base models when the GLB has been committed.
+  var chibi_path: String = "res://assets/heroes/chibi/" + ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"][class_ids[i]] + ".glb"
+  if ResourceLoader.exists(chibi_path):
+   var chibi_visual := Node3D.new()
+   chibi_visual.name = "ChibiGLBVisual"
+   chibi_visual.set_script(preload("res://scripts/chibi_glb_visual.gd"))
+   hero.add_child(chibi_visual)
+   chibi_visual.configure(class_ids[i])
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
