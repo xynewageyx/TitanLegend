@@ -69,12 +69,37 @@ func configure(hero_class: int) -> void:
   sleeve_color = Color("#5caa72")
  elif class_id in [5, 7, 8]:
   sleeve_color = Color("#8063ac")
+ # Unified rounded limb meshes are parented to animated joints, not static hero roots.
  for arm in [left_arm, right_arm]:
-  var upper: MeshInstance3D = VisualFactory.sphere(arm, 0.19, Vector3(0, -0.27, 0), sleeve_color)
-  upper.scale = Vector3(0.95, 2.2, 0.95)
+  var upper := MeshInstance3D.new()
+  upper.name = "SculptedAnimatedArm"
+  var arm_shape := CapsuleMesh.new()
+  arm_shape.radius = 0.18
+  arm_shape.height = 0.67
+  arm_shape.radial_segments = 16
+  arm_shape.rings = 6
+  upper.mesh = arm_shape
+  upper.position = Vector3(0.0, -0.27, 0.0)
+  var arm_surface := StandardMaterial3D.new()
+  arm_surface.albedo_color = sleeve_color
+  arm_surface.roughness = 0.82
+  upper.material_override = arm_surface
+  arm.add_child(upper)
  for leg in [left_leg, right_leg]:
-  var shin: MeshInstance3D = VisualFactory.sphere(leg, 0.19, Vector3(0, -0.31, 0), Color("#354050"))
-  shin.scale = Vector3(0.95, 2.3, 0.95)
+  var shin := MeshInstance3D.new()
+  shin.name = "SculptedAnimatedLeg"
+  var leg_shape := CapsuleMesh.new()
+  leg_shape.radius = 0.19
+  leg_shape.height = 0.74
+  leg_shape.radial_segments = 16
+  leg_shape.rings = 6
+  shin.mesh = leg_shape
+  shin.position = Vector3(0.0, -0.31, 0.0)
+  var leg_surface := StandardMaterial3D.new()
+  leg_surface.albedo_color = Color("#354050")
+  leg_surface.roughness = 0.88
+  shin.material_override = leg_surface
+  leg.add_child(shin)
  # Equipment remains attached to the animated right arm.
  HeroWeapons47.equip(right_arm, class_id)
  var flash_root: Node3D = _part(self, "AttackFlash", Vector3(0.0, 1.45, -0.7))
