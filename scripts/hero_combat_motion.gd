@@ -35,6 +35,10 @@ var defense_ring: Node3D
 var defense_segments: Array[MeshInstance3D] = []
 var class_fx_color: Color = Color("#f8d98e")
 var class_fx_size: float = 0.24
+var face_parts: Array[MeshInstance3D] = []
+var face_base_scales: Array[Vector3] = []
+var face_scan_complete: bool = false
+
 
 func _part(parent: Node3D, part_name: String, at: Vector3) -> Node3D:
  var part: Node3D = Node3D.new()
@@ -167,10 +171,33 @@ func set_tank_defense_state(kind: int) -> void:
  if kind < 0:
   defense_remaining = 0.0
 
+func _update_face_animation() -> void:
+ # Cache only the expression layers; equipment and headgear are never touched.
+ if not face_scan_complete:
+  var owner_hero: Node = get_parent()
+  var face: Node = owner_hero.get_node_or_null("StorybookFace") if owner_hero != null else null
+  if face == null:
+   return
+  for child in face.get_children():
+   if child is MeshInstance3D and child.name in ["EyeWhite", "Iris", "Pupil", "EyeGlint"]:
+    face_parts.append(child)
+    face_base_scales.append(child.scale)
+  face_scan_complete = true
+ # Periodic quick blink plus a brief flinch when receiving damage.
+ var cycle: float = fposmod(elapsed + float(class_id) * 0.29, 4.1)
+ var blink: float = 1.0 - 0.88 * smoothstep(0.0, 0.07, cycle) * (1.0 - smoothstep(0.13, 0.23, cycle))
+ var flinch: float = 0.55 if hit_remaining > 0.0 else 1.0
+ var eye_open: float = maxf(0.12, blink * flinch)
+ for index in range(face_parts.size()):
+  if is_instance_valid(face_parts[index]):
+   var original: Vector3 = face_base_scales[index]
+   face_parts[index].scale = Vector3(original.x, original.y * eye_open, original.z)
+
 func _process(delta: float) -> void:
  if left_arm == null or right_arm == null:
   return
  elapsed += delta
+ _update_face_animation()
  attack_remaining = maxf(0.0, attack_remaining - delta)
  hit_remaining = maxf(0.0, hit_remaining - delta)
  dodge_remaining = maxf(0.0, dodge_remaining - delta)
