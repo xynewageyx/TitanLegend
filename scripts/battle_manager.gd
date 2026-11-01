@@ -684,8 +684,8 @@ func _skill_is_usable(slot: int, role: int, choice: int) -> bool:
  if role == 2 and choice == 8:
   return true
  if choice == 7:
-  # Interrupt can only be used while a boss is actively casting.
-  return is_boss and boss_cast_ticks > 0 and boss_cc_required > 0
+  # Interrupt skills are normal equipped skills: no waiting for a boss cast.
+  return true
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  # Fully healed teams may prepare the healing portion of this slot.
  return true
@@ -749,7 +749,8 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   _refresh_tank_defense_visuals()
   return
  if choice == 7:
-  # An actual equipped interrupt must hit during the cast.
+  # Cast and consume normally; interrupt only if an interruptible cast is active.
+  last_ability = "Unterbrechung"
   if is_boss and boss_cast_ticks > 0 and boss_cc_required > 0:
    _apply_boss_cc_hit()
   return
