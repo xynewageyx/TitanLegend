@@ -360,35 +360,75 @@ def king_bark_details():
                 (side*(.56+i*.39),-.47,.08)], .20, bark)
 
 def animate_creature():
-    """Create simple object-level idle and attack clips for all mesh parts."""
-    root=bpy.data.objects.new("CreatureRoot",None)
+    """Export four distinct clips with body motion and articulated secondary parts.
+
+    Actions live on NLA tracks so Blender's glTF exporter keeps each named clip.
+    The animation stays lightweight enough for the Android GL Compatibility renderer.
+    """
+    root = bpy.data.objects.new("CreatureRoot", None)
     bpy.context.collection.objects.link(root)
-    meshes=[o for o in bpy.context.scene.objects if o.type=="MESH"]
+    meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
     for obj in meshes:
-        obj.parent=root
-        obj.matrix_parent_inverse=root.matrix_world.inverted()
-    # Distinct glTF actions are attached through NLA strips.
-    for clip,frames in (
-        ("idle",[(1,0.0,1.0),(13,0.0,1.07),(25,0.0,1.0)]),
-        ("attack",[(1,0.0,1.0),(7,-0.22,0.92),(13,0.30,1.12),(22,0.0,1.0)]),
-        ("hit",[(1,0.0,1.0),(5,-0.16,0.94),(12,0.0,1.0)]),
-        ("death",[(1,0.0,1.0),(16,0.0,0.10)]),
-    ):
+        obj.parent = root
+        obj.matrix_parent_inverse = root.matrix_world.inverted()
+
+    clips = {
+        "idle": [(1,0,0,0,1),(9,0,.035,.035,1.035),(17,0,0,-.025,1.075),(25,0,-.025,0,1)],
+        "attack": [(1,0,0,0,1),(5,0,.20,-.12,.92),(9,0,-.36,.15,1.12),(14,0,-.17,-.07,1.03),(22,0,0,0,1)],
+        "hit": [(1,0,0,0,1),(4,0,.22,-.18,.91),(8,0,-.09,.10,1.04),(14,0,0,0,1)],
+        "death": [(1,0,0,0,1),(7,0,.11,.20,.88),(15,0,.34,.90,.43),(24,0,.38,1.20,.12)],
+    }
+    for clip, frames in clips.items():
         root.animation_data_create()
-        root.animation_data.action = bpy.data.actions.new(name=clip)
-        for frame,y,scale in frames:
-            root.location=(0,y,0)
-            root.scale=(1,1,scale)
-            root.keyframe_insert(data_path="location",frame=frame)
-            root.keyframe_insert(data_path="scale",frame=frame)
-        action=root.animation_data.action
-        action.name=clip
-        track=root.animation_data.nla_tracks.new()
-        track.name=clip
-        strip=track.strips.new(clip,1,action)
-        strip.action_frame_start=1
-        strip.action_frame_end=frames[-1][0]
-        root.animation_data.action=None
+        action = bpy.data.actions.new(name=clip)
+        root.animation_data.action = action
+        for frame, x, y, tilt, stretch in frames:
+            root.location = (x,y,0)
+            root.rotation_euler = (tilt, 0, 0)
+            root.scale = (1.0 / math.sqrt(stretch), 1.0 / math.sqrt(stretch), stretch)
+            root.keyframe_insert(data_path="location", frame=frame)
+            root.keyframe_insert(data_path="rotation_euler", frame=frame)
+            root.keyframe_insert(data_path="scale", frame=frame)
+        track = root.animation_data.nla_tracks.new()
+        track.name = clip
+        strip = track.strips.new(clip, 1, action)
+        strip.action_frame_start = 1
+        strip.action_frame_end = frames[-1][0]
+        root.animation_data.action = None
+
+    # Mesh-local animation makes paws, fists, ears, leaves and tails move
+    # independently rather than merely scaling the entire creature.
+    moving_tokens = ("arm", "fist", "paw", "leg", "foot", "ear", "tail",
+                     "leaf", "vine", "tendril", "antenna", "horn", "crown")
+    candidates = [o for o in meshes if any(t in o.name.lower() for t in moving_tokens)]
+    for idx, obj in enumerate(candidates[:36]):
+        baseline = obj.rotation_euler.copy()
+        phase = -1 if idx % 2 else 1
+        intensity = .08 if ("leg" in obj.name.lower() or "foot" in obj.name.lower()) else .16
+        for clip, keyframes in (
+            ("idle", [(1,0),(9,1),(17,-1),(25,0)]),
+            ("attack", [(1,0),(5,-1),(9,1.7),(14,-.4),(22,0)]),
+            ("hit", [(1,0),(4,-1.5),(8,.65),(14,0)]),
+            ("death", [(1,0),(7,-.4),(15,1.4),(24,1.8)]),
+        ):
+            obj.animation_data_create()
+            action = bpy.data.actions.new(name=clip + "_" + obj.name)
+            obj.animation_data.action = action
+            for frame, amount in keyframes:
+                obj.rotation_euler = baseline.copy()
+                obj.rotation_euler[0] += phase * amount * intensity
+                obj.rotation_euler[1] += amount * intensity * .35
+                obj.keyframe_insert(data_path="rotation_euler", frame=frame)
+            track = obj.animation_data.nla_tracks.new()
+            track.name = clip
+            strip = track.strips.new(clip, 1, action)
+            strip.action_frame_start = 1
+            strip.action_frame_end = keyframes[-1][0]
+            obj.animation_data.action = None
+        obj.rotation_euler = baseline
+    root.location = (0,0,0)
+    root.rotation_euler = (0,0,0)
+    root.scale = (1,1,1)
     return root
 
 def storybook_creature_finish(creature):
