@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'tools/generate_chibi.py'
+      - 'tools/validate_chibi_glb.py'
+      - '.github/workflows/generate-chibi-heroes.yml'
 permissions:
   contents: write
 jobs:
@@ -21,6 +23,13 @@ jobs:
           find assets/heroes/chibi -name '*.glb' -type f -size +1k | wc -l | grep -qx 11
       - name: Validate skeletons and animations
         run: python3 tools/validate_chibi_glb.py
+      - name: Upload generated models for Android testing
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-legends-chibi-glb
+          path: assets/heroes/chibi/*.glb
+          if-no-files-found: warn
       - name: Commit generated GLBs
         run: |
           git config user.name 'github-actions[bot]'
@@ -28,5 +37,5 @@ jobs:
           git add assets/heroes/chibi/*.glb
           if ! git diff --cached --quiet; then
             git commit -m 'Generate eleven original chibi hero GLB assets'
-            git push
+            git push origin HEAD:main
           fi
