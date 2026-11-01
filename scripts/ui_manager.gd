@@ -109,6 +109,7 @@ func _ready() -> void:
    SaveManager.last_offline_xp, SaveManager.last_offline_levels
   )
  _refresh()
+ call_deferred("_suppress_legacy_shortcut")
 
 func _process(_delta: float) -> void:
  if offline_notice != null and offline_notice.visible and Time.get_ticks_msec() >= offline_notice_until:
@@ -434,6 +435,21 @@ func _make_hud() -> void:
  _select_chat("Alle")
  _apply_chat_visibility()
 
+func _hide_obsolete_talent_shortcut(node: Node) -> void:
+ # The old floating "Talente +" shortcut leaks above every modal on Android.
+ # It is redundant: talents remain accessible from the adventure navigation.
+ if node is Button and (node as Button).text.strip_edges() == "Talente +":
+  (node as Button).hide()
+ elif node is Label and (node as Label).text.strip_edges() == "Talente +":
+  (node as Label).hide()
+ for child in node.get_children():
+  _hide_obsolete_talent_shortcut(child)
+
+func _suppress_legacy_shortcut() -> void:
+ var root: Node = get_tree().current_scene
+ if root != null:
+  _hide_obsolete_talent_shortcut(root)
+
 func _raise_fullscreen_menu(menu: Control) -> void:
  if menu == null:
   return
@@ -442,6 +458,7 @@ func _raise_fullscreen_menu(menu: Control) -> void:
  move_child(menu, get_child_count() - 1)
 
 func _open_menu(target: String) -> void:
+ _suppress_legacy_shortcut()
  # Full-screen submenus must render above the HUD and block touches to the 3D scene.
  action_panel.hide()
  for modal_name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
