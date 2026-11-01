@@ -226,14 +226,16 @@ jobs:
         continue-on-error: true
         timeout-minutes: 9
         run: |
-          set -u
+          set -euo pipefail
           command -v ffmpeg
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
           mkdir -p terrain3d-previews
           for key in emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel; do
             echo "Rendering optional preview: $key"
+            set +e
             timeout 20s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --resolution 960x540 --write-movie "/tmp/$key.avi" --fixed-fps 30 --quit-after 36 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1
             capture_exit=$?
+            set -e
             echo "Capture exit code: $capture_exit" >> "/tmp/$key-preview.log"
             if test -s "/tmp/$key.avi"; then
               echo "AVI bytes: $(stat -c %s "/tmp/$key.avi")" >> "/tmp/$key-preview.log"
