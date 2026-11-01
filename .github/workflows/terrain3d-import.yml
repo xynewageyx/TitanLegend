@@ -233,9 +233,14 @@ jobs:
           for key in emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel; do
             echo "Rendering optional preview: $key"
             set +e
-            timeout 20s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --resolution 960x540 --write-movie "/tmp/$key.avi" --fixed-fps 30 --quit-after 36 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1
+            timeout 20s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --resolution 960x540 --write-movie "/tmp/$key.avi" --fixed-fps 30 --quit-after 12 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1
             capture_exit=$?
             set -e
+            if [ "$capture_exit" -eq 124 ]; then
+              echo "::warning::Godot timed out while capturing $key"
+            elif [ "$capture_exit" -ne 0 ]; then
+              echo "::warning::Godot exited with code $capture_exit while capturing $key"
+            fi
             echo "Capture exit code: $capture_exit" >> "/tmp/$key-preview.log"
             if test -s "/tmp/$key.avi"; then
               echo "AVI bytes: $(stat -c %s "/tmp/$key.avi")" >> "/tmp/$key-preview.log"
