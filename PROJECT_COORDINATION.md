@@ -59,3 +59,12 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - Asset-Qualität und einheitlichen Stil anhand echter Android-Screenshots prüfen.
 - Defekte Import-/Terrain-/UI-Pfade anhand von Logs priorisieren.
 - Fehlende Abhängigkeiten nur hinzufügen, wenn ein konkreter technischer Bedarf nachgewiesen ist.
+
+## Ausrüstung / Frisuren – Entwicklungsstand 2026-11-01
+- Arbeitsbranch: `feature/modular-hair-v3`; Draft-PR #10: https://github.com/xynewageyx/TitanLegend/pull/10
+- Neue originale Frisuren: `scripts/equipment/procedural_hairstyle.gd`, Anbindung über `hero_equipment_sockets.gd::equip_hairstyle`.
+- Überarbeitete prozedurale Rüstungsgeometrie: `scripts/equipment/chibi_armor_piece.gd`. Bestehende Slots und Kampfregeln bleiben erhalten.
+- Tests: `tests/test_modular_hairstyle.py` und `tests/test_modular_armor_geometry.py`.
+- GitHub Actions für Commit `6a6e865f`: Godot-Validierung und Core Regression erfolgreich; Android-Debug-APK abgebrochen (kein APK-Erfolg nachgewiesen).
+- Noch offen: echte Android-Sichtprüfung, Charakter-Skelett-/Socket-Ausrichtung, hochwertige individuelle Meshes, LOD/Performance, Merge.
+- WICHTIG: andere Chats bitte vor Arbeiten an den genannten Dateien PR #10 prüfen; keine parallele Überschreibung. Dieser Projektstatus ist eine gemeinsame Referenz, keine automatische Live-Chat-Synchronisation.
