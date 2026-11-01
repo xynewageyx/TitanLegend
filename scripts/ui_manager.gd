@@ -112,6 +112,8 @@ func _ready() -> void:
  call_deferred("_suppress_legacy_shortcut")
 
 func _process(_delta: float) -> void:
+ if _any_fullscreen_menu_open():
+  _suppress_legacy_shortcut()
  if offline_notice != null and offline_notice.visible and Time.get_ticks_msec() >= offline_notice_until:
   offline_notice.hide()
  # Refresh only the clock each frame; the rest of the HUD remains event-driven.
@@ -435,12 +437,21 @@ func _make_hud() -> void:
  _select_chat("Alle")
  _apply_chat_visibility()
 
+func _any_fullscreen_menu_open() -> bool:
+ for name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
+  var menu: Control = get_node_or_null(name) as Control
+  if menu != null and menu.visible:
+   return true
+ if skin_shop_menu != null and skin_shop_menu.visible:
+  return true
+ return action_panel != null and action_panel.visible
+
 func _hide_obsolete_talent_shortcut(node: Node) -> void:
  # The old floating "Talente +" shortcut leaks above every modal on Android.
  # It is redundant: talents remain accessible from the adventure navigation.
- if node is Button and (node as Button).text.strip_edges() == "Talente +":
+ if node is Button and (node as Button).text.strip_edges().begins_with("Talente +"):
   (node as Button).hide()
- elif node is Label and (node as Label).text.strip_edges() == "Talente +":
+ elif node is Label and (node as Label).text.strip_edges().begins_with("Talente +"):
   (node as Label).hide()
  for child in node.get_children():
   _hide_obsolete_talent_shortcut(child)
