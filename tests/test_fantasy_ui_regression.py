@@ -72,6 +72,14 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('SKIN.style_menu_tree(margin)', talents)
         self.assertIn('_invest.bind(tree, amount)', talents)
 
+    def test_four_selectable_hardening_slots(self):
+        ui = self.read_script("ui_manager.gd")
+        self.assertIn('hardening_slot_grid.columns = 4', ui)
+        self.assertIn('for field_index in range(4):', ui)
+        self.assertIn('_choose_hardening_field.bind(field_index)', ui)
+        self.assertIn('func _choose_hardening_field(field_index: int)', ui)
+        self.assertIn('field_index == hardening_field', ui)
+
     def test_equipment_sections(self):
         ui = self.read_script("ui_manager.gd")
         for heading in ("HELD & WAFFE", "BEUTE & AUSRÜSTUNG", "AUSRÜSTUNGSHÄRTUNG"):
