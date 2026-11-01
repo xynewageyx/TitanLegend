@@ -326,7 +326,7 @@ jobs:
                   if log.exists():
                       lines = log.read_text(errors="replace").splitlines()
                       print(f"--- {name} (last 15 lines) ---")
-                      print("\\n".join(lines[-15:]))
+                      print("\n".join(lines[-15:]))
               raise SystemExit("No usable PNG previews. Inspect Terrain3D-Biome-Previews logs and video capture.")
           PY
       - name: Verify Terrain3D native extension registration
