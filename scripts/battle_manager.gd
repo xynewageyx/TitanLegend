@@ -454,14 +454,7 @@ func _heal_heroes(amount: int, group_heal: bool = false) -> void:
     hero_hp[i] = mini(hero_max_hp[i], hero_hp[i] + maxi(1, roundi(float(amount) / 4.0)))
     _show_hero_combat_number(i, hero_hp[i] - previous, true)
  else:
-  var target: int = -1
-  var lowest: float = 2.0
-  for i in range(4):
-   if hero_hp[i] > 0:
-    var ratio: float = float(hero_hp[i]) / float(maxi(1, hero_max_hp[i]))
-    if ratio < lowest:
-     lowest = ratio
-     target = i
+  var target: int = TitanSkillTargetingRules.single_heal_target(hero_hp, hero_max_hp)
   if target >= 0:
    var previous: int = hero_hp[target]
    hero_hp[target] = mini(hero_max_hp[target], hero_hp[target] + amount)
