@@ -23,7 +23,7 @@ func _ready() -> void:
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  mouse_filter = Control.MOUSE_FILTER_STOP
  var shade := ColorRect.new()
- shade.color = Color("#f3e4bf")
+ shade.color = SKIN.PAPER
  shade.mouse_filter = Control.MOUSE_FILTER_STOP
  shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(shade)
@@ -41,23 +41,23 @@ func _ready() -> void:
  var top := HBoxContainer.new()
  outer.add_child(top)
  var heading := Label.new()
- heading.text = "HELDEN · TALENTBÄUME"
+ heading.text = "✦ HELDENTALENTE"
  heading.add_theme_font_size_override("font_size", 28)
  heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  top.add_child(heading)
  var close := Button.new()
- close.text = "X"
+ close.text = "✕"
  close.custom_minimum_size = Vector2(70, 65)
  close.pressed.connect(func(): visible = false)
  top.add_child(close)
  slot_picker = OptionButton.new()
- slot_picker.custom_minimum_size.y = 64
+ slot_picker.custom_minimum_size.y = 58
  for slot in range(4):
   slot_picker.add_item("Held " + str(slot + 1), slot)
  slot_picker.item_selected.connect(func(_index: int): _refresh())
  outer.add_child(slot_picker)
  summary = Label.new()
- summary.add_theme_font_size_override("font_size", 22)
+ summary.add_theme_font_size_override("font_size", 20)
  summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  outer.add_child(summary)
  var scroll := ScrollContainer.new()
@@ -66,7 +66,7 @@ func _ready() -> void:
  outer.add_child(scroll)
  var stack := VBoxContainer.new()
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- stack.add_theme_constant_override("separation", 20)
+ stack.add_theme_constant_override("separation", 14)
  scroll.add_child(stack)
  for tree in range(3):
   _create_tree_card(stack, tree)
@@ -92,13 +92,19 @@ func _create_tree_card(stack: VBoxContainer, tree: int) -> void:
  var panel := PanelContainer.new()
  panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  stack.add_child(panel)
- panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 18, 3))
+ panel.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 22, 3))
  var card := VBoxContainer.new()
- card.add_theme_constant_override("separation", 10)
- panel.add_child(card)
+ card.add_theme_constant_override("separation", 12)
+ var padding := MarginContainer.new()
+ padding.add_theme_constant_override("margin_left", 12)
+ padding.add_theme_constant_override("margin_right", 12)
+ padding.add_theme_constant_override("margin_top", 12)
+ padding.add_theme_constant_override("margin_bottom", 12)
+ panel.add_child(padding)
+ padding.add_child(card)
  tree_cards.append(card)
  var title := Label.new()
- title.add_theme_font_size_override("font_size", 24)
+ title.add_theme_font_size_override("font_size", 22)
  title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  card.add_child(title)
  rank_labels.append(title)
@@ -135,7 +141,7 @@ func _create_tree_card(stack: VBoxContainer, tree: int) -> void:
   invest_buttons.append(invest)
  var diagram := Control.new()
  diagram.set_script(preload("res://scripts/talent_path_diagram.gd"))
- diagram.custom_minimum_size = Vector2(240, 195)
+ diagram.custom_minimum_size = Vector2(220, 170)
  card.add_child(diagram)
  path_diagrams.append(diagram)
  var branch_row := HBoxContainer.new()
