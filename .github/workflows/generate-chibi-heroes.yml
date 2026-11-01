@@ -23,6 +23,9 @@ jobs:
           find assets/heroes/chibi -name '*.glb' -type f -size +1k | wc -l | grep -qx 11
       - name: Validate skeletons and animations
         run: python3 tools/validate_chibi_glb.py
+      - name: Validate generated GLBs with Blender importer
+        run: |
+          blender -b --python tools/check_chibi_import.py
       - name: Upload generated models for Android testing
         if: always()
         uses: actions/upload-artifact@v4
