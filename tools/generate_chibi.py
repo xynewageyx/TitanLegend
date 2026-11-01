@@ -68,7 +68,6 @@ def rig_and_animate():
     if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
     if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
     bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
-  action.frame_range=(start,end)
   track=arm.animation_data.nla_tracks.new();track.name=clip
   track.strips.new(clip,start,action)
  arm.animation_data.action=None
