@@ -606,6 +606,24 @@ func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> v
   if material != null:
    material.albedo_color = Color(0.94, 0.23, 0.20) if ratio <= 0.25 else (Color(0.97, 0.69, 0.22) if ratio <= 0.55 else Color(0.25, 0.88, 0.43))
 
+func _rounded_limb(parent: Node3D, label: String, location: Vector3, radius: float, length: float, tint: Color, angle: float = 0.0) -> MeshInstance3D:
+ var limb := MeshInstance3D.new()
+ limb.name = label
+ var shape := CapsuleMesh.new()
+ shape.radius = radius
+ shape.height = length
+ shape.radial_segments = 16
+ shape.rings = 6
+ limb.mesh = shape
+ limb.position = location
+ limb.rotation.z = angle
+ var surface := StandardMaterial3D.new()
+ surface.albedo_color = tint
+ surface.roughness = 0.84
+ limb.material_override = surface
+ parent.add_child(limb)
+ return limb
+
 func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  # Update 66: rounded torso and articulated limbs replace the old rigid cubes.
  # Connected capsule torso: less like stacked spheres and more like a compact stylized body.
@@ -643,8 +661,10 @@ func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  for shoulder_side in [-1.0, 1.0]:
   var shoulder: MeshInstance3D = VisualFactory.sphere(hero, 0.20, Vector3(shoulder_side * 0.50, 1.58, 0), color.lightened(0.16))
   shoulder.scale = Vector3(1.15, 0.70, 1.15)
+ # Rounded connected-looking limbs; keep original face and equipment anchor positions.
  for side in [-1.0, 1.0]:
-  VisualFactory.sphere(hero, 0.19, Vector3(side * 0.47, 1.58, 0), color.darkened(0.1))
+  _rounded_limb(hero, "ChibiUpperArm", Vector3(side * 0.54, 1.36, 0.0), 0.17, 0.56, color.darkened(0.09), -side * 0.16)
+  _rounded_limb(hero, "ChibiLowerLeg", Vector3(side * 0.25, 0.47, 0.0), 0.20, 0.68, color.darkened(0.18), side * 0.06)
  if role == 0: # Krieger: Helm, Schild und Schwert
   VisualFactory.box(hero, Vector3(0.66, 0.22, 0.65), Vector3(0, 2.19, 0), Color("#9ea9b7"))
   VisualFactory.box(hero, Vector3(0.58, 0.75, 0.15), Vector3(-0.65, 1.2, -0.2), Color("#66798c"))
