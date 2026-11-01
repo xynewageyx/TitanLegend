@@ -42,7 +42,7 @@ jobs:
                   exists = binary.is_file()
                   report.append(f"- {feature}: {relative} ({'present' if exists else 'MISSING'})")
                   if "android" in feature.lower() and ("arm64" in feature.lower() or "arm64-v8a" in feature.lower()):
-                      android_found |= exists
+                      android_for_manifest |= exists
                       if not exists:
                           print(f"::warning::Android ARM64 native library missing: {binary}")
               manifest_results.append((str(manifest.relative_to(root)), android_for_manifest))
