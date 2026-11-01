@@ -159,6 +159,16 @@ jobs:
               print(f"Android forest asset ready: {model}")
           PY
 
+      - name: Isolate archived Godot scripts before Android import
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Archived project snapshots may register duplicate global class_names.
+          # They are not part of the active Android game.
+          if test -d original_update168; then
+            mv original_update168 "${RUNNER_TEMP}/titan_original_update168"
+          fi
+
       - name: Import game resources
         shell: bash
         run: |
