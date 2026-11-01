@@ -258,6 +258,74 @@ def sculpted_face_features(creature):
             brow.rotation_euler[1] = side*.22
             sphere("king_cheek_plate", (side*.61,-.92,2.88),(.24,.17,.32),dark,16,10)
 
+def tapered_limb(name, points, radii, mat, sides=12):
+    """Single connected, capped limb mesh with varying cross-section."""
+    if len(points) != len(radii) or len(points) < 2:
+        raise ValueError("Limb points and radii must match")
+    verts, faces = [], []
+    for i, point in enumerate(points):
+        center = Vector(point)
+        tangent = Vector(points[min(i+1,len(points)-1)]) - Vector(points[max(0,i-1)])
+        if tangent.length < 1e-6:
+            tangent = Vector((0,0,1))
+        tangent.normalize()
+        axis = tangent.cross(Vector((0,1,0)))
+        if axis.length < 1e-6:
+            axis = tangent.cross(Vector((1,0,0)))
+        axis.normalize()
+        side = tangent.cross(axis).normalized()
+        for j in range(sides):
+            theta = 2 * math.pi * j / sides
+            offset = radii[i] * (axis * math.cos(theta) + side * math.sin(theta))
+            verts.append(tuple(center + offset))
+        if i:
+            for j in range(sides):
+                a=(i-1)*sides+j
+                b=(i-1)*sides+(j+1)%sides
+                c=i*sides+(j+1)%sides
+                d=i*sides+j
+                faces.append((a,b,c,d))
+    faces.append(tuple(reversed(range(sides))))
+    faces.append(tuple((len(points)-1)*sides+j for j in range(sides)))
+    mesh=bpy.data.meshes.new(name+"_mesh")
+    mesh.from_pydata(verts, [], faces)
+    mesh.update()
+    obj=bpy.data.objects.new(name,mesh)
+    bpy.context.collection.objects.link(obj)
+    mesh.materials.append(mat)
+    for poly in mesh.polygons:
+        poly.use_smooth=True
+    return obj
+
+def sculpted_limb_details(creature):
+    """Readable organic limbs, independent of the original primitive appendages."""
+    wood=material("limb_wood",(.42,.27,.15))
+    green=material("limb_green",(.26,.56,.25))
+    fur=material("limb_fur",(.68,.43,.24))
+    pale=material("limb_pale",(.86,.77,.55))
+    specs={
+        "forest_01_mooshuepfer":(.49,1.05,.30,green),
+        "forest_02_pilzling":(.45,1.10,.28,pale),
+        "forest_03_wurzelkrabbler":(.62,.84,.22,wood),
+        "forest_04_blattfuchs":(.40,.79,.20,fur),
+        "forest_05_dorneneber":(.58,.98,.31,fur),
+        "forest_06_rankenwerfer":(.45,1.02,.17,green),
+        "forest_elite_01_rindenwaechter":(1.00,2.15,.39,wood),
+        "forest_elite_02_moosbestie":(.88,1.43,.40,green),
+        "forest_boss_01_wurzelkoenig":(1.42,3.05,.51,wood),
+    }
+    reach,height,radius,mat=specs[creature]
+    for sign in (-1,1):
+        tapered_limb("sculpted_arm_%s"%("L" if sign<0 else "R"),
+            [(sign*reach*.74,0,height),(sign*reach*1.13,-.10,height*.82),
+             (sign*reach*1.25,-.20,height*.55)],
+            [radius*.78,radius,radius*.62],mat)
+        if creature in ("forest_elite_01_rindenwaechter","forest_boss_01_wurzelkoenig"):
+            tapered_limb("sculpted_leg_%s"%("L" if sign<0 else "R"),
+                [(sign*reach*.35,.13,height*.62),(sign*reach*.42,.06,height*.37),
+                 (sign*reach*.47,-.13,.18)],
+                [radius*.88,radius*.76,radius*.95],mat)
+
 def reshape_primary_anatomy(creature):
     """Replace perfectly ellipsoidal primary bodies with species-specific sculpted volume.
 
@@ -606,7 +674,7 @@ def premium_creature_details(creature):
             sphere("king_fist_guard",(side*1.48,-.65,1.29),(.47,.12,.31),shade,20,14)
 
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);reshape_primary_anatomy(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
