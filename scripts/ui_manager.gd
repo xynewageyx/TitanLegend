@@ -721,7 +721,7 @@ func _refresh(_unused: int = 0) -> void:
    var field_level: int = int(GameManager.hardening_levels[weapon_hero_slot][field_index])
    var field_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][field_index])
    var slot_button: Button = hardening_slot_buttons[field_index]
-   slot_button.text = "◆ %d\\nLv %d" % [field_index + 1, field_level]
+   slot_button.text = "◆ %d\nLv %d" % [field_index + 1, field_level]
    slot_button.tooltip_text = str(GameManager.HARDENING_NAMES[field_attribute])
    ADVENTURE_THEME.button(slot_button, field_index == hardening_field, true)
   hardening_select_button.text = "Feld %d: %s (Rang %d)" % [hardening_field + 1, GameManager.HARDENING_NAMES[assigned_attribute], hardening_level]
