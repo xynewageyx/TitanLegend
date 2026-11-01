@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:31 UTC**
-Git-Stand: **8c72e7b73898ea63ec17fdbb0694298dd57c468a** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:34 UTC**
+Git-Stand: **6a3204b32aa1eb49e9e4159a1ea6526956be0aa7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,7 +11,6 @@ Git-Stand: **8c72e7b73898ea63ec17fdbb0694298dd57c468a** auf Branch **main**
 - \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
 - \`07c83e8\` (2026-11-01): Correct Blender armature cleanup and explicit NLA strip frame ranges
 - \`804bd81\` (2026-11-01): art(forest): sculpt species-specific asymmetric primary body silhouettes
-- \`9ac4060\` (2026-11-01): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
@@ -27,13 +26,13 @@ Git-Stand: **8c72e7b73898ea63ec17fdbb0694298dd57c468a** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
+- \`6a3204b\` (2026-11-01): fix(talents): guard invalid hero selection and stale upgrade callbacks in Android menu
 - \`e987497\` (2026-11-01): ui(talents): wrap long stats and expand two-column touch targets on narrow Android screens
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - \`e23c106\` (2026-11-01): Add Blender round-trip import verification step to chibi workflow
 - \`d6441d2\` (2026-11-01): ci: add event-driven shared project coordination
 - \`ace0b1e\` (2026-11-01): ci: run eleven-class chibi GLB integration regressions on every validation
-- \`5614d01\` (2026-11-01): ci: install numpy for Blender chibi GLB exporter
 
 ## Bereichsübergreifende Änderungen
 
