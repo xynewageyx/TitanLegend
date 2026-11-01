@@ -25,7 +25,11 @@ static func spent_points(build: Array) -> int:
  return total
 
 static func available_points(level: int, build: Array) -> int:
+ # Unspent earned points remain visible even when all 225 talent ranks are filled.
  return maxi(0, BALANCE.talent_points_earned(level) - spent_points(build))
+
+static func remaining_rank_capacity(build: Array) -> int:
+ return maxi(0, BRANCH_COUNT * TALENTS_PER_BRANCH * MAX_RANK - spent_points(build))
 
 static func can_upgrade(level: int, build: Array, branch: int, talent: int) -> bool:
  if branch < 0 or branch >= BRANCH_COUNT or talent < 0 or talent >= TALENTS_PER_BRANCH:
@@ -35,7 +39,7 @@ static func can_upgrade(level: int, build: Array, branch: int, talent: int) -> b
  var current_rank: int = int(build[branch][talent])
  if current_rank < 0 or current_rank >= MAX_RANK:
   return false
- if available_points(level, build) <= 0:
+ if available_points(level, build) <= 0 or remaining_rank_capacity(build) <= 0:
   return false
  # Every row has three talents; unlock a new row after 5 ranks in earlier rows.
  var row: int = int(talent / 3)
