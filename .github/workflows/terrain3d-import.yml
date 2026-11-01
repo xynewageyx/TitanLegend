@@ -321,6 +321,12 @@ jobs:
           valid = [name for name, result in status.items() if result["png"]]
           print("Usable biome previews:", len(valid), "of", len(status))
           if not valid:
+              for name in status:
+                  log = Path("terrain3d-previews") / (name + ".log")
+                  if log.exists():
+                      lines = log.read_text(errors="replace").splitlines()
+                      print(f"--- {name} (last 15 lines) ---")
+                      print("\\n".join(lines[-15:]))
               raise SystemExit("No usable PNG previews. Inspect Terrain3D-Biome-Previews logs and video capture.")
           PY
       - name: Verify Terrain3D native extension registration
