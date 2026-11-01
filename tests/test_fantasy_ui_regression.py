@@ -80,6 +80,11 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('func _choose_hardening_field(field_index: int)', ui)
         self.assertIn('field_index == hardening_field', ui)
 
+    def test_hardening_slot_caption_uses_escaped_newline(self):
+        ui = self.read_script("ui_manager.gd")
+        self.assertIn('slot_button.text = "◆ %d\\nLv %d"', ui)
+        self.assertNotIn('slot_button.text = "◆ %d\nLv %d"', ui)
+
     def test_equipment_sections(self):
         ui = self.read_script("ui_manager.gd")
         for heading in ("HELD & WAFFE", "BEUTE & AUSRÜSTUNG", "AUSRÜSTUNGSHÄRTUNG"):
