@@ -431,8 +431,55 @@ def storybook_creature_finish(creature):
                            (.09*scl,.045*scl,.18*scl),leaf,14,10)
             badge.rotation_euler[1] = side*.48
 
+def creature_silhouette_upgrade(creature):
+    """Species-specific, readable shapes instead of interchangeable sphere creatures."""
+    cream = material("silhouette_cream", (.98,.88,.67))
+    leaf = material("silhouette_leaf", (.27,.67,.34))
+    dark = material("silhouette_wood", (.37,.24,.16))
+    coral = material("silhouette_coral", (.96,.54,.35))
+    if creature == "forest_01_mooshuepfer":
+        for side in (-1,1):
+            sphere("springy_ear", (side*.63,-.04,1.50), (.20,.18,.40),leaf,20,14).rotation_euler[1] = side*.45
+            sphere("padded_toe", (side*.42,-.37,.19),(.22,.23,.14),cream,16,10)
+    elif creature == "forest_02_pilzling":
+        for side in (-1,1):
+            sphere("cap_hanging_frill", (side*.77,-.28,1.48),(.27,.26,.17),coral,20,14)
+            sphere("tiny_hand", (side*.51,-.31,.85),(.16,.17,.21),cream,16,10)
+    elif creature == "forest_03_wurzelkrabbler":
+        for side in (-1,1):
+            branching_root("swept_antler",[(side*.34,.04,1.30),(side*.53,.03,1.56),
+                (side*.74,.07,1.70),(side*.88,.08,1.66)],.12,dark)
+            sphere("root_knuckle", (side*.72,-.29,.38),(.21,.22,.17),dark,16,10)
+    elif creature == "forest_04_blattfuchs":
+        for side in (-1,1):
+            sphere("fluffy_cheek", (side*.48,-.71,1.03),(.24,.19,.20),cream,20,14)
+            leaf_mesh("swept_ear_tip",(side*.37,-.41,1.58),.52,.25,leaf,bend=side*.18)
+        sphere("tail_pom", (0,1.42,1.17),(.36,.32,.34),cream,20,14)
+    elif creature == "forest_05_dorneneber":
+        for side in (-1,1):
+            sphere("drooping_ear",(side*.63,-.61,1.36),(.30,.14,.24),coral,20,14).rotation_euler[1]=side*.38
+            sphere("split_hoof",(side*.54,-.60,.17),(.24,.29,.15),dark,16,10)
+    elif creature == "forest_06_rankenwerfer":
+        for side in (-1,1):
+            leaf_mesh("wide_petal",(side*.41,-.13,1.44),.75,.37,coral,bend=side*.2)
+            branching_root("curling_tendril",[(side*.48,-.08,.96),(side*.72,-.19,1.02),
+                (side*.89,-.23,1.23),(side*.79,-.27,1.39)],.09,leaf)
+    elif creature == "forest_elite_01_rindenwaechter":
+        for side in (-1,1):
+            sphere("armored_shoulder",(side*1.01,-.04,2.03),(.49,.47,.43),dark,20,14)
+            leaf_mesh("shoulder_leaf",(side*.96,-.27,2.27),.73,.37,leaf,bend=side*.17)
+    elif creature == "forest_elite_02_moosbestie":
+        for side in (-1,1):
+            sphere("heavy_brow",(side*.43,-1.30,1.78),(.33,.17,.16),dark,20,14)
+            sphere("massive_paw",(side*.83,-.76,.24),(.36,.42,.25),cream,20,14)
+    elif creature == "forest_boss_01_wurzelkoenig":
+        for side in (-1,1):
+            leaf_mesh("crown_side_leaf",(side*.91,-.12,4.24),1.22,.56,leaf,bend=side*.27)
+            sphere("royal_bark_brow",(side*.42,-1.07,3.48),(.40,.18,.18),dark,20,14)
+        sphere("heartwood_core",(0,-.88,2.14),(.37,.15,.48),coral,24,16)
+
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
