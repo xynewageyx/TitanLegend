@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:51 UTC**
-Git-Stand: **d15182f8125fca73ccbef053bdb6fb878df06c35** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 17:52 UTC**
+Git-Stand: **a246df68ca6cf83b02d652c25c10fb7bb72a1a16** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **d15182f8125fca73ccbef053bdb6fb878df06c35** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
 - \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
-- \`07c83e8\` (2026-11-01): Correct Blender armature cleanup and explicit NLA strip frame ranges
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
@@ -26,6 +25,7 @@ Git-Stand: **d15182f8125fca73ccbef053bdb6fb878df06c35** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
+- \`a246df6\` (2026-11-01): fix(talents): reject invalid negative ranks before spending earned talent points
 - \`d15182f\` (2026-11-01): ui(talents): enlarge hero and branch selectors and follow focused talent buttons on Android
 - \`6a3204b\` (2026-11-01): fix(talents): guard invalid hero selection and stale upgrade callbacks in Android menu
 - \`e987497\` (2026-11-01): ui(talents): wrap long stats and expand two-column touch targets on narrow Android screens
