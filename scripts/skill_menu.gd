@@ -15,27 +15,29 @@ func _ready() -> void:
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  mouse_filter = Control.MOUSE_FILTER_STOP
  var shade := ColorRect.new()
- shade.color = Color(0.10, 0.07, 0.04, 0.90)
+ shade.color = SKIN.PAPER
+ shade.mouse_filter = Control.MOUSE_FILTER_STOP
  shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(shade)
  var margin := MarginContainer.new()
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- margin.add_theme_constant_override("margin_left", 24)
- margin.add_theme_constant_override("margin_right", 24)
- margin.add_theme_constant_override("margin_top", 76)
- margin.add_theme_constant_override("margin_bottom", 76)
+ margin.add_theme_constant_override("margin_left", 16)
+ margin.add_theme_constant_override("margin_right", 16)
+ margin.add_theme_constant_override("margin_top", 22)
+ margin.add_theme_constant_override("margin_bottom", 22)
  add_child(margin)
  var stack := VBoxContainer.new()
  stack.add_theme_constant_override("separation", 9)
  var scroll := ScrollContainer.new()
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  margin.add_child(scroll)
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.add_child(stack)
  var title := Label.new()
- title.text = "HELDEN · SKILLS 1–4"
- title.add_theme_font_size_override("font_size", 27)
+ title.text = "✦ HELDENSKILLS"
+ title.add_theme_font_size_override("font_size", 25)
  stack.add_child(title)
  var hint := Label.new()
  hint.text = "Automatische Aktivierung · Reihenfolge 1 → 2 → 3 → 4"
@@ -53,10 +55,20 @@ func _ready() -> void:
  stack.add_child(pet_element_selector)
  pet_element_selector.item_selected.connect(_on_pet_element_selected)
  for skill_slot in range(4):
+  var card := PanelContainer.new()
+  card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 18, 3))
+  stack.add_child(card)
+  var content := VBoxContainer.new()
+  content.add_theme_constant_override("separation", 6)
+  card.add_child(content)
+  var slot_title := Label.new()
+  slot_title.text = ["⚔ ANGRIFF", "✦ FÄHIGKEIT", "◆ SPEZIAL", "★ FINISHER"][skill_slot]
+  slot_title.add_theme_font_size_override("font_size", 17)
+  content.add_child(slot_title)
   var selector := OptionButton.new()
   selector.custom_minimum_size.y = 55
   skill_selectors.append(selector)
-  stack.add_child(selector)
+  content.add_child(selector)
  info = Label.new()
  info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  info.add_theme_font_size_override("font_size", 19)
