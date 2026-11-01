@@ -7,6 +7,8 @@ var animation_player: AnimationPlayer
 var model_instance: Node3D
 var _hidden_meshes: Array[MeshInstance3D] = []
 var _active_clip: String = ""
+var _walking: bool = false
+var _one_shot_generation: int = 0
 
 func _ready() -> void:
  if not ResourceLoader.exists(model_path):
@@ -31,26 +33,25 @@ func _ready() -> void:
 func play_clip(clip: String) -> void:
  if animation_player == null:
   return
- if clip == _active_clip and animation_player.is_playing():
+ if clip == _active_clip and animation_player.is_playing() and (clip == "idle" or clip == "walk"):
   return
  for library_name in animation_player.get_animation_library_list():
   var library := animation_player.get_animation_library(library_name)
   if library.has_animation(clip):
    var full_name := clip if String(library_name).is_empty() else String(library_name) + "/" + clip
+   _one_shot_generation += 1
    animation_player.play(full_name)
    _active_clip = clip
    if clip != "idle" and clip != "walk":
     var animation := library.get_animation(clip)
-    if animation != null and not animation.loop_mode:
-     get_tree().create_timer(animation.length).timeout.connect(_return_to_idle.bind(clip))
+    if animation != null:
+     get_tree().create_timer(maxf(animation.length, 0.05)).timeout.connect(_return_to_idle.bind(clip, _one_shot_generation))
    return
 
-func _return_to_idle(previous_clip: String) -> void:
- if not is_inside_tree() or _active_clip != previous_clip:
+func _return_to_idle(previous_clip: String, generation: int) -> void:
+ if not is_inside_tree() or _active_clip != previous_clip or generation != _one_shot_generation:
   return
  play_clip("walk" if _walking else "idle")
-
-var _walking: bool = false
 
 func play_attack() -> void:
  play_clip("attack")
