@@ -232,7 +232,7 @@ jobs:
           mkdir -p terrain3d-previews
           for key in emerald_grassland whisper_forest sun_desert frost_peaks ember_volcano crystal_caverns thunder_plateau mist_marsh sky_islands shadow_ruins coral_archipelago astral_citadel; do
             echo "Rendering optional preview: $key"
-            timeout 30s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --resolution 960x540 --write-movie "/tmp/$key.avi" --fixed-fps 30 --quit-after 90 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1 || true
+            timeout 20s xvfb-run -a "$GODOT" --path terrain3d-preview --rendering-method gl_compatibility --resolution 960x540 --write-movie "/tmp/$key.avi" --fixed-fps 30 --quit-after 36 "res://scenes/${key}_terrain3d.tscn" > "/tmp/$key-preview.log" 2>&1 || true
             if test -s "/tmp/$key.avi"; then
               ffmpeg -hide_banner -loglevel error -y -sseof -0.2 -i "/tmp/$key.avi" -frames:v 1 "terrain3d-previews/$key.png" || ffmpeg -hide_banner -loglevel error -y -i "/tmp/$key.avi" -frames:v 1 "terrain3d-previews/$key.png" || true
             fi
@@ -312,6 +312,17 @@ jobs:
           name: Terrain3D-Biome-Previews
           path: terrain3d-previews/
           if-no-files-found: ignore
+      - name: Require at least one usable biome preview
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          status = json.loads(Path("terrain3d-previews/status.json").read_text())
+          valid = [name for name, result in status.items() if result["png"]]
+          print("Usable biome previews:", len(valid), "of", len(status))
+          if not valid:
+              raise SystemExit("No usable PNG previews. Inspect Terrain3D-Biome-Previews logs and video capture.")
+          PY
       - name: Verify Terrain3D native extension registration
         run: |
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
