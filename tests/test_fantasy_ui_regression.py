@@ -34,6 +34,18 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('shade.mouse_filter = Control.MOUSE_FILTER_STOP', talent)
         self.assertIn('scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED', talent)
 
+    def test_obsolete_talent_shortcut_hidden(self):
+        ui = self.read_script("ui_manager.gd")
+        self.assertIn('func _suppress_legacy_shortcut()', ui)
+        self.assertIn('text.strip_edges() == "Talente +"', ui)
+        self.assertIn('call_deferred("_suppress_legacy_shortcut")', ui)
+
+    def test_class_menu_uses_single_scroll_container(self):
+        menu = self.read_script("class_menu.gd")
+        self.assertIn('scroll.add_child(v)', menu)
+        self.assertNotIn('panel.add_child(v)', menu)
+        self.assertIn('ScrollContainer.SCROLL_MODE_DISABLED', menu)
+
     def test_single_canonical_boss_panel(self):
         hud = self.read_script("adventure_hud_overlay.gd")
         ui = self.read_script("ui_manager.gd")
