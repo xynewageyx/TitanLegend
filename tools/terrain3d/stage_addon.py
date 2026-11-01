@@ -117,6 +117,7 @@ scripts=root/"scripts";scripts.mkdir(exist_ok=True)
  '        if img == null or img.is_empty():',
  '            push_error("TERRAIN_TEXTURE_MISSING: " + path)',
  '            continue',
+ '        img.generate_mipmaps()',
  '        var tex := ImageTexture.create_from_image(img)',
  '        var asset := Terrain3DTextureAsset.new()',
  '        asset.name = names[i]',
