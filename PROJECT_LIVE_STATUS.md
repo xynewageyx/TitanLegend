@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 18:04 UTC**
-Git-Stand: **ca8d177fe59610cd0264cc4cfb30b9ff6e30b621** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 18:08 UTC**
+Git-Stand: **b5d6c3a9b0edc989f38658b4b4863d807498b263** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,11 +10,9 @@ Git-Stand: **ca8d177fe59610cd0264cc4cfb30b9ff6e30b621** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - \`dcc9150\` (2026-11-01): Correct left-right limb skinning by mesh coordinates and parent generated meshes to rig
 - \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
-- \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - \`42ae25d\` (2026-11-01): art(forest): remove redundant primitive limbs when sculpted connected limbs replace them
-- \`8c72e7b\` (2026-11-01): art(forest): introduce connected tapered limb geometry for all nine forest enemies
 
 ### Landschaften — Landschaften-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
@@ -30,11 +28,15 @@ Git-Stand: **ca8d177fe59610cd0264cc4cfb30b9ff6e30b621** auf Branch **main**
 - \`d15182f\` (2026-11-01): ui(talents): enlarge hero and branch selectors and follow focused talent buttons on Android
 - \`6a3204b\` (2026-11-01): fix(talents): guard invalid hero selection and stale upgrade callbacks in Android menu
 
+### Skills und Animationen — Skills-und-Animationen-Chat
+- Keine passenden Änderungen in den letzten 15 Commits.
+
 ### Integration/CI — GitHub-/Integrations-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ## Bereichsübergreifende Änderungen
 
+- \`b5d6c3a\` (2026-11-01): ci(coordination): monitor skills and animations changes as dedicated area
 - \`e49f80b\` (2026-11-01): Check all four limb skin-weight groups after GLB round-trip
 - \`a7d44a3\` (2026-11-01): docs(coordination): register skills and animation chat with interfaces
 
