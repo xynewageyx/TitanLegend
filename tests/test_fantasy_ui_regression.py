@@ -22,6 +22,18 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertEqual(len(original), expected['bytes'])
         self.assertEqual(hashlib.sha256(original).hexdigest(), expected['sha256'])
 
+    def test_portrait_modals_are_raised_above_hud(self):
+        ui = self.read_script("ui_manager.gd")
+        self.assertIn('func _raise_fullscreen_menu(menu: Control)', ui)
+        self.assertIn('move_child(menu, get_child_count() - 1)', ui)
+        for target in ('$ClassMenu', '$SkillMenu', '$TalentMenu'):
+            self.assertIn('_raise_fullscreen_menu(' + target + ')', ui)
+
+    def test_talent_menu_blocks_world_and_scrolls_vertically(self):
+        talent = self.read_script("talent_menu.gd")
+        self.assertIn('shade.mouse_filter = Control.MOUSE_FILTER_STOP', talent)
+        self.assertIn('scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED', talent)
+
     def test_single_canonical_boss_panel(self):
         hud = self.read_script("adventure_hud_overlay.gd")
         ui = self.read_script("ui_manager.gd")
