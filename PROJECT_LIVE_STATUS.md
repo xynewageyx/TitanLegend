@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 17:52 UTC**
-Git-Stand: **a246df68ca6cf83b02d652c25c10fb7bb72a1a16** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 18:02 UTC**
+Git-Stand: **a7d44a32a9de43aacfdcae33e85fb0ef38567549** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -31,10 +31,11 @@ Git-Stand: **a246df68ca6cf83b02d652c25c10fb7bb72a1a16** auf Branch **main**
 - \`e987497\` (2026-11-01): ui(talents): wrap long stats and expand two-column touch targets on narrow Android screens
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- \`e23c106\` (2026-11-01): Add Blender round-trip import verification step to chibi workflow
+- Keine passenden Änderungen in den letzten 15 Commits.
 
 ## Bereichsübergreifende Änderungen
 
+- \`a7d44a3\` (2026-11-01): docs(coordination): register skills and animation chat with interfaces
 - \`739d317\` (2026-11-01): Verify generated hero GLBs round-trip through Blender with armatures and skinning
 
 ## Regeln für alle Fach-Chats
