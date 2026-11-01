@@ -258,6 +258,38 @@ def sculpted_face_features(creature):
             brow.rotation_euler[1] = side*.22
             sphere("king_cheek_plate", (side*.61,-.92,2.88),(.24,.17,.32),dark,16,10)
 
+def reshape_primary_anatomy(creature):
+    """Replace perfectly ellipsoidal primary bodies with species-specific sculpted volume.
+
+    Sculpt in local mesh space, preserving materials, object names and animation
+    attachment. This runs before the organic surface and bevel passes.
+    """
+    profiles = {
+        "forest_01_mooshuepfer": ("round_body", .13, .08, .16),
+        "forest_02_pilzling": ("stem_body", .10, .04, -.08),
+        "forest_03_wurzelkrabbler": ("gnarled_body", .19, .13, -.06),
+        "forest_04_blattfuchs": ("fox_body", .13, .09, -.12),
+        "forest_05_dorneneber": ("barrel_body", .16, .06, -.18),
+        "forest_06_rankenwerfer": ("flower_head", .12, .12, .12),
+        "forest_elite_01_rindenwaechter": ("massive_torso", .22, .14, .10),
+        "forest_elite_02_moosbestie": ("hulking_body", .19, .12, -.12),
+        "forest_boss_01_wurzelkoenig": ("ancient_trunk", .24, .17, .06),
+    }
+    target, taper, lobes, posture = profiles[creature]
+    obj = bpy.data.objects.get(target)
+    if obj is None or obj.type != "MESH":
+        raise RuntimeError("Missing primary body for sculpt: " + creature)
+    for vertex in obj.data.vertices:
+        x,y,z = vertex.co
+        # Native UV sphere coordinates are within approximately [-1,1].
+        upper = (z + 1.0) * .5
+        waist = 1.0 + taper * math.sin(upper * math.pi) - taper * .35 * z
+        asymmetry = 1.0 + lobes * math.sin(3.0 * math.atan2(y,x) + 1.1*z)
+        vertex.co.x = x * waist * asymmetry + posture * .09 * (1.0-z*z)
+        vertex.co.y = y * (1.0 + taper * .35 * math.cos(2.5*z)) + posture * .13 * upper
+        vertex.co.z = z * (1.0 + lobes * .22 * math.cos(3.0*x))
+    obj.data.update()
+
 def sculpt_organic_silhouettes():
     """Non-destructive-to-rig vertex sculpting: asymmetry without new dependencies."""
     body_terms = ("body", "torso", "trunk", "head", "cap", "muzzle", "snout",
@@ -574,7 +606,7 @@ def premium_creature_details(creature):
             sphere("king_fist_guard",(side*1.48,-.65,1.29),(.47,.12,.31),shade,20,14)
 
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);reshape_primary_anatomy(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
