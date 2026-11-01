@@ -1,17 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 20:03 UTC**
-Git-Stand: **ca52481913eb080131a8a30e9ece2be02f04e03c** auf Branch **main**
+Automatisch erzeugt: **2026-11-01 20:11 UTC**
+Git-Stand: **b9a878deb10c3fcaeeeff1fb980e01c4d75c832e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
 - \`dcc9150\` (2026-11-01): Correct left-right limb skinning by mesh coordinates and parent generated meshes to rig
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine passenden Änderungen in den letzten 15 Commits.
+- \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
 
 ### Landschaften — Landschaften-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
@@ -26,7 +27,6 @@ Git-Stand: **ca52481913eb080131a8a30e9ece2be02f04e03c** auf Branch **main**
 - \`ca52481\` (2026-11-01): ui(talents): show invested rank progress and completed talent trees on Android
 - \`92ac368\` (2026-11-01): test compatibility: retain explicit earned-point guard before talent capacity guard
 - \`17bc5f8\` (2026-11-01): feat(talents): expose remaining talent rank capacity without losing earned-point accounting
-- \`a246df6\` (2026-11-01): fix(talents): reject invalid negative ranks before spending earned talent points
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
