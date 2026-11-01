@@ -64,7 +64,7 @@ func _ready() -> void:
 func _resource_tile(parent: Container, heading: String) -> Label:
  var tile := PanelContainer.new()
  tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#ffefd2f4"), SKIN.WOOD, 16, 3))
+ tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c9"), SKIN.GOLD, 19, 3))
  parent.add_child(tile)
  resource_tiles.append(tile)
  var value := Label.new()
@@ -82,8 +82,8 @@ func _build_resources() -> void:
  ribbon.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
  ribbon.offset_left = 9
  ribbon.offset_right = -9
- ribbon.offset_top = 10
- ribbon.offset_bottom = 76
+ ribbon.offset_top = 8
+ ribbon.offset_bottom = 66
  ribbon.add_theme_constant_override("separation", 8)
  ribbon.mouse_filter = Control.MOUSE_FILTER_PASS
  add_child(ribbon)
@@ -95,11 +95,11 @@ func _build_journey() -> void:
  var card := PanelContainer.new()
  card.name = "JourneyPlaque"
  card.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
- card.offset_left = -274
+ card.offset_left = -214
  card.offset_right = -11
- card.offset_top = 91
- card.offset_bottom = 224
- card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff1d8f5"), SKIN.WOOD, 19, 4))
+ card.offset_top = 79
+ card.offset_bottom = 175
+ card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c9"), SKIN.GOLD, 19, 3))
  add_child(card)
  var content := HBoxContainer.new()
  content.add_theme_constant_override("separation", 6)
@@ -107,7 +107,7 @@ func _build_journey() -> void:
  map_control = Control.new()
  map_control.name = "AdventureMap"
  map_control.set_script(MAP_BADGE)
- map_control.custom_minimum_size = Vector2(95, 95)
+ map_control.custom_minimum_size = Vector2(58, 58)
  map_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
  content.add_child(map_control)
  var text_stack := VBoxContainer.new()
@@ -134,30 +134,30 @@ func _build_party() -> void:
  var strip := VBoxContainer.new()
  strip.name = "AdventureTeam"
  strip.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
- strip.offset_left = 11
- strip.offset_right = 210
- strip.offset_top = 94
- strip.offset_bottom = 404
+ strip.offset_left = 8
+ strip.offset_right = 174
+ strip.offset_top = 79
+ strip.offset_bottom = 310
  strip.add_theme_constant_override("separation", 5)
  add_child(strip)
  for i in range(4):
   var tile := PanelContainer.new()
   tile.name = "PartySlot" + str(i + 1)
-  tile.custom_minimum_size.y = 61
-  tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0d7f3"), SKIN.WOOD, 15, 2))
+  tile.custom_minimum_size.y = 47
+  tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff4d9"), SKIN.GOLD, 16, 2))
   strip.add_child(tile)
   var line := HBoxContainer.new()
   line.add_theme_constant_override("separation", 7)
   tile.add_child(line)
   var icon_label := Label.new()
-  icon_label.custom_minimum_size = Vector2(38, 42)
+  icon_label.custom_minimum_size = Vector2(30, 32)
   icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
   icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
   icon_label.add_theme_stylebox_override("normal", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
-  SKIN.title(icon_label, 23)
+  SKIN.title(icon_label, 19)
   icon_label.text = "◆"
   var portrait := PanelContainer.new()
-  portrait.custom_minimum_size = Vector2(44, 46)
+  portrait.custom_minimum_size = Vector2(34, 36)
   portrait.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
   line.add_child(portrait)
   portrait.add_child(icon_label)
@@ -170,13 +170,13 @@ func _build_party() -> void:
   column.add_theme_constant_override("separation", 0)
   line.add_child(column)
   var name_label := Label.new()
-  SKIN.title(name_label, 15)
+  SKIN.title(name_label, 14)
   name_label.clip_text = true
   name_label.text = "Held " + str(i + 1)
   column.add_child(name_label)
   party_names.append(name_label)
   var role_label := Label.new()
-  SKIN.title(role_label, 12)
+  SKIN.title(role_label, 11)
   role_label.add_theme_color_override("font_color", SKIN.MUTED)
   role_label.text = "Teammitglied"
   column.add_child(role_label)
@@ -190,7 +190,7 @@ func _build_party() -> void:
   party_bars.append(hp)
  party_bonus = Label.new()
  party_bonus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- SKIN.title(party_bonus, 13)
+ SKIN.title(party_bonus, 11)
  strip.add_child(party_bonus)
 
 func _nav_button(parent: Container, _icon_text: String, caption: String, key: String) -> Button:
@@ -198,7 +198,7 @@ func _nav_button(parent: Container, _icon_text: String, caption: String, key: St
  b.name = "Nav_" + key
  b.text = ""
  b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- b.custom_minimum_size.y = 88
+ b.custom_minimum_size.y = 80
  SKIN.button(b, key == active_page, true)
  b.pressed.connect(_on_navigation.bind(key))
  parent.add_child(b)
@@ -213,7 +213,7 @@ func _nav_button(parent: Container, _icon_text: String, caption: String, key: St
  var artwork := Control.new()
  artwork.set_script(NAV_ART)
  artwork.set("kind", key)
- artwork.custom_minimum_size = Vector2(50, 54)
+ artwork.custom_minimum_size = Vector2(42, 46)
  artwork.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  artwork.mouse_filter = Control.MOUSE_FILTER_IGNORE
  contents.add_child(artwork)
@@ -222,7 +222,7 @@ func _nav_button(parent: Container, _icon_text: String, caption: String, key: St
  title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  title.mouse_filter = Control.MOUSE_FILTER_IGNORE
- SKIN.title(title, 16)
+ SKIN.title(title, 14)
  contents.add_child(title)
  nav_buttons[key] = b
  return b
@@ -234,10 +234,10 @@ func _build_navigation() -> void:
  dock.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
  dock.offset_left = 6
  dock.offset_right = -6
- dock.offset_top = -126
+ dock.offset_top = -112
  dock.offset_bottom = -7
  dock.mouse_filter = Control.MOUSE_FILTER_STOP
- dock.add_theme_stylebox_override("panel", SKIN.plaque(Color("#9a653feF"), SKIN.WOOD_DARK, 20, 4))
+ dock.add_theme_stylebox_override("panel", SKIN.plaque(Color("#bd7c49"), SKIN.GOLD, 24, 4))
  add_child(dock)
  var row := HBoxContainer.new()
  row.add_theme_constant_override("separation", 5)
@@ -390,12 +390,12 @@ func _adapt_layout() -> void:
  var journey: Control = get_node_or_null("JourneyPlaque") as Control
  var overflow: Control = get_node_or_null("MoreAdventures") as Control
  if team_strip != null:
-  team_strip.offset_right = minf(210.0, screen_width * 0.47)
+  team_strip.offset_right = minf(174.0, screen_width * 0.43)
  if journey != null:
-  journey.offset_left = -minf(274.0, screen_width * 0.51)
+  journey.offset_left = -minf(214.0, screen_width * 0.53)
  if overflow != null:
   overflow.offset_left = -minf(366.0, screen_width - 20.0)
   overflow.pivot_offset = Vector2(overflow.size.x * 0.5, overflow.size.y)
  var dock: Control = get_node_or_null("AdventureDock") as Control
  if dock != null:
-  dock.offset_top = -116.0 if screen_width < 430.0 else -126.0
+  dock.offset_top = -106.0 if screen_width < 430.0 else -112.0
