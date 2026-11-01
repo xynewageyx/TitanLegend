@@ -1,0 +1,2 @@
+# Preserve the original Update 168 source archive for checksum tests.
+# Exclude archived scripts from Godot's class registry to avoid duplicate class_name declarations.
