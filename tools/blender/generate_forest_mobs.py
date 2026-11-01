@@ -518,8 +518,63 @@ def creature_silhouette_upgrade(creature):
             sphere("royal_bark_brow",(side*.42,-1.07,3.48),(.40,.18,.18),dark,20,14)
         sphere("heartwood_core",(0,-.88,2.14),(.37,.15,.48),coral,24,16)
 
+def premium_creature_details(creature):
+    """Distinct, readable layered features for portrait-scale Android rendering."""
+    gold = material("premium_warm_gold", (.94,.68,.24))
+    shade = material("premium_deep_shadow", (.16,.23,.14))
+    ivory = material("premium_warm_ivory", (.99,.91,.71))
+    emerald = material("premium_leaf_edge", (.42,.78,.32))
+    if creature == "forest_01_mooshuepfer":
+        for side in (-1,1):
+            leaf_mesh("moss_ear_inner", (side*.62,-.18,1.51), .40,.16,emerald,side*.12)
+            sphere("moss_paw_pad",(side*.43,-.57,.19),(.15,.045,.08),ivory,16,10)
+        sphere("moss_chest_patch",(0,-.59,.76),(.36,.085,.29),ivory,20,14)
+    elif creature == "forest_02_pilzling":
+        for side in (-1,1):
+            sphere("mushroom_gill_edge",(side*.48,-.56,1.49),(.31,.085,.07),ivory,20,12)
+            sphere("mushroom_sleeve",(side*.51,-.31,1.02),(.20,.20,.14),gold,16,10)
+        sphere("mushroom_collar",(0,-.34,1.36),(.47,.16,.12),ivory,20,12)
+    elif creature == "forest_03_wurzelkrabbler":
+        for side in (-1,1):
+            branching_root("crawler_face_crest",[(side*.25,-.50,1.10),
+                (side*.40,-.54,1.25),(side*.52,-.52,1.32)],.08,gold)
+        sphere("crawler_heartwood",(0,-.57,.77),(.22,.07,.24),emerald,20,14)
+    elif creature == "forest_04_blattfuchs":
+        sphere("fox_cream_bib",(0,-.83,.70),(.31,.12,.24),ivory,20,14)
+        for side in (-1,1):
+            sphere("fox_brow_mark",(side*.25,-.89,1.42),(.17,.05,.06),gold,16,10)
+            leaf_mesh("fox_ear_inner",(side*.38,-.52,1.54),.42,.15,ivory,side*.08)
+    elif creature == "forest_05_dorneneber":
+        sphere("boar_nose_plate",(0,-1.34,.83),(.30,.055,.18),shade,20,14)
+        for side in (-1,1):
+            sphere("boar_nostril",(side*.15,-1.394,.84),(.055,.022,.065),ivory,12,8)
+            sphere("boar_eyebrow",(side*.35,-1.04,1.37),(.19,.06,.07),shade,16,10)
+    elif creature == "forest_06_rankenwerfer":
+        for i in range(5):
+            angle=2*math.pi*i/5
+            leaf_mesh("flower_petal_layer",(.38*math.cos(angle),-.28,1.50+.27*math.sin(angle)),
+                      .43,.22,emerald,.10*math.cos(angle))
+        sphere("flower_core",(0,-.59,1.45),(.22,.07,.21),gold,20,14)
+    elif creature == "forest_elite_01_rindenwaechter":
+        sphere("guardian_chest_armor",(0,-.64,1.74),(.60,.16,.57),shade,20,14)
+        sphere("guardian_chest_emblem",(0,-.79,1.83),(.24,.07,.30),gold,20,14)
+        for side in (-1,1):
+            sphere("guardian_knuckle_plate",(side*1.10,-.49,1.03),(.34,.09,.24),ivory,16,10)
+    elif creature == "forest_elite_02_moosbestie":
+        sphere("beast_muzzle_mask",(0,-1.58,1.09),(.42,.075,.20),ivory,20,14)
+        for side in (-1,1):
+            for i in range(3):
+                cone("beast_claw",(side*(.66+i*.13),-1.02,.18),.07,0,.21,ivory,8)
+    elif creature == "forest_boss_01_wurzelkoenig":
+        sphere("king_heartwood_plate",(0,-.96,2.19),(.48,.13,.65),shade,24,16)
+        sphere("king_heartwood_gem",(0,-1.09,2.24),(.24,.08,.34),gold,24,16)
+        for side in (-1,1):
+            branching_root("king_gilded_crown",[(side*.54,-.19,4.48),
+                (side*.77,-.22,4.84),(side*.84,-.20,5.20)],.13,gold)
+            sphere("king_fist_guard",(side*1.48,-.65,1.29),(.47,.12,.31),shade,20,14)
+
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
