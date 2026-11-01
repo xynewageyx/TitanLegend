@@ -182,10 +182,24 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
-          godot --headless --path . --editor --import --quit
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+          export LIBGL_ALWAYS_SOFTWARE=1
+          xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee build/android-godot-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' build/android-godot-import.log; then
+            echo 'Android resource import failed'
+            exit 1
+          fi
           godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
           test -s build/TitanLegends-debug.apk
           unzip -tq build/TitanLegends-debug.apk
+      - name: Upload Android import diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Android-Import-Log
+          path: build/android-godot-import.log
+          if-no-files-found: ignore
       - name: Upload Android debug APK
         uses: actions/upload-artifact@v4
         with:
