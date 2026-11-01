@@ -23,7 +23,9 @@ class FantasyCostumeTests(unittest.TestCase):
     def test_face_and_body_proportions(self):
         team = (ROOT / "scripts/team_formation.gd").read_text(encoding="utf-8")
         faces = (ROOT / "scripts/hero_faces_hands_70.gd").read_text(encoding="utf-8")
-        self.assertIn("torso.scale = Vector3(0.94, 1.26, 0.69)", team)
+        self.assertIn("var torso_mesh: CapsuleMesh = CapsuleMesh.new()", team)
+        self.assertIn("torso.mesh = torso_mesh", team)
+        self.assertIn("torso.scale = Vector3(1.10, 1.0, 0.82)", team)
         self.assertIn("head.scale = Vector3(1.12, 1.16, 0.92)", team)
         for marker in ("var ear :=", "var cheek :=", "var mouth :="):
             self.assertIn(marker, faces)
