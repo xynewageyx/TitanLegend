@@ -116,6 +116,23 @@ for idx,name in enumerate(NAMES):
   lock.location.x=x
  oval("Nose",(0,-.42,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40,1.71),(.10,.018,.02),dark)
+ # Original class-specific silhouettes, kept lightweight for Android GL Compatibility.
+ cloth=material("class_cloth",tuple(min(.95,v*.7+.18) for v in COLORS[idx]))
+ gold=material("class_trim",(.94,.70,.23))
+ if name in ("warrior","paladin","brawler"):
+  for side in (-1,1):
+   oval("ArmPauldron",(side*.40,0,1.43),(.23,.24,.17),gold)
+  oval("ChestCrest",(0,-.28,1.22),(.20,.07,.25),gold)
+ if name in ("druid","shaman","priest"):
+  oval("HeadCirclet",(0,-.03,2.16),(.42,.38,.065),gold)
+  oval("ChestCharm",(0,-.29,1.12),(.13,.08,.18),cloth)
+ if name in ("hunter","rogue"):
+  for side in (-1,1):
+   oval("ArmBracer",(side*.43,-.04,1.04),(.16,.17,.17),cloth)
+  oval("ChestStrap",(0,-.30,1.19),(.10,.08,.36),gold)
+ if name in ("mage","warlock","summoner"):
+  oval("HeadGem",(0,-.37,2.14),(.12,.065,.16),gold)
+  oval("ChestRune",(0,-.29,1.22),(.19,.07,.22),cloth)
  rig_and_animate()
  bpy.ops.object.select_all(action="SELECT")
  bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_animations=True,export_nla_strips=True)
