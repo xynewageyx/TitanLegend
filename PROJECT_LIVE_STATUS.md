@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:13 UTC**
-Git-Stand: **b12ac1e3f3c01ea99e0fb6104045ff4681f4eaab** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:14 UTC**
+Git-Stand: **20a617d0ecfbeb9b8941472b85e8c3cb941042a7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -24,7 +24,7 @@ Git-Stand: **b12ac1e3f3c01ea99e0fb6104045ff4681f4eaab** auf Branch **main**
 - `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `20a617d` (2026-11-02): test(talents): cover locked-talent inspection and live eligibility on Android taps
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
