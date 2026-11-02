@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 22:14 UTC**
-Git-Stand: **e7946e771c17813fdb6097c20152b4e96de7f01d** auf Branch **main**
+Git-Stand: **8711f60b7d1f794bf222a822673ac694ad19f851** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
 - `90b0b2f` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
 - `bdac0a9` (2026-11-02): Generate eleven original chibi hero GLB assets
@@ -43,11 +44,11 @@ Git-Stand: **e7946e771c17813fdb6097c20152b4e96de7f01d** auf Branch **main**
 - `2b822ce` (2026-11-02): Give each class layered harmonic and transient sound signatures (#15)
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
 
 ## Bereichsübergreifende Änderungen
 
-- `f9e225f` (2026-11-02): test(forest): detect animation clips whose 3D keyframes never change
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
