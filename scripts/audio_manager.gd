@@ -4,6 +4,7 @@ extends Node
 signal audio_backend_changed(backend_name: String)
 
 const SFX_POOL_SIZE: int = 8
+var ambience: AudioStreamPlayer
 var music: AudioStreamPlayer
 var effects: Array[AudioStreamPlayer] = []
 var music_volume: float = 1.0
@@ -13,6 +14,9 @@ var sfx_muted: bool = false
 var _next_sfx_index: int = 0
 
 func _ready() -> void:
+ ambience = AudioStreamPlayer.new()
+ ambience.name = "Ambience"
+ add_child(ambience)
  music = AudioStreamPlayer.new()
  music.name = "Music"
  add_child(music)
@@ -25,6 +29,8 @@ func _ready() -> void:
  audio_backend_changed.emit("godot")
 
 func _apply_volumes() -> void:
+ if ambience != null:
+  ambience.volume_linear = 0.0 if sfx_muted else sfx_volume * 0.4
  if music != null:
   music.volume_linear = 0.0 if music_muted else music_volume
  for player in effects:
@@ -69,6 +75,20 @@ func play_bgm(stream: AudioStream) -> void:
  music.stop()
  music.stream = stream
  music.play()
+
+func play_ambience(event_name: String) -> void:
+ var stream: AudioStream = AUDIO_EVENTS.load_event(event_name)
+ if stream == null or ambience == null:
+  return
+ if ambience.stream == stream and ambience.playing:
+  return
+ ambience.stop()
+ ambience.stream = stream
+ ambience.play()
+
+func stop_ambience() -> void:
+ if ambience != null:
+  ambience.stop()
 
 func stop_bgm() -> void:
  music.stop()
