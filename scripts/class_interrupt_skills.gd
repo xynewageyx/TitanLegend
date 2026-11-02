@@ -9,9 +9,10 @@ const NAMES: Array[String] = [
  "Heiliges Schweigen", "Betaeubender Haken"
 ]
 const VFX: Array[String] = [
- "shield_bash", "holy_light", "frost_nova", "frost_nova",
- "precision_shot", "precision_shot", "frost_nova",
- "frost_nova", "frost_nova", "holy_light", "shield_bash"
+ "interrupt_warrior", "interrupt_paladin", "interrupt_druid",
+ "interrupt_shaman", "interrupt_hunter", "interrupt_rogue",
+ "interrupt_mage", "interrupt_warlock", "interrupt_summoner",
+ "interrupt_priest", "interrupt_brawler"
 ]
 
 static func name_for_class(class_id: int) -> String:
