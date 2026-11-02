@@ -1,42 +1,117 @@
-import bpy, math, random
-from mathutils import Vector
-random.seed(42)
-bpy.ops.object.select_all(action='SELECT')
+"""Deterministic, mobile-friendly stylized forest route for Titan Legends."""
+import bpy
+import math
+import random
+
+rng = random.Random(42)
+bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
-def mat(name, color):
- m=bpy.data.materials.new(name); m.diffuse_color=(*color,1); return m
-grass=mat("Grass",(.28,.66,.19)); dirt=mat("Warm earth",(.53,.34,.18)); stone=mat("Sandstone",(.67,.61,.49)); bark=mat("Bark",(.36,.22,.12)); leaf=mat("Canopy",(.16,.52,.22)); leaf2=mat("Light canopy",(.36,.72,.23)); water=mat("Water",(.16,.62,.86)); gold=mat("Path",(.83,.66,.38))
-def cube(name,loc,scale,material,bevel=0):
- bpy.ops.mesh.primitive_cube_add(size=1,location=loc);o=bpy.context.object;o.name=name;o.dimensions=scale;bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
- if bevel: mod=o.modifiers.new("Rounded edges","BEVEL");mod.width=bevel;mod.segments=2;o.modifiers.new("Normals","WEIGHTED_NORMAL")
- o.data.materials.append(material);return o
-def sphere(name,loc,scale,material):
- bpy.ops.mesh.primitive_uv_sphere_add(segments=12,ring_count=8,location=loc);o=bpy.context.object;o.name=name;o.scale=scale;o.data.materials.append(material);return o
-def cylinder(name,loc,radius,depth,material,vertices=10):
- bpy.ops.mesh.primitive_cylinder_add(vertices=vertices,radius=radius,depth=depth,location=loc);o=bpy.context.object;o.name=name;o.data.materials.append(material);return o
-cube("Meadow plateau",(0,-8,-.65),(24,56,1.3),grass,1.0)
-for i in range(25):
- y=-32+i*2
- x=math.sin(i*.34)*1.1
- sphere("Winding trail %02d"%i,(x,y,.03),(2.25,1.5,.08),gold)
-for i in range(28):
- x=random.choice([-1,1])*random.uniform(5,10);y=random.uniform(-32,15)
- cylinder("Tree trunk %02d"%i,(x,y,1.4),.35,2.8,bark)
- sphere("Canopy %02d"%i,(x,y,3.25),(1.8,1.65,.9),leaf if i%2 else leaf2)
-for i in range(38):
- x=random.choice([-1,1])*random.uniform(3.8,11);y=random.uniform(-34,17)
- sphere("Rounded rock %02d"%i,(x,y,.25),(random.uniform(.3,1.0),.65,.48),stone)
-cube("River",(0,19,-.02),(23,3,.09),water,.3)
-for i in range(9):
- cube("Bridge plank %02d"%i,(0,16.8+i*.45,.26),(4.8,.37,.25),bark,.08)
+
+def material(name, rgb):
+    m = bpy.data.materials.new(name)
+    m.diffuse_color = (*rgb, 1.0)
+    m.use_nodes = True
+    m.node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value = (*rgb, 1.0)
+    return m
+
+grass = material("Soft meadow green", (.25, .58, .19))
+grass_light = material("Meadow highlights", (.40, .70, .23))
+path = material("Warm sandy path", (.74, .55, .30))
+bark = material("Warm tree bark", (.38, .23, .13))
+leaves = [material("Canopy green", (.17, .49, .20)), material("Canopy lime", (.37, .69, .23)), material("Canopy deep", (.12, .38, .20))]
+rock = material("Soft sandstone", (.61, .58, .50))
+water = material("River turquoise", (.12, .54, .72))
+flower_colors = [material("Flower pink", (.95, .39, .58)), material("Flower cream", (.98, .85, .51)), material("Flower lavender", (.63, .49, .85))]
+
+def mesh_obj(name, verts, faces, mat):
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(verts, [], faces)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    obj.data.materials.append(mat)
+    return obj
+
+def box(name, loc, dimensions, mat, bevel=0):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
+    o = bpy.context.object
+    o.name = name
+    o.dimensions = dimensions
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    if bevel:
+        modifier = o.modifiers.new("Soft edges", "BEVEL")
+        modifier.width = bevel
+        modifier.segments = 2
+        o.modifiers.new("Weighted normals", "WEIGHTED_NORMAL")
+    o.data.materials.append(mat)
+    return o
+
+def ico(name, loc, scale, mat, subdivisions=1):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=subdivisions, radius=1, location=loc)
+    o = bpy.context.object
+    o.name = name
+    o.scale = scale
+    o.data.materials.append(mat)
+    return o
+
+def trunk(name, x, y, height, radius):
+    bpy.ops.mesh.primitive_cone_add(vertices=9, radius1=radius, radius2=radius * .72, depth=height, location=(x,y,height/2))
+    o = bpy.context.object
+    o.name = name
+    o.data.materials.append(bark)
+
+def route_x(y):
+    return math.sin((y + 32) * .17) * 1.15
+
+# Keep the continuous travel corridor free of blocking props.
+box("Continuous meadow ground", (0,-7,-.65), (24,58,1.3), grass, .65)
+for i in range(55):
+    y = -33 + i * .95
+    ico("Path segment %03d" % i, (route_x(y),y,.025), (2.25,.80,.045), path, 1)
+
+for i in range(44):
+    y = rng.uniform(-32,15)
+    side = rng.choice((-1,1))
+    x = side * rng.uniform(5.2,10.7)
+    height = rng.uniform(2.2,3.7)
+    trunk("Tree trunk %03d" % i,x,y,height,.24 + height*.04)
+    # Overlapping asymmetric clusters give a rounded cartoon silhouette.
+    for j in range(3):
+        offset = (j-1)*.65
+        ico("Tree foliage %03d-%d" % (i,j), (x+offset,y+rng.uniform(-.35,.35),height+(.45 if j!=1 else .9)),
+            (1.08+rng.random()*.35,1.1+rng.random()*.4,.88+rng.random()*.35), leaves[(i+j)%3],2)
+
+for i in range(65):
+    y = rng.uniform(-32,16)
+    x = rng.choice((-1,1))*rng.uniform(3.8,11.2)
+    ico("Stone %03d" % i,(x,y,.18),(.25+rng.random()*.55,.25+rng.random()*.45,.20+rng.random()*.35),rock,1)
+
+# Small accents are kept outside the central character movement lane.
+for i in range(170):
+    y = rng.uniform(-32,15)
+    x = rng.choice((-1,1))*rng.uniform(3.1,11.2)
+    height = rng.uniform(.12,.36)
+    ico("Grass tuft %03d" % i,(x,y,height*.5),(.09,.15,height),grass_light,1)
+for i in range(75):
+    y = rng.uniform(-32,15)
+    x = rng.choice((-1,1))*rng.uniform(3.2,11)
+    ico("Flower %03d" % i,(x,y,.16),(.13,.13,.15),flower_colors[i%3],1)
+
+box("River", (0,19,-.03), (23,3,.08),water,.15)
+for i in range(10):
+    box("Bridge plank %02d" % i,(0,17+i*.42,.24),(4.8,.36,.23),bark,.055)
+
+# The boss clearing is integrated into the world path, not a separate arena scene.
+ico("Boss clearing", (0,26,-.18),(6.8,6.8,.2),rock,2)
 for i in range(12):
- angle=math.tau*i/12
- cylinder("Boss stone %02d"%i,(math.cos(angle)*6,26+math.sin(angle)*6,.75),.7,1.5,stone)
-cylinder("Boss arena",(0,26,.05),7,.25,stone,32)
-cylinder("World tree trunk",(0,29,3),1.35,6,bark,12)
+    angle = math.tau*i/12
+    x,y = math.cos(angle)*6.5,26+math.sin(angle)*6.5
+    ico("Clearing border rock %02d" % i,(x,y,.35),(.6,.6,.55),rock,1)
+trunk("Ancient tree trunk",0,32,5.8,1.0)
 for i in range(7):
- a=math.tau*i/7
- sphere("World tree canopy %02d"%i,(math.cos(a)*2,29+math.sin(a)*2,7.1),(2.1,2.0,1.7),leaf2)
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.export_scene.gltf(filepath='/tmp/grasland.glb',export_format='GLB',use_selection=True)
-print("GLB exported")
+    a = math.tau*i/7
+    ico("Ancient tree crown %02d" % i,(math.cos(a)*1.8,32+math.sin(a)*1.8,6.6),(2.0,1.9,1.5),leaves[i%3],2)
+
+bpy.ops.object.select_all(action="SELECT")
+bpy.ops.export_scene.gltf(filepath="/tmp/grasland.glb",export_format="GLB",use_selection=True)
+print("GLB exported: stylized forest route")
