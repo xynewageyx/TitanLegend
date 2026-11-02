@@ -9,8 +9,6 @@ var scale_slider: HSlider
 var shadows: CheckBox
 var effects: CheckBox
 var automatic: CheckBox
-var performance_label: Label
-var performance_elapsed := 0.0
 var updating := false
 
 func _ready() -> void:
@@ -65,9 +63,6 @@ func _ready() -> void:
 	automatic = CheckBox.new()
 	automatic.text = "Automatische FPS-Optimierung"
 	column.add_child(automatic)
-	performance_label = Label.new()
-	performance_label.text = "FPS: –"
-	column.add_child(performance_label)
 	var close_button := Button.new()
 	close_button.text = "Schließen"
 	column.add_child(close_button)
@@ -121,18 +116,3 @@ func _automatic_changed(enabled: bool) -> void:
 		return
 	GraphicsQualityManager.set_automatic(enabled)
 
-func _process(delta: float) -> void:
-	if not center.visible:
-		return
-	performance_elapsed += delta
-	if performance_elapsed < 0.5:
-		return
-	performance_elapsed = 0.0
-	var actual_fps := Engine.get_frames_per_second()
-	var effective_scale: float = clampf(
-		GraphicsQualityManager.render_scale * GraphicsQualityManager.adaptive_scale,
-		0.5, 1.0
-	)
-	performance_label.text = "FPS: %d / Ziel: %d | 3D-Skalierung: %d%%" % [
-		actual_fps, GraphicsQualityManager.target_fps, roundi(effective_scale * 100.0)
-	]
