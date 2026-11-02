@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:08 UTC**
-Git-Stand: **03bdff9b245ddfdf5ed29ed0ec5c1683da60b755** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:09 UTC**
+Git-Stand: **e1495de244f7bd86c83ef8fb120224d789b66631** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -25,7 +25,6 @@ Git-Stand: **03bdff9b245ddfdf5ed29ed0ec5c1683da60b755** auf Branch **main**
 - `6c0d2b3` (2026-11-02): Show live FPS and effective 3D render scale in graphics menu
 - `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
 - `d758a4f` (2026-11-02): ui(talents): show exact missing prerequisite points and insufficient budget on locked talents
-- `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
@@ -35,11 +34,11 @@ Git-Stand: **03bdff9b245ddfdf5ed29ed0ec5c1683da60b755** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `d8b249a` (2026-11-02): Add regression tests for graphics profiles and hidden FPS display
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
 - `4574a8a` (2026-11-02): Remove live FPS and render-scale readout from graphics menu
 - `6c0d2b3` (2026-11-02): Show live FPS and effective 3D render scale in graphics menu
 - `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
-- `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -48,7 +47,7 @@ Git-Stand: **03bdff9b245ddfdf5ed29ed0ec5c1683da60b755** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `e1495de` (2026-11-02): Run graphics settings regression tests in Godot validation workflow
 
 ## Bereichsübergreifende Änderungen
 
