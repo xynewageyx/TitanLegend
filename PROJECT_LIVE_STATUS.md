@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 19:13 UTC**
-Git-Stand: **b52dfc9d9eb7ba07c95111625906edaeb588d0b2** auf Branch **main**
+Git-Stand: **b12ac1e3f3c01ea99e0fb6104045ff4681f4eaab** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,6 +41,7 @@ Git-Stand: **b52dfc9d9eb7ba07c95111625906edaeb588d0b2** auf Branch **main**
 - `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `b12ac1e` (2026-11-02): test(forest): require exactly four valid animation clips with unique node channels
 - `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
 
 ## Bereichsübergreifende Änderungen
