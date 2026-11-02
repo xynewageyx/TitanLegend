@@ -40,7 +40,20 @@ jobs:
               doc = json.loads(data[20:20+chunk_size])
               names = {a.get('name', '').split('.')[0] for a in doc.get('animations', [])}
               required = {'idle', 'attack', 'hit', 'death'}
-              assert required.issubset(names), f'Missing animation clips in {path}: {required - names}; found {names}'
+              assert names == required, f'Expected exactly four animations in {path}; found {names}'
+              animations = doc.get('animations', [])
+              assert len(animations) == 4, f'Unexpected animation count in {path}: {len(animations)}'
+              for animation in animations:
+                  channels = animation.get('channels', [])
+                  samplers = animation.get('samplers', [])
+                  assert channels and samplers, f'Empty animation in {path}: {animation.get("name")}'
+                  targets = set()
+                  for channel in channels:
+                      assert 0 <= channel['sampler'] < len(samplers), f'Invalid sampler in {path}'
+                      target = channel['target']
+                      key = (target.get('node'), target.get('path'))
+                      assert key not in targets, f'Duplicate animation target in {path}: {key}'
+                      targets.add(key)
               meshes = doc.get('meshes', [])
               assert len(meshes) >= 8, f'Unexpectedly simple or empty mesh scene: {path} ({len(meshes)} meshes)'
               nodes = doc.get('nodes', [])
