@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:38 UTC**
-Git-Stand: **2d6db4360a9b712d71f061753d7a67517161263a** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:39 UTC**
+Git-Stand: **07c5bd51fb7bcdfd5d25ef1ea9440874c8886a5f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,8 +11,6 @@ Git-Stand: **2d6db4360a9b712d71f061753d7a67517161263a** auf Branch **main**
 - `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
 - `5b6e4c2` (2026-11-02): fix(talents): validate selected hero and branch before reading touch details
 - `48c4a53` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `062d9e3` (2026-11-02): ci(chibi): upload visual PNG preview gallery alongside eleven GLBs
-- `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -34,9 +32,9 @@ Git-Stand: **2d6db4360a9b712d71f061753d7a67517161263a** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `07c5bd5` (2026-11-02): Reset graphics sampling after manual preset changes and simplify persistence
 - `2d6db43` (2026-11-02): Reset adaptive FPS sampling after scene transitions
 - `725c5cc` (2026-11-02): Avoid automatic graphics downscaling during scene startup and loading
-- `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
@@ -46,7 +44,6 @@ Git-Stand: **2d6db4360a9b712d71f061753d7a67517161263a** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
-- `062d9e3` (2026-11-02): ci(chibi): upload visual PNG preview gallery alongside eleven GLBs
 
 ## Bereichsübergreifende Änderungen
 
