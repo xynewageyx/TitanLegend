@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:17 UTC**
-Git-Stand: **64622761cb6c48ffc5188954f3abe4bc390377ee** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:18 UTC**
+Git-Stand: **29aec3110c80b39ed7f55d763971b26c914f4c88** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -18,7 +18,7 @@ Git-Stand: **64622761cb6c48ffc5188954f3abe4bc390377ee** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -29,17 +29,15 @@ Git-Stand: **64622761cb6c48ffc5188954f3abe4bc390377ee** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - `6462276` (2026-11-02): fix(talents): guard stale hero and malformed talent row during Android interaction
 - `cb2919a` (2026-11-02): test(talents): guard missing-prerequisite feedback and spent-point progress
-- `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d8b249a` (2026-11-02): Add regression tests for graphics profiles and hidden FPS display
-- `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `29aec31` (2026-11-02): Add Godot regression tests for moderation warnings, approvals and ban changes
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
