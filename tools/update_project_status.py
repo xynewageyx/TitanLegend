@@ -64,7 +64,7 @@ def main():
         "Integration/CI": ("ci(", "build(", "workflow", "pipeline"),
     }
     for commit in commits:
-        if commit["subject"].startswith("chore(coordination):"):
+        if "(coordination)" in commit["subject"].lower() or all(path in {"PROJECT_COORDINATION.md", "PROJECT_LIVE_STATUS.md", "VISUAL_QUALITY_GATE.md", "tools/update_project_status.py", ".github/workflows/project-coordination.yml"} for path in commit["files"]):
             continue
         subject = commit["subject"].lower()
         matched = [name for name, prefixes in AREAS.items() if any(f.startswith(p) for f in commit["files"] for p in prefixes) or any(hint in subject for hint in SUBJECT_HINTS[name])]
