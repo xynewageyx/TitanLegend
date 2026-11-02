@@ -25,7 +25,7 @@ for name in names:
     bpy.context.object.data.energy = 450
     bpy.context.object.data.shape = "DISK"
     bpy.context.object.data.size = 4.0
-    bpy.context.scene.render.engine = "BLENDER_EEVEE_NEXT"
+    bpy.context.scene.render.engine = "BLENDER_EEVEE"
     world = bpy.context.scene.world
     if world is not None:
         world.use_nodes = True
