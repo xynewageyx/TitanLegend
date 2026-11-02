@@ -56,7 +56,7 @@ jobs:
           for script in tests/test_skill_targeting_rules.gd tests/test_class_interrupt_skills.gd tests/test_skill_catalog_effects.gd; do
             echo "Running $script"
             xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script "$script" 2>&1 | tee /tmp/titan-skill-test.log
-            if grep -E 'SCRIPT ERROR:|Parse Error:|Assertion failed|ERROR:' /tmp/titan-skill-test.log; then
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Assertion failed|Assertion failure|ERROR:' /tmp/titan-skill-test.log; then
               echo "::error::Skill test failed: $script"
               exit 1
             fi
