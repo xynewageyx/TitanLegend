@@ -8,14 +8,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 AREAS = {
-    "Charaktere": ("tools/generate_chibi.py", "assets/heroes/", "tools/blender/", "scenes/heroes/"),
+    "Charaktere": ("tools/generate_chibi.py", "tools/validate_chibi", "assets/heroes/", "scenes/heroes/", "scripts/hero", "tools/blender/generate_hero"),
     "Gegner/Bosse": ("assets/enemies/", "scripts/enemy", "scripts/boss", "tools/blender/generate_forest_mobs.py"),
-    "Landschaften": ("scripts/biome", "assets/terrain/", "assets/environment/", "scenes/biome"),
+    "Landschaften": ("scripts/biome", "assets/terrain/", "assets/environment/", "scenes/biome", "assets/landscape/", "assets/grassland/", "tools/blender/generate_grasland", "tools/blender/generate_grassland", "tools/generate_grasland", "tools/generate_grassland", "scripts/terrain", "scenes/terrain"),
     "Ausrüstung": ("scripts/equipment", "assets/weapons/", "assets/armor/"),
     "UI": ("scripts/ui", "scenes/ui/", "assets/ui/"),
     "Gameplay": ("scripts/team", "scripts/battle", "scripts/talent", "scripts/save", "scripts/game_manager"),
-    "Skills und Animationen": ("scripts/skill", "scripts/ability", "assets/skills/", "assets/vfx/", "scenes/skills/", "tools/skills/", "tests/test_skill"),
-    "Integration/CI": (".github/workflows/", "project.godot", "export_presets.cfg", "tests/"),
+    "Skills und Animationen": ("scripts/skill", "scripts/ability", "scripts/combat_skill", "assets/skills/", "assets/vfx/", "assets/effects/", "scenes/skills/", "tools/skills/", "tests/test_skill", "tests/test_ability", "tools/blender/generate_skill"),
+    "Integration/CI": (".github/workflows/", "project.godot", "export_presets.cfg"),
 }
 OWNERS = {
     "Charaktere": "Charaktere-Chat",
@@ -53,10 +53,21 @@ def main():
         commits.append(current)
     classified = {name: [] for name in AREAS}
     shared = []
+    SUBJECT_HINTS = {
+        "Charaktere": ("chibi", "character", "hero", "rigg", "skin weight"),
+        "Gegner/Bosse": ("enemy", "enemies", "boss", "forest mob"),
+        "Landschaften": ("landscape", "terrain", "grasland", "grassland", "biome", "vegetation"),
+        "Ausrüstung": ("equipment", "weapon", "armor", "rüstung", "waffe"),
+        "UI": ("ui(", "hud", "menu", "layout"),
+        "Gameplay": ("talent", "xp", "combat", "battle", "team", "progression"),
+        "Skills und Animationen": ("skill", "ability", "spell", "interrupt", "unterbrech", "vfx"),
+        "Integration/CI": ("ci(", "build(", "workflow", "pipeline"),
+    }
     for commit in commits:
         if commit["subject"].startswith("chore(coordination):"):
             continue
-        matched = [name for name, prefixes in AREAS.items() if any(f.startswith(p) for f in commit["files"] for p in prefixes)]
+        subject = commit["subject"].lower()
+        matched = [name for name, prefixes in AREAS.items() if any(f.startswith(p) for f in commit["files"] for p in prefixes) or any(hint in subject for hint in SUBJECT_HINTS[name])]
         if not matched:
             shared.append(commit)
         else:
@@ -76,12 +87,12 @@ def main():
     for name, owner in OWNERS.items():
         output += [f"### {name} — {owner}"]
         items = classified[name][:5]
-        output += [f"- \`{c['hash']}\` ({c['date']}): {c['subject']}" for c in items] if items else ["- Keine passenden Änderungen in den letzten 15 Commits."]
+        output += [f"- `{c['hash']}` ({c['date']}): {c['subject']}" for c in items] if items else ["- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität)."]
         output.append("")
     output += ["## Bereichsübergreifende Änderungen", ""]
-    output += [f"- \`{c['hash']}\` ({c['date']}): {c['subject']}" for c in shared[:8]] if shared else ["- Keine in den letzten 15 Commits."]
+    output += [f"- `{c['hash']}` ({c['date']}): {c['subject']}" for c in shared[:8]] if shared else ["- Keine in den letzten 15 Commits."]
     output += ["", "## Regeln für alle Fach-Chats", "",
-        "1. Vor Arbeitsbeginn \`PROJECT_COORDINATION.md\`, \`VISUAL_QUALITY_GATE.md\` und diese Datei lesen.",
+        "1. Vor Arbeitsbeginn `PROJECT_COORDINATION.md`, `VISUAL_QUALITY_GATE.md` und diese Datei lesen.",
         "2. Eigene Änderungen mit aussagekräftigen Commit-Meldungen und möglichst getrennten Dateien einreichen.",
         "3. Bei Konflikten oder Abhängigkeiten einen GitHub-Issue/PR mit betroffenen Bereichen anlegen.",
         "4. Erfolge nur anhand der zugehörigen GitHub-Actions-Läufe melden; diese Übersicht klassifiziert Commits, nicht deren Qualität.",
@@ -96,7 +107,7 @@ def main():
     summary = Path(os.getenv("GITHUB_STEP_SUMMARY", "/dev/null"))
     if summary != Path("/dev/null"):
         with summary.open("a", encoding="utf-8") as f:
-            f.write(f"### Titan Legends coordination\nGenerated project status for \`{sha[:12]}\`.\n")
+            f.write(f"### Titan Legends coordination\nGenerated project status for `{sha[:12]}`.\n")
 
 if __name__ == "__main__":
     main()
