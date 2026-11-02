@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:48 UTC**
-Git-Stand: **94cbd3a8343a2b5658cfddfdc71220a353b28727** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:49 UTC**
+Git-Stand: **cb086f447dddf64af5bccd2220f69563410373cf** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -34,6 +34,7 @@ Git-Stand: **94cbd3a8343a2b5658cfddfdc71220a353b28727** auf Branch **main**
 - `4afe7af` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `cb086f4` (2026-11-02): Add atomic persistent moderation state storage for dedicated Godot server
 - `94cbd3a` (2026-11-02): Add server-authoritative moderation cases, evidence snapshots and owner-approved bans
 - `3139396` (2026-11-02): Add Godot moderation review panel for owner-adjustable ban proposals
 
