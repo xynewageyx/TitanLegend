@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:12 UTC**
-Git-Stand: **9a0dc92e111b722123ad716f9d4670818efacc6f** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:13 UTC**
+Git-Stand: **9f89e070e070a1d06895cb8bbafa17d254406e60** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -25,12 +25,14 @@ Git-Stand: **9a0dc92e111b722123ad716f9d4670818efacc6f** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `9f89e07` (2026-11-02): Cache scene lights and particles to avoid repeated combat tree scans
 - `65e31d0` (2026-11-02): fix(talents): validate latest build before mobile tap purchase
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `9f89e07` (2026-11-02): Cache scene lights and particles to avoid repeated combat tree scans
 - `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
 - `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
 
@@ -40,7 +42,6 @@ Git-Stand: **9a0dc92e111b722123ad716f9d4670818efacc6f** auf Branch **main**
 
 ### Audio — Audio-Erstellung-Chat
 - `2b822ce` (2026-11-02): Give each class layered harmonic and transient sound signatures (#15)
-- `0524569` (2026-11-02): Cache 24 recently used audio streams for Android combat (#14)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
