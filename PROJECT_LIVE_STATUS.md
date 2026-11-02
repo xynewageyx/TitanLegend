@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:54 UTC**
-Git-Stand: **7ac49f057d72cea6979edbbed9c31dd451421aee** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:55 UTC**
+Git-Stand: **f90327eeaea53994f9bf6587cb175a5082729525** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `f90327e` (2026-11-02): anim(chibi): add breathing idle secondary motion head bounce and attack torso follow-through
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -28,13 +28,10 @@ Git-Stand: **7ac49f057d72cea6979edbbed9c31dd451421aee** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - `7ac49f0` (2026-11-02): fix(talents): recheck current upgrade eligibility on tap instead of trusting stale button state
 - `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
-- `949bbff` (2026-11-02): Add five original elemental skill sound profiles for local player
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `7714b80` (2026-11-02): Add five original elemental skill sound profiles for local player
 - `b80a2ce` (2026-11-02): Add five original elemental skill sound profiles for local player
-- `1e989ad` (2026-11-02): Add five original elemental skill sound profiles for local player
-- `949bbff` (2026-11-02): Add five original elemental skill sound profiles for local player
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
