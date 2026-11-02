@@ -1,0 +1,32 @@
+name: Chat moderation validation
+on:
+  push:
+    paths:
+      - 'scripts/chat/**'
+      - 'tests/test_chat_moderation.gd'
+      - '.github/workflows/chat-moderation-validate.yml'
+  pull_request:
+    paths:
+      - 'scripts/chat/**'
+      - 'tests/test_chat_moderation.gd'
+      - '.github/workflows/chat-moderation-validate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  moderation-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        run: |
+          curl --fail --location --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
+          sudo mv /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+      - name: Import and run moderation tests
+        run: |
+          rm -rf original_update168
+          godot --headless --path . --editor --import --quit
+          godot --headless --path . --script res://tests/test_chat_moderation.gd
