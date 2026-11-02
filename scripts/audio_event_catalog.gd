@@ -44,6 +44,7 @@ const EVENTS: Dictionary = {
  "element_nature": "res://assets/audio/elements/nature.wav",
  "element_shadow": "res://assets/audio/elements/shadow.wav",
  "element_light": "res://assets/audio/elements/light.wav",
+ "element_water": "res://assets/audio/elements/water.wav",
  "element_crystal": "res://assets/audio/elements/crystal.wav",
  "element_earth": "res://assets/audio/elements/earth.wav",
  "element_wind": "res://assets/audio/elements/wind.wav",
