@@ -121,6 +121,22 @@ def render(path, duration, start, end, mode):
     wave_value += rng.uniform(-1, 1) * strength * math.exp(-25 * t)
    if is_skill:
     wave_value += math.sin(phase * 0.5) * 0.16 * math.sin(math.pi * t)
+  # Boss elements need distinct warning/release timbres, not just pitch changes.
+  if path.startswith("boss/"):
+   element = path.split("/")[1].split(".")[0]
+   # Each element uses a different mix of pulsing, harmonics and transients.
+   signatures = {
+    "fire": (2.3, 0.42, 11), "water": (1.4, 0.18, 3),
+    "earth": (0.7, 0.55, 6), "nature": (1.7, 0.20, 4),
+    "light": (3.1, 0.22, 9), "shadow": (0.5, 0.38, 5),
+    "wind": (2.7, 0.48, 14), "frost": (3.8, 0.15, 7),
+    "lightning": (4.5, 0.60, 23), "chaos": (1.13, 0.57, 17),
+   }
+   harmonic, texture, pulses = signatures.get(element, (2.0, 0.2, 5))
+   wave_value += math.sin(phase * harmonic) * 0.38
+   wave_value += rng.uniform(-1, 1) * texture * (0.5 + 0.5 * math.sin(2 * math.pi * pulses * t) ** 2)
+   if element in ("earth", "lightning", "fire", "chaos"):
+    wave_value += rng.uniform(-1, 1) * 0.38 * math.exp(-32 * t)
   sample = int(max(-1, min(1, wave_value * env * 0.65)) * 32767)
   frames.extend(struct.pack("<h", sample))
  target = Path("assets/audio") / path
