@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:41 UTC**
-Git-Stand: **088d636653d22fcfce941205bfef6a398e4ddf3b** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:42 UTC**
+Git-Stand: **c7fe0a11e6ce4f68ec186316f2aefbb74ecf101b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -32,16 +32,17 @@ Git-Stand: **088d636653d22fcfce941205bfef6a398e4ddf3b** auf Branch **main**
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
 - `07c5bd5` (2026-11-02): Reset graphics sampling after manual preset changes and simplify persistence
 - `2d6db43` (2026-11-02): Reset adaptive FPS sampling after scene transitions
-- `725c5cc` (2026-11-02): Avoid automatic graphics downscaling during scene startup and loading
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
+- `f60f990` (2026-11-02): Add security regression tests for peer-bound owner authorization
 - `7e53706` (2026-11-02): Add server-owned peer authorization boundary for moderation requests
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
 
 ## Bereichsübergreifende Änderungen
 
