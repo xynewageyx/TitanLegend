@@ -1,4 +1,5 @@
 extends Control
+const CLASS_INTERRUPTS = preload("res://scripts/class_interrupt_skills.gd")
 @export var team_formation: Node3D
 @export var battle_manager: Node3D
 var hero_selector: OptionButton
@@ -99,7 +100,7 @@ func _process(_delta: float) -> void:
  var ability: int = int(battle_manager.skill_loadouts[hero][active_slot])
  var needed: int = battle_manager._skill_hit_cost(role, ability)
  var progress: int = mini(needed, int(battle_manager.skill_hit_charge[hero]))
- var skill: String = TitanCrowdControl.ability_name(int(team_formation.class_ids[hero])) if ability == 7 else str(TitanSkillSystem.skill_for_role(role, ability).get("name", "Skill"))
+ var skill: String = CLASS_INTERRUPTS.name_for_class(int(team_formation.class_ids[hero])) if ability == 7 else str(TitanSkillSystem.skill_for_role(role, ability).get("name", "Skill"))
  charge_info.text = "Naechster Skill: Platz %d – %s\nNormale Treffer: %d / %d" % [active_slot + 1, skill, progress, needed]
  for index in range(4):
   var equipped: int = int(battle_manager.skill_loadouts[hero][index])
@@ -123,11 +124,11 @@ func _refresh() -> void:
   var selector: OptionButton = skill_selectors[skill_slot]
   selector.clear()
   for choice in range(10 if role == 0 else (9 if role == 2 else 8)):
-   var skill_name: String = TitanCrowdControl.ability_name(class_id) if choice == 7 else str(TitanSkillSystem.skill_for_role(role, choice)["name"])
+   var skill_name: String = CLASS_INTERRUPTS.name_for_class(class_id) if choice == 7 else str(TitanSkillSystem.skill_for_role(role, choice)["name"])
    var hits: int = battle_manager._skill_hit_cost(role, choice)
    selector.add_item(str(skill_slot + 1) + ". " + skill_name + "  (" + str(hits) + " Treffer)", choice)
   selector.select(clampi(int(battle_manager.skill_loadouts[hero][skill_slot]), 0, 9 if role == 0 else (8 if role == 2 else 7)))
- info.text = "Normale Treffer laden Skills auf (2 bis 5 Treffer).\nAlle 4 belegten Skills werden der Reihe nach automatisch genutzt.\nSpott und Gruppenschutz sind getrennte Tank-Skills.\nHeilung nur bei Bedarf; CC nur bei einem Boss-Cast."
+ info.text = "Normale Treffer laden Skills auf (2 bis 5 Treffer).\nAlle 4 belegten Skills werden der Reihe nach automatisch genutzt.\nSpott und Gruppenschutz sind getrennte Tank-Skills.\nUnterbrechung ist ein normaler Skill; nur aktive Boss-Casts werden gestoppt."
 
 func _apply() -> void:
  var hero: int = hero_selector.selected
