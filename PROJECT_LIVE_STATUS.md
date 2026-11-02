@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:53 UTC**
-Git-Stand: **0da879bd8274ac4be96d0e42e633c4ea1a049c8f** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:54 UTC**
+Git-Stand: **c814159ec3673c7667f170f6243cd06a10a60f0f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -30,6 +30,7 @@ Git-Stand: **0da879bd8274ac4be96d0e42e633c4ea1a049c8f** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 - `fe07814` (2026-11-02): Update graphics regression assertions for per-profile shadows and particles
 - `0b3dec0` (2026-11-02): Reduce dynamic shadow and particle costs on low and medium Android profiles
 - `147c0bd` (2026-11-02): Verify Android renderer, native export templates and GPU driver packaging safety
@@ -43,7 +44,6 @@ Git-Stand: **0da879bd8274ac4be96d0e42e633c4ea1a049c8f** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `9775fbe` (2026-11-02): Run Android graphics compatibility checks during Godot validation
-- `5a56320` (2026-11-02): ci(forest): run animation playback with same OpenGL renderer as asset import
 
 ## Bereichsübergreifende Änderungen
 
