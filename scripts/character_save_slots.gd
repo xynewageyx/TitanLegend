@@ -27,7 +27,14 @@ static func load_slot(registry: Dictionary, slot: int) -> Dictionary:
  var path: String = PROFILES.character_save_path(registry, slot)
  if path.is_empty():
   return {}
- return STORE.load_latest(path)
+ var data: Dictionary = STORE.load_latest(path)
+ if data.is_empty():
+  return {}
+ var profile: Dictionary = registry["characters"][slot]
+ if int(data.get("class_id", -1)) != int(profile.get("class_id", -2)) or int(data.get("role_id", -1)) != int(profile.get("role_id", -2)):
+  push_warning("Character save identity does not match the selected profile.")
+  return {}
+ return data
 
 static func create_slot_save(registry: Dictionary, slot: int) -> Error:
  var path: String = PROFILES.character_save_path(registry, slot)
