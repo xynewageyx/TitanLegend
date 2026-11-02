@@ -1,17 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 21:27 UTC**
-Git-Stand: **665dade3bc4348759cefdce967f972d8e410ccbb** auf Branch **main**
+Git-Stand: **062d9e329dd33efe6a71f857480de115c458f0c3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `062d9e3` (2026-11-02): ci(chibi): upload visual PNG preview gallery alongside eleven GLBs
+- `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
 - `3512624` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `1e71fb0` (2026-11-02): art(chibi): improve armored torso silhouette and attach head gem to head bone
 - `6462276` (2026-11-02): fix(talents): guard stale hero and malformed talent row during Android interaction
-- `593ed43` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
@@ -28,12 +29,12 @@ Git-Stand: **665dade3bc4348759cefdce967f972d8e410ccbb** auf Branch **main**
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `6462276` (2026-11-02): fix(talents): guard stale hero and malformed talent row during Android interaction
-- `cb2919a` (2026-11-02): test(talents): guard missing-prerequisite feedback and spent-point progress
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
 - `665dade` (2026-11-02): Preserve authored light and particle settings across graphics quality changes
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
@@ -43,6 +44,7 @@ Git-Stand: **665dade3bc4348759cefdce967f972d8e410ccbb** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `062d9e3` (2026-11-02): ci(chibi): upload visual PNG preview gallery alongside eleven GLBs
 - `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
 
 ## Bereichsübergreifende Änderungen
