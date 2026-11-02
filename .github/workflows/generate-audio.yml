@@ -1,0 +1,34 @@
+name: Generate original audio SFX
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/generate_audio_sfx.py'
+      - '.github/workflows/generate-audio.yml'
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate WAV assets
+        run: python3 tools/generate_audio_sfx.py
+      - name: Verify WAV headers and sound count
+        run: |
+          python3 - <<'PY'
+          import wave
+          from pathlib import Path
+          files = list(Path("assets/audio").rglob("*.wav"))
+          assert len(files) == 11, len(files)
+          for path in files:
+              with wave.open(str(path), "rb") as audio:
+                  assert audio.getnframes() > 0
+                  assert audio.getframerate() == 22050
+          print("11 audio files validated")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-legends-original-sfx
+          path: assets/audio/**/*.wav
+          retention-days: 30
