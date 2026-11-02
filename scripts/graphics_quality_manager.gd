@@ -88,18 +88,27 @@ func load_settings() -> void:
 	adaptive_scale = 1.0
 
 func _apply_scene_quality() -> void:
-	# Only affect optional visual nodes; gameplay and hit detection stay unchanged.
 	var root := get_tree().current_scene
 	if root == null:
 		return
-	for node in root.find_children("*", "DirectionalLight3D", true, false):
-		(node as DirectionalLight3D).shadow_enabled = shadows_enabled
-	for node in root.find_children("*", "OmniLight3D", true, false):
-		(node as OmniLight3D).shadow_enabled = shadows_enabled
-	for node in root.find_children("*", "SpotLight3D", true, false):
-		(node as SpotLight3D).shadow_enabled = shadows_enabled
+	for node in root.find_children("*", "Light3D", true, false):
+		_apply_visual_quality(node)
 	for node in root.find_children("*", "GPUParticles3D", true, false):
-		(node as GPUParticles3D).amount_ratio = 1.0 if effects_enabled else 0.35
+		_apply_visual_quality(node)
+
+func _apply_visual_quality(node: Node) -> void:
+	# Preserve each visual's authored settings, including intentionally disabled shadows.
+	if node is Light3D:
+		var light := node as Light3D
+		if not light.has_meta("titan_original_shadow"):
+			light.set_meta("titan_original_shadow", light.shadow_enabled)
+		light.shadow_enabled = shadows_enabled and bool(light.get_meta("titan_original_shadow"))
+	elif node is GPUParticles3D:
+		var particles := node as GPUParticles3D
+		if not particles.has_meta("titan_original_amount_ratio"):
+			particles.set_meta("titan_original_amount_ratio", particles.amount_ratio)
+		var original_ratio := float(particles.get_meta("titan_original_amount_ratio"))
+		particles.amount_ratio = original_ratio * (1.0 if effects_enabled else 0.35)
 
 func _on_scene_changed(_scene: Node) -> void:
 	_apply_scene_quality()
@@ -141,13 +150,5 @@ func _process(delta: float) -> void:
 		apply_settings()
 
 func _on_node_added(node: Node) -> void:
-	# Enemies, skill effects and landscape objects may spawn after scene_changed.
-	# Apply the active profile to each newly spawned visual without touching combat.
-	if node is DirectionalLight3D:
-		(node as DirectionalLight3D).shadow_enabled = shadows_enabled
-	elif node is OmniLight3D:
-		(node as OmniLight3D).shadow_enabled = shadows_enabled
-	elif node is SpotLight3D:
-		(node as SpotLight3D).shadow_enabled = shadows_enabled
-	elif node is GPUParticles3D:
-		(node as GPUParticles3D).amount_ratio = 1.0 if effects_enabled else 0.35
+	# Apply the selected profile to visuals spawned after the scene loads.
+	_apply_visual_quality(node)
