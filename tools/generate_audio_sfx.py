@@ -137,6 +137,26 @@ def render(path, duration, start, end, mode):
    wave_value += rng.uniform(-1, 1) * texture * (0.5 + 0.5 * math.sin(2 * math.pi * pulses * t) ** 2)
    if element in ("earth", "lightning", "fire", "chaos"):
     wave_value += rng.uniform(-1, 1) * 0.38 * math.exp(-32 * t)
+  if path.startswith("ambient/"):
+   # Seamless periodic atmosphere with distinct layers per biome.
+   # Integer cycle counts guarantee matching endpoints on repeated playback.
+   biome = path.split("/")[1].split(".")[0]
+   profiles = {
+    "fire": (9, 23, 0.42), "water": (5, 13, 0.18),
+    "earth": (4, 11, 0.30), "nature": (7, 19, 0.15),
+    "light": (12, 29, 0.08), "shadow": (3, 17, 0.25),
+    "wind": (6, 31, 0.35), "frost": (11, 37, 0.10),
+    "lightning": (14, 43, 0.32), "chaos": (8, 47, 0.40),
+   }
+   low_cycles, high_cycles, grit = profiles.get(biome, (7, 19, 0.2))
+   angle = 2 * math.pi * i / total
+   low = math.sin(angle * low_cycles) * 0.42
+   high = math.sin(angle * high_cycles) * 0.17
+   breath = 0.75 + 0.25 * math.sin(angle * 2)
+   # Harmonic texture stays loopable and avoids discontinuous random noise.
+   texture = math.sin(angle * (high_cycles + low_cycles)) * grit
+   wave_value = (low + high + texture) * breath
+   env = 1.0
   sample = int(max(-1, min(1, wave_value * env * 0.65)) * 32767)
   frames.extend(struct.pack("<h", sample))
  target = Path("assets/audio") / path
