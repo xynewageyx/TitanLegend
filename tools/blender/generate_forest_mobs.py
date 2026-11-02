@@ -730,8 +730,45 @@ def facial_depth_finish(creature):
     sphere("sculpted_chin",(0,front-.02,z-.23),(.21+depth*.30,depth*.65,.12+depth*.18),
            mat,20,14)
 
+def sculpted_surface_identity(creature):
+    """Lightweight species-specific surface geometry, readable at phone scale."""
+    bark=material("surface_bark",(.24,.16,.10))
+    bark_light=material("surface_bark_light",(.58,.39,.21))
+    fur=material("surface_fur",(.88,.66,.40))
+    moss=material("surface_moss",(.18,.51,.25))
+    spot=material("surface_fungal_spot",(.99,.90,.68))
+    if creature in ("forest_03_wurzelkrabbler","forest_elite_01_rindenwaechter","forest_boss_01_wurzelkoenig"):
+        zbase,scale=((.86,.7) if "03_" in creature else ((1.55,1.0) if "elite" in creature else (2.45,1.4)))
+        for i in range(7):
+            theta=2*math.pi*i/7
+            x=scale*.64*math.cos(theta)
+            y=scale*.48*math.sin(theta)
+            ridge=sphere("bark_grain",(x,y,zbase+.23*math.sin(i*2)),
+                         (.055*scale,.07*scale,.33*scale),bark_light,12,8)
+            ridge.rotation_euler[1]=.20*math.sin(i)
+    elif creature in ("forest_04_blattfuchs","forest_05_dorneneber","forest_elite_02_moosbestie"):
+        base_z=1.12 if "fox" in creature else (1.32 if "boar" in creature else 1.90)
+        radius=.43 if "fox" in creature else (.62 if "boar" in creature else .83)
+        for i in range(9):
+            theta=2*math.pi*i/9
+            tuft=sphere("fur_layer",(radius*math.cos(theta),.12+radius*.60*math.sin(theta),base_z+.10*math.sin(i)),
+                        (.15,.11,.18),fur if "fox" in creature else moss,12,8)
+            tuft.rotation_euler[1]=.25*math.sin(theta)
+    elif creature=="forest_02_pilzling":
+        for i in range(8):
+            theta=2*math.pi*i/8
+            sphere("cap_texture_spot",(.70*math.cos(theta),.54*math.sin(theta),1.90),
+                   (.10,.08,.035),spot,12,8)
+    elif creature in ("forest_01_mooshuepfer","forest_06_rankenwerfer"):
+        for i in range(6):
+            theta=2*math.pi*i/6
+            x=.47*math.cos(theta)
+            y=.29*math.sin(theta)
+            z=1.40 if "01_" in creature else 1.70
+            leaf_mesh("foliage_surface",(x,y,z),.27,.11,moss,bend=.07*math.sin(theta))
+
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);facial_depth_finish(name);sculpt_organic_silhouettes();organic_finish();cartoon_material_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);facial_depth_finish(name);sculpted_surface_identity(name);sculpt_organic_silhouettes();organic_finish();cartoon_material_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
