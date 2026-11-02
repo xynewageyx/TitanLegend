@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:10 UTC**
-Git-Stand: **6da9662dfe8b6c9f9c1e7a1bd2af582241eb8bec** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:13 UTC**
+Git-Stand: **f20621cb1fe8e3754214607094d7d80baec7a8c8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -30,6 +30,7 @@ Git-Stand: **6da9662dfe8b6c9f9c1e7a1bd2af582241eb8bec** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `f20621c` (2026-11-02): Apply graphics settings to scene shadows and particle budgets
 - `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
 - `b926a4a` (2026-11-02): Add persistent player-selectable graphics quality manager
 
@@ -37,12 +38,10 @@ Git-Stand: **6da9662dfe8b6c9f9c1e7a1bd2af582241eb8bec** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `3ff7124` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
-- `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ## Bereichsübergreifende Änderungen
 
