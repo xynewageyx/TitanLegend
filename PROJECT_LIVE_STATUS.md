@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:38 UTC**
-Git-Stand: **9ea32131aa2ccbef4b8ff622865fe153788d333c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:39 UTC**
+Git-Stand: **da8c0c28d911d2a49dbfeda312c0f8ffcd492852** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `da8c0c2` (2026-11-02): Bind local hero audio to authoritative team ownership and clear on switching
 - `9ea3213` (2026-11-02): art(chibi): add expressive eye glints brows and varied volumetric hair silhouettes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -23,6 +24,7 @@ Git-Stand: **9ea32131aa2ccbef4b8ff622865fe153788d333c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `da8c0c2` (2026-11-02): Bind local hero audio to authoritative team ownership and clear on switching
 - `9ea3213` (2026-11-02): art(chibi): add expressive eye glints brows and varied volumetric hair silhouettes
 - `539df86` (2026-11-02): fix(talents): let Android users inspect locked talents without purchasing them
 
@@ -33,10 +35,9 @@ Git-Stand: **9ea32131aa2ccbef4b8ff622865fe153788d333c** auf Branch **main**
 - `fcca378` (2026-11-02): Support owner-customizable moderation penalty proposals and rejection previews
 - `4d82215` (2026-11-02): Require three system warnings before owner-approved account ban requests
 - `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
-- `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `da8c0c2` (2026-11-02): Bind local hero audio to authoritative team ownership and clear on switching
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
