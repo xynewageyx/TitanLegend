@@ -3,12 +3,12 @@ on:
   push:
     paths:
       - 'scripts/chat/**'
-      - 'tests/test_chat_moderation.gd'
+      - 'tests/test_chat_moderation*.gd'
       - '.github/workflows/chat-moderation-validate.yml'
   pull_request:
     paths:
       - 'scripts/chat/**'
-      - 'tests/test_chat_moderation.gd'
+      - 'tests/test_chat_moderation*.gd'
       - '.github/workflows/chat-moderation-validate.yml'
   workflow_dispatch:
 permissions:
@@ -30,3 +30,4 @@ jobs:
           rm -rf original_update168
           godot --headless --path . --editor --import --quit
           godot --headless --path . --script res://tests/test_chat_moderation.gd
+          godot --headless --path . --script res://tests/test_chat_moderation_peer_authority.gd
