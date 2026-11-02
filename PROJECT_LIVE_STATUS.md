@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:40 UTC**
-Git-Stand: **f04ab3e9de73222d3c44c5dc6fefa9077cfbd26c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:41 UTC**
+Git-Stand: **7e53706155fd7d9d1fe3c6685c5ff6d3112df01e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,11 +10,9 @@ Git-Stand: **f04ab3e9de73222d3c44c5dc6fefa9077cfbd26c** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
 - `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
-- `5b6e4c2` (2026-11-02): fix(talents): validate selected hero and branch before reading touch details
-- `48c4a53` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `11570e2` (2026-11-02): test(forest): verify imported enemies contain real MeshInstance3D geometry
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -27,7 +25,6 @@ Git-Stand: **f04ab3e9de73222d3c44c5dc6fefa9077cfbd26c** auf Branch **main**
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
-- `5b6e4c2` (2026-11-02): fix(talents): validate selected hero and branch before reading touch details
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -39,13 +36,13 @@ Git-Stand: **f04ab3e9de73222d3c44c5dc6fefa9077cfbd26c** auf Branch **main**
 - `725c5cc` (2026-11-02): Avoid automatic graphics downscaling during scene startup and loading
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
+- `7e53706` (2026-11-02): Add server-owned peer authorization boundary for moderation requests
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
