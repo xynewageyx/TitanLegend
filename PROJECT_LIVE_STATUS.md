@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 04:04 UTC**
-Git-Stand: **fef5937d93817223d31dfec881fbdd35b393fac7** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 04:10 UTC**
+Git-Stand: **178fb03010bf5fc698c7cbf7d7312ff152128fc6** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -24,9 +24,8 @@ Git-Stand: **fef5937d93817223d31dfec881fbdd35b393fac7** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Gameplay — Gameplay-/Talent-Chat
+- \`178fb03\` (2026-11-02): ui(talents): explain row unlock requirements and max rank in talent button tooltips
 - \`ca52481\` (2026-11-01): ui(talents): show invested rank progress and completed talent trees on Android
-- \`92ac368\` (2026-11-01): test compatibility: retain explicit earned-point guard before talent capacity guard
-- \`17bc5f8\` (2026-11-01): feat(talents): expose remaining talent rank capacity without losing earned-point accounting
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
