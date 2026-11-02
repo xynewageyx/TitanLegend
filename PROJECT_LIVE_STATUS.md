@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 04:03 UTC**
-Git-Stand: **fa369fc4041407bbea0efbe7c7b8c78ee4499efc** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 04:04 UTC**
+Git-Stand: **fef5937d93817223d31dfec881fbdd35b393fac7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -32,7 +32,7 @@ Git-Stand: **fa369fc4041407bbea0efbe7c7b8c78ee4499efc** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine passenden Änderungen in den letzten 15 Commits.
+- \`fef5937\` (2026-11-02): ci: expect eleven hero specifications in asset toolchain
 
 ## Bereichsübergreifende Änderungen
 
