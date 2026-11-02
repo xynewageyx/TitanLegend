@@ -11,10 +11,13 @@ const CHARACTER_PROFILES = preload("res://scripts/character_profiles.gd")
 const CHARACTER_SAVE_SLOTS = preload("res://scripts/character_save_slots.gd")
 var SAVE_PATH: String = LEGACY_SAVE_PATH
 var active_character_slot: int = -1
+var character_switching_enabled: bool = false
 
 ## Call only before entering gameplay or after the old session has been saved.
 ## This changes the source for all SaveManager readers, without touching legacy data.
 func configure_character_save(slot: int) -> Error:
+ if not character_switching_enabled:
+  return ERR_BUSY
  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
  var path: String = CHARACTER_PROFILES.character_save_path(registry, slot)
  if path.is_empty():
@@ -23,9 +26,11 @@ func configure_character_save(slot: int) -> Error:
   return ERR_FILE_CORRUPT
  SAVE_PATH = path
  active_character_slot = slot
+ character_switching_enabled = false
  return OK
 
 func use_legacy_save() -> void:
+ character_switching_enabled = false
  SAVE_PATH = LEGACY_SAVE_PATH
  active_character_slot = -1
 var timer: Timer
