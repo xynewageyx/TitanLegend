@@ -43,12 +43,17 @@ func _initialize() -> void:
                 failures.append("%s: %s has zero duration" % [enemy, clip])
                 continue
             var has_transform_track := false
+            var has_keyframes := false
             for track in animation.get_track_count():
                 if animation.track_get_type(track) in [Animation.TYPE_POSITION_3D, Animation.TYPE_ROTATION_3D, Animation.TYPE_SCALE_3D]:
                     has_transform_track = true
-                    break
+                    if animation.track_get_key_count(track) >= 2:
+                        has_keyframes = true
             if not has_transform_track:
                 failures.append("%s: %s has no 3D motion tracks" % [enemy, clip])
+                continue
+            if not has_keyframes:
+                failures.append("%s: %s has no animated 3D keyframe sequence" % [enemy, clip])
                 continue
             player.play(clip)
             player.advance(0.0)
