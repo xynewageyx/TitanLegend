@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 19:10 UTC**
-Git-Stand: **48d5101e8e31f85a3fecc8a95305f035d6c87629** auf Branch **main**
+Git-Stand: **6da9662dfe8b6c9f9c1e7a1bd2af582241eb8bec** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -39,7 +39,6 @@ Git-Stand: **48d5101e8e31f85a3fecc8a95305f035d6c87629** auf Branch **main**
 ### Audio — Audio-Erstellung-Chat
 - `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 - `3ff7124` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `23ecd27` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
