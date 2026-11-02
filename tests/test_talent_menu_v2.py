@@ -69,6 +69,20 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("button.size_flags_horizontal = Control.SIZE_EXPAND_FILL", MENU)
         self.assertIn("points_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART", MENU)
 
+    def test_locked_talents_remain_inspectable_on_android(self):
+        self.assertIn("button.disabled = false", MENU)
+        self.assertIn("button.modulate = Color(0.65, 0.65, 0.65)", MENU)
+        self.assertIn("button.pressed.connect(_on_talent_pressed.bind(talent_index))", MENU)
+        self.assertIn("talent_detail_label.text =", MENU)
+
+    def test_talent_purchase_rechecks_live_eligibility(self):
+        start = MENU.index("func _on_talent_pressed(")
+        section = MENU[start:]
+        self.assertIn("TREES.can_upgrade(GameManager.character_level, build, selected_branch, talent_index)", section)
+        self.assertIn("if can_upgrade_now:", section)
+        self.assertIn("_upgrade(talent_index)", section)
+        self.assertNotIn("func _on_talent_pressed(talent_index: int, can_upgrade_talent: bool)", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
