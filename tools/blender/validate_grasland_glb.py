@@ -42,3 +42,18 @@ if triangle_count > 150000:
     print(f"WARNING: Forest preview has {triangle_count} triangles; profile on Android.")
 print(f"Landscape geometry: {triangle_count} triangles; {len(document['meshes'])} mesh objects")
 print(f"Landscape GLB OK: {len(names)} nodes, {len(document['meshes'])} meshes, {len(document['materials'])} materials")
+
+# Machine-readable performance baseline for CI and future Android comparisons.
+if len(sys.argv) > 2:
+    report_path = Path(sys.argv[2])
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps({
+        "source": str(path.name),
+        "nodes": len(names),
+        "meshes": len(document["meshes"]),
+        "materials": len(document["materials"]),
+        "triangles": triangle_count,
+        "glb_bytes": len(raw),
+        "triangle_warning_threshold": 150000,
+        "requires_android_fps_test": True
+    }, indent=2) + "\n", encoding="utf-8")
