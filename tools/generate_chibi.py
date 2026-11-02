@@ -53,11 +53,11 @@ def rig_and_animate():
   name=obj.name
   # Blender adds .001 to repeated names; side is determined by world X, not suffix.
   center_x=sum((obj.matrix_world @ vertex.co).x for vertex in obj.data.vertices)/max(1,len(obj.data.vertices))
-  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow")):
+  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Circlet")):
    target="Head"
-  elif name.startswith(("Hand","Arm")):
+  elif name.startswith(("Hand","Arm","Cuff","Glove")):
    target="Arm_L" if center_x < 0 else "Arm_R"
-  elif name.startswith(("Foot","Leg")):
+  elif name.startswith(("Foot","Leg","Boot")):
    target="Leg_L" if center_x < 0 else "Leg_R"
   else:
    target="Spine"
@@ -147,6 +147,9 @@ for idx,name in enumerate(NAMES):
   oval("Boot",(side*.19,-.065,.235),(.205,.26,.17),leather)
   oval("BootToe",(side*.19,-.245,.185),(.188,.10,.10),sole)
   oval("Cuff",(side*.43,-.025,1.04),(.17,.175,.075),cloth)
+  # Layered glove wraps make hand and forearm shapes visually coherent.
+  oval("Glove",(side*.47,-.045,.965),(.155,.145,.145),leather)
+  oval("GloveTrim",(side*.45,-.035,1.075),(.175,.17,.055),gold)
  # A face-frame fringe and sideburns soften the blocky cap silhouette.
  for side in (-1,1):
   oval("HairSide",(side*.39,-.10,2.015),(.13,.20,.21),hair)
