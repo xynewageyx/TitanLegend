@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 21:51 UTC**
-Git-Stand: **a45cfde517dfb821b05ef306d4a3379dde7b12c9** auf Branch **main**
+Git-Stand: **0b3dec02eaa14d0d946aaed680e5a5a2ee2f211f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -32,13 +32,14 @@ Git-Stand: **a45cfde517dfb821b05ef306d4a3379dde7b12c9** auf Branch **main**
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `0b3dec0` (2026-11-02): Reduce dynamic shadow and particle costs on low and medium Android profiles
 - `147c0bd` (2026-11-02): Verify Android renderer, native export templates and GPU driver packaging safety
 - `8fc1bf4` (2026-11-02): Apply graphics profile to scene root visuals as well as children
 - `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
@@ -47,7 +48,6 @@ Git-Stand: **a45cfde517dfb821b05ef306d4a3379dde7b12c9** auf Branch **main**
 - `9775fbe` (2026-11-02): Run Android graphics compatibility checks during Godot validation
 - `5a56320` (2026-11-02): ci(forest): run animation playback with same OpenGL renderer as asset import
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
-- `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
 
 ## Bereichsübergreifende Änderungen
 
