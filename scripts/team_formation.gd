@@ -365,9 +365,9 @@ func _on_attack_step_finished(hero_index: int) -> void:
 
 const COLORS = [Color("#c8d0df"), Color("#4f85d9"), Color("#a06dd8"), Color("#6bc37d")]
 func _ready() -> void:
- var talent_menu: CanvasLayer = TALENT_MENU_V2.new()
- talent_menu.name = "TalentMenuV2"
- add_child(talent_menu)
+ # The V2 talent data remains active, but its legacy CanvasLayer editor
+ # must not be spawned: it floats above every HUD modal on Android.
+ # Talents are opened exclusively through HUD/TalentMenu.
  add_to_group("talent_team")
  _load_classes()
  _load_roles()
