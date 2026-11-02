@@ -26,20 +26,30 @@ func _ready() -> void:
  panel.custom_minimum_size = Vector2.ZERO
  panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 20, 4))
  add_child(panel)
+ var layout := VBoxContainer.new()
+ layout.add_theme_constant_override("separation", 10)
+ panel.add_child(layout)
+ var header := HBoxContainer.new()
+ layout.add_child(header)
+ var title := Label.new()
+ title.text = "✦ HELDEN & KLASSEN"
+ title.add_theme_font_size_override("font_size", 26)
+ title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ header.add_child(title)
+ var header_close := Button.new()
+ header_close.text = "✕"
+ header_close.custom_minimum_size = Vector2(58, 56)
+ header_close.pressed.connect(func(): visible = false)
+ header.add_child(header_close)
  var scroll := ScrollContainer.new()
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
- panel.add_child(scroll)
+ layout.add_child(scroll)
  var v := VBoxContainer.new()
  v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.add_child(v)
  v.add_theme_constant_override("separation", 14)
- # Keep all content inside the ScrollContainer; a second PanelContainer child overlaps it.
- var title := Label.new()
- title.text = "✦ HELDEN & KLASSEN"
- title.add_theme_font_size_override("font_size", 28)
- v.add_child(title)
  var hero_heading := Label.new()
  hero_heading.text = "◆ HELDENPLATZ"
  v.add_child(hero_heading)
@@ -81,11 +91,11 @@ func _ready() -> void:
  var apply := Button.new()
  apply.text = "Klasse und Rolle uebernehmen"
  apply.custom_minimum_size.y = 75
- v.add_child(apply)
+ layout.add_child(apply)
  var close := Button.new()
  close.text = "Schliessen"
  close.custom_minimum_size.y = 65
- v.add_child(close)
+ layout.add_child(close)
  SKIN.style_menu_tree(panel)
  formation_card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 18, 3))
  class_card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 18, 3))
