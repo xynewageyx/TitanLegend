@@ -1,16 +1,15 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:09 UTC**
-Git-Stand: **c74d207f3e6f05d953c7a92fbd01d1d4470fff74** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:10 UTC**
+Git-Stand: **f9e225ff3998536c2f25016fa588f6bb37ecab6a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
 - `512096f` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `43006d9` (2026-11-02): ci(chibi): install Mesa EGL libraries and run Blender preview under virtual display
-- `99601d5` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -31,6 +30,7 @@ Git-Stand: **c74d207f3e6f05d953c7a92fbd01d1d4470fff74** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
 - `6eae66b` (2026-11-02): Avoid redundant viewport render scale writes during graphics updates
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
@@ -42,11 +42,11 @@ Git-Stand: **c74d207f3e6f05d953c7a92fbd01d1d4470fff74** auf Branch **main**
 - `e92b526` (2026-11-02): Preserve ambience crossfade gains when changing volume or switching biomes (#13)
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `43006d9` (2026-11-02): ci(chibi): install Mesa EGL libraries and run Blender preview under virtual display
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `f9e225f` (2026-11-02): test(forest): detect animation clips whose 3D keyframes never change
 
 ## Regeln für alle Fach-Chats
 
