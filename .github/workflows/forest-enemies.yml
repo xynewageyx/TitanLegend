@@ -106,7 +106,7 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: '1'
         run: |
           set -o pipefail
-          xvfb-run -a godot --headless --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee godot-forest-animation-test.log
+          xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee godot-forest-animation-test.log
           grep -q 'FOREST ANIMATION TEST PASSED: 36 clips on 9 enemies' godot-forest-animation-test.log
       - name: Upload forest animation test log
         if: always()
