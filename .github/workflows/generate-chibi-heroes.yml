@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Blender
-        run: sudo apt-get update && sudo apt-get install -y blender python3-numpy
+        run: sudo apt-get update && sudo apt-get install -y blender python3-numpy libegl1 libgl1 libgl1-mesa-dri libosmesa6 xvfb
       - name: Generate all eleven hero models
         run: blender -b --python tools/generate_chibi.py
       - name: Verify GLB outputs
@@ -35,7 +35,7 @@ jobs:
           path: assets/heroes/chibi/*.glb
           if-no-files-found: warn
       - name: Render visual previews of all eleven heroes
-        run: blender -b --python tools/render_chibi_previews.py
+        run: xvfb-run -a blender -b --python tools/render_chibi_previews.py
       - name: Upload character preview images
         if: always()
         uses: actions/upload-artifact@v4
