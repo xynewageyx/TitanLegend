@@ -67,6 +67,14 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_autosave_routes_active_character_through_validated_slot(self):
+        manager = self.read_script("save_manager.gd")
+        self.assertIn('if active_character_slot >= 0:', manager)
+        self.assertIn('if profile_path != SAVE_PATH:', manager)
+        self.assertIn('data["class_id"]', manager)
+        self.assertIn('data["role_id"]', manager)
+        self.assertIn('CHARACTER_SAVE_SLOTS.save_slot(registry, active_character_slot, data)', manager)
+
     def test_character_selection_reads_progress_from_own_save(self):
         selection = self.read_script("character_selection.gd")
         self.assertIn('SAVE_SLOTS.load_slot(registry, slot)', selection)
