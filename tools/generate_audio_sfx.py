@@ -102,6 +102,25 @@ def render(path, duration, start, end, mode):
   wave_value = math.sin(phase) * (0.8 if mode == "tone" else 0.3)
   if mode == "noise":
    wave_value += rng.uniform(-1, 1) * 0.65
+  # Layer subtle class-specific harmonics and percussive transients so attacks
+  # and abilities sound less alike without adding files or dependencies.
+  if path.startswith("classes/"):
+   class_name = path.split("/")[1].split("_")[0]
+   is_skill = path.endswith("_skill.wav")
+   character = {
+    "warrior": (0.42, 1.25), "paladin": (0.30, 2.0),
+    "druid": (0.18, 1.5), "shaman": (0.26, 2.5),
+    "hunter": (0.38, 3.0), "rogue": (0.48, 4.0),
+    "mage": (0.32, 2.8), "warlock": (0.36, 1.35),
+    "summoner": (0.22, 1.8), "priest": (0.20, 2.2),
+    "brawler": (0.52, 1.15),
+   }
+   strength, harmonic = character.get(class_name, (0.2, 2.0))
+   wave_value += math.sin(phase * harmonic) * strength * (0.65 if is_skill else 1.0)
+   if class_name in ("warrior", "hunter", "rogue", "brawler"):
+    wave_value += rng.uniform(-1, 1) * strength * math.exp(-25 * t)
+   if is_skill:
+    wave_value += math.sin(phase * 0.5) * 0.16 * math.sin(math.pi * t)
   sample = int(max(-1, min(1, wave_value * env * 0.65)) * 32767)
   frames.extend(struct.pack("<h", sample))
  target = Path("assets/audio") / path
