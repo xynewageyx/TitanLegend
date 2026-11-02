@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 18:28 UTC**
-Git-Stand: **8eeaad205f1183e009bb8944f59c47ac40d8f9c2** auf Branch **main**
+Git-Stand: **e9c479a6a850f58c503cef18be69525971637d20** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -37,15 +37,15 @@ Git-Stand: **8eeaad205f1183e009bb8944f59c47ac40d8f9c2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
+- `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
 - `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `76d95be` (2026-11-02): Add distinct procedural attack audio for all eleven hero classes
-- `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
 - `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
-- `e4e50e0` (2026-11-02): Add free procedural audio generation and CI artifacts
 
 ## Bereichsübergreifende Änderungen
 
