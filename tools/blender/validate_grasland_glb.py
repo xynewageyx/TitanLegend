@@ -23,4 +23,22 @@ for prefix, minimum in (("Tree trunk", 44), ("Stone ", 65), ("Grass tuft", 170),
     assert count >= minimum, f"{prefix}: expected >= {minimum}, got {count}"
 assert len(document.get("meshes", [])) > 0, "GLB contains no meshes"
 assert len(document.get("materials", [])) >= 8, "Insufficient material variety"
+# glTF accessor counts allow a renderer-independent mobile geometry budget.
+accessors = document.get("accessors", [])
+triangle_count = 0
+for mesh in document["meshes"]:
+    for primitive in mesh.get("primitives", []):
+        mode = primitive.get("mode", 4)
+        assert mode == 4, f"Expected triangulated geometry, got mode {mode}"
+        index = primitive.get("indices")
+        if index is not None:
+            count = accessors[index]["count"]
+        else:
+            count = accessors[primitive["attributes"]["POSITION"]]["count"]
+        assert count % 3 == 0, "Triangle primitive index count is not divisible by 3"
+        triangle_count += count // 3
+# A conservative warning, not an artificial rejection: final FPS needs Android hardware.
+if triangle_count > 150000:
+    print(f"WARNING: Forest preview has {triangle_count} triangles; profile on Android.")
+print(f"Landscape geometry: {triangle_count} triangles; {len(document['meshes'])} mesh objects")
 print(f"Landscape GLB OK: {len(names)} nodes, {len(document['meshes'])} meshes, {len(document['materials'])} materials")
