@@ -107,13 +107,22 @@ func _apply_visual_quality(node: Node) -> void:
 		var light := node as Light3D
 		if not light.has_meta("titan_original_shadow"):
 			light.set_meta("titan_original_shadow", light.shadow_enabled)
-		light.shadow_enabled = shadows_enabled and bool(light.get_meta("titan_original_shadow"))
+		var allow_shadow := shadows_enabled
+		# On weaker devices, only directional shadows are retained in Medium.
+		if quality == "medium" and not (light is DirectionalLight3D):
+			allow_shadow = false
+		light.shadow_enabled = allow_shadow and bool(light.get_meta("titan_original_shadow"))
 	elif node is GPUParticles3D:
 		var particles := node as GPUParticles3D
 		if not particles.has_meta("titan_original_amount_ratio"):
 			particles.set_meta("titan_original_amount_ratio", particles.amount_ratio)
 		var original_ratio := float(particles.get_meta("titan_original_amount_ratio"))
-		particles.amount_ratio = original_ratio * (1.0 if effects_enabled else 0.35)
+		var effect_multiplier := 1.0
+		if not effects_enabled:
+			effect_multiplier = 0.20 if quality == "low" else 0.35
+		elif quality == "high":
+			effect_multiplier = 0.75
+		particles.amount_ratio = original_ratio * effect_multiplier
 
 func _on_scene_changed(_scene: Node) -> void:
 	_reset_adaptive_sampling()
