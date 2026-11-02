@@ -165,14 +165,18 @@ func _select(slot: int) -> void:
  if not SaveManager.character_switching_enabled:
   message_label.text = "Charakterwechsel ist während einer aktiven Spielsitzung gesperrt."
   return
- var switch_error: Error = SaveManager.configure_character_save(slot)
- if switch_error != OK:
-  message_label.text = "Spielstandwechsel fehlgeschlagen (%d)." % switch_error
-  return
+ # Persist the selection first. If this fails, the live save target stays unchanged.
  var result: Error = PROFILES.save_registry(candidate)
  if result != OK:
-  SaveManager.use_legacy_save()
   message_label.text = "Charakterauswahl konnte nicht gespeichert werden (%d)." % result
+  return
+ var switch_error: Error = SaveManager.configure_character_save(slot)
+ if switch_error != OK:
+  # Restore the previous registry; do not redirect an existing session to legacy.
+  var rollback_error: Error = PROFILES.save_registry(registry)
+  if rollback_error != OK:
+   push_error("Character selection rollback failed: " + str(rollback_error))
+  message_label.text = "Spielstandwechsel fehlgeschlagen (%d)." % switch_error
   return
  registry = candidate
  character_selected.emit(slot)
