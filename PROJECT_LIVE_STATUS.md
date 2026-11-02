@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 04:00 UTC**
-Git-Stand: **2b53bd5b8297675640f83dd500aded9427343d5c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 04:01 UTC**
+Git-Stand: **cc51c5217d438045fe4ef8cbd7e09c40b883399a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **2b53bd5b8297675640f83dd500aded9427343d5c** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
-- \`dcc9150\` (2026-11-01): Correct left-right limb skinning by mesh coordinates and parent generated meshes to rig
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
@@ -36,9 +35,9 @@ Git-Stand: **2b53bd5b8297675640f83dd500aded9427343d5c** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- \`cc51c52\` (2026-11-02): art: align character proportions and shading with Ulala-like chibi direction
 - \`2b53bd5\` (2026-11-02): docs: define stylized 3D character art and animation standard
 - \`b5d6c3a\` (2026-11-01): ci(coordination): monitor skills and animations changes as dedicated area
-- \`e49f80b\` (2026-11-01): Check all four limb skin-weight groups after GLB round-trip
 
 ## Regeln für alle Fach-Chats
 
