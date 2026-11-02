@@ -1,9 +1,17 @@
 name: Generate original audio SFX
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/audio_event_catalog.gd'
+      - 'scripts/audio_manager.gd'
+      - 'scripts/battle_manager.gd'
+      - 'tools/generate_audio_sfx.py'
+      - '.github/workflows/generate-audio.yml'
   push:
     paths:
       - 'tools/generate_audio_sfx.py'
+      - 'scripts/audio_event_catalog.gd'
       - '.github/workflows/generate-audio.yml'
 permissions:
   contents: read
