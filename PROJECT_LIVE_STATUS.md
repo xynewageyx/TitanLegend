@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 19:16 UTC**
-Git-Stand: **6623a8209fd0c4e31bc7b1a6b92902661d02b637** auf Branch **main**
+Git-Stand: **5f058791940d7c8380d2851e47b855093cc1633d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -32,10 +32,9 @@ Git-Stand: **6623a8209fd0c4e31bc7b1a6b92902661d02b637** auf Branch **main**
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `f20621c` (2026-11-02): Apply graphics settings to scene shadows and particle budgets
 - `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
-- `b926a4a` (2026-11-02): Add persistent player-selectable graphics quality manager
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `5f05879` (2026-11-02): Add instantiable moderation administrator screen scene
 
 ### Audio — Audio-Erstellung-Chat
 - `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
