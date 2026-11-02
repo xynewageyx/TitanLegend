@@ -34,6 +34,12 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('shade.mouse_filter = Control.MOUSE_FILTER_STOP', talent)
         self.assertIn('scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED', talent)
 
+    def test_legacy_canvaslayer_talent_editor_is_not_spawned(self):
+        team = self.read_script("team_formation.gd")
+        self.assertNotIn('TALENT_MENU_V2.new()', team)
+        self.assertNotIn('talent_menu.name = "TalentMenuV2"', team)
+        self.assertIn('set_meta("talent_builds_v2"', team)
+
     def test_obsolete_talent_shortcut_hidden(self):
         ui = self.read_script("ui_manager.gd")
         self.assertIn('func _suppress_legacy_shortcut()', ui)
