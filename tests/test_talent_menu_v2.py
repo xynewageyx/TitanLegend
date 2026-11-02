@@ -83,6 +83,18 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("_upgrade(talent_index)", section)
         self.assertNotIn("func _on_talent_pressed(talent_index: int, can_upgrade_talent: bool)", MENU)
 
+    def test_locked_talent_details_explain_exact_missing_points(self):
+        self.assertIn("var invested_before: int = 0", MENU)
+        self.assertIn("for index in range(row * 3):", MENU)
+        self.assertIn("row * 5 - invested_before", MENU)
+        self.assertIn("Keine freien Talentpunkte", MENU)
+        self.assertIn("Maximalrang erreicht", MENU)
+
+    def test_talent_menu_shows_spent_and_remaining_capacity(self):
+        self.assertIn("TREES.spent_points(build)", MENU)
+        self.assertIn("TREES.remaining_rank_capacity(build)", MENU)
+        self.assertIn("Talentbaum voll", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
