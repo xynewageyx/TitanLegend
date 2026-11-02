@@ -1,24 +1,20 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:04 UTC**
-Git-Stand: **c9c5ed2925e0c31c9e5d653a55522674b2ff10bb** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:05 UTC**
+Git-Stand: **8394f5c4e8debc03c82f977a19260b98c3494da6** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `d8d7b0d` (2026-11-02): Generate eleven original chibi hero GLB assets
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `3ff7124` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `23ecd27` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `7ebbed1` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `7b328dd` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -37,7 +33,6 @@ Git-Stand: **c9c5ed2925e0c31c9e5d653a55522674b2ff10bb** auf Branch **main**
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c14c019` (2026-11-02): Connect moderation admin panel signals to authenticated gateway adapter
-- `8efeb19` (2026-11-02): Add fail-closed admin moderation gateway with server-side owner identity resolution
 
 ### Audio — Audio-Erstellung-Chat
 - `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
