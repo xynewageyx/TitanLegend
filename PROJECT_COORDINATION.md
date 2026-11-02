@@ -69,3 +69,8 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 
 ## Audio-Erstellung (2026-11-02)
 - **Audio-Erstellung (neuer Fach-Chat):** Musik, Umgebungsgeräusche, Kampf-/Skill-SFX, UI-Sounds, Audio-Mixing und Godot-Audio-Integration; stimmt Skill-Sounds mit Skills-und-Animationen, Gebietsatmosphäre mit Landschaft und UI-Sounds mit UI ab. Nur eigene oder entsprechend lizenzierte Audio-Assets verwenden.
+
+## Titan Chat / Moderation (2026-11-02)
+- **Titan-Chat (neuer Fach-Chat):** Ingame-Chat, Chatkanäle, Nachrichtenübermittlung, Schimpfwortfilter, Verwarnungen, Moderationsprotokoll und Sperrverwaltung.
+- **Moderationsregeln:** zunächst drei Systemverwarnungen; danach bei erneuten Verstößen abgestufte Sperren von 2 Stunden, 5 Stunden, 24 Stunden und 7 Tagen. Sperren bedürfen der Freigabe durch den Spielbetreiber; der Betreiber kann die Strafdauer ändern. Zur Prüfung muss ein zweckgebundener, zugriffsgeschützter Chatverlaufs-Auszug bereitstehen; Aufbewahrung und Zugriff datensparsam gestalten.
+- **Schnittstellen:** Abstimmung mit UI für Chatoberfläche, mit Multiplayer/Backend für serverseitige Durchsetzung und mit Audio für Benachrichtigungstöne. Andere Fach-Chats sollen keine parallelen Chat- oder Moderationssysteme entwickeln.
