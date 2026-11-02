@@ -59,6 +59,8 @@ def rig_and_animate():
    target="Arm_L" if center_x < 0 else "Arm_R"
   elif name.startswith(("Foot","Leg","Boot")):
    target="Leg_L" if center_x < 0 else "Leg_R"
+  elif name.startswith(("Belt","Tunic","Chest","HeadGem")):
+   target="Head" if name.startswith("HeadGem") else "Spine"
   else:
    target="Spine"
   group=obj.vertex_groups.new(name=target)
@@ -156,7 +158,8 @@ for idx,name in enumerate(NAMES):
  if name in ("warrior","paladin","brawler"):
   for side in (-1,1):
    oval("ArmPauldron",(side*.40,0,1.43),(.23,.24,.17),gold)
-  oval("ChestCrest",(0,-.28,1.22),(.20,.07,.25),gold)
+  oval("ChestCrest",(0,-.33,1.22),(.20,.07,.25),gold)
+  oval("ArmorCollar",(0,-.05,1.43),(.32,.25,.10),gold)
  if name in ("druid","shaman","priest"):
   oval("HeadCirclet",(0,-.03,2.16),(.42,.38,.065),gold)
   oval("ChestCharm",(0,-.29,1.12),(.13,.08,.18),cloth)
