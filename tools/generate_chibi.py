@@ -55,9 +55,9 @@ def rig_and_animate():
   center_x=sum((obj.matrix_world @ vertex.co).x for vertex in obj.data.vertices)/max(1,len(obj.data.vertices))
   if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")):
    target="Head"
-  elif "Hand" in name:
+  elif name.startswith(("Hand","Arm")):
    target="Arm_L" if center_x < 0 else "Arm_R"
-  elif "Foot" in name:
+  elif name.startswith(("Foot","Leg")):
    target="Leg_L" if center_x < 0 else "Leg_R"
   else:
    target="Spine"
@@ -106,8 +106,10 @@ for idx,name in enumerate(NAMES):
   oval("EyeWhite",(x,-.37,1.90),(.13,.035,.16),white)
   oval("Iris",(x,-.405,1.90),(.075,.018,.11),dark)
   oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
-  oval("Hand",(side*.47,-.02,.94),(.12,.12,.13),skin)
-  oval("Foot",(side*.19,-.1,.23),(.15,.23,.12),skin)
+  oval("Arm",(side*.40,0,1.19),(.14,.16,.32),skin)
+  oval("Hand",(side*.47,-.02,.94),(.15,.14,.15),skin)
+  oval("Leg",(side*.19,0,.49),(.16,.17,.28),skin)
+  oval("Foot",(side*.19,-.1,.23),(.19,.27,.15),skin)
  for k in range(5+idx%3):
   x=(k-2)*.15
   lock=loft("HairLock",[(2.04,.07,.08,-.29),(2.17,.10,.11,-.26),(2.29,.08,.08,-.18),(2.36,.01,.01,-.12)],hair)
