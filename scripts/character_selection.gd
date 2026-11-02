@@ -124,7 +124,11 @@ func _create() -> void:
   message_label.text = "Bitte gültigen Namen, Klasse und Rolle auswählen."
   return
  var save_error: Error = SAVE_SLOTS.create_slot_save(candidate, creation_slot)
- if save_error != OK:
+ if save_error == ERR_ALREADY_EXISTS:
+  if not SAVE_SLOTS.recover_pending_creation(candidate, creation_slot):
+   message_label.text = "Dieser Platz enthält bereits einen anderen Spielstand. Nichts wurde überschrieben."
+   return
+ elif save_error != OK:
   message_label.text = "Spielstand konnte nicht erstellt werden (%d)." % save_error
   return
  var result: Error = PROFILES.save_registry(candidate)
