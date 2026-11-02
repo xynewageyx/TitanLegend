@@ -76,7 +76,20 @@ def main():
         if "(coordination)" in commit["subject"].lower() or all(path in {"PROJECT_COORDINATION.md", "PROJECT_LIVE_STATUS.md", "VISUAL_QUALITY_GATE.md", "tools/update_project_status.py", ".github/workflows/project-coordination.yml"} for path in commit["files"]):
             continue
         subject = commit["subject"].lower()
-        matched = [name for name, prefixes in AREAS.items() if any(f.startswith(p) for f in commit["files"] for p in prefixes) or any(hint in subject for hint in SUBJECT_HINTS[name])]
+        # Explicit audio work often mentions biomes, ambient landscapes or gameplay.
+        # Prefer its primary subject over incidental keyword matches; keep genuine
+        # cross-area edits when they touch files owned by other areas.
+        path_matches = {
+            name for name, prefixes in AREAS.items()
+            if any(f.startswith(p) for f in commit["files"] for p in prefixes)
+        }
+        subject_matches = {
+            name for name, hints in SUBJECT_HINTS.items()
+            if any(hint in subject for hint in hints)
+        }
+        if "Audio" in subject_matches:
+            subject_matches -= {"Landschaften", "Gameplay", "Integration/CI"}
+        matched = [name for name in AREAS if name in path_matches or name in subject_matches]
         if not matched:
             shared.append(commit)
         else:
