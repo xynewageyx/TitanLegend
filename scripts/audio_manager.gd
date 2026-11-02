@@ -76,3 +76,21 @@ func stop_bgm() -> void:
 func stop_sfx() -> void:
  for player in effects:
   player.stop()
+
+# Named audio events keep gameplay independent from asset paths.
+const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
+
+func play_event(event_name: String) -> void:
+ var stream: AudioStream = AUDIO_EVENTS.load_event(event_name)
+ if stream == null:
+  return
+ if event_name.begins_with("music_"):
+  play_bgm(stream)
+ else:
+  play_sfx(stream)
+
+func play_combat_hit(is_critical: bool = false) -> void:
+ play_event("combat_critical" if is_critical else "combat_hit")
+
+func play_interrupt() -> void:
+ play_event("combat_interrupt")
