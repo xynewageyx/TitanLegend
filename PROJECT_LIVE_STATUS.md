@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:10 UTC**
-Git-Stand: **65e31d0101163a9dd26350ee9ab485c269a8be50** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:11 UTC**
+Git-Stand: **2b822ce53268dc83534e8fa8a6ef63f6b455d9ab** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -14,7 +14,7 @@ Git-Stand: **65e31d0101163a9dd26350ee9ab485c269a8be50** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `e92b526` (2026-11-02): Preserve ambience crossfade gains when changing volume or switching biomes (#13)
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -37,8 +37,8 @@ Git-Stand: **65e31d0101163a9dd26350ee9ab485c269a8be50** auf Branch **main**
 - `4dffb9a` (2026-11-02): Add authoritative moderation RPC transport with sender-derived permissions
 
 ### Audio — Audio-Erstellung-Chat
+- `2b822ce` (2026-11-02): Give each class layered harmonic and transient sound signatures (#15)
 - `0524569` (2026-11-02): Cache 24 recently used audio streams for Android combat (#14)
-- `e92b526` (2026-11-02): Preserve ambience crossfade gains when changing volume or switching biomes (#13)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
