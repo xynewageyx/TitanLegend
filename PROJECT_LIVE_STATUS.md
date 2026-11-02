@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:16 UTC**
-Git-Stand: **cb2919ae090fd3de1c59a1f6effad7967e1a823c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:17 UTC**
+Git-Stand: **64622761cb6c48ffc5188954f3abe4bc390377ee** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `6462276` (2026-11-02): fix(talents): guard stale hero and malformed talent row during Android interaction
 - `593ed43` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `879746a` (2026-11-02): fix(chibi): skin boots gloves and cuffs to correct animated limb bones
 - `4335c12` (2026-11-02): Generate eleven original chibi hero GLB assets
@@ -23,9 +24,10 @@ Git-Stand: **cb2919ae090fd3de1c59a1f6effad7967e1a823c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `4574a8a` (2026-11-02): Remove live FPS and render-scale readout from graphics menu
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `6462276` (2026-11-02): fix(talents): guard stale hero and malformed talent row during Android interaction
 - `cb2919a` (2026-11-02): test(talents): guard missing-prerequisite feedback and spent-point progress
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
 
@@ -35,7 +37,6 @@ Git-Stand: **cb2919ae090fd3de1c59a1f6effad7967e1a823c** auf Branch **main**
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d8b249a` (2026-11-02): Add regression tests for graphics profiles and hidden FPS display
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
-- `4574a8a` (2026-11-02): Remove live FPS and render-scale readout from graphics menu
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
