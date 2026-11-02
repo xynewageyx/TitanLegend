@@ -103,6 +103,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("talent_index >= build[selected_branch].size()", detail)
         self.assertIn("build[selected_branch].size() != TREES.TALENTS_PER_BRANCH", press)
 
+    def test_refresh_normalizes_saved_talents_and_picker_selection(self):
+        refresh = MENU[MENU.index("func _refresh("):MENU.index("func _upgrade(")]
+        self.assertIn("TREES.validate_build(level, team.get_talent_build_v2(selected_hero))", refresh)
+        self.assertIn("hero_picker.select(selected_hero)", refresh)
+        self.assertIn("branch_picker.select(selected_branch)", refresh)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
