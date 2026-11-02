@@ -64,6 +64,19 @@ SOUNDS.update({
  "elements/chaos.wav": (0.82, 480, 55, "noise"),
 })
 SOUNDS["elements/water.wav"] = (0.68, 540, 165, "noise")
+# Short, lightweight ambience beds loop in Godot; these remain placeholder audio.
+SOUNDS.update({
+ "ambient/fire.wav": (2.0, 110, 80, "noise"),
+ "ambient/water.wav": (2.0, 149, 106, "tone"),
+ "ambient/earth.wav": (2.0, 188, 132, "tone"),
+ "ambient/nature.wav": (2.0, 227, 158, "noise"),
+ "ambient/light.wav": (2.0, 266, 184, "tone"),
+ "ambient/shadow.wav": (2.0, 305, 210, "tone"),
+ "ambient/wind.wav": (2.0, 344, 236, "noise"),
+ "ambient/frost.wav": (2.0, 383, 262, "tone"),
+ "ambient/lightning.wav": (2.0, 422, 288, "tone"),
+ "ambient/chaos.wav": (2.0, 461, 314, "noise"),
+})
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
