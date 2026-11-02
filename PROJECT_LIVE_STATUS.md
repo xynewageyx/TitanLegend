@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 22:10 UTC**
-Git-Stand: **f9e225ff3998536c2f25016fa588f6bb37ecab6a** auf Branch **main**
+Git-Stand: **65e31d0101163a9dd26350ee9ab485c269a8be50** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **f9e225ff3998536c2f25016fa588f6bb37ecab6a** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
-- `512096f` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -24,7 +23,7 @@ Git-Stand: **f9e225ff3998536c2f25016fa588f6bb37ecab6a** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `871e88b` (2026-11-02): fix(talents): use validated build for locked talent detail explanations
+- `65e31d0` (2026-11-02): fix(talents): validate latest build before mobile tap purchase
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
