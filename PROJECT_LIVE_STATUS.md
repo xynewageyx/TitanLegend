@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:37 UTC**
-Git-Stand: **539df86b4144d874def25266284be9dd0a7becab** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:38 UTC**
+Git-Stand: **9ea32131aa2ccbef4b8ff622865fe153788d333c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `9ea3213` (2026-11-02): art(chibi): add expressive eye glints brows and varied volumetric hair silhouettes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -23,6 +23,7 @@ Git-Stand: **539df86b4144d874def25266284be9dd0a7becab** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `9ea3213` (2026-11-02): art(chibi): add expressive eye glints brows and varied volumetric hair silhouettes
 - `539df86` (2026-11-02): fix(talents): let Android users inspect locked talents without purchasing them
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
@@ -33,7 +34,6 @@ Git-Stand: **539df86b4144d874def25266284be9dd0a7becab** auf Branch **main**
 - `4d82215` (2026-11-02): Require three system warnings before owner-approved account ban requests
 - `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
 - `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
-- `eaa6a25` (2026-11-02): Add standalone Titan Legends chat channel model
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
