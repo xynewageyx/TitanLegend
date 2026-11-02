@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:32 UTC**
-Git-Stand: **d5811f438bb5f07017364bb598e4cf667f4a8731** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:38 UTC**
+Git-Stand: **2d6db4360a9b712d71f061753d7a67517161263a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -34,9 +34,9 @@ Git-Stand: **d5811f438bb5f07017364bb598e4cf667f4a8731** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `2d6db43` (2026-11-02): Reset adaptive FPS sampling after scene transitions
 - `725c5cc` (2026-11-02): Avoid automatic graphics downscaling during scene startup and loading
 - `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
-- `665dade` (2026-11-02): Preserve authored light and particle settings across graphics quality changes
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
