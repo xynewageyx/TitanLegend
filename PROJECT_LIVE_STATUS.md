@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:08 UTC**
-Git-Stand: **4dffb9aa6057bb1c38edcab2ec246901331a1740** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:09 UTC**
+Git-Stand: **c74d207f3e6f05d953c7a92fbd01d1d4470fff74** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,7 +11,6 @@ Git-Stand: **4dffb9aa6057bb1c38edcab2ec246901331a1740** auf Branch **main**
 - `512096f` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `43006d9` (2026-11-02): ci(chibi): install Mesa EGL libraries and run Blender preview under virtual display
 - `99601d5` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -33,9 +32,9 @@ Git-Stand: **4dffb9aa6057bb1c38edcab2ec246901331a1740** auf Branch **main**
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `6eae66b` (2026-11-02): Avoid redundant viewport render scale writes during graphics updates
-- `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `c74d207` (2026-11-02): Wire Android moderation admin controller to authoritative RPC client
 - `4dffb9a` (2026-11-02): Add authoritative moderation RPC transport with sender-derived permissions
 
 ### Audio — Audio-Erstellung-Chat
