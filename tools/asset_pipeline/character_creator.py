@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-CLASSES = ['Warrior','Paladin','Berserker','Assassin','Hunter','Mage','Warlock','Druid','Priest','Shaman']
+CLASSES = ['Warrior','Paladin','Druid','Shaman','Hunter','Rogue','Mage','Warlock','Summoner','Priest','Brawler']
 OUT = Path(__file__).parent / 'generated' / 'heroes.json'
 
 def main():
