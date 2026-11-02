@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:45 UTC**
-Git-Stand: **6719bd79d97e3a02bf69186ba2a8f8736e22e0e2** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:46 UTC**
+Git-Stand: **a3173865454f84b58fe3d88600f3e15dffdda26e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,6 +12,7 @@ Git-Stand: **6719bd79d97e3a02bf69186ba2a8f8736e22e0e2** auf Branch **main**
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 - `11570e2` (2026-11-02): test(forest): verify imported enemies contain real MeshInstance3D geometry
 
 ### Landschaften — Landschaften-Chat
@@ -24,17 +25,17 @@ Git-Stand: **6719bd79d97e3a02bf69186ba2a8f8736e22e0e2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 - `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
-- `07c5bd5` (2026-11-02): Reset graphics sampling after manual preset changes and simplify persistence
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
@@ -42,9 +43,10 @@ Git-Stand: **6719bd79d97e3a02bf69186ba2a8f8736e22e0e2** auf Branch **main**
 - `7e53706` (2026-11-02): Add server-owned peer authorization boundary for moderation requests
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 - `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
 
 ## Bereichsübergreifende Änderungen
