@@ -49,6 +49,10 @@ jobs:
             echo 'Godot import or script errors detected'
             exit 1
           fi
+      - name: Validate Android graphics runtime and driver compatibility
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_android_graphics_compatibility.py' -v
+
       - name: Test graphics settings integration and hidden FPS overlay
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_graphics_settings_integration.py' -v
