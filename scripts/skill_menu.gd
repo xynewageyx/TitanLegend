@@ -26,19 +26,30 @@ func _ready() -> void:
  margin.add_theme_constant_override("margin_top", 22)
  margin.add_theme_constant_override("margin_bottom", 22)
  add_child(margin)
- var stack := VBoxContainer.new()
- stack.add_theme_constant_override("separation", 9)
+ var layout := VBoxContainer.new()
+ layout.add_theme_constant_override("separation", 10)
+ margin.add_child(layout)
+ var header := HBoxContainer.new()
+ layout.add_child(header)
+ var title := Label.new()
+ title.text = "✦ HELDENSKILLS"
+ title.add_theme_font_size_override("font_size", 25)
+ title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ header.add_child(title)
+ var header_close := Button.new()
+ header_close.text = "✕"
+ header_close.custom_minimum_size = Vector2(60, 56)
+ header_close.pressed.connect(func(): visible = false)
+ header.add_child(header_close)
  var scroll := ScrollContainer.new()
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
- margin.add_child(scroll)
+ layout.add_child(scroll)
+ var stack := VBoxContainer.new()
+ stack.add_theme_constant_override("separation", 9)
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.add_child(stack)
- var title := Label.new()
- title.text = "✦ HELDENSKILLS"
- title.add_theme_font_size_override("font_size", 25)
- stack.add_child(title)
  var hint := Label.new()
  hint.text = "Automatische Aktivierung · Reihenfolge 1 → 2 → 3 → 4"
  hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -93,11 +104,11 @@ func _ready() -> void:
  var apply := Button.new()
  apply.text = "Vier Skills speichern"
  apply.custom_minimum_size.y = 65
- stack.add_child(apply)
+ layout.add_child(apply)
  var close := Button.new()
  close.text = "Schliessen"
  close.custom_minimum_size.y = 65
- stack.add_child(close)
+ layout.add_child(close)
  apply.pressed.connect(_apply)
  close.pressed.connect(func(): visible = false)
  SKIN.style_menu_tree(margin)
