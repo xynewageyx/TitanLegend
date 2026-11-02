@@ -1,21 +1,21 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:28 UTC**
-Git-Stand: **352eb531dd8ed6104a3fc21373b3e30cf6ab5d06** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:30 UTC**
+Git-Stand: **868b1079f5ec50fedbd02008ffb9f9c8aa919a05** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
+- `5b6e4c2` (2026-11-02): fix(talents): validate selected hero and branch before reading touch details
+- `48c4a53` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `062d9e3` (2026-11-02): ci(chibi): upload visual PNG preview gallery alongside eleven GLBs
 - `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
-- `3512624` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `1e71fb0` (2026-11-02): art(chibi): improve armored torso silhouette and attach head gem to head bone
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
-- `245d8d1` (2026-11-02): test(forest): add Godot runtime playback smoke test for all 36 enemy clips
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -27,7 +27,8 @@ Git-Stand: **352eb531dd8ed6104a3fc21373b3e30cf6ab5d06** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
+- `5b6e4c2` (2026-11-02): fix(talents): validate selected hero and branch before reading touch details
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -37,14 +38,14 @@ Git-Stand: **352eb531dd8ed6104a3fc21373b3e30cf6ab5d06** auf Branch **main**
 - `665dade` (2026-11-02): Preserve authored light and particle settings across graphics quality changes
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `29aec31` (2026-11-02): Add Godot regression tests for moderation warnings, approvals and ban changes
+- `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `842f0dc` (2026-11-02): Add isolated Godot chat moderation regression CI
 - `062d9e3` (2026-11-02): ci(chibi): upload visual PNG preview gallery alongside eleven GLBs
-- `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
 
 ## Bereichsübergreifende Änderungen
 
