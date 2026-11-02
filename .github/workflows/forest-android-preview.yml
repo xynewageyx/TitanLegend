@@ -1,6 +1,13 @@
 name: Forest Preview Android APK
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/blender-grasland-pipeline
+    paths:
+      - ".github/workflows/forest-android-preview.yml"
+      - "scenes/grasland_preview.tscn"
+      - "scenes/grasland_performance_hud.gd"
 jobs:
   android-preview:
     runs-on: ubuntu-latest
@@ -62,14 +69,17 @@ jobs:
           set -euo pipefail
           GODOT=/tmp/godot-bin/Godot_v4.7.2-stable_linux.x86_64
           mkdir -p "$HOME/.android"
+          if [ -f /usr/share/vulkan/icd.d/lvp_icd.x86_64.json ]; then
+            export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          fi
           keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           cat >> preview/export_presets.cfg <<EOF
           keystore/debug="$HOME/.android/debug.keystore"
           keystore/debug_user="androiddebugkey"
           keystore/debug_password="android"
           EOF
-          xvfb-run -a "$GODOT" --headless --path preview --editor --import --quit
-          xvfb-run -a "$GODOT" --headless --path preview --export-debug "Android" "$GITHUB_WORKSPACE/build/TitanLegends-Forest-FPS-Test.apk"
+          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --editor --import --quit
+          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --export-debug "Android" "$GITHUB_WORKSPACE/build/TitanLegends-Forest-FPS-Test.apk"
           test -s build/TitanLegends-Forest-FPS-Test.apk
       - name: Upload Android test APK
         uses: actions/upload-artifact@v4
