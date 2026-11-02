@@ -129,7 +129,7 @@ func _create() -> void:
   return
  var result: Error = PROFILES.save_registry(candidate)
  if result != OK:
-  message_label.text = "Charakter konnte nicht gespeichert werden (%d)." % result
+  message_label.text = "Charakterliste konnte nicht gespeichert werden (%d). Spielstand bleibt zur Wiederherstellung erhalten." % result
   _refresh_slots()
   return
  registry = candidate
