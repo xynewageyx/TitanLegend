@@ -34,7 +34,7 @@ func set_preset(preset: String) -> void:
 	target_fps = data["fps"]
 	render_scale = data["scale"]
 	adaptive_scale = 1.0
-	startup_grace_seconds = 10.0
+	_reset_adaptive_sampling()
 	shadows_enabled = data["shadows"]
 	effects_enabled = data["effects"]
 	apply_settings()
@@ -45,6 +45,7 @@ func set_custom(fps: int, scale: float, shadows: bool, effects: bool) -> void:
 	target_fps = clampi(fps, 30, 120)
 	render_scale = clampf(scale, 0.5, 1.0)
 	adaptive_scale = 1.0
+	_reset_adaptive_sampling()
 	shadows_enabled = shadows
 	effects_enabled = effects
 	apply_settings()
@@ -70,8 +71,9 @@ func get_settings() -> Dictionary:
 
 func save_settings() -> void:
 	var config := ConfigFile.new()
-	for key in get_settings():
-		config.set_value("graphics", key, get_settings()[key])
+	var settings := get_settings()
+	for key in settings:
+		config.set_value("graphics", key, settings[key])
 	var err := config.save(SAVE_PATH)
 	if err != OK:
 		push_warning("Could not save graphics settings: %s" % err)
