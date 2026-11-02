@@ -1,19 +1,25 @@
 extends RefCounted
 class_name ChatModerationPolicy
 
-# Policy helper only: authoritative server must persist cases, audit logs,
-# evidence snapshots, strike counts and admin approvals securely.
+# Policy proposal only. The authoritative server stores warnings, evidence,
+# account-wide bans, approvals and audit history. Never trust client counts.
+const FREE_WARNINGS := 3
 const BAN_HOURS := [2, 5, 24, 168]
-const REPEATED_VIOLATIONS_THRESHOLD := 3
 
 static func proposed_duration_hours(prior_approved_bans: int) -> int:
 	return BAN_HOURS[clampi(prior_approved_bans, 0, BAN_HOURS.size() - 1)]
 
-static func should_open_case(confirmed_violations: int) -> bool:
-	return confirmed_violations >= REPEATED_VIOLATIONS_THRESHOLD
-
-static func make_pending_case(account_id: String, confirmed_violations: int, prior_approved_bans: int, evidence_id: String) -> Dictionary:
-	if account_id.is_empty() or evidence_id.is_empty() or not should_open_case(confirmed_violations):
+static func decision_for_violation(confirmed_violations: int, prior_approved_bans: int, evidence_id: String, account_id: String) -> Dictionary:
+	if confirmed_violations <= 0 or account_id.is_empty():
+		return {}
+	if confirmed_violations <= FREE_WARNINGS:
+		return {
+			"status": "system_warning",
+			"warning_number": confirmed_violations,
+			"warnings_total": FREE_WARNINGS,
+			"enforce_ban": false
+		}
+	if evidence_id.is_empty():
 		return {}
 	return {
 		"account_id": account_id,
@@ -23,7 +29,6 @@ static func make_pending_case(account_id: String, confirmed_violations: int, pri
 		"enforce_ban": false
 	}
 
-static func may_enforce(case_data: Dictionary) -> bool:
-	# Never accept a client-side approval as authorization.
-	# Server must verify the owner identity and signed administrative action.
+static func may_enforce(_case_data: Dictionary) -> bool:
+	# Only a trusted server-side owner-approval transaction may enforce a ban.
 	return false
