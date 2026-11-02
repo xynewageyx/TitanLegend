@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 04:01 UTC**
-Git-Stand: **cc51c5217d438045fe4ef8cbd7e09c40b883399a** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 04:03 UTC**
+Git-Stand: **fa369fc4041407bbea0efbe7c7b8c78ee4499efc** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`b1186cb\` (2026-11-02): fix(characters): repair chibi rig script and export node-based cartoon materials
 - \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -31,13 +32,13 @@ Git-Stand: **cc51c5217d438045fe4ef8cbd7e09c40b883399a** auf Branch **main**
 - Keine passenden Änderungen in den letzten 15 Commits.
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- \`cd45980\` (2026-11-01): test(talents): guard invalid rank rejection and Android talent navigation regressions
+- Keine passenden Änderungen in den letzten 15 Commits.
 
 ## Bereichsübergreifende Änderungen
 
+- \`a54247e\` (2026-11-02): fix(characters): align hero manifest with eleven playable classes
 - \`cc51c52\` (2026-11-02): art: align character proportions and shading with Ulala-like chibi direction
 - \`2b53bd5\` (2026-11-02): docs: define stylized 3D character art and animation standard
-- \`b5d6c3a\` (2026-11-01): ci(coordination): monitor skills and animations changes as dedicated area
 
 ## Regeln für alle Fach-Chats
 
