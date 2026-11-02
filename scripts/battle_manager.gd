@@ -120,13 +120,13 @@ func _ready() -> void:
 # WIND, ICE, LIGHTNING, CHAOS. WATER uses a separate sound from ICE.
 func _on_audio_biome_changed(biome: int) -> void:
  const BIOME_AUDIO_EVENTS: Array[String] = [
-  "element_fire", "element_water", "element_earth",
-  "element_nature", "element_light", "element_shadow",
-  "element_wind", "element_frost", "element_lightning",
-  "element_chaos"
+  "ambient_fire", "ambient_water", "ambient_earth",
+  "ambient_nature", "ambient_light", "ambient_shadow",
+  "ambient_wind", "ambient_frost", "ambient_lightning",
+  "ambient_chaos"
  ]
  if biome >= 0 and biome < BIOME_AUDIO_EVENTS.size():
-  AudioManager.play_event(BIOME_AUDIO_EVENTS[biome])
+  AudioManager.play_ambience(BIOME_AUDIO_EVENTS[biome])
 
 func _process(delta: float) -> void:
  var now_ms: int = Time.get_ticks_msec()
