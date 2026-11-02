@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 19:13 UTC**
-Git-Stand: **f20621cb1fe8e3754214607094d7d80baec7a8c8** auf Branch **main**
+Git-Stand: **b52dfc9d9eb7ba07c95111625906edaeb588d0b2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -27,7 +27,7 @@ Git-Stand: **f20621cb1fe8e3754214607094d7d80baec7a8c8** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `f20621c` (2026-11-02): Apply graphics settings to scene shadows and particle budgets
@@ -38,7 +38,7 @@ Git-Stand: **f20621cb1fe8e3754214607094d7d80baec7a8c8** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
