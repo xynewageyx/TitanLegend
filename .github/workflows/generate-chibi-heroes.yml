@@ -40,5 +40,14 @@ jobs:
           git add assets/heroes/chibi/*.glb
           if ! git diff --cached --quiet; then
             git commit -m 'Generate eleven original chibi hero GLB assets'
-            git push origin HEAD:main
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              if git rebase origin/main && git push origin HEAD:main; then
+                exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((attempt * 2))
+            done
+            echo 'Could not push generated GLBs after retries' >&2
+            exit 1
           fi
