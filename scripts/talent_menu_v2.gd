@@ -10,6 +10,7 @@ var hero_picker: OptionButton
 var branch_picker: OptionButton
 var points_label: Label
 var bonus_label: Label
+var talent_detail_label: Label
 var talent_grid: GridContainer
 var open_button: Button
 
@@ -84,6 +85,10 @@ func _ready() -> void:
  bonus_label = Label.new()
  bonus_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  column.add_child(bonus_label)
+ talent_detail_label = Label.new()
+ talent_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ talent_detail_label.text = "Talent antippen, um Voraussetzungen anzuzeigen."
+ column.add_child(talent_detail_label)
  talent_grid = GridContainer.new()
  talent_grid.columns = 2
  talent_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -134,6 +139,7 @@ func _refresh() -> void:
    button.tooltip_text += " | Voraussetzung: %d Punkte in vorherigen Reihen" % (row * 5)
   button.disabled = not TREES.can_upgrade(level, build, selected_branch, talent_index)
   talent_grid.add_child(button)
+  button.focus_entered.connect(_show_talent_detail.bind(talent_index))
   button.pressed.connect(_upgrade.bind(talent_index))
 
 func _upgrade(talent_index: int) -> void:
@@ -144,3 +150,19 @@ func _upgrade(talent_index: int) -> void:
  if team.has_method("upgrade_talent_v2"):
   team.upgrade_talent_v2(selected_hero, selected_branch, talent_index)
  _refresh()
+
+func _show_talent_detail(talent_index: int) -> void:
+ if talent_detail_label == null or team == null or not is_instance_valid(team):
+  return
+ if talent_index < 0 or talent_index >= TREES.TALENTS_PER_BRANCH:
+  return
+ var build: Array = team.get_talent_build_v2(selected_hero)
+ if build.size() <= selected_branch or not build[selected_branch] is Array:
+  return
+ var rank: int = int(build[selected_branch][talent_index])
+ var row: int = int(talent_index / 3)
+ talent_detail_label.text = "Talent %d | Rang %d/%d | Reihe %d" % [talent_index + 1, rank, TREES.MAX_RANK, row + 1]
+ if rank >= TREES.MAX_RANK:
+  talent_detail_label.text += " | Maximalrang erreicht"
+ elif row > 0:
+  talent_detail_label.text += " | Benötigt %d Punkte in vorherigen Reihen" % (row * 5)
