@@ -6,7 +6,28 @@ var last_offline_gold: int = 0
 var last_offline_xp: int = 0
 var last_offline_levels: int = 0
 var last_offline_seconds: int = 0
-const SAVE_PATH: String = "user://save_data.json"
+const LEGACY_SAVE_PATH: String = "user://save_data.json"
+const CHARACTER_PROFILES = preload("res://scripts/character_profiles.gd")
+const CHARACTER_SAVE_SLOTS = preload("res://scripts/character_save_slots.gd")
+var SAVE_PATH: String = LEGACY_SAVE_PATH
+var active_character_slot: int = -1
+
+## Call only before entering gameplay or after the old session has been saved.
+## This changes the source for all SaveManager readers, without touching legacy data.
+func configure_character_save(slot: int) -> Error:
+ var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+ var path: String = CHARACTER_PROFILES.character_save_path(registry, slot)
+ if path.is_empty():
+  return ERR_INVALID_PARAMETER
+ if CHARACTER_SAVE_SLOTS.load_slot(registry, slot).is_empty():
+  return ERR_FILE_CORRUPT
+ SAVE_PATH = path
+ active_character_slot = slot
+ return OK
+
+func use_legacy_save() -> void:
+ SAVE_PATH = LEGACY_SAVE_PATH
+ active_character_slot = -1
 var timer: Timer
 func _ready() -> void:
  load_game()
