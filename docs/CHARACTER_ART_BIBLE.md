@@ -4,10 +4,18 @@
 Eigenständige, hochwertige stylisierte 3D-Fantasy-Helden mit charmanten Chibi-Proportionen; keine Übernahme fremder Meshes, Texturen oder geschützter Charakterdesigns. Android-Hochformat und Godot-GL-Compatibility bleiben verbindlich.
 
 ## Silhouette und Proportionen
-- Grundfigur: ca. 3.2–3.7 Kopfhöhen; Tank 3.0–3.3, agile Klassen 3.5–3.8.
+- Grundfigur: ca. 2.5–3.2 Kopfhöhen als verbindlicher Chibi-Zielbereich; Tank 2.5–2.8, agile Klassen 2.8–3.2.
 - Große lesbare Hände und Waffen, markante Schuhe, klare Farbflächen; Lesbarkeit bei 720x1280 prüfen.
 - Klassen müssen ohne Texturen anhand der Silhouette erkennbar sein.
 - Gesicht: getrennte Augenbrauen, Augenlider, Mundformen und Blickrichtung; mindestens neutral, froh, wütend, überrascht, getroffen.
+
+## Visuelle Referenz: Ulala-artiger Cartoon-Look
+- Große rundliche Köpfe, kurze Gliedmaßen, kompakte Körper, breite Hände und Füße.
+- Dicke, in Volumen modellierte Haarsträhnen, runde Wangen, kleine Nase und sehr lesbare Augen.
+- Weiche Farbverläufe und sanftes Toon-Shading; keine fotorealistischen PBR-Materialien oder scharfkantigen Low-Poly-Platzhalter.
+- Federnde Bewegungen mit klaren Antizipations- und Nachschwungphasen; besonders Idle, Run, Attack und Hit.
+- Rüstung und Waffen überzeichnet, aber eigenständig gestaltet; keine direkte Übernahme fremder Modelle, Texturen oder unverwechselbarer Designs.
+- Freigabe eines Referenzcharakters anhand von Front-, Seiten-, Rückenansicht und Ingame-Screenshot vor Serienproduktion.
 
 ## 11 Klassen
 | Klasse | Silhouette | Bewegung |
