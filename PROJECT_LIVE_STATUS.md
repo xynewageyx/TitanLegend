@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:09 UTC**
-Git-Stand: **c1fba528e5db9f130d884708b1a0c8152f13eeaa** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:10 UTC**
+Git-Stand: **4ca0505d34b4eb0881874ca629159f524e208dca** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `4ca0505` (2026-11-02): art(chibi): add layered tunics belts boots cuffs and face-framing hair to all heroes
 - `efe08f1` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `770ca2c` (2026-11-02): fix(chibi): anchor fringe locks to hair cap and remove floating spikes
 
@@ -23,7 +24,6 @@ Git-Stand: **c1fba528e5db9f130d884708b1a0c8152f13eeaa** auf Branch **main**
 ### UI — UI-Chat
 - `4574a8a` (2026-11-02): Remove live FPS and render-scale readout from graphics menu
 - `6c0d2b3` (2026-11-02): Show live FPS and effective 3D render scale in graphics menu
-- `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
@@ -36,7 +36,6 @@ Git-Stand: **c1fba528e5db9f130d884708b1a0c8152f13eeaa** auf Branch **main**
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
 - `4574a8a` (2026-11-02): Remove live FPS and render-scale readout from graphics menu
 - `6c0d2b3` (2026-11-02): Show live FPS and effective 3D render scale in graphics menu
-- `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
