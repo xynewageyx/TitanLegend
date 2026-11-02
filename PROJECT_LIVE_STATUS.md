@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 18:59 UTC**
-Git-Stand: **c14c01998ff8effad0a0978e9ef7d6e06a68a4c3** auf Branch **main**
+Git-Stand: **c6bcd31f7cbd3561edf84c1e7b76993ac2cfdd2b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,7 +15,11 @@ Git-Stand: **c14c01998ff8effad0a0978e9ef7d6e06a68a4c3** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `3ff7124` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `23ecd27` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `7ebbed1` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `7b328dd` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -24,7 +28,7 @@ Git-Stand: **c14c01998ff8effad0a0978e9ef7d6e06a68a4c3** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `7ac49f0` (2026-11-02): fix(talents): recheck current upgrade eligibility on tap instead of trusting stale button state
+- `7ebbed1` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -35,12 +39,14 @@ Git-Stand: **c14c01998ff8effad0a0978e9ef7d6e06a68a4c3** auf Branch **main**
 - `08b7ec7` (2026-11-02): Add owner-controlled ban adjustment and revocation with audit history
 
 ### Audio — Audio-Erstellung-Chat
-- `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
-- `a6e36be` (2026-11-02): Add water element sound and validate 49 generated WAV files
-- `cdb0a16` (2026-11-02): Add water element sound and validate 49 generated WAV files
+- `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `3ff7124` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `23ecd27` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `7ebbed1` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- `7b328dd` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
+- `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ## Bereichsübergreifende Änderungen
 
