@@ -77,6 +77,18 @@ SOUNDS.update({
  "ambient/lightning.wav": (2.0, 422, 288, "tone"),
  "ambient/chaos.wav": (2.0, 461, 314, "noise"),
 })
+SOUNDS.update({
+ "boss/fire.wav": (0.550, 140, 45, "noise"),
+ "boss/water.wav": (0.585, 203, 64, "tone"),
+ "boss/earth.wav": (0.620, 266, 83, "noise"),
+ "boss/nature.wav": (0.655, 329, 102, "tone"),
+ "boss/light.wav": (0.690, 392, 121, "noise"),
+ "boss/shadow.wav": (0.725, 455, 140, "tone"),
+ "boss/wind.wav": (0.760, 518, 159, "noise"),
+ "boss/frost.wav": (0.795, 581, 178, "tone"),
+ "boss/lightning.wav": (0.830, 644, 197, "noise"),
+ "boss/chaos.wav": (0.865, 707, 216, "tone"),
+})
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
