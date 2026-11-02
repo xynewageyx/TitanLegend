@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:48 UTC**
-Git-Stand: **8fc1bf4db7f6854b00b2e7e92cf124d6ee2b292e** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:49 UTC**
+Git-Stand: **9775fbe40cfd71b415fee493eec0663d6ca98b0a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,6 +23,7 @@ Git-Stand: **8fc1bf4db7f6854b00b2e7e92cf124d6ee2b292e** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `147c0bd` (2026-11-02): Verify Android renderer, native export templates and GPU driver packaging safety
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 - `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
@@ -31,6 +32,7 @@ Git-Stand: **8fc1bf4db7f6854b00b2e7e92cf124d6ee2b292e** auf Branch **main**
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `147c0bd` (2026-11-02): Verify Android renderer, native export templates and GPU driver packaging safety
 - `8fc1bf4` (2026-11-02): Apply graphics profile to scene root visuals as well as children
 - `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
@@ -38,12 +40,12 @@ Git-Stand: **8fc1bf4db7f6854b00b2e7e92cf124d6ee2b292e** auf Branch **main**
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
 - `f60f990` (2026-11-02): Add security regression tests for peer-bound owner authorization
-- `7e53706` (2026-11-02): Add server-owned peer authorization boundary for moderation requests
 
 ### Audio — Audio-Erstellung-Chat
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `9775fbe` (2026-11-02): Run Android graphics compatibility checks during Godot validation
 - `5a56320` (2026-11-02): ci(forest): run animation playback with same OpenGL renderer as asset import
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 - `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
