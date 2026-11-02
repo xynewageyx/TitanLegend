@@ -20,6 +20,7 @@ var low_samples := 0
 var good_samples := 0
 var startup_grace_seconds := 10.0
 var last_effective_scale := -1.0
+var cached_visuals: Array[Node] = []
 
 func _ready() -> void:
 	load_settings()
@@ -96,14 +97,31 @@ func load_settings() -> void:
 	adaptive_scale = 1.0
 
 func _apply_scene_quality() -> void:
+	# Avoid rescanning the entire combat scene during automatic scaling.
+	for i in range(cached_visuals.size() - 1, -1, -1):
+		var node := cached_visuals[i]
+		if not is_instance_valid(node):
+			cached_visuals.remove_at(i)
+		else:
+			_apply_visual_quality(node)
+
+func _rebuild_visual_cache() -> void:
+	cached_visuals.clear()
 	var root := get_tree().current_scene
 	if root == null:
 		return
-	_apply_visual_quality(root)
+	_register_visual(root)
 	for node in root.find_children("*", "Light3D", true, false):
-		_apply_visual_quality(node)
+		_register_visual(node)
 	for node in root.find_children("*", "GPUParticles3D", true, false):
-		_apply_visual_quality(node)
+		_register_visual(node)
+
+func _register_visual(node: Node) -> void:
+	if not (node is Light3D or node is GPUParticles3D):
+		return
+	if not cached_visuals.has(node):
+		cached_visuals.append(node)
+	_apply_visual_quality(node)
 
 func _apply_visual_quality(node: Node) -> void:
 	# Preserve each visual's authored settings, including intentionally disabled shadows.
@@ -130,7 +148,7 @@ func _apply_visual_quality(node: Node) -> void:
 
 func _on_scene_changed(_scene: Node) -> void:
 	_reset_adaptive_sampling()
-	_apply_scene_quality()
+	_rebuild_visual_cache()
 
 func _reset_adaptive_sampling() -> void:
 	startup_grace_seconds = 10.0
@@ -178,4 +196,4 @@ func _process(delta: float) -> void:
 
 func _on_node_added(node: Node) -> void:
 	# Apply the selected profile to visuals spawned after the scene loads.
-	_apply_visual_quality(node)
+	_register_visual(node)
