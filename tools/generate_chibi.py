@@ -116,15 +116,21 @@ for idx,name in enumerate(NAMES):
   oval("Hand",(side*.47,-.02,.94),(.15,.14,.15),skin)
   oval("Leg",(side*.19,0,.49),(.16,.17,.28),skin)
   oval("Foot",(side*.19,-.1,.23),(.19,.27,.15),skin)
- for k in range(5+idx%3):
-  x=(k-2)*.15
-  lock=loft("HairLock",[(2.04,.07,.08,-.29),(2.17,.10,.11,-.26),(2.29,.08,.08,-.18),(2.36,.01,.01,-.12)],hair)
+ # Hair roots overlap the cap and the tips sweep DOWN onto the forehead.
+ # Previous locks extended upward to z=2.36 and looked like floating spikes.
+ strand_count=5+idx%3
+ for k in range(strand_count):
+  x=(k-(strand_count-1)/2)*.145
+  length=.15+.035*((k+idx)%3)
+  lock=loft("HairLock",[
+   (2.12-length,.012,.015,-.348),
+   (2.17-length*.45,.060,.067,-.347),
+   (2.22,.090,.100,-.275),
+   (2.26,.075,.085,-.210)],hair)
   lock.location.x=x
-  # Alternating length and lean gives each class a less uniform fringe.
-  lock.scale.z=1.0+(idx%4)*.09+(k%2)*.06
-  lock.rotation_euler.y=(k-2)*.065
- # Rounded rear hair volume avoids a flat silhouette from the side.
- oval("HairBack",(0,.21,2.09),(.37,.22,.30),hair)
+  lock.rotation_euler.y=(k-(strand_count-1)/2)*.045
+ # Rear hair overlaps the cap rather than forming separate floating shapes.
+ oval("HairBack",(0,.18,2.07),(.35,.20,.23),hair)
  oval("Nose",(0,-.42,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40,1.71),(.10,.018,.02),dark)
  # Original class-specific silhouettes, kept lightweight for Android GL Compatibility.
