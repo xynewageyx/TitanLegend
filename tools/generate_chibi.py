@@ -53,7 +53,7 @@ def rig_and_animate():
   name=obj.name
   # Blender adds .001 to repeated names; side is determined by world X, not suffix.
   center_x=sum((obj.matrix_world @ vertex.co).x for vertex in obj.data.vertices)/max(1,len(obj.data.vertices))
-  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")):
+  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow")):
    target="Head"
   elif name.startswith(("Hand","Arm")):
    target="Arm_L" if center_x < 0 else "Arm_R"
@@ -110,6 +110,7 @@ for idx,name in enumerate(NAMES):
   oval("EyeWhite",(x,-.37,1.90),(.13,.035,.16),white)
   oval("Iris",(x,-.405,1.90),(.075,.018,.11),dark)
   oval("EyeGlint",(x-.027,-.423,1.952),(.026,.012,.035),white)
+  oval("Cheek",(side*.325,-.345,1.76),(.115,.035,.064),skin)
   oval("Eyebrow",(x,-.39,2.095),(.115,.027,.035),hair)
   oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
   oval("Arm",(side*.40,0,1.19),(.14,.16,.32),skin)
@@ -136,6 +137,19 @@ for idx,name in enumerate(NAMES):
  # Original class-specific silhouettes, kept lightweight for Android GL Compatibility.
  cloth=material("class_cloth",tuple(min(.95,v*.7+.18) for v in COLORS[idx]))
  gold=material("class_trim",(.94,.70,.23))
+ leather=material("leather",(.23,.14,.11))
+ sole=material("boot_soles",(.15,.12,.14))
+ # Layered tunic and waist silhouette: original costume geometry rather than bare body.
+ loft("Tunic",[(.69,.24,.21,-.005),(.76,.31,.25,-.015),(1.03,.392,.306,-.005),(1.28,.35,.284,0),(1.41,.205,.185,0)],cloth)
+ oval("Belt",(0,-.275,.79),(.315,.070,.065),leather)
+ oval("BeltBuckle",(0,-.346,.79),(.083,.026,.065),gold)
+ for side in (-1,1):
+  oval("Boot",(side*.19,-.065,.235),(.205,.26,.17),leather)
+  oval("BootToe",(side*.19,-.245,.185),(.188,.10,.10),sole)
+  oval("Cuff",(side*.43,-.025,1.04),(.17,.175,.075),cloth)
+ # A face-frame fringe and sideburns soften the blocky cap silhouette.
+ for side in (-1,1):
+  oval("HairSide",(side*.39,-.10,2.015),(.13,.20,.21),hair)
  if name in ("warrior","paladin","brawler"):
   for side in (-1,1):
    oval("ArmPauldron",(side*.40,0,1.43),(.23,.24,.17),gold)
