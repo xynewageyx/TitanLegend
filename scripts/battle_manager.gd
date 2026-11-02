@@ -744,7 +744,7 @@ func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  _play_equipped_skill_vfx(slot, role, choice)
  if team_formation != null and slot < team_formation.class_ids.size():
-  AudioManager.play_local_hero_event(slot, "class_attack_%d" % int(team_formation.class_ids[slot]))
+  AudioManager.play_local_hero_event(slot, "class_skill_%d" % int(team_formation.class_ids[slot]))
  if team_formation != null and slot >= 0 and slot < team_formation.heroes.size():
   var glb_visual: Node = team_formation.heroes[slot].get_node_or_null("WarriorGLBVisual")
   if glb_visual != null and glb_visual.has_method("play_cast"):
