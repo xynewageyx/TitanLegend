@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:05 UTC**
-Git-Stand: **6eae66b61afabb933c2dd2333b6a043d406ff280** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:06 UTC**
+Git-Stand: **0524569e6e809823a8190df8bcd6fbd7074f64bf** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -18,7 +18,6 @@ Git-Stand: **6eae66b61afabb933c2dd2333b6a043d406ff280** auf Branch **main**
 
 ### Landschaften — Landschaften-Chat
 - `e92b526` (2026-11-02): Preserve ambience crossfade gains when changing volume or switching biomes (#13)
-- `82833b3` (2026-11-02): Start biome ambience when loading a saved or default stage (#12)
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -28,7 +27,6 @@ Git-Stand: **6eae66b61afabb933c2dd2333b6a043d406ff280** auf Branch **main**
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `871e88b` (2026-11-02): fix(talents): use validated build for locked talent detail explanations
-- `82833b3` (2026-11-02): Start biome ambience when loading a saved or default stage (#12)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -41,6 +39,7 @@ Git-Stand: **6eae66b61afabb933c2dd2333b6a043d406ff280** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
+- `0524569` (2026-11-02): Cache 24 recently used audio streams for Android combat (#14)
 - `e92b526` (2026-11-02): Preserve ambience crossfade gains when changing volume or switching biomes (#13)
 
 ### Integration/CI — GitHub-/Integrations-Chat
