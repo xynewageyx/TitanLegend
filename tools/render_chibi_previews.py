@@ -14,7 +14,7 @@ for name in names:
     bpy.ops.object.delete(use_global=False)
     bpy.ops.import_scene.gltf(filepath=os.path.join(SOURCE, name + ".glb"))
     # Imported meshes use their rest pose, so every class is compared consistently.
-    bpy.ops.object.camera_add(location=(3.8, -6.5, 3.1))
+    bpy.ops.object.camera_add(location=(0, -7.0, 2.9))
     camera = bpy.context.object
     target = Vector((0, 0, 1.25))
     camera.rotation_euler = (target - camera.location).to_track_quat("-Z", "Y").to_euler()
@@ -46,4 +46,10 @@ for name in names:
     scene.render.film_transparent = False
     scene.render.filepath = os.path.join(OUTPUT, name + ".png")
     bpy.ops.render.render(write_still=True)
+    if not os.path.isfile(scene.render.filepath) or os.path.getsize(scene.render.filepath) < 1024:
+        raise RuntimeError("Missing or empty character preview: " + scene.render.filepath)
     print("Preview", name, scene.render.filepath)
+
+previews = [f for f in os.listdir(OUTPUT) if f.endswith(".png")]
+if len(previews) != len(names):
+    raise RuntimeError(f"Expected {len(names)} PNG previews, found {len(previews)}")
