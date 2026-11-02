@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:06 UTC**
-Git-Stand: **0524569e6e809823a8190df8bcd6fbd7074f64bf** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:08 UTC**
+Git-Stand: **4dffb9aa6057bb1c38edcab2ec246901331a1740** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -36,7 +36,7 @@ Git-Stand: **0524569e6e809823a8190df8bcd6fbd7074f64bf** auf Branch **main**
 - `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `4dffb9a` (2026-11-02): Add authoritative moderation RPC transport with sender-derived permissions
 
 ### Audio — Audio-Erstellung-Chat
 - `0524569` (2026-11-02): Cache 24 recently used audio streams for Android combat (#14)
@@ -47,7 +47,7 @@ Git-Stand: **0524569e6e809823a8190df8bcd6fbd7074f64bf** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `0da879b` (2026-11-02): test(forest): reject animation clips with no multi-keyframe 3D motion
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
