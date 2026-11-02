@@ -173,7 +173,13 @@ func _show_talent_detail(talent_index: int) -> void:
  if rank >= TREES.MAX_RANK:
   talent_detail_label.text += " | Maximalrang erreicht"
  elif row > 0:
-  talent_detail_label.text += " | Benötigt %d Punkte in vorherigen Reihen" % (row * 5)
+  var invested_before: int = 0
+  for index in range(row * 3):
+   invested_before += clampi(int(build[selected_branch][index]), 0, TREES.MAX_RANK)
+  if invested_before < row * 5:
+   talent_detail_label.text += " | Noch %d Punkte in vorherigen Reihen nötig" % (row * 5 - invested_before)
+ if rank < TREES.MAX_RANK and TREES.available_points(GameManager.character_level, build) <= 0:
+  talent_detail_label.text += " | Keine freien Talentpunkte"
 
 func _on_talent_pressed(talent_index: int) -> void:
  if team == null or not is_instance_valid(team) or not team.has_method("get_talent_build_v2"):
