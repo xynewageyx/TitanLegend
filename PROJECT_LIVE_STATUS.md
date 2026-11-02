@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:33 UTC**
-Git-Stand: **70b3e4340831d858c3c57dc0a6f6a2d5cd478ba0** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:34 UTC**
+Git-Stand: **4d822152ee76028582171139abb8bdbf5d73ff54** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,6 @@ Git-Stand: **70b3e4340831d858c3c57dc0a6f6a2d5cd478ba0** auf Branch **main**
 - `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `76d95be` (2026-11-02): Add distinct procedural attack audio for all eleven hero classes
-- `fac2f31` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -46,6 +45,7 @@ Git-Stand: **70b3e4340831d858c3c57dc0a6f6a2d5cd478ba0** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `4d82215` (2026-11-02): Require three system warnings before owner-approved account ban requests
 - `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
 - `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
 - `eaa6a25` (2026-11-02): Add standalone Titan Legends chat channel model
