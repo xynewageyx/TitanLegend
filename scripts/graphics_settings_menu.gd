@@ -52,8 +52,7 @@ func _ready() -> void:
 	effects.text = "Erweiterte Effekte"
 	column.add_child(effects)
 	automatic = CheckBox.new()
-	automatic.text = "Automatische Optimierung (in Vorbereitung)"
-	automatic.disabled = true
+	automatic.text = "Automatische FPS-Optimierung"
 	column.add_child(automatic)
 	var close_button := Button.new()
 	close_button.text = "Schließen"
@@ -64,6 +63,7 @@ func _ready() -> void:
 	scale_slider.value_changed.connect(_custom_changed)
 	shadows.toggled.connect(_custom_changed)
 	effects.toggled.connect(_custom_changed)
+	automatic.toggled.connect(_automatic_changed)
 	panel.visible = false
 	_refresh()
 
@@ -101,3 +101,8 @@ func _custom_changed(_value: Variant) -> void:
 		effects.button_pressed
 	)
 	_refresh()
+
+func _automatic_changed(enabled: bool) -> void:
+	if updating:
+		return
+	GraphicsQualityManager.set_automatic(enabled)
