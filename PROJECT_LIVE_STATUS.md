@@ -1,18 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 04:11 UTC**
-Git-Stand: **d1bea54f18b85ccae1b499906f6c0d84f594ec73** auf Branch **main**
+Git-Stand: **cd60f0b1e935ac66ea9a2d8c561764ad60ea8b59** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`cd60f0b\` (2026-11-02): art(forest): add species-specific bark grain fur tufts fungus spots and foliage surfaces
 - \`b1186cb\` (2026-11-02): fix(characters): repair chibi rig script and export node-based cartoon materials
-- \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- \`b9a878d\` (2026-11-01): art(forest): improve face depth and consistent cartoon GLB material finish
+- \`cd60f0b\` (2026-11-02): art(forest): add species-specific bark grain fur tufts fungus spots and foliage surfaces
 
 ### Landschaften — Landschaften-Chat
 - Keine passenden Änderungen in den letzten 15 Commits.
