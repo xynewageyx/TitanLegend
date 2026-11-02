@@ -160,5 +160,9 @@ func _select(slot: int) -> void:
  if result != OK:
   message_label.text = "Charakterauswahl konnte nicht gespeichert werden (%d)." % result
   return
+ var switch_error: Error = SaveManager.configure_character_save(slot)
+ if switch_error != OK:
+  message_label.text = "Spielstandwechsel fehlgeschlagen (%d)." % switch_error
+  return
  registry = candidate
  character_selected.emit(slot)
