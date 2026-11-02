@@ -440,7 +440,7 @@ func _trigger_prepared_healing() -> void:
    var modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
    modifier *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
    var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier))
-   _heal_heroes(amount, bool(skill.get("aoe", false)))
+   _heal_heroes(amount, str(skill.get("effect", "")) == "group_heal")
   last_ability = "Vorbereitete Heilung"
   if not _has_wounded_hero():
    break
@@ -471,15 +471,7 @@ func _refresh_tank_defense_visuals() -> void:
 
 func _apply_heal_over_time(_caster: int, skill: Dictionary) -> void:
  # Renew the HoT on the most injured living ally; it never resurrects heroes.
- var target: int = -1
- var lowest: float = 1.01
- for i in range(4):
-  if hero_hp[i] <= 0:
-   continue
-  var ratio: float = float(hero_hp[i]) / float(maxi(1, hero_max_hp[i]))
-  if ratio < lowest:
-   lowest = ratio
-   target = i
+ var target: int = TitanSkillTargetingRules.single_heal_target(hero_hp, hero_max_hp)
  if target < 0:
   return
  var new_ticks: int = clampi(int(skill.get("hot_ticks", 4)), 1, 4)
