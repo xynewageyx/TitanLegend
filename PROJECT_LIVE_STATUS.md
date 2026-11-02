@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-01 20:11 UTC**
-Git-Stand: **b9a878deb10c3fcaeeeff1fb980e01c4d75c832e** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 04:00 UTC**
+Git-Stand: **2b53bd5b8297675640f83dd500aded9427343d5c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -36,9 +36,9 @@ Git-Stand: **b9a878deb10c3fcaeeeff1fb980e01c4d75c832e** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- \`2b53bd5\` (2026-11-02): docs: define stylized 3D character art and animation standard
 - \`b5d6c3a\` (2026-11-01): ci(coordination): monitor skills and animations changes as dedicated area
 - \`e49f80b\` (2026-11-01): Check all four limb skin-weight groups after GLB round-trip
-- \`a7d44a3\` (2026-11-01): docs(coordination): register skills and animation chat with interfaces
 
 ## Regeln für alle Fach-Chats
 
