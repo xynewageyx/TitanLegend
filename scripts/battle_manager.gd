@@ -97,6 +97,8 @@ func _ready() -> void:
  _last_player_input_ms = Time.get_ticks_msec()
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
+ if biome_manager != null and biome_manager.has_signal("biome_changed"):
+  biome_manager.connect("biome_changed", Callable(self, "_on_audio_biome_changed"))
  var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
  current_level = maxi(1, saved_progress.x)
  current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)
@@ -112,6 +114,19 @@ func _ready() -> void:
  add_to_group("battle_manager")
  _reset_hero_health()
  _queue_next_encounter()
+
+# Area transitions are shared environment cues, not other players' combat sounds.
+# BiomeType order: FIRE, WATER, EARTH, NATURE, LIGHT, SHADOW,
+# WIND, ICE, LIGHTNING, CHAOS. WATER uses a separate sound from ICE.
+func _on_audio_biome_changed(biome: int) -> void:
+ const BIOME_AUDIO_EVENTS: Array[String] = [
+  "element_fire", "element_water", "element_earth",
+  "element_nature", "element_light", "element_shadow",
+  "element_wind", "element_frost", "element_lightning",
+  "element_chaos"
+ ]
+ if biome >= 0 and biome < BIOME_AUDIO_EVENTS.size():
+  AudioManager.play_event(BIOME_AUDIO_EVENTS[biome])
 
 func _process(delta: float) -> void:
  var now_ms: int = Time.get_ticks_msec()
