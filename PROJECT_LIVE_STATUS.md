@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:09 UTC**
-Git-Stand: **b926a4aee86c2b27eb3ebecc6a709b9db291ffa9** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:10 UTC**
+Git-Stand: **48d5101e8e31f85a3fecc8a95305f035d6c87629** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,15 +20,17 @@ Git-Stand: **b926a4aee86c2b27eb3ebecc6a709b9db291ffa9** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
+- `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `7ebbed1` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
 - `b926a4a` (2026-11-02): Add persistent player-selectable graphics quality manager
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
@@ -38,10 +40,9 @@ Git-Stand: **b926a4aee86c2b27eb3ebecc6a709b9db291ffa9** auf Branch **main**
 - `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 - `3ff7124` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 - `23ecd27` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `7ebbed1` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
-- `7b328dd` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
 - `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
 
 ## Bereichsübergreifende Änderungen
