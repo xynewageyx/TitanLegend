@@ -18,6 +18,7 @@ var adaptive_scale := 1.0
 var sample_seconds := 0.0
 var low_samples := 0
 var good_samples := 0
+var startup_grace_seconds := 10.0
 
 func _ready() -> void:
 	load_settings()
@@ -33,6 +34,7 @@ func set_preset(preset: String) -> void:
 	target_fps = data["fps"]
 	render_scale = data["scale"]
 	adaptive_scale = 1.0
+	startup_grace_seconds = 10.0
 	shadows_enabled = data["shadows"]
 	effects_enabled = data["effects"]
 	apply_settings()
@@ -116,6 +118,7 @@ func _on_scene_changed(_scene: Node) -> void:
 func set_automatic(enabled: bool) -> void:
 	automatic_optimization = enabled
 	adaptive_scale = 1.0
+	startup_grace_seconds = 10.0
 	low_samples = 0
 	good_samples = 0
 	apply_settings()
@@ -123,6 +126,9 @@ func set_automatic(enabled: bool) -> void:
 
 func _process(delta: float) -> void:
 	if not automatic_optimization:
+		return
+	if startup_grace_seconds > 0.0:
+		startup_grace_seconds -= delta
 		return
 	sample_seconds += delta
 	if sample_seconds < 5.0:
@@ -141,7 +147,7 @@ func _process(delta: float) -> void:
 		low_samples = 0
 		good_samples = 0
 	if low_samples >= 3:
-		adaptive_scale = maxf(0.5 / render_scale, adaptive_scale - 0.1)
+		adaptive_scale = maxf(minf(1.0, 0.5 / render_scale), adaptive_scale - 0.1)
 		low_samples = 0
 		apply_settings()
 	elif good_samples >= 6 and adaptive_scale < 1.0:
