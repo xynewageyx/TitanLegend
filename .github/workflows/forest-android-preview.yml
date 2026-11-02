@@ -89,11 +89,28 @@ jobs:
           keystore/debug_user="androiddebugkey"
           keystore/debug_password="android"
           EOF
-          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --editor --import --quit
-          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --export-debug "Android" "$GITHUB_WORKSPACE/build/TitanLegends-Forest-FPS-Test.apk"
+          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --editor --import --quit 2>&1 | tee /tmp/forest-android-import.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|(^|[[:space:]])ERROR:|Failed to load script" /tmp/forest-android-import.log; then
+            echo "::error::Forest preview import contains Godot errors"
+            exit 1
+          fi
+          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --export-debug "Android" "$GITHUB_WORKSPACE/build/TitanLegends-Forest-FPS-Test.apk" 2>&1 | tee /tmp/forest-android-export.log
+          if grep -E "SCRIPT ERROR:|Parse Error:|(^|[[:space:]])ERROR:|Failed to load script|Export failed" /tmp/forest-android-export.log; then
+            echo "::error::Forest Android export reported errors"
+            exit 1
+          fi
           test -s build/TitanLegends-Forest-FPS-Test.apk
           unzip -t build/TitanLegends-Forest-FPS-Test.apk | tail -n 2
           sha256sum build/TitanLegends-Forest-FPS-Test.apk
+      - name: Upload Godot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Android-Diagnostics
+          path: |
+            /tmp/forest-android-import.log
+            /tmp/forest-android-export.log
+          if-no-files-found: ignore
       - name: Upload Android test APK
         uses: actions/upload-artifact@v4
         with:
