@@ -3,6 +3,7 @@ const AFK_POLICY = preload("res://scripts/afk_farming_policy.gd")
 const BOSS_ART = preload("res://scripts/boss_art.gd")
 const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
 const SKILL_VFX = preload("res://scripts/skill_vfx_3d_v1.gd")
+const CLASS_INTERRUPTS = preload("res://scripts/class_interrupt_skills.gd")
 const TALENT_COMBAT_V2 = preload("res://scripts/talent_combat_adapter_v2.gd")
 # TEMPORARY compatibility implementation.
 # Original Update 168 battle_manager.gd (36,410 bytes) must replace this file.
@@ -715,7 +716,10 @@ func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
  if not is_instance_valid(hero):
   return
  var effect_id: String = "precision_shot"
- if role == 0:
+ if choice == 7:
+  var class_id: int = int(team_formation.class_ids[slot])
+  effect_id = CLASS_INTERRUPTS.vfx_for_class(class_id)
+ elif role == 0:
   effect_id = "group_guard" if choice == 9 or choice == 2 else "shield_bash"
  elif role == 2:
   effect_id = "healing_wave" if choice == 7 or choice == 8 else "holy_light"
@@ -750,7 +754,8 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   return
  if choice == 7:
   # Cast and consume normally; interrupt only if an interruptible cast is active.
-  last_ability = "Unterbrechung"
+  var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 0
+  last_ability = CLASS_INTERRUPTS.name_for_class(class_id)
   if is_boss and boss_cast_ticks > 0 and boss_cc_required > 0:
    _apply_boss_cc_hit()
   return
