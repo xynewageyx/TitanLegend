@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 17:58 UTC**
-Git-Stand: **9c87471751fff295c717c978cdbdb0dbac117cf8** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:07 UTC**
+Git-Stand: **5ad392aca672b474a4e5aace4d7294a4a4b046d9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -33,11 +33,11 @@ Git-Stand: **9c87471751fff295c717c978cdbdb0dbac117cf8** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `8a050b7` (2026-11-02): ci(chibi): rebase and retry GLB commit after concurrent pushes
-- `9382599` (2026-11-02): ci(forest): validate mesh attributes materials animation root and use project Godot 4.7.2
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `8f411cd` (2026-11-02): Connect named audio events to existing Godot AudioManager
+- `a7efb46` (2026-11-02): Add centralized Titan Legends audio event catalog
 
 ## Regeln für alle Fach-Chats
 
