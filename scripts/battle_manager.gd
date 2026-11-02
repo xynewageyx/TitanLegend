@@ -588,6 +588,8 @@ func _begin_boss_cast() -> void:
  boss_next_cast_tick = skill_tick + 9
  _animate_boss_event("attack_windup")
  if boss_cc_required > 0:
+  AudioManager.play_event("boss_warning")
+ if boss_cc_required > 0:
   # Prepared hits were earned by the strict four-slot rotation earlier.
   # Each living hero can contribute at most one banked hit.
   for slot in range(4):
