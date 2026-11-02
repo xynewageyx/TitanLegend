@@ -31,6 +31,7 @@ jobs:
           assert struct.unpack_from('<I',header,4)[0]==2, 'GLB version must be 2'
           print('GLB export validated')
           PY
+          python3 tools/blender/validate_grasland_glb.py /tmp/grasland.glb
       - name: Upload Godot-ready model
         uses: actions/upload-artifact@v4
         with:
