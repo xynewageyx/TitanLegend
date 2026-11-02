@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 04:12 UTC**
-Git-Stand: **7f2b7d61dd3d328e37506a2c754a8e5f60d43be7** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 14:07 UTC**
+Git-Stand: **cd83e2940d8b5edebaf95ca65eca2248c0f3e4b1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`cd83e29\` (2026-11-02): art(characters): add rigged chibi limbs and correct arm leg skin weights
 - \`cd60f0b\` (2026-11-02): art(forest): add species-specific bark grain fur tufts fungus spots and foliage surfaces
 - \`b1186cb\` (2026-11-02): fix(characters): repair chibi rig script and export node-based cartoon materials
 
@@ -37,7 +38,6 @@ Git-Stand: **7f2b7d61dd3d328e37506a2c754a8e5f60d43be7** auf Branch **main**
 
 - \`7f2b7d6\` (2026-11-02): docs(coordination): register replacement character and landscape chats
 - \`a54247e\` (2026-11-02): fix(characters): align hero manifest with eleven playable classes
-- \`cc51c52\` (2026-11-02): art: align character proportions and shading with Ulala-like chibi direction
 
 ## Regeln für alle Fach-Chats
 
