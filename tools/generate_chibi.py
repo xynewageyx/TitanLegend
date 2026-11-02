@@ -5,7 +5,14 @@ os.makedirs(OUT,exist_ok=True)
 NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
 COLORS=[(.2,.12,.1),(.7,.5,.2),(.2,.4,.2),(.1,.3,.5),(.4,.25,.1),(.2,.15,.3),(.1,.2,.6),(.4,.2,.5),(.6,.4,.7),(.8,.7,.4),(.5,.2,.1)]
 def material(name,color):
- m=bpy.data.materials.new(name);m.diffuse_color=(*color,1);return m
+ m=bpy.data.materials.new(name);m.diffuse_color=(*color,1)
+ m.use_nodes=True
+ bsdf=m.node_tree.nodes.get('Principled BSDF')
+ if bsdf:
+  bsdf.inputs['Base Color'].default_value=(*color,1)
+  bsdf.inputs['Metallic'].default_value=0.0
+  bsdf.inputs['Roughness'].default_value=0.85
+ return m
 def loft(name,levels,mat):
  vertices=[];faces=[];n=24
  for z,rx,ry,front in levels:
@@ -26,7 +33,8 @@ def rig_and_animate():
  """Lightweight rigid skinning with named bones and five reusable action clips."""
  bpy.ops.object.armature_add(enter_editmode=True,location=(0,0,0))
  arm=bpy.context.object;arm.name="ChibiRig"
- for initial_bone in list(arm.data.edit_bones):\n  arm.data.edit_bones.remove(initial_bone)
+ for initial_bone in list(arm.data.edit_bones):
+  arm.data.edit_bones.remove(initial_bone)
  specs=[
   ("Root",None,(0,0,.1),(0,0,.5)),
   ("Hips","Root",(0,0,.5),(0,0,1.0)),
