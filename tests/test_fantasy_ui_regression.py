@@ -67,6 +67,16 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_interrupted_character_creation_is_recoverable_without_overwrite(self):
+        selection = self.read_script("character_selection.gd")
+        slots = self.read_script("character_save_slots.gd")
+        self.assertIn('if save_error == ERR_ALREADY_EXISTS:', selection)
+        self.assertIn('SAVE_SLOTS.recover_pending_creation(candidate, creation_slot)', selection)
+        self.assertIn('static func recover_pending_creation(registry: Dictionary, slot: int)', slots)
+        self.assertIn('saved.get("character_name", "")', slots)
+        self.assertIn('saved.get("class_id", -1)', slots)
+        self.assertIn('saved.get("role_id", -1)', slots)
+
     def test_character_registry_backup_recovery(self):
         profiles = self.read_script("character_profiles.gd")
         self.assertIn('static func _read_registry(path: String)', profiles)
