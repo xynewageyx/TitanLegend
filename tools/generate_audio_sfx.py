@@ -55,6 +55,14 @@ SOUNDS.update({
  "elements/shadow.wav": (0.58, 190, 62, "tone"),
  "elements/light.wav": (0.49, 680, 1350, "tone"),
 })
+SOUNDS.update({
+ "elements/crystal.wav": (0.48, 1420, 760, "tone"),
+ "elements/earth.wav": (0.65, 135, 48, "noise"),
+ "elements/wind.wav": (0.73, 820, 180, "noise"),
+ "elements/frost.wav": (0.59, 1180, 170, "tone"),
+ "elements/lightning.wav": (0.24, 1750, 110, "noise"),
+ "elements/chaos.wav": (0.82, 480, 55, "noise"),
+})
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
