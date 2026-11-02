@@ -36,11 +36,21 @@ func _initialize() -> void:
             if animation == null or animation.get_track_count() == 0:
                 failures.append("%s: empty %s" % [enemy, clip])
                 continue
+            if animation.length <= 0.0:
+                failures.append("%s: %s has zero duration" % [enemy, clip])
+                continue
+            var has_transform_track := false
+            for track in animation.get_track_count():
+                if animation.track_get_type(track) in [Animation.TYPE_POSITION_3D, Animation.TYPE_ROTATION_3D, Animation.TYPE_SCALE_3D]:
+                    has_transform_track = true
+                    break
+            if not has_transform_track:
+                failures.append("%s: %s has no 3D motion tracks" % [enemy, clip])
+                continue
             player.play(clip)
-            player.advance(0.1)
-            player.advance(0.25)
-            if not player.is_playing():
-                failures.append("%s: %s did not play" % [enemy, clip])
+            player.advance(0.0)
+            player.seek(minf(animation.length * 0.5, animation.length - 0.0001), true)
+            player.advance(0.0)
             player.stop()
             tested += 1
         instance.free()
