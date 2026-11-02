@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:42 UTC**
-Git-Stand: **c7fe0a11e6ce4f68ec186316f2aefbb74ecf101b** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:45 UTC**
+Git-Stand: **52d787668ba78ec48504b58d0a92e3969cc59800** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -23,12 +24,15 @@ Git-Stand: **c7fe0a11e6ce4f68ec186316f2aefbb74ecf101b** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
+- `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
+- `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
 - `07c5bd5` (2026-11-02): Reset graphics sampling after manual preset changes and simplify persistence
 - `2d6db43` (2026-11-02): Reset adaptive FPS sampling after scene transitions
@@ -46,7 +50,7 @@ Git-Stand: **c7fe0a11e6ce4f68ec186316f2aefbb74ecf101b** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `d5811f4` (2026-11-02): test(forest): sample midpoint of short animation clips and validate nonzero 3D motion
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
