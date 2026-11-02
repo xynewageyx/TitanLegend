@@ -67,6 +67,15 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_character_selection_reads_progress_from_own_save(self):
+        selection = self.read_script("character_selection.gd")
+        self.assertIn('SAVE_SLOTS.load_slot(registry, slot)', selection)
+        self.assertIn('updated_profile["level"]', selection)
+        self.assertIn('updated_profile["xp"]', selection)
+        self.assertIn('updated_profile["reincarnation"]', selection)
+        self.assertIn('PROFILES.save_registry(candidate)', selection)
+        self.assertIn('character_selected.emit(slot)', selection)
+
     def test_class_menu_fixed_header_and_footer(self):
         classes = self.read_script("class_menu.gd")
         self.assertIn('header_close.pressed.connect', classes)
