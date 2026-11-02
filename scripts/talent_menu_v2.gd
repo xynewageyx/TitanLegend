@@ -142,7 +142,7 @@ func _refresh() -> void:
   button.disabled = false
   if not can_upgrade_talent:
    button.modulate = Color(0.65, 0.65, 0.65)
-  button.pressed.connect(_on_talent_pressed.bind(talent_index, can_upgrade_talent))
+  button.pressed.connect(_on_talent_pressed.bind(talent_index))
   talent_grid.add_child(button)
   button.focus_entered.connect(_show_talent_detail.bind(talent_index))
   button.mouse_entered.connect(_show_talent_detail.bind(talent_index))
@@ -175,7 +175,14 @@ func _show_talent_detail(talent_index: int) -> void:
  elif row > 0:
   talent_detail_label.text += " | Benötigt %d Punkte in vorherigen Reihen" % (row * 5)
 
-func _on_talent_pressed(talent_index: int, can_upgrade_talent: bool) -> void:
- _show_talent_detail(talent_index)
- if can_upgrade_talent:
+func _on_talent_pressed(talent_index: int) -> void:
+ if team == null or not is_instance_valid(team) or not team.has_method("get_talent_build_v2"):
+  return
+ if talent_index < 0 or talent_index >= TREES.TALENTS_PER_BRANCH:
+  return
+ var build: Array = team.get_talent_build_v2(selected_hero)
+ var can_upgrade_now: bool = TREES.can_upgrade(GameManager.character_level, build, selected_branch, talent_index)
+ if can_upgrade_now:
   _upgrade(talent_index)
+ else:
+  _show_talent_detail(talent_index)
