@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:47 UTC**
-Git-Stand: **5a56320888cab58755f5d02b40df3799943c6d43** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:48 UTC**
+Git-Stand: **8fc1bf4db7f6854b00b2e7e92cf124d6ee2b292e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,6 @@ Git-Stand: **5a56320888cab58755f5d02b40df3799943c6d43** auf Branch **main**
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
-- `11570e2` (2026-11-02): test(forest): verify imported enemies contain real MeshInstance3D geometry
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -32,6 +31,7 @@ Git-Stand: **5a56320888cab58755f5d02b40df3799943c6d43** auf Branch **main**
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `8fc1bf4` (2026-11-02): Apply graphics profile to scene root visuals as well as children
 - `52d7876` (2026-11-02): test(talents): guard normalized talent rendering and hero branch picker synchronization
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 
