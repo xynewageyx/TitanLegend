@@ -23,6 +23,9 @@ func _initialize() -> void:
             failures.append("%s: cannot instantiate scene" % enemy)
             continue
         root.add_child(instance)
+        var mesh_count := _count_meshes(instance)
+        if mesh_count < 8:
+            failures.append("%s: too few visible mesh nodes (%d)" % [enemy, mesh_count])
         var player := _find_player(instance)
         if player == null:
             failures.append("%s: missing AnimationPlayer" % enemy)
@@ -70,3 +73,9 @@ func _find_player(node: Node) -> AnimationPlayer:
         if found != null:
             return found
     return null
+
+func _count_meshes(node: Node) -> int:
+    var count := 1 if node is MeshInstance3D and (node as MeshInstance3D).mesh != null else 0
+    for child in node.get_children():
+        count += _count_meshes(child)
+    return count
