@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:23 UTC**
-Git-Stand: **d758a4f85542f53308ba5f016c41b411921b9e2c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 20:47 UTC**
+Git-Stand: **34fcc64d3ddb68098fe59118682f62a2dd855ad5** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,6 +20,7 @@ Git-Stand: **d758a4f85542f53308ba5f016c41b411921b9e2c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
+- `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
 - `d758a4f` (2026-11-02): ui(talents): show exact missing prerequisite points and insufficient budget on locked talents
 - `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 
@@ -28,9 +29,10 @@ Git-Stand: **d758a4f85542f53308ba5f016c41b411921b9e2c** auf Branch **main**
 - `20a617d` (2026-11-02): test(talents): cover locked-talent inspection and live eligibility on Android taps
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
 - `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 - `feccca4` (2026-11-02): Add opt-in adaptive resolution with FPS hysteresis
 
@@ -38,7 +40,7 @@ Git-Stand: **d758a4f85542f53308ba5f016c41b411921b9e2c** auf Branch **main**
 - `5f05879` (2026-11-02): Add instantiable moderation administrator screen scene
 
 ### Audio — Audio-Erstellung-Chat
-- `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6623a82` (2026-11-02): test(forest): verify animation targets reference valid nodes and each clip animates CreatureRoot
