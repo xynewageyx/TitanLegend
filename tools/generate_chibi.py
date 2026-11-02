@@ -105,6 +105,8 @@ for idx,name in enumerate(NAMES):
   x=side*.19
   oval("EyeWhite",(x,-.37,1.90),(.13,.035,.16),white)
   oval("Iris",(x,-.405,1.90),(.075,.018,.11),dark)
+  oval("EyeGlint",(x-.027,-.423,1.952),(.026,.012,.035),white)
+  oval("Eyebrow",(x,-.39,2.095),(.115,.027,.035),hair)
   oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
   oval("Arm",(side*.40,0,1.19),(.14,.16,.32),skin)
   oval("Hand",(side*.47,-.02,.94),(.15,.14,.15),skin)
@@ -114,6 +116,11 @@ for idx,name in enumerate(NAMES):
   x=(k-2)*.15
   lock=loft("HairLock",[(2.04,.07,.08,-.29),(2.17,.10,.11,-.26),(2.29,.08,.08,-.18),(2.36,.01,.01,-.12)],hair)
   lock.location.x=x
+  # Alternating length and lean gives each class a less uniform fringe.
+  lock.scale.z=1.0+(idx%4)*.09+(k%2)*.06
+  lock.rotation_euler.y=(k-2)*.065
+ # Rounded rear hair volume avoids a flat silhouette from the side.
+ oval("HairBack",(0,.21,2.09),(.37,.22,.30),hair)
  oval("Nose",(0,-.42,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40,1.71),(.10,.018,.02),dark)
  # Original class-specific silhouettes, kept lightweight for Android GL Compatibility.
