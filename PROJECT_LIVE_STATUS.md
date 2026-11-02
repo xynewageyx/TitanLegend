@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:31 UTC**
-Git-Stand: **d46514b5d0df9795b93949065bcb471b6b3b4239** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:32 UTC**
+Git-Stand: **725c5cc216ea84feb4cfcbb9d0ccf1ae61ae8b58** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -21,7 +21,7 @@ Git-Stand: **d46514b5d0df9795b93949065bcb471b6b3b4239** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `1e71fb0` (2026-11-02): art(chibi): improve armored torso silhouette and attach head gem to head bone
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -34,6 +34,7 @@ Git-Stand: **d46514b5d0df9795b93949065bcb471b6b3b4239** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `725c5cc` (2026-11-02): Avoid automatic graphics downscaling during scene startup and loading
 - `3455e2a` (2026-11-02): test(chibi): render Android-friendly hero preview PNGs for visual quality checks
 - `665dade` (2026-11-02): Preserve authored light and particle settings across graphics quality changes
 
