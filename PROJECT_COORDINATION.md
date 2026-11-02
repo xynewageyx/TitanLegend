@@ -66,3 +66,6 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - Beide ersetzen für die Koordination die bisherigen Chat-Zuordnungen ihrer Fachbereiche; es entstehen keine doppelten Entwicklungsaufträge.
 - Skill-Animationen bleiben beim separaten Skills-und-Animationen-Chat. Schnittstellen zum Charakterdesign abstimmen.
 - Alle Fach-Chats lesen PROJECT_LIVE_STATUS.md und dokumentieren Änderungen in GitHub. Ein automatischer Nachrichtenaustausch zwischen ChatGPT-Chats ist nicht verfügbar.
+
+## Audio-Erstellung (2026-11-02)
+- **Audio-Erstellung (neuer Fach-Chat):** Musik, Umgebungsgeräusche, Kampf-/Skill-SFX, UI-Sounds, Audio-Mixing und Godot-Audio-Integration; stimmt Skill-Sounds mit Skills-und-Animationen, Gebietsatmosphäre mit Landschaft und UI-Sounds mit UI ab. Nur eigene oder entsprechend lizenzierte Audio-Assets verwenden.
