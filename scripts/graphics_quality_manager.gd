@@ -95,6 +95,7 @@ func _apply_scene_quality() -> void:
 	var root := get_tree().current_scene
 	if root == null:
 		return
+	_apply_visual_quality(root)
 	for node in root.find_children("*", "Light3D", true, false):
 		_apply_visual_quality(node)
 	for node in root.find_children("*", "GPUParticles3D", true, false):
