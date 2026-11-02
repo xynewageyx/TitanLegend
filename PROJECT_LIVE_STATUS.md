@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 18:49 UTC**
-Git-Stand: **cb086f447dddf64af5bccd2220f69563410373cf** auf Branch **main**
+Git-Stand: **6863dac8c0fcbc63bad6eb0846c56da75bd3c038** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,17 +23,17 @@ Git-Stand: **cb086f447dddf64af5bccd2220f69563410373cf** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `6863dac` (2026-11-02): Connect moderation policy, persistent storage and evidence export in server coordinator
 - `f3b84eb` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
-- `5fc680c` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `9e424f4` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
 - `37f2270` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
 - `c1a9f81` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
 - `f3b84eb` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
-- `4afe7af` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `6863dac` (2026-11-02): Connect moderation policy, persistent storage and evidence export in server coordinator
 - `cb086f4` (2026-11-02): Add atomic persistent moderation state storage for dedicated Godot server
 - `94cbd3a` (2026-11-02): Add server-authoritative moderation cases, evidence snapshots and owner-approved bans
 - `3139396` (2026-11-02): Add Godot moderation review panel for owner-adjustable ban proposals
@@ -43,11 +43,9 @@ Git-Stand: **cb086f447dddf64af5bccd2220f69563410373cf** auf Branch **main**
 - `37f2270` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
 - `c1a9f81` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
 - `f3b84eb` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
-- `4afe7af` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `9e424f4` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
-- `4afe7af` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
 
 ## Bereichsübergreifende Änderungen
 
