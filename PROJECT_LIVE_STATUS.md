@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 22:13 UTC**
-Git-Stand: **9f89e070e070a1d06895cb8bbafa17d254406e60** auf Branch **main**
+Git-Stand: **90b0b2f95fec2732dd1d49bc7b83c4184ea3f4f7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `90b0b2f` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
 - `bdac0a9` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
@@ -37,8 +38,7 @@ Git-Stand: **9f89e070e070a1d06895cb8bbafa17d254406e60** auf Branch **main**
 - `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `c74d207` (2026-11-02): Wire Android moderation admin controller to authoritative RPC client
-- `4dffb9a` (2026-11-02): Add authoritative moderation RPC transport with sender-derived permissions
+- `b9f9332` (2026-11-02): Attach moderation RPC node to admin scene and wire controller path
 
 ### Audio — Audio-Erstellung-Chat
 - `2b822ce` (2026-11-02): Give each class layered harmonic and transient sound signatures (#15)
