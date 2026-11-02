@@ -15,6 +15,7 @@ AREAS = {
     "UI": ("scripts/ui", "scenes/ui/", "assets/ui/"),
     "Gameplay": ("scripts/team", "scripts/battle", "scripts/talent", "scripts/save", "scripts/game_manager"),
     "Skills und Animationen": ("scripts/skill", "scripts/ability", "scripts/combat_skill", "assets/skills/", "assets/vfx/", "assets/effects/", "scenes/skills/", "tools/skills/", "tests/test_skill", "tests/test_ability", "tools/blender/generate_skill"),
+    "Titan Chat / Moderation": ("scripts/chat", "scripts/moderation", "scripts/chat_filter", "scenes/chat", "assets/chat/", "tools/chat/", "tests/test_chat", "tests/test_moderation", "server/chat", "server/moderation"),
     "Audio": ("assets/audio/", "audio/", "sounds/", "music/", "scripts/audio", "scenes/audio", "tools/audio/", "tests/test_audio"),
     "Integration/CI": (".github/workflows/", "project.godot", "export_presets.cfg"),
 }
@@ -26,6 +27,7 @@ OWNERS = {
     "UI": "UI-Chat",
     "Gameplay": "Gameplay-/Talent-Chat",
     "Skills und Animationen": "Skills-und-Animationen-Chat",
+    "Titan Chat / Moderation": "Titan-Chat-Chat",
     "Audio": "Audio-Erstellung-Chat",
     "Integration/CI": "GitHub-/Integrations-Chat",
 }
@@ -63,6 +65,7 @@ def main():
         "UI": ("ui(", "hud", "menu", "layout"),
         "Gameplay": ("talent", "xp", "combat", "battle", "team", "progression"),
         "Skills und Animationen": ("skill", "ability", "spell", "interrupt", "unterbrech", "vfx"),
+        "Titan Chat / Moderation": ("chat(", "moderation", "profanity", "schimpfwort", "verwarn", "chatban", "chat ban", "mute"),
         "Audio": ("audio", "sound", "sfx", "soundtrack", "music", "musik", "ambient", "foley"),
         "Integration/CI": ("ci(", "build(", "workflow", "pipeline"),
     }
