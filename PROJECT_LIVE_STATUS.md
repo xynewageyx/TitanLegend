@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:46 UTC**
-Git-Stand: **1e5776a23c04a6441978586e5b1a1bc9059025b9** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:47 UTC**
+Git-Stand: **313939697b6cf83b870bb90c9d00284f61830849** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **1e5776a23c04a6441978586e5b1a1bc9059025b9** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `86e07fd` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `da8c0c2` (2026-11-02): Bind local hero audio to authoritative team ownership and clear on switching
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `1e5776a` (2026-11-02): fix(forest): accept Blender numeric NLA animation suffixes during clip merge
@@ -26,7 +25,6 @@ Git-Stand: **1e5776a23c04a6441978586e5b1a1bc9059025b9** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - `f3b84eb` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
 - `5fc680c` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
-- `da8c0c2` (2026-11-02): Bind local hero audio to authoritative team ownership and clear on switching
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `9e424f4` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
@@ -36,7 +34,7 @@ Git-Stand: **1e5776a23c04a6441978586e5b1a1bc9059025b9** auf Branch **main**
 - `4afe7af` (2026-11-02): Add eleven distinct class skill sounds and preserve local-only audio playback
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `3139396` (2026-11-02): Add Godot moderation review panel for owner-adjustable ban proposals
 
 ### Audio — Audio-Erstellung-Chat
 - `9e424f4` (2026-11-02): Add distinct local-only audio for taunt, guard, interrupt, regeneration and healing
