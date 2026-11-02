@@ -94,3 +94,15 @@ func play_combat_hit(is_critical: bool = false) -> void:
 
 func play_interrupt() -> void:
  play_event("combat_interrupt")
+
+# Local client owns exactly one hero. Multiplayer must set this after login/spawn.
+# -1 disables all character combat sounds until ownership is known.
+var local_hero_slot: int = -1
+
+func set_local_hero_slot(slot: int) -> void:
+ local_hero_slot = slot if slot >= 0 and slot < 4 else -1
+
+func play_local_hero_event(slot: int, event_name: String) -> void:
+ if slot != local_hero_slot or local_hero_slot < 0:
+  return
+ play_event(event_name)
