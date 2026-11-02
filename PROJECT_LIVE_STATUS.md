@@ -1,13 +1,15 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:11 UTC**
-Git-Stand: **2b822ce53268dc83534e8fa8a6ef63f6b455d9ab** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:12 UTC**
+Git-Stand: **9a0dc92e111b722123ad716f9d4670818efacc6f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
+- `bdac0a9` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -29,8 +31,8 @@ Git-Stand: **2b822ce53268dc83534e8fa8a6ef63f6b455d9ab** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
 - `fc0bb61` (2026-11-02): fix(chibi): initialize scene before configuring Workbench preview shading
-- `6eae66b` (2026-11-02): Avoid redundant viewport render scale writes during graphics updates
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c74d207` (2026-11-02): Wire Android moderation admin controller to authoritative RPC client
