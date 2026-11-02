@@ -6,6 +6,7 @@ on:
       - 'tools/generate_chibi.py'
       - 'tools/validate_chibi_glb.py'
       - '.github/workflows/generate-chibi-heroes.yml'
+      - 'tools/render_chibi_previews.py'
 permissions:
   contents: write
 jobs:
@@ -32,6 +33,15 @@ jobs:
         with:
           name: titan-legends-chibi-glb
           path: assets/heroes/chibi/*.glb
+          if-no-files-found: warn
+      - name: Render visual previews of all eleven heroes
+        run: blender -b --python tools/render_chibi_previews.py
+      - name: Upload character preview images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-legends-chibi-previews
+          path: build/chibi_previews/*.png
           if-no-files-found: warn
       - name: Commit generated GLBs
         run: |
