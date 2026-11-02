@@ -65,7 +65,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get install -y xvfb libgl1-mesa-dri
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1-mesa-dri mesa-vulkan-drivers libvulkan1 vulkan-tools
           curl -fL --retry 3 -o /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
           mkdir -p /tmp/godot-bin
           unzip -q /tmp/godot.zip -d /tmp/godot-bin
@@ -75,6 +76,12 @@ jobs:
           "$GODOT" --version | grep -F '4.7.2.stable'
           export LIBGL_ALWAYS_SOFTWARE=1
           export GODOT_AUDIO_DRIVER=Dummy
+          # Godot's GLB editor importer may initialize Vulkan even in GL Compatibility mode.
+          # Provide Mesa's CPU Vulkan implementation rather than masking the error.
+          if [ -f /usr/share/vulkan/icd.d/lvp_icd.x86_64.json ]; then
+            export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          fi
+          vulkaninfo --summary > /tmp/grasland-vulkan-info.log 2>&1 || { cat /tmp/grasland-vulkan-info.log; exit 1; }
           xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --editor --import --quit 2>&1 | tee /tmp/grasland-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|(^|[[:space:]])ERROR:|Failed to load script' /tmp/grasland-import.log; then
             echo "::error::Godot preview import reported an error"
