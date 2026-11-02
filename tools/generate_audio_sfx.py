@@ -42,6 +42,12 @@ SOUNDS.update({
  "classes/priest_skill.wav": (0.507, 933, 1168, "tone"),
  "classes/brawler_skill.wav": (0.530, 1000, 1220, "noise"),
 })
+SOUNDS.update({
+ "skills/taunt.wav": (0.32, 170, 320, "noise"),
+ "skills/guard.wav": (0.48, 260, 120, "tone"),
+ "skills/interrupt.wav": (0.25, 1100, 180, "noise"),
+ "skills/regeneration.wav": (0.72, 360, 880, "tone"),
+})
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
