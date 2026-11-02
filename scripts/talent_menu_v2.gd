@@ -168,7 +168,7 @@ func _show_talent_detail(talent_index: int) -> void:
   return
  if not team.has_method("get_talent_build_v2") or selected_hero < 0 or selected_hero >= team.class_ids.size():
   return
- var build: Array = team.get_talent_build_v2(selected_hero)
+ var build: Array = TREES.validate_build(GameManager.character_level, team.get_talent_build_v2(selected_hero))
  if selected_branch < 0 or selected_branch >= build.size() or not build[selected_branch] is Array:
   return
  if talent_index >= build[selected_branch].size():
