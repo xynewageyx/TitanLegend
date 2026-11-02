@@ -44,6 +44,9 @@ jobs:
             echo 'Godot import or script errors detected'
             exit 1
           fi
+      - name: Test five independent character profiles
+        shell: bash
+        run: godot --headless --path . --script res://tests/test_character_profiles.gd
       - name: Test fantasy UI and four hardening slots
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_fantasy_ui_regression.py' -v
