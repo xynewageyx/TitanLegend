@@ -4,6 +4,10 @@ extends Node
 signal audio_backend_changed(backend_name: String)
 
 const SFX_POOL_SIZE: int = 8
+# Keep frequently reused audio streams ready for Android combat.
+const EVENT_CACHE_LIMIT: int = 24
+var _event_stream_cache: Dictionary = {}
+var _event_cache_order: Array[String] = []
 var ambience: AudioStreamPlayer
 var ambience_next: AudioStreamPlayer
 var ambience_transition: Tween
@@ -94,7 +98,7 @@ func _set_ambience_gain(value: float, player: AudioStreamPlayer) -> void:
  _apply_volumes()
 
 func play_ambience(event_name: String) -> void:
- var stream: AudioStream = AUDIO_EVENTS.load_event(event_name)
+ var stream: AudioStream = _get_event_stream(event_name)
  if stream == null or ambience == null or ambience_next == null:
   return
  if ambience_transition != null and ambience_transition.is_running():
@@ -155,8 +159,23 @@ func stop_sfx() -> void:
 # Named audio events keep gameplay independent from asset paths.
 const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
 
-func play_event(event_name: String) -> void:
+func _get_event_stream(event_name: String) -> AudioStream:
+ if _event_stream_cache.has(event_name):
+  _event_cache_order.erase(event_name)
+  _event_cache_order.append(event_name)
+  return _event_stream_cache[event_name] as AudioStream
  var stream: AudioStream = AUDIO_EVENTS.load_event(event_name)
+ if stream == null:
+  return null
+ if _event_cache_order.size() >= EVENT_CACHE_LIMIT:
+  var oldest: String = _event_cache_order.pop_front()
+  _event_stream_cache.erase(oldest)
+ _event_stream_cache[event_name] = stream
+ _event_cache_order.append(event_name)
+ return stream
+
+func play_event(event_name: String) -> void:
+ var stream: AudioStream = _get_event_stream(event_name)
  if stream == null:
   return
  if event_name.begins_with("music_"):
