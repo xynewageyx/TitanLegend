@@ -109,7 +109,9 @@ func _refresh() -> void:
  selected_hero = clampi(selected_hero, 0, mini(3, team.class_ids.size() - 1))
  selected_branch = clampi(selected_branch, 0, 2)
  var level: int = GameManager.character_level
- var build: Array = team.get_talent_build_v2(selected_hero)
+ var build: Array = TREES.validate_build(level, team.get_talent_build_v2(selected_hero))
+ hero_picker.select(selected_hero)
+ branch_picker.select(selected_branch)
  for hero_slot in range(hero_picker.item_count):
   var class_label: String = "Held"
   if hero_slot < team.class_ids.size():
