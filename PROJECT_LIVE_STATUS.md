@@ -1,16 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 18:35 UTC**
-Git-Stand: **fcca378e38fe45f0b4d6b63efcc0c00e46f59527** auf Branch **main**
+Git-Stand: **733e5a35346cdc2c04f77bc3337d3bcd27b16bd8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -25,29 +23,27 @@ Git-Stand: **fcca378e38fe45f0b4d6b63efcc0c00e46f59527** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
+### Titan Chat / Moderation — Titan-Chat-Chat
+- `fcca378` (2026-11-02): Support owner-customizable moderation penalty proposals and rejection previews
+- `4d82215` (2026-11-02): Require three system warnings before owner-approved account ban requests
+- `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
+- `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
+- `eaa6a25` (2026-11-02): Add standalone Titan Legends chat channel model
+
 ### Audio — Audio-Erstellung-Chat
 - `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
-- `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
 
 ## Bereichsübergreifende Änderungen
 
-- `fcca378` (2026-11-02): Support owner-customizable moderation penalty proposals and rejection previews
-- `4d82215` (2026-11-02): Require three system warnings before owner-approved account ban requests
-- `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
-- `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
-- `eaa6a25` (2026-11-02): Add standalone Titan Legends chat channel model
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
