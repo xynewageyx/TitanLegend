@@ -1,18 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:25 UTC**
-Git-Stand: **067333cca03fdb25b70d6ca404d4694c17c8bd20** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:26 UTC**
+Git-Stand: **f5d20bdf866ecf130e4089f0031edbda8c9042ce** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
 - `e003a91` (2026-11-02): art(heroes): introduce distinct class silhouette accessories for eleven chibi heroes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `bfebb01` (2026-11-02): fix(forest): normalize JSON padding removal in GLB animation merge
-- `a847bfb` (2026-11-02): fix(forest): merge Blender root and limb NLA tracks into four complete GLB animation clips
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -24,17 +24,18 @@ Git-Stand: **067333cca03fdb25b70d6ca404d4694c17c8bd20** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
 - `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
+- `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
 - `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
 - `e4e50e0` (2026-11-02): Add free procedural audio generation and CI artifacts
 - `ae80ae2` (2026-11-02): Add free procedural audio generation and CI artifacts
 - `8f411cd` (2026-11-02): Connect named audio events to existing Godot AudioManager
-- `a7efb46` (2026-11-02): Add centralized Titan Legends audio event catalog
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
