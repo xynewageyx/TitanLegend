@@ -34,7 +34,7 @@ jobs:
           import json
           from pathlib import Path
           root = Path('tools/asset_pipeline/generated')
-          assert len(json.loads((root/'heroes.json').read_text())['heroes']) == 10
+          assert len(json.loads((root/'heroes.json').read_text())['heroes']) == 11
           assert len(json.loads((root/'biomes.json').read_text())['biomes']) == 12
           assert len(json.loads((root/'animations.json').read_text())['clips']) == 6
           PY
