@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:59 UTC**
-Git-Stand: **c6bcd31f7cbd3561edf84c1e7b76993ac2cfdd2b** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:03 UTC**
+Git-Stand: **380bbef776c3d692641b85f5c70d813f0073b680** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **c6bcd31f7cbd3561edf84c1e7b76993ac2cfdd2b** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `d8d7b0d` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `f90327e` (2026-11-02): anim(chibi): add breathing idle secondary motion head bounce and attack torso follow-through
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -33,10 +32,12 @@ Git-Stand: **c6bcd31f7cbd3561edf84c1e7b76993ac2cfdd2b** auf Branch **main**
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
+### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c14c019` (2026-11-02): Connect moderation admin panel signals to authenticated gateway adapter
 - `8efeb19` (2026-11-02): Add fail-closed admin moderation gateway with server-side owner identity resolution
-- `08b7ec7` (2026-11-02): Add owner-controlled ban adjustment and revocation with audit history
 
 ### Audio — Audio-Erstellung-Chat
 - `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
