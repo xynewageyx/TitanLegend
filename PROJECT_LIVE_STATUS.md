@@ -1,18 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:20 UTC**
-Git-Stand: **85d5daade2bed0e49c207729489844a2b24a94bf** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:21 UTC**
+Git-Stand: **1e71fb00381257570aa4aca8d7d8fe3d5e4d7043** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `1e71fb0` (2026-11-02): art(chibi): improve armored torso silhouette and attach head gem to head bone
 - `6462276` (2026-11-02): fix(talents): guard stale hero and malformed talent row during Android interaction
 - `593ed43` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `879746a` (2026-11-02): fix(chibi): skin boots gloves and cuffs to correct animated limb bones
 - `4335c12` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `4ca0505` (2026-11-02): art(chibi): add layered tunics belts boots cuffs and face-framing hair to all heroes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
@@ -22,7 +22,7 @@ Git-Stand: **85d5daade2bed0e49c207729489844a2b24a94bf** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `1e71fb0` (2026-11-02): art(chibi): improve armored torso silhouette and attach head gem to head bone
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
