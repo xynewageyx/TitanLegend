@@ -67,6 +67,13 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_character_switch_failure_does_not_force_legacy_save(self):
+        selection = self.read_script("character_selection.gd")
+        select = selection.split('func _select(slot: int) -> void:', 1)[1]
+        self.assertLess(select.index('PROFILES.save_registry(candidate)'), select.index('SaveManager.configure_character_save(slot)'))
+        self.assertIn('PROFILES.save_registry(registry)', select)
+        self.assertNotIn('SaveManager.use_legacy_save()', select)
+
     def test_interrupted_character_creation_is_recoverable_without_overwrite(self):
         selection = self.read_script("character_selection.gd")
         slots = self.read_script("character_save_slots.gd")
