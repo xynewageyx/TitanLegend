@@ -799,7 +799,7 @@ def merge_gltf_animation_tracks(path):
     groups={clip:{"name":clip,"samplers":[],"channels":[]} for clip in ("idle","attack","hit","death")}
     for animation in source:
         name=animation.get("name","")
-        clip=next((c for c in groups if name==c or name.startswith(c+"_")),None)
+        clip=next((c for c in groups if name==c or name.startswith(c+"_") or (name.startswith(c+".") and name[len(c)+1:].isdigit())),None)
         if clip is None:
             raise RuntimeError("Unexpected forest animation: "+name)
         dest=groups[clip]
