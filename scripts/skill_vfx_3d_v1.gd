@@ -57,6 +57,44 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
  tween.set_parallel(true)
  tween.tween_property(ring, "scale", Vector3(2.2, 1.0, 2.2), 0.42)
  tween.tween_property(material, "albedo_color:a", 0.0, 0.42)
+ # Class-specific motion silhouettes reuse cheap primitive meshes on Android.
+ if skill_id.begins_with("interrupt_"):
+  var accent := MeshInstance3D.new()
+  var accent_mesh := SphereMesh.new()
+  var destination := Vector3.ZERO
+  match skill_id:
+   "interrupt_warrior", "interrupt_brawler":
+    accent_mesh.radius = 0.28
+    accent_mesh.height = 0.56
+    destination = Vector3(0.0, 1.15, -0.7)
+   "interrupt_hunter", "interrupt_rogue":
+    accent_mesh.radius = 0.12
+    accent_mesh.height = 0.24
+    destination = Vector3(0.0, 1.25, -2.0)
+   "interrupt_druid", "interrupt_summoner":
+    accent_mesh.radius = 0.35
+    accent_mesh.height = 0.70
+    destination = Vector3(0.0, 1.6, 0.0)
+   "interrupt_mage", "interrupt_warlock", "interrupt_shaman":
+    accent_mesh.radius = 0.24
+    accent_mesh.height = 0.48
+    destination = Vector3(0.0, 2.0, -0.5)
+   _:
+    accent_mesh.radius = 0.32
+    accent_mesh.height = 0.64
+    destination = Vector3(0.0, 1.8, 0.0)
+  accent.mesh = accent_mesh
+  var accent_material := StandardMaterial3D.new()
+  accent_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+  accent_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+  accent_material.albedo_color = tint
+  accent_material.emission_enabled = true
+  accent_material.emission = Color(tint.r, tint.g, tint.b)
+  accent.material_override = accent_material
+  effect.add_child(accent)
+  accent.position = Vector3(0.0, 0.4, 0.0)
+  tween.tween_property(accent, "position", destination, 0.42)
+  tween.tween_property(accent_material, "albedo_color:a", 0.0, 0.42)
  tween.chain().tween_callback(func() -> void:
   _effects.erase(effect)
   effect.queue_free()
