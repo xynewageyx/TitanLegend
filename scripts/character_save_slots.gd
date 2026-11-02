@@ -9,6 +9,7 @@ static func initial_save(profile: Dictionary) -> Dictionary:
   "version": 2, "stage": 1, "wave": 1, "astral_floor": 1, "astral_marks": 0,
   "gold": 0, "tickets": 0, "gems": 0,
   "character_level": 1, "character_xp": 0, "reincarnation": 0,
+  "character_name": str(profile.get("name", "")),
   "class_id": int(profile.get("class_id", -1)),
   "role_id": int(profile.get("role_id", -1)),
   "jewel_level": 1,
@@ -59,3 +60,21 @@ static func save_slot(registry: Dictionary, slot: int, data: Dictionary) -> Erro
  if int(data.get("character_level", 0)) < 1:
   return ERR_INVALID_DATA
  return STORE.save_atomic(path, data)
+
+## Recover an interrupted character creation without deleting or overwriting
+## an existing save. Only the exact original identity may reclaim the slot.
+static func recover_pending_creation(registry: Dictionary, slot: int) -> bool:
+ var path: String = PROFILES.character_save_path(registry, slot)
+ if path.is_empty():
+  return false
+ var profile: Dictionary = registry["characters"][slot]
+ var saved: Dictionary = STORE.load_latest(path)
+ if saved.is_empty():
+  return false
+ if str(saved.get("character_name", "")) != str(profile.get("name", "")):
+  return false
+ if int(saved.get("class_id", -1)) != int(profile.get("class_id", -2)):
+  return false
+ if int(saved.get("role_id", -1)) != int(profile.get("role_id", -2)):
+  return false
+ return true
