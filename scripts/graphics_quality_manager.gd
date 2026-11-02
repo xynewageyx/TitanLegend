@@ -17,6 +17,7 @@ var automatic_optimization := false
 
 func _ready() -> void:
 	load_settings()
+	get_tree().scene_changed.connect(_on_scene_changed)
 	apply_settings()
 
 func set_preset(preset: String) -> void:
@@ -45,6 +46,7 @@ func apply_settings() -> void:
 	# The 3D scale applies to the root viewport. In Compatibility,
 	# scaling support may vary; keep the control independent of the UI.
 	get_tree().root.scaling_3d_scale = render_scale
+	_apply_scene_quality()
 	settings_changed.emit(get_settings())
 
 func get_settings() -> Dictionary:
@@ -76,3 +78,20 @@ func load_settings() -> void:
 	shadows_enabled = bool(config.get_value("graphics", "shadows", true))
 	effects_enabled = bool(config.get_value("graphics", "effects", false))
 	automatic_optimization = bool(config.get_value("graphics", "automatic", false))
+
+func _apply_scene_quality() -> void:
+	# Only affect optional visual nodes; gameplay and hit detection stay unchanged.
+	var root := get_tree().current_scene
+	if root == null:
+		return
+	for node in root.find_children("*", "DirectionalLight3D", true, false):
+		(node as DirectionalLight3D).shadow_enabled = shadows_enabled
+	for node in root.find_children("*", "OmniLight3D", true, false):
+		(node as OmniLight3D).shadow_enabled = shadows_enabled
+	for node in root.find_children("*", "SpotLight3D", true, false):
+		(node as SpotLight3D).shadow_enabled = shadows_enabled
+	for node in root.find_children("*", "GPUParticles3D", true, false):
+		(node as GPUParticles3D).amount_ratio = 1.0 if effects_enabled else 0.35
+
+func _on_scene_changed(_scene: Node) -> void:
+	_apply_scene_quality()
