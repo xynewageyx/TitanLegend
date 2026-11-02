@@ -59,3 +59,10 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - Asset-Qualität und einheitlichen Stil anhand echter Android-Screenshots prüfen.
 - Defekte Import-/Terrain-/UI-Pfade anhand von Logs priorisieren.
 - Fehlende Abhängigkeiten nur hinzufügen, wenn ein konkreter technischer Bedarf nachgewiesen ist.
+
+## Aktuelle Chat-Zuordnung (2026-11-02)
+- **Charakterdesign (neuer Chat):** übernimmt die bestehende Zuständigkeit für Charaktermodelle, Gesichter, Proportionen, Haare, Rigging und Basisanimationen.
+- **Landschaft (neuer Chat):** übernimmt die bestehende Zuständigkeit für Gebiete, Terrain, Vegetation, Beleuchtung und Android-Performance.
+- Beide ersetzen für die Koordination die bisherigen Chat-Zuordnungen ihrer Fachbereiche; es entstehen keine doppelten Entwicklungsaufträge.
+- Skill-Animationen bleiben beim separaten Skills-und-Animationen-Chat. Schnittstellen zum Charakterdesign abstimmen.
+- Alle Fach-Chats lesen PROJECT_LIVE_STATUS.md und dokumentieren Änderungen in GitHub. Ein automatischer Nachrichtenaustausch zwischen ChatGPT-Chats ist nicht verfügbar.
