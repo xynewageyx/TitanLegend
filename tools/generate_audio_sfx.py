@@ -63,6 +63,7 @@ SOUNDS.update({
  "elements/lightning.wav": (0.24, 1750, 110, "noise"),
  "elements/chaos.wav": (0.82, 480, 55, "noise"),
 })
+SOUNDS["elements/water.wav"] = (0.68, 540, 165, "noise")
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
