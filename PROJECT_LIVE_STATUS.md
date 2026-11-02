@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:35 UTC**
-Git-Stand: **733e5a35346cdc2c04f77bc3337d3bcd27b16bd8** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:37 UTC**
+Git-Stand: **539df86b4144d874def25266284be9dd0a7becab** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,7 +23,7 @@ Git-Stand: **733e5a35346cdc2c04f77bc3337d3bcd27b16bd8** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `539df86` (2026-11-02): fix(talents): let Android users inspect locked talents without purchasing them
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -36,10 +36,10 @@ Git-Stand: **733e5a35346cdc2c04f77bc3337d3bcd27b16bd8** auf Branch **main**
 - `eaa6a25` (2026-11-02): Add standalone Titan Legends chat channel model
 
 ### Audio — Audio-Erstellung-Chat
-- `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
