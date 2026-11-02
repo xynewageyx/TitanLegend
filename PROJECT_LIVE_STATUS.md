@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:16 UTC**
-Git-Stand: **5f058791940d7c8380d2851e47b855093cc1633d** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:17 UTC**
+Git-Stand: **4d439a7dac46b0acf2bd4b88f4f19874b95ba906** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,8 +20,7 @@ Git-Stand: **5f058791940d7c8380d2851e47b855093cc1633d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
-- `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
+- `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `20a617d` (2026-11-02): test(talents): cover locked-talent inspection and live eligibility on Android taps
@@ -30,8 +29,9 @@ Git-Stand: **5f058791940d7c8380d2851e47b855093cc1633d** auf Branch **main**
 - `b52dfc9` (2026-11-02): Loop biome ambience on its dedicated player without interrupting local combat sounds
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
+- `feccca4` (2026-11-02): Add opt-in adaptive resolution with FPS hysteresis
 - `f20621c` (2026-11-02): Apply graphics settings to scene shadows and particle budgets
-- `d975e15` (2026-11-02): Add player graphics settings overlay for portrait HUD
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `5f05879` (2026-11-02): Add instantiable moderation administrator screen scene
@@ -42,7 +42,6 @@ Git-Stand: **5f058791940d7c8380d2851e47b855093cc1633d** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6623a82` (2026-11-02): test(forest): verify animation targets reference valid nodes and each clip animates CreatureRoot
 - `b12ac1e` (2026-11-02): test(forest): require exactly four valid animation clips with unique node channels
-- `48d5101` (2026-11-02): Register graphics quality manager and player settings menu autoloads
 
 ## Bereichsübergreifende Änderungen
 
