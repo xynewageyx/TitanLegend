@@ -74,3 +74,8 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - **Titan-Chat (neuer Fach-Chat):** Ingame-Chat, Chatkanäle, Nachrichtenübermittlung, Schimpfwortfilter, Verwarnungen, Moderationsprotokoll und Sperrverwaltung.
 - **Moderationsregeln:** zunächst drei Systemverwarnungen; danach bei erneuten Verstößen abgestufte Sperren von 2 Stunden, 5 Stunden, 24 Stunden und 7 Tagen. Sperren bedürfen der Freigabe durch den Spielbetreiber; der Betreiber kann die Strafdauer ändern. Zur Prüfung muss ein zweckgebundener, zugriffsgeschützter Chatverlaufs-Auszug bereitstehen; Aufbewahrung und Zugriff datensparsam gestalten.
 - **Schnittstellen:** Abstimmung mit UI für Chatoberfläche, mit Multiplayer/Backend für serverseitige Durchsetzung und mit Audio für Benachrichtigungstöne. Andere Fach-Chats sollen keine parallelen Chat- oder Moderationssysteme entwickeln.
+
+## Grafiktreiber / Rendering (2026-11-02)
+- **Grafiktreiber (neuer Fach-Chat):** Godot-4.7.2-Rendering-Konfiguration, Android-Grafikkompatibilität, Shader-/Material-Optimierung, Beleuchtung, Schatten, Postprocessing, GPU-Profiling, Qualitätsstufen und Performance-Budgets.
+- **Schnittstellen:** Charakterdesign, Landschaften, Gegner/Bosse, Ausrüstung und UI liefern visuelle Anforderungen und Test-Szenen; Grafiktreiber verantwortet gemeinsame Rendering-Standards und geräteabhängige Fallbacks. Integration/CI verantwortet Build- und Validierungsworkflows. Änderungen an globalen Renderer-Einstellungen vorab mit den betroffenen Bereichen abstimmen.
+- **Qualitätsnachweis:** tatsächliche Android-Tests, Framerate/Frametime und Bildvergleiche; erfolgreiche CI allein beweist keine visuelle Qualität. Keine pauschale Behauptung, dass externe Treiber die Engine-Fähigkeiten ersetzen.
