@@ -794,7 +794,7 @@ def merge_gltf_animation_tracks(path):
         cursor+=size
     if not chunks or chunks[0][0]!=0x4E4F534A:
         raise RuntimeError("Missing glTF JSON chunk: "+path)
-    doc=json.loads(chunks[0][1].decode("utf-8").rstrip(" \\x00"))
+    doc=json.loads(chunks[0][1].decode("utf-8").rstrip(" "))
     source=doc.get("animations",[])
     groups={clip:{"name":clip,"samplers":[],"channels":[]} for clip in ("idle","attack","hit","death")}
     for animation in source:
