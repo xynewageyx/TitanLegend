@@ -24,7 +24,9 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn("node_added.connect(_on_node_added)", code)
         self.assertIn("func _on_node_added(", code)
         self.assertIn("GPUParticles3D", code)
-        self.assertIn("shadow_enabled = shadows_enabled", code)
+        self.assertIn("light.shadow_enabled = allow_shadow and bool(light.get_meta(", code)
+        self.assertIn('quality == "medium" and not (light is DirectionalLight3D)', code)
+        self.assertIn('effect_multiplier = 0.20 if quality == "low" else 0.35', code)
 
     def test_no_live_fps_overlay(self):
         menu = MENU.read_text(encoding="utf-8")
