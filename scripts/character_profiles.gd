@@ -41,39 +41,61 @@ static func select_character(registry: Dictionary, slot: int) -> bool:
  registry["active_slot"] = slot
  return true
 
+static func _read_registry(path: String) -> Dictionary:
+ if not FileAccess.file_exists(path):
+  return {}
+ var file := FileAccess.open(path, FileAccess.READ)
+ if file == null or file.get_length() > 262144:
+  return {}
+ var parsed: Variant = JSON.parse_string(file.get_as_text())
+ file.close()
+ if not parsed is Dictionary:
+  return {}
+ var characters: Variant = parsed.get("characters", [])
+ if not characters is Array or characters.size() != MAX_CHARACTERS:
+  return {}
+ for character in characters:
+  if character != null and not character is Dictionary:
+   return {}
+ var active: int = int(parsed.get("active_slot", -1))
+ if active < -1 or active >= MAX_CHARACTERS or (active >= 0 and not characters[active] is Dictionary):
+  return {}
+ return parsed
+
 static func save_registry(registry: Dictionary) -> Error:
- var characters: Array = registry.get("characters", [])
- if characters.size() != MAX_CHARACTERS:
+ if registry.get("characters", []).size() != MAX_CHARACTERS:
   return ERR_INVALID_DATA
- var file := FileAccess.open(PROFILE_PATH + ".tmp", FileAccess.WRITE)
+ var temporary: String = PROFILE_PATH + ".tmp"
+ var file := FileAccess.open(temporary, FileAccess.WRITE)
  if file == null:
   return FileAccess.get_open_error()
  file.store_string(JSON.stringify(registry))
  file.flush()
  file.close()
- var absolute_temp := ProjectSettings.globalize_path(PROFILE_PATH + ".tmp")
- var absolute_target := ProjectSettings.globalize_path(PROFILE_PATH)
- return DirAccess.rename_absolute(absolute_temp, absolute_target)
+ if _read_registry(temporary).is_empty():
+  return ERR_FILE_CORRUPT
+ var existing: Dictionary = _read_registry(PROFILE_PATH)
+ if not existing.is_empty():
+  var backup_temp: String = PROFILE_PATH + ".bak.tmp"
+  var copy_error: Error = DirAccess.copy_absolute(ProjectSettings.globalize_path(PROFILE_PATH), ProjectSettings.globalize_path(backup_temp))
+  if copy_error != OK:
+   return copy_error
+  if _read_registry(backup_temp).is_empty():
+   return ERR_FILE_CORRUPT
+  var rotate_error: Error = DirAccess.rename_absolute(ProjectSettings.globalize_path(backup_temp), ProjectSettings.globalize_path(PROFILE_PATH + ".bak"))
+  if rotate_error != OK:
+   return rotate_error
+ return DirAccess.rename_absolute(ProjectSettings.globalize_path(temporary), ProjectSettings.globalize_path(PROFILE_PATH))
 
 static func load_registry() -> Dictionary:
- if not FileAccess.file_exists(PROFILE_PATH):
-  return new_registry()
- var file := FileAccess.open(PROFILE_PATH, FileAccess.READ)
- if file == null:
-  return new_registry()
- var parsed: Variant = JSON.parse_string(file.get_as_text())
- if not parsed is Dictionary:
-  return new_registry()
- var characters: Variant = parsed.get("characters", [])
- if not characters is Array or characters.size() != MAX_CHARACTERS:
-  return new_registry()
- for character in characters:
-  if character != null and not character is Dictionary:
-   return new_registry()
- var active: int = int(parsed.get("active_slot", -1))
- if active < -1 or active >= MAX_CHARACTERS or (active >= 0 and not characters[active] is Dictionary):
-  return new_registry()
- return parsed
+ var current: Dictionary = _read_registry(PROFILE_PATH)
+ if not current.is_empty():
+  return current
+ var backup: Dictionary = _read_registry(PROFILE_PATH + ".bak")
+ if not backup.is_empty():
+  push_warning("Character registry restored from backup.")
+  return backup
+ return new_registry()
 
 ## Explicit one-time migration: never overwrite an occupied profile.
 ## Legacy saves stay untouched until the new per-character save system is ready.
