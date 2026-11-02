@@ -22,6 +22,7 @@ var good_samples := 0
 func _ready() -> void:
 	load_settings()
 	get_tree().scene_changed.connect(_on_scene_changed)
+	get_tree().node_added.connect(_on_node_added)
 	apply_settings()
 
 func set_preset(preset: String) -> void:
@@ -138,3 +139,15 @@ func _process(delta: float) -> void:
 		adaptive_scale = minf(1.0, adaptive_scale + 0.05)
 		good_samples = 0
 		apply_settings()
+
+func _on_node_added(node: Node) -> void:
+	# Enemies, skill effects and landscape objects may spawn after scene_changed.
+	# Apply the active profile to each newly spawned visual without touching combat.
+	if node is DirectionalLight3D:
+		(node as DirectionalLight3D).shadow_enabled = shadows_enabled
+	elif node is OmniLight3D:
+		(node as OmniLight3D).shadow_enabled = shadows_enabled
+	elif node is SpotLight3D:
+		(node as SpotLight3D).shadow_enabled = shadows_enabled
+	elif node is GPUParticles3D:
+		(node as GPUParticles3D).amount_ratio = 1.0 if effects_enabled else 0.35
