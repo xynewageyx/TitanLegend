@@ -67,6 +67,13 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_character_registry_backup_recovery(self):
+        profiles = self.read_script("character_profiles.gd")
+        self.assertIn('static func _read_registry(path: String)', profiles)
+        self.assertIn('PROFILE_PATH + ".bak"', profiles)
+        self.assertIn('if _read_registry(temporary).is_empty():', profiles)
+        self.assertIn('Character registry restored from backup.', profiles)
+
     def test_autosave_routes_active_character_through_validated_slot(self):
         manager = self.read_script("save_manager.gd")
         self.assertIn('if active_character_slot >= 0:', manager)
