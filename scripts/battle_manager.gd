@@ -695,19 +695,17 @@ func _try_cast_charged_skill(slot: int, role: int) -> void:
  var loadout: Array = skill_loadouts[slot]
  if loadout.is_empty():
   return
- # Traverse equipped slots in priority order; unavailable interrupt skills
- # do not block other skills and never consume charge.
- for offset in range(loadout.size()):
-  var index: int = (next_skill_slot[slot] + offset) % loadout.size()
-  var choice: int = int(loadout[index])
-  if skill_hit_charge[slot] < _skill_hit_cost(role, choice):
-   continue
-  if not _skill_is_usable(slot, role, choice):
-   continue
-  skill_hit_charge[slot] = 0
-  next_skill_slot[slot] = (index + 1) % loadout.size()
-  _execute_equipped_skill(slot, role, choice)
+ # All four equipped skills follow the same strict 1 -> 2 -> 3 -> 4 rotation.
+ # The interrupt skill has no priority, reservation, or boss-cast condition.
+ var index: int = next_skill_slot[slot] % loadout.size()
+ var choice: int = int(loadout[index])
+ if skill_hit_charge[slot] < _skill_hit_cost(role, choice):
   return
+ if not _skill_is_usable(slot, role, choice):
+  return
+ skill_hit_charge[slot] = 0
+ next_skill_slot[slot] = (index + 1) % loadout.size()
+ _execute_equipped_skill(slot, role, choice)
 
 func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
  if skill_vfx_node == null or team_formation == null or slot < 0 or slot >= team_formation.heroes.size():
