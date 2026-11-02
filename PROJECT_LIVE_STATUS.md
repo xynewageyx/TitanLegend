@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 21:09 UTC**
-Git-Stand: **e1495de244f7bd86c83ef8fb120224d789b66631** auf Branch **main**
+Git-Stand: **c1fba528e5db9f130d884708b1a0c8152f13eeaa** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -24,11 +24,9 @@ Git-Stand: **e1495de244f7bd86c83ef8fb120224d789b66631** auf Branch **main**
 - `4574a8a` (2026-11-02): Remove live FPS and render-scale readout from graphics menu
 - `6c0d2b3` (2026-11-02): Show live FPS and effective 3D render scale in graphics menu
 - `34fcc64` (2026-11-02): Fix graphics settings overlay layout for portrait screens
-- `d758a4f` (2026-11-02): ui(talents): show exact missing prerequisite points and insufficient budget on locked talents
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `03bdff9` (2026-11-02): Apply graphics profile to dynamically spawned combat and landscape visuals
-- `d758a4f` (2026-11-02): ui(talents): show exact missing prerequisite points and insufficient budget on locked talents
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
