@@ -747,12 +747,18 @@ def sculpted_surface_identity(creature):
                          (.055*scale,.07*scale,.33*scale),bark_light,12,8)
             ridge.rotation_euler[1]=.20*math.sin(i)
     elif creature in ("forest_04_blattfuchs","forest_05_dorneneber","forest_elite_02_moosbestie"):
-        base_z=1.12 if "fox" in creature else (1.32 if "boar" in creature else 1.90)
-        radius=.43 if "fox" in creature else (.62 if "boar" in creature else .83)
+        # Species IDs are German: use exact identifiers, not English substrings.
+        profiles={
+            "forest_04_blattfuchs": (1.12,.43,.12,fur),
+            "forest_05_dorneneber": (1.32,.62,.20,moss),
+            "forest_elite_02_moosbestie": (1.90,.83,.25,moss),
+        }
+        base_z,radius,depth,coat=profiles[creature]
         for i in range(9):
             theta=2*math.pi*i/9
-            tuft=sphere("fur_layer",(radius*math.cos(theta),.12+radius*.60*math.sin(theta),base_z+.10*math.sin(i)),
-                        (.15,.11,.18),fur if "fox" in creature else moss,12,8)
+            tuft=sphere("fur_layer",(radius*math.cos(theta),depth+radius*.60*math.sin(theta),
+                                     base_z+.10*math.sin(i)),
+                        (.15,.11,.18),coat,12,8)
             tuft.rotation_euler[1]=.25*math.sin(theta)
     elif creature=="forest_02_pilzling":
         for i in range(8):
