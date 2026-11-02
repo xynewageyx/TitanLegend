@@ -7,7 +7,9 @@ const COLORS := {
  "fire": Color(1.0, 0.30, 0.10, 0.72),
  "frost": Color(0.35, 0.84, 1.0, 0.70),
  "nature": Color(0.30, 1.0, 0.50, 0.70),
- "shadow": Color(0.68, 0.35, 1.0, 0.72)
+ "shadow": Color(0.68, 0.35, 1.0, 0.72),
+ "storm": Color(0.45, 0.70, 1.0, 0.72),
+ "steel": Color(0.85, 0.85, 0.95, 0.72)
 }
 const SKILL_STYLE := {
  "shield_bash": "shield", "group_guard": "shield",
@@ -15,7 +17,13 @@ const SKILL_STYLE := {
  "meteor_rain": "fire", "frost_nova": "frost",
  "arrow_rain": "nature", "precision_shot": "nature",
  "healing_wave": "nature", "blessing": "holy",
- "shadow_step": "shadow", "blade_storm": "shadow"
+ "shadow_step": "shadow", "blade_storm": "shadow",
+ "interrupt_warrior": "steel", "interrupt_paladin": "holy",
+ "interrupt_druid": "nature", "interrupt_shaman": "storm",
+ "interrupt_hunter": "nature", "interrupt_rogue": "shadow",
+ "interrupt_mage": "frost", "interrupt_warlock": "shadow",
+ "interrupt_summoner": "storm", "interrupt_priest": "holy",
+ "interrupt_brawler": "fire"
 }
 @export var max_active_effects: int = 12
 var _effects: Array[Node3D] = []
