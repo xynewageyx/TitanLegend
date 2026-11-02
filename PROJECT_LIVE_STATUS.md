@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:17 UTC**
-Git-Stand: **c0ee37b8cffe0287ef2c1aaec1d43acf06f931d6** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:23 UTC**
+Git-Stand: **d758a4f85542f53308ba5f016c41b411921b9e2c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,9 +20,11 @@ Git-Stand: **c0ee37b8cffe0287ef2c1aaec1d43acf06f931d6** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
+- `d758a4f` (2026-11-02): ui(talents): show exact missing prerequisite points and insufficient budget on locked talents
 - `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `d758a4f` (2026-11-02): ui(talents): show exact missing prerequisite points and insufficient budget on locked talents
 - `20a617d` (2026-11-02): test(talents): cover locked-talent inspection and live eligibility on Android taps
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
@@ -31,7 +33,6 @@ Git-Stand: **c0ee37b8cffe0287ef2c1aaec1d43acf06f931d6** auf Branch **main**
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `4d439a7` (2026-11-02): Enable opt-in adaptive FPS optimization in graphics menu
 - `feccca4` (2026-11-02): Add opt-in adaptive resolution with FPS hysteresis
-- `f20621c` (2026-11-02): Apply graphics settings to scene shadows and particle budgets
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `5f05879` (2026-11-02): Add instantiable moderation administrator screen scene
