@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 19:05 UTC**
-Git-Stand: **8394f5c4e8debc03c82f977a19260b98c3494da6** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 19:09 UTC**
+Git-Stand: **b926a4aee86c2b27eb3ebecc6a709b9db291ffa9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -29,10 +29,10 @@ Git-Stand: **8394f5c4e8debc03c82f977a19260b98c3494da6** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `b926a4a` (2026-11-02): Add persistent player-selectable graphics quality manager
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `c14c019` (2026-11-02): Connect moderation admin panel signals to authenticated gateway adapter
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - `2ef9737` (2026-11-02): Add independent ambient audio channel and ten biome sound beds
