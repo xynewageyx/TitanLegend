@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:34 UTC**
-Git-Stand: **4d822152ee76028582171139abb8bdbf5d73ff54** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:35 UTC**
+Git-Stand: **fcca378e38fe45f0b4d6b63efcc0c00e46f59527** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,7 +11,6 @@ Git-Stand: **4d822152ee76028582171139abb8bdbf5d73ff54** auf Branch **main**
 - `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `76d95be` (2026-11-02): Add distinct procedural attack audio for all eleven hero classes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -38,13 +37,13 @@ Git-Stand: **4d822152ee76028582171139abb8bdbf5d73ff54** auf Branch **main**
 - `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `76d95be` (2026-11-02): Add distinct procedural attack audio for all eleven hero classes
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `e9c479a` (2026-11-02): Validate 22 generated SFX including 11 class-specific sounds
 
 ## Bereichsübergreifende Änderungen
 
+- `fcca378` (2026-11-02): Support owner-customizable moderation penalty proposals and rejection previews
 - `4d82215` (2026-11-02): Require three system warnings before owner-approved account ban requests
 - `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
 - `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
