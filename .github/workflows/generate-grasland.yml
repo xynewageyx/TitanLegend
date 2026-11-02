@@ -31,7 +31,18 @@ jobs:
           assert struct.unpack_from('<I',header,4)[0]==2, 'GLB version must be 2'
           print('GLB export validated')
           PY
-          python3 tools/blender/validate_grasland_glb.py /tmp/grasland.glb
+          python3 tools/blender/validate_grasland_glb.py /tmp/grasland.glb /tmp/grasland-performance.json
+          python3 -m json.tool /tmp/grasland-performance.json
+          echo "### Grasland geometry budget" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/grasland-performance.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload geometry report
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Grasland-Geometry-Report
+          path: /tmp/grasland-performance.json
+          if-no-files-found: error
       - name: Upload Godot-ready model
         uses: actions/upload-artifact@v4
         with:
