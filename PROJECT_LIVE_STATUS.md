@@ -1,18 +1,19 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 14:07 UTC**
-Git-Stand: **cd83e2940d8b5edebaf95ca65eca2248c0f3e4b1** auf Branch **main**
+Git-Stand: **3643a6d86c2b43b9fdcd0a29c7c9bedb6620ffca** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- \`3643a6d\` (2026-11-02): fix(forest): correct German species profile lookup for fox boar and moss beast fur
 - \`cd83e29\` (2026-11-02): art(characters): add rigged chibi limbs and correct arm leg skin weights
 - \`cd60f0b\` (2026-11-02): art(forest): add species-specific bark grain fur tufts fungus spots and foliage surfaces
-- \`b1186cb\` (2026-11-02): fix(characters): repair chibi rig script and export node-based cartoon materials
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- \`3643a6d\` (2026-11-02): fix(forest): correct German species profile lookup for fox boar and moss beast fur
 - \`cd60f0b\` (2026-11-02): art(forest): add species-specific bark grain fur tufts fungus spots and foliage surfaces
 
 ### Landschaften — Landschaften-Chat
