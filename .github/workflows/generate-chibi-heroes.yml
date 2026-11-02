@@ -36,6 +36,10 @@ jobs:
           if-no-files-found: warn
       - name: Render visual previews of all eleven heroes
         run: xvfb-run -a blender -b --python tools/render_chibi_previews.py
+      - name: Verify all eleven rendered PNG previews
+        run: |
+          test "$(find build/chibi_previews -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 11
+          test "$(find build/chibi_previews -maxdepth 1 -name '*.png' -type f -size +1k | wc -l)" -eq 11
       - name: Upload character preview images
         if: always()
         uses: actions/upload-artifact@v4
