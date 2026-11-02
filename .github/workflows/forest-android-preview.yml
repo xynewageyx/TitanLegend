@@ -34,7 +34,7 @@ jobs:
           python3 tools/blender/validate_grasland_glb.py /tmp/grasland.glb /tmp/grasland-performance.json
           mkdir -p preview/assets/worlds/grasland preview/scenes build
           cp /tmp/grasland.glb preview/assets/worlds/grasland/grasland.glb
-          cp scenes/grasland_preview.tscn scenes/grasland_performance_hud.gd preview/scenes/
+          cp scenes/grasland_preview.tscn scenes/grasland_performance_hud.gd scenes/grasland_orbit_camera.gd preview/scenes/
           cat > preview/project.godot <<'EOF'
           config_version=5
           [application]
