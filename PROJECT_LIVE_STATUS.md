@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:01 UTC**
-Git-Stand: **e92b526692d04f6bc2914cf6dfa3d64070371b56** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 22:02 UTC**
+Git-Stand: **5f79d3d64544dc3affabd392f845660b6ffa4ddb** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -36,7 +36,6 @@ Git-Stand: **e92b526692d04f6bc2914cf6dfa3d64070371b56** auf Branch **main**
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 - `fe07814` (2026-11-02): Update graphics regression assertions for per-profile shadows and particles
-- `0b3dec0` (2026-11-02): Reduce dynamic shadow and particle costs on low and medium Android profiles
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
