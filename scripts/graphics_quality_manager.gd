@@ -19,6 +19,7 @@ var sample_seconds := 0.0
 var low_samples := 0
 var good_samples := 0
 var startup_grace_seconds := 10.0
+var last_effective_scale := -1.0
 
 func _ready() -> void:
 	load_settings()
@@ -55,7 +56,10 @@ func apply_settings() -> void:
 	Engine.max_fps = target_fps
 	# The 3D scale applies to the root viewport. In Compatibility,
 	# scaling support may vary; keep the control independent of the UI.
-	get_tree().root.scaling_3d_scale = clampf(render_scale * adaptive_scale, 0.5, 1.0)
+	var effective_scale := clampf(render_scale * adaptive_scale, 0.5, 1.0)
+	if not is_equal_approx(effective_scale, last_effective_scale):
+		get_tree().root.scaling_3d_scale = effective_scale
+		last_effective_scale = effective_scale
 	_apply_scene_quality()
 	settings_changed.emit(get_settings())
 
