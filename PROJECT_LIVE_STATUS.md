@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:30 UTC**
-Git-Stand: **d6451f50c6eb49586a8de305f7f5d4adf67bbe0a** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:33 UTC**
+Git-Stand: **70b3e4340831d858c3c57dc0a6f6a2d5cd478ba0** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -30,7 +30,6 @@ Git-Stand: **d6451f50c6eb49586a8de305f7f5d4adf67bbe0a** auf Branch **main**
 - `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
-- `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -47,6 +46,7 @@ Git-Stand: **d6451f50c6eb49586a8de305f7f5d4adf67bbe0a** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `70b3e43` (2026-11-02): Add approval-gated account ban escalation policy for chat moderation
 - `d6451f5` (2026-11-02): Add configurable German and English chat profanity filtering utility
 - `eaa6a25` (2026-11-02): Add standalone Titan Legends chat channel model
 
