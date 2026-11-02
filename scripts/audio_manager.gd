@@ -5,6 +5,9 @@ signal audio_backend_changed(backend_name: String)
 
 const SFX_POOL_SIZE: int = 8
 var ambience: AudioStreamPlayer
+var ambience_next: AudioStreamPlayer
+var ambience_transition: Tween
+const AMBIENCE_FADE_SECONDS: float = 0.8
 var music: AudioStreamPlayer
 var effects: Array[AudioStreamPlayer] = []
 var music_volume: float = 1.0
@@ -17,7 +20,11 @@ func _ready() -> void:
  ambience = AudioStreamPlayer.new()
  ambience.name = "Ambience"
  add_child(ambience)
- ambience.finished.connect(_on_ambience_finished)
+ ambience.finished.connect(_on_ambience_finished.bind(ambience))
+ ambience_next = AudioStreamPlayer.new()
+ ambience_next.name = "AmbienceNext"
+ add_child(ambience_next)
+ ambience_next.finished.connect(_on_ambience_finished.bind(ambience_next))
  music = AudioStreamPlayer.new()
  music.name = "Music"
  add_child(music)
@@ -32,6 +39,8 @@ func _ready() -> void:
 func _apply_volumes() -> void:
  if ambience != null:
   ambience.volume_linear = 0.0 if sfx_muted else sfx_volume * 0.4
+ if ambience_next != null:
+  ambience_next.volume_linear = 0.0 if sfx_muted else sfx_volume * 0.4
  if music != null:
   music.volume_linear = 0.0 if music_muted else music_volume
  for player in effects:
@@ -79,24 +88,47 @@ func play_bgm(stream: AudioStream) -> void:
 
 func play_ambience(event_name: String) -> void:
  var stream: AudioStream = AUDIO_EVENTS.load_event(event_name)
- if stream == null or ambience == null:
+ if stream == null or ambience == null or ambience_next == null:
   return
  if ambience.stream == stream and ambience.playing:
   return
- ambience.stop()
- ambience.stream = stream
- ambience.play()
-
-func _on_ambience_finished() -> void:
- # Replay the environment bed without consuming a combat SFX voice.
- # Do not restart if a transition has cleared the stream.
- if ambience != null and ambience.stream != null:
+ if ambience_transition != null and ambience_transition.is_running():
+  ambience_transition.kill()
+  ambience_next.stop()
+  ambience_next.stream = null
+ if not ambience.playing:
+  ambience.stream = stream
   ambience.play()
+  _apply_volumes()
+  return
+ ambience_next.stream = stream
+ ambience_next.volume_linear = 0.0
+ ambience_next.play()
+ var target_volume: float = 0.0 if sfx_muted else sfx_volume * 0.4
+ ambience_transition = create_tween().set_parallel(true)
+ ambience_transition.tween_property(ambience, "volume_linear", 0.0, AMBIENCE_FADE_SECONDS)
+ ambience_transition.tween_property(ambience_next, "volume_linear", target_volume, AMBIENCE_FADE_SECONDS)
+ ambience_transition.finished.connect(_finish_ambience_transition)
+
+func _finish_ambience_transition() -> void:
+ ambience.stop()
+ ambience.stream = null
+ var previous: AudioStreamPlayer = ambience
+ ambience = ambience_next
+ ambience_next = previous
+ ambience_next.volume_linear = 0.0
+
+func _on_ambience_finished(player: AudioStreamPlayer) -> void:
+ if player != null and player.stream != null:
+  player.play()
 
 func stop_ambience() -> void:
- if ambience != null:
-  ambience.stop()
-  ambience.stream = null
+ if ambience_transition != null and ambience_transition.is_running():
+  ambience_transition.kill()
+ for player in [ambience, ambience_next]:
+  if player != null:
+   player.stop()
+   player.stream = null
 
 func stop_bgm() -> void:
  music.stop()
