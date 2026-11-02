@@ -89,6 +89,8 @@ func _refresh_slots() -> void:
   child.queue_free()
  creation_slot = -1
  var characters: Array = registry.get("characters", [])
+ if characters.size() != PROFILES.MAX_CHARACTERS:
+  return
  for slot in range(PROFILES.MAX_CHARACTERS):
   var button := Button.new()
   button.custom_minimum_size.y = 74
@@ -96,6 +98,8 @@ func _refresh_slots() -> void:
   if profile is Dictionary:
    var class_id: int = int(profile.get("class_id", 0))
    var role_id: int = int(profile.get("role_id", 1))
+   class_id = clampi(class_id, 0, PROFILES.CLASS_NAMES.size() - 1)
+   role_id = clampi(role_id, 0, PROFILES.ROLE_NAMES.size() - 1)
    button.text = "%d · %s · Level %d · %s / %s" % [slot + 1, str(profile.get("name", "")), int(profile.get("level", 1)), PROFILES.CLASS_NAMES[class_id], PROFILES.ROLE_NAMES[role_id]]
    button.pressed.connect(_select.bind(slot))
   else:
