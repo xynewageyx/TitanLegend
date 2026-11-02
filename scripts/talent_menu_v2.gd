@@ -137,11 +137,15 @@ func _refresh() -> void:
    button.tooltip_text += " | Maximalrang erreicht"
   elif row > 0:
    button.tooltip_text += " | Voraussetzung: %d Punkte in vorherigen Reihen" % (row * 5)
-  button.disabled = not TREES.can_upgrade(level, build, selected_branch, talent_index)
+  var can_upgrade_talent: bool = TREES.can_upgrade(level, build, selected_branch, talent_index)
+  # Keep locked talents touchable so their requirements can be inspected on Android.
+  button.disabled = false
+  if not can_upgrade_talent:
+   button.modulate = Color(0.65, 0.65, 0.65)
+  button.pressed.connect(_on_talent_pressed.bind(talent_index, can_upgrade_talent))
   talent_grid.add_child(button)
   button.focus_entered.connect(_show_talent_detail.bind(talent_index))
   button.mouse_entered.connect(_show_talent_detail.bind(talent_index))
-  button.pressed.connect(_upgrade.bind(talent_index))
  if talent_detail_label != null:
   talent_detail_label.text = "Talent auswählen: Rang und Freischaltung ansehen."
 
@@ -170,3 +174,8 @@ func _show_talent_detail(talent_index: int) -> void:
   talent_detail_label.text += " | Maximalrang erreicht"
  elif row > 0:
   talent_detail_label.text += " | Benötigt %d Punkte in vorherigen Reihen" % (row * 5)
+
+func _on_talent_pressed(talent_index: int, can_upgrade_talent: bool) -> void:
+ _show_talent_detail(talent_index)
+ if can_upgrade_talent:
+  _upgrade(talent_index)
