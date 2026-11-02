@@ -1,6 +1,8 @@
 extends CanvasLayer
 ## Player-facing graphics menu. UI is created at runtime for the portrait HUD.
 var panel: PanelContainer
+var screen_root: Control
+var center: CenterContainer
 var preset: OptionButton
 var fps: OptionButton
 var scale_slider: HSlider
@@ -11,18 +13,25 @@ var updating := false
 
 func _ready() -> void:
 	layer = 20
+	screen_root = Control.new()
+	screen_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	screen_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(screen_root)
 	var open_button := Button.new()
 	open_button.text = "Grafik"
-	open_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	open_button.position = Vector2(-120, 80)
-	open_button.custom_minimum_size = Vector2(110, 54)
-	add_child(open_button)
+	screen_root.add_child(open_button)
+	open_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	open_button.position += Vector2(-130, 75)
+	open_button.custom_minimum_size = Vector2(115, 54)
 	open_button.pressed.connect(_toggle)
+	center = CenterContainer.new()
+	screen_root.add_child(center)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel = PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.position = Vector2(70, 180)
-	panel.custom_minimum_size = Vector2(580, 0)
-	add_child(panel)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	center.add_child(panel)
+	panel.custom_minimum_size = Vector2(320, 0)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 12)
 	panel.add_child(column)
@@ -64,12 +73,12 @@ func _ready() -> void:
 	shadows.toggled.connect(_custom_changed)
 	effects.toggled.connect(_custom_changed)
 	automatic.toggled.connect(_automatic_changed)
-	panel.visible = false
+	center.visible = false
 	_refresh()
 
 func _toggle() -> void:
-	panel.visible = not panel.visible
-	if panel.visible:
+	center.visible = not center.visible
+	if center.visible:
 		_refresh()
 
 func _refresh() -> void:
