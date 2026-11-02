@@ -67,6 +67,14 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_skill_menu_fixed_header_and_footer(self):
+        skills = self.read_script("skill_menu.gd")
+        self.assertIn('header_close.pressed.connect', skills)
+        self.assertIn('layout.add_child(scroll)', skills)
+        self.assertIn('layout.add_child(apply)', skills)
+        self.assertIn('layout.add_child(close)', skills)
+        self.assertIn('scroll.add_child(stack)', skills)
+
     def test_menus_preserve_actions(self):
         classes = self.read_script("class_menu.gd")
         skills = self.read_script("skill_menu.gd")
