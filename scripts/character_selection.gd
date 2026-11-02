@@ -2,6 +2,7 @@ extends Control
 ## Standalone character selection/creation screen. The game must connect
 ## character_selected before enabling entry into the world.
 const PROFILES = preload("res://scripts/character_profiles.gd")
+const SAVE_SLOTS = preload("res://scripts/character_save_slots.gd")
 signal character_selected(slot: int)
 var registry: Dictionary = {}
 var list_container: VBoxContainer
@@ -118,15 +119,20 @@ func _create() -> void:
  if creation_slot < 0:
   message_label.text = "Alle fünf Charakterplätze sind belegt."
   return
- if not PROFILES.create_character(registry, creation_slot, name_input.text, class_input.get_selected_id(), role_input.get_selected_id()):
+ var candidate: Dictionary = registry.duplicate(true)
+ if not PROFILES.create_character(candidate, creation_slot, name_input.text, class_input.get_selected_id(), role_input.get_selected_id()):
   message_label.text = "Bitte gültigen Namen, Klasse und Rolle auswählen."
   return
- var result: Error = PROFILES.save_registry(registry)
+ var save_error: Error = SAVE_SLOTS.create_slot_save(candidate, creation_slot)
+ if save_error != OK:
+  message_label.text = "Spielstand konnte nicht erstellt werden (%d)." % save_error
+  return
+ var result: Error = PROFILES.save_registry(candidate)
  if result != OK:
-  registry = PROFILES.load_registry()
   message_label.text = "Charakter konnte nicht gespeichert werden (%d)." % result
   _refresh_slots()
   return
+ registry = candidate
  name_input.clear()
  message_label.text = "Charakter erstellt. Wähle ihn zum Spielen aus."
  _refresh_slots()
