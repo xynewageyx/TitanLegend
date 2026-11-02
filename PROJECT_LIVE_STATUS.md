@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:18 UTC**
-Git-Stand: **29aec3110c80b39ed7f55d763971b26c914f4c88** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:20 UTC**
+Git-Stand: **5f04e24858f40f64e87a9f2878c00ac0fcfc32e1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,7 +15,8 @@ Git-Stand: **29aec3110c80b39ed7f55d763971b26c914f4c88** auf Branch **main**
 - `4ca0505` (2026-11-02): art(chibi): add layered tunics belts boots cuffs and face-framing hair to all heroes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
+- `245d8d1` (2026-11-02): test(forest): add Godot runtime playback smoke test for all 36 enemy clips
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -34,7 +35,7 @@ Git-Stand: **29aec3110c80b39ed7f55d763971b26c914f4c88** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `d8b249a` (2026-11-02): Add regression tests for graphics profiles and hidden FPS display
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `29aec31` (2026-11-02): Add Godot regression tests for moderation warnings, approvals and ban changes
@@ -43,7 +44,7 @@ Git-Stand: **29aec3110c80b39ed7f55d763971b26c914f4c88** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `e1495de` (2026-11-02): Run graphics settings regression tests in Godot validation workflow
+- `5f04e24` (2026-11-02): ci(forest): execute Godot playback smoke test of all 36 forest enemy animations
 
 ## Bereichsübergreifende Änderungen
 
