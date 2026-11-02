@@ -14,6 +14,10 @@ var render_scale := 0.8
 var shadows_enabled := true
 var effects_enabled := false
 var automatic_optimization := false
+var adaptive_scale := 1.0
+var sample_seconds := 0.0
+var low_samples := 0
+var good_samples := 0
 
 func _ready() -> void:
 	load_settings()
@@ -27,6 +31,7 @@ func set_preset(preset: String) -> void:
 	var data: Dictionary = PRESETS[preset]
 	target_fps = data["fps"]
 	render_scale = data["scale"]
+	adaptive_scale = 1.0
 	shadows_enabled = data["shadows"]
 	effects_enabled = data["effects"]
 	apply_settings()
@@ -36,6 +41,7 @@ func set_custom(fps: int, scale: float, shadows: bool, effects: bool) -> void:
 	quality = "custom"
 	target_fps = clampi(fps, 30, 120)
 	render_scale = clampf(scale, 0.5, 1.0)
+	adaptive_scale = 1.0
 	shadows_enabled = shadows
 	effects_enabled = effects
 	apply_settings()
@@ -45,7 +51,7 @@ func apply_settings() -> void:
 	Engine.max_fps = target_fps
 	# The 3D scale applies to the root viewport. In Compatibility,
 	# scaling support may vary; keep the control independent of the UI.
-	get_tree().root.scaling_3d_scale = render_scale
+	get_tree().root.scaling_3d_scale = clampf(render_scale * adaptive_scale, 0.5, 1.0)
 	_apply_scene_quality()
 	settings_changed.emit(get_settings())
 
@@ -78,6 +84,7 @@ func load_settings() -> void:
 	shadows_enabled = bool(config.get_value("graphics", "shadows", true))
 	effects_enabled = bool(config.get_value("graphics", "effects", false))
 	automatic_optimization = bool(config.get_value("graphics", "automatic", false))
+	adaptive_scale = 1.0
 
 func _apply_scene_quality() -> void:
 	# Only affect optional visual nodes; gameplay and hit detection stay unchanged.
@@ -95,3 +102,39 @@ func _apply_scene_quality() -> void:
 
 func _on_scene_changed(_scene: Node) -> void:
 	_apply_scene_quality()
+
+func set_automatic(enabled: bool) -> void:
+	automatic_optimization = enabled
+	adaptive_scale = 1.0
+	low_samples = 0
+	good_samples = 0
+	apply_settings()
+	save_settings()
+
+func _process(delta: float) -> void:
+	if not automatic_optimization:
+		return
+	sample_seconds += delta
+	if sample_seconds < 5.0:
+		return
+	sample_seconds = 0.0
+	var measured_fps := Engine.get_frames_per_second()
+	if measured_fps <= 0:
+		return
+	if measured_fps < float(target_fps) * 0.80:
+		low_samples += 1
+		good_samples = 0
+	elif measured_fps > float(target_fps) * 0.96:
+		good_samples += 1
+		low_samples = 0
+	else:
+		low_samples = 0
+		good_samples = 0
+	if low_samples >= 3:
+		adaptive_scale = maxf(0.5 / render_scale, adaptive_scale - 0.1)
+		low_samples = 0
+		apply_settings()
+	elif good_samples >= 6 and adaptive_scale < 1.0:
+		adaptive_scale = minf(1.0, adaptive_scale + 0.05)
+		good_samples = 0
+		apply_settings()
