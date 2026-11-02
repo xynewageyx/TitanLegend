@@ -28,19 +28,22 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PROJECT_LIVE_STATUS.md
-          if git diff --cached --quiet; then
-            echo "No status changes"
-            exit 0
-          fi
-          git commit -m "chore(coordination): refresh shared project status [skip ci]"
-          # Handle a concurrent push by regenerating on the latest main.
-          for attempt in 1 2 3; do
-            if git push origin HEAD:main; then exit 0; fi
+          # Regenerate from the latest main on each attempt; never rebase generated files.
+          for attempt in 1 2 3 4 5; do
             git fetch origin main
-            git rebase origin/main
+            git reset --hard origin/main
             python3 tools/update_project_status.py
             git add PROJECT_LIVE_STATUS.md
-            git commit --amend --no-edit
+            if git diff --cached --quiet; then
+              echo "No status changes"
+              exit 0
+            fi
+            git commit -m "chore(coordination): refresh shared project status [skip ci]"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Concurrent push detected; retrying from latest main (${attempt}/5)"
+            sleep 2
           done
+          echo "Unable to publish status after retries" >&2
           exit 1
