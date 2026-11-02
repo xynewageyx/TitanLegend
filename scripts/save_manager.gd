@@ -76,7 +76,19 @@ func save_game() -> void:
   data["talent_branches"] = team.talent_branches
   if team.has_meta("talent_builds_v2"):
    data["talent_builds_v2"] = team.get_meta("talent_builds_v2").duplicate(true)
- var result: Error = SAVE_FILE_STORE.save_atomic(SAVE_PATH, data)
+ var result: Error = OK
+ if active_character_slot >= 0:
+  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+  var profile_path: String = CHARACTER_PROFILES.character_save_path(registry, active_character_slot)
+  if profile_path != SAVE_PATH:
+   push_error("Character save path mismatch; autosave blocked.")
+   return
+  var profile: Dictionary = registry["characters"][active_character_slot]
+  data["class_id"] = int(profile.get("class_id", -1))
+  data["role_id"] = int(profile.get("role_id", -1))
+  result = CHARACTER_SAVE_SLOTS.save_slot(registry, active_character_slot, data)
+ else:
+  result = SAVE_FILE_STORE.save_atomic(SAVE_PATH, data)
  if result != OK:
   push_warning("Automatic save failed (code " + str(result) + ")")
 func load_game() -> void:
