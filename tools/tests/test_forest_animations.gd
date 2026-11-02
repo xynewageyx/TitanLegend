@@ -55,6 +55,22 @@ func _initialize() -> void:
             if not has_keyframes:
                 failures.append("%s: %s has no animated 3D keyframe sequence" % [enemy, clip])
                 continue
+            var has_actual_motion := false
+            for track in animation.get_track_count():
+                if animation.track_get_type(track) not in [Animation.TYPE_POSITION_3D, Animation.TYPE_ROTATION_3D, Animation.TYPE_SCALE_3D]:
+                    continue
+                if animation.track_get_key_count(track) < 2:
+                    continue
+                var first_value: Variant = animation.track_get_key_value(track, 0)
+                for key_index in range(1, animation.track_get_key_count(track)):
+                    if animation.track_get_key_value(track, key_index) != first_value:
+                        has_actual_motion = true
+                        break
+                if has_actual_motion:
+                    break
+            if not has_actual_motion:
+                failures.append("%s: %s has identical 3D poses in all keyframes" % [enemy, clip])
+                continue
             player.play(clip)
             player.advance(0.0)
             player.seek(minf(animation.length * 0.5, animation.length - 0.0001), true)
