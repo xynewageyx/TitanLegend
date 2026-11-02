@@ -156,13 +156,19 @@ func _select(slot: int) -> void:
  candidate["characters"][slot] = updated_profile
  if not PROFILES.select_character(candidate, slot):
   return
- var result: Error = PROFILES.save_registry(candidate)
- if result != OK:
-  message_label.text = "Charakterauswahl konnte nicht gespeichert werden (%d)." % result
+ # Do not persist a new active slot while the running game still uses
+ # another character's data. The startup coordinator must authorize switching.
+ if not SaveManager.character_switching_enabled:
+  message_label.text = "Charakterwechsel ist während einer aktiven Spielsitzung gesperrt."
   return
  var switch_error: Error = SaveManager.configure_character_save(slot)
  if switch_error != OK:
   message_label.text = "Spielstandwechsel fehlgeschlagen (%d)." % switch_error
+  return
+ var result: Error = PROFILES.save_registry(candidate)
+ if result != OK:
+  SaveManager.use_legacy_save()
+  message_label.text = "Charakterauswahl konnte nicht gespeichert werden (%d)." % result
   return
  registry = candidate
  character_selected.emit(slot)
