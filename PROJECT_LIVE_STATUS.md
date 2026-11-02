@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:52 UTC**
-Git-Stand: **442a1e34d416a0764958a0059c287e83cbc5096c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:54 UTC**
+Git-Stand: **7ac49f057d72cea6979edbbed9c31dd451421aee** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,9 +26,9 @@ Git-Stand: **442a1e34d416a0764958a0059c287e83cbc5096c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `7ac49f0` (2026-11-02): fix(talents): recheck current upgrade eligibility on tap instead of trusting stale button state
 - `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 - `949bbff` (2026-11-02): Add five original elemental skill sound profiles for local player
-- `6863dac` (2026-11-02): Connect moderation policy, persistent storage and evidence export in server coordinator
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `7714b80` (2026-11-02): Add five original elemental skill sound profiles for local player
@@ -37,7 +37,7 @@ Git-Stand: **442a1e34d416a0764958a0059c287e83cbc5096c** auf Branch **main**
 - `949bbff` (2026-11-02): Add five original elemental skill sound profiles for local player
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `6863dac` (2026-11-02): Connect moderation policy, persistent storage and evidence export in server coordinator
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
