@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 21:41 UTC**
-Git-Stand: **7e53706155fd7d9d1fe3c6685c5ff6d3112df01e** auf Branch **main**
+Git-Stand: **088d636653d22fcfce941205bfef6a398e4ddf3b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **7e53706155fd7d9d1fe3c6685c5ff6d3112df01e** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
-- `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `11570e2` (2026-11-02): test(forest): verify imported enemies contain real MeshInstance3D geometry
@@ -24,7 +23,7 @@ Git-Stand: **7e53706155fd7d9d1fe3c6685c5ff6d3112df01e** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `868b107` (2026-11-02): test(talents): protect malformed saved talent builds and invalid hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
