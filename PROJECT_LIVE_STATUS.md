@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 21:45 UTC**
-Git-Stand: **52d787668ba78ec48504b58d0a92e3969cc59800** auf Branch **main**
+Git-Stand: **6719bd79d97e3a02bf69186ba2a8f8736e22e0e2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -35,7 +35,6 @@ Git-Stand: **52d787668ba78ec48504b58d0a92e3969cc59800** auf Branch **main**
 - `94d0ba8` (2026-11-02): fix(talents): normalize saved talent builds before rendering and synchronize selector state
 - `f04ab3e` (2026-11-02): fix(chibi): use Blender 5 compatible EEVEE render engine for preview generation
 - `07c5bd5` (2026-11-02): Reset graphics sampling after manual preset changes and simplify persistence
-- `2d6db43` (2026-11-02): Reset adaptive FPS sampling after scene transitions
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
