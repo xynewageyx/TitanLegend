@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 17:54 UTC**
-Git-Stand: **81171069cefa27060dbb5dc1d6135084ba62a9b0** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 17:58 UTC**
+Git-Stand: **9c87471751fff295c717c978cdbdb0dbac117cf8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,10 +11,10 @@ Git-Stand: **81171069cefa27060dbb5dc1d6135084ba62a9b0** auf Branch **main**
 - `7c2faba` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `c27dcf9` (2026-11-02): fix(talents): refresh selected talent detail after upgrades and reset stale hero details
 - `8a050b7` (2026-11-02): ci(chibi): rebase and retry GLB commit after concurrent pushes
-- `cd83e29` (2026-11-02): art(characters): add rigged chibi limbs and correct arm leg skin weights
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `3643a6d` (2026-11-02): fix(forest): correct German species profile lookup for fox boar and moss beast fur
+- `bfebb01` (2026-11-02): fix(forest): normalize JSON padding removal in GLB animation merge
+- `a847bfb` (2026-11-02): fix(forest): merge Blender root and limb NLA tracks into four complete GLB animation clips
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
