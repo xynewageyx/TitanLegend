@@ -20,12 +20,12 @@ jobs:
           import wave
           from pathlib import Path
           files = list(Path("assets/audio").rglob("*.wav"))
-          assert len(files) == 59, len(files)
+          assert len(files) == 69, len(files)
           for path in files:
               with wave.open(str(path), "rb") as audio:
                   assert audio.getnframes() > 0
                   assert audio.getframerate() == 22050
-          print("59 audio files validated")
+          print("69 audio files validated")
           PY
       - uses: actions/upload-artifact@v4
         with:
