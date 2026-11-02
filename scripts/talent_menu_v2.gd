@@ -140,7 +140,10 @@ func _refresh() -> void:
   button.disabled = not TREES.can_upgrade(level, build, selected_branch, talent_index)
   talent_grid.add_child(button)
   button.focus_entered.connect(_show_talent_detail.bind(talent_index))
+  button.mouse_entered.connect(_show_talent_detail.bind(talent_index))
   button.pressed.connect(_upgrade.bind(talent_index))
+ if talent_detail_label != null:
+  talent_detail_label.text = "Talent auswählen: Rang und Freischaltung ansehen."
 
 func _upgrade(talent_index: int) -> void:
  if team == null or not is_instance_valid(team):
@@ -150,6 +153,7 @@ func _upgrade(talent_index: int) -> void:
  if team.has_method("upgrade_talent_v2"):
   team.upgrade_talent_v2(selected_hero, selected_branch, talent_index)
  _refresh()
+ _show_talent_detail(talent_index)
 
 func _show_talent_detail(talent_index: int) -> void:
  if talent_detail_label == null or team == null or not is_instance_valid(team):
