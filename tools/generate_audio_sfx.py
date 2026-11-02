@@ -48,6 +48,13 @@ SOUNDS.update({
  "skills/interrupt.wav": (0.25, 1100, 180, "noise"),
  "skills/regeneration.wav": (0.72, 360, 880, "tone"),
 })
+SOUNDS.update({
+ "elements/fire.wav": (0.47, 270, 85, "noise"),
+ "elements/ice.wav": (0.54, 1280, 380, "tone"),
+ "elements/nature.wav": (0.63, 280, 790, "tone"),
+ "elements/shadow.wav": (0.58, 190, 62, "tone"),
+ "elements/light.wav": (0.49, 680, 1350, "tone"),
+})
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
