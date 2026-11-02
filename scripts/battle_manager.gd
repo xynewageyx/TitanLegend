@@ -757,6 +757,16 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
    var sound_skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
    if role == 2 and float(sound_skill.get("heal", 0.0)) > 0.0:
     sound_event = "skill_heal"
+   elif role == 1:
+    var class_id: int = int(team_formation.class_ids[slot])
+    if class_id == 6:
+     sound_event = "element_ice" if choice == 7 else "element_fire"
+    elif class_id == 7:
+     sound_event = "element_shadow"
+    elif class_id == 2 or class_id == 3:
+     sound_event = "element_nature"
+    elif class_id == 9:
+     sound_event = "element_light"
   AudioManager.play_local_hero_event(slot, sound_event)
  if team_formation != null and slot >= 0 and slot < team_formation.heroes.size():
   var glb_visual: Node = team_formation.heroes[slot].get_node_or_null("WarriorGLBVisual")
