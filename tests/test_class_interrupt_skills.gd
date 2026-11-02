@@ -2,6 +2,7 @@ extends SceneTree
 
 const INTERRUPTS = preload("res://scripts/class_interrupt_skills.gd")
 const RULES = preload("res://scripts/skill_targeting_rules.gd")
+const VFX = preload("res://scripts/skill_vfx_3d_v1.gd")
 
 func _initialize() -> void:
  assert(INTERRUPTS.NAMES.size() == 11)
@@ -16,7 +17,10 @@ func _initialize() -> void:
   assert(not bool(skill.get("aoe", true)))
   assert(not names.has(skill["name"]))
   names[skill["name"]] = true
-  assert(not INTERRUPTS.vfx_for_class(class_id).is_empty())
+  var effect_id: String = INTERRUPTS.vfx_for_class(class_id)
+  assert(not effect_id.is_empty())
+  assert(VFX.SKILL_STYLE.has(effect_id))
+  assert(VFX.COLORS.has(VFX.SKILL_STYLE[effect_id]))
  assert(names.size() == 11)
  print("Class interrupt definitions passed")
  quit()
