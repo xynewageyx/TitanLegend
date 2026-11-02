@@ -100,7 +100,34 @@ func play_interrupt() -> void:
 var local_hero_slot: int = -1
 
 func set_local_hero_slot(slot: int) -> void:
- local_hero_slot = slot if slot >= 0 and slot < 4 else -1
+ # Called only after trusted session ownership has been established.
+ if slot < 0 or slot >= 4:
+  clear_local_hero()
+  return
+ if local_hero_slot != slot:
+  stop_sfx()
+ local_hero_slot = slot
+
+func clear_local_hero() -> void:
+ stop_sfx()
+ local_hero_slot = -1
+
+func bind_local_hero_from_team(owner_peer_ids: Array[int], local_peer_id: int) -> bool:
+ # The server/session supplies the authoritative owner IDs for four slots.
+ # Never infer ownership from class, role, or formation position.
+ clear_local_hero()
+ if local_peer_id <= 0 or owner_peer_ids.size() != 4:
+  return false
+ var found_slot: int = -1
+ for i in range(owner_peer_ids.size()):
+  if owner_peer_ids[i] == local_peer_id:
+   if found_slot != -1:
+    return false
+   found_slot = i
+ if found_slot == -1:
+  return false
+ set_local_hero_slot(found_slot)
+ return true
 
 func play_local_hero_event(slot: int, event_name: String) -> void:
  if slot != local_hero_slot or local_hero_slot < 0:
