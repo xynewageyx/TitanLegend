@@ -1,14 +1,13 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 17:52 UTC**
-Git-Stand: **d7d8b92c56745ade91fe8656e9af18f55296f084** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 17:54 UTC**
+Git-Stand: **81171069cefa27060dbb5dc1d6135084ba62a9b0** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `d7d8b92` (2026-11-02): fix(coordination): classify landscape skills and character commits by subject and path
 - `7c2faba` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `c27dcf9` (2026-11-02): fix(talents): refresh selected talent detail after upgrades and reset stale hero details
 - `8a050b7` (2026-11-02): ci(chibi): rebase and retry GLB commit after concurrent pushes
@@ -18,8 +17,7 @@ Git-Stand: **d7d8b92c56745ade91fe8656e9af18f55296f084** auf Branch **main**
 - `3643a6d` (2026-11-02): fix(forest): correct German species profile lookup for fox boar and moss beast fur
 
 ### Landschaften — Landschaften-Chat
-- `d7d8b92` (2026-11-02): fix(coordination): classify landscape skills and character commits by subject and path
-- `7f2b7d6` (2026-11-02): docs(coordination): register replacement character and landscape chats
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -31,7 +29,7 @@ Git-Stand: **d7d8b92c56745ade91fe8656e9af18f55296f084** auf Branch **main**
 - `c27dcf9` (2026-11-02): fix(talents): refresh selected talent detail after upgrades and reset stale hero details
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `d7d8b92` (2026-11-02): fix(coordination): classify landscape skills and character commits by subject and path
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `8a050b7` (2026-11-02): ci(chibi): rebase and retry GLB commit after concurrent pushes
