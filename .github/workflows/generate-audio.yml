@@ -23,8 +23,8 @@ jobs:
           files = list(Path("assets/audio").rglob("*.wav"))
           assert len(files) == 69, f"Expected 69 WAV files, got {len(files)}"
           catalog = Path("scripts/audio_event_catalog.gd").read_text()
-          paths = set(re.findall(r'res://(assets/audio/[^"]+\\.wav)', catalog))
-          generated = {str(p).replace("\\\\", "/") for p in files}
+          paths = set(re.findall(r'res://(assets/audio/[^"]+[.]wav)', catalog))
+          generated = {p.as_posix() for p in files}
           assert paths == generated, f"Missing: {paths - generated}; unexpected: {generated - paths}"
           for path in files:
               with wave.open(str(path), "rb") as audio:
