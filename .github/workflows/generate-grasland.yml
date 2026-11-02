@@ -49,7 +49,7 @@ jobs:
           [application]
           config/name="Titan Legends Grasland Preview"
           run/main_scene="res://scenes/grasland_preview.tscn"
-          config/features=PackedStringArray("4.2", "GL Compatibility")
+          config/features=PackedStringArray("4.7", "GL Compatibility")
 
           [display]
           window/size/viewport_width=720
@@ -61,14 +61,29 @@ jobs:
           renderer/rendering_method.mobile="gl_compatibility"
           EOF
           test -s preview/assets/worlds/grasland/grasland.glb
-      - name: Validate preview with Godot headless
+      - name: Validate preview with Godot 4.7.2 software OpenGL
+        shell: bash
         run: |
-          curl -fL --retry 3 -o /tmp/godot.zip "https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip"
+          set -euo pipefail
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+          curl -fL --retry 3 -o /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
+          mkdir -p /tmp/godot-bin
           unzip -q /tmp/godot.zip -d /tmp/godot-bin
           GODOT="$(find /tmp/godot-bin -maxdepth 1 -type f -name 'Godot*' | head -n 1)"
+          test -n "$GODOT"
           chmod +x "$GODOT"
-          "$GODOT" --headless --path preview --editor --import --quit
-          "$GODOT" --headless --path preview --quit-after 5
+          "$GODOT" --version | grep -F '4.7.2.stable'
+          export LIBGL_ALWAYS_SOFTWARE=1
+          xvfb-run -a "$GODOT" --rendering-driver opengl3 --path preview --editor --import --quit 2>&1 | tee /tmp/grasland-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null|ERROR:.*(Failed to load|Cannot open)' /tmp/grasland-import.log; then
+            echo "::error::Godot preview import reported an error"
+            exit 1
+          fi
+          xvfb-run -a "$GODOT" --rendering-driver opengl3 --path preview --quit-after 5 2>&1 | tee /tmp/grasland-run.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|ERROR: Parameter "t" is null' /tmp/grasland-run.log; then
+            echo "::error::Godot preview runtime reported an error"
+            exit 1
+          fi
       - name: Upload standalone Godot preview
         uses: actions/upload-artifact@v4
         with:
