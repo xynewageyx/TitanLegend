@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:55 UTC**
-Git-Stand: **f90327eeaea53994f9bf6587cb175a5082729525** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:57 UTC**
+Git-Stand: **08b7ec78bb79f6e9ad96474b9c601671cc24d5d7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -30,11 +30,10 @@ Git-Stand: **f90327eeaea53994f9bf6587cb175a5082729525** auf Branch **main**
 - `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `7714b80` (2026-11-02): Add five original elemental skill sound profiles for local player
-- `b80a2ce` (2026-11-02): Add five original elemental skill sound profiles for local player
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `08b7ec7` (2026-11-02): Add owner-controlled ban adjustment and revocation with audit history
 
 ### Audio — Audio-Erstellung-Chat
 - `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
@@ -46,7 +45,6 @@ Git-Stand: **f90327eeaea53994f9bf6587cb175a5082729525** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
 - `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
-- `7714b80` (2026-11-02): Add five original elemental skill sound profiles for local player
 
 ## Bereichsübergreifende Änderungen
 
