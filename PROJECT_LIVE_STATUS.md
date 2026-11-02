@@ -1,13 +1,15 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:54 UTC**
-Git-Stand: **c814159ec3673c7667f170f6243cd06a10a60f0f** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:56 UTC**
+Git-Stand: **43006d99ce6d76a7b3b79ae1c8cf080bffc394df** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `43006d9` (2026-11-02): ci(chibi): install Mesa EGL libraries and run Blender preview under virtual display
+- `99601d5` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `c814159` (2026-11-02): fix(chibi): render previews with headless Workbench instead of EGL-dependent Eevee
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -34,7 +36,6 @@ Git-Stand: **c814159ec3673c7667f170f6243cd06a10a60f0f** auf Branch **main**
 - `fe07814` (2026-11-02): Update graphics regression assertions for per-profile shadows and particles
 - `0b3dec0` (2026-11-02): Reduce dynamic shadow and particle costs on low and medium Android profiles
 - `147c0bd` (2026-11-02): Verify Android renderer, native export templates and GPU driver packaging safety
-- `8fc1bf4` (2026-11-02): Apply graphics profile to scene root visuals as well as children
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -43,6 +44,7 @@ Git-Stand: **c814159ec3673c7667f170f6243cd06a10a60f0f** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `43006d9` (2026-11-02): ci(chibi): install Mesa EGL libraries and run Blender preview under virtual display
 - `9775fbe` (2026-11-02): Run Android graphics compatibility checks during Godot validation
 
 ## Bereichsübergreifende Änderungen
