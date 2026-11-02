@@ -466,6 +466,7 @@ func _heal_heroes(amount: int, group_heal: bool = false) -> void:
    var previous: int = hero_hp[target]
    hero_hp[target] = mini(hero_max_hp[target], hero_hp[target] + amount)
    _show_hero_combat_number(target, hero_hp[target] - previous, true)
+ AudioManager.play_event("skill_heal")
  _sync_team_health()
 
 func _refresh_tank_defense_visuals() -> void:
@@ -881,6 +882,7 @@ func _hero_attack(slot: int, role: int) -> void:
  var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)
  var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0)))
  _deal_damage_to_enemy(slot, actual_damage)
+ AudioManager.play_combat_hit(critical)
  if not battle_active:
   return
  last_ability = "Kritischer Treffer" if critical else "Standardangriff"
