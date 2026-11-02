@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:58 UTC**
-Git-Stand: **8efeb197542e0a17ebdae2827829779cd5d17f7d** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:59 UTC**
+Git-Stand: **c14c01998ff8effad0a0978e9ef7d6e06a68a4c3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,7 +15,7 @@ Git-Stand: **8efeb197542e0a17ebdae2827829779cd5d17f7d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -25,12 +25,12 @@ Git-Stand: **8efeb197542e0a17ebdae2827829779cd5d17f7d** auf Branch **main**
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `7ac49f0` (2026-11-02): fix(talents): recheck current upgrade eligibility on tap instead of trusting stale button state
-- `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `c14c019` (2026-11-02): Connect moderation admin panel signals to authenticated gateway adapter
 - `8efeb19` (2026-11-02): Add fail-closed admin moderation gateway with server-side owner identity resolution
 - `08b7ec7` (2026-11-02): Add owner-controlled ban adjustment and revocation with audit history
 
@@ -38,7 +38,6 @@ Git-Stand: **8efeb197542e0a17ebdae2827829779cd5d17f7d** auf Branch **main**
 - `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
 - `a6e36be` (2026-11-02): Add water element sound and validate 49 generated WAV files
 - `cdb0a16` (2026-11-02): Add water element sound and validate 49 generated WAV files
-- `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
