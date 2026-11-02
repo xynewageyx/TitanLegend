@@ -124,7 +124,14 @@ func _refresh() -> void:
   var button := Button.new()
   button.custom_minimum_size = Vector2(112, 64)
   button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  button.text = "Talent %d\n%d/5" % [talent_index + 1, int(build[selected_branch][talent_index])]
+  var rank: int = int(build[selected_branch][talent_index])
+  var row: int = int(talent_index / 3)
+  button.text = "Talent %d\n%d/5" % [talent_index + 1, rank]
+  button.tooltip_text = "Reihe %d | Rang %d/5" % [row + 1, rank]
+  if rank >= TREES.MAX_RANK:
+   button.tooltip_text += " | Maximalrang erreicht"
+  elif row > 0:
+   button.tooltip_text += " | Voraussetzung: %d Punkte in vorherigen Reihen" % (row * 5)
   button.disabled = not TREES.can_upgrade(level, build, selected_branch, talent_index)
   talent_grid.add_child(button)
   button.pressed.connect(_upgrade.bind(talent_index))
