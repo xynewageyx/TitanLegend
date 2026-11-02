@@ -74,3 +74,28 @@ static func load_registry() -> Dictionary:
  if active < -1 or active >= MAX_CHARACTERS or (active >= 0 and not characters[active] is Dictionary):
   return new_registry()
  return parsed
+
+## Explicit one-time migration: never overwrite an occupied profile.
+## Legacy saves stay untouched until the new per-character save system is ready.
+static func import_legacy_character(registry: Dictionary, legacy_save: Dictionary, class_id: int, role_id: int, character_name: String = "Bisheriger Held") -> bool:
+ var characters: Array = registry.get("characters", [])
+ if characters.size() != MAX_CHARACTERS or characters[0] != null:
+  return false
+ if not create_character(registry, 0, character_name, class_id, role_id):
+  return false
+ var profile: Dictionary = characters[0]
+ profile["level"] = maxi(1, int(legacy_save.get("character_level", 1)))
+ profile["xp"] = maxi(0, int(legacy_save.get("character_xp", 0)))
+ profile["reincarnation"] = clampi(int(legacy_save.get("reincarnation", 0)), 0, 5)
+ profile["legacy_import_pending"] = true
+ characters[0] = profile
+ registry["characters"] = characters
+ return true
+
+static func character_save_path(registry: Dictionary, slot: int) -> String:
+ var characters: Array = registry.get("characters", [])
+ if slot < 0 or slot >= MAX_CHARACTERS or characters.size() != MAX_CHARACTERS:
+  return ""
+ if not characters[slot] is Dictionary:
+  return ""
+ return "user://character_%d.json" % slot
