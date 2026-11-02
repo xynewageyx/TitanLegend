@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:07 UTC**
-Git-Stand: **5ad392aca672b474a4e5aace4d7294a4a4b046d9** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:08 UTC**
+Git-Stand: **50e058b0119d6e0c7b5fa1904b6d44a9c94e9486** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,8 +9,6 @@ Git-Stand: **5ad392aca672b474a4e5aace4d7294a4a4b046d9** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `7c2faba` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `c27dcf9` (2026-11-02): fix(talents): refresh selected talent detail after upgrades and reset stale hero details
-- `8a050b7` (2026-11-02): ci(chibi): rebase and retry GLB commit after concurrent pushes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `bfebb01` (2026-11-02): fix(forest): normalize JSON padding removal in GLB animation merge
@@ -26,18 +24,21 @@ Git-Stand: **5ad392aca672b474a4e5aace4d7294a4a4b046d9** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `c27dcf9` (2026-11-02): fix(talents): refresh selected talent detail after upgrades and reset stale hero details
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
+### Audio — Audio-Erstellung-Chat
+- `8f411cd` (2026-11-02): Connect named audio events to existing Godot AudioManager
+- `a7efb46` (2026-11-02): Add centralized Titan Legends audio event catalog
+
 ### Integration/CI — GitHub-/Integrations-Chat
-- `8a050b7` (2026-11-02): ci(chibi): rebase and retry GLB commit after concurrent pushes
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
-- `8f411cd` (2026-11-02): Connect named audio events to existing Godot AudioManager
-- `a7efb46` (2026-11-02): Add centralized Titan Legends audio event catalog
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
