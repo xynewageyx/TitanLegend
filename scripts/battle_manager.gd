@@ -743,8 +743,21 @@ func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
 
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  _play_equipped_skill_vfx(slot, role, choice)
- if team_formation != null and slot < team_formation.class_ids.size():
-  AudioManager.play_local_hero_event(slot, "class_skill_%d" % int(team_formation.class_ids[slot]))
+ if team_formation != null and slot >= 0 and slot < team_formation.class_ids.size():
+  var sound_event: String = "class_skill_%d" % int(team_formation.class_ids[slot])
+  if role == 0 and choice == 8:
+   sound_event = "skill_taunt"
+  elif role == 0 and choice == 9:
+   sound_event = "skill_guard"
+  elif choice == 7:
+   sound_event = "skill_interrupt"
+  elif role == 2 and choice == 8:
+   sound_event = "skill_regeneration"
+  else:
+   var sound_skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
+   if role == 2 and float(sound_skill.get("heal", 0.0)) > 0.0:
+    sound_event = "skill_heal"
+  AudioManager.play_local_hero_event(slot, sound_event)
  if team_formation != null and slot >= 0 and slot < team_formation.heroes.size():
   var glb_visual: Node = team_formation.heroes[slot].get_node_or_null("WarriorGLBVisual")
   if glb_visual != null and glb_visual.has_method("play_cast"):
