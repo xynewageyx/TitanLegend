@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/blender/generate_forest_mobs.py'
       - '.github/workflows/forest-enemies.yml'
+      - 'tools/tests/test_forest_animations.gd'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -100,6 +101,20 @@ jobs:
             echo 'Godot reported import or script errors'
             exit 1
           fi
+      - name: Test all forest animations in Godot
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          set -o pipefail
+          xvfb-run -a godot --headless --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee godot-forest-animation-test.log
+          grep -q 'FOREST ANIMATION TEST PASSED: 36 clips on 9 enemies' godot-forest-animation-test.log
+      - name: Upload forest animation test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Animation-Test-Log
+          path: godot-forest-animation-test.log
+          if-no-files-found: ignore
       - name: Upload Godot import diagnostic log
         if: always()
         uses: actions/upload-artifact@v4
