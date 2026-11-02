@@ -48,6 +48,19 @@ jobs:
             echo 'Godot import or script errors detected'
             exit 1
           fi
+      - name: Validate skill targeting, interrupt VFX and catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          export LIBGL_ALWAYS_SOFTWARE=1
+          for script in tests/test_skill_targeting_rules.gd tests/test_class_interrupt_skills.gd tests/test_skill_catalog_effects.gd; do
+            echo "Running $script"
+            xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script "$script" 2>&1 | tee /tmp/titan-skill-test.log
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Assertion failed|ERROR:' /tmp/titan-skill-test.log; then
+              echo "::error::Skill test failed: $script"
+              exit 1
+            fi
+          done
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
