@@ -75,11 +75,15 @@ def rig_and_animate():
    for bone in arm.pose.bones:
     bone.rotation_mode="XYZ";bone.rotation_euler=(0,0,0)
     if clip=="Idle" and bone.name=="Head":bone.rotation_euler.z=.06*math.sin(phase*math.tau)
+    if clip=="Idle" and bone.name=="Spine":bone.rotation_euler.x=.035*math.sin(phase*math.tau)
+    if clip=="Idle" and bone.name in ("Arm_L","Arm_R"):bone.rotation_euler.z=(1 if bone.name.endswith("L") else -1)*.045*math.sin(phase*math.tau)
     if clip=="Walk" and bone.name in ("Leg_L","Leg_R","Arm_L","Arm_R"):
      sign=1 if bone.name.endswith("L") else -1
      if bone.name.startswith("Arm"):sign=-sign
      bone.rotation_euler.x=.48*sign*math.sin(phase*math.tau)
+    if clip=="Walk" and bone.name=="Head":bone.rotation_euler.x=.055*math.sin(phase*math.tau*2)
     if clip=="Attack" and bone.name=="Arm_R":bone.rotation_euler.x=-1.1*math.sin(phase*math.pi)
+    if clip=="Attack" and bone.name=="Spine":bone.rotation_euler.y=-.22*math.sin(phase*math.pi)
     if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
     if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
     bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
