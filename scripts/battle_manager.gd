@@ -106,6 +106,8 @@ func _ready() -> void:
  # Restore the area's element before spawning bosses, including save-game loads.
  if biome_manager != null:
   biome_manager.call("update_biome_from_stage", current_level)
+  # Initial biome may already match the default and emit no change signal.
+  _on_audio_biome_changed(int(biome_manager.current_biome))
  var astral_progress: Dictionary = SaveManager.get_saved_astral()
  astral_floor = maxi(1, int(astral_progress.get("floor", 1)))
  astral_marks = maxi(0, int(astral_progress.get("marks", 0)))
