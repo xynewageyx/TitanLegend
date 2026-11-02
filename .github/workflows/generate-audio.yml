@@ -1,9 +1,17 @@
 name: Generate original audio SFX
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/audio_event_catalog.gd'
+      - 'scripts/audio_manager.gd'
+      - 'scripts/battle_manager.gd'
+      - 'tools/generate_audio_sfx.py'
+      - '.github/workflows/generate-audio.yml'
   push:
     paths:
       - 'tools/generate_audio_sfx.py'
+      - 'scripts/audio_event_catalog.gd'
       - '.github/workflows/generate-audio.yml'
 permissions:
   contents: read
@@ -18,14 +26,21 @@ jobs:
         run: |
           python3 - <<'PY'
           import wave
+          import re
           from pathlib import Path
           files = list(Path("assets/audio").rglob("*.wav"))
-          assert len(files) == 59, len(files)
+          assert len(files) == 69, f"Expected 69 WAV files, got {len(files)}"
+          catalog = Path("scripts/audio_event_catalog.gd").read_text()
+          paths = set(re.findall(r'res://(assets/audio/[^"]+[.]wav)', catalog))
+          generated = {p.as_posix() for p in files}
+          assert paths == generated, f"Missing: {paths - generated}; unexpected: {generated - paths}"
           for path in files:
               with wave.open(str(path), "rb") as audio:
                   assert audio.getnframes() > 0
                   assert audio.getframerate() == 22050
-          print("59 audio files validated")
+                  assert audio.getnchannels() == 1
+                  assert audio.getsampwidth() == 2
+          print("69 audio files validated")
           PY
       - uses: actions/upload-artifact@v4
         with:

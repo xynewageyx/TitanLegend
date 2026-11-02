@@ -588,6 +588,8 @@ func _begin_boss_cast() -> void:
  boss_next_cast_tick = skill_tick + 9
  _animate_boss_event("attack_windup")
  if boss_cc_required > 0:
+  AudioManager.play_event("boss_warning")
+ if boss_cc_required > 0:
   # Prepared hits were earned by the strict four-slot rotation earlier.
   # Each living hero can contribute at most one banked hit.
   for slot in range(4):
@@ -602,6 +604,14 @@ func _resolve_boss_cast() -> void:
  if not battle_active or not is_boss:
   return
  _animate_boss_event("attack_release")
+ if biome_manager != null:
+  const BOSS_ELEMENTS: Array[String] = [
+   "fire", "water", "earth", "nature", "light",
+   "shadow", "wind", "frost", "lightning", "chaos"
+  ]
+  var boss_biome_id: int = int(biome_manager.current_biome)
+  if boss_biome_id >= 0 and boss_biome_id < BOSS_ELEMENTS.size():
+   AudioManager.play_event("boss_element_" + BOSS_ELEMENTS[boss_biome_id])
  if boss_cast_kind == "self_heal":
   enemy_hp = mini(enemy_max_hp, enemy_hp + maxi(1, roundi(float(enemy_max_hp) * 0.05)))
   last_ability = "Boss: Selbstheilung"
