@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 20:47 UTC**
-Git-Stand: **34fcc64d3ddb68098fe59118682f62a2dd855ad5** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 20:53 UTC**
+Git-Stand: **770ca2c7026aeec8986363c38a82756c582c2753** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `770ca2c` (2026-11-02): fix(chibi): anchor fringe locks to hair cap and remove floating spikes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -44,7 +44,6 @@ Git-Stand: **34fcc64d3ddb68098fe59118682f62a2dd855ad5** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6623a82` (2026-11-02): test(forest): verify animation targets reference valid nodes and each clip animates CreatureRoot
-- `b12ac1e` (2026-11-02): test(forest): require exactly four valid animation clips with unique node channels
 
 ## Bereichsübergreifende Änderungen
 
