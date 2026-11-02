@@ -1,16 +1,17 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:10 UTC**
-Git-Stand: **4ca0505d34b4eb0881874ca629159f524e208dca** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:15 UTC**
+Git-Stand: **879746a370766c6079cf3be25d7e815d6b71b5a5** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `879746a` (2026-11-02): fix(chibi): skin boots gloves and cuffs to correct animated limb bones
+- `4335c12` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `4ca0505` (2026-11-02): art(chibi): add layered tunics belts boots cuffs and face-framing hair to all heroes
 - `efe08f1` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `770ca2c` (2026-11-02): fix(chibi): anchor fringe locks to hair cap and remove floating spikes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
