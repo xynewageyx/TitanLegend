@@ -138,10 +138,20 @@ func _create() -> void:
  _refresh_slots()
 
 func _select(slot: int) -> void:
- if not PROFILES.select_character(registry, slot):
+ var character_save: Dictionary = SAVE_SLOTS.load_slot(registry, slot)
+ if character_save.is_empty():
+  message_label.text = "Spielstand fehlt oder ist beschädigt. Charakterwechsel abgebrochen."
   return
- var result: Error = PROFILES.save_registry(registry)
+ var profile: Dictionary = registry["characters"][slot]
+ if int(character_save.get("class_id", -1)) != int(profile.get("class_id", -2)) or int(character_save.get("role_id", -1)) != int(profile.get("role_id", -2)):
+  message_label.text = "Klasse oder Rolle stimmen nicht mit dem Charakterprofil überein."
+  return
+ var candidate: Dictionary = registry.duplicate(true)
+ if not PROFILES.select_character(candidate, slot):
+  return
+ var result: Error = PROFILES.save_registry(candidate)
  if result != OK:
   message_label.text = "Charakterauswahl konnte nicht gespeichert werden (%d)." % result
   return
+ registry = candidate
  character_selected.emit(slot)
