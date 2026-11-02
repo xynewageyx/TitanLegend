@@ -17,6 +17,7 @@ func _ready() -> void:
  ambience = AudioStreamPlayer.new()
  ambience.name = "Ambience"
  add_child(ambience)
+ ambience.finished.connect(_on_ambience_finished)
  music = AudioStreamPlayer.new()
  music.name = "Music"
  add_child(music)
@@ -86,9 +87,16 @@ func play_ambience(event_name: String) -> void:
  ambience.stream = stream
  ambience.play()
 
+func _on_ambience_finished() -> void:
+ # Replay the environment bed without consuming a combat SFX voice.
+ # Do not restart if a transition has cleared the stream.
+ if ambience != null and ambience.stream != null:
+  ambience.play()
+
 func stop_ambience() -> void:
  if ambience != null:
   ambience.stop()
+  ambience.stream = null
 
 func stop_bgm() -> void:
  music.stop()
