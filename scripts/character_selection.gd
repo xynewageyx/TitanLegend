@@ -147,6 +147,13 @@ func _select(slot: int) -> void:
   message_label.text = "Klasse oder Rolle stimmen nicht mit dem Charakterprofil überein."
   return
  var candidate: Dictionary = registry.duplicate(true)
+ # The save file is authoritative for progression; the registry only caches
+ # level/XP for the character selection screen.
+ var updated_profile: Dictionary = candidate["characters"][slot]
+ updated_profile["level"] = maxi(1, int(character_save.get("character_level", 1)))
+ updated_profile["xp"] = maxi(0, int(character_save.get("character_xp", 0)))
+ updated_profile["reincarnation"] = maxi(0, int(character_save.get("reincarnation", 0)))
+ candidate["characters"][slot] = updated_profile
  if not PROFILES.select_character(candidate, slot):
   return
  var result: Error = PROFILES.save_registry(candidate)
