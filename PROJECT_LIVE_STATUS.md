@@ -1,17 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:27 UTC**
-Git-Stand: **76d95be279a05996f1ec0f00bd95f4462a898a2c** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:28 UTC**
+Git-Stand: **8eeaad205f1183e009bb8944f59c47ac40d8f9c2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `76d95be` (2026-11-02): Add distinct procedural attack audio for all eleven hero classes
 - `fac2f31` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
-- `e003a91` (2026-11-02): art(heroes): introduce distinct class silhouette accessories for eleven chibi heroes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -26,6 +27,9 @@ Git-Stand: **76d95be279a05996f1ec0f00bd95f4462a898a2c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
 - `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
 
@@ -33,11 +37,11 @@ Git-Stand: **76d95be279a05996f1ec0f00bd95f4462a898a2c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
+- `9a8896a` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- `e8b6df2` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
+- `b8cd23b` (2026-11-02): Restrict class combat audio to locally owned hero and generate eleven class sounds
 - `76d95be` (2026-11-02): Add distinct procedural attack audio for all eleven hero classes
 - `f5d20bd` (2026-11-02): Trigger hit and healing sounds in combat
-- `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
-- `e4e50e0` (2026-11-02): Add free procedural audio generation and CI artifacts
-- `ae80ae2` (2026-11-02): Add free procedural audio generation and CI artifacts
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `067333c` (2026-11-02): Generate original sound assets before Godot validation and Android APK export
