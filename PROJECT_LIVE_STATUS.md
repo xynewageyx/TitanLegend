@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 21:49 UTC**
-Git-Stand: **9775fbe40cfd71b415fee493eec0663d6ca98b0a** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 21:51 UTC**
+Git-Stand: **a45cfde517dfb821b05ef306d4a3379dde7b12c9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -39,7 +39,6 @@ Git-Stand: **9775fbe40cfd71b415fee493eec0663d6ca98b0a** auf Branch **main**
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7fe0a1` (2026-11-02): Run peer authorization security regression in moderation CI
-- `f60f990` (2026-11-02): Add security regression tests for peer-bound owner authorization
 
 ### Audio — Audio-Erstellung-Chat
 - `a317386` (2026-11-02): Audio: Boss-Warnsignal für unterbrechbare Fähigkeiten (#11)
