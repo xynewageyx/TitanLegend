@@ -113,14 +113,19 @@ func _apply_visual_quality(node: Node) -> void:
 		particles.amount_ratio = original_ratio * (1.0 if effects_enabled else 0.35)
 
 func _on_scene_changed(_scene: Node) -> void:
+	_reset_adaptive_sampling()
 	_apply_scene_quality()
+
+func _reset_adaptive_sampling() -> void:
+	startup_grace_seconds = 10.0
+	sample_seconds = 0.0
+	low_samples = 0
+	good_samples = 0
 
 func set_automatic(enabled: bool) -> void:
 	automatic_optimization = enabled
 	adaptive_scale = 1.0
-	startup_grace_seconds = 10.0
-	low_samples = 0
-	good_samples = 0
+	_reset_adaptive_sampling()
 	apply_settings()
 	save_settings()
 
