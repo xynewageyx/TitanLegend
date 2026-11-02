@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-02 18:52 UTC**
-Git-Stand: **a79b9f63fa869e7b00176a60aa9112d635e33d78** auf Branch **main**
+Git-Stand: **53c34b087102fe369194ff7c979762ab7c4eede1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -14,6 +14,7 @@ Git-Stand: **a79b9f63fa869e7b00176a60aa9112d635e33d78** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
+- `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 - `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 - `64bc5bc` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 - `b237248` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
@@ -25,6 +26,7 @@ Git-Stand: **a79b9f63fa869e7b00176a60aa9112d635e33d78** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 - `949bbff` (2026-11-02): Add five original elemental skill sound profiles for local player
 - `6863dac` (2026-11-02): Connect moderation policy, persistent storage and evidence export in server coordinator
 
@@ -37,15 +39,13 @@ Git-Stand: **a79b9f63fa869e7b00176a60aa9112d635e33d78** auf Branch **main**
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6863dac` (2026-11-02): Connect moderation policy, persistent storage and evidence export in server coordinator
 - `cb086f4` (2026-11-02): Add atomic persistent moderation state storage for dedicated Godot server
-- `94cbd3a` (2026-11-02): Add server-authoritative moderation cases, evidence snapshots and owner-approved bans
-- `3139396` (2026-11-02): Add Godot moderation review panel for owner-adjustable ban proposals
 
 ### Audio — Audio-Erstellung-Chat
+- `cdb0a16` (2026-11-02): Add water element sound and validate 49 generated WAV files
+- `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
 - `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 - `64bc5bc` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 - `b237248` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
-- `7714b80` (2026-11-02): Add five original elemental skill sound profiles for local player
-- `b80a2ce` (2026-11-02): Add five original elemental skill sound profiles for local player
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
