@@ -49,6 +49,9 @@ jobs:
             echo 'Godot import or script errors detected'
             exit 1
           fi
+      - name: Test graphics settings integration and hidden FPS overlay
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_graphics_settings_integration.py' -v
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
