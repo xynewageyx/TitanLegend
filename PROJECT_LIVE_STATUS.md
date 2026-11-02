@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 04:11 UTC**
-Git-Stand: **cd60f0b1e935ac66ea9a2d8c561764ad60ea8b59** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 04:12 UTC**
+Git-Stand: **7f2b7d61dd3d328e37506a2c754a8e5f60d43be7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -35,9 +35,9 @@ Git-Stand: **cd60f0b1e935ac66ea9a2d8c561764ad60ea8b59** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- \`7f2b7d6\` (2026-11-02): docs(coordination): register replacement character and landscape chats
 - \`a54247e\` (2026-11-02): fix(characters): align hero manifest with eleven playable classes
 - \`cc51c52\` (2026-11-02): art: align character proportions and shading with Ulala-like chibi direction
-- \`2b53bd5\` (2026-11-02): docs: define stylized 3D character art and animation standard
 
 ## Regeln für alle Fach-Chats
 
