@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 18:57 UTC**
-Git-Stand: **08b7ec78bb79f6e9ad96474b9c601671cc24d5d7** auf Branch **main**
+Automatisch erzeugt: **2026-11-02 18:58 UTC**
+Git-Stand: **8efeb197542e0a17ebdae2827829779cd5d17f7d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `d8d7b0d` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `f90327e` (2026-11-02): anim(chibi): add breathing idle secondary motion head bounce and attack torso follow-through
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -15,9 +16,6 @@ Git-Stand: **08b7ec78bb79f6e9ad96474b9c601671cc24d5d7** auf Branch **main**
 
 ### Landschaften — Landschaften-Chat
 - `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
-- `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
-- `64bc5bc` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
-- `b237248` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -33,6 +31,7 @@ Git-Stand: **08b7ec78bb79f6e9ad96474b9c601671cc24d5d7** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `8efeb19` (2026-11-02): Add fail-closed admin moderation gateway with server-side owner identity resolution
 - `08b7ec7` (2026-11-02): Add owner-controlled ban adjustment and revocation with audit history
 
 ### Audio — Audio-Erstellung-Chat
@@ -40,11 +39,9 @@ Git-Stand: **08b7ec78bb79f6e9ad96474b9c601671cc24d5d7** auf Branch **main**
 - `a6e36be` (2026-11-02): Add water element sound and validate 49 generated WAV files
 - `cdb0a16` (2026-11-02): Add water element sound and validate 49 generated WAV files
 - `6dac59c` (2026-11-02): Play biome-specific environmental audio on area transitions with correct ten-element mapping
-- `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `442a1e3` (2026-11-02): Add water element sound and validate 49 generated WAV files
-- `a79b9f6` (2026-11-02): Cover all ten Titan Legends biome elements with original procedural audio
 
 ## Bereichsübergreifende Änderungen
 
