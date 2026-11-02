@@ -1,0 +1,21 @@
+extends SceneTree
+const PROFILES = preload("res://scripts/character_profiles.gd")
+
+func _initialize() -> void:
+ var registry: Dictionary = PROFILES.new_registry()
+ assert(registry["characters"].size() == 5)
+ assert(registry["active_slot"] == -1)
+ assert(PROFILES.create_character(registry, 0, "Krieger A", 0, 0))
+ assert(registry["characters"][0]["level"] == 1)
+ assert(registry["characters"][0]["xp"] == 0)
+ assert(not PROFILES.create_character(registry, 0, "Duplikat", 0, 0))
+ assert(not PROFILES.create_character(registry, 1, "Unzulaessig", 4, 0))
+ assert(PROFILES.create_character(registry, 1, "Jaegerin", 4, 1))
+ assert(PROFILES.select_character(registry, 1))
+ assert(registry["active_slot"] == 1)
+ assert(registry["characters"][0]["class_id"] == 0)
+ assert(registry["characters"][1]["class_id"] == 4)
+ assert(not PROFILES.select_character(registry, 4))
+ assert(not PROFILES.create_character(registry, 5, "Zu viel", 0, 1))
+ print("Character profile slot tests passed")
+ quit()
