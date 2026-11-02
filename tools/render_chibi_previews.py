@@ -25,7 +25,8 @@ for name in names:
     bpy.context.object.data.energy = 450
     bpy.context.object.data.shape = "DISK"
     bpy.context.object.data.size = 4.0
-    bpy.context.scene.render.engine = "BLENDER_WORKBENCH"
+    scene = bpy.context.scene
+    scene.render.engine = "BLENDER_WORKBENCH"
     scene.display.shading.light = "STUDIO"
     scene.display.shading.color_type = "MATERIAL"
     scene.display.shading.show_shadows = True
