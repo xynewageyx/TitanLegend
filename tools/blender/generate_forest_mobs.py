@@ -1,7 +1,7 @@
 """Titan Legends forest creature procedural GLB generator.
 Run: blender --background --python tools/blender/generate_forest_mobs.py -- --output assets/enemies/forest
 """
-import bpy, math, os, sys, argparse
+import bpy, math, os, sys, argparse, json, struct
 from mathutils import Vector
 
 def material(name, rgba):
@@ -773,6 +773,65 @@ def sculpted_surface_identity(creature):
             z=1.40 if "01_" in creature else 1.70
             leaf_mesh("foliage_surface",(x,y,z),.27,.11,moss,bend=.07*math.sin(theta))
 
+def merge_gltf_animation_tracks(path):
+    """Combine root and limb clips into exactly four glTF animations.
+
+    Blender can export object NLA actions as separate animations. A single
+    AnimationPlayer clip must include both root and secondary mesh channels.
+    Remap sampler indices when combining; binary keyframe data stays unchanged.
+    """
+    with open(path, "rb") as stream:
+        raw=stream.read()
+    magic,version,total=struct.unpack_from("<4sII",raw,0)
+    if magic!=b"glTF" or version!=2 or total!=len(raw):
+        raise RuntimeError("Invalid glTF container: "+path)
+    chunks=[]
+    cursor=12
+    while cursor<len(raw):
+        size,kind=struct.unpack_from("<II",raw,cursor)
+        cursor+=8
+        chunks.append((kind,raw[cursor:cursor+size]))
+        cursor+=size
+    if not chunks or chunks[0][0]!=0x4E4F534A:
+        raise RuntimeError("Missing glTF JSON chunk: "+path)
+    doc=json.loads(chunks[0][1].decode("utf-8").rstrip(" \\x00"))
+    source=doc.get("animations",[])
+    groups={clip:{"name":clip,"samplers":[],"channels":[]} for clip in ("idle","attack","hit","death")}
+    for animation in source:
+        name=animation.get("name","")
+        clip=next((c for c in groups if name==c or name.startswith(c+"_")),None)
+        if clip is None:
+            raise RuntimeError("Unexpected forest animation: "+name)
+        dest=groups[clip]
+        offset=len(dest["samplers"])
+        dest["samplers"].extend(animation.get("samplers",[]))
+        for channel in animation.get("channels",[]):
+            copy=dict(channel)
+            copy["sampler"]=channel["sampler"]+offset
+            dest["channels"].append(copy)
+    for clip,item in groups.items():
+        if not item["channels"]:
+            raise RuntimeError("Missing animation channels: "+clip)
+        unique=set()
+        for channel in item["channels"]:
+            target=channel.get("target",{})
+            key=(target.get("node"),target.get("path"))
+            if key in unique:
+                raise RuntimeError("Conflicting animated target in "+clip+": "+str(key))
+            unique.add(key)
+    doc["animations"]=list(groups.values())
+    encoded=json.dumps(doc,separators=(",",":"),ensure_ascii=False).encode("utf-8")
+    encoded+=b" " * ((-len(encoded))%4)
+    chunks[0]=(0x4E4F534A,encoded)
+    output=bytearray(struct.pack("<4sII",b"glTF",2,0))
+    for kind,payload in chunks:
+        output.extend(struct.pack("<II",len(payload),kind))
+        output.extend(payload)
+    struct.pack_into("<I",output,8,len(output))
+    with open(path,"wb") as stream:
+        stream.write(output)
+    print("MERGED ANIMATIONS",path,[(a["name"],len(a["channels"])) for a in doc["animations"]])
+
 def export(name,fn,out):
     clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);facial_depth_finish(name);sculpted_surface_identity(name);sculpt_organic_silhouettes();organic_finish();cartoon_material_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
@@ -783,6 +842,7 @@ def export(name,fn,out):
     with open(target,"rb") as stream:
         if stream.read(4)!=b"glTF":
             raise RuntimeError("Invalid GLB magic: "+target)
+    merge_gltf_animation_tracks(target)
     print("EXPORTED",name,os.path.getsize(target),"bytes")
 
 def main():
