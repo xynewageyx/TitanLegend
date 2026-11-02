@@ -29,6 +29,19 @@ SOUNDS.update({
  "classes/priest_attack.wav": (0.312, 927, 516, "tone"),
  "classes/brawler_attack.wav": (0.330, 1010, 565, "noise"),
 })
+SOUNDS.update({
+ "classes/warrior_skill.wav": (0.300, 330, 700, "noise"),
+ "classes/paladin_skill.wav": (0.323, 397, 752, "tone"),
+ "classes/druid_skill.wav": (0.346, 464, 804, "tone"),
+ "classes/shaman_skill.wav": (0.369, 531, 856, "tone"),
+ "classes/hunter_skill.wav": (0.392, 598, 908, "noise"),
+ "classes/rogue_skill.wav": (0.415, 665, 960, "noise"),
+ "classes/mage_skill.wav": (0.438, 732, 1012, "tone"),
+ "classes/warlock_skill.wav": (0.461, 799, 1064, "tone"),
+ "classes/summoner_skill.wav": (0.484, 866, 1116, "tone"),
+ "classes/priest_skill.wav": (0.507, 933, 1168, "tone"),
+ "classes/brawler_skill.wav": (0.530, 1000, 1220, "noise"),
+})
 def render(path, duration, start, end, mode):
  rng = random.Random(path)
  frames = bytearray()
