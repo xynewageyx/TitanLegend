@@ -165,7 +165,9 @@ func _show_talent_detail(talent_index: int) -> void:
  if talent_index < 0 or talent_index >= TREES.TALENTS_PER_BRANCH:
   return
  var build: Array = team.get_talent_build_v2(selected_hero)
- if build.size() <= selected_branch or not build[selected_branch] is Array:
+ if selected_branch < 0 or selected_branch >= build.size() or not build[selected_branch] is Array:
+  return
+ if talent_index >= build[selected_branch].size():
   return
  var rank: int = int(build[selected_branch][talent_index])
  var row: int = int(talent_index / 3)
@@ -185,6 +187,8 @@ func _on_talent_pressed(talent_index: int) -> void:
  if team == null or not is_instance_valid(team) or not team.has_method("get_talent_build_v2"):
   return
  if talent_index < 0 or talent_index >= TREES.TALENTS_PER_BRANCH:
+  return
+ if selected_hero < 0 or selected_hero >= team.class_ids.size():
   return
  var build: Array = team.get_talent_build_v2(selected_hero)
  var can_upgrade_now: bool = TREES.can_upgrade(GameManager.character_level, build, selected_branch, talent_index)
