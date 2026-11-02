@@ -74,13 +74,14 @@ jobs:
           chmod +x "$GODOT"
           "$GODOT" --version | grep -F '4.7.2.stable'
           export LIBGL_ALWAYS_SOFTWARE=1
-          xvfb-run -a "$GODOT" --rendering-driver opengl3 --path preview --editor --import --quit 2>&1 | tee /tmp/grasland-import.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null|ERROR:.*(Failed to load|Cannot open)' /tmp/grasland-import.log; then
+          export GODOT_AUDIO_DRIVER=Dummy
+          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --editor --import --quit 2>&1 | tee /tmp/grasland-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|(^|[[:space:]])ERROR:|Failed to load script' /tmp/grasland-import.log; then
             echo "::error::Godot preview import reported an error"
             exit 1
           fi
-          xvfb-run -a "$GODOT" --rendering-driver opengl3 --path preview --quit-after 5 2>&1 | tee /tmp/grasland-run.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|ERROR: Parameter "t" is null' /tmp/grasland-run.log; then
+          xvfb-run -a "$GODOT" --rendering-method gl_compatibility --rendering-driver opengl3 --audio-driver Dummy --path preview --quit-after 5 2>&1 | tee /tmp/grasland-run.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|(^|[[:space:]])ERROR:|Failed to load script' /tmp/grasland-run.log; then
             echo "::error::Godot preview runtime reported an error"
             exit 1
           fi
