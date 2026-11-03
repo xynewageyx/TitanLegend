@@ -123,6 +123,11 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("for branch_ranks in build:", upgrade_guard)
         self.assertIn("branch_ranks.size() != TALENTS_PER_BRANCH", upgrade_guard)
 
+    def test_team_read_boundary_validates_persisted_builds(self):
+        getter = TEAM[TEAM.index("func get_talent_build_v2("):TEAM.index("\nvar role_ids:", TEAM.index("func get_talent_build_v2("))]
+        self.assertIn("not builds[hero_slot] is Array", getter)
+        self.assertIn("TALENT_TREES_V2.validate_build(GameManager.character_level, builds[hero_slot])", getter)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
