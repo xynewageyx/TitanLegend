@@ -2,6 +2,12 @@ name: Titan Legends Android Debug APK
 
 on:
   workflow_dispatch:
+    inputs:
+      developer_fps:
+        description: "Enable developer-only FPS overlay in this manually triggered debug APK"
+        type: boolean
+        required: false
+        default: false
   push:
     paths:
       - 'export_presets.cfg'
@@ -189,6 +195,22 @@ jobs:
               assert "dest_files" in text or "path=" in text, f"Missing import target for {model}"
               print(f"Godot import metadata OK: {model.name}")
           PY
+
+      - name: Configure optional developer FPS diagnostics
+        shell: bash
+        env:
+          DEVELOPER_FPS: ${{ inputs.developer_fps || 'false' }}
+        run: |
+          if [ "$DEVELOPER_FPS" = "true" ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          preset = Path("export_presets.cfg")
+          data = preset.read_text(encoding="utf-8")
+          assert 'custom_features=""' in data
+          preset.write_text(data.replace('custom_features=""', 'custom_features="titan_developer"', 1), encoding="utf-8")
+          PY
+            echo "Developer FPS diagnostics enabled for this debug build only." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Export Android arm64 debug APK
         shell: bash
