@@ -2,6 +2,7 @@ extends CanvasLayer
 ## Developer-only FPS diagnostic. Not part of player graphics settings.
 ## Requires a debug export with the custom feature tag "titan_developer".
 var fps_label: Label
+var reset_button: Button
 var elapsed := 0.0
 var min_fps := 9999
 var max_fps := 0
@@ -22,6 +23,20 @@ func _ready() -> void:
 	fps_label.add_theme_constant_override("shadow_offset_x", 1)
 	fps_label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(fps_label)
+	reset_button = Button.new()
+	reset_button.text = "FPS Reset"
+	reset_button.position = Vector2(12, 45)
+	reset_button.custom_minimum_size = Vector2(110, 40)
+	reset_button.pressed.connect(_reset_measurements)
+	add_child(reset_button)
+
+func _reset_measurements() -> void:
+	min_fps = 9999
+	max_fps = 0
+	sample_count = 0
+	total_fps = 0
+	elapsed = 0.0
+	fps_label.text = "FPS: --  Min: --  Max: --  Avg: --"
 
 func _process(delta: float) -> void:
 	elapsed += delta
