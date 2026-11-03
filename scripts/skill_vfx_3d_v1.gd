@@ -118,6 +118,20 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
    "interrupt_brawler":
     accent.scale = Vector3(2.2, 0.7, 0.7)
   tween.tween_property(accent, "position", destination, 0.42)
+  # Different trajectories make each class readable even on low graphics.
+  match skill_id:
+   "interrupt_warrior", "interrupt_brawler":
+    tween.tween_property(accent, "rotation:z", -0.9, 0.42)
+   "interrupt_paladin", "interrupt_priest":
+    tween.tween_property(accent, "scale", accent.scale * 1.35, 0.42)
+   "interrupt_druid", "interrupt_summoner":
+    tween.tween_property(accent, "rotation:y", 2.4, 0.42)
+   "interrupt_shaman", "interrupt_warlock":
+    tween.tween_property(accent, "rotation:y", -3.0, 0.42)
+   "interrupt_hunter", "interrupt_rogue":
+    tween.tween_property(accent, "scale", accent.scale * Vector3(0.65, 0.65, 1.4), 0.42)
+   "interrupt_mage":
+    tween.tween_property(accent, "rotation:x", 2.8, 0.42)
   tween.tween_property(accent_material, "albedo_color:a", 0.0, 0.42)
  tween.chain().tween_callback(func() -> void:
   _effects.erase(effect)
