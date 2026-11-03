@@ -17,6 +17,12 @@ func _run() -> void:
 	coordinator.loaded = true
 	var gateway := ChatModerationAdminGateway.new(coordinator, "owner-account")
 	var authority := ChatModerationPeerAuthority.new(gateway)
+	check(authority.can_admit_account("normal-account", 1800000000), "Unbanned account should be admissible")
+	check(not authority.can_admit_account("", 1800000000), "Empty account must be rejected")
+	check(not authority.can_admit_account("normal-account", 0), "Invalid time must be rejected")
+	coordinator.service.accounts["banned-account"] = {"warnings": 4, "approved_bans": 1, "ban_until": 1800003600}
+	check(not authority.can_admit_account("banned-account", 1800000000), "Active account ban must block admission")
+	check(authority.can_admit_account("banned-account", 1800003600), "Expired account ban must allow admission")
 	check(not authority.has_owner_access(42), "Unknown peer must have no owner access")
 	check(authority.pending_cases_for_peer(42).is_empty(), "Unknown peer must see no cases")
 	check(authority.evidence_for_peer(42, "MOD-000001").is_empty(), "Unknown peer must see no evidence")
