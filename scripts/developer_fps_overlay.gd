@@ -18,7 +18,7 @@ func _ready() -> void:
 		return
 	layer = 100
 	fps_label = Label.new()
-	fps_label.text = "FPS: --  Min: --  Max: --\nAvg: --  Zeit: --  Skalierung: --"
+	fps_label.text = "FPS: --  Min: --  Max: --\nAvg: --  Zeit: --  Soll-Skalierung: --"
 	fps_label.position = Vector2(12, 12)
 	fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fps_label.add_theme_color_override("font_color", Color.WHITE)
@@ -53,7 +53,7 @@ func _reset_measurements() -> void:
 	measurement_seconds = 0.0
 	measurement_paused = false
 	pause_button.text = "FPS Pause"
-	fps_label.text = "FPS: --  Min: --  Max: --\nAvg: --  Zeit: --  Skalierung: --"
+	fps_label.text = "FPS: --  Min: --  Max: --\nAvg: --  Zeit: --  Soll-Skalierung: --"
 
 func _process(delta: float) -> void:
 	if measurement_paused:
@@ -70,4 +70,4 @@ func _process(delta: float) -> void:
 			total_fps += current_fps
 		var average_fps := int(round(float(total_fps) / float(sample_count))) if sample_count > 0 else 0
 		var requested_scale := get_tree().root.scaling_3d_scale
-		fps_label.text = "FPS: %d  Min: %d  Max: %d\nAvg: %d  Zeit: %ds  Skalierung: %d%%" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps, average_fps, int(measurement_seconds), int(round(requested_scale * 100.0))]
+		fps_label.text = "FPS: %d  Min: %d  Max: %d\nAvg: %d  Zeit: %ds  Soll-Skalierung: %d%%" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps, average_fps, int(measurement_seconds), int(round(requested_scale * 100.0))]
