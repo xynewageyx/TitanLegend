@@ -29,7 +29,7 @@ def loft(name,levels,mat):
 def oval(name,pos,scale,mat):
  bpy.ops.mesh.primitive_uv_sphere_add(segments=16,ring_count=10,location=pos)
  o=bpy.context.object;o.name=name;o.scale=scale;o.data.materials.append(mat)
-def rig_and_animate():
+def rig_and_animate(hero_class):
  """Lightweight rigid skinning with named bones and five reusable action clips."""
  bpy.ops.object.armature_add(enter_editmode=True,location=(0,0,0))
  arm=bpy.context.object;arm.name="ChibiRig"
@@ -88,8 +88,19 @@ def rig_and_animate():
      bone.rotation_euler.x=.48*sign*math.sin(phase*math.tau)
     if clip=="Walk" and bone.name=="Head":bone.rotation_euler.x=.055*math.cos(phase*math.tau)
     if clip=="Walk" and bone.name=="Spine":bone.rotation_euler.x=.045*math.cos(phase*math.tau)
-    if clip=="Attack" and bone.name=="Arm_R":bone.rotation_euler.x=-1.1*math.sin(phase*math.pi)
-    if clip=="Attack" and bone.name=="Spine":bone.rotation_euler.y=-.22*math.sin(phase*math.pi)
+    if clip=="Attack":
+     strike=math.sin(phase*math.pi)
+     if hero_class in ("warrior","paladin","brawler","rogue"):
+      if bone.name=="Arm_R":bone.rotation_euler.x=-1.25*strike
+      if bone.name=="Arm_L":bone.rotation_euler.x=-.35*strike
+     elif hero_class=="hunter":
+      if bone.name=="Arm_L":bone.rotation_euler.x=-.90*strike
+      if bone.name=="Arm_R":bone.rotation_euler.x=-.70*strike
+     else:
+      if bone.name in ("Arm_L","Arm_R"):bone.rotation_euler.x=-.85*strike
+      if bone.name=="Head":bone.rotation_euler.x=-.10*strike
+    if clip=="Attack" and bone.name=="Spine":
+     bone.rotation_euler.y=(-.28 if hero_class in ("warrior","paladin","brawler","rogue") else -.10)*math.sin(phase*math.pi)
     if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
     if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
     bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
@@ -234,7 +245,7 @@ for idx,name in enumerate(NAMES):
   for side in (-1,1):
    oval("HairCrystal",(side*.32,-.01,2.25),(.11,.11,.18),gold)
   oval("ChestSigil",(0,-.36,1.18),(.16,.06,.17),white)
- rig_and_animate()
+ rig_and_animate(name)
  bpy.ops.object.select_all(action="SELECT")
  bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_animations=True,export_nla_strips=True)
  print("Generated",name)
