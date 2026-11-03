@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 06:49 UTC**
-Git-Stand: **8a53c4923804b6387034a89973ea53dd0551a192** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 06:51 UTC**
+Git-Stand: **d9ef28d996e3eb6b3b1cb285eb044cdef8172e81** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **8a53c4923804b6387034a89973ea53dd0551a192** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `8a53c49` (2026-11-03): fix(chibi): bind pupils to head, pair hunter pouches and reuse eye/sleeve materials
 - `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
-- `570e459` (2026-11-03): fix(talents): validate persisted hero builds at team read boundary
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
@@ -27,8 +26,6 @@ Git-Stand: **8a53c4923804b6387034a89973ea53dd0551a192** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 - `7e1a576` (2026-11-03): ci(talents): run focused regression tests on talent changes and pull requests
-- `f6b4079` (2026-11-03): test(talents): assert persisted builds are normalized at team getter
-- `570e459` (2026-11-03): fix(talents): validate persisted hero builds at team read boundary
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -49,7 +46,7 @@ Git-Stand: **8a53c4923804b6387034a89973ea53dd0551a192** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `d9ef28d` (2026-11-03): Validate PCM loop boundaries for all ten ambience files (#19)
 
 ## Regeln für alle Fach-Chats
 
