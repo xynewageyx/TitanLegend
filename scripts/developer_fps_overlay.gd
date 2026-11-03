@@ -5,6 +5,8 @@ var fps_label: Label
 var elapsed := 0.0
 var min_fps := 9999
 var max_fps := 0
+var sample_count := 0
+var total_fps := 0
 
 func _ready() -> void:
 	if not (OS.has_feature("debug") and OS.has_feature("titan_developer")):
@@ -29,4 +31,7 @@ func _process(delta: float) -> void:
 		if current_fps > 0:
 			min_fps = mini(min_fps, current_fps)
 			max_fps = maxi(max_fps, current_fps)
-		fps_label.text = "FPS: %d  Min: %d  Max: %d" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps]
+			sample_count += 1
+			total_fps += current_fps
+		var average_fps := int(round(float(total_fps) / float(sample_count))) if sample_count > 0 else 0
+		fps_label.text = "FPS: %d  Min: %d  Max: %d  Avg: %d" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps, average_fps]
