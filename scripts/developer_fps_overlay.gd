@@ -3,6 +3,8 @@ extends CanvasLayer
 ## Requires a debug export with the custom feature tag "titan_developer".
 var fps_label: Label
 var elapsed := 0.0
+var min_fps := 9999
+var max_fps := 0
 
 func _ready() -> void:
 	if not (OS.has_feature("debug") and OS.has_feature("titan_developer")):
@@ -23,4 +25,8 @@ func _process(delta: float) -> void:
 	elapsed += delta
 	if elapsed >= 0.5 and is_instance_valid(fps_label):
 		elapsed = 0.0
-		fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
+		var current_fps := Engine.get_frames_per_second()
+		if current_fps > 0:
+			min_fps = mini(min_fps, current_fps)
+			max_fps = maxi(max_fps, current_fps)
+		fps_label.text = "FPS: %d  Min: %d  Max: %d" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps]
