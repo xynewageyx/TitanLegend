@@ -1,19 +1,21 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-02 22:14 UTC**
-Git-Stand: **8711f60b7d1f794bf222a822673ac694ad19f851** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 03:43 UTC**
+Git-Stand: **327c88c3c9a9279801ad088aa99bc4303b863c98** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `38747f4` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
 - `90b0b2f` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
 - `bdac0a9` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- `327c88c` (2026-11-03): feat(forest): add reusable runtime visual controller for nine animated GLB enemies
 - `e7946e7` (2026-11-02): Differentiate ten elemental boss sound signatures (#16)
 
 ### Landschaften — Landschaften-Chat
@@ -27,7 +29,6 @@ Git-Stand: **8711f60b7d1f794bf222a822673ac694ad19f851** auf Branch **main**
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `9f89e07` (2026-11-02): Cache scene lights and particles to avoid repeated combat tree scans
-- `65e31d0` (2026-11-02): fix(talents): validate latest build before mobile tap purchase
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -41,7 +42,6 @@ Git-Stand: **8711f60b7d1f794bf222a822673ac694ad19f851** auf Branch **main**
 
 ### Audio — Audio-Erstellung-Chat
 - `e7946e7` (2026-11-02): Differentiate ten elemental boss sound signatures (#16)
-- `2b822ce` (2026-11-02): Give each class layered harmonic and transient sound signatures (#15)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
