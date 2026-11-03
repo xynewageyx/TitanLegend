@@ -105,7 +105,9 @@ for idx,name in enumerate(NAMES):
  skin=material("skin",(.92,.69,.51));hair=material("hair",COLORS[idx])
  white=material("white",(1,.96,.89));dark=material("pupil",(.05,.08,.12))
  loft("SculptedHead",[(1.53,.02,.02,0),(1.65,.34,.29,0),(1.82,.49,.38,-.03),(2.02,.47,.40,-.02),(2.20,.29,.28,0),(2.27,.02,.02,0)],skin)
- loft("SculptedBody",[(.45,.02,.02,0),(.60,.27,.22,0),(.95,.38,.29,0),(1.25,.34,.27,0),(1.52,.10,.11,0)],skin)
+ # The base torso is covered by the costume; avoid a pale exposed belly.
+ body_base=material("body_underlayer",tuple(max(.08,v*.50) for v in COLORS[idx]))
+ loft("SculptedBody",[(.45,.02,.02,0),(.60,.255,.205,0),(.95,.35,.265,0),(1.25,.315,.245,0),(1.52,.10,.11,0)],body_base)
  loft("HairCap",[(2.04,.33,.32,.08),(2.17,.44,.37,.04),(2.29,.26,.24,.03),(2.34,.02,.02,.03)],hair)
  for side in (-1,1):
   x=side*.19
@@ -115,7 +117,8 @@ for idx,name in enumerate(NAMES):
   oval("Cheek",(side*.325,-.345,1.76),(.115,.035,.064),skin)
   oval("Eyebrow",(x,-.39,2.095),(.115,.027,.035),hair)
   oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
-  oval("Arm",(side*.40,0,1.19),(.14,.16,.32),skin)
+  sleeve=material("sleeve",tuple(min(.9,v*.75+.1) for v in COLORS[idx]))
+  oval("Arm",(side*.40,0,1.19),(.165,.175,.34),sleeve)
   oval("Hand",(side*.47,-.02,.94),(.15,.14,.15),skin)
   oval("Leg",(side*.19,0,.49),(.16,.17,.28),skin)
   oval("Foot",(side*.19,-.1,.23),(.19,.27,.15),skin)
