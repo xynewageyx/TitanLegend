@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 18:07 UTC**
-Git-Stand: **8a960d89ed35a49a766326217e8a25fe580a6a58** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 18:14 UTC**
+Git-Stand: **7291f9734457f404fcdf624ba471cdcb99d33960** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -25,21 +25,20 @@ Git-Stand: **8a960d89ed35a49a766326217e8a25fe580a6a58** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 - `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 - `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
 - `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
-- `8e51a79` (2026-11-03): Test rejection of peer account identity switching and privilege escalation
-- `da453fa` (2026-11-03): Prevent moderation peer identity switching within authenticated session
 
 ### Audio — Audio-Erstellung-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
