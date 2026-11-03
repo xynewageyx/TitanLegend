@@ -9,6 +9,7 @@ on:
       - "scenes/grasland_preview.tscn"
       - "scenes/grasland_performance_hud.gd"
       - "scenes/forest_battle_arena_controller.gd"
+      - "scenes/grasland_orbit_camera.gd"
       - "tools/blender/generate_grasland.py"
 jobs:
   android-preview:
