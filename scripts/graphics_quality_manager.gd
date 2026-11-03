@@ -21,6 +21,7 @@ var good_samples := 0
 var startup_grace_seconds := 10.0
 var last_effective_scale := -1.0
 var cached_visuals: Array[Node] = []
+var last_visual_profile := ""
 
 func _ready() -> void:
 	load_settings()
@@ -63,7 +64,11 @@ func apply_settings() -> void:
 	if not is_equal_approx(effective_scale, last_effective_scale):
 		get_tree().root.scaling_3d_scale = effective_scale
 		last_effective_scale = effective_scale
-	_apply_scene_quality()
+	# Adaptive resolution changes must not rewrite every combat light/particle.
+	var visual_profile := "%s|%s|%s" % [quality, shadows_enabled, effects_enabled]
+	if visual_profile != last_visual_profile:
+		last_visual_profile = visual_profile
+		_apply_scene_quality()
 	settings_changed.emit(get_settings())
 
 func get_settings() -> Dictionary:
