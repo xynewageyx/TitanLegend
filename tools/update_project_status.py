@@ -42,7 +42,7 @@ def main():
     branch = os.getenv("GITHUB_REF_NAME", "main")
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     try:
-        lines = git("log", "-15", "--date=short", "--pretty=format:%h%x09%ad%x09%s", "--name-only").splitlines()
+        lines = git("log", "-30", "--date=short", "--pretty=format:%h%x09%ad%x09%s", "--name-only").splitlines()
     except subprocess.CalledProcessError:
         lines = []
     commits = []
@@ -69,7 +69,7 @@ def main():
         "Skills und Animationen": ("skill", "ability", "spell", "interrupt", "unterbrech", "vfx"),
         "Grafiktreiber / Rendering": ("render(", "graphics(", "grafiktreiber", "shader", "gpu", "postprocess", "antialias", "shadow quality", "rendering"),
         "Titan Chat / Moderation": ("chat(", "moderation", "profanity", "schimpfwort", "verwarn", "chatban", "chat ban", "mute"),
-        "Audio": ("audio", "sound", "sfx", "soundtrack", "music", "musik", "ambient", "foley"),
+        "Audio": ("audio", "sound", "sfx", "soundtrack", "music", "musik", "ambient", "ambience", "pcm", "foley"),
         "Integration/CI": ("ci(", "build(", "workflow", "pipeline"),
     }
     for commit in commits:
@@ -109,7 +109,7 @@ def main():
     for name, owner in OWNERS.items():
         output += [f"### {name} — {owner}"]
         items = classified[name][:5]
-        output += [f"- `{c['hash']}` ({c['date']}): {c['subject']}" for c in items] if items else ["- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität)."]
+        output += [f"- `{c['hash']}` ({c['date']}): {c['subject']}" for c in items] if items else ["- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität)."]
         output.append("")
     output += ["## Bereichsübergreifende Änderungen", ""]
     output += [f"- `{c['hash']}` ({c['date']}): {c['subject']}" for c in shared[:8]] if shared else ["- Keine in den letzten 15 Commits."]
