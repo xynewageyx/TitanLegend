@@ -60,3 +60,11 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - GitHub Actions für Commit `6a6e865f`: Godot-Validierung und Core Regression erfolgreich; Android-Debug-APK abgebrochen (kein APK-Erfolg nachgewiesen).
 - Noch offen: echte Android-Sichtprüfung, Charakter-Skelett-/Socket-Ausrichtung, hochwertige individuelle Meshes, LOD/Performance, Merge.
 - WICHTIG: andere Chats bitte vor Arbeiten an den genannten Dateien PR #10 prüfen; keine parallele Überschreibung. Dieser Projektstatus ist eine gemeinsame Referenz, keine automatische Live-Chat-Synchronisation.
+
+## Ulala-Referenzarchiv – Eingang 2026-11-03
+- Vom Projektinhaber bereitgestellte Google-Drive-Datei: https://drive.google.com/file/d/1vkf9QhtLKloS0b4CC9Wg9VG32rJlVedu/view
+- Dateigröße laut Google-Drive-Downloadversuch: 2.291.698.525 Bytes (~2,29 GB).
+- Der Connector verweigert den Download über seiner Grenze von 268.435.456 Bytes (256 MiB). **Der Inhalt ist deshalb noch NICHT analysiert.**
+- Bitte für eine vollständige Bestandsaufnahme in mehrere Dateien unter 256 MiB aufteilen, möglichst nach Modellen, Animationen, Texturen, Materialdaten, Szenen und Metadaten. Alternativ ein Text-Dateiverzeichnis/Manifest exportieren.
+- Nach erfolgreicher Analyse hier ein überprüfbares Inventar, Format-/Rig-/Animations-Erkenntnisse und konkrete, rechtlich unbedenkliche Umsetzungsaufgaben für Charaktere, Gegner, Waffen, Rüstung, Animationen und Landschaften eintragen.
+- Fremde Ulala-Dateien nur mit passenden Nutzungsrechten direkt ins Spiel übernehmen; ansonsten ausschließlich als technische Referenz für eigene Assets verwenden.
