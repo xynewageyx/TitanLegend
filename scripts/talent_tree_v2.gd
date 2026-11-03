@@ -34,8 +34,11 @@ static func remaining_rank_capacity(build: Array) -> int:
 static func can_upgrade(level: int, build: Array, branch: int, talent: int) -> bool:
  if branch < 0 or branch >= BRANCH_COUNT or talent < 0 or talent >= TALENTS_PER_BRANCH:
   return false
- if build.size() != BRANCH_COUNT or not build[branch] is Array or build[branch].size() != TALENTS_PER_BRANCH:
+ if build.size() != BRANCH_COUNT:
   return false
+ for branch_ranks in build:
+  if not branch_ranks is Array or branch_ranks.size() != TALENTS_PER_BRANCH:
+   return false
  var current_rank: int = int(build[branch][talent])
  if current_rank < 0 or current_rank >= MAX_RANK:
   return false
