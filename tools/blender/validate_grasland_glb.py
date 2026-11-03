@@ -15,9 +15,10 @@ assert chunk_type == b"JSON", "First GLB chunk must be JSON"
 assert 20 + chunk_length <= len(raw), "Truncated JSON chunk"
 document = json.loads(raw[20:20 + chunk_length])
 names = [node.get("name", "") for node in document.get("nodes", [])]
-required = ("Continuous meadow ground", "River", "Ancient tree trunk", "Boss clearing")
+required = ("Continuous meadow ground", "River", "Ancient tree trunk")
 for name in required:
     assert name in names, f"Missing landmark: {name}"
+assert not any(name == "Boss clearing" or name.startswith("Clearing border rock") for name in names), "Combat arena must not be embedded in exploration GLB"
 for prefix, minimum in (("Tree trunk", 44), ("Stone ", 65), ("Grass tuft", 170), ("Flower ", 75), ("Path segment", 55)):
     count = sum(name.startswith(prefix) for name in names)
     assert count >= minimum, f"{prefix}: expected >= {minimum}, got {count}"
