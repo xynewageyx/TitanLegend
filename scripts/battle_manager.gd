@@ -688,6 +688,7 @@ func _attack_tick() -> void:
   _damage_heroes(damage, [target])
  if not battle_active:
   return
+ _play_forest_enemy_clip("attack")
  _boss_minions_attack()
  _boss_phase_two_tick()
  _refresh_tank_defense_visuals()
@@ -889,6 +890,7 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
  var vulnerability: float = 1.0 + INTERRUPT_BOSS_DAMAGE_BONUS if is_boss and skill_tick < boss_vulnerable_until_tick else 1.0
  if is_boss:
   _animate_boss_event("react_to_hit")
+ _play_forest_enemy_clip("hit", is_area)
  enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense) * vulnerability)))
  _update_enemy_casualties()
  if enemy_hp <= 0:
@@ -1160,6 +1162,17 @@ func _update_enemy_casualties() -> void:
 
 # Visual-only boss animation bridge. Combat decisions, damage and timing
 # remain entirely in BattleManager; the animation may be absent safely.
+# Dispatch visual clips without changing damage, targeting or combat timing.
+func _play_forest_enemy_clip(clip: String, all_visible: bool = false) -> void:
+ for mob in enemy_visuals:
+  if not is_instance_valid(mob) or not mob.visible:
+   continue
+  var presenter: Node = mob.get_node_or_null("ForestModel")
+  if presenter != null and presenter.has_method("play_clip"):
+   presenter.call("play_clip", clip)
+   if not all_visible:
+    break
+
 func _animate_boss_event(event_name: String) -> void:
  if not is_boss or enemy_visuals.is_empty():
   return
