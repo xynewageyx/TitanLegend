@@ -117,3 +117,17 @@ Compared the previously decoded, unique `Transform.m_GameObject -> GameObject.m_
 - `ck_dujiaoxing_hair` vs `ck_dujiaoxing_clothes`: 44 shared names. The hair prefab has 35 names absent from clothes, including finger/hand transforms. Clothes has 21 names absent from hair, including `male_hair_00` through `male_hair_07` and multiple `male_skirt_*` entries. Jaccard overlap **44/100 = 44%**.
 
 Important limitation: some bundles have duplicate Transform names and two root instances; unique name sets collapse those duplicates. A rigorous structural comparison must use root-relative parent paths or stable per-file object path IDs, and a rig compatibility check must additionally compare bindposes and skinning weights. Metadata-only comparison JSON: `ulala_equipment_exact_name_differences.json` (local).
+
+## Parent-path comparison using resolved Transform links (2026-11-04)
+
+Compared **root-relative full parent/child paths** from actual decoded `Transform.m_Father` and `m_Children` references, not just sets of node names. Paths were counted with multiplicity to retain duplicate subtrees in two-root prefabs. The root name itself was excluded.
+
+| Pair | Root-relative paths A | Paths B | Shared identical paths |
+| --- | ---: | ---: | ---: |
+| `ck_dujiaoxing_hair` vs `ck_dujiaoxing_shoes` | 79 | 79 | 78 |
+| `ck_dujiaoxing_weapon` vs `ck_lang_hair` | 158 | 158 | 156 |
+| `ck_dujiaoxing_hair` vs `ck_dujiaoxing_clothes` | 79 | 65 | 44 |
+
+For the first pair, the only difference is the name of the immediate child model object (`CK_DuJiaoXing_Hair` versus `CK_DuJiaoXing_Shoes`). For the second pair, that same model-object-name difference appears **twice** because each prefab contains two roots. Thus all remaining 78/156 root-relative paths match exactly in their ancestral naming structure.
+
+The third pair differs more substantially: hair contains additional finger chains, while clothes contains additional `male_hair_*` and `male_skirt_*` chains. These are **structural naming matches**, not proof of matching local transforms, bindpose matrices, bone weights or compatible skinning. The local report is `ulala_equipment_parent_path_comparison.json`; no original asset binaries are published.
