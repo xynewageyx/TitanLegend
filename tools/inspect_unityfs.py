@@ -62,6 +62,12 @@ def inspect(path):
         name = info[off:end].decode("utf-8", "replace")
         off = end + 1
         entries.append({"name": name, "offset": offset, "size": size, "flags": nflags})
+    # Verify directory ranges before reporting them as valid.
+    data_length = sum(x[0] for x in blocks)
+    for entry in entries:
+        if entry["offset"] + entry["size"] > data_length:
+            raise ValueError("UnityFS entry exceeds decompressed data region")
+
     return {
         "file": Path(path).name,
         "unity": unity,
@@ -70,6 +76,8 @@ def inspect(path):
         "blocks": len(blocks),
         "decompressed_bytes": sum(x[0] for x in blocks),
         "entries": entries,
+        "block_codecs": [x[2] & 0x3f for x in blocks],
+        "metadata_at_end": bool(flags & 0x80),
     }
 
 
