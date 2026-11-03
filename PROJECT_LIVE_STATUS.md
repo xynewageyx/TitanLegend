@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 17:04 UTC**
-Git-Stand: **8f4766a3a6f0229595563ac41f1a0dbd9ebbd2ae** auf Branch **main**
+Git-Stand: **108ab6be8d154415714f7f3ac882df9226842c8e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -13,7 +13,6 @@ Git-Stand: **8f4766a3a6f0229595563ac41f1a0dbd9ebbd2ae** auf Branch **main**
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `40fcbff` (2026-11-03): Duck music and ambience while boss warning plays (#21)
-- `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -33,6 +32,7 @@ Git-Stand: **8f4766a3a6f0229595563ac41f1a0dbd9ebbd2ae** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `108ab6b` (2026-11-03): Regression-test initial graphics cache setup before applying quality
 - `8f4766a` (2026-11-03): Apply graphics quality to pre-existing scene lights and particles at startup
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
@@ -41,7 +41,6 @@ Git-Stand: **8f4766a3a6f0229595563ac41f1a0dbd9ebbd2ae** auf Branch **main**
 
 ### Audio — Audio-Erstellung-Chat
 - `40fcbff` (2026-11-03): Duck music and ambience while boss warning plays (#21)
-- `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
