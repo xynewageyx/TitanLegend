@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 17:25 UTC**
-Git-Stand: **18cf7e9608d3a750176338808cc2ba59b847511f** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 17:46 UTC**
+Git-Stand: **8e51a793fd9046e393638845389c71a2c711a718** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -38,7 +38,8 @@ Git-Stand: **18cf7e9608d3a750176338808cc2ba59b847511f** auf Branch **main**
 - `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `8e51a79` (2026-11-03): Test rejection of peer account identity switching and privilege escalation
+- `da453fa` (2026-11-03): Prevent moderation peer identity switching within authenticated session
 
 ### Audio — Audio-Erstellung-Chat
 - `18cf7e9` (2026-11-03): Preload critical boss and interrupt sounds into bounded audio cache (#23)
