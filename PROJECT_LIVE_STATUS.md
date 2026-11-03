@@ -1,54 +1,54 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 17:02 UTC**
-Git-Stand: **80e3399e68fb4795492abfa9903e7518ed45dedb** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 17:03 UTC**
+Git-Stand: **312f754e7a02be25230b6899113702efe952a0c1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 - `de9b92d` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `06c0cfc` (2026-11-03): fix(animation): add quarter-cycle keyframes so walk and idle actually move
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Landschaften — Landschaften-Chat
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### UI — UI-Chat
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
 - `d52d8b1` (2026-11-03): fix(talents): safely ignore non-integer saved ranks during talent build recovery
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
 - `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `8d0e78b` (2026-11-03): Fix typed moderation admin smoke test access for Godot static analyzer
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Audio — Audio-Erstellung-Chat
 - `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
+- `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 
 ## Bereichsübergreifende Änderungen
 
