@@ -687,11 +687,9 @@ func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
  elif role == 0:
   effect_id = "group_guard" if choice == 9 or choice == 2 else "shield_bash"
  elif role == 2:
-  effect_id = "healing_wave" if choice == 7 or choice == 8 else "holy_light"
+  effect_id = "healing_wave" if choice == 8 else "holy_light"
  elif choice == 4 or choice == 6:
   effect_id = "meteor_rain"
- elif choice == 7:
-  effect_id = "frost_nova"
  skill_vfx_node.call("play_skill", effect_id, hero.global_position)
 
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
