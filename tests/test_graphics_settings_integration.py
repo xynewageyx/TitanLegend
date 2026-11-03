@@ -36,7 +36,8 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
 
     def test_visual_cache_cleanup(self):
         code = MANAGER.read_text(encoding="utf-8")
-        self.assertIn("node.tree_exiting.connect(_on_visual_exiting.bind(node), CONNECT_ONE_SHOT)", code)
+        self.assertIn("node.tree_exiting.is_connected(exit_callback)", code)
+        self.assertIn("node.tree_exiting.connect(exit_callback, CONNECT_ONE_SHOT)", code)
         self.assertIn("cached_visuals.erase(node)", code)
         self.assertIn("func _rebuild_visual_cache()", code)
         self.assertIn("if not is_instance_valid(node):", code)
