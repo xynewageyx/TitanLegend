@@ -101,8 +101,19 @@ def rig_and_animate(hero_class):
       if bone.name=="Head":bone.rotation_euler.x=-.10*strike
     if clip=="Attack" and bone.name=="Spine":
      bone.rotation_euler.y=(-.28 if hero_class in ("warrior","paladin","brawler","rogue") else -.10)*math.sin(phase*math.pi)
-    if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
-    if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
+    if clip=="Hit":
+     impact=math.sin(phase*math.pi)
+     if bone.name=="Spine":bone.rotation_euler.x=.25*impact
+     if bone.name=="Head":bone.rotation_euler.x=.18*impact
+     if bone.name in ("Arm_L","Arm_R"):bone.rotation_euler.x=.24*impact
+    if clip=="Dodge":
+     evade=math.sin(phase*math.pi)
+     if bone.name=="Spine":bone.rotation_euler.y=.35*evade
+     if bone.name=="Head":bone.rotation_euler.y=-.13*evade
+     if bone.name in ("Leg_L","Leg_R"):
+      bone.rotation_euler.x=(.30 if bone.name.endswith("L") else -.30)*evade
+     if bone.name in ("Arm_L","Arm_R"):
+      bone.rotation_euler.z=(.22 if bone.name.endswith("L") else -.22)*evade
     bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
   # NLA strips must not keep an active action that overrides them.
   arm.animation_data.action=None
