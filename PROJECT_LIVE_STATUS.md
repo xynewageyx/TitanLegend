@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 19:03 UTC**
-Git-Stand: **422cd4cb769802312079c8cef4190875258e2ad4** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 19:04 UTC**
+Git-Stand: **fa2753f904b726dd0b95ebbe1c16a6f026658f7b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,18 +10,20 @@ Git-Stand: **422cd4cb769802312079c8cef4190875258e2ad4** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
 - `6925c8c` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
@@ -30,7 +32,7 @@ Git-Stand: **422cd4cb769802312079c8cef4190875258e2ad4** auf Branch **main**
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `efcaa3c` (2026-11-03): Test adaptive resolution steps for severe sustained FPS drops
@@ -39,17 +41,20 @@ Git-Stand: **422cd4cb769802312079c8cef4190875258e2ad4** auf Branch **main**
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `d3ebfa7` (2026-11-03): Provide trusted login callback for binding verified moderation peer identities
 - `94d8bf2` (2026-11-03): Regression-test admin revocation clearing cached private evidence
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
+- `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 
 ## Bereichsübergreifende Änderungen
 
