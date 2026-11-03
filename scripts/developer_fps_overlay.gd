@@ -3,6 +3,8 @@ extends CanvasLayer
 ## Requires a debug export with the custom feature tag "titan_developer".
 var fps_label: Label
 var reset_button: Button
+var pause_button: Button
+var measurement_paused := false
 var elapsed := 0.0
 var measurement_seconds := 0.0
 var min_fps := 9999
@@ -30,6 +32,17 @@ func _ready() -> void:
 	reset_button.custom_minimum_size = Vector2(110, 40)
 	reset_button.pressed.connect(_reset_measurements)
 	add_child(reset_button)
+	pause_button = Button.new()
+	pause_button.text = "FPS Pause"
+	pause_button.position = Vector2(130, 45)
+	pause_button.custom_minimum_size = Vector2(110, 40)
+	pause_button.pressed.connect(_toggle_pause)
+	add_child(pause_button)
+
+func _toggle_pause() -> void:
+	measurement_paused = not measurement_paused
+	pause_button.text = "FPS Weiter" if measurement_paused else "FPS Pause"
+	elapsed = 0.0
 
 func _reset_measurements() -> void:
 	min_fps = 9999
@@ -38,9 +51,13 @@ func _reset_measurements() -> void:
 	total_fps = 0
 	elapsed = 0.0
 	measurement_seconds = 0.0
+	measurement_paused = false
+	pause_button.text = "FPS Pause"
 	fps_label.text = "FPS: --  Min: --  Max: --  Avg: --"
 
 func _process(delta: float) -> void:
+	if measurement_paused:
+		return
 	measurement_seconds += delta
 	elapsed += delta
 	if elapsed >= 0.5 and is_instance_valid(fps_label):
