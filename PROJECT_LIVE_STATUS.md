@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 17:03 UTC**
-Git-Stand: **40fcbff4ba5a32450868e370049aabb19f908d3b** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 17:04 UTC**
+Git-Stand: **9ebdcfb9cb0f874ea1548712c948572a20c561cc** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -52,7 +52,6 @@ Git-Stand: **40fcbff4ba5a32450868e370049aabb19f908d3b** auf Branch **main**
 ## Bereichsübergreifende Änderungen
 
 - `b69cf80` (2026-11-03): Add pause and resume controls to developer-only FPS measurements
-- `5c4cb92` (2026-11-03): Show elapsed measurement time in developer FPS overlay
 
 ## Regeln für alle Fach-Chats
 
