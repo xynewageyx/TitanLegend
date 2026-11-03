@@ -1,20 +1,21 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 04:05 UTC**
-Git-Stand: **3d1792791dfc0dc9410b5f5906c713269dc66d99** auf Branch **main**
+Git-Stand: **738f31ad0b75665f8cadd8e3032de51f5b6c624e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
 - `25a42f0` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
 
 ### Landschaften — Landschaften-Chat
-- `a10aad8` (2026-11-03): Generate seamless layered ambience for ten biomes (#17)
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -41,6 +42,7 @@ Git-Stand: **3d1792791dfc0dc9410b5f5906c713269dc66d99** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
 - `3d17927` (2026-11-03): Register developer FPS overlay with runtime feature gating
 
 ## Bereichsübergreifende Änderungen
