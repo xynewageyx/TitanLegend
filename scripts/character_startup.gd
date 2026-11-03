@@ -17,6 +17,7 @@ func _ready() -> void:
  # Existing installations stay in legacy mode until migration is supported.
  if not occupied and (FileAccess.file_exists(LEGACY) or FileAccess.file_exists(LEGACY + ".bak")):
   SaveManager.use_legacy_save()
+  SaveManager.begin_game_session()
   get_tree().call_deferred("change_scene_to_file", GAME_SCENE)
   return
  SaveManager.character_switching_enabled = true
@@ -27,5 +28,5 @@ func _ready() -> void:
 func _enter_game(_slot: int) -> void:
  if SaveManager.active_character_slot < 0:
   return
- SaveManager.load_game()
+ SaveManager.begin_game_session()
  get_tree().call_deferred("change_scene_to_file", GAME_SCENE)
