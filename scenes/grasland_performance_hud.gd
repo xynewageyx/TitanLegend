@@ -4,6 +4,8 @@ extends CanvasLayer
 var _label: Label
 var _toggle: Button
 var _elapsed := 0.0
+var _battle_active := false
+var _battle_button: Button
 
 func _ready() -> void:
     var panel := PanelContainer.new()
@@ -28,6 +30,12 @@ func _ready() -> void:
     _label.add_theme_constant_override("shadow_offset_x", 1)
     _label.add_theme_constant_override("shadow_offset_y", 1)
     stack.add_child(_label)
+
+    _battle_button = Button.new()
+    _battle_button.text = "Start battle (test)"
+    _battle_button.custom_minimum_size = Vector2(160, 48)
+    _battle_button.pressed.connect(_toggle_battle)
+    stack.add_child(_battle_button)
     _refresh()
 
 func _process(delta: float) -> void:
@@ -46,6 +54,17 @@ func _toggle_metrics() -> void:
     _toggle.text = "FPS / Hide" if _label.visible else "FPS / Show"
     if _label.visible:
         _refresh()
+
+func _toggle_battle() -> void:
+    var controller := get_parent().get_node_or_null("BattleArenaController")
+    if controller == null:
+        return
+    if _battle_active:
+        controller.end_battle()
+    else:
+        controller.start_battle()
+    _battle_active = not _battle_active
+    _battle_button.text = "End battle (test)" if _battle_active else "Start battle (test)"
 
 func _refresh() -> void:
     var fps := Engine.get_frames_per_second()
