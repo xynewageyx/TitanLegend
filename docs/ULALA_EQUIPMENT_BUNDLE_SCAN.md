@@ -107,3 +107,13 @@ Pairwise **unique name set** intersections:
 This strongly suggests reusable naming/hierarchy templates across equipment categories. It does **not** prove identical bone transforms, skinning weights, bindposes or runtime attachment behavior. In particular, the 160-Transform bundles contain two separate roots and duplicated object names; a naive name-based join would be ambiguous. Next compare parent-path structures and bindpose data using unique Transform path IDs.
 
 A metadata-only JSON report was generated locally as `ulala_equipment_skeleton_name_comparison.json`; no proprietary asset payloads were committed.
+
+## Exact name-set differences (2026-11-04)
+
+Compared the previously decoded, unique `Transform.m_GameObject -> GameObject.m_Name` name sets. This is a **name-set comparison only**, not a parent-edge or bindpose equivalence test.
+
+- `ck_dujiaoxing_hair` vs `ck_dujiaoxing_shoes`: 78 names shared; only `CK_DuJiaoXing_Hair` vs `CK_DuJiaoXing_Shoes` differ. Jaccard overlap **78/80 = 97.5%**.
+- `ck_dujiaoxing_weapon` vs `ck_lang_hair`: 78 names shared; only `CK_DuJiaoXing_Weapon` vs `CK_Lang_Hair` differ. Jaccard overlap **78/80 = 97.5%**.
+- `ck_dujiaoxing_hair` vs `ck_dujiaoxing_clothes`: 44 shared names. The hair prefab has 35 names absent from clothes, including finger/hand transforms. Clothes has 21 names absent from hair, including `male_hair_00` through `male_hair_07` and multiple `male_skirt_*` entries. Jaccard overlap **44/100 = 44%**.
+
+Important limitation: some bundles have duplicate Transform names and two root instances; unique name sets collapse those duplicates. A rigorous structural comparison must use root-relative parent paths or stable per-file object path IDs, and a rig compatibility check must additionally compare bindposes and skinning weights. Metadata-only comparison JSON: `ulala_equipment_exact_name_differences.json` (local).
