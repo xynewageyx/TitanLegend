@@ -67,6 +67,17 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_character_startup_and_immutable_player_role(self):
+        project = (self.root / "project.godot").read_text(encoding="utf-8")
+        team = self.read_script("team_formation.gd")
+        startup = self.read_script("character_startup.gd")
+        self.assertIn('run/main_scene="res://scenes/character_startup.tscn"', project)
+        self.assertIn('SaveManager.character_switching_enabled = true', startup)
+        self.assertIn('SaveManager.load_game()', startup)
+        self.assertIn('class_ids[0] = int(profile.get("class_id"', team)
+        self.assertIn('role_ids[0] = int(profile.get("role_id"', team)
+        self.assertIn('if SaveManager.active_character_slot >= 0 and slot == 0:', team)
+
     def test_character_switch_failure_does_not_force_legacy_save(self):
         selection = self.read_script("character_selection.gd")
         select = selection.split('func _select(slot: int) -> void:', 1)[1]
