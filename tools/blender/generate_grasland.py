@@ -101,12 +101,7 @@ box("River", (0,19,-.03), (23,3,.08),water,.15)
 for i in range(10):
     box("Bridge plank %02d" % i,(0,17+i*.42,.24),(4.8,.36,.23),bark,.055)
 
-# The boss clearing is integrated into the world path, not a separate arena scene.
-ico("Boss clearing", (0,26,-.18),(6.8,6.8,.2),rock,2)
-for i in range(12):
-    angle = math.tau*i/12
-    x,y = math.cos(angle)*6.5,26+math.sin(angle)*6.5
-    ico("Clearing border rock %02d" % i,(x,y,.35),(.6,.6,.55),rock,1)
+# Combat arenas are spawned only by the battle system, never baked into exploration terrain.
 trunk("Ancient tree trunk",0,32,5.8,1.0)
 for i in range(7):
     a = math.tau*i/7
