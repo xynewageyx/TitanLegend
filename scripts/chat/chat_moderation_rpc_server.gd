@@ -20,6 +20,26 @@ func _on_peer_disconnected(peer_id: int) -> void:
 	if authority != null:
 		authority.disconnect_peer(peer_id)
 
+# Server returns only a boolean; never trust client-side visibility as permission.
+signal admin_access_received(allowed: bool)
+
+@rpc("any_peer", "call_remote", "reliable")
+func request_admin_access() -> void:
+	if not multiplayer.is_server():
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	if sender <= 0:
+		return
+	var allowed := false
+	if authority != null and authority.gateway != null:
+		allowed = authority.gateway._is_owner(authority._account_for_peer(sender))
+	receive_admin_access.rpc_id(sender, allowed)
+
+@rpc("authority", "call_remote", "reliable")
+func receive_admin_access(allowed: bool) -> void:
+	if not multiplayer.is_server():
+		admin_access_received.emit(allowed)
+
 @rpc("any_peer", "call_remote", "reliable")
 func request_pending_cases() -> void:
 	if not multiplayer.is_server():
