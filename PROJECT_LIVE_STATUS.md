@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 17:04 UTC**
-Git-Stand: **108ab6be8d154415714f7f3ac882df9226842c8e** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 17:05 UTC**
+Git-Stand: **0ef3b482e6b5c1631bebfb177e5e455ac6c87b82** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `0575c6d` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 - `de9b92d` (2026-11-03): Generate eleven original chibi hero GLB assets
 
@@ -32,6 +33,8 @@ Git-Stand: **108ab6be8d154415714f7f3ac882df9226842c8e** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `0ef3b48` (2026-11-03): Test deduplicated scene visual cleanup connections
+- `8cada32` (2026-11-03): Prevent duplicate visual cleanup signal connections during scene cache rebuilds
 - `108ab6b` (2026-11-03): Regression-test initial graphics cache setup before applying quality
 - `8f4766a` (2026-11-03): Apply graphics quality to pre-existing scene lights and particles at startup
 
@@ -47,7 +50,7 @@ Git-Stand: **108ab6be8d154415714f7f3ac882df9226842c8e** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `b69cf80` (2026-11-03): Add pause and resume controls to developer-only FPS measurements
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
