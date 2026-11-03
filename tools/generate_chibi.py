@@ -53,9 +53,9 @@ def rig_and_animate():
   name=obj.name
   # Blender adds .001 to repeated names; side is determined by world X, not suffix.
   center_x=sum((obj.matrix_world @ vertex.co).x for vertex in obj.data.vertices)/max(1,len(obj.data.vertices))
-  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Circlet")):
+  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Circlet","Hat","FaceScarf")):
    target="Head"
-  elif name.startswith(("Hand","Arm","Cuff","Glove")):
+  elif name.startswith(("Hand","Arm","Cuff","Glove","Shoulder")):
    target="Arm_L" if center_x < 0 else "Arm_R"
   elif name.startswith(("Foot","Leg","Boot")):
    target="Leg_L" if center_x < 0 else "Leg_R"
@@ -170,6 +170,47 @@ for idx,name in enumerate(NAMES):
  if name in ("mage","warlock","summoner"):
   oval("HeadGem",(0,-.37,2.14),(.12,.065,.16),gold)
   oval("ChestRune",(0,-.29,1.22),(.19,.07,.22),cloth)
+ # Individual class silhouettes: no borrowed game assets.
+ if name=="warrior":
+  for side in (-1,1):
+   oval("ArmPlate",(side*.42,-.12,1.31),(.20,.13,.19),leather)
+  oval("ChestShield",(0,-.345,1.19),(.18,.065,.21),gold)
+ elif name=="paladin":
+  for side in (-1,1):
+   oval("ArmWing",(side*.55,.015,1.49),(.18,.14,.22),white)
+  oval("ChestSun",(0,-.40,1.23),(.13,.045,.13),white)
+ elif name=="brawler":
+  for side in (-1,1):
+   oval("GloveKnuckle",(side*.47,-.175,.96),(.14,.08,.09),gold)
+ elif name=="druid":
+  for side in (-1,1):
+   oval("HairLeaf",(side*.32,-.13,2.20),(.16,.07,.095),cloth)
+  oval("ChestLeaf",(0,-.36,1.16),(.14,.05,.22),gold)
+ elif name=="shaman":
+  for side in (-1,1):
+   oval("HairFeather",(side*.36,-.01,2.24),(.08,.065,.23),white)
+  oval("ChestTotem",(0,-.36,1.17),(.13,.06,.24),leather)
+ elif name=="priest":
+  oval("ChestHalo",(0,-.36,1.20),(.17,.055,.17),white)
+ elif name=="hunter":
+  for side in (-1,1):
+   oval("ShoulderLeather",(side*.39,.025,1.39),(.20,.22,.12),leather)
+  oval("ChestPouch",(side*.19,-.34,.91),(.13,.08,.12),leather)
+ elif name=="rogue":
+  oval("FaceScarf",(0,-.36,1.67),(.34,.095,.105),cloth)
+  for side in (-1,1):
+   oval("ShoulderLeather",(side*.40,0,1.39),(.17,.18,.10),leather)
+ elif name=="mage":
+  oval("HatBrim",(0,0,2.26),(.49,.42,.075),cloth)
+  loft("HatCrown",[(2.29,.30,.27,.02),(2.45,.23,.22,.02),(2.66,.07,.07,.02)],cloth)
+ elif name=="warlock":
+  for side in (-1,1):
+   oval("HairHorn",(side*.30,-.04,2.30),(.10,.10,.20),cloth)
+  oval("ChestVoid",(0,-.36,1.21),(.14,.055,.19),dark)
+ elif name=="summoner":
+  for side in (-1,1):
+   oval("HairCrystal",(side*.32,-.01,2.25),(.11,.11,.18),gold)
+  oval("ChestSigil",(0,-.36,1.18),(.16,.06,.17),white)
  rig_and_animate()
  bpy.ops.object.select_all(action="SELECT")
  bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_animations=True,export_nla_strips=True)
