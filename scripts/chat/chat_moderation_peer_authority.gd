@@ -25,6 +25,11 @@ func disconnect_peer(peer_id: int) -> void:
 func _account_for_peer(peer_id: int) -> String:
 	return str(peer_accounts.get(peer_id, ""))
 
+func has_owner_access(peer_id: int) -> bool:
+	if gateway == null or not peer_accounts.has(peer_id):
+		return false
+	return gateway._is_owner(_account_for_peer(peer_id))
+
 func pending_cases_for_peer(peer_id: int) -> Array:
 	if gateway == null:
 		return []
