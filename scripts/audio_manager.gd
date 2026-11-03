@@ -6,6 +6,7 @@ signal audio_backend_changed(backend_name: String)
 const SFX_POOL_SIZE: int = 8
 # Keep frequently reused audio streams ready for Android combat.
 const EVENT_CACHE_LIMIT: int = 24
+const PINNED_AUDIO_EVENTS: Array[String] = ["boss_warning", "combat_interrupt", "skill_interrupt"]
 var _event_stream_cache: Dictionary = {}
 var _event_cache_order: Array[String] = []
 var ambience: AudioStreamPlayer
@@ -192,7 +193,7 @@ func stop_sfx() -> void:
 const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
 
 func _prewarm_critical_events() -> void:
- for event_name in ["boss_warning", "combat_interrupt", "skill_interrupt"]:
+ for event_name in PINNED_AUDIO_EVENTS:
   _get_event_stream(event_name)
 
 func _get_event_stream(event_name: String) -> AudioStream:
@@ -204,8 +205,12 @@ func _get_event_stream(event_name: String) -> AudioStream:
  if stream == null:
   return null
  if _event_cache_order.size() >= EVENT_CACHE_LIMIT:
-  var oldest: String = _event_cache_order.pop_front()
-  _event_stream_cache.erase(oldest)
+  # Never evict critical cues during heavy class/biome audio churn.
+  for cached_name in _event_cache_order:
+   if not PINNED_AUDIO_EVENTS.has(cached_name):
+    _event_cache_order.erase(cached_name)
+    _event_stream_cache.erase(cached_name)
+    break
  _event_stream_cache[event_name] = stream
  _event_cache_order.append(event_name)
  return stream
