@@ -42,6 +42,18 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn("func _rebuild_visual_cache()", code)
         self.assertIn("if not is_instance_valid(node):", code)
 
+    def test_adaptive_quality_uses_hysteresis(self):
+        code = MANAGER.read_text(encoding="utf-8")
+        self.assertIn("if low_samples >= 2:", code)
+        self.assertIn("elif good_samples >= 6 and adaptive_scale < 1.0:", code)
+        self.assertIn("startup_grace_seconds := 10.0", code)
+        self.assertIn("if sample_seconds < 5.0:", code)
+
+    def test_adaptive_scale_does_not_reapply_unchanged_visual_profile(self):
+        code = MANAGER.read_text(encoding="utf-8")
+        self.assertIn("if visual_profile != last_visual_profile:", code)
+        self.assertIn("last_visual_profile = visual_profile", code)
+
     def test_no_live_fps_overlay(self):
         menu = MENU.read_text(encoding="utf-8")
         self.assertNotIn("performance_label", menu)
