@@ -14,7 +14,11 @@ func _run() -> void:
 	var admin_packed: PackedScene = load("res://scenes/chat_moderation_admin.tscn")
 	_check(admin_packed != null, "Admin scene must load")
 	if admin_packed != null:
-		var admin: Node = admin_packed.instantiate()
+		var admin: ChatModerationAdminController = admin_packed.instantiate() as ChatModerationAdminController
+		_check(admin != null, "Admin scene must instantiate as controller")
+		if admin == null:
+			quit(1)
+			return
 		root.add_child(admin)
 		await process_frame
 		_check(admin is ChatModerationAdminController, "Admin scene must use controller")
