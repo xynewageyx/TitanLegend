@@ -1149,7 +1149,21 @@ func finish_wave() -> void:
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- _queue_next_encounter()
+ # Keep defeated forest GLBs on screen briefly before clearing them.
+ # Only visual pacing changes; rewards and progression are already committed.
+ var forest_death_visible: bool = false
+ for mob in enemy_visuals:
+  if is_instance_valid(mob) and mob.get_node_or_null("ForestModel") != null:
+   forest_death_visible = true
+   break
+ if forest_death_visible:
+  var request_id: int = _encounter_request_id
+  get_tree().create_timer(0.65).timeout.connect(func() -> void:
+   if is_inside_tree() and not _app_paused and not afk_farming and request_id == _encounter_request_id:
+    _queue_next_encounter()
+  )
+ else:
+  _queue_next_encounter()
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
