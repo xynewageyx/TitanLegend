@@ -101,6 +101,15 @@ def rig_and_animate(hero_class):
       if bone.name=="Head":bone.rotation_euler.x=-.10*strike
     if clip=="Attack" and bone.name=="Spine":
      bone.rotation_euler.y=(-.28 if hero_class in ("warrior","paladin","brawler","rogue") else -.10)*math.sin(phase*math.pi)
+    # Each spellcaster gets a distinct readable casting gesture.
+    if clip=="Attack" and hero_class in ("druid","shaman","mage","warlock","summoner","priest"):
+     cast=math.sin(phase*math.pi)
+     if bone.name=="Arm_L":
+      bone.rotation_euler.z=(-.18 if hero_class in ("mage","warlock","summoner") else -.40)*cast
+     if bone.name=="Arm_R":
+      bone.rotation_euler.z=(.18 if hero_class in ("mage","warlock","summoner") else .40)*cast
+     if bone.name=="Head":
+      bone.rotation_euler.y=(.09 if hero_class in ("priest","druid") else -.09)*cast
     if clip=="Hit":
      impact=math.sin(phase*math.pi)
      if bone.name=="Spine":bone.rotation_euler.x=.25*impact
