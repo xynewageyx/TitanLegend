@@ -4,6 +4,9 @@ on:
     paths:
       - 'scripts/chat/**'
       - 'tests/test_chat_moderation*.gd'
+      - 'tests/test_chat_admin_scene.gd'
+      - 'scenes/chat_moderation_admin.tscn'
+      - 'scenes/main.tscn'
       - '.github/workflows/chat-moderation-validate.yml'
   pull_request:
     paths:
@@ -31,3 +34,4 @@ jobs:
           godot --headless --path . --editor --import --quit
           godot --headless --path . --script res://tests/test_chat_moderation.gd
           godot --headless --path . --script res://tests/test_chat_moderation_peer_authority.gd
+          godot --headless --path . --script res://tests/test_chat_admin_scene.gd
