@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 17:49 UTC**
-Git-Stand: **864e69755a32d684af911800f647aafec706ed7e** auf Branch **main**
+Git-Stand: **7f7e58132d20d59c161f5a212e4882905a48e415** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,50 +10,48 @@ Git-Stand: **864e69755a32d684af911800f647aafec706ed7e** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `c85b6ac` (2026-11-03): feat(chibi): add full-body hit recoil and coordinated dodge poses
 - `3401585` (2026-11-03): Generate eleven original chibi hero GLB assets
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `18cf7e9` (2026-11-03): Preload critical boss and interrupt sounds into bounded audio cache (#23)
 - `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
 
 ### Landschaften — Landschaften-Chat
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### UI — UI-Chat
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `be50c1a` (2026-11-03): test(talents): guard safe counting of malformed saved rank values
 - `db23d37` (2026-11-03): fix(talents): safely count spent ranks when legacy saved data has invalid types
 - `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `18cf7e9` (2026-11-03): Preload critical boss and interrupt sounds into bounded audio cache (#23)
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
 - `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
 - `8e51a79` (2026-11-03): Test rejection of peer account identity switching and privilege escalation
 - `da453fa` (2026-11-03): Prevent moderation peer identity switching within authenticated session
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Audio — Audio-Erstellung-Chat
 - `18cf7e9` (2026-11-03): Preload critical boss and interrupt sounds into bounded audio cache (#23)
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
-- `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
+- `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 
 ## Bereichsübergreifende Änderungen
 
