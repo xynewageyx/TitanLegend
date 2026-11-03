@@ -131,3 +131,17 @@ Compared **root-relative full parent/child paths** from actual decoded `Transfor
 For the first pair, the only difference is the name of the immediate child model object (`CK_DuJiaoXing_Hair` versus `CK_DuJiaoXing_Shoes`). For the second pair, that same model-object-name difference appears **twice** because each prefab contains two roots. Thus all remaining 78/156 root-relative paths match exactly in their ancestral naming structure.
 
 The third pair differs more substantially: hair contains additional finger chains, while clothes contains additional `male_hair_*` and `male_skirt_*` chains. These are **structural naming matches**, not proof of matching local transforms, bindpose matrices, bone weights or compatible skinning. The local report is `ulala_equipment_parent_path_comparison.json`; no original asset binaries are published.
+
+## Local Transform value comparison (2026-11-04)
+
+Re-read the original UnityFS bytes of the relevant equipment main bundles, parsed SerializedFile v21 GameObjects and Transforms, and compared their `m_LocalPosition` (3 floats), `m_LocalRotation` (4 floats) and `m_LocalScale` (3 floats) at corresponding **root-relative parent paths**. Each compared scalar differed by less than `1e-5`.
+
+| Pair | Matching local transforms | Differing values |
+| --- | ---: | ---: |
+| `ck_dujiaoxing_hair` vs `ck_dujiaoxing_shoes` | 78 / 78 | 0 |
+| `ck_dujiaoxing_weapon` vs `ck_lang_hair` | 156 / 156 | 0 |
+| `ck_dujiaoxing_hair` vs `ck_dujiaoxing_clothes` | 44 / 44 | 0 |
+
+For the two-root pair, 78 shared root-relative path names occur twice. Their transform-value **multisets** were compared, rather than arbitrarily matching duplicate names. The two differently named immediate model nodes were excluded from the shared-path comparison. This establishes matching local Transform values on the compared paths, but **does not** establish equal Mesh bindposes, skinning weights, material assignments or runtime rig compatibility.
+
+Machine-readable local report: `ulala_equipment_local_transform_comparison.json`. No third-party model data was committed.
