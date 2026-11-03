@@ -1,16 +1,16 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 06:48 UTC**
-Git-Stand: **a1e8fa9580bf53628649450323e735b47dbd0852** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 06:49 UTC**
+Git-Stand: **8a53c4923804b6387034a89973ea53dd0551a192** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `8a53c49` (2026-11-03): fix(chibi): bind pupils to head, pair hunter pouches and reuse eye/sleeve materials
 - `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 - `570e459` (2026-11-03): fix(talents): validate persisted hero builds at team read boundary
-- `6a66a60` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
