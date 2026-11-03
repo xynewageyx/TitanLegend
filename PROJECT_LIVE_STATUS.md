@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 05:27 UTC**
-Git-Stand: **644705f13e17fc8bdd927d5c829d6b0ff04d08c2** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 05:29 UTC**
+Git-Stand: **ab05daac908fc452edb4a7c99424ade367d514ce** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **644705f13e17fc8bdd927d5c829d6b0ff04d08c2** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `53f4948` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `24ea7ed` (2026-11-03): art(chibi): sculpt layered tunic hems, collar and shoulder seams for eleven heroes
-- `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
@@ -42,11 +41,11 @@ Git-Stand: **644705f13e17fc8bdd927d5c829d6b0ff04d08c2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `ab05daa` (2026-11-03): Show minimum and maximum sampled FPS in developer-only diagnostic overlay
 
 ## Regeln für alle Fach-Chats
 
