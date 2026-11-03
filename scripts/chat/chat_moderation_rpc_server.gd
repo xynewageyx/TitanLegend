@@ -49,8 +49,8 @@ func request_admin_access() -> void:
 	if sender <= 0:
 		return
 	var allowed := false
-	if authority != null and authority.gateway != null:
-		allowed = authority.gateway._is_owner(authority._account_for_peer(sender))
+	if authority != null:
+		allowed = authority.has_owner_access(sender)
 	receive_admin_access.rpc_id(sender, allowed)
 
 @rpc("authority", "call_remote", "reliable")
