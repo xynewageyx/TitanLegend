@@ -4,6 +4,7 @@ extends CanvasLayer
 var fps_label: Label
 var reset_button: Button
 var elapsed := 0.0
+var measurement_seconds := 0.0
 var min_fps := 9999
 var max_fps := 0
 var sample_count := 0
@@ -36,9 +37,11 @@ func _reset_measurements() -> void:
 	sample_count = 0
 	total_fps = 0
 	elapsed = 0.0
+	measurement_seconds = 0.0
 	fps_label.text = "FPS: --  Min: --  Max: --  Avg: --"
 
 func _process(delta: float) -> void:
+	measurement_seconds += delta
 	elapsed += delta
 	if elapsed >= 0.5 and is_instance_valid(fps_label):
 		elapsed = 0.0
@@ -49,4 +52,4 @@ func _process(delta: float) -> void:
 			sample_count += 1
 			total_fps += current_fps
 		var average_fps := int(round(float(total_fps) / float(sample_count))) if sample_count > 0 else 0
-		fps_label.text = "FPS: %d  Min: %d  Max: %d  Avg: %d" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps, average_fps]
+		fps_label.text = "FPS: %d  Min: %d  Max: %d  Avg: %d  Zeit: %ds" % [current_fps, min_fps if min_fps != 9999 else 0, max_fps, average_fps, int(measurement_seconds)]
