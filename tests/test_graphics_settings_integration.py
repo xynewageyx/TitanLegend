@@ -5,6 +5,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANAGER = ROOT / "scripts" / "graphics_quality_manager.gd"
 MENU = ROOT / "scripts" / "graphics_settings_menu.gd"
 PROJECT = ROOT / "project.godot"
+DEVELOPER_OVERLAY = ROOT / "scripts" / "developer_fps_overlay.gd"
 
 
 class GraphicsSettingsIntegrationTests(unittest.TestCase):
@@ -55,6 +56,13 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         code = MANAGER.read_text(encoding="utf-8")
         self.assertIn("if visual_profile != last_visual_profile:", code)
         self.assertIn("last_visual_profile = visual_profile", code)
+
+    def test_developer_diagnostics_are_opt_in_and_show_render_scale(self):
+        code = DEVELOPER_OVERLAY.read_text(encoding="utf-8")
+        self.assertIn('OS.has_feature("titan_developer")', code)
+        self.assertIn('get_tree().root.scaling_3d_scale', code)
+        self.assertIn('Skalierung: %d%%', code)
+        self.assertIn('\\nAvg:', code)
 
     def test_no_live_fps_overlay(self):
         menu = MENU.read_text(encoding="utf-8")
