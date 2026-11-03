@@ -18,6 +18,9 @@ func _ready() -> void:
  if not occupied and (FileAccess.file_exists(LEGACY) or FileAccess.file_exists(LEGACY + ".bak")):
   SaveManager.use_legacy_save()
   SaveManager.begin_game_session()
+  if not SaveManager.session_ready:
+   push_error("Legacy session initialization failed.")
+   return
   get_tree().call_deferred("change_scene_to_file", GAME_SCENE)
   return
  SaveManager.character_switching_enabled = true
@@ -29,4 +32,7 @@ func _enter_game(_slot: int) -> void:
  if SaveManager.active_character_slot < 0:
   return
  SaveManager.begin_game_session()
+ if not SaveManager.session_ready:
+  push_error("Character session initialization failed.")
+  return
  get_tree().call_deferred("change_scene_to_file", GAME_SCENE)
