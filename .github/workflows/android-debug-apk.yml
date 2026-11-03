@@ -196,6 +196,13 @@ jobs:
               print(f"Godot import metadata OK: {model.name}")
           PY
 
+      - name: Validate forest models and combat animation presenters before APK export
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee /tmp/titan-android-forest-test.log
+          grep -Fq 'FOREST ANIMATION TEST PASSED: 36 clips on 9 enemies' /tmp/titan-android-forest-test.log
+
       - name: Configure optional developer FPS diagnostics
         shell: bash
         env:
