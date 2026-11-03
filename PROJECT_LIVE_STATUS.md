@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 18:16 UTC**
-Git-Stand: **066510733856386ce06ef6bc9845257cfe2d6221** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 18:18 UTC**
+Git-Stand: **efcaa3c60bad38f6c16c8c148ea8422892ddcce8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,50 +11,44 @@ Git-Stand: **066510733856386ce06ef6bc9845257cfe2d6221** auf Branch **main**
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
 - `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `c85b6ac` (2026-11-03): feat(chibi): add full-body hit recoil and coordinated dodge poses
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Landschaften — Landschaften-Chat
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `efcaa3c` (2026-11-03): Test adaptive resolution steps for severe sustained FPS drops
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 - `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `94d8bf2` (2026-11-03): Regression-test admin revocation clearing cached private evidence
 - `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
 - `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### Audio — Audio-Erstellung-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
-- `f04d319` (2026-11-03): React to sustained Android FPS drops after two sampling windows
 
 ## Bereichsübergreifende Änderungen
 
