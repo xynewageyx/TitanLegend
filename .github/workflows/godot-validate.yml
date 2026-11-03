@@ -24,14 +24,15 @@ jobs:
               exit 1
             fi
           done
-      - name: Install Godot 4.6
+      - name: Install Godot 4.7.2
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip"
+          curl --fail --location --retry 3 --output /tmp/godot.zip "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          chmod +x /tmp/Godot_v4.6-stable_linux.x86_64
-          sudo mv /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
+          sudo mv /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version | grep -F "4.7.2.stable"
       - name: Import assets and parse project
         shell: bash
         run: |
@@ -39,23 +40,28 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb libgl1-mesa-dri
           export LIBGL_ALWAYS_SOFTWARE=1
+          # Archived scripts must retain their original checksums but are not game resources.
+          # Exclude them only in the CI checkout to prevent duplicate global class registration.
+          rm -rf original_update168
+          python3 tools/generate_audio_sfx.py
           xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee godot-validation-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' godot-validation-import.log; then
             echo 'Godot import or script errors detected'
             exit 1
           fi
-      - name: Test isolated character save slots
+      - name: Validate Android graphics runtime and driver compatibility
         shell: bash
-        run: godot --headless --path . --script res://tests/test_character_save_slots.gd
-      - name: Test five independent character profiles
+        run: python3 -m unittest discover -s tests -p 'test_android_graphics_compatibility.py' -v
+
+      - name: Test graphics settings integration and hidden FPS overlay
         shell: bash
-        run: godot --headless --path . --script res://tests/test_character_profiles.gd
-      - name: Test fantasy UI and four hardening slots
-        shell: bash
-        run: python3 -m unittest discover -s tests -p 'test_fantasy_ui_regression.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_graphics_settings_integration.py' -v
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
+      - name: Test optional eleven-class chibi GLB integration
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_chibi_glb_integration.py' -v
       - name: Test boss camera framing
         shell: bash
         run: |
@@ -120,6 +126,15 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --script res://tests/test_tank_interception_math.gd
+      - name: Test isolated character save slots
+        shell: bash
+        run: godot --headless --path . --script res://tests/test_character_save_slots.gd
+      - name: Test five independent character profiles
+        shell: bash
+        run: godot --headless --path . --script res://tests/test_character_profiles.gd
+      - name: Test character selection and fantasy UI regressions
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_fantasy_ui_regression.py' -v
       - name: Launch smoke test
         shell: bash
         run: |
@@ -135,19 +150,19 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Install Godot 4.6 and Android export templates
+      - name: Install Godot 4.7.2 and Android export templates
         shell: bash
         run: |
           set -euo pipefail
-          version=4.6-stable
+          version=4.7.2-stable
           base="https://github.com/godotengine/godot-builds/releases/download/$version"
-          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.6-stable_linux.x86_64.zip"
+          curl --fail --location --retry 3 -o /tmp/godot.zip "$base/Godot_v4.7.2-stable_linux.x86_64.zip"
           unzip -q /tmp/godot.zip -d /tmp
-          sudo install -m 755 /tmp/Godot_v4.6-stable_linux.x86_64 /usr/local/bin/godot
-          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.6-stable_export_templates.tpz"
-          mkdir -p "$HOME/.local/share/godot/export_templates/4.6.stable"
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          curl --fail --location --retry 3 -o /tmp/templates.tpz "$base/Godot_v4.7.2-stable_export_templates.tpz"
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           unzip -q /tmp/templates.tpz -d /tmp/godot-templates
-          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.6.stable/"
+          cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
       - name: Configure Android SDK and persistent debug signing
         shell: bash
         run: |
@@ -190,10 +205,28 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
-          godot --headless --path . --editor --import --quit
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+          export LIBGL_ALWAYS_SOFTWARE=1
+          # Archived scripts must retain their original checksums but are not game resources.
+          # Exclude them only in the CI checkout to prevent duplicate global class registration.
+          rm -rf original_update168
+          python3 tools/generate_audio_sfx.py
+          xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee build/android-godot-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' build/android-godot-import.log; then
+            echo 'Android resource import failed'
+            exit 1
+          fi
           godot --headless --path . --export-debug "Android" build/TitanLegends-debug.apk
           test -s build/TitanLegends-debug.apk
           unzip -tq build/TitanLegends-debug.apk
+      - name: Upload Android import diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Android-Import-Log
+          path: build/android-godot-import.log
+          if-no-files-found: ignore
       - name: Upload Android debug APK
         uses: actions/upload-artifact@v4
         with:
