@@ -1,60 +1,62 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 18:19 UTC**
-Git-Stand: **08588d9dd2a127562fba564f7dac37b89af4a857** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 18:34 UTC**
+Git-Stand: **bdef4c4649231d8daed68f4d0c41b54e4e504ac4** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
+- `6925c8c` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
 - `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Landschaften — Landschaften-Chat
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### UI — UI-Chat
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `efcaa3c` (2026-11-03): Test adaptive resolution steps for severe sustained FPS drops
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 - `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `94d8bf2` (2026-11-03): Regression-test admin revocation clearing cached private evidence
-- `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Audio — Audio-Erstellung-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `864e697` (2026-11-03): Run moderation scene validation on pull requests as well as pushes
-- `81065c8` (2026-11-03): Clear cached private moderation evidence when admin access is revoked
+- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ## Bereichsübergreifende Änderungen
 
