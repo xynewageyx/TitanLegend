@@ -26,6 +26,8 @@ func _ready() -> void:
         push_error("ForestEnemyVisual: missing AnimationPlayer: " + enemy_id)
         return
     animation_player.animation_finished.connect(_on_animation_finished)
+    if animation_player.has_animation("idle"):
+        animation_player.get_animation("idle").loop_mode = Animation.LOOP_LINEAR
     if autoplay_idle:
         play_idle()
 
