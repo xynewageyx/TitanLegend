@@ -28,6 +28,13 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn('quality == "medium" and not (light is DirectionalLight3D)', code)
         self.assertIn('effect_multiplier = 0.20 if quality == "low" else 0.35', code)
 
+    def test_visual_cache_cleanup(self):
+        code = MANAGER.read_text(encoding="utf-8")
+        self.assertIn("node.tree_exiting.connect(_on_visual_exiting.bind(node), CONNECT_ONE_SHOT)", code)
+        self.assertIn("cached_visuals.erase(node)", code)
+        self.assertIn("func _rebuild_visual_cache()", code)
+        self.assertIn("if not is_instance_valid(node):", code)
+
     def test_no_live_fps_overlay(self):
         menu = MENU.read_text(encoding="utf-8")
         self.assertNotIn("performance_label", menu)
