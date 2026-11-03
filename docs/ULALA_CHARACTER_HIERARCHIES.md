@@ -53,3 +53,15 @@ Decoded actual little-endian PPtr pairs (`int32 fileID`, `int64 pathID`) from `b
 | Animator pathID `1116753173661700370` | 16 | `1732061794786354735` | Avatar (90) | `BerylAvatar` |
 
 Target names were read directly from each target object's length-prefixed `m_Name` string, not guessed from filenames. This verifies **internal pointer destinations**; the semantic field identities are consistent with the corresponding Unity TypeTree declarations but require full TypeTree field-offset traversal for definitive field mapping. A scan of the Brook main prefab did not resolve internal Mesh/Avatar objects because none are present in its object table. No proprietary reference assets were committed.
+
+## SerializedFile external reference table (2026-11-03)
+
+Parsed the post-object metadata external reference entries in three local Unity SerializedFile v21 samples. Each entry contains an optional asset path, GUID, type and an archive path. These are **external file table entries**; resolving a particular `PPtr.fileID` requires using its corresponding 1-based index in this table.
+
+| Sample | External references | Archive CAB IDs, in fileID order |
+| --- | ---: | --- |
+| `beryl.prefab_ab` | 2 | `171319512be50a8698260252625f99b0`, `2062281392ae861281b59ebda30e4835` |
+| `beryl.prefab_ab_shared` | 4 | `3f7d60643a476f69c2fb82d710bcc158`, `36ba5602013baa7b33df1bb2728455c9`, `ab9039dc1e4a636dbe2dacb305465166`, `d42019473a517db719d7817159be6e37` |
+| `brook.prefab_ab` | 4 | `4db8e5fe34170ee3350b8b9e414400a5`, `d923feb3ad3131129b208e6e16f1ae22`, `8385d6d494407799d12f41f508a655c8`, `4c456cef82792995211031a321bd4db1` |
+
+The external CAB references are confirmed from the source metadata, but they have **not yet been mapped to concrete bundle filenames**. No bone counts or rig compatibility conclusions follow from this step. Only identifiers, not copyrighted mesh/animation payloads, are recorded.
