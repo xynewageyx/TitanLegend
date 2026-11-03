@@ -78,6 +78,30 @@ func _initialize() -> void:
             player.stop()
             tested += 1
         instance.free()
+    var controller_script := load("res://scripts/enemies/forest_enemy_visual.gd") as GDScript
+    if controller_script == null:
+        failures.append("ForestEnemyVisual controller script cannot load")
+    else:
+        for enemy in ENEMIES:
+            var visual := controller_script.new() as Node3D
+            if visual == null:
+                failures.append("%s: cannot instantiate visual controller" % enemy)
+                continue
+            visual.set("enemy_id", enemy)
+            visual.set("autoplay_idle", false)
+            root.add_child(visual)
+            var loaded_model: Variant = visual.get("model")
+            var loaded_player: Variant = visual.get("animation_player")
+            if loaded_model == null or loaded_player == null:
+                failures.append("%s: visual controller did not load model and animation player" % enemy)
+            else:
+                visual.call("play_idle")
+                visual.call("play_attack")
+                visual.call("play_hit")
+                visual.call("play_death")
+                if visual.get("is_dead") != true:
+                    failures.append("%s: visual controller death state not set" % enemy)
+            visual.free()
     if not failures.is_empty():
         for failure in failures:
             printerr("FOREST ANIMATION TEST FAILED: ", failure)
