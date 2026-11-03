@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 06:47 UTC**
-Git-Stand: **51572fdcaf14c42834ea24a07f4235388f39b204** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 06:48 UTC**
+Git-Stand: **a1e8fa9580bf53628649450323e735b47dbd0852** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 - `570e459` (2026-11-03): fix(talents): validate persisted hero builds at team read boundary
 - `6a66a60` (2026-11-03): Generate eleven original chibi hero GLB assets
 
@@ -24,10 +25,10 @@ Git-Stand: **51572fdcaf14c42834ea24a07f4235388f39b204** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 - `7e1a576` (2026-11-03): ci(talents): run focused regression tests on talent changes and pull requests
 - `f6b4079` (2026-11-03): test(talents): assert persisted builds are normalized at team getter
 - `570e459` (2026-11-03): fix(talents): validate persisted hero builds at team read boundary
-- `ce410e4` (2026-11-03): feat(forest): connect forest GLB attack and hit clips to live battle events
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
