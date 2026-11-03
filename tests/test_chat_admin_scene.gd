@@ -31,8 +31,21 @@ func _run() -> void:
 	await process_frame
 	_check(not launcher.open_button.visible, "Admin entry must start hidden")
 	_check(not launcher.admin_view.visible, "Admin panel must start hidden")
+	# A positive server grant may show the entry, but revocation must erase
+	# any private evidence cached by the UI.
+	launcher.set_server_granted_visibility(true)
+	_check(launcher.open_button.visible, "Server grant must reveal admin entry")
+	var controller := launcher.admin_view as ChatModerationAdminController
+	_check(controller != null, "Launcher must instantiate admin controller")
+	if controller != null:
+		controller.show_pending_case({"case_id": "MOD-TEST", "account_id": "test", "status": "pending_owner_approval", "proposed_hours": 2})
+		controller.evidence_output.text = "PRIVATE TEST EVIDENCE"
 	launcher.set_server_granted_visibility(false)
 	_check(not launcher.open_button.visible, "Unauthorized entry must remain hidden")
+	_check(not launcher.admin_view.visible, "Revocation must hide admin view")
+	if controller != null:
+		_check(controller.pending_cases.is_empty(), "Revocation must clear cached cases")
+		_check(controller.evidence_output.text.is_empty(), "Revocation must clear private evidence")
 	launcher.queue_free()
 	await process_frame
 	if failures == 0:
