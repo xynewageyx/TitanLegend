@@ -134,6 +134,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("not saved_rank is int", guard)
         self.assertIn("saved_rank < 0 or saved_rank > MAX_RANK", guard)
 
+    def test_saved_build_recovery_ignores_non_integer_ranks(self):
+        recovery = TREE[TREE.index("static func validate_build("):TREE.index("static func class_tree_names(")]
+        self.assertIn("var saved_value: Variant = value[branch][index]", recovery)
+        self.assertIn("if not saved_value is int:", recovery)
+        self.assertIn("var desired: int = clampi(saved_value, 0, MAX_RANK)", recovery)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
