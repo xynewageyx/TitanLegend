@@ -16,7 +16,7 @@ var character_switching_enabled: bool = false
 ## Call only before entering gameplay or after the old session has been saved.
 ## This changes the source for all SaveManager readers, without touching legacy data.
 func configure_character_save(slot: int) -> Error:
- if not character_switching_enabled:
+ if not character_switching_enabled or session_ready:
   return ERR_BUSY
  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
  var path: String = CHARACTER_PROFILES.character_save_path(registry, slot)
@@ -48,6 +48,11 @@ func _ready() -> void:
 func begin_game_session() -> void:
  if session_ready:
   return
+ if active_character_slot >= 0:
+  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+  if CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot).is_empty():
+   push_error("Character session rejected: save identity or file invalid.")
+   return
  load_game()
  session_ready = true
  timer.start()
@@ -97,6 +102,7 @@ func save_game() -> void:
    push_error("Character save path mismatch; autosave blocked.")
    return
   var profile: Dictionary = registry["characters"][active_character_slot]
+  data["character_name"] = str(profile.get("name", ""))
   data["class_id"] = int(profile.get("class_id", -1))
   data["role_id"] = int(profile.get("role_id", -1))
   result = CHARACTER_SAVE_SLOTS.save_slot(registry, active_character_slot, data)
