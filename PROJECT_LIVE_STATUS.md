@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 04:05 UTC**
-Git-Stand: **738f31ad0b75665f8cadd8e3032de51f5b6c624e** auf Branch **main**
+Git-Stand: **8e799fb12c176594df01ca887fcf332c45e0da9b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,14 +26,12 @@ Git-Stand: **738f31ad0b75665f8cadd8e3032de51f5b6c624e** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - `5b5be3f` (2026-11-03): Add FPS overlay gated behind developer-only debug export feature
 - `6e1cf3d` (2026-11-03): test(talents): guard normalized build use in Android detail and purchase handlers
-- `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `08c0d92` (2026-11-03): Add regression coverage for graphics visual cache cleanup
-- `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
