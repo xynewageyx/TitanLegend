@@ -1,22 +1,21 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 03:58 UTC**
-Git-Stand: **3eb7a3583a9a183dc7b4b3345a4904f39e41a79c** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 04:00 UTC**
+Git-Stand: **6e1cf3d907542ce7e2507bc7ad0a82b3cd26208b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `25a42f0` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
 - `3620434` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
 - `38747f4` (2026-11-02): Generate eleven original chibi hero GLB assets
-- `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `327c88c` (2026-11-03): feat(forest): add reusable runtime visual controller for nine animated GLB enemies
-- `e7946e7` (2026-11-02): Differentiate ten elemental boss sound signatures (#16)
 
 ### Landschaften — Landschaften-Chat
 - `a10aad8` (2026-11-03): Generate seamless layered ambience for ten biomes (#17)
@@ -28,6 +27,7 @@ Git-Stand: **3eb7a3583a9a183dc7b4b3345a4904f39e41a79c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `6e1cf3d` (2026-11-03): test(talents): guard normalized build use in Android detail and purchase handlers
 - `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 - `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
 
@@ -41,10 +41,10 @@ Git-Stand: **3eb7a3583a9a183dc7b4b3345a4904f39e41a79c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `e7946e7` (2026-11-02): Differentiate ten elemental boss sound signatures (#16)
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
