@@ -117,6 +117,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn(normalized, press)
         self.assertIn("TREES.can_upgrade(GameManager.character_level, build, selected_branch, talent_index)", press)
 
+    def test_upgrade_rejects_malformed_sibling_branches(self):
+        upgrade_guard = TREE[TREE.index("static func can_upgrade("):TREE.index("static func upgrade(")]
+        self.assertIn("if build.size() != BRANCH_COUNT:", upgrade_guard)
+        self.assertIn("for branch_ranks in build:", upgrade_guard)
+        self.assertIn("branch_ranks.size() != TALENTS_PER_BRANCH", upgrade_guard)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
