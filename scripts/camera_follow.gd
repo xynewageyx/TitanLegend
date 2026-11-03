@@ -5,8 +5,8 @@ extends Camera3D
 @export var target_path: NodePath = NodePath("../TeamFormation")
 @export var battle_manager_path: NodePath = NodePath("../BattleManager")
 @export var enemy_spawn_path: NodePath = NodePath("../EnemySpawn")
-@export var camera_offset: Vector3 = Vector3(0.0, 8.8, 13.2)
-@export var look_ahead: Vector3 = Vector3(0.0, 1.45, -3.2)
+@export var camera_offset: Vector3 = Vector3(0.0, 10.5, 17.5)
+@export var look_ahead: Vector3 = Vector3(0.0, 1.6, -4.0)
 @export var smoothing: float = 3.0
 @export var aim_smoothing: float = 4.0
 var _smoothed_focus: Vector3 = Vector3.ZERO
@@ -17,7 +17,7 @@ var _smoothed_focus: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
  current = true
- fov = 58.0
+ fov = 56.0
  if target != null:
   var view: Dictionary = _desired_view()
   global_position = view["position"]
