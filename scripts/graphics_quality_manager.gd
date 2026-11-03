@@ -199,7 +199,9 @@ func _process(delta: float) -> void:
 		low_samples = 0
 		good_samples = 0
 	if low_samples >= 2:
-		adaptive_scale = maxf(minf(1.0, 0.5 / render_scale), adaptive_scale - 0.1)
+		# A severe sustained drop needs a larger correction than a small miss.
+		var scale_step := 0.15 if measured_fps < float(target_fps) * 0.55 else 0.1
+		adaptive_scale = maxf(minf(1.0, 0.5 / render_scale), adaptive_scale - scale_step)
 		low_samples = 0
 		apply_settings()
 	elif good_samples >= 6 and adaptive_scale < 1.0:
