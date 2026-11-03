@@ -53,7 +53,7 @@ def rig_and_animate():
   name=obj.name
   # Blender adds .001 to repeated names; side is determined by world X, not suffix.
   center_x=sum((obj.matrix_world @ vertex.co).x for vertex in obj.data.vertices)/max(1,len(obj.data.vertices))
-  if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Circlet","Hat","FaceScarf")):
+  if any(t in name for t in ("Head","Hair","Eye","Iris","Pupil","Ear","Nose","Mouth","Cheek","Brow","Circlet","Hat","FaceScarf")):
    target="Head"
   elif name.startswith(("Hand","Arm","Cuff","Glove","Shoulder")):
    target="Arm_L" if center_x < 0 else "Arm_R"
@@ -109,18 +109,18 @@ for idx,name in enumerate(NAMES):
  body_base=material("body_underlayer",tuple(max(.08,v*.50) for v in COLORS[idx]))
  loft("SculptedBody",[(.45,.02,.02,0),(.60,.255,.205,0),(.95,.35,.265,0),(1.25,.315,.245,0),(1.52,.10,.11,0)],body_base)
  loft("HairCap",[(2.04,.33,.32,.08),(2.17,.44,.37,.04),(2.29,.26,.24,.03),(2.34,.02,.02,.03)],hair)
+ iris_colors=[(.20,.48,.64),(.35,.58,.78),(.25,.58,.38),(.25,.62,.72),(.52,.40,.24),(.55,.32,.60),(.28,.44,.82),(.67,.28,.68),(.48,.42,.78),(.50,.60,.70),(.57,.43,.25)]
+ iris=material("iris_color",iris_colors[idx])
+ sleeve=material("sleeve",tuple(min(.9,v*.75+.1) for v in COLORS[idx]))
  for side in (-1,1):
   x=side*.19
   oval("EyeWhite",(x,-.37,1.90),(.13,.035,.16),white)
-  iris_colors=[(.20,.48,.64),(.35,.58,.78),(.25,.58,.38),(.25,.62,.72),(.52,.40,.24),(.55,.32,.60),(.28,.44,.82),(.67,.28,.68),(.48,.42,.78),(.50,.60,.70),(.57,.43,.25)]
-  iris=material("iris_color",iris_colors[idx])
   oval("Iris",(x,-.405,1.90),(.082,.020,.114),iris)
   oval("Pupil",(x,-.426,1.90),(.042,.013,.083),dark)
   oval("EyeGlint",(x-.027,-.446,1.952),(.026,.012,.035),white)
   oval("Cheek",(side*.325,-.345,1.76),(.115,.035,.064),skin)
   oval("Eyebrow",(x,-.39,2.095),(.115,.027,.035),hair)
   oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
-  sleeve=material("sleeve",tuple(min(.9,v*.75+.1) for v in COLORS[idx]))
   oval("Arm",(side*.40,0,1.19),(.165,.175,.34),sleeve)
   oval("Hand",(side*.47,-.02,.94),(.15,.14,.15),skin)
   oval("Leg",(side*.19,0,.49),(.16,.17,.28),skin)
@@ -213,7 +213,8 @@ for idx,name in enumerate(NAMES):
  elif name=="hunter":
   for side in (-1,1):
    oval("ShoulderLeather",(side*.39,.025,1.39),(.20,.22,.12),leather)
-  oval("ChestPouch",(side*.19,-.34,.91),(.13,.08,.12),leather)
+  for side in (-1,1):
+   oval("ChestPouch",(side*.19,-.34,.91),(.13,.08,.12),leather)
  elif name=="rogue":
   oval("FaceScarf",(0,-.36,1.67),(.34,.095,.105),cloth)
   for side in (-1,1):
