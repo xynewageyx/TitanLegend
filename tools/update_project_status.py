@@ -18,6 +18,7 @@ AREAS = {
     "Grafiktreiber / Rendering": ("scripts/render", "scripts/graphics", "scripts/quality", "shaders/", "assets/shaders/", "materials/", "assets/materials/", "tools/render", "tools/graphics", "tests/test_render", "tests/test_graphics", "scenes/render"),
     "Titan Chat / Moderation": ("scripts/chat", "scripts/moderation", "scripts/chat_filter", "scenes/chat", "assets/chat/", "tools/chat/", "tests/test_chat", "tests/test_moderation", "server/chat", "server/moderation"),
     "Audio": ("assets/audio/", "audio/", "sounds/", "music/", "scripts/audio", "scenes/audio", "tools/audio/", "tests/test_audio"),
+    "APK-Gesamtbuild": ("export_presets.cfg", "android/", "build/android/", "tools/android", "tools/build_apk", ".github/workflows/android", ".github/workflows/build-apk", ".github/workflows/godot-android"),
     "Integration/CI": (".github/workflows/", "project.godot", "export_presets.cfg"),
 }
 OWNERS = {
@@ -31,6 +32,7 @@ OWNERS = {
     "Grafiktreiber / Rendering": "Grafiktreiber-Chat",
     "Titan Chat / Moderation": "Titan-Chat-Chat",
     "Audio": "Audio-Erstellung-Chat",
+    "APK-Gesamtbuild": "APK-Erstellung-des-gesamten-Projekts-Chat",
     "Integration/CI": "GitHub-/Integrations-Chat",
 }
 
@@ -70,6 +72,7 @@ def main():
         "Grafiktreiber / Rendering": ("render(", "graphics(", "grafiktreiber", "shader", "gpu", "postprocess", "antialias", "shadow quality", "rendering"),
         "Titan Chat / Moderation": ("chat(", "moderation", "profanity", "schimpfwort", "verwarn", "chatban", "chat ban", "mute"),
         "Audio": ("audio", "sound", "sfx", "soundtrack", "music", "musik", "ambient", "ambience", "pcm", "foley"),
+        "APK-Gesamtbuild": ("apk", "android export", "android build", "aab", "release signing", "export preset"),
         "Integration/CI": ("ci(", "build(", "workflow", "pipeline"),
     }
     for commit in commits:
