@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 05:29 UTC**
-Git-Stand: **11015e382bb8614c39bfe292e22950ebef0c740e** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 05:30 UTC**
+Git-Stand: **77af582a826aae8b75b27e1c542beb14afaac49f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,7 @@ Git-Stand: **11015e382bb8614c39bfe292e22950ebef0c740e** auf Branch **main**
 - `53f4948` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
 - `5cf0cb3` (2026-11-03): Extend ten biome ambience loops to four seconds with layered modulation (#18)
@@ -27,7 +27,6 @@ Git-Stand: **11015e382bb8614c39bfe292e22950ebef0c740e** auf Branch **main**
 - `8fef6f2` (2026-11-03): art(chibi): give all eleven classes expressive colored irises, pupils and catchlights
 - `39e26fc` (2026-11-03): test(talents): verify all three branches are validated before upgrade
 - `5218bc6` (2026-11-03): fix(talents): reject malformed sibling branches during talent upgrade validation
-- `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -46,6 +45,7 @@ Git-Stand: **11015e382bb8614c39bfe292e22950ebef0c740e** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `77af582` (2026-11-03): fix(forest): restart repeated hit and attack animations immediately
 - `36f826e` (2026-11-03): Add average sampled FPS to developer-only performance overlay
 - `ab05daa` (2026-11-03): Show minimum and maximum sampled FPS in developer-only diagnostic overlay
 
