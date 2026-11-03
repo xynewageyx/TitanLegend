@@ -93,6 +93,30 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
   accent.material_override = accent_material
   effect.add_child(accent)
   accent.position = Vector3(0.0, 0.4, 0.0)
+  # Cheap, distinct silhouettes for every class; no extra particles or lights.
+  match skill_id:
+   "interrupt_warrior":
+    accent.scale = Vector3(1.8, 0.55, 0.8)
+   "interrupt_paladin":
+    accent.scale = Vector3(1.0, 1.8, 1.0)
+   "interrupt_druid":
+    accent.scale = Vector3(1.5, 0.6, 1.5)
+   "interrupt_shaman":
+    accent.scale = Vector3(0.55, 2.0, 0.55)
+   "interrupt_hunter":
+    accent.scale = Vector3(0.5, 0.5, 2.5)
+   "interrupt_rogue":
+    accent.scale = Vector3(0.35, 0.35, 3.0)
+   "interrupt_mage":
+    accent.scale = Vector3(1.4, 1.4, 1.4)
+   "interrupt_warlock":
+    accent.scale = Vector3(0.7, 2.2, 0.7)
+   "interrupt_summoner":
+    accent.scale = Vector3(1.7, 0.8, 1.7)
+   "interrupt_priest":
+    accent.scale = Vector3(1.0, 2.0, 1.0)
+   "interrupt_brawler":
+    accent.scale = Vector3(2.2, 0.7, 0.7)
   tween.tween_property(accent, "position", destination, 0.42)
   tween.tween_property(accent_material, "albedo_color:a", 0.0, 0.42)
  tween.chain().tween_callback(func() -> void:
