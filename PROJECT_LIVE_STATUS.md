@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 19:48 UTC**
-Git-Stand: **531a0eb0033f0a08aba4dfa82536463a363b2844** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 23:05 UTC**
+Git-Stand: **eb2c54cae27e356f02ca1fbee0c2aac52344b380** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -36,21 +36,20 @@ Git-Stand: **531a0eb0033f0a08aba4dfa82536463a363b2844** auf Branch **main**
 - `9ad6e49` (2026-11-03): Guard developer-only FPS overlay and render-scale diagnostics with regression test
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- `8cc0059` (2026-11-04): Add fail-closed account ban admission check for trusted multiplayer login
 - `5d2bd06` (2026-11-03): Test owner-access grants and revocation for authenticated peers
 - `fe4e08f` (2026-11-03): Use centralized peer authorization for admin access RPC
 - `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
-- `56296b7` (2026-11-03): Revoke moderation access immediately on trusted server logout
-- `d3ebfa7` (2026-11-03): Provide trusted login callback for binding verified moderation peer identities
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
-- `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
