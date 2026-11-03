@@ -114,3 +114,17 @@ Die erste Typdefinition jeder der vier bereits dekomprimierten SerializedFiles w
 | `animationclip_ab_list` | 74 | `AnimationClip` |
 
 **Bedeutung für Titan Legends:** Die Dateien enthalten Typdefinitionen für skinnierte Mesh-Renderer bzw. Animationsclips. Die konkreten Meshes, Bone-Hierarchien, Clip-Anzahlen und Laufzeiten wurden noch nicht geprüft. Als nächstes Typentabellen vollständig überspringen und die Objekttabellen auswerten; anschließend eigene kompatible Godot-4.7.2-Assets erstellen. Keine fremden Originalassets übernehmen.
+
+## Tatsächliche SerializedFile-Objekttabellen (2026-11-03)
+Die vier ausgewählten UnityFS-Bundles wurden lokal dekomprimiert. Ein Parser für SerializedFile v21 hat die TypeTree-Deklarationen übersprungen und anschließend **Objektanzahl, TypeIndex und Bytebereich jedes Objekts** gelesen. Alle gelesenen Objekte liegen innerhalb der Dateigrenzen.
+
+| Referenzdatei | Objekte | Tatsächliche Objektklassen (Class-ID: Anzahl) |
+| --- | ---: | --- |
+| `lib/character/base/beryl.prefab_ab` | **10** | `137 SkinnedMeshRenderer: 2`, `1 GameObject: 3`, `4 Transform: 3`, `142 AssetBundle: 1`, `95 Animator: 1` |
+| `lib/character/base/brook.prefab_ab` | **17** | `137 SkinnedMeshRenderer: 3`, `1 GameObject: 5`, `4 Transform: 5`, `33 MeshFilter: 1`, `142 AssetBundle: 1`, `95 Animator: 1`, `23 MeshRenderer: 1` |
+| `lib/character/base/beryl.prefab_ab_shared` | **14** | `137 SkinnedMeshRenderer: 2`, `4 Transform: 3`, `43 Mesh: 2`, `142 AssetBundle: 1`, `95 Animator: 1`, `90 Avatar: 1`, `1 GameObject: 3`, `221 AnimatorOverrideController: 1` |
+| `models/expression/animationclip_ab_list` | **822** | `74 AnimationClip: 821`, `142 AssetBundle: 1` |
+
+**Einordnung:** Dies sind echte Objekteinträge, nicht bloß TypeTree-Typdefinitionen. Die 821 AnimationClip-Objekte belegen jedoch weder 821 unterschiedliche Bewegungen noch ihre Nutzbarkeit in Godot. Clip-Namen, Längen, Keyframes, Bone-Pfade und Beziehungen zu den Charakteren wurden noch nicht ausgelesen. Keine Originalassets in das öffentliche Repository übertragen.
+
+Reproduzierbarer Metadatenparser: `tools/inspect_unity_objects.py` (erwartet bereits dekomprimierte SerializedFile-Daten, keine UnityFS-Container). Die Einbindung in den UnityFS-Inspector und CI-Tests für die Objekttabelle sind noch offen.
