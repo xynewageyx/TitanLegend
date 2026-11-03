@@ -59,6 +59,9 @@ jobs:
           renderer/rendering_method.mobile="gl_compatibility"
           EOF
           cp export_presets.cfg preview/export_presets.cfg
+          # Keep the preview installable alongside the main Titan Legends app.
+          sed -i 's|package/unique_name="org.titanlegends.idlerpg"|package/unique_name="org.titanlegends.forestpreview"|' preview/export_presets.cfg
+          sed -i 's|package/name="Titan Legends"|package/name="Titan Forest Test"|' preview/export_presets.cfg
       - name: Install Godot 4.7.2 and Android export templates
         run: |
           set -euo pipefail
@@ -109,6 +112,8 @@ jobs:
             exit 1
           fi
           test -s build/TitanLegends-Forest-FPS-Test.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging build/TitanLegends-Forest-FPS-Test.apk | grep -E "^(package:|application-label:|sdkVersion:)"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose build/TitanLegends-Forest-FPS-Test.apk
           unzip -t build/TitanLegends-Forest-FPS-Test.apk | tail -n 2
           sha256sum build/TitanLegends-Forest-FPS-Test.apk
       - name: Upload Godot diagnostic logs
