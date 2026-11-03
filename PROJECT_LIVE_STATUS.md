@@ -1,28 +1,28 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 04:09 UTC**
-Git-Stand: **e0676b3dfd520aabcede3ff76451989c65fa2d2b** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 05:27 UTC**
+Git-Stand: **5cf0cb3356883fea56e06db4a948088d170ff4de** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `53f4948` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `24ea7ed` (2026-11-03): art(chibi): sculpt layered tunic hems, collar and shoulder seams for eleven heroes
 - `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
-- `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `5cf0cb3` (2026-11-03): Extend ten biome ambience loops to four seconds with layered modulation (#18)
 
 ### Ausrüstung — Ausrüstungs-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
@@ -35,7 +35,7 @@ Git-Stand: **e0676b3dfd520aabcede3ff76451989c65fa2d2b** auf Branch **main**
 - `08c0d92` (2026-11-03): Add regression coverage for graphics visual cache cleanup
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
