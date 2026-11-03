@@ -11,19 +11,19 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-def make_bundle(entry_offset=0, entry_size=4):
+def make_bundle(entry_offset=0, entry_size=4, payload=b"DATA"):
     name = b"CAB-test\0"
     info = (b"\0" * 16 + struct.pack(">I", 1)
-            + struct.pack(">IIH", 4, 4, 0)
+            + struct.pack(">IIH", len(payload), len(payload), 0)
             + struct.pack(">I", 1)
             + struct.pack(">QQI", entry_offset, entry_size, 0) + name)
     header = b"UnityFS\0" + struct.pack(">I", 7) + b"5.x.x\0" + b"2019.4.16f1c1\0"
     # Version 7 metadata begins at the next 16-byte boundary.
     fixed = len(header) + 20
     padding = b"\0" * ((-fixed) % 16)
-    total = fixed + len(padding) + len(info) + 4
+    total = fixed + len(padding) + len(info) + len(payload)
     return (header + struct.pack(">QIII", total, len(info), len(info), 0)
-            + padding + info + b"DATA")
+            + padding + info + payload)
 
 
 class UnityFSInspectorTests(unittest.TestCase):
@@ -43,6 +43,17 @@ class UnityFSInspectorTests(unittest.TestCase):
     def test_rejects_out_of_bounds_directory_entry(self):
         with self.assertRaisesRegex(ValueError, "exceeds"):
             self.check_bundle(make_bundle(entry_offset=2, entry_size=4))
+
+    def test_embedded_serialized_file_header(self):
+        # Version 21 SerializedFile header, synthetic metadata only.
+        payload = struct.pack(">IIII", 128, 128, 21, 64) + bytes([0]) + b"\\0" * 111
+        result = self.check_bundle(make_bundle(entry_size=len(payload), payload=payload))
+        self.assertEqual(result["serialized_file"]["format_version"], 21)
+        self.assertEqual(result["serialized_file"]["endianness"], "little")
+        self.assertEqual(result["serialized_file"]["data_offset"], 64)
+
+    def test_ignores_non_serialized_payload(self):
+        self.assertIsNone(self.check_bundle(make_bundle())["serialized_file"])
 
     def test_rejects_wrong_signature(self):
         with self.assertRaises(ValueError):
