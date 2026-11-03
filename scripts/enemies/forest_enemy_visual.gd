@@ -55,7 +55,9 @@ func _play(clip: String) -> void:
     if not animation_player.has_animation(clip):
         push_warning("ForestEnemyVisual: animation missing: " + clip)
         return
+    animation_player.stop()
     animation_player.play(clip)
+    animation_player.advance(0.0)
 
 func _on_animation_finished(clip: StringName) -> void:
     if is_dead:
