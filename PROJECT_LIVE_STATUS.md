@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 05:27 UTC**
-Git-Stand: **2405deab09883591a830348f13650cf17bd98199** auf Branch **main**
+Git-Stand: **644705f13e17fc8bdd927d5c829d6b0ff04d08c2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -43,7 +43,6 @@ Git-Stand: **2405deab09883591a830348f13650cf17bd98199** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
-- `3d17927` (2026-11-03): Register developer FPS overlay with runtime feature gating
 
 ## Bereichsübergreifende Änderungen
 
