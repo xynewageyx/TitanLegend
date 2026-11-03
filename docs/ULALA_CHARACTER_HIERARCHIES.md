@@ -41,3 +41,15 @@ Locally rechecked the original `beryl.prefab_ab`, `beryl.prefab_ab_shared`, and 
 - `MeshFilter` (class ID 33, Brook): `m_Mesh`.
 
 This confirms that the serialized schemas expose bone, avatar, skinning and material reference fields. **It does not establish the actual number or names of bones, rig compatibility, material assignments or clip bindings.** Next: decode individual object fields using the TypeTree node layout and resolve PPtr file IDs/path IDs. Proprietary asset payloads remain outside GitHub.
+
+## Resolved Beryl renderer and Animator pointers (2026-11-03)
+
+Decoded actual little-endian PPtr pairs (`int32 fileID`, `int64 pathID`) from `beryl.prefab_ab_shared`, and matched `fileID=0` targets against its SerializedFile v21 object table:
+
+| Source | Byte offset in source object | Target pathID | Target class | Target name |
+| --- | ---: | ---: | --- | --- |
+| SkinnedMeshRenderer pathID `-4464223284711970495` | 136 | `-92901539420410113` | Mesh (43) | `Beryl` |
+| SkinnedMeshRenderer pathID `8141632201946067116` | 136 | `59332492705198890` | Mesh (43) | `Beryl_Weapon` |
+| Animator pathID `1116753173661700370` | 16 | `1732061794786354735` | Avatar (90) | `BerylAvatar` |
+
+Target names were read directly from each target object's length-prefixed `m_Name` string, not guessed from filenames. This verifies **internal pointer destinations**; the semantic field identities are consistent with the corresponding Unity TypeTree declarations but require full TypeTree field-offset traversal for definitive field mapping. A scan of the Brook main prefab did not resolve internal Mesh/Avatar objects because none are present in its object table. No proprietary reference assets were committed.
