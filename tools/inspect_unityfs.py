@@ -68,7 +68,46 @@ def inspect(path):
         if entry["offset"] + entry["size"] > data_length:
             raise ValueError("UnityFS entry exceeds decompressed data region")
 
+    # Decode only the blocks needed for the first embedded SerializedFile header.
+    # UnityFS stores block payloads immediately after the block-info region
+    # unless its block-info table is at the end of the bundle.
+    data_start = pos if flags & 0x80 else pos + compressed
+    prefix = bytearray()
+    cursor = data_start
+    for raw_size, stored_size, block_flags in blocks:
+        if len(prefix) >= 64:
+            break
+        payload = data[cursor:cursor + stored_size]
+        if len(payload) != stored_size:
+            raise ValueError("Truncated UnityFS data block")
+        compression = block_flags & 0x3f
+        if compression in (2, 3):
+            decoded = lz4.block.decompress(payload, uncompressed_size=raw_size)
+        elif compression == 0:
+            decoded = payload
+        else:
+            raise ValueError(f"Unsupported data-block codec {compression}")
+        if len(decoded) != raw_size:
+            raise ValueError("Data block size mismatch")
+        prefix.extend(decoded[:max(0, 64 - len(prefix))])
+        cursor += stored_size
+
+    serialized = None
+    if entries and entries[0]["offset"] == 0 and len(prefix) >= 20:
+        metadata_size, file_size, format_version, data_offset = struct.unpack_from(">IIII", prefix)
+        if 5 <= format_version <= 21 and file_size <= data_length and data_offset <= file_size:
+            endian = prefix[16]
+            if endian in (0, 1):
+                serialized = {
+                    "metadata_bytes": metadata_size,
+                    "file_bytes": file_size,
+                    "format_version": format_version,
+                    "data_offset": data_offset,
+                    "endianness": "little" if endian == 0 else "big",
+                }
+
     return {
+        "serialized_file": serialized,
         "file": Path(path).name,
         "unity": unity,
         "player": player,
