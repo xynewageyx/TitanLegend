@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 06:47 UTC**
-Git-Stand: **d02083dd7c29be58fa75e00c22ce5a76f60f1a71** auf Branch **main**
+Git-Stand: **51572fdcaf14c42834ea24a07f4235388f39b204** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,7 @@ Git-Stand: **d02083dd7c29be58fa75e00c22ce5a76f60f1a71** auf Branch **main**
 - `6a66a60` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -48,7 +48,7 @@ Git-Stand: **d02083dd7c29be58fa75e00c22ce5a76f60f1a71** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `77af582` (2026-11-03): fix(forest): restart repeated hit and attack animations immediately
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
