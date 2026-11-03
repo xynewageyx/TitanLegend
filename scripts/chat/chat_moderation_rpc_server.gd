@@ -36,6 +36,24 @@ func configure_server_authority(server_authority: ChatModerationPeerAuthority) -
 		return
 	authority = server_authority
 
+# Invoke from the authoritative server tick after moderation decisions.
+# A newly approved account ban must also terminate existing sessions.
+func enforce_active_bans() -> void:
+	if not multiplayer.is_server() or authority == null or authority.gateway == null:
+		return
+	var coordinator := authority.gateway.coordinator
+	if coordinator == null or not coordinator.loaded:
+		return
+	var now_unix := int(Time.get_unix_time_from_system())
+	for peer_id in multiplayer.get_peers():
+		var account_id := authority._account_for_peer(peer_id)
+		if account_id.is_empty():
+			continue
+		if coordinator.is_banned(account_id, now_unix):
+			authority.disconnect_peer(peer_id)
+			receive_admin_access.rpc_id(peer_id, false)
+			multiplayer.multiplayer_peer.disconnect_peer(peer_id)
+
 func _on_peer_disconnected(peer_id: int) -> void:
 	if authority != null:
 		authority.disconnect_peer(peer_id)
@@ -95,6 +113,8 @@ func request_case_decision(case_id: String, action: String, hours: int, reason: 
 	if authority != null:
 		result = authority.decide_for_peer(sender, case_id, action, hours, reason, int(Time.get_unix_time_from_system()))
 	receive_case_decision.rpc_id(sender, case_id, result)
+	if result.get("ok", false) and action == "approve":
+		enforce_active_bans()
 
 # Client-only replies: never accept an RPC from another player.
 signal pending_cases_received(cases: Array)
