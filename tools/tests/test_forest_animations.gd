@@ -78,6 +78,24 @@ func _initialize() -> void:
             player.stop()
             tested += 1
         instance.free()
+    # Exercise the presenter actually used by BattleManager.
+    var presenter_script := load("res://scripts/forest_enemy_visual.gd") as GDScript
+    if presenter_script == null:
+        failures.append("BattleManager forest presenter script cannot load")
+    else:
+        for index in range(ENEMIES.size()):
+            var presenter := presenter_script.new() as Node3D
+            root.add_child(presenter)
+            var short_id: String = ENEMIES[index].get_slice("_", 0) + "_" + ENEMIES[index].get_slice("_", 1)
+            if index >= 6:
+                short_id = "forest_elite_01" if index == 6 else ("forest_elite_02" if index == 7 else "forest_boss_01")
+            if not presenter.call("show_enemy", short_id):
+                failures.append("%s: BattleManager presenter cannot load model" % ENEMIES[index])
+            else:
+                for clip in CLIPS:
+                    if not presenter.call("play_clip", clip):
+                        failures.append("%s: BattleManager presenter cannot play %s" % [ENEMIES[index], clip])
+            presenter.free()
     var controller_script := load("res://scripts/enemies/forest_enemy_visual.gd") as GDScript
     if controller_script == null:
         failures.append("ForestEnemyVisual controller script cannot load")
