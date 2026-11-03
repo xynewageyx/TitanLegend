@@ -79,3 +79,10 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - **Grafiktreiber (neuer Fach-Chat):** Godot-4.7.2-Rendering-Konfiguration, Android-Grafikkompatibilität, Shader-/Material-Optimierung, Beleuchtung, Schatten, Postprocessing, GPU-Profiling, Qualitätsstufen und Performance-Budgets.
 - **Schnittstellen:** Charakterdesign, Landschaften, Gegner/Bosse, Ausrüstung und UI liefern visuelle Anforderungen und Test-Szenen; Grafiktreiber verantwortet gemeinsame Rendering-Standards und geräteabhängige Fallbacks. Integration/CI verantwortet Build- und Validierungsworkflows. Änderungen an globalen Renderer-Einstellungen vorab mit den betroffenen Bereichen abstimmen.
 - **Qualitätsnachweis:** tatsächliche Android-Tests, Framerate/Frametime und Bildvergleiche; erfolgreiche CI allein beweist keine visuelle Qualität. Keine pauschale Behauptung, dass externe Treiber die Engine-Fähigkeiten ersetzen.
+
+## Verbindliches Integrationsprinzip: EIN gemeinsames Spiel (2026-11-03)
+- Alle Fach-Chats sind Arbeitsbereiche **desselben** Projekts `xynewageyx/TitanLegend`, keine getrennten Spiele oder unabhängigen Repositories.
+- Gemeinsame Grundlage: Godot 4.7.2, ein gemeinsamer `main`-Branch und ein integrierter Android-Build.
+- Jeder Fachbereich stimmt Schnittstellen mit betroffenen anderen Bereichen ab und integriert seine Änderungen in das bestehende Spiel statt isolierte Parallelimplementierungen zu erstellen.
+- Die zentrale Koordination dokumentiert Verantwortlichkeiten, Abhängigkeiten, Änderungen und GitHub-Actions-Nachweise. Erfolgreiche Teil-Workflows ersetzen keinen vollständigen Integrations- und Gerätetest.
+- Für die Freigabe zählt, dass Charaktere, Gegner, Landschaft, Ausrüstung, Skills, Gameplay, UI, Grafik, Audio, Chat und Backend zusammen funktionieren.
