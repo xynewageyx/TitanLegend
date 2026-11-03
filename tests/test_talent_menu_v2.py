@@ -140,6 +140,11 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("if not saved_value is int:", recovery)
         self.assertIn("var desired: int = clampi(saved_value, 0, MAX_RANK)", recovery)
 
+    def test_spent_points_ignores_invalid_rank_types(self):
+        counter = TREE[TREE.index("static func spent_points("):TREE.index("static func available_points(")]
+        self.assertIn("if not rank is int:", counter)
+        self.assertIn("total += clampi(rank, 0, MAX_RANK)", counter)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
