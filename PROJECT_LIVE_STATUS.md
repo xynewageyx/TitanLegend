@@ -1,15 +1,15 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 04:05 UTC**
-Git-Stand: **8e799fb12c176594df01ca887fcf332c45e0da9b** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 04:07 UTC**
+Git-Stand: **24ea7ede510b524fefcac0baaf414a25ab7dd8b7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `24ea7ed` (2026-11-03): art(chibi): sculpt layered tunic hems, collar and shoulder seams for eleven heroes
 - `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
-- `25a42f0` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
