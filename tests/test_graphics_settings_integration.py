@@ -45,6 +45,8 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
     def test_adaptive_quality_uses_hysteresis(self):
         code = MANAGER.read_text(encoding="utf-8")
         self.assertIn("if low_samples >= 2:", code)
+        self.assertIn("var scale_step := 0.15 if measured_fps < float(target_fps) * 0.55 else 0.1", code)
+        self.assertIn("adaptive_scale - scale_step", code)
         self.assertIn("elif good_samples >= 6 and adaptive_scale < 1.0:", code)
         self.assertIn("startup_grace_seconds := 10.0", code)
         self.assertIn("if sample_seconds < 5.0:", code)
