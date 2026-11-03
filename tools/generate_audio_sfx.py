@@ -160,6 +160,12 @@ def render(path, duration, start, end, mode):
    env = 1.0
   sample = int(max(-1, min(1, wave_value * env * 0.65)) * 32767)
   frames.extend(struct.pack("<h", sample))
+ if path.startswith("ambient/"):
+  # A loop must not jump sharply between its last and first PCM samples.
+  first_sample = struct.unpack_from("<h", frames, 0)[0]
+  last_sample = struct.unpack_from("<h", frames, len(frames) - 2)[0]
+  if abs(first_sample - last_sample) > 1000:
+   raise ValueError(f"Audible loop seam in {path}: {last_sample} -> {first_sample}")
  target = Path("assets/audio") / path
  target.parent.mkdir(parents=True, exist_ok=True)
  with wave.open(str(target), "wb") as out:
@@ -169,4 +175,4 @@ def render(path, duration, start, end, mode):
   out.writeframes(frames)
 for path, parameters in SOUNDS.items():
  render(path, *parameters)
-print(f"Generated {len(SOUNDS)} original placeholder sound effects.")
+print(f"Generated {len(SOUNDS)} original placeholder sound effects; ambient loop seams checked.")
