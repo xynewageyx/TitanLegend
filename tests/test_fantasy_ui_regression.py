@@ -67,6 +67,13 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_game_entry_requires_valid_session(self):
+        startup = self.read_script("character_startup.gd")
+        manager = self.read_script("save_manager.gd")
+        self.assertEqual(startup.count('if not SaveManager.session_ready:'), 2)
+        self.assertIn('if not character_switching_enabled or session_ready:', manager)
+        self.assertIn('CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot).is_empty()', manager)
+
     def test_character_startup_and_immutable_player_role(self):
         project = (self.root / "project.godot").read_text(encoding="utf-8")
         team = self.read_script("team_formation.gd")
