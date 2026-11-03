@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 04:07 UTC**
-Git-Stand: **24ea7ede510b524fefcac0baaf414a25ab7dd8b7** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 04:09 UTC**
+Git-Stand: **e0676b3dfd520aabcede3ff76451989c65fa2d2b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,6 +12,7 @@ Git-Stand: **24ea7ede510b524fefcac0baaf414a25ab7dd8b7** auf Branch **main**
 - `738f31a` (2026-11-03): Allow opt-in developer FPS overlay for manually triggered Android debug APKs
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
 - `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
 
 ### Landschaften — Landschaften-Chat
@@ -24,8 +25,8 @@ Git-Stand: **24ea7ede510b524fefcac0baaf414a25ab7dd8b7** auf Branch **main**
 - `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `e0676b3` (2026-11-03): fix(forest): loop enemy idle animation continuously during combat
 - `5b5be3f` (2026-11-03): Add FPS overlay gated behind developer-only debug export feature
-- `6e1cf3d` (2026-11-03): test(talents): guard normalized build use in Android detail and purchase handlers
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
