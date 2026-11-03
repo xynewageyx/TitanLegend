@@ -102,3 +102,15 @@ Die dekomprimierten Payloads der vier Stichproben wurden bis zum Anfang ihrer Se
 | `animationclip_ab_list` | 2 | 37.181 | 37.216 |
 
 **Interpretationsgrenze:** Die Typdefinitionen sind noch keine gezählten Objekte, Skelette oder Animationsclips. Die konkrete Class-ID-Tabelle, Objektliste und die referenzierten Daten wurden noch nicht vollständig gelesen. `UnityPy` ließ sich in der isolierten Umgebung wegen fehlender Paketnetzverbindung nicht installieren; ein kleiner eigener Parser bestätigte die oben aufgeführten Headerfelder. Nächster Schritt ist eine robuste Class-ID-/Objekttabellen-Auswertung mit Testdateien und klaren Fehlergrenzen.
+
+## Erste Unity-Klassenkennungen (2026-11-03)
+Die erste Typdefinition jeder der vier bereits dekomprimierten SerializedFiles wurde aus der Typentabelle als Little-Endian-`int32` gelesen. **Dies sind Typdeklarationen, keine nachgewiesenen Objektanzahlen.**
+
+| Bundle | Erste Class-ID | Unity-Objektklasse |
+| --- | ---: | --- |
+| `beryl.prefab_ab` | 137 | `SkinnedMeshRenderer` |
+| `brook.prefab_ab` | 137 | `SkinnedMeshRenderer` |
+| `beryl.prefab_ab_shared` | 137 | `SkinnedMeshRenderer` |
+| `animationclip_ab_list` | 74 | `AnimationClip` |
+
+**Bedeutung für Titan Legends:** Die Dateien enthalten Typdefinitionen für skinnierte Mesh-Renderer bzw. Animationsclips. Die konkreten Meshes, Bone-Hierarchien, Clip-Anzahlen und Laufzeiten wurden noch nicht geprüft. Als nächstes Typentabellen vollständig überspringen und die Objekttabellen auswerten; anschließend eigene kompatible Godot-4.7.2-Assets erstellen. Keine fremden Originalassets übernehmen.
