@@ -36,3 +36,23 @@ Neun Teile `ulala_backup.7z.001` bis `.009` erfolgreich geladen und zusammengese
 - Bisher **7z-Dateiverzeichnis und Dateinamen** analysiert; keine vollständige inhaltliche Dekodierung der Unity-AssetBundles, Meshes, Rigs, Animationen, Texturen oder OBB.
 - Archive und urheberrechtlich geschützte Originaldateien werden **nicht** ins öffentliche TitanLegend-Repository hochgeladen.
 - Keine automatische Live-Benachrichtigung anderer Chat-Unterhaltungen. Andere Bereiche können dieses Inventar über GitHub lesen.
+
+## Vertiefung: Verzeichnisstruktur und Zuordnung (2026-11-03)
+Die folgenden Beispiele wurden anhand des ausgelesenen Archivverzeichnisses überprüft; sie beweisen noch keine dekodierten Meshes oder Animationen.
+
+| Referenzpfad im Archiv | Titan-Legends-Bereich | Konkrete nächste Untersuchung |
+| --- | --- | --- |
+| `assets/AssetBundles/Asset/assets/lib/character/base/` | Charaktere | Grundtypen und Klassen-/Variantenbezeichnungen inventarisieren |
+| `assets/AssetBundles/Asset/assets/lib/character/element/` | Charaktere/Ausrüstung | Varianten und modulare Zuordnung prüfen |
+| `assets/AssetBundles/Asset/assets/models/hero/base/shizhuang/` | Kostüme/Waffen | Outfit- und Waffenvarianten nach Dateipfaden erfassen |
+| `assets/AssetBundles/Asset/assets/lib/monsters/` | Gegner/Bosse | Gegnerklassen und Benennungsschema kategorisieren |
+| `assets/AssetBundles/Asset/assets/models/pet/` | Begleiter | Begleitertypen und Animationsgruppen inventarisieren |
+| `assets/AssetBundles/Asset/assets/lib/scripts/main/skill/` | Skills | Gruppen für passive und auslösbare Skills prüfen |
+| `assets/AssetBundles/Asset/assets/models/expression/animationclip_ab_list` | Animation | Referenzlisten und Rig-Zuordnung prüfen |
+| `assets/AssetBundles/Asset/Music/` | Audio | Audio-Kategorien anhand der Dateinamen unterscheiden |
+
+Zusätzlich nachgewiesene Pfadnamen: `models/hero/base/shizhuang/ss10_weapon/`, `models/hero/base/shizhuang/sz_zhangyu_hair/`, `lib/scripts/main/skill/passiveskill/` und `lib/scripts/main/skill/releaseskill/`.
+
+**Priorisierte Arbeit:** (1) Klassen- und Haarvarianten, (2) Ausrüstungsslot-Mapping, (3) Animationsgruppen und Skeleton-Kompatibilität, (4) Gegner-/Begleiter-Typen, (5) mobile Material- und Performance-Budgets. Diese Reihenfolge ist ein Arbeitsplan, keine Behauptung bereits entschlüsselter Daten.
+
+**Verbindlich:** Nur eigene oder eindeutig lizenzierte Spielassets übernehmen. Keine Unity-Originaldateien ins öffentliche Repository übertragen.
