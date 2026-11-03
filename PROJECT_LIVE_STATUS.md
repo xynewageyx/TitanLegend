@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 04:00 UTC**
-Git-Stand: **970c87d78451cbef501ace0a58151892e8c8c235** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 04:02 UTC**
+Git-Stand: **adbaeea2e3ab5facc7812fe3296b287b972c7ff8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -14,7 +14,7 @@ Git-Stand: **970c87d78451cbef501ace0a58151892e8c8c235** auf Branch **main**
 - `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `327c88c` (2026-11-03): feat(forest): add reusable runtime visual controller for nine animated GLB enemies
+- `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
 
 ### Landschaften — Landschaften-Chat
 - `a10aad8` (2026-11-03): Generate seamless layered ambience for ten biomes (#17)
