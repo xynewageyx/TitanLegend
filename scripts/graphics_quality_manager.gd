@@ -198,7 +198,7 @@ func _process(delta: float) -> void:
 	else:
 		low_samples = 0
 		good_samples = 0
-	if low_samples >= 3:
+	if low_samples >= 2:
 		adaptive_scale = maxf(minf(1.0, 0.5 / render_scale), adaptive_scale - 0.1)
 		low_samples = 0
 		apply_settings()
