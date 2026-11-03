@@ -112,6 +112,13 @@ func save_game() -> void:
   push_warning("Automatic save failed (code " + str(result) + ")")
 func load_game() -> void:
  var data: Dictionary = SAVE_FILE_STORE.load_latest(SAVE_PATH)
+ if active_character_slot >= 0:
+  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+  var verified: Dictionary = CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot)
+  if verified.is_empty() or CHARACTER_PROFILES.character_save_path(registry, active_character_slot) != SAVE_PATH:
+   push_error("Character load blocked: identity or save path mismatch.")
+   return
+  data = verified
  if data.is_empty():
   return
  data = _claim_offline_rewards(data)
