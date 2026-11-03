@@ -26,6 +26,8 @@ func _ready() -> void:
 	load_settings()
 	get_tree().scene_changed.connect(_on_scene_changed)
 	get_tree().node_added.connect(_on_node_added)
+	# Include lights and particles that already exist when this autoload becomes ready.
+	_rebuild_visual_cache()
 	apply_settings()
 
 func set_preset(preset: String) -> void:
