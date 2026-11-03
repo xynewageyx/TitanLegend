@@ -69,7 +69,6 @@ const INTERRUPT_VULNERABILITY_TICKS: int = 4
 const INTERRUPT_BOSS_DAMAGE_BONUS: float = 0.15
 var boss_vulnerable_until_tick: int = -1
 var prepared_cc: Array[int] = [0, 0, 0, 0]
-var prepared_healing: Array[int] = [-1, -1, -1, -1]
 var boss_cast_index: int = 0
 var hero_hot_ticks: Array[int] = [0, 0, 0, 0]
 var hero_hot_amount: Array[int] = [0, 0, 0, 0]
@@ -273,7 +272,6 @@ func _reset_hero_health() -> void:
  hero_hot_amount.fill(0)
  boss_cc_progress = 0
  prepared_cc.fill(0)
- prepared_healing.fill(-1)
  team_element_status = -1
  if team_formation != null and team_formation.has_method("reset_individual_defeat_poses"):
   team_formation.reset_individual_defeat_poses()
@@ -416,34 +414,12 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
  if team_hp <= 0:
   _on_team_defeat("normal")
  else:
-  _trigger_prepared_healing()
 
 func _has_wounded_hero() -> bool:
  for i in range(4):
   if hero_hp[i] > 0 and hero_hp[i] < hero_max_hp[i]:
    return true
  return false
-
-func _trigger_prepared_healing() -> void:
- if not battle_active or not _has_wounded_hero():
-  return
- for slot in range(4):
-  if prepared_healing[slot] < 0 or hero_hp[slot] <= 0:
-   continue
-  var choice: int = prepared_healing[slot]
-  prepared_healing[slot] = -1
-  var skill: Dictionary = TitanSkillSystem.skill_for_role(2, choice)
-  if choice == 8:
-   _apply_heal_over_time(slot, skill)
-  else:
-   var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
-   var modifier: float = float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
-   modifier *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
-   var amount: int = maxi(1, roundi(float(team_max_hp) * float(skill.get("heal", 0.0)) * modifier))
-   _heal_heroes(amount, str(skill.get("effect", "")) == "group_heal")
-  last_ability = "Vorbereitete Heilung"
-  if not _has_wounded_hero():
-   break
 
 func _heal_heroes(amount: int, group_heal: bool = false) -> void:
  if amount <= 0:
@@ -870,7 +846,6 @@ func set_skill_loadout(hero: int, skill_slot: int, ability: int) -> void:
  next_skill_slot[hero] = 0
  skill_hit_charge[hero] = 0
  prepared_cc[hero] = 0
- prepared_healing[hero] = -1
  SaveManager.save_game()
  battle_status_changed.emit()
 
