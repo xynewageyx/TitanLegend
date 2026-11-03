@@ -34,5 +34,7 @@ func _enter_game(_slot: int) -> void:
  SaveManager.begin_game_session()
  if not SaveManager.session_ready:
   push_error("Character session initialization failed.")
+  if selector != null and selector.message_label != null:
+   selector.message_label.text = "Charakter konnte nicht geladen werden. Bitte Spielstand prüfen und erneut versuchen."
   return
  get_tree().call_deferred("change_scene_to_file", GAME_SCENE)
