@@ -128,6 +128,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("not builds[hero_slot] is Array", getter)
         self.assertIn("TALENT_TREES_V2.validate_build(GameManager.character_level, builds[hero_slot])", getter)
 
+    def test_upgrade_rejects_out_of_range_and_non_integer_ranks(self):
+        guard = TREE[TREE.index("static func can_upgrade("):TREE.index("static func upgrade(")]
+        self.assertIn("for saved_rank in branch_ranks:", guard)
+        self.assertIn("not saved_rank is int", guard)
+        self.assertIn("saved_rank < 0 or saved_rank > MAX_RANK", guard)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
