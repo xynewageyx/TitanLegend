@@ -72,7 +72,10 @@ def rig_and_animate():
  for clip,(start,end) in clips.items():
   action=bpy.data.actions.new(name=clip)
   arm.animation_data_create();arm.animation_data.action=action
-  for frame in (start,(start+end)//2,end):
+  # Quarter-cycle keys are essential: a sine at 0, 0.5 and 1 is
+  # always zero, so the previous Walk and Idle clips appeared static.
+  frames=sorted(set((start,start+(end-start)//4,start+(end-start)//2,start+3*(end-start)//4,end)))
+  for frame in frames:
    phase=(frame-start)/max(1,end-start)
    for bone in arm.pose.bones:
     bone.rotation_mode="XYZ";bone.rotation_euler=(0,0,0)
@@ -83,7 +86,8 @@ def rig_and_animate():
      sign=1 if bone.name.endswith("L") else -1
      if bone.name.startswith("Arm"):sign=-sign
      bone.rotation_euler.x=.48*sign*math.sin(phase*math.tau)
-    if clip=="Walk" and bone.name=="Head":bone.rotation_euler.x=.055*math.sin(phase*math.tau*2)
+    if clip=="Walk" and bone.name=="Head":bone.rotation_euler.x=.055*math.cos(phase*math.tau)
+    if clip=="Walk" and bone.name=="Spine":bone.rotation_euler.x=.045*math.cos(phase*math.tau)
     if clip=="Attack" and bone.name=="Arm_R":bone.rotation_euler.x=-1.1*math.sin(phase*math.pi)
     if clip=="Attack" and bone.name=="Spine":bone.rotation_euler.y=-.22*math.sin(phase*math.pi)
     if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
