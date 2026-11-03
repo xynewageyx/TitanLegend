@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 03:58 UTC**
-Git-Stand: **a10aad859bdbd5da4357cee1ed47a0f8b34c56bd** auf Branch **main**
+Git-Stand: **3eb7a3583a9a183dc7b4b3345a4904f39e41a79c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -28,13 +28,14 @@ Git-Stand: **a10aad859bdbd5da4357cee1ed47a0f8b34c56bd** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 - `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
