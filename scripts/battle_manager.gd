@@ -764,7 +764,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
   healing *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
   if _has_wounded_hero():
-   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), bool(skill.get("aoe", false)))
+   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), str(skill.get("effect", "")) == "group_heal")
   else:
    prepared_healing[slot] = choice
    last_ability = "Heilung vorbereitet"
@@ -777,7 +777,7 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
   if role == 2 and team_formation != null:
    damage = maxi(1, roundi(float(damage) * float(TitanCombatBalance.healer_profile(int(team_formation.class_ids[slot])).get("damage", 1.0))))
   damage = maxi(1, roundi(float(damage) * (1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2))))
-  _deal_damage_to_enemy(slot, maxi(1, damage), bool(skill.get("aoe", false)))
+  _deal_damage_to_enemy(slot, maxi(1, damage), str(skill.get("effect", "")) == "area_damage")
 
 func _pet_stats(slot: int) -> Dictionary:
  if team_formation == null:
