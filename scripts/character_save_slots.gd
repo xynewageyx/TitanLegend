@@ -32,6 +32,9 @@ static func load_slot(registry: Dictionary, slot: int) -> Dictionary:
  if data.is_empty():
   return {}
  var profile: Dictionary = registry["characters"][slot]
+ if data.has("character_name") and str(data["character_name"]) != str(profile.get("name", "")):
+  push_warning("Character save name does not match selected profile.")
+  return {}
  if int(data.get("class_id", -1)) != int(profile.get("class_id", -2)) or int(data.get("role_id", -1)) != int(profile.get("role_id", -2)):
   push_warning("Character save identity does not match the selected profile.")
   return {}
@@ -53,6 +56,8 @@ static func save_slot(registry: Dictionary, slot: int, data: Dictionary) -> Erro
  if path.is_empty():
   return ERR_INVALID_PARAMETER
  var profile: Dictionary = registry["characters"][slot]
+ if str(data.get("character_name", "")) != str(profile.get("name", "")):
+  return ERR_INVALID_DATA
  if int(data.get("class_id", -1)) != int(profile.get("class_id", -2)):
   return ERR_INVALID_DATA
  if int(data.get("role_id", -1)) != int(profile.get("role_id", -2)):
