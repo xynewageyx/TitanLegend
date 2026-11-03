@@ -90,3 +90,17 @@ Read actual Avatar (class 90) object bytes from the local `beryl.prefab_ab_share
 | `BrookAvatar` | 10,816 bytes | 40 |
 
 Examples actually present in the Avatar object bytes include `Bip001 R Hand`, `Bip001 L UpperArm`, `Bip001 R Calf`, `Bip001 L Toe0`, `Bip001 R Finger0`, and `Bip001 L Finger4`. `BrookAvatar` additionally contains `Bip001 Spine` and `Bip001 Spine1`; `BerylAvatar` includes names such as `Bone007`, `Bone014`, `Bone019`. The names indicate skeletal labeling exists in these objects, but no definitive hierarchy, binding matrices, or rig compatibility has been established. Next parse the Avatar skeleton nodes and parent indices using the TypeTree instead of scanning printable bytes.
+
+## Validated Transform hierarchy against actual UnityFS files (2026-11-04)
+
+A local UnityFS LZ4 decompression and SerializedFile v21 object/Transform reader was executed on the original `beryl.prefab_ab`, `beryl.prefab_ab_shared`, and `ck_chushi_hair.prefab_ab` reference samples. UnityFS block metadata required **16-byte alignment** after the bundle header; the compressed metadata was at the beginning of these files.
+
+| Source bundle | GameObjects | Transforms | Root Transforms |
+| --- | ---: | ---: | ---: |
+| `beryl.prefab_ab` | 3 | 3 | 1 |
+| `beryl.prefab_ab_shared` | 3 | 3 | 1 |
+| `ck_chushi_hair.prefab_ab` | 69 | 69 | 1 |
+
+The Beryl root has children named `Beryl` and `Beryl_Weapon`, confirmed by `Transform.m_Children` pointers and each child's `m_Father` pointer. The Chushi hair prefab root is `CK_ChuShi_Hair` and has two immediate children. Its 69 named Transform objects include `male_Bip001 L Thigh`, `male_Bip001 R Finger2`, `male_Bip001 L Foot`, `male_skirt_22`, and `male_skirt_27`. This is a **Transform hierarchy**, not a verified skinning bone count. These findings are from original object bytes, not just TypeTree schema names.
+
+The metadata-only local validation output is `ulala_verified_transform_hierarchies.json`. No original asset payload was uploaded.
