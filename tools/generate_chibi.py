@@ -155,6 +155,18 @@ for idx,name in enumerate(NAMES):
   # Layered glove wraps make hand and forearm shapes visually coherent.
   oval("Glove",(side*.47,-.045,.965),(.155,.145,.145),leather)
   oval("GloveTrim",(side*.45,-.035,1.075),(.175,.17,.055),gold)
+ # Sculpted skirt panels cover the gap between tunic and boots.
+ hem=material("hem_trim",tuple(min(.95,v*.85+.12) for v in COLORS[idx]))
+ for side in (-1,1):
+  panel=loft("TunicHem",[
+   (.57,.105,.055,-.195),(.64,.14,.075,-.195),
+   (.73,.16,.08,-.185),(.80,.125,.065,-.18)],cloth)
+  panel.location.x=side*.17
+  oval("HemRivet",(side*.17,-.275,.735),(.047,.028,.048),gold)
+ # Small upper-body seam details read better than large floating ornaments.
+ oval("Collar",(0,-.19,1.40),(.24,.13,.085),hem)
+ for side in (-1,1):
+  oval("ShoulderSeam",(side*.34,-.13,1.34),(.09,.07,.18),hem)
  # A face-frame fringe and sideburns soften the blocky cap silhouette.
  for side in (-1,1):
   oval("HairSide",(side*.39,-.10,2.015),(.13,.20,.21),hair)
