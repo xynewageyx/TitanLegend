@@ -38,6 +38,7 @@ var action_detail: Label
 var action_button: Button
 var astral_shop_button: Button
 var weapon_hero_slot: int = 0
+var loot_selected_slot: int = -1
 var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
@@ -662,33 +663,54 @@ func _refresh(_unused: int = 0) -> void:
  weapon_hero_button.visible = current_tab == "jewels"
  weapon_upgrade_button.visible = current_tab == "jewels"
  weapon_rarity_button.visible = current_tab == "jewels"
+ loot_equipped_overview.visible = current_tab == "jewels"
  loot_select_button.visible = current_tab == "jewels"
  loot_equip_button.visible = current_tab == "jewels"
  loot_compare_label.visible = current_tab == "jewels"
  loot_sell_button.visible = current_tab == "jewels"
- hardening_slot_grid.visible = current_tab == "jewels"
  hardening_select_button.visible = current_tab == "jewels"
  hardening_upgrade_button.visible = current_tab == "jewels"
  attribute_select_button.visible = current_tab == "jewels"
  attribute_apply_button.visible = current_tab == "jewels"
  attribute_reroll_button.visible = current_tab == "jewels"
  if current_tab == "jewels":
+  var equipped_lines: PackedStringArray = []
+  var occupied_count: int = 0
+  for slot in range(GameManager.LOOT_SLOTS.size()):
+   var equipped_id: int = int(GameManager.equipped_loot[weapon_hero_slot][slot])
+   var equipped_item: Dictionary = GameManager.loot_item_by_id(equipped_id)
+   var item_text: String = "Leer" if equipped_item.is_empty() else GameManager.WEAPON_RARITIES[clampi(int(equipped_item.get("rarity", 0)), 0, 5)] + " Stufe " + str(int(equipped_item.get("level", 1)))
+   if not equipped_item.is_empty():
+    occupied_count += 1
+   equipped_lines.append("%s: %s" % [GameManager.LOOT_SLOTS[slot], item_text])
+  loot_equipped_overview.text = "Held %d – Ausrüstung %d/%d | Inventar %d/%d" % [weapon_hero_slot + 1, occupied_count, GameManager.LOOT_SLOTS.size(), GameManager.equipment_inventory.size(), GameManager.MAX_LOOT_ITEMS]
+  var rarity_colors := [Color("#aab0b5"), Color("#64c45c"), Color("#4aa8ff"), Color("#ffce54"), Color("#ff8840"), Color("#c47bff")]
+  for slot in range(loot_slot_buttons.size()):
+   var tile: Button = loot_slot_buttons[slot]
+   var worn: Dictionary = GameManager.loot_item_by_id(int(GameManager.equipped_loot[weapon_hero_slot][slot]))
+   var tier: int = clampi(int(worn.get("rarity", 0)), 0, 5)
+   var slot_icons := ["◉", "▣", "◆", "◈", "◈", "▰", "▰", "✦", "✦", "▾", "▾", "▿", "▿"]
+   tile.text = slot_icons[slot] + " " + GameManager.LOOT_SLOTS[slot] + "\n" + ("Leer" if worn.is_empty() else GameManager.WEAPON_RARITIES[tier] + " Lv." + str(worn.get("level", 1)))
+   tile.modulate = Color.WHITE if worn.is_empty() else rarity_colors[tier]
+   tile.button_pressed = slot == loot_selected_slot
   weapon_hero_button.text = "Waffe Held %d / 4 wechseln" % (weapon_hero_slot + 1)
   var weapon_level: int = GameManager.weapon_levels[weapon_hero_slot]
   var weapon_cost: int = GameManager.weapon_upgrade_cost(weapon_hero_slot)
   weapon_upgrade_button.text = "Waffe %d → %d | %d Gold" % [weapon_level, weapon_level + 1, weapon_cost] if weapon_cost > 0 else "Waffe MAX"
   weapon_upgrade_button.disabled = weapon_cost <= 0 or GameManager.current_gold < weapon_cost
-  if GameManager.equipment_inventory.is_empty():
-   loot_select_button.text = "Inventar: leer (Boss-Drops)"
+  var filtered_loot := _matching_loot_indices()
+  if filtered_loot.is_empty():
+   loot_select_button.text = "Keine Gegenstände für diesen Platz" if loot_selected_slot >= 0 else "Inventar: leer (Boss-Drops)"
    loot_equip_button.text = "Kein Gegenstand vorhanden"
    loot_equip_button.disabled = true
    loot_compare_label.text = "Kein Gegenstand zum Vergleichen."
    loot_sell_button.disabled = true
    loot_sell_button.text = "Nichts verkaufen"
   else:
-   loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
+   if not filtered_loot.has(loot_selected_index):
+    loot_selected_index = filtered_loot[0]
    var selected_loot: Dictionary = GameManager.equipment_inventory[loot_selected_index]
-   loot_select_button.text = "Inventar %d/%d: %s" % [loot_selected_index + 1, GameManager.equipment_inventory.size(), GameManager.loot_item_name(selected_loot)]
+   loot_select_button.text = "Inventar %d/%d: %s" % [filtered_loot.find(loot_selected_index) + 1, filtered_loot.size(), GameManager.loot_item_name(selected_loot)]
    loot_equip_button.text = "Held %d ausruesten: %s" % [weapon_hero_slot + 1, GameManager.LOOT_SLOTS[int(selected_loot["slot"])]]
    loot_equip_button.disabled = int(GameManager.equipped_loot[weapon_hero_slot][int(selected_loot["slot"])]) == int(selected_loot["id"])
    var comparison: Dictionary = GameManager.compare_loot(weapon_hero_slot, int(selected_loot["id"]))
@@ -717,13 +739,6 @@ func _refresh(_unused: int = 0) -> void:
   var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
   var assigned_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][hardening_field])
   var reroll_cost: int = GameManager.hardening_reroll_cost(weapon_hero_slot, hardening_field)
-  for field_index in range(hardening_slot_buttons.size()):
-   var field_level: int = int(GameManager.hardening_levels[weapon_hero_slot][field_index])
-   var field_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][field_index])
-   var slot_button: Button = hardening_slot_buttons[field_index]
-   slot_button.text = "◆ %d\nLv %d" % [field_index + 1, field_level]
-   slot_button.tooltip_text = str(GameManager.HARDENING_NAMES[field_attribute])
-   ADVENTURE_THEME.button(slot_button, field_index == hardening_field, true)
   hardening_select_button.text = "Feld %d: %s (Rang %d)" % [hardening_field + 1, GameManager.HARDENING_NAMES[assigned_attribute], hardening_level]
   attribute_select_button.text = "Waehlen: " + str(GameManager.HARDENING_NAMES[attribute_select_index])
   attribute_apply_button.text = "Attribut setzen: %d Gold" % reroll_cost
@@ -777,14 +792,18 @@ func _refresh_loot() -> void:
  _refresh()
 
 func _next_loot_item() -> void:
- if not GameManager.equipment_inventory.is_empty():
-  loot_selected_index = (loot_selected_index + 1) % GameManager.equipment_inventory.size()
+ var matches := _matching_loot_indices()
+ if not matches.is_empty():
+  var current := matches.find(loot_selected_index)
+  loot_selected_index = matches[(current + 1) % matches.size()]
  _refresh()
 
 func _equip_selected_loot() -> void:
- if GameManager.equipment_inventory.is_empty():
+ var matches := _matching_loot_indices()
+ if matches.is_empty():
   return
- loot_selected_index = posmod(loot_selected_index, GameManager.equipment_inventory.size())
+ if not matches.has(loot_selected_index):
+  loot_selected_index = matches[0]
  var item: Dictionary = GameManager.equipment_inventory[loot_selected_index]
  var item_id: int = int(item.get("id", -1))
  var worn_by: int = GameManager.loot_equipped_hero(item_id)
@@ -941,3 +960,19 @@ func _buy_astral_reward() -> void:
  if battle_manager != null:
   battle_manager.buy_astral_reward()
  _refresh()
+
+func _matching_loot_indices() -> Array[int]:
+ var matches: Array[int] = []
+ for index in range(GameManager.equipment_inventory.size()):
+  if loot_selected_slot < 0 or int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
+   matches.append(index)
+ return matches
+
+
+func _select_loot_slot(slot_index: int) -> void:
+ loot_selected_slot = -1 if loot_selected_slot == slot_index else clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
+ var matches := _matching_loot_indices()
+ if not matches.is_empty():
+  loot_selected_index = matches[0]
+ _refresh_loot()
+
