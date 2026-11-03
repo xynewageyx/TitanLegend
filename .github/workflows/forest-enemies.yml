@@ -6,6 +6,9 @@ on:
       - 'tools/blender/generate_forest_mobs.py'
       - '.github/workflows/forest-enemies.yml'
       - 'tools/tests/test_forest_animations.gd'
+      - 'scripts/battle_manager.gd'
+      - 'scripts/forest_enemy_visual.gd'
+      - 'scripts/enemies/forest_enemy_visual.gd'
 jobs:
   build:
     runs-on: ubuntu-latest
