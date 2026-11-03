@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 16:49 UTC**
-Git-Stand: **b58b0bceac189d82874b45046bad52975df5ddfd** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 16:50 UTC**
+Git-Stand: **2f17499fe08be5fb0312a03d8382f1841655e65e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,6 @@ Git-Stand: **b58b0bceac189d82874b45046bad52975df5ddfd** auf Branch **main**
 - `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 - `cd297e7` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `8a53c49` (2026-11-03): fix(chibi): bind pupils to head, pair hunter pouches and reuse eye/sleeve materials
-- `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
@@ -31,7 +30,6 @@ Git-Stand: **b58b0bceac189d82874b45046bad52975df5ddfd** auf Branch **main**
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
 - `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 - `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
-- `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
