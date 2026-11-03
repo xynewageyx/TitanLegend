@@ -75,7 +75,10 @@ static func validate_build(level: int, value: Variant) -> Array:
     continue
    for column in range(3):
     var index: int = row * 3 + column
-    var desired: int = clampi(int(value[branch][index]), 0, MAX_RANK)
+    var saved_value: Variant = value[branch][index]
+    if not saved_value is int:
+     continue
+    var desired: int = clampi(saved_value, 0, MAX_RANK)
     for rank in range(desired):
      if not upgrade(level, result, branch, index):
       break
