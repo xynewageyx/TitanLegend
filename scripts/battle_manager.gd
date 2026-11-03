@@ -413,7 +413,6 @@ func _damage_heroes(amount: int, targets: Array[int], max_hp_fraction: float = 0
  _refresh_tank_defense_visuals()
  if team_hp <= 0:
   _on_team_defeat("normal")
- else:
 
 func _has_wounded_hero() -> bool:
  for i in range(4):
