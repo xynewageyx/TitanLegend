@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 17:13 UTC**
-Git-Stand: **fe681ec5c7279df665231c1e7b08416b3609e1bf** auf Branch **main**
+Git-Stand: **652b3259a62cc44e1b0246beabecdebe499866c9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,28 +10,24 @@ Git-Stand: **fe681ec5c7279df665231c1e7b08416b3609e1bf** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `fe681ec` (2026-11-03): test(chibi): verify five named animation clips and rotation channels in each GLB
 - `0575c6d` (2026-11-03): Generate eleven original chibi hero GLB assets
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `40fcbff` (2026-11-03): Duck music and ambience while boss warning plays (#21)
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
 
 ### Landschaften — Landschaften-Chat
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `7cfdf7c` (2026-11-03): Require server access response before displaying moderation menu
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
@@ -41,15 +37,14 @@ Git-Stand: **fe681ec5c7279df665231c1e7b08416b3609e1bf** auf Branch **main**
 - `8f4766a` (2026-11-03): Apply graphics quality to pre-existing scene lights and particles at startup
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `7cfdf7c` (2026-11-03): Require server access response before displaying moderation menu
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
+- `652b325` (2026-11-03): Avoid updating SFX player volumes on every ambience and ducking tween frame (#22)
 - `40fcbff` (2026-11-03): Duck music and ambience while boss warning plays (#21)
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
