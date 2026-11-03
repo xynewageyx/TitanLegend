@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 17:02 UTC**
-Git-Stand: **d52d8b1ea8925fb04beddb3d8d492d6b4917a506** auf Branch **main**
+Git-Stand: **80e3399e68fb4795492abfa9903e7518ed45dedb** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,36 +15,40 @@ Git-Stand: **d52d8b1ea8925fb04beddb3d8d492d6b4917a506** auf Branch **main**
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
 - `d52d8b1` (2026-11-03): fix(talents): safely ignore non-integer saved ranks during talent build recovery
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
 - `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 - `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `8d0e78b` (2026-11-03): Fix typed moderation admin smoke test access for Godot static analyzer
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Audio — Audio-Erstellung-Chat
 - `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 
 ## Bereichsübergreifende Änderungen
 
