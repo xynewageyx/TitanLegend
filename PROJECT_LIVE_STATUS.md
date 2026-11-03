@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 04:02 UTC**
-Git-Stand: **adbaeea2e3ab5facc7812fe3296b287b972c7ff8** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 04:04 UTC**
+Git-Stand: **08c0d92aff962cb2b721d846be210ddc1e8b9d65** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,7 +11,6 @@ Git-Stand: **adbaeea2e3ab5facc7812fe3296b287b972c7ff8** auf Branch **main**
 - `25a42f0` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
 - `3620434` (2026-11-03): Generate eleven original chibi hero GLB assets
-- `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
@@ -20,7 +19,7 @@ Git-Stand: **adbaeea2e3ab5facc7812fe3296b287b972c7ff8** auf Branch **main**
 - `a10aad8` (2026-11-03): Generate seamless layered ambience for ten biomes (#17)
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
+- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
 - `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
@@ -34,6 +33,7 @@ Git-Stand: **adbaeea2e3ab5facc7812fe3296b287b972c7ff8** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `08c0d92` (2026-11-03): Add regression coverage for graphics visual cache cleanup
 - `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
