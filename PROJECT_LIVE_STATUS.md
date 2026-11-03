@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 19:43 UTC**
-Git-Stand: **5d2bd06eff4ffb146c6dada681113d03770ff371** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 19:44 UTC**
+Git-Stand: **3bbca2725d7a3c83a4d46a69bbcd1913488c7dc9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,19 +9,19 @@ Git-Stand: **5d2bd06eff4ffb146c6dada681113d03770ff371** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
-- `6925c8c` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
@@ -29,10 +29,11 @@ Git-Stand: **5d2bd06eff4ffb146c6dada681113d03770ff371** auf Branch **main**
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `9ad6e49` (2026-11-03): Guard developer-only FPS overlay and render-scale diagnostics with regression test
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `5d2bd06` (2026-11-03): Test owner-access grants and revocation for authenticated peers
@@ -42,16 +43,18 @@ Git-Stand: **5d2bd06eff4ffb146c6dada681113d03770ff371** auf Branch **main**
 - `d3ebfa7` (2026-11-03): Provide trusted login callback for binding verified moderation peer identities
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 - `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
+- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ## Bereichsübergreifende Änderungen
 
