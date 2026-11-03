@@ -1107,6 +1107,8 @@ func finish_wave() -> void:
   return
  battle_active = false
  _finishing = true
+ if not afk_farming:
+  _play_forest_enemy_clip("death", true)
  if afk_farming:
   # Eine abgeschlossene AFK-Welle gibt maximal alle 60 Sekunden Belohnung.
   # Niemals Bossloot vergeben oder die gespeicherte Stage/Welle erhoehen.
@@ -1156,8 +1158,17 @@ func _update_enemy_casualties() -> void:
  survivors = clampi(survivors, 0, enemy_visuals.size())
  for index in range(survivors, enemy_visuals.size()):
   var mob: Node3D = enemy_visuals[index]
-  if is_instance_valid(mob):
-   mob.visible = false
+  if is_instance_valid(mob) and mob.visible:
+   var presenter: Node = mob.get_node_or_null("ForestModel")
+   if presenter != null and presenter.has_method("play_clip") and presenter.call("play_clip", "death"):
+    var death_tween: Tween = create_tween()
+    death_tween.tween_interval(0.6)
+    death_tween.tween_callback(func() -> void:
+     if is_instance_valid(mob):
+      mob.visible = false
+    )
+   else:
+    mob.visible = false
  enemies_remaining = survivors
 
 # Visual-only boss animation bridge. Combat decisions, damage and timing
