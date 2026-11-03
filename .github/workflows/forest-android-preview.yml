@@ -60,7 +60,7 @@ jobs:
           renderer/rendering_method.mobile="gl_compatibility"
           textures/vram_compression/import_etc2_astc=true
           EOF
-          cat > preview/icon.svg <<\u0027SVG\u0027
+          cat > preview/icon.svg <<'SVG'
           <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="22" fill="#27573a"/><path d="M64 15 20 80h26L31 101h66L82 80h26Z" fill="#8ed36b"/><rect x="57" y="77" width="14" height="34" fill="#9c653b"/></svg>
           SVG
           cp export_presets.cfg preview/export_presets.cfg
@@ -68,6 +68,9 @@ jobs:
           sed -i 's|package/unique_name="org.titanlegends.idlerpg"|package/unique_name="org.titanlegends.forestpreview"|' preview/export_presets.cfg
           sed -i 's|package/name="Titan Legends"|package/name="Titan Forest Test"|' preview/export_presets.cfg
           grep -F 'package/unique_name="org.titanlegends.forestpreview"' preview/export_presets.cfg
+          grep -F '[preset.0]' preview/export_presets.cfg
+          grep -F 'name="Android"' preview/export_presets.cfg
+          test -s preview/icon.svg
           grep -F 'textures/vram_compression/import_etc2_astc=true' preview/project.godot
       - name: Install Godot 4.7.2 and Android export templates
         run: |
