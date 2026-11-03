@@ -12,6 +12,9 @@ on:
     paths:
       - 'scripts/chat/**'
       - 'tests/test_chat_moderation*.gd'
+      - 'tests/test_chat_admin_scene.gd'
+      - 'scenes/chat_moderation_admin.tscn'
+      - 'scenes/main.tscn'
       - '.github/workflows/chat-moderation-validate.yml'
   workflow_dispatch:
 permissions:
