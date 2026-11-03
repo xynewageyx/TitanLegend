@@ -1,7 +1,7 @@
 name: Godot project validation
 on:
   push:
-    branches: [main]
+    branches: [main, feature/skill-vfx-foundation]
   pull_request:
   workflow_dispatch:
 
