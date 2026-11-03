@@ -109,6 +109,14 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("hero_picker.select(selected_hero)", refresh)
         self.assertIn("branch_picker.select(selected_branch)", refresh)
 
+    def test_talent_details_and_purchases_use_validated_builds(self):
+        detail = MENU[MENU.index("func _show_talent_detail("):MENU.index("func _on_talent_pressed(")]
+        press = MENU[MENU.index("func _on_talent_pressed("):]
+        normalized = "TREES.validate_build(GameManager.character_level, team.get_talent_build_v2(selected_hero))"
+        self.assertIn(normalized, detail)
+        self.assertIn(normalized, press)
+        self.assertIn("TREES.can_upgrade(GameManager.character_level, build, selected_branch, talent_index)", press)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
