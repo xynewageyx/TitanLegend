@@ -25,6 +25,8 @@ func _run() -> void:
 	check(authority.bind_authenticated_peer(42, "normal-account"), "Verified normal account should bind")
 	check(not authority.decide_for_peer(42, "MOD-000001", "approve", 2, "test", 1800000000).get("ok", false), "Normal player must not approve")
 	check(authority.evidence_for_peer(42, "MOD-000001").is_empty(), "Normal player must not read evidence")
+	check(not authority.bind_authenticated_peer(42, "owner-account"), "Bound normal account must not elevate to owner")
+	check(authority._account_for_peer(42) == "normal-account", "Rejected identity change must preserve original binding")
 	check(authority.bind_authenticated_peer(43, "owner-account"), "Verified owner should bind")
 	check(gateway._is_owner("owner-account"), "Owner should pass owner identity check")
 	check(not gateway._is_owner("normal-account"), "Normal account must fail owner check")
