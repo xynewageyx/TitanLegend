@@ -133,6 +133,25 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
    "interrupt_mage":
     tween.tween_property(accent, "rotation:x", 2.8, 0.42)
   tween.tween_property(accent_material, "albedo_color:a", 0.0, 0.42)
+  # A brief expanding impact disc emphasizes the end of the cast.
+  # Reuse one primitive mesh; no particle emitter or dynamic light.
+  var impact := MeshInstance3D.new()
+  var impact_mesh := CylinderMesh.new()
+  impact_mesh.top_radius = 0.38
+  impact_mesh.bottom_radius = 0.38
+  impact_mesh.height = 0.035
+  impact.mesh = impact_mesh
+  var impact_material := StandardMaterial3D.new()
+  impact_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+  impact_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+  impact_material.albedo_color = Color(tint.r, tint.g, tint.b, 0.0)
+  impact.material_override = impact_material
+  effect.add_child(impact)
+  impact.position = Vector3(destination.x, 0.15, destination.z)
+  impact.scale = Vector3(0.15, 1.0, 0.15)
+  tween.tween_interval(0.24)
+  tween.tween_property(impact, "scale", Vector3(1.8, 1.0, 1.8), 0.18)
+  tween.tween_property(impact_material, "albedo_color:a", 0.5, 0.10)
  tween.chain().tween_callback(func() -> void:
   _effects.erase(effect)
   effect.queue_free()
