@@ -121,7 +121,11 @@ func _register_visual(node: Node) -> void:
 		return
 	if not cached_visuals.has(node):
 		cached_visuals.append(node)
+		node.tree_exiting.connect(_on_visual_exiting.bind(node), CONNECT_ONE_SHOT)
 	_apply_visual_quality(node)
+
+func _on_visual_exiting(node: Node) -> void:
+	cached_visuals.erase(node)
 
 func _apply_visual_quality(node: Node) -> void:
 	# Preserve each visual's authored settings, including intentionally disabled shadows.
