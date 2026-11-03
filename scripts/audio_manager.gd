@@ -49,6 +49,8 @@ func _ready() -> void:
   add_child(player)
   effects.append(player)
  _apply_volumes()
+ # Prepare short, latency-sensitive shared cues before the first boss cast.
+ _prewarm_critical_events()
  audio_backend_changed.emit("godot")
 
 # Crossfades and boss ducking update only ambience/music, not all SFX voices.
@@ -188,6 +190,10 @@ func stop_sfx() -> void:
 
 # Named audio events keep gameplay independent from asset paths.
 const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
+
+func _prewarm_critical_events() -> void:
+ for event_name in ["boss_warning", "combat_interrupt", "skill_interrupt"]:
+  _get_event_stream(event_name)
 
 func _get_event_stream(event_name: String) -> AudioStream:
  if _event_stream_cache.has(event_name):
