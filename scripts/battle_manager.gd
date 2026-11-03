@@ -752,22 +752,14 @@ func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  var skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
  last_ability = str(skill.get("name", "Skill"))
  if role == 2 and choice == 8:
-  if _has_wounded_hero():
-   _apply_heal_over_time(slot, skill)
-  else:
-   prepared_healing[slot] = choice
-   last_ability = "Erneuerung vorbereitet"
+  _apply_heal_over_time(slot, skill)
   return
  var healing: float = float(skill.get("heal", 0.0))
  if role == 2 and healing > 0.0:
   var class_id: int = int(team_formation.class_ids[slot]) if team_formation != null else 9
   healing *= float(TitanCombatBalance.healer_profile(class_id).get("direct", 1.0))
   healing *= 1.0 + float(_hero_progression(slot).get("healing", 0.0))
-  if _has_wounded_hero():
-   _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), str(skill.get("effect", "")) == "group_heal")
-  else:
-   prepared_healing[slot] = choice
-   last_ability = "Heilung vorbereitet"
+  _heal_heroes(maxi(1, roundi(float(team_max_hp) * healing)), str(skill.get("effect", "")) == "group_heal")
   # Healing is exclusive: never apply legacy damage on the same cast.
   return
  var power: float = float(skill.get("power", 0.0))
