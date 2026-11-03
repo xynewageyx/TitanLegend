@@ -19,6 +19,15 @@ func on_verified_login(peer_id: int, verified_account_id: String) -> bool:
 		return false
 	return authority.bind_authenticated_peer(peer_id, verified_account_id)
 
+# Called by the trusted session manager on logout or token revocation.
+# Removes access immediately without waiting for the network disconnect.
+func on_verified_logout(peer_id: int) -> void:
+	if not multiplayer.is_server() or authority == null:
+		return
+	authority.disconnect_peer(peer_id)
+	if multiplayer.get_peers().has(peer_id):
+		receive_admin_access.rpc_id(peer_id, false)
+
 func configure_server_authority(server_authority: ChatModerationPeerAuthority) -> void:
 	if not multiplayer.is_server():
 		push_error("Only the multiplayer server can configure moderation authority")
