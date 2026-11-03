@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/worlds/grasland/grasland.glb" id="1_gras"]
 
@@ -6,9 +6,14 @@
 
 [ext_resource type="Script" path="res://scenes/grasland_orbit_camera.gd" id="3_camera"]
 
+[ext_resource type="Script" path="res://scenes/forest_battle_arena_controller.gd" id="4_arena"]
+
 [node name="GraslandPreview" type="Node3D"]
 
 [node name="Landscape" parent="." instance=ExtResource("1_gras")]
+
+[node name="BattleArenaController" type="Node3D" parent="."]
+script = ExtResource("4_arena")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-48, -25, 0)
