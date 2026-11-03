@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 18:35 UTC**
-Git-Stand: **006b2879acbe585a512667bab61549aecb3e52db** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 19:02 UTC**
+Git-Stand: **d3ebfa718eb910852bb3847f2097a2a60524298c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,55 +10,53 @@ Git-Stand: **006b2879acbe585a512667bab61549aecb3e52db** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
 - `6925c8c` (2026-11-03): Generate eleven original chibi hero GLB assets
-- `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
 
 ### Landschaften — Landschaften-Chat
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### UI — UI-Chat
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 - `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `efcaa3c` (2026-11-03): Test adaptive resolution steps for severe sustained FPS drops
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `d3ebfa7` (2026-11-03): Provide trusted login callback for binding verified moderation peer identities
 - `94d8bf2` (2026-11-03): Regression-test admin revocation clearing cached private evidence
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Audio — Audio-Erstellung-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
+- `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
-- `f603da3` (2026-11-03): fix(forest-ci): defer runtime test until SceneTree children can run _ready
+- `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 
 ## Bereichsübergreifende Änderungen
 
