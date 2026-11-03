@@ -51,15 +51,19 @@ func _ready() -> void:
  _apply_volumes()
  audio_backend_changed.emit("godot")
 
-func _apply_volumes() -> void:
+# Crossfades and boss ducking update only ambience/music, not all SFX voices.
+func _apply_background_volumes() -> void:
  if ambience != null:
   ambience.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4 * _boss_duck_gain) * float(_ambience_gains.get(ambience, 1.0))
  if ambience_next != null:
-  ambience_next.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4) * float(_ambience_gains.get(ambience_next, 0.0))
- if boss_warning_player != null:
-  boss_warning_player.volume_linear = 0.0 if sfx_muted else sfx_volume
+  ambience_next.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4 * _boss_duck_gain) * float(_ambience_gains.get(ambience_next, 0.0))
  if music != null:
   music.volume_linear = 0.0 if music_muted else music_volume * _boss_duck_gain
+
+func _apply_volumes() -> void:
+ _apply_background_volumes()
+ if boss_warning_player != null:
+  boss_warning_player.volume_linear = 0.0 if sfx_muted else sfx_volume
  for player in effects:
   player.volume_linear = 0.0 if sfx_muted else sfx_volume
 
@@ -81,7 +85,7 @@ func set_sfx_muted(value: bool) -> void:
 
 func _set_boss_duck_gain(value: float) -> void:
  _boss_duck_gain = clampf(value, BOSS_DUCK_LEVEL, 1.0)
- _apply_volumes()
+ _apply_background_volumes()
 
 func _animate_boss_duck(target: float, duration: float) -> void:
  if _boss_duck_tween != null and _boss_duck_tween.is_running():
@@ -118,7 +122,7 @@ func play_bgm(stream: AudioStream) -> void:
 
 func _set_ambience_gain(value: float, player: AudioStreamPlayer) -> void:
  _ambience_gains[player] = clampf(value, 0.0, 1.0)
- _apply_volumes()
+ _apply_background_volumes()
 
 func play_ambience(event_name: String) -> void:
  var stream: AudioStream = _get_event_stream(event_name)
