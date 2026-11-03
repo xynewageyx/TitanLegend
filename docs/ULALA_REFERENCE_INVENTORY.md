@@ -56,3 +56,23 @@ Zusätzlich nachgewiesene Pfadnamen: `models/hero/base/shizhuang/ss10_weapon/`, 
 **Priorisierte Arbeit:** (1) Klassen- und Haarvarianten, (2) Ausrüstungsslot-Mapping, (3) Animationsgruppen und Skeleton-Kompatibilität, (4) Gegner-/Begleiter-Typen, (5) mobile Material- und Performance-Budgets. Diese Reihenfolge ist ein Arbeitsplan, keine Behauptung bereits entschlüsselter Daten.
 
 **Verbindlich:** Nur eigene oder eindeutig lizenzierte Spielassets übernehmen. Keine Unity-Originaldateien ins öffentliche Repository übertragen.
+
+## Binärprüfung: echte UnityFS-Dateiköpfe (2026-11-03)
+Vier ausgewählte Archivdateien wurden über libarchive **inhaltlich gelesen**. Alle vier beginnen mit `UnityFS\0`, nennen Formatversion `5.x.x` und Unity-Editorversion `2019.4.16f1c1`. Das ist eine echte Headerprüfung, **keine** Dekodierung der enthaltenen Prefab-/Animation-Objekte.
+
+| Archivdatei | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `lib/character/base/beryl.prefab_ab` | 3.657 | `024bc8352e2b82a2ac6d02c8eb500bedcf4314d389313224c9dfef7e2a3c04cf` |
+| `lib/character/base/brook.prefab_ab` | 4.456 | `82c8ec260cc5d8b258a428d816c2265c28d339a09c4fc8df8e2858c8991b7ba7` |
+| `lib/character/base/chad.prefab_ab` | 4.135 | `02a89fc55b7be567d581dce83b36e6e3190dd30f8a7b652ed7caed428ef13d77` |
+| `models/expression/animationclip_ab_list` | 98.568 | `d09f7d46e3c1e81045f0decd862b9f38d4c3d70985618f6388a6103f82c552a5` |
+
+**Nächster technischer Schritt:** Einen mit Unity 2019.4 kompatiblen Bundle-Parser in einer isolierten Analyseumgebung nutzen; Objektklassen, Transform-Hierarchien, Animator-/AnimationClip-Referenzen und Mesh-/Material-Metadaten inventarisieren. Keine Originalressourcen oder urheberrechtlich geschützten Assets im öffentlichen Repo ablegen.
+
+### Präzisierte Teilmengen nach Verzeichnispfad
+Die folgenden Zahlen zählen **nur Einträge mit Dateigröße > 0 innerhalb des exakt genannten Pfads**; sie sind nicht mit den breiten Stichwortzahlen oben vergleichbar:
+- `lib/character/base/`: 122 Einträge, 17.285.758 Bytes
+- `models/hero/base/shizhuang/`: 87 Einträge, 15.874.831 Bytes
+- `lib/monsters/`: 157 Einträge, 13.462.638 Bytes
+- `models/pet/`: 14 Einträge, 4.651.596 Bytes
+- `lib/scripts/main/skill/`: 17 Einträge, 676.600 Bytes
