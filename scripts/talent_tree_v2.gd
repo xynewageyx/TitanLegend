@@ -39,6 +39,9 @@ static func can_upgrade(level: int, build: Array, branch: int, talent: int) -> b
  for branch_ranks in build:
   if not branch_ranks is Array or branch_ranks.size() != TALENTS_PER_BRANCH:
    return false
+  for saved_rank in branch_ranks:
+   if not saved_rank is int or saved_rank < 0 or saved_rank > MAX_RANK:
+    return false
  var current_rank: int = int(build[branch][talent])
  if current_rank < 0 or current_rank >= MAX_RANK:
   return false
