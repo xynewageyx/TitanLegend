@@ -67,6 +67,13 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_direct_game_load_rechecks_character_identity(self):
+        manager = self.read_script("save_manager.gd")
+        load = manager.split('func load_game() -> void:', 1)[1].split('func get_saved_battle_progress()', 1)[0]
+        self.assertIn('CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot)', load)
+        self.assertIn('CHARACTER_PROFILES.character_save_path(registry, active_character_slot) != SAVE_PATH', load)
+        self.assertIn('Character load blocked: identity or save path mismatch.', load)
+
     def test_character_save_name_identity_and_visible_startup_error(self):
         slots = self.read_script("character_save_slots.gd")
         startup = self.read_script("character_startup.gd")
