@@ -76,3 +76,17 @@ Die folgenden Zahlen zählen **nur Einträge mit Dateigröße > 0 innerhalb des 
 - `lib/monsters/`: 157 Einträge, 13.462.638 Bytes
 - `models/pet/`: 14 Einträge, 4.651.596 Bytes
 - `lib/scripts/main/skill/`: 17 Einträge, 676.600 Bytes
+
+## UnityFS-LZ4-Dekompression nachgewiesen (2026-11-03)
+Die vier folgenden Referenzdateien wurden aus dem geteilten 7z-Archiv selektiv extrahiert. Ein isolierter Python-Parser hat die UnityFS-Header (Formatversion 7), die 16-Byte-Ausrichtung, die LZ4-komprimierten Blockinformationen, die Blockliste und den einzigen internen Dateieintrag pro Bundle verarbeitet. Die Blocknutzdaten wurden erfolgreich dekomprimiert; **das Unity SerializedFile-Objektmodell wurde noch nicht interpretiert**.
+
+| UnityFS-Datei | Bundle-Bytes | LZ4-Blöcke | Entpackte Bytes | Interner Name | SHA-256 der entpackten Daten |
+| --- | ---: | ---: | ---: | --- | --- |
+| `lib/character/base/beryl.prefab_ab` | 3.657 | 1 | 9.492 | `CAB-66ddda5bddc5ca5f01d54b4871fca5d2` | `fa9f43acd8afa0f9` (Präfix) |
+| `lib/character/base/brook.prefab_ab` | 4.456 | 1 | 13.180 | `CAB-cf94a32a8cdd9ae1982649060964e00d` | `cba0dadd946b816d` (Präfix) |
+| `lib/character/base/beryl.prefab_ab_shared` | 142.249 | 3 | 281.191 | `CAB-2062281392ae861281b59ebda30e4835` | `6d2c46a1a2ba7731` (Präfix) |
+| `models/expression/animationclip_ab_list` | 98.568 | 19 | 2.446.852 | `CAB-6c3de20da4523b0bc14cd7fc9b065e97` | `2d0d18dabc7e2e98` (Präfix) |
+
+Die Prüfsummen in dieser Tabelle sind ausdrücklich **16-stellige Präfixe**, nicht vollständige SHA-256-Hashes.
+
+**Nächste Schritte für die zuständigen Bereiche:** Unity SerializedFile-Header und TypeTree prüfen, danach lediglich Struktur-Metadaten (Objektklassen, Referenzen, Skeleton-/Clip-Zuordnung) dokumentieren. Proprietäre Original-Meshes, Animationen, Sounds und Texturen nicht in Titan Legends oder das öffentliche GitHub-Repository übernehmen.
