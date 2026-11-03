@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 17:05 UTC**
-Git-Stand: **9566d403917f3ba6bd92c98ad68cfc2994c2049a** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 17:10 UTC**
+Git-Stand: **f56ba0c686588311ac4d4c623b27c296542e4022** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,47 +10,47 @@ Git-Stand: **9566d403917f3ba6bd92c98ad68cfc2994c2049a** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `0575c6d` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `40fcbff` (2026-11-03): Duck music and ambience while boss warning plays (#21)
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Landschaften — Landschaften-Chat
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### UI — UI-Chat
 - `7cfdf7c` (2026-11-03): Require server access response before displaying moderation menu
 - `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
 - `0ef3b48` (2026-11-03): Test deduplicated scene visual cleanup connections
 - `8cada32` (2026-11-03): Prevent duplicate visual cleanup signal connections during scene cache rebuilds
 - `108ab6b` (2026-11-03): Regression-test initial graphics cache setup before applying quality
 - `8f4766a` (2026-11-03): Apply graphics quality to pre-existing scene lights and particles at startup
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `7cfdf7c` (2026-11-03): Require server access response before displaying moderation menu
 - `938ba6b` (2026-11-03): Add server-authorized moderation menu access handshake
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Audio — Audio-Erstellung-Chat
 - `40fcbff` (2026-11-03): Duck music and ambience while boss warning plays (#21)
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `80e3399` (2026-11-03): test(talents): cover recovery of malformed saved rank types
+- `312f754` (2026-11-03): feat(animation): differentiate melee, hunter and caster attack poses across classes
 
 ## Bereichsübergreifende Änderungen
 
