@@ -140,6 +140,16 @@ func play_skill_cast(role: int, choice: int) -> void:
   tint = Color("#5cbaff")
  elif role == 0 and choice == 8:
   tint = Color("#ff9650")
+ # Interrupts use the same class element color as their 3D VFX.
+ if choice == 7:
+  match class_id:
+   0: tint = Color("#d9d9f2") # Warrior: steel
+   1, 9: tint = Color("#ffd245") # Paladin / Priest: holy
+   2, 4: tint = Color("#4dff80") # Druid / Hunter: nature
+   3, 8: tint = Color("#73b3ff") # Shaman / Summoner: storm
+   5, 7: tint = Color("#ad59ff") # Rogue / Warlock: shadow
+   6: tint = Color("#59d6ff") # Mage: frost
+   10: tint = Color("#ff4d1a") # Brawler: fire
  var material: StandardMaterial3D = skill_flash.material_override as StandardMaterial3D
  if material != null:
   material.albedo_color = tint
