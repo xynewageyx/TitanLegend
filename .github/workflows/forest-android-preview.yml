@@ -123,7 +123,7 @@ jobs:
           fi
           test -s build/TitanLegends-Forest-FPS-Test.apk
           "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging build/TitanLegends-Forest-FPS-Test.apk | grep -E "^(package:|application-label:|sdkVersion:)"
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging build/TitanLegends-Forest-FPS-Test.apk | grep -F "name=\u0027org.titanlegends.forestpreview\u0027"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging build/TitanLegends-Forest-FPS-Test.apk | grep -F "package: name=\u0027org.titanlegends.forestpreview\u0027"
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose build/TitanLegends-Forest-FPS-Test.apk
           unzip -t build/TitanLegends-Forest-FPS-Test.apk | tail -n 2
           sha256sum build/TitanLegends-Forest-FPS-Test.apk
