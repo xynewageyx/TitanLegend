@@ -34,14 +34,27 @@ func use_legacy_save() -> void:
  SAVE_PATH = LEGACY_SAVE_PATH
  active_character_slot = -1
 var timer: Timer
+var session_ready: bool = false
 func _ready() -> void:
- load_game()
  timer = Timer.new()
  timer.wait_time = 30.0
- timer.autostart = true
  timer.timeout.connect(save_game)
  add_child(timer)
+ # The startup scene chooses a profile before any gameplay data is loaded.
+ # Never autosave the temporary legacy state during character selection.
+ if get_tree().current_scene != null and get_tree().current_scene.scene_file_path == "res://scenes/main.tscn":
+  begin_game_session()
+
+func begin_game_session() -> void:
+ if session_ready:
+  return
+ load_game()
+ session_ready = true
+ timer.start()
+
 func save_game() -> void:
+ if not session_ready:
+  return
  var data: Dictionary = {
   "version": 1, "astral_floor": 1, "astral_marks": 0, "gold": GameManager.current_gold,
   "last_active_unix": int(Time.get_unix_time_from_system()),
