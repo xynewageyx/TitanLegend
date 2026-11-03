@@ -33,6 +33,11 @@ func set_server_granted_visibility(allowed: bool) -> void:
 	open_button.visible = allowed
 	if not allowed:
 		admin_view.hide()
+		# Purge previously received private case data when access is revoked.
+		var controller := admin_view as ChatModerationAdminController
+		if controller != null and controller.panel != null:
+			controller.pending_cases.clear()
+			controller._select_case(0)
 
 func _toggle_panel() -> void:
 	if not server_granted_visibility:
