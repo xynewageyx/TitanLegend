@@ -23,7 +23,7 @@ permissions:
 
 # Only one preview build may publish the moving android-preview release.
 concurrency:
-  group: titan-legends-android-preview
+  group: titan-legends-android-${{ github.event_name == 'workflow_dispatch' && inputs.developer_fps && 'developer-fps' || 'preview' }}
   cancel-in-progress: true
 
 jobs:
@@ -237,7 +237,9 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      # Never distribute a developer-diagnostics build through the public preview release.
       - name: Publish direct APK download on GitHub Releases
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.developer_fps) }}
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
