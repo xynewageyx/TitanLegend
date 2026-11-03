@@ -1,44 +1,44 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 23:06 UTC**
-Git-Stand: **da8ba8b88f290c6c33a0e0ec9a50791b664068f8** auf Branch **main**
+Git-Stand: **d61899cfc853f6e03830c71c9668bdcd8a4014a1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Landschaften — Landschaften-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### UI — UI-Chat
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
 - `9ad6e49` (2026-11-03): Guard developer-only FPS overlay and render-scale diagnostics with regression test
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
@@ -48,15 +48,14 @@ Git-Stand: **da8ba8b88f290c6c33a0e0ec9a50791b664068f8** auf Branch **main**
 - `fe4e08f` (2026-11-03): Use centralized peer authorization for admin access RPC
 
 ### Audio — Audio-Erstellung-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
 - `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `422cd4c` (2026-11-03): fix(forest): loop idle and return to idle after hit or attack while preserving death state
+- `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 
 ## Bereichsübergreifende Änderungen
 
