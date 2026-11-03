@@ -14,6 +14,7 @@ var ambience_transition: Tween
 var _ambience_gains: Dictionary = {}
 const AMBIENCE_FADE_SECONDS: float = 0.8
 var music: AudioStreamPlayer
+var boss_warning_player: AudioStreamPlayer
 var effects: Array[AudioStreamPlayer] = []
 var music_volume: float = 1.0
 var sfx_volume: float = 1.0
@@ -32,6 +33,9 @@ func _ready() -> void:
  add_child(ambience_next)
  _ambience_gains[ambience_next] = 0.0
  ambience_next.finished.connect(_on_ambience_finished.bind(ambience_next))
+ boss_warning_player = AudioStreamPlayer.new()
+ boss_warning_player.name = "BossWarning"
+ add_child(boss_warning_player)
  music = AudioStreamPlayer.new()
  music.name = "Music"
  add_child(music)
@@ -48,6 +52,8 @@ func _apply_volumes() -> void:
   ambience.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4) * float(_ambience_gains.get(ambience, 1.0))
  if ambience_next != null:
   ambience_next.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4) * float(_ambience_gains.get(ambience_next, 0.0))
+ if boss_warning_player != null:
+  boss_warning_player.volume_linear = 0.0 if sfx_muted else sfx_volume
  if music != null:
   music.volume_linear = 0.0 if music_muted else music_volume
  for player in effects:
@@ -155,6 +161,8 @@ func stop_bgm() -> void:
 func stop_sfx() -> void:
  for player in effects:
   player.stop()
+ if boss_warning_player != null:
+  boss_warning_player.stop()
 
 # Named audio events keep gameplay independent from asset paths.
 const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
@@ -180,6 +188,12 @@ func play_event(event_name: String) -> void:
   return
  if event_name.begins_with("music_"):
   play_bgm(stream)
+ elif event_name == "boss_warning":
+  # Critical shared boss telegraphs must not be stolen by busy hero SFX.
+  if not sfx_muted and sfx_volume > 0.0 and boss_warning_player != null:
+   boss_warning_player.stop()
+   boss_warning_player.stream = stream
+   boss_warning_player.play()
  else:
   play_sfx(stream)
 
