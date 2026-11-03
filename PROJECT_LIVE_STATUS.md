@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 04:00 UTC**
-Git-Stand: **6e1cf3d907542ce7e2507bc7ad0a82b3cd26208b** auf Branch **main**
+Git-Stand: **970c87d78451cbef501ace0a58151892e8c8c235** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,6 @@ Git-Stand: **6e1cf3d907542ce7e2507bc7ad0a82b3cd26208b** auf Branch **main**
 - `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
 - `3620434` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
-- `38747f4` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `327c88c` (2026-11-03): feat(forest): add reusable runtime visual controller for nine animated GLB enemies
@@ -24,7 +23,7 @@ Git-Stand: **6e1cf3d907542ce7e2507bc7ad0a82b3cd26208b** auf Branch **main**
 - `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `6e1cf3d` (2026-11-03): test(talents): guard normalized build use in Android detail and purchase handlers
@@ -38,7 +37,7 @@ Git-Stand: **6e1cf3d907542ce7e2507bc7ad0a82b3cd26208b** auf Branch **main**
 - `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
