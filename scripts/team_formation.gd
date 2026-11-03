@@ -1,5 +1,6 @@
 extends Node3D
 signal walking_finished
+const CHARACTER_PROFILES = preload("res://scripts/character_profiles.gd")
 const MELEE_CLASSES := [0, 1, 5, 10] # Warrior, Paladin, Rogue, Brawler
 func _formation_position(slot: int) -> Vector3:
  var front_slots: Array[int] = []
@@ -54,9 +55,9 @@ func get_talent_build_v2(hero_slot: int) -> Array:
  if hero_slot < 0 or hero_slot >= 4:
   return TALENT_TREES_V2.empty_build()
  var builds: Array = get_meta("talent_builds_v2", [])
- if builds.size() != 4:
+ if builds.size() != 4 or not builds[hero_slot] is Array:
   return TALENT_TREES_V2.empty_build()
- return builds[hero_slot].duplicate(true)
+ return TALENT_TREES_V2.validate_build(GameManager.character_level, builds[hero_slot])
 
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
@@ -365,14 +366,14 @@ func _on_attack_step_finished(hero_index: int) -> void:
 
 const COLORS = [Color("#c8d0df"), Color("#4f85d9"), Color("#a06dd8"), Color("#6bc37d")]
 func _ready() -> void:
- # The V2 talent data remains active, but its legacy CanvasLayer editor
- # must not be spawned: it floats above every HUD modal on Android.
- # Talents are opened exclusively through HUD/TalentMenu.
+ var talent_menu: CanvasLayer = TALENT_MENU_V2.new()
+ talent_menu.name = "TalentMenuV2"
+ add_child(talent_menu)
  add_to_group("talent_team")
  _load_classes()
  _load_roles()
  if SaveManager.active_character_slot >= 0:
-  var profiles: Dictionary = load("res://scripts/character_profiles.gd").load_registry()
+  var profiles: Dictionary = CHARACTER_PROFILES.load_registry()
   var active: int = SaveManager.active_character_slot
   var characters: Array = profiles.get("characters", [])
   if active < characters.size() and characters[active] is Dictionary:
@@ -535,12 +536,20 @@ func create_team() -> void:
   # Optional chibi equipment attachment markers; no visuals equipped by default.
   preload("res://scripts/equipment/formation_equipment_adapter.gd").install(hero)
   # Optional imported 3D warrior: only class 0, and only when the GLB exists.
-  if class_ids[i] == 0 and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
+  if class_ids[i] == 0 and not ResourceLoader.exists("res://assets/heroes/chibi/warrior.glb") and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
    var warrior_visual := Node3D.new()
    warrior_visual.name = "WarriorGLBVisual"
    warrior_visual.set_script(preload("res://scripts/warrior_glb_visual.gd"))
    warrior_visual.set("hide_existing_visuals", true)
    hero.add_child(warrior_visual)
+  # Prefer generated sculpted base models when the GLB has been committed.
+  var chibi_path: String = "res://assets/heroes/chibi/" + ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"][class_ids[i]] + ".glb"
+  if ResourceLoader.exists(chibi_path):
+   var chibi_visual := Node3D.new()
+   chibi_visual.name = "ChibiGLBVisual"
+   chibi_visual.set_script(preload("res://scripts/chibi_glb_visual.gd"))
+   hero.add_child(chibi_visual)
+   chibi_visual.configure(class_ids[i])
   _create_hero_health_bar(hero)
   var pet := Node3D.new()
   pet.name = "PassivePet"
@@ -620,10 +629,42 @@ func update_hero_health_bars(hp_values: Array[int], max_values: Array[int]) -> v
   if material != null:
    material.albedo_color = Color(0.94, 0.23, 0.20) if ratio <= 0.25 else (Color(0.97, 0.69, 0.22) if ratio <= 0.55 else Color(0.25, 0.88, 0.43))
 
+func _rounded_limb(parent: Node3D, label: String, location: Vector3, radius: float, length: float, tint: Color, angle: float = 0.0) -> MeshInstance3D:
+ var limb := MeshInstance3D.new()
+ limb.name = label
+ var shape := CapsuleMesh.new()
+ shape.radius = radius
+ shape.height = length
+ shape.radial_segments = 16
+ shape.rings = 6
+ limb.mesh = shape
+ limb.position = location
+ limb.rotation.z = angle
+ var surface := StandardMaterial3D.new()
+ surface.albedo_color = tint
+ surface.roughness = 0.84
+ limb.material_override = surface
+ parent.add_child(limb)
+ return limb
+
 func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  # Update 66: rounded torso and articulated limbs replace the old rigid cubes.
- var torso: MeshInstance3D = VisualFactory.sphere(hero, 0.52, Vector3(0, 1.25, 0), color)
- torso.scale = Vector3(0.94, 1.26, 0.69)
+ # Connected capsule torso: less like stacked spheres and more like a compact stylized body.
+ var torso: MeshInstance3D = MeshInstance3D.new()
+ torso.name = "HeroSculptedTorso"
+ var torso_mesh: CapsuleMesh = CapsuleMesh.new()
+ torso_mesh.radius = 0.43
+ torso_mesh.height = 1.16
+ torso_mesh.radial_segments = 20
+ torso_mesh.rings = 8
+ torso.mesh = torso_mesh
+ torso.position = Vector3(0.0, 1.22, 0.0)
+ torso.scale = Vector3(1.10, 1.0, 0.82)
+ var torso_material: StandardMaterial3D = StandardMaterial3D.new()
+ torso_material.albedo_color = color
+ torso_material.roughness = 0.82
+ torso.material_override = torso_material
+ hero.add_child(torso)
  var waist: MeshInstance3D = VisualFactory.sphere(hero, 0.35, Vector3(0, 0.80, 0), color.darkened(0.16))
  waist.scale = Vector3(1.14, 0.65, 0.83)
  var head: MeshInstance3D = VisualFactory.sphere(hero, 0.29, Vector3(0, 1.94, 0), Color("#f0c3a0"))
@@ -643,8 +684,7 @@ func _build_hero(hero: Node3D, role: int, color: Color) -> void:
  for shoulder_side in [-1.0, 1.0]:
   var shoulder: MeshInstance3D = VisualFactory.sphere(hero, 0.20, Vector3(shoulder_side * 0.50, 1.58, 0), color.lightened(0.16))
   shoulder.scale = Vector3(1.15, 0.70, 1.15)
- for side in [-1.0, 1.0]:
-  VisualFactory.sphere(hero, 0.19, Vector3(side * 0.47, 1.58, 0), color.darkened(0.1))
+ # Limbs are rendered exclusively by HeroCombatMotion so they animate without duplicates.
  if role == 0: # Krieger: Helm, Schild und Schwert
   VisualFactory.box(hero, Vector3(0.66, 0.22, 0.65), Vector3(0, 2.19, 0), Color("#9ea9b7"))
   VisualFactory.box(hero, Vector3(0.58, 0.75, 0.15), Vector3(-0.65, 1.2, -0.2), Color("#66798c"))
@@ -716,6 +756,7 @@ func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int)
  preload("res://scripts/hero_visual_upgrade.gd").decorate(hero, class_id, selected_role, slot)
  preload("res://scripts/hero_silhouette_v2.gd").decorate(hero, class_id, selected_role, slot)
  preload("res://scripts/hero_fantasy_costumes.gd").decorate(hero, class_id, selected_role, slot)
+ preload("res://scripts/hero_storybook_faces.gd").decorate(hero, class_id, slot)
  var motion: Node3D = Node3D.new()
  motion.name = "HeroCombatMotion"
  motion.set_script(preload("res://scripts/hero_combat_motion.gd"))
