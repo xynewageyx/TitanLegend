@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 17:14 UTC**
-Git-Stand: **e5d37c739986aa3ae28d7ea0f84d3b25e23cc8ad** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 17:23 UTC**
+Git-Stand: **be50c1abb592d4c9a0504d14192b2ac1a7c7842b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `3401585` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `fe681ec` (2026-11-03): test(chibi): verify five named animation clips and rotation channels in each GLB
 - `0575c6d` (2026-11-03): Generate eleven original chibi hero GLB assets
 
@@ -24,6 +25,8 @@ Git-Stand: **e5d37c739986aa3ae28d7ea0f84d3b25e23cc8ad** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `be50c1a` (2026-11-03): test(talents): guard safe counting of malformed saved rank values
+- `db23d37` (2026-11-03): fix(talents): safely count spent ranks when legacy saved data has invalid types
 - `fee4740` (2026-11-03): test(forest): verify the actual BattleManager presenter loads and plays all nine enemy models
 - `c3001a2` (2026-11-03): ci(forest): run animation validation on battle and visual controller changes
 - `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
@@ -35,8 +38,6 @@ Git-Stand: **e5d37c739986aa3ae28d7ea0f84d3b25e23cc8ad** auf Branch **main**
 - `f56ba0c` (2026-11-03): Avoid redundant combat visual updates during adaptive resolution changes
 - `0ef3b48` (2026-11-03): Test deduplicated scene visual cleanup connections
 - `8cada32` (2026-11-03): Prevent duplicate visual cleanup signal connections during scene cache rebuilds
-- `108ab6b` (2026-11-03): Regression-test initial graphics cache setup before applying quality
-- `8f4766a` (2026-11-03): Apply graphics quality to pre-existing scene lights and particles at startup
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
