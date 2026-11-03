@@ -80,3 +80,30 @@ Ran the local UnityFS LZ4 and SerializedFile v21 hierarchy decoder against actua
 Observed object names include `male_Bip001 Pelvis`, `male_Bip001 Neck`, `male_Bip001 L Foot`, `male_Bip001 R Forearm`, and `male_skirt_06`. The duplicate root names in the last two bundles are **distinct Transform objects**, not proof of a specific variant-selection mechanism. A Transform count is **not** a confirmed skinned-bone count. Next correlate these named Transforms with the renderer bone array and mesh bindpose data.
 
 The locally generated metadata-only report is `ulala_more_equipment_hierarchies.json`; no original third-party asset payloads are committed.
+
+## Cross-prefab Transform-name overlap (2026-11-04)
+
+Executed the local UnityFS/SerializedFile Transform decoder on **11 equipment prefab main bundles** and compared the names of the actual Transform-linked GameObjects. Counts are object/name counts, **not skinning bone counts**.
+
+| Prefab | Transforms | Distinct names | Names containing `Bip001` | Root Transforms |
+| --- | ---: | ---: | ---: | ---: |
+| `ck_chushi_hair` | 69 | 69 | 53 | 1 |
+| `ck_dujiaoxing_clothes` | 66 | 65 | 20 | 1 |
+| `ck_dujiaoxing_hair` | 80 | 79 | 54 | 1 |
+| `ck_dujiaoxing_shoes` | 80 | 79 | 54 | 1 |
+| `ck_dujiaoxing_subweapon` | 160 | 79 | 108 | 2 |
+| `ck_dujiaoxing_weapon` | 160 | 79 | 108 | 2 |
+| `ck_lang_hair` | 160 | 79 | 108 | 2 |
+| `ck_lang_subweapon` | 160 | 79 | 108 | 2 |
+| `ck_lang_weapon` | 160 | 79 | 108 | 2 |
+| `dly_dajiaolu_weapon` | 8 | 3 | 4 | 2 |
+| `dly_pugongying_bracers` | 110 | 54 | 106 | 2 |
+
+Pairwise **unique name set** intersections:
+- `ck_dujiaoxing_hair` versus `ck_dujiaoxing_shoes`: 78 common names, out of 79 unique names in each. The differing root names are `CK_DuJiaoXing_Hair` and `CK_DuJiaoXing_Shoes`.
+- `ck_dujiaoxing_weapon` versus `ck_lang_hair`: 78 common names, out of 79 unique names in each. Again the root names differ.
+- `ck_dujiaoxing_hair` versus `ck_dujiaoxing_clothes`: 44 common names (79 and 65 distinct names respectively).
+
+This strongly suggests reusable naming/hierarchy templates across equipment categories. It does **not** prove identical bone transforms, skinning weights, bindposes or runtime attachment behavior. In particular, the 160-Transform bundles contain two separate roots and duplicated object names; a naive name-based join would be ambiguous. Next compare parent-path structures and bindpose data using unique Transform path IDs.
+
+A metadata-only JSON report was generated locally as `ulala_equipment_skeleton_name_comparison.json`; no proprietary asset payloads were committed.
