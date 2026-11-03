@@ -1,42 +1,45 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 23:08 UTC**
-Git-Stand: **60132456b5c0a76d453c508983037d09b9ae8f2d** auf Branch **main**
+Git-Stand: **2e4f95dd66ba2ac09eeca50c4bda6d120ff78f15** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### UI — UI-Chat
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `6013245` (2026-11-04): Update developer graphics diagnostics regression for requested scale label
 - `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
@@ -46,13 +49,14 @@ Git-Stand: **60132456b5c0a76d453c508983037d09b9ae8f2d** auf Branch **main**
 - `5d2bd06` (2026-11-03): Test owner-access grants and revocation for authenticated peers
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `20d9171` (2026-11-03): Centralize server owner-access check in authenticated peer authority
 
 ## Bereichsübergreifende Änderungen
 
