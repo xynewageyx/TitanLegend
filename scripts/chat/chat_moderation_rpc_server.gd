@@ -10,6 +10,15 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
+# Trusted server-side login callback only. The login service must validate
+# the player's session token before calling this method; never expose as RPC.
+func on_verified_login(peer_id: int, verified_account_id: String) -> bool:
+	if not multiplayer.is_server() or authority == null:
+		return false
+	if peer_id <= 1 or not multiplayer.get_peers().has(peer_id):
+		return false
+	return authority.bind_authenticated_peer(peer_id, verified_account_id)
+
 func configure_server_authority(server_authority: ChatModerationPeerAuthority) -> void:
 	if not multiplayer.is_server():
 		push_error("Only the multiplayer server can configure moderation authority")
