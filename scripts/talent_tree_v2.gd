@@ -21,7 +21,9 @@ static func spent_points(build: Array) -> int:
   if not branch is Array:
    continue
   for rank in branch:
-   total += clampi(int(rank), 0, MAX_RANK)
+   if not rank is int:
+    continue
+   total += clampi(rank, 0, MAX_RANK)
  return total
 
 static func available_points(level: int, build: Array) -> int:
