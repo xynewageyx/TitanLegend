@@ -65,3 +65,17 @@ Parsed the post-object metadata external reference entries in three local Unity 
 | `brook.prefab_ab` | 4 | `4db8e5fe34170ee3350b8b9e414400a5`, `d923feb3ad3131129b208e6e16f1ae22`, `8385d6d494407799d12f41f508a655c8`, `4c456cef82792995211031a321bd4db1` |
 
 The external CAB references are confirmed from the source metadata, but they have **not yet been mapped to concrete bundle filenames**. No bone counts or rig compatibility conclusions follow from this step. Only identifiers, not copyrighted mesh/animation payloads, are recorded.
+
+## Brook shared bundle resolved (2026-11-03)
+
+Extracted `brook.prefab_ab_shared` (118,096 bytes) from the supplied original 7z reference archive, decompressed its UnityFS data, and parsed the Unity SerializedFile v21 object table. It contains **23 objects**, including 4 Mesh (43), 3 SkinnedMeshRenderer (137), 1 Avatar (90), 1 AnimatorOverrideController (221), and 1 MeshFilter (33).
+
+Resolved the three `m_Mesh`-candidate pointers at byte offset 136 of the Brook main prefab renderers (`fileID=2`) against exact Mesh path IDs in the shared file (`fileID=0`):
+
+| Mesh path ID | Shared Mesh name |
+| --- | --- |
+| `-6464302524655367657` | `Brook` |
+| `-6069506281926079086` | `Brook_Weapon` |
+| `327975107067027973` | `Brook_Clothes` |
+
+The shared file additionally names Mesh `Face`, Avatar `BrookAvatar`, and AnimatorOverrideController `character_brook`. Mesh names were decoded from the serialized object name strings; IDs were checked against actual object records. The main/shared pointer match establishes cross-file mesh identity; skinning bone lists and rig attachment details remain unverified. No third-party binary content was committed.
