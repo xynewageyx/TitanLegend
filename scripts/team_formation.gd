@@ -54,9 +54,9 @@ func get_talent_build_v2(hero_slot: int) -> Array:
  if hero_slot < 0 or hero_slot >= 4:
   return TALENT_TREES_V2.empty_build()
  var builds: Array = get_meta("talent_builds_v2", [])
- if builds.size() != 4:
+ if builds.size() != 4 or not builds[hero_slot] is Array:
   return TALENT_TREES_V2.empty_build()
- return builds[hero_slot].duplicate(true)
+ return TALENT_TREES_V2.validate_build(GameManager.character_level, builds[hero_slot])
 
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
