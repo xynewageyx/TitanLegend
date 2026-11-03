@@ -64,3 +64,19 @@ Recomputed from the locally saved `ulala_equipment_object_counts.json` object-di
 | `ck_dujiaoxing_shoes` | 163 | 165 | +1 Mesh (43), +1 Avatar (90) | 80 each in both |
 
 Each pair also preserves one `SkinnedMeshRenderer` (137) and one `Animator` (95). This establishes **inventory differences**, not necessarily identical path IDs or guaranteed cross-bundle links. The next unresolved technical task is to decode `m_Bones`, `m_RootBone`, `m_Mesh` and `m_Avatar` PPtr field values and verify their targets. No third-party asset content is redistributed.
+
+## Verified Transform trees in five equipment prefabs (2026-11-04)
+
+Ran the local UnityFS LZ4 and SerializedFile v21 hierarchy decoder against actual original bundle bytes. Each count below is from `Transform` objects with resolved `GameObject.m_Name`, `Transform.m_GameObject`, and `m_Father` links, not from a file-name heuristic.
+
+| Original file | GameObjects / Transforms | Root Transform count | Root name |
+| --- | ---: | ---: | --- |
+| `ck_dujiaoxing_clothes.prefab_ab` | 66 / 66 | 1 | `CK_DuJiaoXing_Clothes` |
+| `ck_dujiaoxing_hair.prefab_ab` | 80 / 80 | 1 | `CK_DuJiaoXing_Hair` |
+| `ck_dujiaoxing_shoes.prefab_ab` | 80 / 80 | 1 | `CK_DuJiaoXing_Shoes` |
+| `ck_dujiaoxing_weapon.prefab_ab` | 160 / 160 | 2 | `CK_DuJiaoXing_Weapon` (twice) |
+| `ck_lang_hair.prefab_ab` | 160 / 160 | 2 | `CK_Lang_Hair` (twice) |
+
+Observed object names include `male_Bip001 Pelvis`, `male_Bip001 Neck`, `male_Bip001 L Foot`, `male_Bip001 R Forearm`, and `male_skirt_06`. The duplicate root names in the last two bundles are **distinct Transform objects**, not proof of a specific variant-selection mechanism. A Transform count is **not** a confirmed skinned-bone count. Next correlate these named Transforms with the renderer bone array and mesh bindpose data.
+
+The locally generated metadata-only report is `ulala_more_equipment_hierarchies.json`; no original third-party asset payloads are committed.
