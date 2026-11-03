@@ -10,8 +10,12 @@ func _init(admin_gateway: ChatModerationAdminGateway) -> void:
 	gateway = admin_gateway
 
 func bind_authenticated_peer(peer_id: int, verified_account_id: String) -> bool:
-	if peer_id <= 0 or verified_account_id.strip_edges().is_empty():
+	if peer_id <= 1 or verified_account_id.strip_edges().is_empty():
 		return false
+	# A bound connection must not silently switch account identities.
+	# Disconnect and reauthenticate with a new session first.
+	if peer_accounts.has(peer_id):
+		return str(peer_accounts[peer_id]) == verified_account_id
 	peer_accounts[peer_id] = verified_account_id
 	return true
 
