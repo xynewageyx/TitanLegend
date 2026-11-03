@@ -15,6 +15,9 @@ var _ambience_gains: Dictionary = {}
 const AMBIENCE_FADE_SECONDS: float = 0.8
 var music: AudioStreamPlayer
 var boss_warning_player: AudioStreamPlayer
+var _boss_duck_gain: float = 1.0
+var _boss_duck_tween: Tween
+const BOSS_DUCK_LEVEL: float = 0.45
 var effects: Array[AudioStreamPlayer] = []
 var music_volume: float = 1.0
 var sfx_volume: float = 1.0
@@ -36,6 +39,7 @@ func _ready() -> void:
  boss_warning_player = AudioStreamPlayer.new()
  boss_warning_player.name = "BossWarning"
  add_child(boss_warning_player)
+ boss_warning_player.finished.connect(_on_boss_warning_finished)
  music = AudioStreamPlayer.new()
  music.name = "Music"
  add_child(music)
@@ -49,13 +53,13 @@ func _ready() -> void:
 
 func _apply_volumes() -> void:
  if ambience != null:
-  ambience.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4) * float(_ambience_gains.get(ambience, 1.0))
+  ambience.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4 * _boss_duck_gain) * float(_ambience_gains.get(ambience, 1.0))
  if ambience_next != null:
   ambience_next.volume_linear = (0.0 if sfx_muted else sfx_volume * 0.4) * float(_ambience_gains.get(ambience_next, 0.0))
  if boss_warning_player != null:
   boss_warning_player.volume_linear = 0.0 if sfx_muted else sfx_volume
  if music != null:
-  music.volume_linear = 0.0 if music_muted else music_volume
+  music.volume_linear = 0.0 if music_muted else music_volume * _boss_duck_gain
  for player in effects:
   player.volume_linear = 0.0 if sfx_muted else sfx_volume
 
@@ -74,6 +78,19 @@ func set_music_muted(value: bool) -> void:
 func set_sfx_muted(value: bool) -> void:
  sfx_muted = value
  _apply_volumes()
+
+func _set_boss_duck_gain(value: float) -> void:
+ _boss_duck_gain = clampf(value, BOSS_DUCK_LEVEL, 1.0)
+ _apply_volumes()
+
+func _animate_boss_duck(target: float, duration: float) -> void:
+ if _boss_duck_tween != null and _boss_duck_tween.is_running():
+  _boss_duck_tween.kill()
+ _boss_duck_tween = create_tween()
+ _boss_duck_tween.tween_method(_set_boss_duck_gain, _boss_duck_gain, target, duration)
+
+func _on_boss_warning_finished() -> void:
+ _animate_boss_duck(1.0, 0.35)
 
 func play_sfx(stream: AudioStream) -> void:
  if stream == null or sfx_muted or sfx_volume <= 0.0:
@@ -163,6 +180,7 @@ func stop_sfx() -> void:
   player.stop()
  if boss_warning_player != null:
   boss_warning_player.stop()
+ _animate_boss_duck(1.0, 0.15)
 
 # Named audio events keep gameplay independent from asset paths.
 const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
@@ -194,6 +212,7 @@ func play_event(event_name: String) -> void:
    boss_warning_player.stop()
    boss_warning_player.stream = stream
    boss_warning_player.play()
+   _animate_boss_duck(BOSS_DUCK_LEVEL, 0.12)
  else:
   play_sfx(stream)
 
