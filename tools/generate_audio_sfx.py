@@ -66,16 +66,16 @@ SOUNDS.update({
 SOUNDS["elements/water.wav"] = (0.68, 540, 165, "noise")
 # Short, lightweight ambience beds loop in Godot; these remain placeholder audio.
 SOUNDS.update({
- "ambient/fire.wav": (2.0, 110, 80, "noise"),
- "ambient/water.wav": (2.0, 149, 106, "tone"),
- "ambient/earth.wav": (2.0, 188, 132, "tone"),
- "ambient/nature.wav": (2.0, 227, 158, "noise"),
- "ambient/light.wav": (2.0, 266, 184, "tone"),
- "ambient/shadow.wav": (2.0, 305, 210, "tone"),
- "ambient/wind.wav": (2.0, 344, 236, "noise"),
- "ambient/frost.wav": (2.0, 383, 262, "tone"),
- "ambient/lightning.wav": (2.0, 422, 288, "tone"),
- "ambient/chaos.wav": (2.0, 461, 314, "noise"),
+ "ambient/fire.wav": (4.0, 110, 80, "noise"),
+ "ambient/water.wav": (4.0, 149, 106, "tone"),
+ "ambient/earth.wav": (4.0, 188, 132, "tone"),
+ "ambient/nature.wav": (4.0, 227, 158, "noise"),
+ "ambient/light.wav": (4.0, 266, 184, "tone"),
+ "ambient/shadow.wav": (4.0, 305, 210, "tone"),
+ "ambient/wind.wav": (4.0, 344, 236, "noise"),
+ "ambient/frost.wav": (4.0, 383, 262, "tone"),
+ "ambient/lightning.wav": (4.0, 422, 288, "tone"),
+ "ambient/chaos.wav": (4.0, 461, 314, "noise"),
 })
 SOUNDS.update({
  "boss/fire.wav": (0.550, 140, 45, "noise"),
@@ -152,10 +152,11 @@ def render(path, duration, start, end, mode):
    angle = 2 * math.pi * i / total
    low = math.sin(angle * low_cycles) * 0.42
    high = math.sin(angle * high_cycles) * 0.17
-   breath = 0.75 + 0.25 * math.sin(angle * 2)
+   breath = 0.75 + 0.18 * math.sin(angle * 2) + 0.07 * math.sin(angle * 5)
    # Harmonic texture stays loopable and avoids discontinuous random noise.
    texture = math.sin(angle * (high_cycles + low_cycles)) * grit
-   wave_value = (low + high + texture) * breath
+   distant = math.sin(angle * (high_cycles * 2 + low_cycles)) * 0.09
+   wave_value = (low + high + texture + distant) * breath
    env = 1.0
   sample = int(max(-1, min(1, wave_value * env * 0.65)) * 32767)
   frames.extend(struct.pack("<h", sample))
