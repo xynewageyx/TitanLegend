@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 18:34 UTC**
-Git-Stand: **bdef4c4649231d8daed68f4d0c41b54e4e504ac4** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 18:35 UTC**
+Git-Stand: **0b3d1a1d5786e36504000e172bdc8468708d5e44** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,52 +11,54 @@ Git-Stand: **bdef4c4649231d8daed68f4d0c41b54e4e504ac4** auf Branch **main**
 - `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
 - `6925c8c` (2026-11-03): Generate eleven original chibi hero GLB assets
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Landschaften — Landschaften-Chat
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### UI — UI-Chat
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 - `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
 - `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
 - `c848cd7` (2026-11-03): feat(chibi): add distinct spellcasting gestures for six magic classes
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `efcaa3c` (2026-11-03): Test adaptive resolution steps for severe sustained FPS drops
 - `7291f97` (2026-11-03): Scale down more aggressively on severe sustained combat FPS drops
 - `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `94d8bf2` (2026-11-03): Regression-test admin revocation clearing cached private evidence
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Audio — Audio-Erstellung-Chat
 - `cd99659` (2026-11-03): Keep prewarmed boss and interrupt cues resident in bounded LRU cache (#24)
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `27b2a71` (2026-11-03): Generate eleven original chibi hero GLB assets
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
+- `136b1a7` (2026-11-03): Protect adaptive graphics hysteresis and visual profile caching with regression tests
 
 ## Bereichsübergreifende Änderungen
 
