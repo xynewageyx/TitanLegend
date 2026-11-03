@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 04:04 UTC**
-Git-Stand: **08c0d92aff962cb2b721d846be210ddc1e8b9d65** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 04:05 UTC**
+Git-Stand: **3d1792791dfc0dc9410b5f5906c713269dc66d99** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,8 +9,6 @@ Git-Stand: **08c0d92aff962cb2b721d846be210ddc1e8b9d65** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `25a42f0` (2026-11-03): Generate eleven original chibi hero GLB assets
-- `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
-- `3620434` (2026-11-03): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `adbaeea` (2026-11-03): test(forest): exercise runtime visual controller for each of nine enemy models
@@ -25,9 +23,9 @@ Git-Stand: **08c0d92aff962cb2b721d846be210ddc1e8b9d65** auf Branch **main**
 - `970c87d` (2026-11-03): Add opt-in moderation menu launcher with hidden-by-default access
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `5b5be3f` (2026-11-03): Add FPS overlay gated behind developer-only debug export feature
 - `6e1cf3d` (2026-11-03): test(talents): guard normalized build use in Android detail and purchase handlers
 - `3eb7a35` (2026-11-03): Release cached combat lights and particles when they leave the scene tree
-- `74b0422` (2026-11-03): art(chibi): remove exposed pale torso and give every class fitted sleeves
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -43,7 +41,7 @@ Git-Stand: **08c0d92aff962cb2b721d846be210ddc1e8b9d65** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `3d17927` (2026-11-03): Register developer FPS overlay with runtime feature gating
 
 ## Bereichsübergreifende Änderungen
 
