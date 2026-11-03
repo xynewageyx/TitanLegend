@@ -90,3 +90,15 @@ Die vier folgenden Referenzdateien wurden aus dem geteilten 7z-Archiv selektiv e
 Die Prüfsummen in dieser Tabelle sind ausdrücklich **16-stellige Präfixe**, nicht vollständige SHA-256-Hashes.
 
 **Nächste Schritte für die zuständigen Bereiche:** Unity SerializedFile-Header und TypeTree prüfen, danach lediglich Struktur-Metadaten (Objektklassen, Referenzen, Skeleton-/Clip-Zuordnung) dokumentieren. Proprietäre Original-Meshes, Animationen, Sounds und Texturen nicht in Titan Legends oder das öffentliche GitHub-Repository übernehmen.
+
+## Unity SerializedFile-Metadaten (2026-11-03)
+Die dekomprimierten Payloads der vier Stichproben wurden bis zum Anfang ihrer SerializedFile-Type-Tabellen interpretiert. Alle vier melden `SerializedFile format_version=21`, `Unity version=2019.4.16f1c1`, `target_platform=13` und `enableTypeTree=true`.
+
+| Datei | Typdefinitionen | Metadatenbytes | Datenoffset |
+| --- | ---: | ---: | ---: |
+| `beryl.prefab_ab` | 5 | 8.109 | 8.144 |
+| `brook.prefab_ab` | 7 | 10.905 | 10.928 |
+| `beryl.prefab_ab_shared` | 8 | 30.489 | 30.512 |
+| `animationclip_ab_list` | 2 | 37.181 | 37.216 |
+
+**Interpretationsgrenze:** Die Typdefinitionen sind noch keine gezählten Objekte, Skelette oder Animationsclips. Die konkrete Class-ID-Tabelle, Objektliste und die referenzierten Daten wurden noch nicht vollständig gelesen. `UnityPy` ließ sich in der isolierten Umgebung wegen fehlender Paketnetzverbindung nicht installieren; ein kleiner eigener Parser bestätigte die oben aufgeführten Headerfelder. Nächster Schritt ist eine robuste Class-ID-/Objekttabellen-Auswertung mit Testdateien und klaren Fehlergrenzen.
