@@ -48,6 +48,7 @@ jobs:
           config_version=5
           [application]
           config/name="Titan Legends Forest FPS Test"
+          config/icon="res://icon.svg"
           run/main_scene="res://scenes/grasland_preview.tscn"
           config/features=PackedStringArray("4.7", "GL Compatibility")
           [display]
@@ -59,6 +60,9 @@ jobs:
           renderer/rendering_method.mobile="gl_compatibility"
           textures/vram_compression/import_etc2_astc=true
           EOF
+          cat > preview/icon.svg <<\u0027SVG\u0027
+          <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="22" fill="#27573a"/><path d="M64 15 20 80h26L31 101h66L82 80h26Z" fill="#8ed36b"/><rect x="57" y="77" width="14" height="34" fill="#9c653b"/></svg>
+          SVG
           cp export_presets.cfg preview/export_presets.cfg
           # Keep the preview installable alongside the main Titan Legends app.
           sed -i 's|package/unique_name="org.titanlegends.idlerpg"|package/unique_name="org.titanlegends.forestpreview"|' preview/export_presets.cfg
