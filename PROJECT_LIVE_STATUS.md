@@ -1,18 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 03:43 UTC**
-Git-Stand: **327c88c3c9a9279801ad088aa99bc4303b863c98** auf Branch **main**
+Git-Stand: **d2c6156e6c91b311bce67ad161265d27d7d20354** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
 - `38747f4` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `8711f60` (2026-11-02): ci(chibi): fail workflow if preview gallery is incomplete or empty
 - `90b0b2f` (2026-11-02): Generate eleven original chibi hero GLB assets
 - `9a0dc92` (2026-11-02): test(chibi): require eleven nonempty preview PNGs and use consistent frontal camera
-- `bdac0a9` (2026-11-02): Generate eleven original chibi hero GLB assets
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `327c88c` (2026-11-03): feat(forest): add reusable runtime visual controller for nine animated GLB enemies
@@ -22,7 +22,7 @@ Git-Stand: **327c88c3c9a9279801ad088aa99bc4303b863c98** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `d2c6156` (2026-11-03): art(chibi): give all eleven classes original distinctive armor, hair and costume silhouettes
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
