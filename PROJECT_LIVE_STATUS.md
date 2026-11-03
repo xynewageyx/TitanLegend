@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 05:34 UTC**
-Git-Stand: **7e1a57604e37040fb7a373cf9a7c52f7a5460e25** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 06:46 UTC**
+Git-Stand: **6d648ba6a105192c3da15d665455ab6b89185080** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -38,7 +38,7 @@ Git-Stand: **7e1a57604e37040fb7a373cf9a7c52f7a5460e25** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
+- `6d648ba` (2026-11-03): Add Godot smoke test for moderation admin scene and hidden launcher
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 15 Commits (kein Nachweis für Inaktivität).
@@ -49,7 +49,6 @@ Git-Stand: **7e1a57604e37040fb7a373cf9a7c52f7a5460e25** auf Branch **main**
 ## Bereichsübergreifende Änderungen
 
 - `77af582` (2026-11-03): fix(forest): restart repeated hit and attack animations immediately
-- `36f826e` (2026-11-03): Add average sampled FPS to developer-only performance overlay
 
 ## Regeln für alle Fach-Chats
 
