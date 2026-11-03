@@ -21,8 +21,10 @@ func start_battle() -> void:
     surface.material_override = material
     _arena.add_child(surface)
     _arena.position = Vector3(0, 0.08, 26)
+    get_parent().get_node("Camera3D").focus_battle(Vector3(0, 0, 26))
 
 func end_battle() -> void:
+    get_parent().get_node("Camera3D").restore_exploration()
     if is_instance_valid(_arena):
         _arena.queue_free()
         _arena = null
