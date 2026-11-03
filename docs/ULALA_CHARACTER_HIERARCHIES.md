@@ -79,3 +79,14 @@ Resolved the three `m_Mesh`-candidate pointers at byte offset 136 of the Brook m
 | `327975107067027973` | `Brook_Clothes` |
 
 The shared file additionally names Mesh `Face`, Avatar `BrookAvatar`, and AnimatorOverrideController `character_brook`. Mesh names were decoded from the serialized object name strings; IDs were checked against actual object records. The main/shared pointer match establishes cross-file mesh identity; skinning bone lists and rig attachment details remain unverified. No third-party binary content was committed.
+
+## Avatar object string probe (2026-11-03)
+
+Read actual Avatar (class 90) object bytes from the local `beryl.prefab_ab_shared` and `brook.prefab_ab_shared` UnityFS samples, then searched for plausible null-terminated ASCII strings. This is a **heuristic string scan**, not a parsed bone array; the number of matches must not be interpreted as the bone count.
+
+| Avatar | Serialized object size | Plausible ASCII strings |
+| --- | ---: | ---: |
+| `BerylAvatar` | 12,704 bytes | 48 |
+| `BrookAvatar` | 10,816 bytes | 40 |
+
+Examples actually present in the Avatar object bytes include `Bip001 R Hand`, `Bip001 L UpperArm`, `Bip001 R Calf`, `Bip001 L Toe0`, `Bip001 R Finger0`, and `Bip001 L Finger4`. `BrookAvatar` additionally contains `Bip001 Spine` and `Bip001 Spine1`; `BerylAvatar` includes names such as `Bone007`, `Bone014`, `Bone019`. The names indicate skeletal labeling exists in these objects, but no definitive hierarchy, binding matrices, or rig compatibility has been established. Next parse the Avatar skeleton nodes and parent indices using the TypeTree instead of scanning printable bytes.
