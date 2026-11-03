@@ -10,6 +10,11 @@ const ENEMIES := [
 const CLIPS := ["idle", "attack", "hit", "death"]
 
 func _initialize() -> void:
+    # The SceneTree root is not fully initialized inside _initialize().
+    # Defer the test so child _ready() callbacks can load their GLB models.
+    call_deferred("_run_tests")
+
+func _run_tests() -> void:
     var failures: Array[String] = []
     var tested := 0
     for enemy in ENEMIES:
