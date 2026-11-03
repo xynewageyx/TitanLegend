@@ -25,6 +25,15 @@ func disconnect_peer(peer_id: int) -> void:
 func _account_for_peer(peer_id: int) -> String:
 	return str(peer_accounts.get(peer_id, ""))
 
+# Call from the trusted server login flow before admitting a player.
+# A ban belongs to the account, not to one of its character slots.
+func can_admit_account(verified_account_id: String, now_unix: int) -> bool:
+	if gateway == null or gateway.coordinator == null or not gateway.coordinator.loaded:
+		return false
+	if verified_account_id.strip_edges().is_empty() or now_unix <= 0:
+		return false
+	return not gateway.coordinator.is_banned(verified_account_id, now_unix)
+
 func has_owner_access(peer_id: int) -> bool:
 	if gateway == null or not peer_accounts.has(peer_id):
 		return false
