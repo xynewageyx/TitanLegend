@@ -6,6 +6,7 @@ MANAGER = ROOT / "scripts" / "graphics_quality_manager.gd"
 MENU = ROOT / "scripts" / "graphics_settings_menu.gd"
 PROJECT = ROOT / "project.godot"
 DEVELOPER_OVERLAY = ROOT / "scripts" / "developer_fps_overlay.gd"
+ANDROID_WORKFLOW = ROOT / ".github" / "workflows" / "android-debug-apk.yml"
 
 
 class GraphicsSettingsIntegrationTests(unittest.TestCase):
@@ -63,6 +64,14 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn('get_tree().root.scaling_3d_scale', code)
         self.assertIn('Skalierung: %d%%', code)
         self.assertIn('\\nAvg:', code)
+
+    def test_developer_apk_does_not_overwrite_public_preview(self):
+        workflow = ANDROID_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn('custom_features="titan_developer"', workflow)
+        self.assertIn("titan-legends-android-${{ github.event_name", workflow)
+        self.assertIn("developer-fps", workflow)
+        self.assertIn("if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.developer_fps) }}", workflow)
+        self.assertIn("actions/upload-artifact@v4", workflow)
 
     def test_no_live_fps_overlay(self):
         menu = MENU.read_text(encoding="utf-8")
