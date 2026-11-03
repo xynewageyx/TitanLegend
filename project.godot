@@ -13,6 +13,7 @@ SaveManager="*res://scripts/save_manager.gd"
 AudioManager="*res://scripts/audio_manager.gd"
 GraphicsQualityManager="*res://scripts/graphics_quality_manager.gd"
 GraphicsSettingsMenu="*res://scripts/graphics_settings_menu.gd"
+DeveloperFPSOverlay="*res://scripts/developer_fps_overlay.gd"
 
 [display]
 window/size/viewport_width=720
