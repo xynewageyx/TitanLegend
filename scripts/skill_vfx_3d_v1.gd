@@ -149,9 +149,15 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
   effect.add_child(impact)
   impact.position = Vector3(destination.x, 0.15, destination.z)
   impact.scale = Vector3(0.15, 1.0, 0.15)
-  tween.tween_interval(0.24)
-  tween.tween_property(impact, "scale", Vector3(1.8, 1.0, 1.8), 0.18)
-  tween.tween_property(impact_material, "albedo_color:a", 0.5, 0.10)
+  # Delay the impact until the projectile is near its destination.
+  # A separate sequential tween makes the flash visible before fading out.
+  var impact_tween: Tween = create_tween()
+  impact_tween.tween_interval(0.24)
+  impact_tween.tween_property(impact_material, "albedo_color:a", 0.55, 0.06)
+  impact_tween.parallel().tween_property(impact, "scale", Vector3(1.8, 1.0, 1.8), 0.18)
+  impact_tween.tween_property(impact_material, "albedo_color:a", 0.0, 0.16)
+  # Keep the parent alive until the impact fade has completed.
+  tween.tween_interval(0.50)
  tween.chain().tween_callback(func() -> void:
   _effects.erase(effect)
   effect.queue_free()
