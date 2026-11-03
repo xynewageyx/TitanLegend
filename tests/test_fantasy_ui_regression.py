@@ -67,6 +67,13 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('party_portraits.append(portrait)', hud)
         self.assertIn('party_portraits[i].modulate', hud)
 
+    def test_character_save_name_identity_and_visible_startup_error(self):
+        slots = self.read_script("character_save_slots.gd")
+        startup = self.read_script("character_startup.gd")
+        self.assertIn('data.has("character_name")', slots)
+        self.assertIn('str(data.get("character_name", "")) != str(profile.get("name", ""))', slots)
+        self.assertIn('selector.message_label.text = "Charakter konnte nicht geladen werden.', startup)
+
     def test_game_entry_requires_valid_session(self):
         startup = self.read_script("character_startup.gd")
         manager = self.read_script("save_manager.gd")
