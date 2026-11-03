@@ -1,39 +1,42 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-03 19:44 UTC**
-Git-Stand: **3bbca2725d7a3c83a4d46a69bbcd1913488c7dc9** auf Branch **main**
+Automatisch erzeugt: **2026-11-03 19:47 UTC**
+Git-Stand: **39cf62901e76a3ad5b19f325b0aa8b6338b2485a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### Landschaften — Landschaften-Chat
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### UI — UI-Chat
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
-- `bdef4c4` (2026-11-03): fix(formation): space four heroes and companions to reduce visual overlap
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `9ad6e49` (2026-11-03): Guard developer-only FPS overlay and render-scale diagnostics with regression test
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `5d2bd06` (2026-11-03): Test owner-access grants and revocation for authenticated peers
@@ -43,18 +46,16 @@ Git-Stand: **3bbca2725d7a3c83a4d46a69bbcd1913488c7dc9** auf Branch **main**
 - `d3ebfa7` (2026-11-03): Provide trusted login callback for binding verified moderation peer identities
 
 ### Audio — Audio-Erstellung-Chat
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
+- `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `596af15` (2026-11-03): Show requested 3D render scale and compact two-line FPS metrics in developer-only APK
 - `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `d1f5f2a` (2026-11-03): Keep developer FPS APKs out of public releases and isolate their build concurrency
 - `0b3d1a1` (2026-11-03): ci(android): gate APK export on all nine forest model and animation presenter tests
-- `b181c17` (2026-11-03): fix(camera): widen portrait combat framing to reveal team and enemies
 
 ## Bereichsübergreifende Änderungen
 
