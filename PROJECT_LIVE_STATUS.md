@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-03 16:49 UTC**
-Git-Stand: **79a13fc476752970b7f539c43793ae92e1d592a7** auf Branch **main**
+Git-Stand: **b58b0bceac189d82874b45046bad52975df5ddfd** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,41 +15,39 @@ Git-Stand: **79a13fc476752970b7f539c43793ae92e1d592a7** auf Branch **main**
 - `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
+- `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
 
 ### Landschaften — Landschaften-Chat
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `79a13fc` (2026-11-03): fix(forest): preserve defeated forest enemies briefly before next encounter
 - `92ca766` (2026-11-03): test(talents): cover malformed rank types and bounds
 - `53bfceb` (2026-11-03): fix(talents): reject invalid rank values across all hero talent branches
 - `a1e8fa9` (2026-11-03): feat(forest): trigger death animations on mob casualties and defeated waves
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `8d0e78b` (2026-11-03): Fix typed moderation admin smoke test access for Godot static analyzer
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
 
 ### Audio — Audio-Erstellung-Chat
+- `b58b0bc` (2026-11-03): Reserve an audio channel for critical boss cast warnings (#20)
 - `d9ef28d` (2026-11-03): Validate PCM loop boundaries for all ten ambience files (#19)
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `51572fd` (2026-11-03): Add developer-only FPS measurement reset button for per-boss testing
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
