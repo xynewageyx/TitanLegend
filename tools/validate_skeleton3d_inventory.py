@@ -55,8 +55,16 @@ def validate(data):
                 errors.append(f"{scene}: {name} invalid rest transform dimensions")
                 continue
             try:
-                if not all(math.isfinite(float(v)) for v in origin + [v for row in basis for v in row]):
+                values = [float(v) for v in origin + [v for row in basis for v in row]]
+                if not all(math.isfinite(v) for v in values):
                     errors.append(f"{scene}: {name} nonfinite rest transform")
+                else:
+                    a, b, d = ([float(v) for v in row] for row in basis)
+                    determinant = (a[0] * (b[1] * d[2] - b[2] * d[1])
+                                   - a[1] * (b[0] * d[2] - b[2] * d[0])
+                                   + a[2] * (b[0] * d[1] - b[1] * d[0]))
+                    if abs(determinant) < 1e-8:
+                        errors.append(f"{scene}: {name} singular rest basis")
             except (ValueError, TypeError):
                 errors.append(f"{scene}: {name} nonnumeric rest transform")
     return {"valid": not errors, "skeleton_count": len(skeletons),
