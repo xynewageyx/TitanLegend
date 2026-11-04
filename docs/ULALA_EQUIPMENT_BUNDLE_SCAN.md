@@ -145,3 +145,14 @@ Re-read the original UnityFS bytes of the relevant equipment main bundles, parse
 For the two-root pair, 78 shared root-relative path names occur twice. Their transform-value **multisets** were compared, rather than arbitrarily matching duplicate names. The two differently named immediate model nodes were excluded from the shared-path comparison. This establishes matching local Transform values on the compared paths, but **does not** establish equal Mesh bindposes, skinning weights, material assignments or runtime rig compatibility.
 
 Machine-readable local report: `ulala_equipment_local_transform_comparison.json`. No third-party model data was committed.
+
+## Validation checkpoint: Transform comparisons versus bindposes (2026-11-04)
+
+Recalculated totals from the existing machine-readable `ulala_equipment_local_transform_comparison.json` report:
+
+- **3** pairwise equipment comparisons.
+- **278** matching Transform occurrences (78 + 156 + 44).
+- **0** differing Transform values reported among those matched occurrences.
+- **78** root-relative path names with duplicated instances in the two-root comparison; these are ambiguous without instance-specific mapping.
+
+**Evidence boundary:** This checkpoint verifies the existing comparison report's arithmetic; it is **not a new decode of Mesh bindpose matrices**. Bindposes, skinning weights, and per-instance attachment compatibility remain unverified. The local validation report is `ulala_transform_comparison_validation.json`. A UnityPy install attempt in the current offline environment was unsuccessful, so no UnityPy-based bindpose extraction is claimed. Do not copy third-party reference asset payloads into this repository.
