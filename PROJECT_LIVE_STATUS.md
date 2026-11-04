@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 17:43 UTC**
-Git-Stand: **72218bb8175240c422ef8483e3353998d5fff349** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 18:54 UTC**
+Git-Stand: **3b14f3561885f42784e978ae255b02d3dfc108a3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,24 +9,26 @@ Git-Stand: **72218bb8175240c422ef8483e3353998d5fff349** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
@@ -34,22 +36,24 @@ Git-Stand: **72218bb8175240c422ef8483e3353998d5fff349** auf Branch **main**
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
 - `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Audio — Audio-Erstellung-Chat
 - `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
 - `f9429b0` (2026-11-04): Add CI smoke test for headless Godot multiplayer test server
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 
 ## Bereichsübergreifende Änderungen
 
 - `f8412ce` (2026-11-04): Add opt-in ENet transport client for Android multiplayer testing
-- `a2478a0` (2026-11-04): Display active target FPS alongside developer performance sample statistics
 
 ## Regeln für alle Fach-Chats
 
