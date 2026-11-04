@@ -1,38 +1,39 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 04:58 UTC**
-Git-Stand: **6670a9d5b0cc45ef83b6f4aec00fc4ea7e16897b** auf Branch **main**
+Git-Stand: **54ef90a8a62ec2bf4301fbdfb94d64360f63210b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 - `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 - `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 - `6380fa2` (2026-11-04): Avoid redundant graphics updates when adaptive resolution reaches its floor
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
@@ -42,12 +43,13 @@ Git-Stand: **6670a9d5b0cc45ef83b6f4aec00fc4ea7e16897b** auf Branch **main**
 
 ### Audio — Audio-Erstellung-Chat
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ## Bereichsübergreifende Änderungen
 
