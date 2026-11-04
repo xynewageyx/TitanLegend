@@ -22,6 +22,25 @@ def classify(path):
     name = path.as_posix().lower()
     return [key for key, words in CATEGORIES.items() if any(word in name for word in words)]
 
+def unityfs_header(path):
+    """Read UnityFS signature and version strings without decompressing the bundle."""
+    try:
+        with path.open("rb") as stream:
+            signature = stream.readline(128).rstrip(b"\\x00\\r\\n")
+            if not signature.startswith(b"UnityFS\\x00"):
+                return None
+            version_raw = stream.readline(128).split(b"\\x00", 1)[0]
+            unity_version = stream.readline(128).split(b"\\x00", 1)[0]
+            revision = stream.readline(128).split(b"\\x00", 1)[0]
+            return {
+                "format": signature.split(b"\\x00", 1)[0].decode("ascii", "replace"),
+                "bundle_version": version_raw.decode("ascii", "replace"),
+                "unity_version": unity_version.decode("ascii", "replace"),
+                "revision": revision.decode("ascii", "replace"),
+            }
+    except (OSError, ValueError):
+        return None
+
 def inspect(root):
     rows = []
     total = 0
@@ -41,9 +60,11 @@ def inspect(root):
             size = path.stat().st_size
         except OSError:
             continue
+        header_info = unityfs_header(path) if header.startswith(b"UnityFS") else None
         rows.append({
             "path": rel.as_posix(), "bytes": size,
-            "unityfs": header.startswith(b"UnityFS"),
+            "unityfs": header_info is not None,
+            "unityfs_header": header_info,
             "categories": cats, "biomes": biomes,
         })
     rows.sort(key=lambda row: row["path"])
