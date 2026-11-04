@@ -286,6 +286,21 @@ func bind_local_hero_from_team(owner_peer_ids: Array[int], local_peer_id: int) -
  set_local_hero_slot(found_slot)
  return true
 
+# Bind both identity and class from the same authoritative multiplayer snapshot.
+# Reject incomplete snapshots rather than playing a previous character's audio.
+func bind_local_hero_with_classes(owner_peer_ids: Array[int], class_ids: Array[int], local_peer_id: int) -> bool:
+ clear_local_hero()
+ if class_ids.size() != 4:
+  return false
+ if not bind_local_hero_from_team(owner_peer_ids, local_peer_id):
+  return false
+ var class_id: int = class_ids[local_hero_slot]
+ if class_id < 0 or class_id > 10:
+  clear_local_hero()
+  return false
+ set_local_hero_class_id(class_id)
+ return true
+
 func play_local_hero_event(slot: int, event_name: String) -> void:
  if slot != local_hero_slot or local_hero_slot < 0:
   return
