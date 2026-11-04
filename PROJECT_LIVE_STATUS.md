@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 19:02 UTC**
-Git-Stand: **88c82c47b67205784dbde040afdf5f2455cd2bff** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 19:03 UTC**
+Git-Stand: **0a7d512b708cce9586ba7e08469755ed74fb45b2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,6 +23,7 @@ Git-Stand: **88c82c47b67205784dbde040afdf5f2455cd2bff** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `0a7d512` (2026-11-04): Document reproducible Android FPS testing across graphics and feature teams
 - `88c82c4` (2026-11-04): Fix Skeleton3D export on main by including missing headless Godot exporter
 - `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 - `8d4d164` (2026-11-04): fix(talents): handle non-array persisted talent metadata safely
@@ -46,7 +47,6 @@ Git-Stand: **88c82c47b67205784dbde040afdf5f2455cd2bff** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
-- `f9429b0` (2026-11-04): Add CI smoke test for headless Godot multiplayer test server
 
 ## Bereichsübergreifende Änderungen
 
