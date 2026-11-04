@@ -92,3 +92,9 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - **Keine isolierten Teil-APKs:** Charaktere, Landschaften, Gegner/Bosse, Ausrüstung, UI, Gameplay, Skills/Animationen, Grafik/Rendering, Audio, Titan Chat und Backend werden im selben Build integriert; fehlende Komponenten und Schnittstellenkonflikte werden an die zuständigen Fach-Chats zurückgemeldet.
 - **Freigabe:** Ein erfolgreicher CI-Export bestätigt zunächst nur das Build-Artefakt. Vor einer spielbaren Gesamtversion sind Start-, Integrations-, Gameplay-, Performance- und reale Android-Gerätetests erforderlich. Debug-APK für Tests, signiertes Release/AAB für spätere Veröffentlichung getrennt behandeln.
 - **Schnittstellen:** enge Abstimmung mit Integration/CI für Workflows, allen Feature-Chats für Fehlerbehebung und Grafiktreiber für Android-Gerätekompatibilität. Die zentrale Koordination dokumentiert Status und Abhängigkeiten.
+
+## UI weiter gestalten (2026-11-04)
+- **UI weiter gestalten (zusätzlicher UI-Fach-Chat):** führt die visuelle und funktionale Weiterentwicklung der gemeinsamen Titan-Legends-Oberfläche im Hochformat fort. Arbeitet mit dem bestehenden UI-Bereich zusammen und übernimmt keine separate UI-Implementierung oder eigenständiges Spiel.
+- **Abstimmung:** bestehende UI-Szenen, Theme-Ressourcen und Navigationsstruktur vor Änderungen prüfen; Änderungen mit dem bisherigen UI-Chat koordinieren, damit keine doppelten Menüs oder konkurrierenden Dateien entstehen. Schnittstellen zu Charaktererstellung, Skills, Inventar, Titan Chat, Grafikprofilen und APK-Gesamtbuild dokumentieren.
+- **Verbindliche Charakterregel:** maximal fünf getrennte Charaktere pro Spieler; jeder beginnt auf Level 1; Klasse und Rolle werden ausschließlich bei der Charaktererstellung festgelegt.
+- **Freigabe:** Android-Hochformat, Touch-Bedienbarkeit, Layout-Skalierung, Godot-4.7.2-Kompatibilität und integrierter APK-Starttest prüfen.
