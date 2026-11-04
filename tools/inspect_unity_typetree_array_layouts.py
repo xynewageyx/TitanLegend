@@ -16,7 +16,12 @@ def inspect_arrays(data):
     if version != 21 or file_size != len(data):
         raise ValueError("Expected complete SerializedFile v21")
     endian = "<" if data[16] == 0 else ">"
-    pos = data.index(b"\0", 20) + 1
+    if data_offset > len(data) or metadata_size > len(data):
+        raise ValueError("Invalid SerializedFile boundaries")
+    try:
+        pos = data.index(b"\0", 20, min(len(data), 256)) + 1
+    except ValueError as exc:
+        raise ValueError("Missing Unity version terminator") from exc
 
     def read(fmt):
         nonlocal pos
@@ -41,6 +46,8 @@ def inspect_arrays(data):
         if cid == 114 or script_index >= 0:
             pos += 16
         pos += 16
+        if pos > len(data):
+            raise ValueError("Truncated type metadata")
         node_count, string_bytes = read("ii")
         if not 0 <= node_count <= 100000 or not 0 <= string_bytes <= len(data):
             raise ValueError("Invalid TypeTree dimensions")
@@ -65,17 +72,24 @@ def inspect_arrays(data):
             else:
                 if name_off >= len(strings):
                     raise ValueError("Invalid name offset")
-                end = strings.index(b"\0", name_off)
+                try:
+                    end = strings.index(b"\0", name_off)
+                except ValueError as exc:
+                    raise ValueError("Unterminated TypeTree name") from exc
                 name = strings[name_off:end].decode("utf-8", "replace")
             nodes.append({"index": i, "level": level, "name": name,
                           "size": size, "flags": flags})
         arrays = []
         for i, node in enumerate(nodes):
             # Unity's common TypeTree string-table entry 0x31 is "Array".
-            if i + 2 >= len(nodes) or nodes[i + 1]["name"] != "common:0x31":
+            if i + 3 >= len(nodes) or nodes[i + 1]["name"] not in ("common:0x31", "Array"):
                 continue
             child = nodes[i + 1]
             if child["level"] != node["level"] + 1:
+                continue
+            size_node, element_node = nodes[i + 2], nodes[i + 3]
+            if (size_node["level"] != child["level"] + 1
+                    or element_node["level"] != child["level"] + 1):
                 continue
             j = i + 2
             while j < len(nodes) and nodes[j]["level"] > node["level"]:
@@ -83,7 +97,7 @@ def inspect_arrays(data):
             arrays.append({
                 "parent": node, "array_node": child,
                 "children": nodes[i + 2:j],
-                "element": nodes[i + 3] if i + 3 < j else None,
+                "element": element_node,
             })
         clips.append({"nodes": len(nodes), "arrays": arrays})
     return {"clip_schemas": clips, "metadata_size": metadata_size,
