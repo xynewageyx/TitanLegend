@@ -1,52 +1,53 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:45 UTC**
-Git-Stand: **cc996ec908401630a9c6e3a02842225c72e04e53** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:46 UTC**
+Git-Stand: **60a4ab393b13569b86ceecbef6ac132c613e01d5** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- `d725be7` (2026-11-04): Add headless Chibi Skeleton3D pose smoke test for 11 classes
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `9e7b33b` (2026-11-04): docs: establish verified Ulala backup reference-analysis checklist for forest enemies
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Landschaften — Landschaften-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### UI — UI-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
-- `8abd53f` (2026-11-04): Validate exported Skeleton3D hierarchy and rest transforms in CI
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Audio — Audio-Erstellung-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
+- `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
 - `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
-- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ## Bereichsübergreifende Änderungen
 
