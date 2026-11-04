@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/worlds/grasland/grasland.glb" id="1_gras"]
 
@@ -8,6 +8,24 @@
 
 [ext_resource type="Script" path="res://scenes/forest_battle_arena_controller.gd" id="4_arena"]
 
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial_forest"]
+sky_top_color = Color(0.25, 0.56, 0.88, 1)
+sky_horizon_color = Color(0.76, 0.89, 0.97, 1)
+ground_bottom_color = Color(0.28, 0.42, 0.29, 1)
+ground_horizon_color = Color(0.68, 0.79, 0.60, 1)
+use_debanding = true
+
+[sub_resource type="Sky" id="Sky_forest"]
+sky_material = SubResource("SkyMaterial_forest")
+
+[sub_resource type="Environment" id="Environment_forest"]
+background_mode = 2
+sky = SubResource("Sky_forest")
+ambient_light_source = 2
+ambient_light_color = Color(0.76, 0.84, 0.76, 1)
+ambient_light_energy = 0.75
+reflected_light_source = 1
+
 [node name="GraslandPreview" type="Node3D"]
 
 [node name="Landscape" parent="." instance=ExtResource("1_gras")]
@@ -15,9 +33,14 @@
 [node name="BattleArenaController" type="Node3D" parent="."]
 script = ExtResource("4_arena")
 
+[node name="ForestSky" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_forest")
+
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-48, -25, 0)
-light_energy = 1.4
+light_energy = 1.15
+light_color = Color(1, 0.93, 0.81, 1)
+shadow_opacity = 0.6
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
