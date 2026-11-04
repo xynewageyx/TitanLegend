@@ -1,0 +1,21 @@
+name: Unity animation metadata inspector tests
+
+on:
+  push:
+    branches:
+      - feature/skill-vfx-foundation
+    paths:
+      - tools/inspect_unity_animation.py
+      - tests/test_unity_animation_inspector.py
+      - .github/workflows/unity-animation-inspector.yml
+  workflow_dispatch:
+
+jobs:
+  inspector-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run offline synthetic metadata tests
+        run: python3 -m unittest discover -s tests -p 'test_unity_animation_inspector.py' -v
+      - name: Check inspector syntax
+        run: python3 -m py_compile tools/inspect_unity_animation.py
