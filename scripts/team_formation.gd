@@ -28,7 +28,8 @@ const TALENT_MENU_V2 = preload("res://scripts/talent_menu_v2.gd")
 func set_talent_build_v2(hero_slot: int, level: int, proposed_build: Array) -> bool:
  if hero_slot < 0 or hero_slot >= 4:
   return false
- var builds: Array = get_meta("talent_builds_v2", [])
+ var stored_builds: Variant = get_meta("talent_builds_v2", [])
+ var builds: Array = stored_builds if stored_builds is Array else []
  if builds.size() != 4:
   builds = []
   for index in range(4):
@@ -53,7 +54,10 @@ func upgrade_talent_v2(hero_slot: int, branch: int, talent_index: int) -> bool:
 func get_talent_build_v2(hero_slot: int) -> Array:
  if hero_slot < 0 or hero_slot >= 4:
   return TALENT_TREES_V2.empty_build()
- var builds: Array = get_meta("talent_builds_v2", [])
+ var stored_builds: Variant = get_meta("talent_builds_v2", [])
+ if not stored_builds is Array:
+  return TALENT_TREES_V2.empty_build()
+ var builds: Array = stored_builds
  if builds.size() != 4 or not builds[hero_slot] is Array:
   return TALENT_TREES_V2.empty_build()
  return TALENT_TREES_V2.validate_build(GameManager.character_level, builds[hero_slot])
