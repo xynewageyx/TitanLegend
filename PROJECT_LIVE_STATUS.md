@@ -1,21 +1,21 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:52 UTC**
-Git-Stand: **cad0efca18dc0b3b807e216ecaaa33339b008ffd** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:53 UTC**
+Git-Stand: **420641e0f7d55c62fc7920ba63eb7028f861741e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- `45a588d` (2026-11-04): Export imported Chibi animation clips and track metadata
 - `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
 - `3a6b483` (2026-11-04): Extend Chibi pose smoke test to arms, legs, and pose restoration
 - `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
-- `d725be7` (2026-11-04): Add headless Chibi Skeleton3D pose smoke test for 11 classes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `9e7b33b` (2026-11-04): docs: establish verified Ulala backup reference-analysis checklist for forest enemies
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -27,7 +27,7 @@ Git-Stand: **cad0efca18dc0b3b807e216ecaaa33339b008ffd** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `45a588d` (2026-11-04): Export imported Chibi animation clips and track metadata
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -45,6 +45,7 @@ Git-Stand: **cad0efca18dc0b3b807e216ecaaa33339b008ffd** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
 - `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 
