@@ -264,3 +264,17 @@ Die Bindpose-Matrizen für den gemeinsamen Bone-Hash `0x26921ABD` aus Dujiaoxing
 ### SkinnedMeshRenderer TypeTree in den Haupt-Bundles (2026-11-04)
 
 Die **Haupt-Bundles** `ck_dujiaoxing_hair.prefab_ab`, `ck_dujiaoxing_shoes.prefab_ab`, `ck_dujiaoxing_clothes.prefab_ab` und `ck_chushi_hair.prefab_ab` wurden lokal per UnityFS/LZ4 dekomprimiert und ihre SerializedFile-v21-TypeTrees direkt gelesen. Alle vier enthalten die Unity-Klasse **137 (`SkinnedMeshRenderer`)** mit jeweils **76 TypeTree-Knoten**. Die relevanten Felder liegen übereinstimmend an den Knotenindizes `m_Mesh` 50, `m_Bones` 53, `m_BlendShapeWeights` 59, `m_RootBone` 63, `m_Quality` 47. `m_Mesh` und `m_RootBone` haben je 12 Byte PPtr-Struktur; `m_Bones` ist ein variables Array. Dies sind **Felddefinitionen**, keine ausgelesenen konkreten Bone-PPtr-Werte. Die Auswertung der `m_Bones`-Arraylängen und PPtr-Zuordnungen zu den Transform-Objekten steht aus. Originaldateien bleiben lokal.
+
+
+### Tatsächliche SkinnedMeshRenderer-Objektgrößen in Haupt-Bundles (2026-11-04)
+
+Die lokalen UnityFS-Dateien wurden mit LZ4 dekomprimiert und die SerializedFile-v21-Objektverzeichnisse gelesen. Für Klasse 137 (`SkinnedMeshRenderer`) wurden folgende **tatsächliche Objekt-Payload-Größen** festgestellt:
+
+| Haupt-Bundle | Objekte insgesamt | SkinnedMeshRenderer-Objekte | Renderer-Payload-Größe |
+| --- | ---: | ---: | ---: |
+| `ck_dujiaoxing_hair.prefab_ab` | 163 | 1 | 208 B |
+| `ck_dujiaoxing_shoes.prefab_ab` | 163 | 1 | 292 B |
+| `ck_dujiaoxing_clothes.prefab_ab` | 135 | 1 | 544 B |
+| `ck_chushi_hair.prefab_ab` | 141 | 1 | 208 B |
+
+Die Größen stammen aus den Objektverzeichniseinträgen und sind **keine** bereits dekodierten `m_Bones`-Arraylängen. Alle vier Renderer verwenden den bereits dokumentierten TypeTree mit `m_Mesh`, `m_Bones`, `m_RootBone` und `m_BlendShapeWeights`. Noch offen: Auslesen der PPtr-Listen und Abgleich mit Transform-PathIDs. Die proprietären Original-Bundles bleiben lokal.
