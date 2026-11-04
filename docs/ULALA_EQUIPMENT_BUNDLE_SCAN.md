@@ -226,3 +226,17 @@ Die UnityFS-LZ4-Bundles wurden lokal dekomprimiert; ein TypeTree-geführter Deco
 | `ck_chushi_hair.prefab_ab_shared` | 31.640 B | 1 | 1 | 1 |
 
 Die drei Arraylängen stimmen für jedes Mesh überein; die komplette Payload wurde ohne Restbytes durchlaufen. **Noch offen:** Bindpose-Matrixwerte und konkrete Bone-Hash-Identitäten vergleichen. Die Anzahl verwendeter Knochen allein beweist weder vollständige Rig-Gleichheit noch Inkompatibilität. Es wurden keine proprietären Mesh-Daten ins Repository geladen.
+
+
+### Tatsächliche Bone-Hash- und Bindpose-Payload-Vergleiche (2026-11-04)
+
+Ein lokaler TypeTree-geführter vollständiger Durchlauf der vier Mesh-Payloads (jeweils exakt bis zum Objektende) hat die Bone-Hash-Arrays und die Bindpose-Bytes extrahiert. Aus Datenschutz-/Lizenzgründen werden hier nur aggregierte Vergleiche und SHA-256-Prüfsummen dokumentiert, keine Mesh- oder Matrix-Rohdaten.
+
+| Mesh | Bindposes / Bone-Hashes | Bindpose SHA-256 | Bone-Hash-Array SHA-256 |
+| --- | ---: | --- | --- |
+| Dujiaoxing Hair | 1 / 1 | `ef1dc6543078090868daa08ae5773d916a74ee56689cc391c9d72bc7393921ae` | `1c30848d8f0befa67b5a4a0a34acff13d3075774b665028ecb8f966a1eafefe2` |
+| Chushi Hair | 1 / 1 | `ef1dc6543078090868daa08ae5773d916a74ee56689cc391c9d72bc7393921ae` | `1c30848d8f0befa67b5a4a0a34acff13d3075774b665028ecb8f966a1eafefe2` |
+| Dujiaoxing Shoes | 8 / 8 | `ed09f8275847cc8d6f30dc3cc7fe71b09cff7ec2714da7984b97a2b9dec3644b` | `db7d0d718c1cdfa1ffeaad849a026ddd6073dbcdbbe898ef142a2b93ca54a57e` |
+| Dujiaoxing Clothes | 29 / 29 | `a0e2b4f299c7233becbf263fc530ae2f71306fde2983bf281b114641ea578314` | `b916a156841cc2a5ebafb674c836ea114a29a232d04134fb1f01f33074d43e97` |
+
+**Set-Überschneidungen:** Hair Dujiaoxing ↔ Hair Chushi: 1/1 Hash, exakt gleiche Bindpose-Bytes; Hair Dujiaoxing ↔ Clothes Dujiaoxing: 1 Hash; Shoes ↔ Clothes Dujiaoxing: 3 Hashes. Diese Überschneidungen allein belegen keine vollständige Rig- oder Animationskompatibilität. Die Hash-Prüfsummen gelten für die Array-Payload-Bytes in Originalreihenfolge.
