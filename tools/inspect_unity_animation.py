@@ -36,6 +36,10 @@ def inspect(root: Path):
                         if isinstance(muscle, dict):
                             item["start_time"] = muscle.get("m_StartTime")
                             item["stop_time"] = muscle.get("m_StopTime")
+                            start = item["start_time"]
+                            stop = item["stop_time"]
+                            if isinstance(start, (int, float)) and isinstance(stop, (int, float)) and stop >= start:
+                                item["duration_seconds"] = round(stop - start, 6)
                         curve_keys = (
                             "m_RotationCurves", "m_PositionCurves", "m_ScaleCurves",
                             "m_FloatCurves", "m_PPtrCurves"
@@ -50,6 +54,7 @@ def inspect(root: Path):
                             if isinstance(curve, dict)
                             and isinstance(curve.get("path"), str)
                         })
+                        item["animated_path_count"] = len(item["curve_paths"])
                         item["curve_keyframe_counts"] = {
                             key: sum(
                                 len(curve.get("curve", {}).get("m_Curve", []))
