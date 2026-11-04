@@ -19,6 +19,7 @@ grass_light = material("Meadow highlights", (.40, .70, .23))
 path = material("Warm sandy path", (.74, .55, .30))
 bark = material("Warm tree bark", (.38, .23, .13))
 leaves = [material("Canopy green", (.17, .49, .20)), material("Canopy lime", (.37, .69, .23)), material("Canopy deep", (.12, .38, .20))]
+leaves_sun = material("Sunlit canopy tips", (.52, .76, .30))
 rock = material("Soft sandstone", (.61, .58, .50))
 water = material("River turquoise", (.12, .54, .72))
 water_highlight = material("River glimmer", (.48, .82, .87))
@@ -85,11 +86,16 @@ for i in range(44):
     x = side * rng.uniform(5.2,10.7)
     height = rng.uniform(2.2,3.7)
     trunk("Tree trunk %03d" % i,x,y,height,.24 + height*.04)
-    # Overlapping asymmetric clusters give a rounded cartoon silhouette.
+    # Layered asymmetric crowns with a brighter upper canopy.
+    crown_width = rng.uniform(1.0, 1.35)
     for j in range(3):
-        offset = (j-1)*.65
-        ico("Tree foliage %03d-%d" % (i,j), (x+offset,y+rng.uniform(-.35,.35),height+(.45 if j!=1 else .9)),
-            (1.08+rng.random()*.35,1.1+rng.random()*.4,.88+rng.random()*.35), leaves[(i+j)%3],2)
+        offset = (j-1)*.58
+        ico("Tree foliage %03d-%d" % (i,j),
+            (x+offset,y+rng.uniform(-.30,.30),height+(.52 if j!=1 else 1.0)),
+            (crown_width,1.15+rng.random()*.3,.85+rng.random()*.3),
+            leaves[(i+j)%3],2)
+    ico("Sunlit crown %03d" % i,(x-.2,y-.12,height+1.55),
+        (.77,.85,.42),leaves_sun,2)
 
 for i in range(65):
     y = rng.uniform(-32,16)
