@@ -31,7 +31,11 @@ func on_verified_login(peer_id: int, verified_account_id: String) -> bool:
 		return false
 	if not authority.can_admit_account(verified_account_id, int(Time.get_unix_time_from_system())):
 		return false
-	return authority.bind_authenticated_peer(peer_id, verified_account_id)
+	var bound := authority.bind_authenticated_peer(peer_id, verified_account_id)
+	if bound:
+		# Login can finish after the initial client access request.
+		receive_admin_access.rpc_id(peer_id, authority.has_owner_access(peer_id))
+	return bound
 
 # Called by the trusted session manager on logout or token revocation.
 # Removes access immediately without waiting for the network disconnect.
