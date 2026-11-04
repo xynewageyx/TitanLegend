@@ -11,6 +11,7 @@ on:
       - tools/validate_skeleton3d_inventory.py
       - tools/test_chibi_pose_smoke.gd
       - tools/test_chibi_animation_keyframes.gd
+      - tools/export_chibi_animation_inventory.gd
       - tests/test_validate_skeleton3d_inventory.py
 
 jobs:
@@ -40,6 +41,10 @@ jobs:
       - name: Smoke-test Chibi animation keyframes
         run: |
           "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_keyframes.gd
+      - name: Export imported Chibi animation metadata
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/export_chibi_animation_inventory.gd
+          test -s build/chibi_animation_inventory.json
       - name: Export skeleton hierarchy and rest poses
         run: |
           mkdir -p build
@@ -55,4 +60,5 @@ jobs:
           path: |
             build/skeleton3d_inventory.json
             build/skeleton3d_validation.json
+            build/chibi_animation_inventory.json
           if-no-files-found: error
