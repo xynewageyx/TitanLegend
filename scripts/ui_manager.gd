@@ -39,6 +39,8 @@ var action_button: Button
 var astral_shop_button: Button
 var weapon_hero_slot: int = 0
 var loot_selected_slot: int = -1
+var loot_equipped_overview: Label
+var loot_slot_buttons: Array[Button] = []
 var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
@@ -393,6 +395,18 @@ func _make_hud() -> void:
  weapon_upgrade_button = _make_button("⚔ Waffe verbessern", weapon_grid, _upgrade_current_weapon, 17)
  weapon_rarity_button = _make_button("✦ Qualität erhöhen", weapon_grid, _upgrade_current_weapon_rarity, 17)
  _equipment_heading(modal, "◆ BEUTE & AUSRÜSTUNG")
+ loot_equipped_overview = Label.new()
+ loot_equipped_overview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ loot_equipped_overview.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
+ modal.add_child(loot_equipped_overview)
+ var loot_slot_grid := GridContainer.new()
+ loot_slot_grid.columns = 3
+ modal.add_child(loot_slot_grid)
+ for slot_index in range(GameManager.LOOT_SLOTS.size()):
+  var loot_tile := _make_button(GameManager.LOOT_SLOTS[slot_index], loot_slot_grid, _select_loot_slot.bind(slot_index), 14)
+  loot_tile.toggle_mode = true
+  loot_tile.custom_minimum_size.y = 64
+  loot_slot_buttons.append(loot_tile)
  var loot_grid := GridContainer.new()
  loot_grid.columns = 2
  loot_grid.add_theme_constant_override("h_separation", 8)
