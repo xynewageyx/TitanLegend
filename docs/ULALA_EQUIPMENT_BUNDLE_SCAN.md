@@ -240,3 +240,17 @@ Ein lokaler TypeTree-geführter vollständiger Durchlauf der vier Mesh-Payloads 
 | Dujiaoxing Clothes | 29 / 29 | `a0e2b4f299c7233becbf263fc530ae2f71306fde2983bf281b114641ea578314` | `b916a156841cc2a5ebafb674c836ea114a29a232d04134fb1f01f33074d43e97` |
 
 **Set-Überschneidungen:** Hair Dujiaoxing ↔ Hair Chushi: 1/1 Hash, exakt gleiche Bindpose-Bytes; Hair Dujiaoxing ↔ Clothes Dujiaoxing: 1 Hash; Shoes ↔ Clothes Dujiaoxing: 3 Hashes. Diese Überschneidungen allein belegen keine vollständige Rig- oder Animationskompatibilität. Die Hash-Prüfsummen gelten für die Array-Payload-Bytes in Originalreihenfolge.
+
+
+### Korrektur und Bindpose-Vergleich pro Knochen-Hash (2026-11-04)
+
+**Korrektur der vorherigen Angabe:** Dujiaoxing Shoes und Clothes teilen **2**, nicht 3, Knochen-Hashes. Der frühere Wert 3 ist überholt. Die Matrixvergleiche wurden anhand der aus den vollständig dekodierten Mesh-Payloads extrahierten 64-Byte-Bindpose-Einträge vorgenommen, jeweils nach identischem 32-Bit-Bone-Hash zugeordnet; identisch bedeutet bytegleiche Matrixdaten (SHA-256-Vergleich).
+
+| Paar | Gemeinsame Bone-Hashes | Identische 64-Byte-Bindposes | Unterschiedliche Bindposes |
+| --- | ---: | ---: | ---: |
+| Dujiaoxing Hair / Chushi Hair | 1 | 1 | 0 |
+| Dujiaoxing Hair / Dujiaoxing Clothes | 1 | 0 | 1 |
+| Dujiaoxing Shoes / Dujiaoxing Clothes | 2 | 2 | 0 |
+| Dujiaoxing Hair / Dujiaoxing Shoes | 0 | 0 | 0 |
+
+Alle vier Mesh-Payloads wurden vollständig bis zu ihrer deklarierten Byte-Länge traversiert (35.012 / 31.640 / 18.548 / 135.904 Byte). **Interpretation:** Gleichheit der Bindpose eines gemeinsamen Knochen-Hashes ist ein Indiz für Rig-Konsistenz an diesem Knochen, beweist aber weder komplette Skelettgleichheit noch Ausrüstungs-Austauschbarkeit. Der Unterschied bei Hair/Clothes verlangt weitere Prüfung der Bindungsräume, Root-Transforms und Renderer-Bone-Zuordnung. Keine proprietären Asset-Rohdaten wurden ins Repository geladen.
