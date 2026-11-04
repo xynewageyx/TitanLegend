@@ -81,9 +81,16 @@ static func style_menu_tree(node: Node) -> void:
   (node as Label).add_theme_color_override("font_color", INK)
  elif node is ProgressBar:
   small_bar(node as ProgressBar, TEAL)
+ elif node is TextEdit:
+  var multi: TextEdit = node as TextEdit
+  multi.add_theme_stylebox_override("normal", plaque(Color("#fffae9"), WOOD, 10, 2))
+  multi.add_theme_stylebox_override("focus", plaque(Color("#fff6d8"), GOLD, 10, 2))
+  multi.add_theme_color_override("font_color", INK)
+  multi.add_theme_color_override("font_placeholder_color", MUTED)
  elif node is LineEdit:
   var edit: LineEdit = node as LineEdit
   edit.add_theme_stylebox_override("normal", plaque(Color("#fffae9"), WOOD, 10, 2))
+  edit.add_theme_stylebox_override("focus", plaque(Color("#fff6d8"), GOLD, 10, 2))
   edit.add_theme_color_override("font_color", INK)
   edit.add_theme_color_override("font_placeholder_color", MUTED)
  for child in node.get_children():
@@ -94,3 +101,16 @@ static func _animate_button(button_node: Button, target: Vector2) -> void:
   return
  var tween := button_node.create_tween()
  tween.tween_property(button_node, "scale", target, 0.11).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+# Shared optional helpers for new portrait panels. Existing gameplay is unchanged.
+static func section_heading(label: Label) -> void:
+ title(label, 22)
+ label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
+static func touch_action(action: Button, primary: bool = false) -> void:
+ button(action, primary, false)
+ action.custom_minimum_size.y = maxf(action.custom_minimum_size.y, 64.0)
+ action.focus_mode = Control.FOCUS_ALL
+
+static func status_chip(panel: PanelContainer, positive: bool = false) -> void:
+ panel.add_theme_stylebox_override("panel", plaque(Color("#e6f3d9") if positive else PAPER_ALT, GREEN if positive else WOOD, 12, 2))

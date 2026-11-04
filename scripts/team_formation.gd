@@ -24,7 +24,6 @@ var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
 var talent_ranks: Array = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]]
 const TALENT_TREES_V2 = preload("res://scripts/talent_tree_v2.gd")
-const TALENT_MENU_V2 = preload("res://scripts/talent_menu_v2.gd")
 # Optional V2 builds. No legacy talent values are overwritten.
 func set_talent_build_v2(hero_slot: int, level: int, proposed_build: Array) -> bool:
  if hero_slot < 0 or hero_slot >= 4:
@@ -366,9 +365,6 @@ func _on_attack_step_finished(hero_index: int) -> void:
 
 const COLORS = [Color("#c8d0df"), Color("#4f85d9"), Color("#a06dd8"), Color("#6bc37d")]
 func _ready() -> void:
- var talent_menu: CanvasLayer = TALENT_MENU_V2.new()
- talent_menu.name = "TalentMenuV2"
- add_child(talent_menu)
  add_to_group("talent_team")
  _load_classes()
  _load_roles()

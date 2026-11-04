@@ -18,7 +18,10 @@ class FantasyUIRegression(unittest.TestCase):
     def test_preserved_update168_boss_motion_matches_manifest(self):
         manifest = json.loads((ROOT / 'docs/update_168_import_manifest.json').read_text(encoding='utf-8'))
         expected = next(item for item in manifest['files'] if item['path'] == 'scripts/boss_motion.gd')
-        original = (ROOT / 'original_update168/scripts/boss_motion.gd').read_bytes()
+        archived_path = ROOT / 'original_update168/scripts/boss_motion.gd'
+        if not archived_path.is_file():
+            self.skipTest('Update 168 source archive is not included in this checkout')
+        original = archived_path.read_bytes()
         self.assertEqual(len(original), expected['bytes'])
         self.assertEqual(hashlib.sha256(original).hexdigest(), expected['sha256'])
 
@@ -89,12 +92,15 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot).is_empty()', manager)
 
     def test_character_startup_and_immutable_player_role(self):
-        project = (self.root / "project.godot").read_text(encoding="utf-8")
+        project = (ROOT / "project.godot").read_text(encoding="utf-8")
         team = self.read_script("team_formation.gd")
         startup = self.read_script("character_startup.gd")
         self.assertIn('run/main_scene="res://scenes/character_startup.tscn"', project)
         self.assertIn('SaveManager.character_switching_enabled = true', startup)
-        self.assertIn('SaveManager.load_game()', startup)
+        self.assertIn('SaveManager.begin_game_session()', startup)
+        manager = self.read_script("save_manager.gd")
+        self.assertIn('func begin_game_session() -> void:', manager)
+        self.assertIn(' load_game()', manager.split('func begin_game_session() -> void:', 1)[1].split('\nfunc ', 1)[0])
         self.assertIn('class_ids[0] = int(profile.get("class_id"', team)
         self.assertIn('role_ids[0] = int(profile.get("role_id"', team)
         self.assertIn('if SaveManager.active_character_slot >= 0 and slot == 0:', team)
