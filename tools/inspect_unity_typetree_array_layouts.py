@@ -16,17 +16,19 @@ def inspect_arrays(data):
     if version != 21 or file_size != len(data):
         raise ValueError("Expected complete SerializedFile v21")
     endian = "<" if data[16] == 0 else ">"
-    if data_offset > len(data) or metadata_size > len(data):
+    if data_offset > len(data) or metadata_size > len(data) or metadata_size < 20:
         raise ValueError("Invalid SerializedFile boundaries")
     try:
         pos = data.index(b"\0", 20, min(len(data), 256)) + 1
     except ValueError as exc:
         raise ValueError("Missing Unity version terminator") from exc
 
+    metadata_limit = min(len(data), metadata_size)
+
     def read(fmt):
         nonlocal pos
         size = struct.calcsize(fmt)
-        if pos + size > len(data):
+        if pos + size > metadata_limit:
             raise ValueError("Truncated metadata")
         result = struct.unpack_from(endian + fmt, data, pos)
         pos += size
@@ -46,19 +48,19 @@ def inspect_arrays(data):
         if cid == 114 or script_index >= 0:
             pos += 16
         pos += 16
-        if pos > len(data):
+        if pos > metadata_limit:
             raise ValueError("Truncated type metadata")
         node_count, string_bytes = read("ii")
         if not 0 <= node_count <= 100000 or not 0 <= string_bytes <= len(data):
             raise ValueError("Invalid TypeTree dimensions")
-        if pos + node_count * 32 + string_bytes > len(data):
+        if pos + node_count * 32 + string_bytes > metadata_limit:
             raise ValueError("Truncated TypeTree")
         raw_nodes = data[pos:pos + node_count * 32]
         pos += node_count * 32
         strings = data[pos:pos + string_bytes]
         pos += string_bytes
         dependencies = read("i")
-        if not 0 <= dependencies <= 100000 or pos + dependencies * 4 > len(data):
+        if not 0 <= dependencies <= 100000 or pos + dependencies * 4 > metadata_limit:
             raise ValueError("Invalid dependencies")
         pos += dependencies * 4
         if cid != 74:
