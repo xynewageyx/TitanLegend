@@ -2,6 +2,11 @@ name: Export Titan Legends Skeleton3D inventory
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/export-skeleton3d-inventory.yml
 
 jobs:
   export-skeletons:
