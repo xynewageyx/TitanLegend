@@ -1,37 +1,35 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 03:30 UTC**
-Git-Stand: **2fda10e331709f47d0fc4ee3380174754d56b08d** auf Branch **main**
+Git-Stand: **0bf4449b51515363d07606a8aa45a76aa5d564c0** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Landschaften — Landschaften-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### UI — UI-Chat
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 - `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
@@ -48,14 +46,14 @@ Git-Stand: **2fda10e331709f47d0fc4ee3380174754d56b08d** auf Branch **main**
 - `8cc0059` (2026-11-04): Add fail-closed account ban admission check for trusted multiplayer login
 
 ### Audio — Audio-Erstellung-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
+- `85d96be` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ## Bereichsübergreifende Änderungen
 
