@@ -9,7 +9,10 @@ import json
 import struct
 from pathlib import Path
 
-from inspect_unity_objects import Reader, inspect_serialized
+try:
+    from .inspect_unity_objects import Reader, inspect_serialized
+except ImportError:  # Direct execution as a script
+    from inspect_unity_objects import Reader, inspect_serialized
 
 
 def type_tree_paths(data, class_id=43, field_filter=None):
