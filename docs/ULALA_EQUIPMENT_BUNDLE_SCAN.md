@@ -254,3 +254,8 @@ Ein lokaler TypeTree-geführter vollständiger Durchlauf der vier Mesh-Payloads 
 | Dujiaoxing Hair / Dujiaoxing Shoes | 0 | 0 | 0 |
 
 Alle vier Mesh-Payloads wurden vollständig bis zu ihrer deklarierten Byte-Länge traversiert (35.012 / 31.640 / 18.548 / 135.904 Byte). **Interpretation:** Gleichheit der Bindpose eines gemeinsamen Knochen-Hashes ist ein Indiz für Rig-Konsistenz an diesem Knochen, beweist aber weder komplette Skelettgleichheit noch Ausrüstungs-Austauschbarkeit. Der Unterschied bei Hair/Clothes verlangt weitere Prüfung der Bindungsräume, Root-Transforms und Renderer-Bone-Zuordnung. Keine proprietären Asset-Rohdaten wurden ins Repository geladen.
+
+
+### Numerischer Float32-Vergleich statt nur Bytegleichheit (2026-11-04)
+
+Die Bindpose-Matrizen für den gemeinsamen Bone-Hash `0x26921ABD` aus Dujiaoxing Hair und Clothes wurden als jeweils 16 IEEE-754-Float32-Werte aus den bereits vollständig dekodierten Mesh-Objekten gelesen. **Ergebnis:** 6 von 16 Elementen unterscheiden sich bitweise, aber die maximale absolute Differenz beträgt lediglich `2.9802322387695312e-08`; Frobenius-Norm der Differenz `2.9802322388250966e-08`. Bei absoluter Toleranz `1e-6` und relativer Toleranz `0` gelten alle 16 Matrixelemente als numerisch übereinstimmend. Die zuvor dokumentierte Aussage **„unterschiedliche Bindposes“** beschreibt nur Byte-Ungleichheit, nicht eine bedeutsame geometrische Abweichung. **Nicht bewiesen:** vollständige Rig-/Renderer-Kompatibilität, korrekte Transform-Bindungsräume oder Animationsverhalten. Keine Matrix-Rohdaten wurden ins Repository übertragen.
