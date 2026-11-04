@@ -1,55 +1,54 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:54 UTC**
-Git-Stand: **bb7254be48df1f6547f5e044c2cd43af42e9a9a0** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:56 UTC**
+Git-Stand: **a09f4998f54de95acbc023296f2db97097da267c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- `785b88c` (2026-11-04): Test Chibi animation coverage counting and incomplete inventories
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 - `60713c4` (2026-11-04): Summarize imported Chibi animation coverage and missing hero scenes
 - `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
-- `45a588d` (2026-11-04): Export imported Chibi animation clips and track metadata
-- `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `45a588d` (2026-11-04): Export imported Chibi animation clips and track metadata
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 - `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
 - `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
-- `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 
 ## Bereichsübergreifende Änderungen
 
