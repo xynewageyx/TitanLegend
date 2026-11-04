@@ -22,6 +22,8 @@ on:
       - "tests/test_unity_animation_candidates.py"
       - "tools/summarize_unity_clip_value_probe.py"
       - "tests/test_unity_clip_value_probe_summary.py"
+      - "tools/audit_unity_clip_failure_stages.py"
+      - "tests/test_unity_clip_failure_stages.py"
       - ".github/workflows/unity-typetree-tests.yml"
   pull_request:
     paths:
@@ -44,6 +46,8 @@ on:
       - "tests/test_unity_animation_candidates.py"
       - "tools/summarize_unity_clip_value_probe.py"
       - "tests/test_unity_clip_value_probe_summary.py"
+      - "tools/audit_unity_clip_failure_stages.py"
+      - "tests/test_unity_clip_failure_stages.py"
       - ".github/workflows/unity-typetree-tests.yml"
   workflow_dispatch:
 
@@ -61,6 +65,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_verify_bone_hierarchy_hashes.py' -v
       - name: Run transform hierarchy integrity tests
         run: python -m unittest discover -s tests -p 'test_unity_transform_hierarchy_audit.py' -v
+      - name: Run clip parser failure-stage tests
+        run: python -m unittest discover -s tests -p 'test_unity_clip_failure_stages.py' -v
       - name: Run clip parser error classification tests
         run: python -m unittest discover -s tests -p 'test_unity_clip_value_probe_summary.py' -v
       - name: Run animation candidate classification tests
