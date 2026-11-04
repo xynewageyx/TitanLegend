@@ -325,3 +325,19 @@ Die m_Bones-PPtrs wurden lokal über Transform.m_GameObject zu GameObject-Namen 
 Die vier lokal dekodierten Mesh-Arrays wurden positionsgetreu mit den bereits aufgelösten Renderer-m_Bones-Transform-Namen verbunden (Hair Dujiaoxing 1, Shoes Dujiaoxing 8, Clothes Dujiaoxing 29, Hair Chushi 1): **39 von 39 Positionen** besitzen je einen Namen und einen 32-Bit-Hash. Über alle vier Meshes ergeben sich **35 unterschiedliche Namen und 35 unterschiedliche Hashes**. Weder wurde ein Name mit zwei unterschiedlichen Hashes noch ein Hash mit zwei unterschiedlichen Namen beobachtet.
 
 Mehrfach vorkommende Namen und jeweils identische Hashwerte: `male_Bip001 Head` → `0x26921ABD`; `male_Bip001 R Thigh` → `0xCE1A28CF`; `male_Bip001 L Thigh` → `0xF9FBCF5C`. Die Werte stammen aus den Original-Mesh-Arrays, nicht aus einem vermuteten Hash-Algorithmus. Die Ergebnisse sind eine **konsistente positionsweise Zuordnung**, jedoch noch keine unabhängige Verifikation der Unity-Bone-Hash-Berechnung und kein Beweis für Animationskompatibilität. Keine Original-Mesh-Daten hochgeladen.
+
+
+### Unabhängige Kandidatenprüfung der Bone-Hash-Funktion (2026-11-04)
+
+Die 39 zuvor positionsweise zugeordneten Renderer-Bone-Einträge wurden auf **35 eindeutige Name/Hash-Paare** reduziert. Für jeden Namen wurde geprüft, ob die in den Mesh-Daten gespeicherte 32-Bit-Zahl durch eine verbreitete Hashfunktion aus den **UTF-8-Bytes des bloßen Transform-Namens** reproduzierbar ist.
+
+| Kandidat | Exakte Treffer von 35 |
+| --- | ---: |
+| CRC32 (Originalschreibweise) | 0 |
+| CRC32 (kleingeschrieben) | 0 |
+| FNV-1a 32-bit (Originalschreibweise) | 0 |
+| FNV-1a 32-bit (kleingeschrieben) | 0 |
+| DJB2 32-bit (Originalschreibweise) | 0 |
+| DJB2 32-bit (kleingeschrieben) | 0 |
+
+**Schlussfolgerung:** Keine der sechs geprüften Kombinationen bildet die gespeicherten Mesh-BoneNameHashes direkt aus den bloßen Transform-Namen ab. Dies **widerlegt nicht**, dass Unity beispielsweise vollständige Hierarchiepfade oder andere Encodings/Hashfunktionen verwendet. Für Titan Legends keine dieser Kandidatenfunktionen ungeprüft als Ersatz einsetzen. Die 39 positionsweisen Zuordnungen bleiben gültige Beobachtungen, aber noch keine unabhängige mathematische Hash-Bestätigung.
