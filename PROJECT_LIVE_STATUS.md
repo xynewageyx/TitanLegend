@@ -1,23 +1,23 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 03:29 UTC**
-Git-Stand: **c9721e94512b4ca3d2a0f815a4962f01cb1fe9fd** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 03:30 UTC**
+Git-Stand: **2fda10e331709f47d0fc4ee3380174754d56b08d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### UI — UI-Chat
 - `39cf629` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
@@ -31,9 +31,11 @@ Git-Stand: **c9721e94512b4ca3d2a0f815a4962f01cb1fe9fd** auf Branch **main**
 - `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
+- `6380fa2` (2026-11-04): Avoid redundant graphics updates when adaptive resolution reaches its floor
 - `6013245` (2026-11-04): Update developer graphics diagnostics regression for requested scale label
 - `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
@@ -46,13 +48,14 @@ Git-Stand: **c9721e94512b4ca3d2a0f815a4962f01cb1fe9fd** auf Branch **main**
 - `8cc0059` (2026-11-04): Add fail-closed account ban admission check for trusted multiplayer login
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d7dbc1d` (2026-11-03): Align portrait formation and camera regression expectations with current game layout
 
 ## Bereichsübergreifende Änderungen
 
