@@ -1,5 +1,5 @@
 extends SceneTree
-## Headless animation playback smoke test for the eleven imported Chibi rigs.
+## Headless animation keyframe interpolation smoke test for eleven imported Chibi rigs.
 ## Procedural placeholder clips; NOT converted Unity animation data.
 
 const HEROES := ["brawler", "druid", "hunter", "mage", "paladin", "priest", "rogue", "shaman", "summoner", "warlock", "warrior"]
@@ -37,6 +37,11 @@ func _initialize() -> void:
             clip.rotation_track_insert_key(track, 0.3, original * Quaternion(Vector3.RIGHT, amplitude))
             clip.rotation_track_insert_key(track, 0.6, original)
             var middle := clip.rotation_track_interpolate(track, 0.3)
+            var start := clip.rotation_track_interpolate(track, 0.0)
+            var finish := clip.rotation_track_interpolate(track, 0.6)
+            if start.angle_to(original) > 0.001 or finish.angle_to(original) > 0.001:
+                failures.append("%s: %s keyframe endpoints incorrect" % [scene_path, clip_id])
+                continue
             if abs(middle.angle_to(original) - amplitude) > 0.02:
                 failures.append("%s: %s keyframe interpolation failed" % [scene_path, clip_id])
             else:
