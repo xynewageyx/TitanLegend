@@ -28,6 +28,8 @@ var attack_variant: int = 0
 # Visual-only secondary motion (no new meshes or combat timers).
 var stride_blend: float = 0.0
 var attack_lean: float = 0.0
+var skill_cast_remaining: float = 0.0
+var skill_cast_role: int = -1
 var skill_flash_remaining: float = 0.0
 var skill_flash_duration: float = 0.55
 var skill_flash: MeshInstance3D
@@ -129,6 +131,8 @@ func play_skill_cast(role: int, choice: int) -> void:
  # Distinct skill pulse; passive pets never cast or attack.
  skill_flash_remaining = skill_flash_duration
  play_attack()
+ skill_cast_remaining = attack_duration
+ skill_cast_role = role
  if skill_flash == null:
   return
  var tint := Color("#f3ba62")
@@ -209,6 +213,7 @@ func _process(delta: float) -> void:
  elapsed += delta
  _update_face_animation()
  attack_remaining = maxf(0.0, attack_remaining - delta)
+ skill_cast_remaining = maxf(0.0, skill_cast_remaining - delta)
  hit_remaining = maxf(0.0, hit_remaining - delta)
  dodge_remaining = maxf(0.0, dodge_remaining - delta)
  element_remaining = maxf(0.0, element_remaining - delta)
@@ -273,6 +278,23 @@ func _process(delta: float) -> void:
    right_arm.rotation.x = -0.78 * swing
    left_arm.rotation.x = -1.15 * swing
    right_arm.rotation.z = alternate * 0.12 * swing
+  # Equipped skills use their own casting silhouette instead of a basic swing.
+  if skill_cast_remaining > 0.0:
+   if skill_cast_role == 0:
+    # Frontline: brace, then deliver a heavy shield or weapon impact.
+    left_arm.rotation.x = -0.85 * windup * recovery
+    right_arm.rotation.x = 0.55 * windup * (1.0 - strike) - 2.05 * swing
+    right_arm.rotation.z = alternate * 0.42 * swing
+   elif skill_cast_role == 1:
+    # Damage dealers: draw back, release forward, recover quickly.
+    left_arm.rotation.x = -0.75 * windup * recovery
+    right_arm.rotation.x = -1.55 * swing
+    right_arm.rotation.z = alternate * 0.18 * swing
+   else:
+    # Healers: lift both arms and channel without a weapon strike.
+    left_arm.rotation.x = -1.30 * windup * recovery
+    right_arm.rotation.x = -1.30 * windup * recovery
+    right_arm.rotation.z = 0.12 * swing
   # Weight transfer during windup and strike makes attacks less rigid.
   left_leg.rotation.x += 0.15 * windup * (1.0 - strike)
   right_leg.rotation.x -= 0.22 * swing
