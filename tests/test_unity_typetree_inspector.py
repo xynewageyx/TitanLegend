@@ -12,7 +12,7 @@ from tools.inspect_unity_typetree import type_tree_paths
 class TypeTreeInspectorTests(unittest.TestCase):
     def test_reads_nested_bindpose_field_path(self):
         # Synthetic TypeTree metadata, not extracted proprietary asset content.
-        strings = b"Mesh\\0m_BindPose\\0Array\\0size\\0data\\0"
+        strings = b"Mesh\0m_BindPose\0Array\0size\0data\0"
         offsets = {"Mesh": 0, "m_BindPose": 5, "Array": 16,
                    "size": 22, "data": 27}
         nodes = [
@@ -21,7 +21,7 @@ class TypeTreeInspectorTests(unittest.TestCase):
         ]
         payload = bytearray(20)
         payload[16] = 0  # little endian
-        payload.extend(b"2019.4.16f1\\0")
+        payload.extend(b"2019.4.16f1\0")
         payload.extend(struct.pack("<i?i", 13, True, 1))
         payload.extend(struct.pack("<i?h", 43, False, -1))
         payload.extend(bytes(16))
