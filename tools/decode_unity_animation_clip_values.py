@@ -12,10 +12,16 @@ import json
 from pathlib import Path
 import struct
 
-try:
-    from tools.inspect_unity_animation_clip_headers import decode_bundle
-except ModuleNotFoundError:
-    from inspect_unity_animation_clip_headers import decode_bundle
+# Lazy import: synthetic parser tests do not need UnityFS decompression/lz4.
+# Keep missing optional dependencies distinct from module path errors.
+def decode_bundle(data):
+    try:
+        from tools.inspect_unity_animation_clip_headers import decode_bundle as unpack
+    except ImportError as exc:
+        if exc.name != "tools.inspect_unity_animation_clip_headers":
+            raise
+        from inspect_unity_animation_clip_headers import decode_bundle as unpack
+    return unpack(data)
 
 
 def aligned(position):
