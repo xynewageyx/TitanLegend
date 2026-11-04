@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:33 UTC**
-Git-Stand: **6e487cc803f70178fc48ff1d08e3268761dbdbb8** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:34 UTC**
+Git-Stand: **6f849d0947350a8cc540a8480a8b9ab0e92a3249** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -49,6 +49,7 @@ Git-Stand: **6e487cc803f70178fc48ff1d08e3268761dbdbb8** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `6f849d0` (2026-11-04): Add regression tests for Skeleton3D inventory validator
 - `6e487cc` (2026-11-04): Reject Skeleton3D parent cycles and inconsistent bone indices
 
 ## Regeln für alle Fach-Chats
