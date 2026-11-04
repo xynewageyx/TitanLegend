@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:57 UTC**
-Git-Stand: **8cb52468090b123daa12c1cbb4622a0bf28b314a** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:58 UTC**
+Git-Stand: **404226157826d58a722e9f4effece6d7d468705e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -45,6 +45,7 @@ Git-Stand: **8cb52468090b123daa12c1cbb4622a0bf28b314a** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `4042261` (2026-11-04): Preserve partial skeleton and animation reports when CI fails
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 - `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
@@ -54,7 +55,6 @@ Git-Stand: **8cb52468090b123daa12c1cbb4622a0bf28b314a** auf Branch **main**
 
 - `8cb5246` (2026-11-04): Check procedural animation start/end keyframes and clarify interpolation-only test
 - `ed05909` (2026-11-04): Add headless procedural idle run attack keyframe smoke test
-- `0947faf` (2026-11-04): tools: add read-only UnityFS bundle metadata inventory for Ulala reference analysis
 
 ## Regeln für alle Fach-Chats
 
