@@ -36,9 +36,29 @@ def inspect(root: Path):
                         if isinstance(muscle, dict):
                             item["start_time"] = muscle.get("m_StartTime")
                             item["stop_time"] = muscle.get("m_StopTime")
-                        item["curve_count"] = sum(len(tree.get(k, [])) for k in (
+                        curve_keys = (
                             "m_RotationCurves", "m_PositionCurves", "m_ScaleCurves",
-                            "m_FloatCurves", "m_PPtrCurves"))
+                            "m_FloatCurves", "m_PPtrCurves"
+                        )
+                        item["curve_count"] = sum(
+                            len(tree.get(k, [])) for k in curve_keys
+                        )
+                        item["curve_paths"] = sorted({
+                            curve["path"]
+                            for key in curve_keys
+                            for curve in tree.get(key, [])
+                            if isinstance(curve, dict)
+                            and isinstance(curve.get("path"), str)
+                        })
+                        item["curve_keyframe_counts"] = {
+                            key: sum(
+                                len(curve.get("curve", {}).get("m_Curve", []))
+                                for curve in tree.get(key, [])
+                                if isinstance(curve, dict)
+                                and isinstance(curve.get("curve"), dict)
+                            )
+                            for key in curve_keys
+                        }
                     elif obj.type.name == "AnimatorOverrideController":
                         item["clip_override_count"] = len(tree.get("m_Clips", []))
                 except Exception as exc:
