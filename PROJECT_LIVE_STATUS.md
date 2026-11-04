@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:46 UTC**
-Git-Stand: **f9f703e6814c3f2e687aff4d6dc5f7363936d273** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:48 UTC**
+Git-Stand: **57ab5340a0762a4ef28d18cbd8204ffd47d73b19** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 - `d725be7` (2026-11-04): Add headless Chibi Skeleton3D pose smoke test for 11 classes
 
@@ -52,7 +53,6 @@ Git-Stand: **f9f703e6814c3f2e687aff4d6dc5f7363936d273** auf Branch **main**
 - `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 - `b87d2a0` (2026-11-04): Reject duplicate and out-of-order Skeleton3D bone indices
 - `6f849d0` (2026-11-04): Add regression tests for Skeleton3D inventory validator
-- `6e487cc` (2026-11-04): Reject Skeleton3D parent cycles and inconsistent bone indices
 
 ## Regeln für alle Fach-Chats
 
