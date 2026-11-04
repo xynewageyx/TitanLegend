@@ -76,9 +76,21 @@ for i in range(12):
     ico("Rolling meadow bank %02d" % i, (x, y, -.15), (3.8, 3.1, .65),
         grass_light if i % 3 == 0 else meadow_shadow, 2)
 
-for i in range(55):
-    y = -33 + i * .95
-    ico("Path segment %03d" % i, (route_x(y),y,.025), (2.4,.85,.045), path, 1)
+# Continuous winding trail: one mesh instead of 55 overlapping objects.
+trail_vertices = []
+trail_faces = []
+for i in range(111):
+    y = -33.0 + 52.0 * i / 110
+    x = route_x(y)
+    slope = 0.1955 * math.cos((y + 32) * .17)
+    inv_length = 1.0 / math.sqrt(1.0 + slope * slope)
+    width = 1.18 + .12 * math.sin(y * .41)
+    trail_vertices.append((x - width * inv_length, y + width * slope * inv_length, .025))
+    trail_vertices.append((x + width * inv_length, y - width * slope * inv_length, .025))
+    if i > 0:
+        j = 2 * (i - 1)
+        trail_faces.append((j, j + 1, j + 3, j + 2))
+mesh_obj("Continuous winding forest trail", trail_vertices, trail_faces, path)
 
 for i in range(44):
     y = rng.uniform(-32,15)
