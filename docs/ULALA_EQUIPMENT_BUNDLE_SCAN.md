@@ -278,3 +278,17 @@ Die lokalen UnityFS-Dateien wurden mit LZ4 dekomprimiert und die SerializedFile-
 | `ck_chushi_hair.prefab_ab` | 141 | 1 | 208 B |
 
 Die Größen stammen aus den Objektverzeichniseinträgen und sind **keine** bereits dekodierten `m_Bones`-Arraylängen. Alle vier Renderer verwenden den bereits dokumentierten TypeTree mit `m_Mesh`, `m_Bones`, `m_RootBone` und `m_BlendShapeWeights`. Noch offen: Auslesen der PPtr-Listen und Abgleich mit Transform-PathIDs. Die proprietären Original-Bundles bleiben lokal.
+
+
+### Renderer-m_Bones-Payloads vollständig gelesen (2026-11-04)
+
+Die lokalen Haupt-Bundles wurden als UnityFS/LZ4 und SerializedFile-v21 dekomprimiert. Die SkinnedMeshRenderer-Objekte wurden aus dem Objektverzeichnis lokalisiert; `m_Mesh` bei Byteoffset 136, `m_Bones`-Arraylänge bei 148 und danach die je 12 Byte großen PPtr-Einträge sowie `m_RootBone` wurden direkt aus den Objekt-Payloads gelesen. Alle PPtr-PathIDs der Bones und RootBones sind in den **Transform-Objektverzeichnissen desselben Haupt-Bundles** vorhanden (`fileID=0`).
+
+| Haupt-Bundle | `m_Bones`-Einträge | Mesh-Bindposes | gültige lokale Bone-PPtrs | RootBone lokal vorhanden | BlendShapeWeights | verbleibende Renderer-Bytes nach RootBone |
+| --- | ---: | ---: | ---: | --- | ---: | ---: |
+| Dujiaoxing Hair | 1 | 1 | 1/1 | ja | 0 | 28 |
+| Dujiaoxing Shoes | 8 | 8 | 8/8 | ja | 0 | 28 |
+| Dujiaoxing Clothes | 29 | 29 | 29/29 | ja | 0 | 28 |
+| Chushi Hair | 1 | 1 | 1/1 | ja | 0 | 28 |
+
+**Befund:** 39 von 39 Bone-PPtrs sind lokal auflösbar; alle vier RootBone-PPtrs ebenfalls. `m_Bones`-Arraylängen stimmen mit den zuvor gelesenen Mesh-Bindpose-Anzahlen überein. Die verbleibenden 28 Bytes sind nachfolgende Renderer-Felder und wurden nicht als Bones interpretiert. **Offen:** Zuordnung der konkreten Renderer-Bone-Reihenfolge zu Mesh-BoneNameHashes und übergreifende Rig-Kompatibilität. Keine Originalasset-Rohdaten in GitHub übertragen.
