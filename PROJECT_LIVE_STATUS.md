@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 19:03 UTC**
-Git-Stand: **0a7d512b708cce9586ba7e08469755ed74fb45b2** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 19:10 UTC**
+Git-Stand: **bcaa55381799fea57b9acc13914fc4f77a8e8fc8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -23,11 +24,11 @@ Git-Stand: **0a7d512b708cce9586ba7e08469755ed74fb45b2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 - `0a7d512` (2026-11-04): Document reproducible Android FPS testing across graphics and feature teams
 - `88c82c4` (2026-11-04): Fix Skeleton3D export on main by including missing headless Godot exporter
 - `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 - `8d4d164` (2026-11-04): fix(talents): handle non-array persisted talent metadata safely
-- `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -50,7 +51,7 @@ Git-Stand: **0a7d512b708cce9586ba7e08469755ed74fb45b2** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `f8412ce` (2026-11-04): Add opt-in ENet transport client for Android multiplayer testing
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
