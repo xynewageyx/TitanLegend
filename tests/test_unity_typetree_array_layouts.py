@@ -25,6 +25,32 @@ class TypeTreeArrayLayoutTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "disabled"):
             inspect_arrays(data)
 
+    def test_synthetic_clip_array_schema(self):
+        strings = b"AnimationClip\0curves\0Array\0size\0data\0"
+        offsets = {name: strings.index(name.encode() + b"\0")
+                   for name in ("AnimationClip", "curves", "Array", "size", "data")}
+        spec = [("AnimationClip", 0, -1), ("curves", 1, -1),
+                ("Array", 2, -1), ("size", 3, 4), ("data", 3, 4)]
+        nodes = b"".join(
+            struct.pack("<HBBIIiiiQ", 1, level, 0, 0, offsets[name], size,
+                        index, 0, 0)
+            for index, (name, level, size) in enumerate(spec)
+        )
+        payload = (b"2019.4.16f1c1\0" + struct.pack("<i?i", 13, True, 1)
+                   + struct.pack("<i?h", 74, False, -1)
+                   + b"\0" * 16 + struct.pack("<ii", len(spec), len(strings))
+                   + nodes + strings + struct.pack("<i", 0))
+        blob = bytearray(20 + len(payload))
+        struct.pack_into(">IIII", blob, 0, len(payload) + 20, len(blob), 21, len(blob))
+        blob[16] = 0
+        blob[20:] = payload
+        result = inspect_arrays(bytes(blob))
+        self.assertEqual(len(result["clip_schemas"]), 1)
+        arrays = result["clip_schemas"][0]["arrays"]
+        self.assertEqual(len(arrays), 1)
+        self.assertEqual(arrays[0]["parent"]["name"], "curves")
+        self.assertEqual(arrays[0]["element"]["name"], "data")
+
 
 if __name__ == "__main__":
     unittest.main()
