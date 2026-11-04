@@ -306,3 +306,15 @@ Erneute lokale Dekodierung der vier Haupt-Bundles und direkte Prüfung der `m_Bo
 | Chushi Hair | 1 | ja | 0 |
 
 **Implementierungsrelevante Folgerung:** Den RootBone niemals pauschal als `m_Bones[0]` annehmen. Die Reihenfolge der Renderer-Bone-Liste muss für den späteren Abgleich mit dem Mesh beibehalten werden. **Nicht belegt:** Übereinstimmung der BoneNameHashes mit den Transform-Namen oder die Austauschbarkeit der Ausrüstung. Keine proprietären Originaldaten ins Repository übertragen.
+
+
+### Aufgelöste Renderer-Bone-Namen (2026-11-04)
+
+Die m_Bones-PPtrs wurden lokal über Transform.m_GameObject zu GameObject-Namen aufgelöst. Die Reihenfolge stammt aus den tatsächlichen SkinnedMeshRenderer-Payloads:
+
+- Dujiaoxing Hair: male_Bip001 Head; RootBone male_Bip001 Head.
+- Chushi Hair: male_Bip001 Head; RootBone male_Bip001 Head.
+- Dujiaoxing Shoes (8): male_Bip001 R Calf, R Foot, R Thigh, R Toe0, L Calf, L Foot, L Thigh, L Toe0 (jeweils Präfix male_Bip001); RootBone male_Bip001 L Thigh, Index 6.
+- Dujiaoxing Clothes (29): darunter male_Bip001 Spine1, Head, Spine, Pelvis, beide Clavicles, UpperArms und Thighs sowie eigene male_clothes_* und male_skirt_* Transforms; RootBone male_Bip001 Pelvis, Index 10.
+
+**Grenze:** Gleiche Transform-Namen beweisen keine vollständige Rig-Kompatibilität. Der positionsgetreue Abgleich der Renderer-Knochen mit den Mesh-BoneNameHashes bleibt offen. Keine proprietären Asset-Bytes hochgeladen.
