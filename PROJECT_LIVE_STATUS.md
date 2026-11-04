@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:44 UTC**
-Git-Stand: **9e7b33b806344c844d1fe61027b9808d0eaeff0a** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:45 UTC**
+Git-Stand: **94d223ae5b5e7e6b395310fd27ef9d1d8b0c1c9b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,7 +26,6 @@ Git-Stand: **9e7b33b806344c844d1fe61027b9808d0eaeff0a** auf Branch **main**
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
 - `8abd53f` (2026-11-04): Validate exported Skeleton3D hierarchy and rest transforms in CI
 - `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
-- `0a7d512` (2026-11-04): Document reproducible Android FPS testing across graphics and feature teams
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -49,6 +48,8 @@ Git-Stand: **9e7b33b806344c844d1fe61027b9808d0eaeff0a** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `94d223a` (2026-11-04): Test singular and rotated Skeleton3D rest bases
+- `d6a8502` (2026-11-04): Detect singular Skeleton3D rest transforms before retargeting
 - `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 - `b87d2a0` (2026-11-04): Reject duplicate and out-of-order Skeleton3D bone indices
 - `6f849d0` (2026-11-04): Add regression tests for Skeleton3D inventory validator
