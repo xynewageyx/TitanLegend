@@ -156,3 +156,16 @@ Recalculated totals from the existing machine-readable `ulala_equipment_local_tr
 - **78** root-relative path names with duplicated instances in the two-root comparison; these are ambiguous without instance-specific mapping.
 
 **Evidence boundary:** This checkpoint verifies the existing comparison report's arithmetic; it is **not a new decode of Mesh bindpose matrices**. Bindposes, skinning weights, and per-instance attachment compatibility remain unverified. The local validation report is `ulala_transform_comparison_validation.json`. A UnityPy install attempt in the current offline environment was unsuccessful, so no UnityPy-based bindpose extraction is claimed. Do not copy third-party reference asset payloads into this repository.
+
+## Mesh and Avatar serialized payload sizes (2026-11-04)
+
+Decompressed original local UnityFS LZ4 blocks and parsed the Unity SerializedFile v21 object directory. These sizes are the **actual serialized object payload byte lengths**, not vertex counts, bone counts or bindpose counts.
+
+| Shared bundle | Mesh (class 43) payload sizes | Avatar (class 90) payload sizes |
+| --- | --- | --- |
+| `beryl.prefab_ab_shared` | 233,160 and 2,536 bytes | 12,704 bytes |
+| `ck_chushi_hair.prefab_ab_shared` | 31,640 bytes | 16,704 bytes |
+| `ck_dujiaoxing_hair.prefab_ab_shared` | 35,012 bytes | 18,908 bytes |
+| `ck_dujiaoxing_shoes.prefab_ab_shared` | 18,548 bytes | 18,912 bytes |
+
+All four bundles decoded successfully in this pass. Dujiaoxing hair and shoes have substantially different Mesh object byte lengths, despite their previously observed matching Transform values; their Avatar sizes are close but not equal. Byte lengths alone cannot prove skeleton or skinning compatibility. **Bindpose matrices have not yet been parsed.** Metadata-only local report: `ulala_mesh_avatar_payload_sizes.json`. Do not redistribute proprietary asset contents.
