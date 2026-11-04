@@ -1,0 +1,35 @@
+name: Export Titan Legends Skeleton3D inventory
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export-skeletons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot headless
+        run: |
+          set -euo pipefail
+          GODOT_VERSION="4.7.2"
+          URL="https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fL --retry 3 "$URL" -o /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          GODOT_BIN="$(find /tmp -maxdepth 1 -type f -name 'Godot_v*-stable_linux.x86_64' | head -n 1)"
+          test -n "$GODOT_BIN"
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+      - name: Import project
+        run: |
+          "$GODOT_BIN" --headless --editor --path . --import --quit
+      - name: Export skeleton hierarchy and rest poses
+        run: |
+          mkdir -p build
+          "$GODOT_BIN" --headless --path . --script res://tools/export_skeleton3d_inventory.gd -- --output build/skeleton3d_inventory.json
+          test -s build/skeleton3d_inventory.json
+      - name: Upload inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-skeleton3d-inventory
+          path: build/skeleton3d_inventory.json
+          if-no-files-found: error
