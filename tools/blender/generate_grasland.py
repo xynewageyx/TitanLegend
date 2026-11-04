@@ -21,6 +21,8 @@ bark = material("Warm tree bark", (.38, .23, .13))
 leaves = [material("Canopy green", (.17, .49, .20)), material("Canopy lime", (.37, .69, .23)), material("Canopy deep", (.12, .38, .20))]
 rock = material("Soft sandstone", (.61, .58, .50))
 water = material("River turquoise", (.12, .54, .72))
+water_highlight = material("River glimmer", (.48, .82, .87))
+meadow_shadow = material("Meadow lowlands", (.19, .45, .18))
 flower_colors = [material("Flower pink", (.95, .39, .58)), material("Flower cream", (.98, .85, .51)), material("Flower lavender", (.63, .49, .85))]
 
 def mesh_obj(name, verts, faces, mat):
@@ -65,6 +67,14 @@ def route_x(y):
 
 # Keep the continuous travel corridor free of blocking props.
 box("Continuous meadow ground", (0,-7,-.65), (24,58,1.3), grass, .65)
+# Gentle meadow banks remain outside the movement corridor.
+for i in range(12):
+    side = -1 if i % 2 else 1
+    y = -29 + i * 4.4
+    x = side * (10.2 + (i % 3) * .65)
+    ico("Rolling meadow bank %02d" % i, (x, y, -.15), (3.8, 3.1, .65),
+        grass_light if i % 3 == 0 else meadow_shadow, 2)
+
 for i in range(55):
     y = -33 + i * .95
     ico("Path segment %03d" % i, (route_x(y),y,.025), (2.25,.80,.045), path, 1)
@@ -98,6 +108,12 @@ for i in range(75):
     ico("Flower %03d" % i,(x,y,.16),(.13,.13,.15),flower_colors[i%3],1)
 
 box("River", (0,19,-.03), (23,3,.08),water,.15)
+# Simple river glimmers use unlit-looking bright material.
+for i in range(8):
+    x = -10 + i * 2.8
+    box("Water shimmer %02d" % i, (x, 19 + (i % 3 - 1) * .55, .025),
+        (1.1, .07, .012), water_highlight)
+
 for i in range(10):
     box("Bridge plank %02d" % i,(0,17+i*.42,.24),(4.8,.36,.23),bark,.055)
 
