@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:56 UTC**
-Git-Stand: **cd0650725e09e58964c99579d10f5775a7903231** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:57 UTC**
+Git-Stand: **8cb52468090b123daa12c1cbb4622a0bf28b314a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,45 +15,44 @@ Git-Stand: **cd0650725e09e58964c99579d10f5775a7903231** auf Branch **main**
 - `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `45a588d` (2026-11-04): Export imported Chibi animation clips and track metadata
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 - `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
 - `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
-- `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
 
 ## Bereichsübergreifende Änderungen
 
+- `8cb5246` (2026-11-04): Check procedural animation start/end keyframes and clarify interpolation-only test
 - `ed05909` (2026-11-04): Add headless procedural idle run attack keyframe smoke test
 - `0947faf` (2026-11-04): tools: add read-only UnityFS bundle metadata inventory for Ulala reference analysis
 
