@@ -34,6 +34,8 @@ on:
       - "tests/test_unity_typetree_array_layouts.py"
       - "tools/decode_unity_animation_clip_values.py"
       - "tests/test_unity_clip_alignment_fix.py"
+      - "tools/validate_titan_skeleton_mapping.py"
+      - "tests/test_titan_skeleton_mapping.py"
       - ".github/workflows/unity-typetree-tests.yml"
   pull_request:
     paths:
@@ -64,6 +66,12 @@ on:
       - "tests/test_unity_typetree_bounds.py"
       - "tools/crosscheck_unity_animation_legacy_failures.py"
       - "tests/test_unity_animation_legacy_failures.py"
+      - "tools/inspect_unity_typetree_array_layouts.py"
+      - "tests/test_unity_typetree_array_layouts.py"
+      - "tools/decode_unity_animation_clip_values.py"
+      - "tests/test_unity_clip_alignment_fix.py"
+      - "tools/validate_titan_skeleton_mapping.py"
+      - "tests/test_titan_skeleton_mapping.py"
       - ".github/workflows/unity-typetree-tests.yml"
   workflow_dispatch:
 
