@@ -1,39 +1,39 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 04:57 UTC**
-Git-Stand: **051f3da75c057a9dbe1872804505c670f4a27b3e** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 04:58 UTC**
+Git-Stand: **d2c7f36983c4757036455b05edc17cc330b8c736** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 - `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 - `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 - `6380fa2` (2026-11-04): Avoid redundant graphics updates when adaptive resolution reaches its floor
 - `6013245` (2026-11-04): Update developer graphics diagnostics regression for requested scale label
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `7be5674` (2026-11-04): Push admin permission after verified login completes
@@ -42,15 +42,17 @@ Git-Stand: **051f3da75c057a9dbe1872804505c670f4a27b3e** auf Branch **main**
 
 ### Audio — Audio-Erstellung-Chat
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 
 ## Bereichsübergreifende Änderungen
 
+- `a2478a0` (2026-11-04): Display active target FPS alongside developer performance sample statistics
 - `ea9aad4` (2026-11-04): Add below-target FPS sample percentage to developer-only Android diagnostics
 
 ## Regeln für alle Fach-Chats
