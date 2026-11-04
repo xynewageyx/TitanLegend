@@ -185,3 +185,17 @@ Directly decompressed `ck_dujiaoxing_hair.prefab_ab_shared` and `ck_dujiaoxing_s
 | `m_VariableBoneCountWeights` | Variable bone-weight representation | No |
 
 This is a **verified TypeTree schema inspection**, not an extraction of bindpose matrix counts or values. Both bundles contain 165 SerializedFile objects and 7 type declarations. A subsequent decoder must traverse the Mesh object's complete TypeTree to reach these variable-length fields safely, then compare bindpose matrices with appropriate bone-index mapping. No proprietary assets were committed.
+
+
+### Vier Shared-Bundles: lokaler TypeTree-Gegencheck (2026-11-04)
+
+Die lokal vorhandenen UnityFS-Dateien wurden mit LZ4 dekomprimiert und ihre SerializedFile-v21-TypeTrees ausgelesen. Diese Ergebnisse beziehen sich auf die **Anzahl sämtlicher SerializedFile-Objekte**, nicht auf Knochen oder Bindposes:
+
+| Shared-Bundle | SerializedFile-Objekte | Mesh-TypeTree-Felder bestätigt |
+| --- | ---: | --- |
+| `ck_dujiaoxing_hair.prefab_ab_shared` | 165 | ja |
+| `ck_dujiaoxing_shoes.prefab_ab_shared` | 165 | ja |
+| `ck_dujiaoxing_clothes.prefab_ab_shared` | 137 | ja |
+| `ck_chushi_hair.prefab_ab_shared` | 143 | ja |
+
+In allen vier Mesh-TypeTrees sind `m_BindPose` (Knoten 65), `m_BoneNameHashes` (85), `m_RootBoneNameHash` (89), `m_BonesAABB` (90) und `m_VariableBoneCountWeights` (102) vorhanden. Die Knotenindizes beziehen sich auf die jeweilige lokale Mesh-TypeTree-Liste. **Nicht bestimmt:** Array-Längen, Matrixwerte, Bone-Hash-Werte und tatsächliche Skinning-Kompatibilität. Die proprietären Asset-Bytes wurden nicht in GitHub übertragen.
