@@ -29,6 +29,8 @@ def djb2(data):
 def variants(path):
     normalized = path.replace("\\", "/").strip("/")
     parts = normalized.split("/")
+    if len(parts) < 2 or any(not part for part in parts):
+        raise ValueError("Bone path must contain a prefab root and at least one nonempty bone segment")
     choices = {
         "full_slash": normalized,
         "full_backslash": normalized.replace("/", "\\"),
