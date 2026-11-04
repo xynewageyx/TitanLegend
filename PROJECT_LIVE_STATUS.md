@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 17:33 UTC**
-Git-Stand: **482e23e2a24029ec607d534fbd31bef011fcc19d** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 17:43 UTC**
+Git-Stand: **72218bb8175240c422ef8483e3353998d5fff349** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -37,7 +37,6 @@ Git-Stand: **482e23e2a24029ec607d534fbd31bef011fcc19d** auf Branch **main**
 
 ### Audio — Audio-Erstellung-Chat
 - `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
-- `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
