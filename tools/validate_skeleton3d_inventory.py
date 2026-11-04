@@ -21,11 +21,31 @@ def validate(data):
         names = [b.get("name") for b in bones]
         if len(names) != len(set(names)):
             errors.append(f"{scene}: duplicate bone names")
+        parent_map = {b.get("name"): b.get("parent") for b in bones}
+        for name in names:
+            visited = set()
+            current = name
+            while current is not None and current in parent_map:
+                if current in visited:
+                    errors.append(f"{scene}: parent cycle involving {name}")
+                    break
+                visited.add(current)
+                current = parent_map[current]
         for b in bones:
             name = b.get("name")
             parent = b.get("parent")
             if parent is not None and parent not in names:
                 errors.append(f"{scene}: {name} missing parent {parent}")
+            index = b.get("index")
+            parent_index = b.get("parent_index")
+            if not isinstance(index, int) or index < 0:
+                errors.append(f"{scene}: {name} invalid bone index")
+            if parent is None and parent_index != -1:
+                errors.append(f"{scene}: {name} invalid root parent index")
+            if parent is not None and (not isinstance(parent_index, int) or parent_index < 0 or parent_index >= len(bones)):
+                errors.append(f"{scene}: {name} invalid parent index")
+            elif parent is not None and bones[parent_index].get("name") != parent:
+                errors.append(f"{scene}: {name} parent index/name mismatch")
             origin = b.get("rest_origin", [])
             basis = b.get("rest_basis", [])
             if len(origin) != 3 or len(basis) != 3 or any(len(row) != 3 for row in basis):
