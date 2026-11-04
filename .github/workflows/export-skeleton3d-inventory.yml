@@ -61,6 +61,7 @@ jobs:
         run: |
           python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json
       - name: Upload inventory
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: titan-skeleton3d-inventory
@@ -69,4 +70,4 @@ jobs:
             build/skeleton3d_validation.json
             build/chibi_animation_inventory.json
             build/chibi_animation_coverage.json
-          if-no-files-found: error
+          if-no-files-found: warn
