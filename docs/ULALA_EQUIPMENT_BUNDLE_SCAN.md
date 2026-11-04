@@ -341,3 +341,10 @@ Die 39 zuvor positionsweise zugeordneten Renderer-Bone-Einträge wurden auf **35
 | DJB2 32-bit (kleingeschrieben) | 0 |
 
 **Schlussfolgerung:** Keine der sechs geprüften Kombinationen bildet die gespeicherten Mesh-BoneNameHashes direkt aus den bloßen Transform-Namen ab. Dies **widerlegt nicht**, dass Unity beispielsweise vollständige Hierarchiepfade oder andere Encodings/Hashfunktionen verwendet. Für Titan Legends keine dieser Kandidatenfunktionen ungeprüft als Ersatz einsetzen. Die 39 positionsweisen Zuordnungen bleiben gültige Beobachtungen, aber noch keine unabhängige mathematische Hash-Bestätigung.
+
+
+### Hash-Verfahren reproduziert: CRC32 über Hierarchiepfad ohne Prefab-Root (2026-11-04)
+
+**Neue lokale Validierung:** Die zuvor positionsweise zugeordneten 39 Renderer-BoneNameHash-Einträge wurden mit den Transform-Hierarchien aus `ulala_verified_transform_hierarchies.json` und `ulala_more_equipment_hierarchies.json` verknüpft. Alle **39/39** Pfade waren auflösbar. Für **39/39** Einträge reproduziert `zlib.crc32(path.encode('utf-8')) & 0xffffffff` den gespeicherten Mesh-Hash exakt, wenn `path` aus den Transform-Namen mit `/` zusammengesetzt und der äußerste Prefab-Root ausgelassen wird. Schreibweise der Namen unverändert lassen. Der CRC32-Test des **vollständigen** Pfades einschließlich Prefab-Root ergab 0/39 Treffer; CRC32 bloßer Blattnamen ebenfalls 0/35 (zuvor dokumentiert). Dies erklärt den scheinbaren Widerspruch zum früheren Kandidatentest.
+
+Beispiel eines getesteten Pfadaufbaus: `male_Bip001/male_Bip001 Pelvis/male_Bip001 Spine/male_Bip001 Spine1/male_Bip001 Neck/male_Bip001 Head` (Prefab-Root `CK_DuJiaoXing_Hair` nicht Teil des Hash-Inputs). Die Prüfung erfolgte mit Python `zlib.crc32` über UTF-8; **keine Original-Asset-Payloads oder vollständigen privaten Meshes** wurden hochgeladen. Das Ergebnis ist eine reproduzierte Übereinstimmung für diese 39 Referenzzuordnungen, keine universelle Garantie für alle Unity-Versionen oder alle Assets.
