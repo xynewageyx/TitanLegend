@@ -67,6 +67,8 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn('below_target_samples += 1', code)
         self.assertIn('below_target_samples = 0', code)
         self.assertIn('Unter Ziel: %d%%', code)
+        self.assertIn('Ziel: %d', code)
+        self.assertIn('Engine.max_fps]', code)
         self.assertIn('\\nAvg:', code)
 
     def test_developer_apk_does_not_overwrite_public_preview(self):
