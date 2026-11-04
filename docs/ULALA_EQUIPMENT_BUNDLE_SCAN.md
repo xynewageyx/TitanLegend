@@ -199,3 +199,16 @@ Die lokal vorhandenen UnityFS-Dateien wurden mit LZ4 dekomprimiert und ihre Seri
 | `ck_chushi_hair.prefab_ab_shared` | 143 | ja |
 
 In allen vier Mesh-TypeTrees sind `m_BindPose` (Knoten 65), `m_BoneNameHashes` (85), `m_RootBoneNameHash` (89), `m_BonesAABB` (90) und `m_VariableBoneCountWeights` (102) vorhanden. Die Knotenindizes beziehen sich auf die jeweilige lokale Mesh-TypeTree-Liste. **Nicht bestimmt:** Array-Längen, Matrixwerte, Bone-Hash-Werte und tatsächliche Skinning-Kompatibilität. Die proprietären Asset-Bytes wurden nicht in GitHub übertragen.
+
+
+### Bindpose-Array-Elementstruktur (lokaler Mesh-TypeTree-Check)
+
+Für `ck_dujiaoxing_hair.prefab_ab_shared` wurde der Mesh-TypeTree bis auf die Kindknoten geprüft:
+
+- Knoten 65 `m_BindPose`: Array mit Knoten 67 (`size`, 4 Byte) und Knoten 68 (`data`, 64 Byte).
+- Knoten 68 enthält die 16 Felder `e00` bis `e33`, jeweils 4 Byte: eine `float4x4`-Matrix pro Arrayeintrag.
+- Knoten 85 `m_BoneNameHashes`: Array mit Knoten 87 (`size`, 4 Byte) und Knoten 88 (`data`, 4 Byte pro Hash).
+- Knoten 89 `m_RootBoneNameHash`: 4 Byte.
+- Knoten 90 `m_BonesAABB`: Array mit 24-Byte-`MinMaxAABB`-Einträgen.
+
+**Einschränkung:** Dies sind nachgewiesene *Schema-Größen*, keine aus Objekt-Payloads gelesenen Arraylängen. Es ist noch nicht nachgewiesen, wie viele Bindposes oder Knochen-Hashes das konkrete Mesh enthält. Keine Original-Asset-Daten wurden hochgeladen.
