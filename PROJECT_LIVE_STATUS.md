@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 23:01 UTC**
-Git-Stand: **db093e44c4802c51e356d4fbe3e8a1b62b71ae6b** auf Branch **main**
+Git-Stand: **86bb9795bc45848311833b30b33a7ddfe8efcfac** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,41 +15,40 @@ Git-Stand: **db093e44c4802c51e356d4fbe3e8a1b62b71ae6b** auf Branch **main**
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 - `4042261` (2026-11-04): Preserve partial skeleton and animation reports when CI fails
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
 
 ## Bereichsübergreifende Änderungen
 
