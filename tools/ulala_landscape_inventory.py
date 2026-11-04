@@ -23,21 +23,26 @@ def classify(path):
     return [key for key, words in CATEGORIES.items() if any(word in name for word in words)]
 
 def unityfs_header(path):
-    """Read UnityFS signature and version strings without decompressing the bundle."""
+    """Read four NUL-delimited UnityFS header fields without unpacking assets."""
     try:
         with path.open("rb") as stream:
-            signature = stream.readline(128).rstrip(b"\\x00\\r\\n")
-            if not signature.startswith(b"UnityFS\\x00"):
-                return None
-            version_raw = stream.readline(128).split(b"\\x00", 1)[0]
-            unity_version = stream.readline(128).split(b"\\x00", 1)[0]
-            revision = stream.readline(128).split(b"\\x00", 1)[0]
-            return {
-                "format": signature.split(b"\\x00", 1)[0].decode("ascii", "replace"),
-                "bundle_version": version_raw.decode("ascii", "replace"),
-                "unity_version": unity_version.decode("ascii", "replace"),
-                "revision": revision.decode("ascii", "replace"),
-            }
+            data = stream.read(512)
+        fields = data.split(b"\\x00", 4)
+        if len(fields) < 4 or fields[0] != b"UnityFS":
+            return None
+        version = int.from_bytes(fields[1][:4], "big") if len(fields[1]) == 4 else None
+        # UnityFS format version is a big-endian 32-bit integer, not a string.
+        if version is None:
+            version = int.from_bytes(data[8:12], "big")
+            remainder = data[12:].split(b"\\x00", 2)
+        else:
+            remainder = fields[2:4]
+        return {
+            "format": "UnityFS",
+            "bundle_version": version,
+            "unity_version": remainder[0].decode("ascii", "replace") if remainder else "",
+            "revision": remainder[1].decode("ascii", "replace") if len(remainder) > 1 else "",
+        }
     except (OSError, ValueError):
         return None
 
