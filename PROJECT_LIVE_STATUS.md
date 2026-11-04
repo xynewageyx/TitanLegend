@@ -1,55 +1,53 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 04:58 UTC**
-Git-Stand: **26df88c13af3ccb9d981b043343b14f9726c6dfa** auf Branch **main**
+Git-Stand: **6670a9d5b0cc45ef83b6f4aec00fc4ea7e16897b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 - `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 - `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 - `6380fa2` (2026-11-04): Avoid redundant graphics updates when adaptive resolution reaches its floor
-- `6013245` (2026-11-04): Update developer graphics diagnostics regression for requested scale label
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
 - `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 - `7be5674` (2026-11-04): Push admin permission after verified login completes
 - `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Audio — Audio-Erstellung-Chat
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
