@@ -1,18 +1,18 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:58 UTC**
-Git-Stand: **404226157826d58a722e9f4effece6d7d468705e** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:59 UTC**
+Git-Stand: **680c8a2f0398fa9fafb10b5b46dd019a35573dd9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `599b3d9` (2026-11-04): Add real AnimationPlayer seek smoke test for eleven Chibi skeletons
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 - `785b88c` (2026-11-04): Test Chibi animation coverage counting and incomplete inventories
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 - `60713c4` (2026-11-04): Summarize imported Chibi animation coverage and missing hero scenes
-- `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -45,16 +45,15 @@ Git-Stand: **404226157826d58a722e9f4effece6d7d468705e** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 - `4042261` (2026-11-04): Preserve partial skeleton and animation reports when CI fails
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 - `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 - `420641e` (2026-11-04): Publish Chibi imported animation inventory alongside skeleton CI reports
-- `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
 
 ## Bereichsübergreifende Änderungen
 
 - `8cb5246` (2026-11-04): Check procedural animation start/end keyframes and clarify interpolation-only test
-- `ed05909` (2026-11-04): Add headless procedural idle run attack keyframe smoke test
 
 ## Regeln für alle Fach-Chats
 
