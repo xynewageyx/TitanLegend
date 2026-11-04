@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 18:54 UTC**
-Git-Stand: **0b3e70704c6a4bf141c1811a289f57a9dcd62dc6** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 19:02 UTC**
+Git-Stand: **88c82c47b67205784dbde040afdf5f2455cd2bff** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,6 +23,7 @@ Git-Stand: **0b3e70704c6a4bf141c1811a289f57a9dcd62dc6** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `88c82c4` (2026-11-04): Fix Skeleton3D export on main by including missing headless Godot exporter
 - `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 - `8d4d164` (2026-11-04): fix(talents): handle non-array persisted talent metadata safely
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
@@ -34,7 +35,7 @@ Git-Stand: **0b3e70704c6a4bf141c1811a289f57a9dcd62dc6** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
