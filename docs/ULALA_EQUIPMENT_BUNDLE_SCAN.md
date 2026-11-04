@@ -169,3 +169,19 @@ Decompressed original local UnityFS LZ4 blocks and parsed the Unity SerializedFi
 | `ck_dujiaoxing_shoes.prefab_ab_shared` | 18,548 bytes | 18,912 bytes |
 
 All four bundles decoded successfully in this pass. Dujiaoxing hair and shoes have substantially different Mesh object byte lengths, despite their previously observed matching Transform values; their Avatar sizes are close but not equal. Byte lengths alone cannot prove skeleton or skinning compatibility. **Bindpose matrices have not yet been parsed.** Metadata-only local report: `ulala_mesh_avatar_payload_sizes.json`. Do not redistribute proprietary asset contents.
+
+## Mesh TypeTree bindpose schema verified (2026-11-04)
+
+Directly decompressed `ck_dujiaoxing_hair.prefab_ab_shared` and `ck_dujiaoxing_shoes.prefab_ab_shared` with UnityFS/LZ4, parsed SerializedFile v21 metadata, and decoded 32-byte TypeTree node records for Mesh class ID 43. Both files contain the following actual Mesh schema field names:
+
+| TypeTree field | Declared purpose | Decoded values? |
+| --- | --- | --- |
+| `m_BindPose` | Bone bindpose matrices | No |
+| `m_BoneNameHashes` | Bone-name hash array | No |
+| `m_RootBoneNameHash` | Root-bone name hash | No |
+| `m_BonesAABB` | Bone bounding boxes | No |
+| `m_Weights` | Packed skinning weights | No |
+| `m_BoneIndices` | Packed bone indices | No |
+| `m_VariableBoneCountWeights` | Variable bone-weight representation | No |
+
+This is a **verified TypeTree schema inspection**, not an extraction of bindpose matrix counts or values. Both bundles contain 165 SerializedFile objects and 7 type declarations. A subsequent decoder must traverse the Mesh object's complete TypeTree to reach these variable-length fields safely, then compare bindpose matrices with appropriate bone-index mapping. No proprietary assets were committed.
