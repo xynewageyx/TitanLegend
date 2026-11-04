@@ -8,8 +8,8 @@ const CLASSES := ["brawler", "druid", "hunter", "mage", "paladin", "priest", "ro
 func _initialize() -> void:
     var failures: Array[String] = []
     var tested := 0
-    for class_name in CLASSES:
-        var path := "res://assets/heroes/chibi/%s.glb" % class_name
+    for hero_id in CLASSES:
+        var path := "res://assets/heroes/chibi/%s.glb" % hero_id
         var packed := load(path) as PackedScene
         if packed == null:
             failures.append("%s: cannot load scene" % path)
