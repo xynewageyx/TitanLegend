@@ -5,10 +5,22 @@ class_name ChatModerationRpcServer
 # Server must inject authority after authenticated login; never expose peer binding as RPC.
 # ENetMultiplayerPeer server ID is 1. Requests are only accepted by the server.
 var authority: ChatModerationPeerAuthority
+const BAN_SWEEP_SECONDS := 5.0
+var _ban_sweep_elapsed := 0.0
 
 func _ready() -> void:
 	if multiplayer.is_server():
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+
+# Server-only periodic enforcement also catches bans created outside this RPC,
+# for example through an administrative console or a restored moderation state.
+func _process(delta: float) -> void:
+	if not multiplayer.is_server() or authority == null:
+		return
+	_ban_sweep_elapsed += delta
+	if _ban_sweep_elapsed >= BAN_SWEEP_SECONDS:
+		_ban_sweep_elapsed = 0.0
+		enforce_active_bans()
 
 # Trusted server-side login callback only. The login service must validate
 # the player's session token before calling this method; never expose as RPC.
