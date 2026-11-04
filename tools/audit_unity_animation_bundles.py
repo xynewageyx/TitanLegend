@@ -50,8 +50,10 @@ def unpack_unityfs(data):
     node_count = struct.unpack_from(">I", meta, offset)[0]
     offset += 4
     for _ in range(node_count):
-        _, name_len, _ = struct.unpack_from(">QQI", meta, offset)
-        offset += 20 + name_len
+        _, _, _ = struct.unpack_from(">QQI", meta, offset)
+        offset += 20
+        end = meta.index(b"\\0", offset)
+        offset = end + 1
     output = bytearray()
     for raw_size, packed_size, block_flags in blocks:
         raw = data[pos:pos + packed_size]
