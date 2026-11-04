@@ -9,12 +9,15 @@ on:
       - .github/workflows/export-skeleton3d-inventory.yml
       - tools/export_skeleton3d_inventory.gd
       - tools/validate_skeleton3d_inventory.py
+      - tests/test_validate_skeleton3d_inventory.py
 
 jobs:
   export-skeletons:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test Skeleton3D inventory validator
+        run: python3 -m unittest discover -s tests -p 'test_validate_skeleton3d_inventory.py' -v
       - name: Install Godot headless
         run: |
           set -euo pipefail
