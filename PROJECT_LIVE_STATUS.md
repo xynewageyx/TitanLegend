@@ -1,39 +1,40 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 04:09 UTC**
-Git-Stand: **7be5674dd5762c99b8ed90f1e53b1303dfb5220d** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 04:10 UTC**
+Git-Stand: **512de64f6a9be34adbe37b0a80081e16668101a4** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
+- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 - `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 - `6380fa2` (2026-11-04): Avoid redundant graphics updates when adaptive resolution reaches its floor
 - `6013245` (2026-11-04): Update developer graphics diagnostics regression for requested scale label
 - `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
-- `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `7be5674` (2026-11-04): Push admin permission after verified login completes
@@ -43,17 +44,18 @@ Git-Stand: **7be5674dd5762c99b8ed90f1e53b1303dfb5220d** auf Branch **main**
 - `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `ea9aad4` (2026-11-04): Add below-target FPS sample percentage to developer-only Android diagnostics
 
 ## Regeln für alle Fach-Chats
 
