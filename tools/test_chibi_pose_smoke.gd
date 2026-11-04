@@ -20,20 +20,26 @@ func _initialize() -> void:
             failures.append("%s: Skeleton3D missing" % path)
             root.free()
             continue
-        var head := skeleton.find_bone("Head")
-        if head < 0:
-            failures.append("%s: Head bone missing" % path)
-            root.free()
-            continue
-        var original := skeleton.get_bone_pose_rotation(head)
-        var delta := Quaternion(Vector3.UP, 0.2)
-        skeleton.set_bone_pose_rotation(head, original * delta)
-        var result := skeleton.get_bone_pose_rotation(head)
-        if abs(result.angle_to(original) - 0.2) > 0.01:
-            failures.append("%s: bone rotation did not apply" % path)
-        else:
+        var pose_ok := true
+        for bone_name in ["Head", "Arm_L", "Arm_R", "Leg_L", "Leg_R"]:
+            var bone_id := skeleton.find_bone(bone_name)
+            if bone_id < 0:
+                failures.append("%s: %s bone missing" % [path, bone_name])
+                pose_ok = false
+                continue
+            var original := skeleton.get_bone_pose_rotation(bone_id)
+            var delta := Quaternion(Vector3.UP, 0.2)
+            skeleton.set_bone_pose_rotation(bone_id, original * delta)
+            var result := skeleton.get_bone_pose_rotation(bone_id)
+            if abs(result.angle_to(original) - 0.2) > 0.01:
+                failures.append("%s: %s rotation did not apply" % [path, bone_name])
+                pose_ok = false
+            skeleton.set_bone_pose_rotation(bone_id, original)
+            if skeleton.get_bone_pose_rotation(bone_id).angle_to(original) > 0.001:
+                failures.append("%s: %s pose did not restore" % [path, bone_name])
+                pose_ok = false
+        if pose_ok:
             tested += 1
-        skeleton.set_bone_pose_rotation(head, original)
         root.free()
     print("Chibi pose smoke test: %d/%d passed" % [tested, CLASSES.size()])
     for failure in failures:
