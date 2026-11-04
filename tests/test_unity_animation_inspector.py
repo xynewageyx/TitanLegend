@@ -53,6 +53,8 @@ class InspectorTests(unittest.TestCase):
             self.assertEqual(by_name["idle.anim_ab"]["curve_keyframe_counts"]["m_PositionCurves"], 3)
             self.assertEqual(by_name["idle.anim_ab"]["curve_keyframe_counts"]["m_RotationCurves"], 3)
             self.assertEqual(by_name["idle.anim_ab"]["stop_time"], 1.25)
+            self.assertEqual(by_name["idle.anim_ab"]["duration_seconds"], 1.25)
+            self.assertEqual(by_name["idle.anim_ab"]["animated_path_count"], 2)
             self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_override_count"], 2)
             json.dumps(rows)
 
