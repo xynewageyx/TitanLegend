@@ -21,6 +21,9 @@ def validate(data):
         names = [b.get("name") for b in bones]
         if len(names) != len(set(names)):
             errors.append(f"{scene}: duplicate bone names")
+        indices = [b.get("index") for b in bones]
+        if indices != list(range(len(bones))):
+            errors.append(f"{scene}: bone indices must be unique and contiguous in export order")
         parent_map = {b.get("name"): b.get("parent") for b in bones}
         for name in names:
             visited = set()
