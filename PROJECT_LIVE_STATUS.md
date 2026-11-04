@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 22:45 UTC**
-Git-Stand: **94d223ae5b5e7e6b395310fd27ef9d1d8b0c1c9b** auf Branch **main**
+Git-Stand: **cc996ec908401630a9c6e3a02842225c72e04e53** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,15 +12,16 @@ Git-Stand: **94d223ae5b5e7e6b395310fd27ef9d1d8b0c1c9b** auf Branch **main**
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `9e7b33b` (2026-11-04): docs: establish verified Ulala backup reference-analysis checklist for forest enemies
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
@@ -28,23 +29,24 @@ Git-Stand: **94d223ae5b5e7e6b395310fd27ef9d1d8b0c1c9b** auf Branch **main**
 - `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
 - `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
+- `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 
 ## Bereichsübergreifende Änderungen
 
