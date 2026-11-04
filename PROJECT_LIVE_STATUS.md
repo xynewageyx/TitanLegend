@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 16:49 UTC**
-Git-Stand: **f8412cec3c3caec5b5aed88d0ed86a29428d5832** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 17:25 UTC**
+Git-Stand: **4a773d416ff3b67d018636364a881b57a44e6045** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,7 +23,7 @@ Git-Stand: **f8412cec3c3caec5b5aed88d0ed86a29428d5832** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -35,7 +35,6 @@ Git-Stand: **f8412cec3c3caec5b5aed88d0ed86a29428d5832** auf Branch **main**
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
 - `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
-- `7be5674` (2026-11-04): Push admin permission after verified login completes
 
 ### Audio — Audio-Erstellung-Chat
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
@@ -44,6 +43,7 @@ Git-Stand: **f8412cec3c3caec5b5aed88d0ed86a29428d5832** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
 - `f9429b0` (2026-11-04): Add CI smoke test for headless Godot multiplayer test server
 
 ## Bereichsübergreifende Änderungen
