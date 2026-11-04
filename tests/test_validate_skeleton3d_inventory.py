@@ -36,6 +36,16 @@ class SkeletonInventoryValidationTests(unittest.TestCase):
         b["rest_basis"][0][0] = float("nan")
         self.assertFalse(validate(inventory([b]))["valid"])
 
+    def test_singular_rest_basis(self):
+        b = bone("Root")
+        b["rest_basis"][2] = [0, 0, 0]
+        self.assertFalse(validate(inventory([b]))["valid"])
+
+    def test_valid_rotated_basis(self):
+        b = bone("Root")
+        b["rest_basis"] = [[0, -1, 0], [1, 0, 0], [0, 0, 1]]
+        self.assertTrue(validate(inventory([b]))["valid"])
+
     def test_no_skeletons(self):
         self.assertFalse(validate({"skeletons": []})["valid"])
 
