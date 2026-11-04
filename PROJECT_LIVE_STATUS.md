@@ -1,55 +1,51 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 17:26 UTC**
-Git-Stand: **c7feb027d24a3ba7aa110f8e9a18956975fbc8fd** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 17:33 UTC**
+Git-Stand: **482e23e2a24029ec607d534fbd31bef011fcc19d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
 - `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 
 ### Audio — Audio-Erstellung-Chat
 - `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
 - `f9429b0` (2026-11-04): Add CI smoke test for headless Godot multiplayer test server
-- `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 
 ## Bereichsübergreifende Änderungen
 
