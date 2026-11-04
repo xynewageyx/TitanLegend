@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:49 UTC**
-Git-Stand: **3a6b4836679ed7cb9bcafbcf6490829702c32784** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:51 UTC**
+Git-Stand: **0947fafbd730b75095bf175c2c2ed669afc84b76** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,7 +26,7 @@ Git-Stand: **3a6b4836679ed7cb9bcafbcf6490829702c32784** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -45,10 +45,10 @@ Git-Stand: **3a6b4836679ed7cb9bcafbcf6490829702c32784** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
-- `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
 
 ## Bereichsübergreifende Änderungen
 
+- `0947faf` (2026-11-04): tools: add read-only UnityFS bundle metadata inventory for Ulala reference analysis
 - `94d223a` (2026-11-04): Test singular and rotated Skeleton3D rest bases
 - `d6a8502` (2026-11-04): Detect singular Skeleton3D rest transforms before retargeting
 - `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
