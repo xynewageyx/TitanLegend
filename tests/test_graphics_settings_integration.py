@@ -64,6 +64,9 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn('OS.has_feature("titan_developer")', code)
         self.assertIn('get_tree().root.scaling_3d_scale', code)
         self.assertIn('Soll-Skalierung: %d%%', code)
+        self.assertIn('below_target_samples += 1', code)
+        self.assertIn('below_target_samples = 0', code)
+        self.assertIn('Unter Ziel: %d%%', code)
         self.assertIn('\\nAvg:', code)
 
     def test_developer_apk_does_not_overwrite_public_preview(self):
