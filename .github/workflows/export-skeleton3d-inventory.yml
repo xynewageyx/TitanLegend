@@ -7,6 +7,8 @@ on:
       - main
     paths:
       - .github/workflows/export-skeleton3d-inventory.yml
+      - tools/export_skeleton3d_inventory.gd
+      - tools/validate_skeleton3d_inventory.py
 
 jobs:
   export-skeletons:
@@ -32,9 +34,14 @@ jobs:
           mkdir -p build
           "$GODOT_BIN" --headless --path . --script res://tools/export_skeleton3d_inventory.gd -- --output build/skeleton3d_inventory.json
           test -s build/skeleton3d_inventory.json
+      - name: Validate exported skeletons and rest poses
+        run: |
+          python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json
       - name: Upload inventory
         uses: actions/upload-artifact@v4
         with:
           name: titan-skeleton3d-inventory
-          path: build/skeleton3d_inventory.json
+          path: |
+            build/skeleton3d_inventory.json
+            build/skeleton3d_validation.json
           if-no-files-found: error
