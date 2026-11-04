@@ -1,33 +1,32 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 04:10 UTC**
-Git-Stand: **512de64f6a9be34adbe37b0a80081e16668101a4** auf Branch **main**
+Git-Stand: **b0ebb2aa2c104e8ac19d0f67e7a047bf6b16770f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
@@ -41,17 +40,15 @@ Git-Stand: **512de64f6a9be34adbe37b0a80081e16668101a4** auf Branch **main**
 - `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 - `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
 - `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Audio — Audio-Erstellung-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `eb2c54c` (2026-11-04): Reject banned accounts before moderation peer session binding
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
