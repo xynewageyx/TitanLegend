@@ -91,7 +91,9 @@ def inspect_arrays(data):
                 continue
             size_node, element_node = nodes[i + 2], nodes[i + 3]
             if (size_node["level"] != child["level"] + 1
-                    or element_node["level"] != child["level"] + 1):
+                    or element_node["level"] != child["level"] + 1
+                    or size_node["name"] not in ("size", "common:0x18")
+                    or size_node["size"] != 4):
                 continue
             j = i + 2
             while j < len(nodes) and nodes[j]["level"] > node["level"]:
