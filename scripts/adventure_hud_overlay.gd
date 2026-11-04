@@ -35,12 +35,16 @@ var map_control: Control
 var party_names: Array[Label] = []
 var party_roles: Array[Label] = []
 var party_icons: Array[Label] = []
+var party_portraits: Array[PanelContainer] = []
+var party_portrait_roles: Array[int] = []
 var party_bars: Array[ProgressBar] = []
 var party_bonus: Label
 var nav_buttons: Dictionary = {}
 var more_panel: PanelContainer
 var more_open: bool = false
+var more_tween: Tween
 var active_page: String = "combat"
+var resource_tiles: Array[PanelContainer] = []
 
 func initialize(parent_hud: Control, battle_node: Node3D, biome_node: Node3D) -> void:
  hud = parent_hud
@@ -54,17 +58,20 @@ func _ready() -> void:
  _build_journey()
  _build_party()
  _build_navigation()
+ _adapt_layout()
  refresh()
 
 func _resource_tile(parent: Container, heading: String) -> Label:
  var tile := PanelContainer.new()
  tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#ffefd2f4"), SKIN.WOOD, 16, 3))
+ tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c9"), SKIN.GOLD, 19, 3))
  parent.add_child(tile)
+ resource_tiles.append(tile)
  var value := Label.new()
  value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  value.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
  SKIN.title(value, 17)
+ value.add_theme_color_override("font_color", SKIN.INK)
  value.text = heading
  tile.add_child(value)
  return value
@@ -75,8 +82,8 @@ func _build_resources() -> void:
  ribbon.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
  ribbon.offset_left = 9
  ribbon.offset_right = -9
- ribbon.offset_top = 10
- ribbon.offset_bottom = 76
+ ribbon.offset_top = 8
+ ribbon.offset_bottom = 66
  ribbon.add_theme_constant_override("separation", 8)
  ribbon.mouse_filter = Control.MOUSE_FILTER_PASS
  add_child(ribbon)
@@ -88,11 +95,11 @@ func _build_journey() -> void:
  var card := PanelContainer.new()
  card.name = "JourneyPlaque"
  card.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
- card.offset_left = -274
+ card.offset_left = -214
  card.offset_right = -11
- card.offset_top = 91
- card.offset_bottom = 224
- card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff1d8f5"), SKIN.WOOD, 19, 4))
+ card.offset_top = 79
+ card.offset_bottom = 175
+ card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c9"), SKIN.GOLD, 19, 3))
  add_child(card)
  var content := HBoxContainer.new()
  content.add_theme_constant_override("separation", 6)
@@ -100,7 +107,7 @@ func _build_journey() -> void:
  map_control = Control.new()
  map_control.name = "AdventureMap"
  map_control.set_script(MAP_BADGE)
- map_control.custom_minimum_size = Vector2(95, 95)
+ map_control.custom_minimum_size = Vector2(58, 58)
  map_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
  content.add_child(map_control)
  var text_stack := VBoxContainer.new()
@@ -127,42 +134,49 @@ func _build_party() -> void:
  var strip := VBoxContainer.new()
  strip.name = "AdventureTeam"
  strip.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
- strip.offset_left = 11
- strip.offset_right = 210
- strip.offset_top = 94
- strip.offset_bottom = 404
+ strip.offset_left = 8
+ strip.offset_right = 174
+ strip.offset_top = 79
+ strip.offset_bottom = 310
  strip.add_theme_constant_override("separation", 5)
  add_child(strip)
  for i in range(4):
   var tile := PanelContainer.new()
   tile.name = "PartySlot" + str(i + 1)
-  tile.custom_minimum_size.y = 61
-  tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0d7f3"), SKIN.WOOD, 15, 2))
+  tile.custom_minimum_size.y = 47
+  tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff4d9"), SKIN.GOLD, 16, 2))
   strip.add_child(tile)
   var line := HBoxContainer.new()
   line.add_theme_constant_override("separation", 7)
   tile.add_child(line)
   var icon_label := Label.new()
-  icon_label.custom_minimum_size = Vector2(38, 42)
+  icon_label.custom_minimum_size = Vector2(30, 32)
   icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
   icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
   icon_label.add_theme_stylebox_override("normal", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
-  SKIN.title(icon_label, 23)
+  SKIN.title(icon_label, 19)
   icon_label.text = "◆"
-  line.add_child(icon_label)
+  var portrait := PanelContainer.new()
+  portrait.custom_minimum_size = Vector2(34, 36)
+  portrait.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.GOLD_LIGHT, SKIN.GOLD, 13, 2))
+  line.add_child(portrait)
+  portrait.add_child(icon_label)
+  party_portraits.append(portrait)
+  party_portrait_roles.append(-1)
   party_icons.append(icon_label)
+  icon_label.add_theme_color_override("font_color", SKIN.WOOD_DARK)
   var column := VBoxContainer.new()
   column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   column.add_theme_constant_override("separation", 0)
   line.add_child(column)
   var name_label := Label.new()
-  SKIN.title(name_label, 15)
+  SKIN.title(name_label, 14)
   name_label.clip_text = true
   name_label.text = "Held " + str(i + 1)
   column.add_child(name_label)
   party_names.append(name_label)
   var role_label := Label.new()
-  SKIN.title(role_label, 12)
+  SKIN.title(role_label, 11)
   role_label.add_theme_color_override("font_color", SKIN.MUTED)
   role_label.text = "Teammitglied"
   column.add_child(role_label)
@@ -176,7 +190,7 @@ func _build_party() -> void:
   party_bars.append(hp)
  party_bonus = Label.new()
  party_bonus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- SKIN.title(party_bonus, 13)
+ SKIN.title(party_bonus, 11)
  strip.add_child(party_bonus)
 
 func _nav_button(parent: Container, _icon_text: String, caption: String, key: String) -> Button:
@@ -184,7 +198,7 @@ func _nav_button(parent: Container, _icon_text: String, caption: String, key: St
  b.name = "Nav_" + key
  b.text = ""
  b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- b.custom_minimum_size.y = 88
+ b.custom_minimum_size.y = 80
  SKIN.button(b, key == active_page, true)
  b.pressed.connect(_on_navigation.bind(key))
  parent.add_child(b)
@@ -199,7 +213,7 @@ func _nav_button(parent: Container, _icon_text: String, caption: String, key: St
  var artwork := Control.new()
  artwork.set_script(NAV_ART)
  artwork.set("kind", key)
- artwork.custom_minimum_size = Vector2(50, 54)
+ artwork.custom_minimum_size = Vector2(42, 46)
  artwork.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  artwork.mouse_filter = Control.MOUSE_FILTER_IGNORE
  contents.add_child(artwork)
@@ -208,7 +222,7 @@ func _nav_button(parent: Container, _icon_text: String, caption: String, key: St
  title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  title.mouse_filter = Control.MOUSE_FILTER_IGNORE
- SKIN.title(title, 16)
+ SKIN.title(title, 14)
  contents.add_child(title)
  nav_buttons[key] = b
  return b
@@ -220,10 +234,10 @@ func _build_navigation() -> void:
  dock.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
  dock.offset_left = 6
  dock.offset_right = -6
- dock.offset_top = -126
+ dock.offset_top = -112
  dock.offset_bottom = -7
  dock.mouse_filter = Control.MOUSE_FILTER_STOP
- dock.add_theme_stylebox_override("panel", SKIN.plaque(Color("#9a653feF"), SKIN.WOOD_DARK, 20, 4))
+ dock.add_theme_stylebox_override("panel", SKIN.plaque(Color("#bd7c49"), SKIN.GOLD, 24, 4))
  add_child(dock)
  var row := HBoxContainer.new()
  row.add_theme_constant_override("separation", 5)
@@ -257,6 +271,22 @@ func _build_navigation() -> void:
   menu.add_child(button)
  more_panel.hide()
 
+func _animate_more_menu(open_menu: bool) -> void:
+ if more_tween != null and more_tween.is_running():
+  more_tween.kill()
+ more_panel.pivot_offset = Vector2(more_panel.size.x * 0.5, more_panel.size.y)
+ if open_menu:
+  more_panel.show()
+  more_panel.modulate.a = 0.0
+  more_panel.scale = Vector2(0.92, 0.92)
+ more_tween = create_tween()
+ more_tween.set_parallel(true)
+ more_tween.tween_property(more_panel, "modulate:a", 1.0 if open_menu else 0.0, 0.16)
+ more_tween.tween_property(more_panel, "scale", Vector2.ONE if open_menu else Vector2(0.94, 0.94), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+ if not open_menu:
+  more_tween.set_parallel(false)
+  more_tween.tween_callback(more_panel.hide)
+
 func _process(_delta: float) -> void:
  if hud == null:
   return
@@ -274,6 +304,12 @@ func _process(_delta: float) -> void:
  if actions is Control and (actions as Control).visible:
   modal_active = true
  if modal_active and visible:
+  more_open = false
+  if more_tween != null and more_tween.is_running():
+   more_tween.kill()
+  more_panel.hide()
+  more_panel.modulate.a = 1.0
+  more_panel.scale = Vector2.ONE
   hide()
  elif not modal_active and not visible:
   show()
@@ -281,11 +317,11 @@ func _process(_delta: float) -> void:
 func _on_navigation(target: String) -> void:
  if target == "more":
   more_open = not more_open
-  more_panel.visible = more_open
+  _animate_more_menu(more_open)
   _update_nav_selection()
   return
  more_open = false
- more_panel.hide()
+ _animate_more_menu(false)
  active_page = target
  _update_nav_selection()
  if hud != null:
@@ -327,10 +363,39 @@ func refresh() -> void:
   party_names[i].text = str(team.CLASS_NAMES[class_id])
   party_roles[i].text = ROLE_TEXT[role_id]
   party_icons[i].text = ROLE_ICONS[role_id]
+  var portrait_fill: Color = SKIN.SKY if role_id == 0 else (SKIN.CORAL if role_id == 1 else SKIN.GREEN)
+  # Rebuild the StyleBox only when the role changes, not on every HUD refresh.
+  if party_portrait_roles[i] != role_id:
+   party_portraits[i].add_theme_stylebox_override("panel", SKIN.plaque(portrait_fill, SKIN.GOLD, 13, 2))
+   party_portrait_roles[i] = role_id
   var hp: int = maxi(0, int(battle.hero_hp[i]))
   var max_hp: int = maxi(1, int(battle.hero_max_hp[i]))
   party_bars[i].value = 100.0 * float(hp) / float(max_hp)
   party_bars[i].modulate = Color.WHITE if hp > 0 else Color("#a39a8e")
+  party_portraits[i].modulate = Color.WHITE if hp > 0 else Color("#8c807b")
  var formation: bool = team.has_formation_bonus()
  party_bonus.text = "✦ FORMATIONS-BONUS" if formation else "4 HELDEN · 1 TEAM"
  party_bonus.add_theme_color_override("font_color", Color("#3a845b") if formation else SKIN.MUTED)
+
+func _notification(what: int) -> void:
+ if what == NOTIFICATION_RESIZED and is_node_ready():
+  _adapt_layout()
+
+func _adapt_layout() -> void:
+ # Fit the four-hero HUD and overflow panel on narrow portrait screens.
+ var screen_width: float = size.x
+ if screen_width <= 0.0:
+  return
+ var team_strip: Control = get_node_or_null("AdventureTeam") as Control
+ var journey: Control = get_node_or_null("JourneyPlaque") as Control
+ var overflow: Control = get_node_or_null("MoreAdventures") as Control
+ if team_strip != null:
+  team_strip.offset_right = minf(174.0, screen_width * 0.43)
+ if journey != null:
+  journey.offset_left = -minf(214.0, screen_width * 0.53)
+ if overflow != null:
+  overflow.offset_left = -minf(366.0, screen_width - 20.0)
+  overflow.pivot_offset = Vector2(overflow.size.x * 0.5, overflow.size.y)
+ var dock: Control = get_node_or_null("AdventureDock") as Control
+ if dock != null:
+  dock.offset_top = -106.0 if screen_width < 430.0 else -112.0
