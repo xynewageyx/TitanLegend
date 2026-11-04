@@ -78,7 +78,7 @@ for i in range(12):
 
 for i in range(55):
     y = -33 + i * .95
-    ico("Path segment %03d" % i, (route_x(y),y,.025), (2.25,.80,.045), path, 1)
+    ico("Path segment %03d" % i, (route_x(y),y,.025), (2.4,.85,.045), path, 1)
 
 for i in range(44):
     y = rng.uniform(-32,15)
