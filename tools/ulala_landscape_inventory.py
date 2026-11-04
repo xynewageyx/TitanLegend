@@ -45,6 +45,19 @@ def unityfs_header(path):
     except (OSError, ValueError):
         return None
 
+def landscape_priority(relative_path):
+    """Prioritize likely scene roots over incidental material-name matches."""
+    path = relative_path.as_posix().lower()
+    if "/scenes/forest/" in "/" + path and path.endswith(".prefab_ab"):
+        return 0
+    if "/scenes/" in "/" + path and path.endswith(".prefab_ab"):
+        return 1
+    if "/materials/terrain/" in "/" + path:
+        return 2
+    if "/materials/" in "/" + path:
+        return 3
+    return 4
+
 def inspect(root):
     rows = []
     total = 0
@@ -67,17 +80,19 @@ def inspect(root):
         header_info = unityfs_header(path) if header.startswith(b"UnityFS") else None
         rows.append({
             "path": rel.as_posix(), "bytes": size,
+            "analysis_priority": landscape_priority(rel),
             "unityfs": header_info is not None,
             "unityfs_header": header_info,
             "categories": cats, "biomes": biomes,
         })
-    rows.sort(key=lambda row: row["path"])
+    rows.sort(key=lambda row: (row["analysis_priority"], row["path"]))
     return {
         "scope": "filename and first eight bytes only; not decoded mesh/material data",
         "total_files_scanned": total,
         "matching_files": len(rows),
         "categories": dict(Counter(cat for row in rows for cat in row["categories"])),
         "biomes": dict(Counter(b for row in rows for b in row["biomes"])),
+        "priority_note": "0 forest scene prefabs; 1 other scene prefabs; 2 terrain materials; 3 other materials; 4 other matches",
         "entries": rows,
     }
 
