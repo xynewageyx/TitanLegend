@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 18:54 UTC**
-Git-Stand: **160201a3fbb419ef011e68c70a85b1e48b740401** auf Branch **main**
+Git-Stand: **0b3e70704c6a4bf141c1811a289f57a9dcd62dc6** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,48 +9,43 @@ Git-Stand: **160201a3fbb419ef011e68c70a85b1e48b740401** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 - `8d4d164` (2026-11-04): fix(talents): handle non-array persisted talent metadata safely
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 
 ### Audio — Audio-Erstellung-Chat
 - `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
 - `4a773d4` (2026-11-04): Add Skeleton3D inventory export workflow to main
 - `f9429b0` (2026-11-04): Add CI smoke test for headless Godot multiplayer test server
-- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 
 ## Bereichsübergreifende Änderungen
 
