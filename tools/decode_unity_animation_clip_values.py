@@ -12,7 +12,10 @@ import json
 from pathlib import Path
 import struct
 
-from inspect_unity_animation_clip_headers import decode_bundle
+try:
+    from tools.inspect_unity_animation_clip_headers import decode_bundle
+except ModuleNotFoundError:
+    from inspect_unity_animation_clip_headers import decode_bundle
 
 
 def aligned(position):
