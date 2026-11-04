@@ -1,32 +1,32 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 04:58 UTC**
-Git-Stand: **d2c7f36983c4757036455b05edc17cc330b8c736** auf Branch **main**
+Git-Stand: **26df88c13af3ccb9d981b043343b14f9726c6dfa** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Landschaften — Landschaften-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### UI — UI-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
@@ -36,19 +36,20 @@ Git-Stand: **d2c7f36983c4757036455b05edc17cc330b8c736** auf Branch **main**
 - `6013245` (2026-11-04): Update developer graphics diagnostics regression for requested scale label
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
+- `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 - `7be5674` (2026-11-04): Push admin permission after verified login completes
 - `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Audio — Audio-Erstellung-Chat
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
+- `716151e` (2026-11-04): Label developer 3D scale as requested value to avoid misleading Android GPU benchmarks
 
 ## Bereichsübergreifende Änderungen
 
