@@ -212,3 +212,17 @@ Für `ck_dujiaoxing_hair.prefab_ab_shared` wurde der Mesh-TypeTree bis auf die K
 - Knoten 90 `m_BonesAABB`: Array mit 24-Byte-`MinMaxAABB`-Einträgen.
 
 **Einschränkung:** Dies sind nachgewiesene *Schema-Größen*, keine aus Objekt-Payloads gelesenen Arraylängen. Es ist noch nicht nachgewiesen, wie viele Bindposes oder Knochen-Hashes das konkrete Mesh enthält. Keine Original-Asset-Daten wurden hochgeladen.
+
+
+### Tatsächliche Mesh-Arraylängen – erfolgreich dekodiert (2026-11-04)
+
+Die UnityFS-LZ4-Bundles wurden lokal dekomprimiert; ein TypeTree-geführter Decoder hat jedes betroffene Mesh-Objekt bis exakt zu seinem Objektende gelesen. Die folgenden Zahlen stammen aus den **Array-Längen im Mesh-Payload**, nicht nur aus dem TypeTree-Schema:
+
+| Shared-Bundle | Mesh-Payload | `m_BindPose` | `m_BoneNameHashes` | `m_BonesAABB` |
+| --- | ---: | ---: | ---: | ---: |
+| `ck_dujiaoxing_hair.prefab_ab_shared` | 35.012 B | 1 | 1 | 1 |
+| `ck_dujiaoxing_shoes.prefab_ab_shared` | 18.548 B | 8 | 8 | 8 |
+| `ck_dujiaoxing_clothes.prefab_ab_shared` | 135.904 B | 29 | 29 | 29 |
+| `ck_chushi_hair.prefab_ab_shared` | 31.640 B | 1 | 1 | 1 |
+
+Die drei Arraylängen stimmen für jedes Mesh überein; die komplette Payload wurde ohne Restbytes durchlaufen. **Noch offen:** Bindpose-Matrixwerte und konkrete Bone-Hash-Identitäten vergleichen. Die Anzahl verwendeter Knochen allein beweist weder vollständige Rig-Gleichheit noch Inkompatibilität. Es wurden keine proprietären Mesh-Daten ins Repository geladen.
