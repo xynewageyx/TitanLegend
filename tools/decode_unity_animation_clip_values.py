@@ -32,6 +32,8 @@ def parse_clip(obj, nodes):
     pos = 0
     counts = Counter()
     values = {}
+    bindings = []
+    current_binding = None
     length = len(obj)
 
     def subtree_end(i):
@@ -41,7 +43,7 @@ def parse_clip(obj, nodes):
         return j
 
     def walk(i, depth=0):
-        nonlocal pos
+        nonlocal pos, current_binding
         if depth > 80:
             raise ValueError("TypeTree recursion limit")
         level, name, size, flags = nodes[i]
@@ -64,7 +66,12 @@ def parse_clip(obj, nodes):
                 pos = endpos
             else:
                 for _ in range(count):
+                    if name == "genericBindings":
+                        current_binding = {}
                     walk(element, depth + 1)
+                    if name == "genericBindings":
+                        bindings.append(current_binding)
+                        current_binding = None
         elif i + 1 < end:
             child = i + 1
             while child < end:
@@ -73,6 +80,8 @@ def parse_clip(obj, nodes):
         else:
             if size < 0 or pos + size > length:
                 raise ValueError(f"Truncated field {name} at {pos}")
+            if current_binding is not None and name in ("path", "attribute", "typeID", "customType", "isPPtrCurve") and size in (1, 4, 8):
+                current_binding[name] = int.from_bytes(obj[pos:pos + size], "little")
             if name in ("m_SampleRate", "m_StartTime", "m_StopTime") and size == 4:
                 values.setdefault(name, []).append(struct.unpack_from("<f", obj, pos)[0])
             pos += size
@@ -84,7 +93,7 @@ def parse_clip(obj, nodes):
     if pos != length:
         raise ValueError(f"Clip not fully consumed: {pos}/{length}")
     return {"bytes": length, "consumed": pos, "values": values,
-            "counts": dict(counts)}
+            "counts": dict(counts), "bindings": bindings}
 
 
 def parse_serialized(data):
