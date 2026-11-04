@@ -92,7 +92,7 @@ class FantasyUIRegression(unittest.TestCase):
         self.assertIn('CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot).is_empty()', manager)
 
     def test_character_startup_and_immutable_player_role(self):
-        project = (self.root / "project.godot").read_text(encoding="utf-8")
+        project = (ROOT / "project.godot").read_text(encoding="utf-8")
         team = self.read_script("team_formation.gd")
         startup = self.read_script("character_startup.gd")
         self.assertIn('run/main_scene="res://scenes/character_startup.tscn"', project)
