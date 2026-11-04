@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 21:52 UTC**
-Git-Stand: **0f5d70f71ab57afe2885ee9e098147adf49af4a1** auf Branch **main**
+Git-Stand: **d000b86b775a341f717c43c5a12c19aab5e9f8f2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,18 +10,19 @@ Git-Stand: **0f5d70f71ab57afe2885ee9e098147adf49af4a1** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `8abd53f` (2026-11-04): Validate exported Skeleton3D hierarchy and rest transforms in CI
@@ -31,23 +32,24 @@ Git-Stand: **0f5d70f71ab57afe2885ee9e098147adf49af4a1** auf Branch **main**
 - `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Audio — Audio-Erstellung-Chat
 - `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
 - `482e23e` (2026-11-04): Register Skeleton3D inventory workflow with initial push trigger
+- `c7feb02` (2026-11-04): Audio: Heldenzuordnung und Klasse gemeinsam aus Multiplayer-Snapshot übernehmen (#27)
 
 ## Bereichsübergreifende Änderungen
 
