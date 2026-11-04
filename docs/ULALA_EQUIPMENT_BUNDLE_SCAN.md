@@ -318,3 +318,10 @@ Die m_Bones-PPtrs wurden lokal über Transform.m_GameObject zu GameObject-Namen 
 - Dujiaoxing Clothes (29): darunter male_Bip001 Spine1, Head, Spine, Pelvis, beide Clavicles, UpperArms und Thighs sowie eigene male_clothes_* und male_skirt_* Transforms; RootBone male_Bip001 Pelvis, Index 10.
 
 **Grenze:** Gleiche Transform-Namen beweisen keine vollständige Rig-Kompatibilität. Der positionsgetreue Abgleich der Renderer-Knochen mit den Mesh-BoneNameHashes bleibt offen. Keine proprietären Asset-Bytes hochgeladen.
+
+
+### Positionsgenauer Abgleich Renderer-Bones ↔ Mesh-BoneNameHashes (2026-11-04)
+
+Die vier lokal dekodierten Mesh-Arrays wurden positionsgetreu mit den bereits aufgelösten Renderer-m_Bones-Transform-Namen verbunden (Hair Dujiaoxing 1, Shoes Dujiaoxing 8, Clothes Dujiaoxing 29, Hair Chushi 1): **39 von 39 Positionen** besitzen je einen Namen und einen 32-Bit-Hash. Über alle vier Meshes ergeben sich **35 unterschiedliche Namen und 35 unterschiedliche Hashes**. Weder wurde ein Name mit zwei unterschiedlichen Hashes noch ein Hash mit zwei unterschiedlichen Namen beobachtet.
+
+Mehrfach vorkommende Namen und jeweils identische Hashwerte: `male_Bip001 Head` → `0x26921ABD`; `male_Bip001 R Thigh` → `0xCE1A28CF`; `male_Bip001 L Thigh` → `0xF9FBCF5C`. Die Werte stammen aus den Original-Mesh-Arrays, nicht aus einem vermuteten Hash-Algorithmus. Die Ergebnisse sind eine **konsistente positionsweise Zuordnung**, jedoch noch keine unabhängige Verifikation der Unity-Bone-Hash-Berechnung und kein Beweis für Animationskompatibilität. Keine Original-Mesh-Daten hochgeladen.
