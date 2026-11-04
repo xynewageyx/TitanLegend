@@ -39,8 +39,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile inspector and tests
-        run: python -m py_compile tools/inspect_unity_objects.py tools/inspect_unity_typetree.py tests/test_unity_typetree_inspector.py
+      - name: Compile all Unity analysis tools and tests
+        run: python -m compileall -q tools tests
       - name: Run hierarchy-to-mesh hash validation tests
         run: python -m unittest discover -s tests -p 'test_verify_bone_hierarchy_hashes.py' -v
       - name: Run transform hierarchy integrity tests
