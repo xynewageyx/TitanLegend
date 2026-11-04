@@ -100,6 +100,16 @@ func _run_tests() -> void:
                 for clip in CLIPS:
                     if not presenter.call("play_clip", clip):
                         failures.append("%s: BattleManager presenter cannot play %s" % [ENEMIES[index], clip])
+                # Death is terminal: late hit/attack events must not resurrect a mob.
+                if presenter.call("play_clip", "attack"):
+                    failures.append("%s: dead presenter accepted attack" % ENEMIES[index])
+                if presenter.call("play_clip", "idle"):
+                    failures.append("%s: dead presenter accepted idle" % ENEMIES[index])
+                # Reusing the presenter for a new spawn must reset death state.
+                if not presenter.call("show_enemy", short_id):
+                    failures.append("%s: presenter cannot respawn" % ENEMIES[index])
+                elif not presenter.call("play_clip", "attack"):
+                    failures.append("%s: respawned presenter remains dead" % ENEMIES[index])
             presenter.free()
     var controller_script := load("res://scripts/enemies/forest_enemy_visual.gd") as GDScript
     if controller_script == null:
