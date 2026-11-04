@@ -1,55 +1,54 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 04:58 UTC**
-Git-Stand: **54ef90a8a62ec2bf4301fbdfb94d64360f63210b** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 05:32 UTC**
+Git-Stand: **f9429b0e51cb8e71f33d8df0d0a12e4a72ab10af** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Landschaften — Landschaften-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### UI — UI-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `d2c7f36` (2026-11-04): Cover target FPS display in developer diagnostics regression
 - `512de64` (2026-11-04): Test developer FPS target-miss percentage and measurement reset
 - `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
-- `6380fa2` (2026-11-04): Avoid redundant graphics updates when adaptive resolution reaches its floor
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `6670a9d` (2026-11-04): Create headless multiplayer test scene matching moderation RPC client path
 - `26df88c` (2026-11-04): Add headless ENet test server with moderation authority and no implicit login
 - `7be5674` (2026-11-04): Push admin permission after verified login completes
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Audio — Audio-Erstellung-Chat
 - `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
+- `f9429b0` (2026-11-04): Add CI smoke test for headless Godot multiplayer test server
+- `2fda10e` (2026-11-04): Cover adaptive graphics floor no-op guard in regression tests
 
 ## Bereichsübergreifende Änderungen
 
