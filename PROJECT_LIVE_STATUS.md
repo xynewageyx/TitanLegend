@@ -1,53 +1,52 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 22:52 UTC**
-Git-Stand: **ed059090d911c855f3b137428ff84b14c35e379f** auf Branch **main**
+Git-Stand: **cad0efca18dc0b3b807e216ecaaa33339b008ffd** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
 - `3a6b483` (2026-11-04): Extend Chibi pose smoke test to arms, legs, and pose restoration
 - `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 - `d725be7` (2026-11-04): Add headless Chibi Skeleton3D pose smoke test for 11 classes
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `9e7b33b` (2026-11-04): docs: establish verified Ulala backup reference-analysis checklist for forest enemies
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Landschaften — Landschaften-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `cad0efc` (2026-11-04): Validate 33 procedural Chibi animation keyframes in Godot CI
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ## Bereichsübergreifende Änderungen
 
