@@ -13,8 +13,8 @@ class UnityFSInventoryTests(unittest.TestCase):
     def test_unityfs_header(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "forest.prefab_ab"
-            path.write_bytes(b"UnityFS\\x00" + (6).to_bytes(4, "big") +
-                             b"2019.4.16f1\\x002019.4.16f1\\x00" + bytes(64))
+            path.write_bytes(b"UnityFS\x00" + (6).to_bytes(4, "big") +
+                             b"2019.4.16f1\x002019.4.16f1\x00" + bytes(64))
             result = inventory.unityfs_header(path)
             self.assertEqual(result["bundle_version"], 6)
             self.assertEqual(result["unity_version"], "2019.4.16f1")
@@ -31,8 +31,8 @@ class UnityFSInventoryTests(unittest.TestCase):
             folder = root / "assets" / "lib" / "scenes" / "forest"
             folder.mkdir(parents=True)
             (folder / "rain.prefab_ab").write_bytes(
-                b"UnityFS\\x00" + (6).to_bytes(4, "big") +
-                b"2019.4.16f1\\x002019.4.16f1\\x00" + bytes(32))
+                b"UnityFS\x00" + (6).to_bytes(4, "big") +
+                b"2019.4.16f1\x002019.4.16f1\x00" + bytes(32))
             result = inventory.inspect(root)
             self.assertEqual(result["matching_files"], 1)
             self.assertIn("forest", result["entries"][0]["biomes"])
