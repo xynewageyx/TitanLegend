@@ -1,5 +1,6 @@
 extends Node3D
 signal walking_finished
+const CHARACTER_PROFILES = preload("res://scripts/character_profiles.gd")
 const MELEE_CLASSES := [0, 1, 5, 10] # Warrior, Paladin, Rogue, Brawler
 func _formation_position(slot: int) -> Vector3:
  var front_slots: Array[int] = []
@@ -15,9 +16,9 @@ func _formation_position(slot: int) -> Vector3:
  var index_in_row: int = row.find(slot)
  # Keep compact all-melee teams inside the path, but give mixed teams
  # enough lateral room for large helmets, weapons and passive companions.
- var spacing: float = 2.65 if row.size() <= 3 else 1.95
+ var spacing: float = 2.05 if row.size() <= 3 else 1.48
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
- return Vector3(x, 0.0, -2.65 if in_front else 1.65)
+ return Vector3(x, 0.0, -2.15 if in_front else 1.25)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
@@ -371,6 +372,20 @@ func _ready() -> void:
  add_to_group("talent_team")
  _load_classes()
  _load_roles()
+ if SaveManager.active_character_slot >= 0:
+  var profiles: Dictionary = CHARACTER_PROFILES.load_registry()
+  var active: int = SaveManager.active_character_slot
+  var characters: Array = profiles.get("characters", [])
+  if active < characters.size() and characters[active] is Dictionary:
+   var profile: Dictionary = characters[active]
+   class_ids[0] = int(profile.get("class_id", class_ids[0]))
+   role_ids[0] = int(profile.get("role_id", role_ids[0]))
+   if role_ids[0] == 0:
+    for i in range(1, 4):
+     if role_ids[i] == 0:
+      role_ids[i] = 1
+   else:
+    _enforce_single_tank()
  _load_pet_elements()
  talent_ranks = SaveManager.get_saved_talents()
  talent_branches = SaveManager.get_saved_talent_branches()
@@ -749,6 +764,8 @@ func _decorate_class(hero: Node3D, class_id: int, selected_role: int, slot: int)
  motion.configure(class_id)
 
 func set_class(slot: int, class_id: int) -> bool:
+ if SaveManager.active_character_slot >= 0 and slot == 0:
+  return false
  if slot < 0 or slot >= 4 or class_id < 0 or class_id >= CLASS_NAMES.size():
   return false
  var allowed: Array = ALLOWED_ROLES[class_id]
@@ -764,11 +781,15 @@ func set_class(slot: int, class_id: int) -> bool:
  return true
 
 func _save_classes() -> void:
+ if SaveManager.active_character_slot >= 0:
+  return
  var file := FileAccess.open("user://team_classes.json", FileAccess.WRITE)
  if file != null:
   file.store_string(JSON.stringify(class_ids))
 
 func _load_classes() -> void:
+ if SaveManager.active_character_slot >= 0:
+  return
  if not FileAccess.file_exists("user://team_classes.json"):
   return
  var file := FileAccess.open("user://team_classes.json", FileAccess.READ)
@@ -800,6 +821,8 @@ func _enforce_single_tank() -> void:
     role_ids[i] = replacement
 
 func set_role(slot: int, role: int) -> bool:
+ if SaveManager.active_character_slot >= 0 and slot == 0:
+  return false
  if slot < 0 or slot >= 4 or role not in ALLOWED_ROLES[class_ids[slot]]:
   return false
  if role == 0:
@@ -815,11 +838,15 @@ func has_formation_bonus() -> bool:
  return role_ids.count(0) == 1 and role_ids.count(1) == 2 and role_ids.count(2) == 1
 
 func _save_roles() -> void:
+ if SaveManager.active_character_slot >= 0:
+  return
  var file := FileAccess.open("user://team_roles.json", FileAccess.WRITE)
  if file != null:
   file.store_string(JSON.stringify(role_ids))
 
 func _load_roles() -> void:
+ if SaveManager.active_character_slot >= 0:
+  return
  if not FileAccess.file_exists("user://team_roles.json"):
   return
  var file := FileAccess.open("user://team_roles.json", FileAccess.READ)
