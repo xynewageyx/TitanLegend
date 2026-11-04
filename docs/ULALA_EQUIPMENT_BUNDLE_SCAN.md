@@ -292,3 +292,17 @@ Die lokalen Haupt-Bundles wurden als UnityFS/LZ4 und SerializedFile-v21 dekompri
 | Chushi Hair | 1 | 1 | 1/1 | ja | 0 | 28 |
 
 **Befund:** 39 von 39 Bone-PPtrs sind lokal auflösbar; alle vier RootBone-PPtrs ebenfalls. `m_Bones`-Arraylängen stimmen mit den zuvor gelesenen Mesh-Bindpose-Anzahlen überein. Die verbleibenden 28 Bytes sind nachfolgende Renderer-Felder und wurden nicht als Bones interpretiert. **Offen:** Zuordnung der konkreten Renderer-Bone-Reihenfolge zu Mesh-BoneNameHashes und übergreifende Rig-Kompatibilität. Keine Originalasset-Rohdaten in GitHub übertragen.
+
+
+### RootBone-Mitgliedschaft und Eindeutigkeit der Renderer-Bone-Listen (2026-11-04)
+
+Erneute lokale Dekodierung der vier Haupt-Bundles und direkte Prüfung der `m_Bones`-PPtr-Einträge sowie des `m_RootBone`-PPtrs (Renderer-Payloads). In **allen vier** Renderern sind die Bone-PPtrs innerhalb der Liste eindeutig; der RootBone-PPtr ist jeweils exakt in der Liste enthalten:
+
+| Haupt-Bundle | Bone-PPtrs | Eindeutige PPtrs | RootBone-Index (0-basiert) |
+| --- | ---: | --- | ---: |
+| Dujiaoxing Hair | 1 | ja | 0 |
+| Dujiaoxing Shoes | 8 | ja | 6 |
+| Dujiaoxing Clothes | 29 | ja | 10 |
+| Chushi Hair | 1 | ja | 0 |
+
+**Implementierungsrelevante Folgerung:** Den RootBone niemals pauschal als `m_Bones[0]` annehmen. Die Reihenfolge der Renderer-Bone-Liste muss für den späteren Abgleich mit dem Mesh beibehalten werden. **Nicht belegt:** Übereinstimmung der BoneNameHashes mit den Transform-Namen oder die Austauschbarkeit der Ausrüstung. Keine proprietären Originaldaten ins Repository übertragen.
