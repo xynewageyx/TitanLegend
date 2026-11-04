@@ -145,6 +145,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("if not rank is int:", counter)
         self.assertIn("total += clampi(rank, 0, MAX_RANK)", counter)
 
+    def test_team_handles_non_array_saved_talent_metadata(self):
+        setter = TEAM[TEAM.index("func set_talent_build_v2("):TEAM.index("func upgrade_talent_v2(")]
+        getter = TEAM[TEAM.index("func get_talent_build_v2("):TEAM.index("\nvar role_ids:", TEAM.index("func get_talent_build_v2("))]
+        self.assertIn("stored_builds if stored_builds is Array else []", setter)
+        self.assertIn("if not stored_builds is Array:", getter)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
