@@ -1,0 +1,29 @@
+name: Unity TypeTree inspector tests
+
+on:
+  push:
+    paths:
+      - "tools/inspect_unity_objects.py"
+      - "tools/inspect_unity_typetree.py"
+      - "tests/test_unity_typetree_inspector.py"
+      - ".github/workflows/unity-typetree-tests.yml"
+  pull_request:
+    paths:
+      - "tools/inspect_unity_objects.py"
+      - "tools/inspect_unity_typetree.py"
+      - "tests/test_unity_typetree_inspector.py"
+      - ".github/workflows/unity-typetree-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile inspector and tests
+        run: python -m py_compile tools/inspect_unity_objects.py tools/inspect_unity_typetree.py tests/test_unity_typetree_inspector.py
+      - name: Run synthetic TypeTree tests
+        run: python -m unittest discover -s tests -p 'test_unity_typetree_inspector.py' -v
