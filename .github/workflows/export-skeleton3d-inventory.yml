@@ -10,6 +10,7 @@ on:
       - tools/export_skeleton3d_inventory.gd
       - tools/validate_skeleton3d_inventory.py
       - tools/test_chibi_pose_smoke.gd
+      - tools/test_chibi_animation_keyframes.gd
       - tests/test_validate_skeleton3d_inventory.py
 
 jobs:
@@ -36,6 +37,9 @@ jobs:
       - name: Smoke-test Chibi bone posing
         run: |
           "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_pose_smoke.gd
+      - name: Smoke-test Chibi animation keyframes
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_keyframes.gd
       - name: Export skeleton hierarchy and rest poses
         run: |
           mkdir -p build
