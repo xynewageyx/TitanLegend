@@ -19,9 +19,11 @@ required = ("Continuous meadow ground", "River", "Ancient tree trunk")
 for name in required:
     assert name in names, f"Missing landmark: {name}"
 assert not any(name == "Boss clearing" or name.startswith("Clearing border rock") for name in names), "Combat arena must not be embedded in exploration GLB"
-for prefix, minimum in (("Tree trunk", 44), ("Stone ", 65), ("Grass tuft", 170), ("Flower ", 75), ("Path segment", 55)):
+for prefix, minimum in (("Tree trunk", 44), ("Stone ", 65), ("Grass tuft", 170), ("Flower ", 75)):
     count = sum(name.startswith(prefix) for name in names)
     assert count >= minimum, f"{prefix}: expected >= {minimum}, got {count}"
+# The winding path is one continuous mesh, not dozens of overlapping segments.
+assert "Continuous winding forest trail" in names, "Missing continuous exploration path"
 assert len(document.get("meshes", [])) > 0, "GLB contains no meshes"
 assert len(document.get("materials", [])) >= 8, "Insufficient material variety"
 # glTF accessor counts allow a renderer-independent mobile geometry budget.
