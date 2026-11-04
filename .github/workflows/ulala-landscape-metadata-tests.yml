@@ -1,0 +1,31 @@
+name: Ulala landscape metadata tests
+
+on:
+  push:
+    paths:
+      - 'tools/ulala_landscape_inventory.py'
+      - 'tests/test_ulala_landscape_inventory.py'
+      - '.github/workflows/ulala-landscape-metadata-tests.yml'
+  pull_request:
+    paths:
+      - 'tools/ulala_landscape_inventory.py'
+      - 'tests/test_ulala_landscape_inventory.py'
+      - '.github/workflows/ulala-landscape-metadata-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax validation
+        run: python -m py_compile tools/ulala_landscape_inventory.py tests/test_ulala_landscape_inventory.py
+      - name: UnityFS inventory unit tests
+        run: python -m unittest discover -s tests -p 'test_ulala_landscape_inventory.py' -v
