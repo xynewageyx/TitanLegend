@@ -25,6 +25,12 @@ class SkeletonInventoryValidationTests(unittest.TestCase):
     def test_index_name_mismatch(self):
         self.assertFalse(validate(inventory([bone("Root"), bone("Head", "Root", 1, 1)]))["valid"])
 
+    def test_duplicate_bone_indices(self):
+        self.assertFalse(validate(inventory([bone("Root"), bone("Head", "Root", 0, 0)]))["valid"])
+
+    def test_out_of_order_bone_indices(self):
+        self.assertFalse(validate(inventory([bone("Root", index=1), bone("Head", "Root", 0, 1)]))["valid"])
+
     def test_nonfinite_basis(self):
         b = bone("Root")
         b["rest_basis"][0][0] = float("nan")
