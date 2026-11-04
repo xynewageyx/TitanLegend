@@ -39,5 +39,24 @@ class UnityFSInventoryTests(unittest.TestCase):
             self.assertIn("sky_weather", result["entries"][0]["categories"])
             self.assertTrue(result["entries"][0]["unityfs"])
 
+    def test_priorities(self):
+        cases = [
+            ("assets/lib/scenes/forest/rain.prefab_ab", 0),
+            ("assets/lib/scenes/desert/dunes.prefab_ab", 1),
+            ("assets/models/article/materials/terrain/ground.mat_ab", 2),
+            ("assets/models/article/materials/common/water.mat_ab", 3),
+            ("misc/grass.bin", 4),
+        ]
+        for name, expected in cases:
+            with self.subTest(name=name):
+                self.assertEqual(inventory.landscape_priority(Path(name)), expected)
+
+    def test_invalid_unityfs_version(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "invalid.prefab_ab"
+            path.write_bytes(b"UnityFS\x00" + (0).to_bytes(4, "big") +
+                             b"2019.4.16f1\x002019.4.16f1\x00")
+            self.assertIsNone(inventory.unityfs_header(path))
+
 if __name__ == "__main__":
     unittest.main()
