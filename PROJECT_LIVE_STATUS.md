@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 22:51 UTC**
-Git-Stand: **0947fafbd730b75095bf175c2c2ed669afc84b76** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 22:52 UTC**
+Git-Stand: **ed059090d911c855f3b137428ff84b14c35e379f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,47 +12,49 @@ Git-Stand: **0947fafbd730b75095bf175c2c2ed669afc84b76** auf Branch **main**
 - `57ab534` (2026-11-04): Fix GDScript reserved class_name keyword in Chibi pose smoke test
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
 - `d725be7` (2026-11-04): Add headless Chibi Skeleton3D pose smoke test for 11 classes
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `9e7b33b` (2026-11-04): docs: establish verified Ulala backup reference-analysis checklist for forest enemies
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `60a4ab3` (2026-11-04): Run Chibi pose smoke test in Godot Skeleton3D CI
+- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
 
 ## Bereichsübergreifende Änderungen
 
+- `ed05909` (2026-11-04): Add headless procedural idle run attack keyframe smoke test
 - `0947faf` (2026-11-04): tools: add read-only UnityFS bundle metadata inventory for Ulala reference analysis
 - `94d223a` (2026-11-04): Test singular and rotated Skeleton3D rest bases
 - `d6a8502` (2026-11-04): Detect singular Skeleton3D rest transforms before retargeting
-- `6113f42` (2026-11-04): Test duplicate and out-of-order Skeleton3D indices
-- `b87d2a0` (2026-11-04): Reject duplicate and out-of-order Skeleton3D bone indices
 
 ## Regeln für alle Fach-Chats
 
