@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 04:10 UTC**
-Git-Stand: **b0ebb2aa2c104e8ac19d0f67e7a047bf6b16770f** auf Branch **main**
+Automatisch erzeugt: **2026-11-04 04:57 UTC**
+Git-Stand: **051f3da75c057a9dbe1872804505c670f4a27b3e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,7 +23,7 @@ Git-Stand: **b0ebb2aa2c104e8ac19d0f67e7a047bf6b16770f** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -39,13 +39,12 @@ Git-Stand: **b0ebb2aa2c104e8ac19d0f67e7a047bf6b16770f** auf Branch **main**
 - `7be5674` (2026-11-04): Push admin permission after verified login completes
 - `c9721e9` (2026-11-04): Periodically enforce account bans on active multiplayer peers
 - `fdbcaf6` (2026-11-04): Disconnect active sessions after owner-approved account bans
-- `1c5543f` (2026-11-04): Test banned account admission and expiry in multiplayer login gate
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `051f3da` (2026-11-04): Audio: Eigene Klassensounds vorladen (aktueller main) (#26)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `da8ba8b` (2026-11-04): Test isolation of developer FPS APK from public Android preview release
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
