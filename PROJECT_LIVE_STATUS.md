@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-04 22:39 UTC**
-Git-Stand: **6113f42be99aaf7e5363a1039d68475ec3104efb** auf Branch **main**
+Git-Stand: **71945cda336c6f8f9aee6e7c80a15b14e51267f1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,19 +9,18 @@ Git-Stand: **6113f42be99aaf7e5363a1039d68475ec3104efb** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `bcaa553` (2026-11-04): Include imported GLB and GLTF character rigs in Skeleton3D inventory export
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
@@ -31,24 +30,23 @@ Git-Stand: **6113f42be99aaf7e5363a1039d68475ec3104efb** auf Branch **main**
 - `88c82c4` (2026-11-04): Fix Skeleton3D export on main by including missing headless Godot exporter
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `c9c4e1b` (2026-11-04): Run Skeleton3D regression tests before Godot export
 - `0f5d70f` (2026-11-04): Gate Skeleton3D artifact upload on hierarchy and rest-pose validation
-- `160201a` (2026-11-04): test(talents): cover invalid persisted talent metadata container
 
 ## Bereichsübergreifende Änderungen
 
