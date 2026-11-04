@@ -27,13 +27,13 @@ def unityfs_header(path):
     try:
         with path.open("rb") as stream:
             data = stream.read(512)
-        signature = b"UnityFS\\x00"
+        signature = b"UnityFS\x00"
         if not data.startswith(signature) or len(data) < 16:
             return None
         version = int.from_bytes(data[len(signature):len(signature) + 4], "big")
         if not 1 <= version <= 10:
             return None
-        remainder = data[len(signature) + 4:].split(b"\\x00", 2)
+        remainder = data[len(signature) + 4:].split(b"\x00", 2)
         if len(remainder) < 3:
             return None
         return {
