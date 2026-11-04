@@ -1,6 +1,7 @@
 extends SceneTree
 ## Run: godot --headless --path . --script res://tools/export_skeleton3d_inventory.gd -- --output build/skeleton3d_inventory.json
 ## Metadata only. No mesh surfaces, textures, animation keyframes, or original assets exported.
+## Includes imported GLB/GLTF character scenes, not only .tscn/.scn files.
 
 var _entries: Array[Dictionary] = []
 var _warnings: Array[String] = []
@@ -56,7 +57,7 @@ func _scan_directory(folder: String) -> void:
         if dir.current_is_dir():
             if item not in ["addons", ".godot", "build"]:
                 folders.append(folder.path_join(item))
-        elif item.ends_with(".tscn") or item.ends_with(".scn"):
+        elif item.ends_with(".tscn") or item.ends_with(".scn") or item.ends_with(".glb") or item.ends_with(".gltf"):
             scenes.append(folder.path_join(item))
     dir.list_dir_end()
     folders.sort()
@@ -68,6 +69,9 @@ func _scan_directory(folder: String) -> void:
 
 
 func _scan_scene(path: String) -> void:
+    if not ResourceLoader.exists(path, "PackedScene"):
+        _warnings.append("No imported PackedScene available: " + path)
+        return
     var packed := ResourceLoader.load(path, "PackedScene") as PackedScene
     if packed == null:
         _warnings.append("Cannot load scene: " + path)
