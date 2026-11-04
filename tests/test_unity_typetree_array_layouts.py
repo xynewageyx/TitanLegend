@@ -17,7 +17,8 @@ class TypeTreeArrayLayoutTests(unittest.TestCase):
 
     def test_typetree_disabled(self):
         data = bytearray(48)
-        struct.pack_into(">IIII", data, 0, 20, len(data), 21, 32)
+        # Metadata includes the version string, target platform and TypeTree flag.
+        struct.pack_into(">IIII", data, 0, 32, len(data), 21, 32)
         data[20:26] = b"2019\x00\x00"
         # Unity version string ends at 24; target platform at 25..28,
         # TypeTree enabled flag at 29.
