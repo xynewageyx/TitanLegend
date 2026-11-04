@@ -240,6 +240,7 @@ func play_interrupt() -> void:
 # Local client owns exactly one hero. Multiplayer must set this after login/spawn.
 # -1 disables all character combat sounds until ownership is known.
 var local_hero_slot: int = -1
+var local_hero_class_id: int = -1
 
 func set_local_hero_slot(slot: int) -> void:
  # Called only after trusted session ownership has been established.
@@ -248,11 +249,25 @@ func set_local_hero_slot(slot: int) -> void:
   return
  if local_hero_slot != slot:
   stop_sfx()
+  local_hero_class_id = -1
  local_hero_slot = slot
 
 func clear_local_hero() -> void:
  stop_sfx()
  local_hero_slot = -1
+ local_hero_class_id = -1
+
+# Call only after trusted slot ownership is established and the local class is known.
+# Avoid loading all 22 class cues into the Android audio cache at startup.
+func set_local_hero_class_id(class_id: int) -> void:
+ if local_hero_slot < 0 or class_id < 0 or class_id > 10:
+  local_hero_class_id = -1
+  return
+ if local_hero_class_id == class_id:
+  return
+ local_hero_class_id = class_id
+ _get_event_stream("class_attack_%d" % class_id)
+ _get_event_stream("class_skill_%d" % class_id)
 
 func bind_local_hero_from_team(owner_peer_ids: Array[int], local_peer_id: int) -> bool:
  # The server/session supplies the authoritative owner IDs for four slots.
