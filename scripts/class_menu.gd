@@ -127,17 +127,29 @@ func _refresh_description() -> void:
   if role_selector.get_item_id(idx) == current_role:
    role_selector.select(idx)
    break
- description.text = "Moegliche Rollen: " + CLASS_ROLES[selected_class] + "\nBegleiter bleiben passiv."
+ if SaveManager.active_character_slot >= 0 and slot == 0:
+  class_selector.disabled = true
+  role_selector.disabled = true
+  description.text = "Deine Klasse und Rolle sind dauerhaft festgelegt."
+ else:
+  class_selector.disabled = false
+  role_selector.disabled = false
+  description.text = "Moegliche Rollen: " + CLASS_ROLES[selected_class] + "\nBegleiter bleiben passiv."
  bonus_label.text = "Teambonus +5%: " + ("AKTIV" if team_formation.has_formation_bonus() else "INAKTIV")
 func _apply() -> void:
  var chosen_role: int = role_selector.get_selected_id()
  var slot: int = slot_selector.selected
+ if SaveManager.active_character_slot >= 0 and slot == 0:
+  description.text = "Klasse und Rolle dieses Charakters wurden bei der Erstellung festgelegt."
+  return
  if chosen_role == 0:
   for i in range(4):
    if i != slot and team_formation.role_ids[i] == 0:
     description.text = "Tankplatz belegt. Der bisherige Tank behaelt seine Rolle."
     return
- team_formation.set_class(slot, class_selector.selected)
+ if not team_formation.set_class(slot, class_selector.selected):
+  description.text = "Klassenwechsel abgelehnt."
+  return
  if not team_formation.set_role(slot, chosen_role):
   description.text = "Rollenwechsel abgelehnt: Tankplatz bereits belegt."
   return
