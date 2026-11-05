@@ -3,6 +3,8 @@ extends Node3D
 ## Attach as a child of an existing hero node after importing the GLB.
 @export var model_path: String = "res://assets/characters/titan_warrior.glb"
 @export var hide_existing_visuals: bool = false
+const CHIBI_CONTROLLER = preload("res://scripts/animation/chibi_animation_controller.gd")
+var chibi_controller: Node
 var animation_player: AnimationPlayer
 var model_instance: Node3D
 var _hidden_meshes: Array[MeshInstance3D] = []
@@ -27,6 +29,11 @@ func _ready() -> void:
  model_instance = instance as Node3D
  add_child(model_instance)
  animation_player = _find_player(model_instance)
+ if animation_player != null:
+  chibi_controller = CHIBI_CONTROLLER.new()
+  chibi_controller.name = "ChibiAnimationController"
+  add_child(chibi_controller)
+  chibi_controller.configure(model_instance)
  if hide_existing_visuals:
   _hide_existing_meshes(get_parent())
  play_clip("idle")
@@ -36,6 +43,20 @@ func play_clip(clip: String) -> void:
   return
  if animation_player == null:
   return
+ # Imported Chibi clips use capitalized names; legacy GLB clips use lowercase.
+ var action := ""
+ match clip:
+  "idle": action = "Idle"
+  "walk": action = "Walk"
+  "attack": action = "Attack"
+  "hit": action = "Hit"
+  "dodge": action = "Dodge"
+ if chibi_controller != null and action != "":
+  if clip == "walk" or clip == "idle":
+   if chibi_controller.set_moving(clip == "walk"):
+    return
+  elif chibi_controller.play_action(action):
+   return
  if clip == _active_clip and animation_player.is_playing() and (clip == "idle" or clip == "walk"):
   return
  for library_name in animation_player.get_animation_library_list():
