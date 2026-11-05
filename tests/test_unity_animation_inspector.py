@@ -33,7 +33,12 @@ class InspectorTests(unittest.TestCase):
                 "m_PositionCurves": [{"path": "Root/Hips", "curve": {"m_Curve": [{}, {}]}}, {"path": "Root/Arm", "curve": {"m_Curve": [{}]}}], "m_RotationCurves": [{"path": "Root/Hips", "curve": {"m_Curve": [{}, {}, {}]}}]
             })
             override = FakeObject("AnimatorOverrideController", {
-                "m_Name": "controller", "m_Clips": [{}, {}]
+                "m_Name": "controller", "m_Clips": [
+                    {"m_OriginalClip": {"m_FileID": 1, "m_PathID": 100},
+                     "m_OverrideClip": {"m_FileID": 2, "m_PathID": 200}},
+                    {"m_OriginalClip": {"m_FileID": 0, "m_PathID": 101},
+                     "m_OverrideClip": {"m_FileID": 0, "m_PathID": 0}}
+                ]
             })
             def load(path):
                 return types.SimpleNamespace(objects=[clip if Path(path).name == "idle.anim_ab" else override])
@@ -56,6 +61,8 @@ class InspectorTests(unittest.TestCase):
             self.assertEqual(by_name["idle.anim_ab"]["duration_seconds"], 1.25)
             self.assertEqual(by_name["idle.anim_ab"]["animated_path_count"], 2)
             self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_override_count"], 2)
+            self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_overrides"][0]["original"], {"file_id": 1, "path_id": "100"})
+            self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_overrides"][0]["override"], {"file_id": 2, "path_id": "200"})
             json.dumps(rows)
 
     def test_corrupt_bundle_does_not_stop_scan(self):
