@@ -55,6 +55,25 @@ def inspect(root: Path):
                             and isinstance(curve.get("path"), str)
                         })
                         item["animated_path_count"] = len(item["curve_paths"])
+                        # Extract only aggregate timing metadata; never export
+                        # proprietary curve values or full keyframe sequences.
+                        times = []
+                        for key in curve_keys:
+                            for curve in tree.get(key, []):
+                                if not isinstance(curve, dict):
+                                    continue
+                                data = curve.get("curve", {})
+                                if not isinstance(data, dict):
+                                    continue
+                                for frame in data.get("m_Curve", []):
+                                    if isinstance(frame, dict):
+                                        t = frame.get("time")
+                                        if isinstance(t, (int, float)) and not isinstance(t, bool):
+                                            times.append(float(t))
+                        item["keyframe_time_range"] = (
+                            {"first": min(times), "last": max(times)}
+                            if times else None
+                        )
                         item["curve_keyframe_counts"] = {
                             key: sum(
                                 len(curve.get("curve", {}).get("m_Curve", []))
