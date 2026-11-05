@@ -1,56 +1,55 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 17:43 UTC**
-Git-Stand: **9c5be79dc120afd43c0f7434b50892cb856b6f47** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 17:44 UTC**
+Git-Stand: **e67a27790a4f81f1cce0f5c20a5651d882e56c14** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `e67a277` (2026-11-05): Run imported Chibi animation controller smoke test in CI
 - `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 - `89a61c1` (2026-11-05): test(talents): validate every hero build before persistence
 - `9354605` (2026-11-05): fix(talents): normalize all four hero talent builds before persisting edits
 - `7bc7479` (2026-11-05): Add reusable Chibi animation controller for imported idle walk attack hit dodge clips
-- `b2d185e` (2026-11-05): Add regression tests for five Chibi action types and numbered clip variants
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
+- `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
 - `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
 - `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
 - `89a61c1` (2026-11-05): test(talents): validate every hero build before persistence
 - `9354605` (2026-11-05): fix(talents): normalize all four hero talent builds before persisting edits
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - `e628317` (2026-11-05): Fix Godot editor audio inspector plugin script path (#31)
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- `e67a277` (2026-11-05): Run imported Chibi animation controller smoke test in CI
 
 ## Bereichsübergreifende Änderungen
 
