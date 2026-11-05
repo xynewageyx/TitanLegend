@@ -30,8 +30,8 @@ func _ready() -> void:
 func _add_rarity_details() -> void:
     if rarity < 1:
         return
-    var accent := COLORS[rarity]
-    var width := SIZES[slot_index].x
+    var accent: Color = COLORS[rarity]
+    var width: float = SIZES[slot_index].x
     if rarity >= 2:
         _detail(Vector3(0, 0.08, 0.17), Vector3(width * 0.6, 0.14, 0.12), accent, false)
     if rarity >= 3 and slot_index in [0, 3, 4, 5, 6]:
