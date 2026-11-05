@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 15:13 UTC**
-Git-Stand: **f55da2ba24871ae3861b1c7538edfe9b86f992ca** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 15:14 UTC**
+Git-Stand: **1ecc357d256086145844bcfdc38b9a98f2a3e567** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,43 +11,40 @@ Git-Stand: **f55da2ba24871ae3861b1c7538edfe9b86f992ca** auf Branch **main**
 - `3ecfe9d` (2026-11-05): Fix malformed duplicated block in Chibi AnimationPlayer smoke test
 - `db093e4` (2026-11-05): Exercise idle run attack AnimationPlayer bone playback on all Chibi rigs
 - `599b3d9` (2026-11-04): Add real AnimationPlayer seek smoke test for eleven Chibi skeletons
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 - `4042261` (2026-11-04): Preserve partial skeleton and animation reports when CI fails
-- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ## Bereichsübergreifende Änderungen
 
