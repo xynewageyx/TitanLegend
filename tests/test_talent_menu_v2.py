@@ -151,6 +151,11 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("stored_builds if stored_builds is Array else []", setter)
         self.assertIn("if not stored_builds is Array:", getter)
 
+    def test_team_persists_validated_builds_for_all_four_heroes(self):
+        setter = TEAM[TEAM.index("func set_talent_build_v2("):TEAM.index("func upgrade_talent_v2(")]
+        self.assertIn("builds[index] = TALENT_TREES_V2.validate_build(level, builds[index])", setter)
+        self.assertIn("builds[hero_slot] = TALENT_TREES_V2.validate_build(level, proposed_build)", setter)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
