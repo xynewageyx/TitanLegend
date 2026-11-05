@@ -65,7 +65,24 @@ def inspect(root: Path):
                             for key in curve_keys
                         }
                     elif obj.type.name == "AnimatorOverrideController":
-                        item["clip_override_count"] = len(tree.get("m_Clips", []))
+                        clips = tree.get("m_Clips", [])
+                        item["clip_override_count"] = len(clips)
+                        item["clip_overrides"] = []
+                        for entry in clips:
+                            if not isinstance(entry, dict):
+                                continue
+                            def ptr(value):
+                                if not isinstance(value, dict):
+                                    return None
+                                file_id = value.get("m_FileID")
+                                path_id = value.get("m_PathID")
+                                if file_id is None or path_id is None:
+                                    return None
+                                return {"file_id": file_id, "path_id": str(path_id)}
+                            item["clip_overrides"].append({
+                                "original": ptr(entry.get("m_OriginalClip")),
+                                "override": ptr(entry.get("m_OverrideClip"))
+                            })
                 except Exception as exc:
                     item["read_error"] = str(exc)[:200]
                 row["objects"].append(item)
