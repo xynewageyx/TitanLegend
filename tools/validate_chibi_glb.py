@@ -9,7 +9,7 @@ import pathlib
 import struct
 import sys
 
-NAMES = "warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
+NAMES = "warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler death_knight".split()
 LEGACY_BONES = {"Root", "Hips", "Spine", "Head", "Arm_L", "Arm_R", "Leg_L", "Leg_R"}
 EXTENDED_BONES = {
     "Chest", "Neck", "Shoulder_L", "Shoulder_R",
@@ -100,7 +100,7 @@ def main():
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
-    print("All 11 chibi GLBs passed structural and rig validation")
+    print("All 12 chibi GLBs passed structural and rig validation")
     return 0
 
 
