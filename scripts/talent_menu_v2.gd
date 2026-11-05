@@ -16,6 +16,8 @@ var open_button: Button
 
 func _ready() -> void:
  team = get_parent()
+ if team != null and team.has_signal("team_changed"):
+  team.team_changed.connect(_on_team_changed)
  open_button = Button.new()
  open_button.text = "Talente +"
  open_button.custom_minimum_size = Vector2(130, 52)
@@ -94,6 +96,11 @@ func _ready() -> void:
  talent_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  column.add_child(talent_grid)
  _refresh()
+
+func _on_team_changed() -> void:
+ # Refresh class names, ranks and bonuses when another team screen changes the team.
+ if panel != null and panel.visible:
+  _refresh()
 
 func _toggle() -> void:
  panel.visible = not panel.visible
