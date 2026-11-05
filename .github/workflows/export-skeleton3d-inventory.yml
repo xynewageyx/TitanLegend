@@ -12,6 +12,8 @@ on:
       - tools/test_chibi_pose_smoke.gd
       - tools/test_chibi_animation_keyframes.gd
       - tools/test_chibi_animation_player_smoke.gd
+      - tools/test_chibi_animation_controller.gd
+      - scripts/animation/chibi_animation_controller.gd
       - tools/export_chibi_animation_inventory.gd
       - tools/analyze_chibi_animation_inventory.py
       - tests/test_validate_skeleton3d_inventory.py
@@ -49,6 +51,9 @@ jobs:
       - name: Smoke-test actual AnimationPlayer bone posing
         run: |
           "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_player_smoke.gd
+      - name: Smoke-test imported Chibi animation controller
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_controller.gd
       - name: Export imported Chibi animation metadata
         run: |
           "$GODOT_BIN" --headless --path . --script res://tools/export_chibi_animation_inventory.gd
