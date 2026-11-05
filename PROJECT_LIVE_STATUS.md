@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 21:39 UTC**
-Git-Stand: **c125f4f43a071ceea3479d68771be1f6070ae98c** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 22:26 UTC**
+Git-Stand: **0f2796eab4e8575b721da0a56e9f2d6b54003637** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **c125f4f43a071ceea3479d68771be1f6070ae98c** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
 - `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
-- `7601dca` (2026-11-05): Connect Chibi controller to existing hero GLB animation events with legacy fallback
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -50,6 +49,7 @@ Git-Stand: **c125f4f43a071ceea3479d68771be1f6070ae98c** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 - `1d18c85` (2026-11-05): Add regression tests for animation keyframe fingerprint duplicate audit
 - `1da65d8` (2026-11-05): Distinguish matching keyframe fingerprints from metadata-only duplicate candidates
 - `4468d7c` (2026-11-05): Fingerprint imported animation keyframe values and timing for duplicate audit
