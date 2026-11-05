@@ -12,7 +12,7 @@ from pathlib import Path
 
 FIELDS = ("bundle", "status", "object_count", "mesh", "skinned_mesh_renderer",
           "animation_clip", "animator", "material", "transform",
-          "game_object", "other", "error")
+          "game_object", "other", "clip_names", "clip_durations_s", "mesh_names", "error")
 
 def inspect(path):
     import UnityPy
@@ -21,6 +21,31 @@ def inspect(path):
     try:
         env = UnityPy.load(str(path))
         counts = Counter(str(obj.type.name) for obj in env.objects)
+        clip_names = []
+        clip_durations = []
+        mesh_names = []
+        for obj in env.objects:
+            if obj.type.name not in ("AnimationClip", "Mesh"):
+                continue
+            try:
+                tree = obj.read_typetree()
+                name = str(tree.get("m_Name", ""))
+                if obj.type.name == "Mesh":
+                    mesh_names.append(name)
+                else:
+                    clip_names.append(name)
+                    start = tree.get("m_StartTime")
+                    stop = tree.get("m_StopTime")
+                    if isinstance(start, (int, float)) and isinstance(stop, (int, float)):
+                        clip_durations.append(f"{max(0.0, stop - start):.3f}")
+                    else:
+                        clip_durations.append("unknown")
+            except Exception:
+                if obj.type.name == "AnimationClip":
+                    clip_names.append("<unreadable>")
+                    clip_durations.append("unknown")
+                else:
+                    mesh_names.append("<unreadable>")
         row.update({
             "status": "ok",
             "object_count": sum(counts.values()),
@@ -31,6 +56,9 @@ def inspect(path):
             "material": counts["Material"],
             "transform": counts["Transform"],
             "game_object": counts["GameObject"],
+            "clip_names": ";".join(clip_names),
+            "clip_durations_s": ";".join(clip_durations),
+            "mesh_names": ";".join(mesh_names),
             "other": sum(v for k, v in counts.items() if k not in {
                 "Mesh", "SkinnedMeshRenderer", "AnimationClip", "Animator",
                 "Material", "Transform", "GameObject"}),
