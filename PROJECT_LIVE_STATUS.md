@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 17:44 UTC**
-Git-Stand: **bb1805c89c3eb711764567be6cb84d53fce65b45** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 17:45 UTC**
+Git-Stand: **68fd7c14167c3140181f2e1681364bdef27560f8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,7 +12,6 @@ Git-Stand: **bb1805c89c3eb711764567be6cb84d53fce65b45** auf Branch **main**
 - `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 - `89a61c1` (2026-11-05): test(talents): validate every hero build before persistence
 - `9354605` (2026-11-05): fix(talents): normalize all four hero talent builds before persisting edits
-- `7bc7479` (2026-11-05): Add reusable Chibi animation controller for imported idle walk attack hit dodge clips
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -54,6 +53,7 @@ Git-Stand: **bb1805c89c3eb711764567be6cb84d53fce65b45** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `68fd7c1` (2026-11-05): tools: add read-only UnityFS object inventory for reference monster bundles
 - `b46fd14` (2026-11-05): Mount opt-in Android multiplayer client in main scene
 
 ## Regeln für alle Fach-Chats
