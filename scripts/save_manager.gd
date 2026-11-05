@@ -6,16 +6,60 @@ var last_offline_gold: int = 0
 var last_offline_xp: int = 0
 var last_offline_levels: int = 0
 var last_offline_seconds: int = 0
-const SAVE_PATH: String = "user://save_data.json"
+const LEGACY_SAVE_PATH: String = "user://save_data.json"
+const CHARACTER_PROFILES = preload("res://scripts/character_profiles.gd")
+const CHARACTER_SAVE_SLOTS = preload("res://scripts/character_save_slots.gd")
+var SAVE_PATH: String = LEGACY_SAVE_PATH
+var active_character_slot: int = -1
+var character_switching_enabled: bool = false
+
+## Call only before entering gameplay or after the old session has been saved.
+## This changes the source for all SaveManager readers, without touching legacy data.
+func configure_character_save(slot: int) -> Error:
+ if not character_switching_enabled or session_ready:
+  return ERR_BUSY
+ var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+ var path: String = CHARACTER_PROFILES.character_save_path(registry, slot)
+ if path.is_empty():
+  return ERR_INVALID_PARAMETER
+ if CHARACTER_SAVE_SLOTS.load_slot(registry, slot).is_empty():
+  return ERR_FILE_CORRUPT
+ SAVE_PATH = path
+ active_character_slot = slot
+ character_switching_enabled = false
+ return OK
+
+func use_legacy_save() -> void:
+ character_switching_enabled = false
+ SAVE_PATH = LEGACY_SAVE_PATH
+ active_character_slot = -1
 var timer: Timer
+var session_ready: bool = false
 func _ready() -> void:
- load_game()
  timer = Timer.new()
  timer.wait_time = 30.0
- timer.autostart = true
  timer.timeout.connect(save_game)
  add_child(timer)
+ # The startup scene chooses a profile before any gameplay data is loaded.
+ # Never autosave the temporary legacy state during character selection.
+ if get_tree().current_scene != null and get_tree().current_scene.scene_file_path == "res://scenes/main.tscn":
+  begin_game_session()
+
+func begin_game_session() -> void:
+ if session_ready:
+  return
+ if active_character_slot >= 0:
+  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+  if CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot).is_empty():
+   push_error("Character session rejected: save identity or file invalid.")
+   return
+ load_game()
+ session_ready = true
+ timer.start()
+
 func save_game() -> void:
+ if not session_ready:
+  return
  var data: Dictionary = {
   "version": 1, "astral_floor": 1, "astral_marks": 0, "gold": GameManager.current_gold,
   "last_active_unix": int(Time.get_unix_time_from_system()),
@@ -50,11 +94,31 @@ func save_game() -> void:
   data["talent_branches"] = team.talent_branches
   if team.has_meta("talent_builds_v2"):
    data["talent_builds_v2"] = team.get_meta("talent_builds_v2").duplicate(true)
- var result: Error = SAVE_FILE_STORE.save_atomic(SAVE_PATH, data)
+ var result: Error = OK
+ if active_character_slot >= 0:
+  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+  var profile_path: String = CHARACTER_PROFILES.character_save_path(registry, active_character_slot)
+  if profile_path != SAVE_PATH:
+   push_error("Character save path mismatch; autosave blocked.")
+   return
+  var profile: Dictionary = registry["characters"][active_character_slot]
+  data["character_name"] = str(profile.get("name", ""))
+  data["class_id"] = int(profile.get("class_id", -1))
+  data["role_id"] = int(profile.get("role_id", -1))
+  result = CHARACTER_SAVE_SLOTS.save_slot(registry, active_character_slot, data)
+ else:
+  result = SAVE_FILE_STORE.save_atomic(SAVE_PATH, data)
  if result != OK:
   push_warning("Automatic save failed (code " + str(result) + ")")
 func load_game() -> void:
  var data: Dictionary = SAVE_FILE_STORE.load_latest(SAVE_PATH)
+ if active_character_slot >= 0:
+  var registry: Dictionary = CHARACTER_PROFILES.load_registry()
+  var verified: Dictionary = CHARACTER_SAVE_SLOTS.load_slot(registry, active_character_slot)
+  if verified.is_empty() or CHARACTER_PROFILES.character_save_path(registry, active_character_slot) != SAVE_PATH:
+   push_error("Character load blocked: identity or save path mismatch.")
+   return
+  data = verified
  if data.is_empty():
   return
  data = _claim_offline_rewards(data)

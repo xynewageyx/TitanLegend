@@ -1,4 +1,5 @@
 extends Control
+const SKIN = preload("res://scripts/adventure_ui_theme.gd")
 @export var team_formation: Node3D
 @export var battle_manager: Node3D
 var hero_selector: OptionButton
@@ -14,28 +15,45 @@ func _ready() -> void:
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  mouse_filter = Control.MOUSE_FILTER_STOP
  var shade := ColorRect.new()
- shade.color = Color(0.02, 0.04, 0.08, 0.96)
+ shade.color = SKIN.PAPER
+ shade.mouse_filter = Control.MOUSE_FILTER_STOP
  shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(shade)
  var margin := MarginContainer.new()
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- margin.add_theme_constant_override("margin_left", 24)
- margin.add_theme_constant_override("margin_right", 24)
- margin.add_theme_constant_override("margin_top", 105)
- margin.add_theme_constant_override("margin_bottom", 100)
+ margin.add_theme_constant_override("margin_left", 16)
+ margin.add_theme_constant_override("margin_right", 16)
+ margin.add_theme_constant_override("margin_top", 22)
+ margin.add_theme_constant_override("margin_bottom", 22)
  add_child(margin)
- var stack := VBoxContainer.new()
- stack.add_theme_constant_override("separation", 9)
+ var layout := VBoxContainer.new()
+ layout.add_theme_constant_override("separation", 10)
+ margin.add_child(layout)
+ var header := HBoxContainer.new()
+ layout.add_child(header)
+ var title := Label.new()
+ title.text = "✦ HELDENSKILLS"
+ title.add_theme_font_size_override("font_size", 25)
+ title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ header.add_child(title)
+ var header_close := Button.new()
+ header_close.text = "✕"
+ header_close.custom_minimum_size = Vector2(60, 56)
+ header_close.pressed.connect(func(): visible = false)
+ header.add_child(header_close)
  var scroll := ScrollContainer.new()
  scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
- margin.add_child(scroll)
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ layout.add_child(scroll)
+ var stack := VBoxContainer.new()
+ stack.add_theme_constant_override("separation", 9)
  stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  scroll.add_child(stack)
- var title := Label.new()
- title.text = "SKILLS: PRIORITAET 1 BIS 4"
- title.add_theme_font_size_override("font_size", 27)
- stack.add_child(title)
+ var hint := Label.new()
+ hint.text = "Automatische Aktivierung · Reihenfolge 1 → 2 → 3 → 4"
+ hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ stack.add_child(hint)
  hero_selector = OptionButton.new()
  for i in range(4):
   hero_selector.add_item("Held " + str(i + 1), i)
@@ -48,10 +66,20 @@ func _ready() -> void:
  stack.add_child(pet_element_selector)
  pet_element_selector.item_selected.connect(_on_pet_element_selected)
  for skill_slot in range(4):
+  var card := PanelContainer.new()
+  card.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0c7"), SKIN.GOLD, 18, 3))
+  stack.add_child(card)
+  var content := VBoxContainer.new()
+  content.add_theme_constant_override("separation", 6)
+  card.add_child(content)
+  var slot_title := Label.new()
+  slot_title.text = ["⚔ ANGRIFF", "✦ FÄHIGKEIT", "◆ SPEZIAL", "★ FINISHER"][skill_slot]
+  slot_title.add_theme_font_size_override("font_size", 17)
+  content.add_child(slot_title)
   var selector := OptionButton.new()
   selector.custom_minimum_size.y = 55
   skill_selectors.append(selector)
-  stack.add_child(selector)
+  content.add_child(selector)
  info = Label.new()
  info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  info.add_theme_font_size_override("font_size", 19)
@@ -76,13 +104,16 @@ func _ready() -> void:
  var apply := Button.new()
  apply.text = "Vier Skills speichern"
  apply.custom_minimum_size.y = 65
- stack.add_child(apply)
+ layout.add_child(apply)
  var close := Button.new()
  close.text = "Schliessen"
  close.custom_minimum_size.y = 65
- stack.add_child(close)
+ layout.add_child(close)
  apply.pressed.connect(_apply)
  close.pressed.connect(func(): visible = false)
+ SKIN.style_menu_tree(margin)
+ for bar in charge_bars:
+  SKIN.small_bar(bar, SKIN.GOLD)
  hero_selector.item_selected.connect(func(_idx: int): _refresh())
  _refresh()
 

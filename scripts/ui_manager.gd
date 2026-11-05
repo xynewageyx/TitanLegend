@@ -38,12 +38,12 @@ var action_detail: Label
 var action_button: Button
 var astral_shop_button: Button
 var weapon_hero_slot: int = 0
+var loot_selected_slot: int = -1
+var loot_equipped_overview: Label
+var loot_slot_buttons: Array[Button] = []
 var loot_selected_index: int = 0
 var loot_select_button: Button
 var loot_equip_button: Button
-var loot_equipped_overview: Label
-var loot_slot_buttons: Array[Button] = []
-var loot_selected_slot: int = -1
 var loot_compare_label: Label
 var loot_sell_button: Button
 var loot_downgrade_confirmation: ConfirmationDialog
@@ -61,6 +61,8 @@ var weapon_upgrade_button: Button
 var weapon_rarity_button: Button
 var weapon_hero_button: Button
 var hardening_field: int = 0
+var hardening_slot_buttons: Array[Button] = []
+var hardening_slot_grid: GridContainer
 var hardening_select_button: Button
 var hardening_upgrade_button: Button
 var attribute_select_index: int = 0
@@ -112,8 +114,11 @@ func _ready() -> void:
    SaveManager.last_offline_xp, SaveManager.last_offline_levels
   )
  _refresh()
+ call_deferred("_suppress_legacy_shortcut")
 
 func _process(_delta: float) -> void:
+ if _any_fullscreen_menu_open():
+  _suppress_legacy_shortcut()
  if offline_notice != null and offline_notice.visible and Time.get_ticks_msec() >= offline_notice_until:
   offline_notice.hide()
  # Refresh only the clock each frame; the rest of the HUD remains event-driven.
@@ -157,6 +162,16 @@ func _make_button(text_value: String, parent: Node, callback: Callable, px: int 
  b.pressed.connect(callback)
  return b
 
+func _equipment_heading(parent: VBoxContainer, caption: String) -> void:
+ var heading := Label.new()
+ heading.text = caption
+ heading.add_theme_color_override("font_color", ADVENTURE_THEME.WOOD_DARK)
+ heading.add_theme_font_size_override("font_size", 19)
+ heading.add_theme_stylebox_override("normal", ADVENTURE_THEME.plaque(ADVENTURE_THEME.PAPER_ALT, ADVENTURE_THEME.GOLD, 11, 2))
+ heading.custom_minimum_size.y = 42
+ heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ parent.add_child(heading)
+
 func _make_hud() -> void:
  # Resource bar at top.
  var resources := HBoxContainer.new()
@@ -186,28 +201,30 @@ func _make_hud() -> void:
  boss_panel = VBoxContainer.new()
  boss_panel.name = "BossHP"
  boss_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
- boss_panel.offset_left = 216
- boss_panel.offset_right = -19
- boss_panel.offset_top = 240
- boss_panel.offset_bottom = 385
+ boss_panel.offset_left = 18
+ boss_panel.offset_right = -18
+ boss_panel.offset_top = 435
+ boss_panel.offset_bottom = 544
+ boss_panel.add_theme_constant_override("separation", 4)
  add_child(boss_panel)
  boss_name = Label.new()
  boss_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- _font(boss_name, 23)
+ _font(boss_name, 19)
+ boss_name.add_theme_color_override("font_color", ADVENTURE_THEME.GOLD_LIGHT)
  boss_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  boss_panel.add_child(boss_name)
  boss_hp = ProgressBar.new()
- boss_hp.custom_minimum_size.y = 24
+ boss_hp.custom_minimum_size.y = 19
  boss_hp.max_value = 100
  boss_hp.show_percentage = true
- boss_hp.add_theme_stylebox_override("background", _style(Color(0.14, 0.035, 0.035, 0.93), 8))
- boss_hp.add_theme_stylebox_override("fill", _style(Color(0.92, 0.13, 0.09, 1.0), 8))
+ boss_hp.add_theme_stylebox_override("background", ADVENTURE_THEME.plaque(Color("#4b3027"), ADVENTURE_THEME.GOLD, 9, 2))
+ boss_hp.add_theme_stylebox_override("fill", ADVENTURE_THEME.plaque(ADVENTURE_THEME.CORAL, ADVENTURE_THEME.GOLD_LIGHT, 9, 1))
  boss_hp.add_theme_font_size_override("font_size", 18)
  boss_panel.add_child(boss_hp)
  boss_countdown = Label.new()
  boss_countdown.name = "BossCountdown"
  boss_countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- _font(boss_countdown, 22)
+ _font(boss_countdown, 17)
  boss_countdown.add_theme_color_override("font_color", Color(0.95, 0.94, 0.87))
  boss_panel.add_child(boss_countdown)
  boss_panel.hide()
@@ -368,32 +385,35 @@ func _make_hud() -> void:
  action_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  modal.add_child(action_detail)
  action_button = _make_button("Ausführen", modal, _on_action_pressed, 19)
- weapon_hero_button = _make_button("Held wechseln", modal, _next_weapon_hero, 17)
- weapon_upgrade_button = _make_button("Waffe verbessern", modal, _upgrade_current_weapon, 17)
- weapon_rarity_button = _make_button("Qualitaet verbessern", modal, _upgrade_current_weapon_rarity, 17)
+ _equipment_heading(modal, "⚔ HELD & WAFFE")
+ var weapon_grid := GridContainer.new()
+ weapon_grid.columns = 2
+ weapon_grid.add_theme_constant_override("h_separation", 8)
+ weapon_grid.add_theme_constant_override("v_separation", 8)
+ modal.add_child(weapon_grid)
+ weapon_hero_button = _make_button("♟ Held wechseln", weapon_grid, _next_weapon_hero, 17)
+ weapon_upgrade_button = _make_button("⚔ Waffe verbessern", weapon_grid, _upgrade_current_weapon, 17)
+ weapon_rarity_button = _make_button("✦ Qualität erhöhen", weapon_grid, _upgrade_current_weapon_rarity, 17)
+ _equipment_heading(modal, "◆ BEUTE & AUSRÜSTUNG")
  loot_equipped_overview = Label.new()
  loot_equipped_overview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
- loot_equipped_overview.add_theme_font_size_override("font_size", 15)
  loot_equipped_overview.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
  modal.add_child(loot_equipped_overview)
+ var loot_slot_grid := GridContainer.new()
+ loot_slot_grid.columns = 3
+ modal.add_child(loot_slot_grid)
+ for slot_index in range(GameManager.LOOT_SLOTS.size()):
+  var loot_tile := _make_button(GameManager.LOOT_SLOTS[slot_index], loot_slot_grid, _select_loot_slot.bind(slot_index), 14)
+  loot_tile.toggle_mode = true
+  loot_tile.custom_minimum_size.y = 64
+  loot_slot_buttons.append(loot_tile)
  var loot_grid := GridContainer.new()
  loot_grid.columns = 2
- loot_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  loot_grid.add_theme_constant_override("h_separation", 8)
  loot_grid.add_theme_constant_override("v_separation", 8)
  modal.add_child(loot_grid)
- for slot_index in range(GameManager.LOOT_SLOTS.size()):
-  var slot_button := Button.new()
-  slot_button.custom_minimum_size = Vector2(0, 68)
-  slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  slot_button.add_theme_font_size_override("font_size", 14)
-  slot_button.clip_text = true
-  slot_button.toggle_mode = true
-  slot_button.pressed.connect(_select_loot_slot.bind(slot_index))
-  loot_grid.add_child(slot_button)
-  loot_slot_buttons.append(slot_button)
- loot_select_button = _make_button("Loot ansehen", modal, _next_loot_item, 17)
- loot_equip_button = _make_button("Loot ausruesten", modal, _equip_selected_loot, 17)
+ loot_select_button = _make_button("◆ Beute ansehen", loot_grid, _next_loot_item, 17)
+ loot_equip_button = _make_button("♜ Ausrüsten", loot_grid, _equip_selected_loot, 17)
  loot_downgrade_confirmation = ConfirmationDialog.new()
  loot_downgrade_confirmation.title = "Schwächeren Gegenstand ausrüsten?"
  loot_downgrade_confirmation.confirmed.connect(_confirm_loot_downgrade)
@@ -409,17 +429,32 @@ func _make_hud() -> void:
  loot_compare_label.add_theme_font_size_override("font_size", 17)
  loot_compare_label.add_theme_color_override("font_color", ADVENTURE_THEME.INK)
  modal.add_child(loot_compare_label)
- loot_sell_button = _make_button("Gegenstand verkaufen", modal, _sell_selected_loot, 17)
+ loot_sell_button = _make_button("✕ Verkaufen", loot_grid, _sell_selected_loot, 17)
  loot_sale_confirmation = ConfirmationDialog.new()
  loot_sale_confirmation.title = "Gegenstand verkaufen?"
  loot_sale_confirmation.confirmed.connect(_confirm_loot_sale)
  loot_sale_confirmation.canceled.connect(_cancel_loot_sale)
  add_child(loot_sale_confirmation)
- hardening_select_button = _make_button("Haertungsfeld wechseln", modal, _next_hardening_field, 17)
- hardening_upgrade_button = _make_button("Haerten", modal, _upgrade_current_hardening, 17)
- attribute_select_button = _make_button("Attribut waehlen", modal, _next_hardening_attribute, 17)
- attribute_apply_button = _make_button("Attribut setzen", modal, _apply_hardening_attribute, 17)
- attribute_reroll_button = _make_button("Zufaellig neu", modal, _reroll_hardening_attribute, 17)
+ _equipment_heading(modal, "✦ AUSRÜSTUNGSHÄRTUNG")
+ hardening_slot_grid = GridContainer.new()
+ hardening_slot_grid.columns = 4
+ hardening_slot_grid.add_theme_constant_override("h_separation", 5)
+ modal.add_child(hardening_slot_grid)
+ for field_index in range(4):
+  var slot_button := _make_button("◆ %d" % (field_index + 1), hardening_slot_grid, _choose_hardening_field.bind(field_index), 16)
+  slot_button.custom_minimum_size.y = 78
+  slot_button.tooltip_text = "Härtungsfeld %d auswählen" % (field_index + 1)
+  hardening_slot_buttons.append(slot_button)
+ var hardening_grid := GridContainer.new()
+ hardening_grid.columns = 2
+ hardening_grid.add_theme_constant_override("h_separation", 8)
+ hardening_grid.add_theme_constant_override("v_separation", 8)
+ modal.add_child(hardening_grid)
+ hardening_select_button = _make_button("▣ Feld wechseln", hardening_grid, _next_hardening_field, 17)
+ hardening_upgrade_button = _make_button("✦ Härten", hardening_grid, _upgrade_current_hardening, 17)
+ attribute_select_button = _make_button("◆ Attribut wählen", hardening_grid, _next_hardening_attribute, 17)
+ attribute_apply_button = _make_button("✓ Attribut setzen", hardening_grid, _apply_hardening_attribute, 17)
+ attribute_reroll_button = _make_button("↻ Neu würfeln", hardening_grid, _reroll_hardening_attribute, 17)
  astral_shop_button = _make_button("Astralshop: 30 Marken → 10 Tickets", modal, _buy_astral_reward, 17)
  astral_shop_button.hide()
  _make_button("Schließen", modal, func(): action_panel.hide(), 18)
@@ -443,19 +478,61 @@ func _make_hud() -> void:
  _select_chat("Alle")
  _apply_chat_visibility()
 
+func _any_fullscreen_menu_open() -> bool:
+ for name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
+  var menu: Control = get_node_or_null(name) as Control
+  if menu != null and menu.visible:
+   return true
+ if skin_shop_menu != null and skin_shop_menu.visible:
+  return true
+ return action_panel != null and action_panel.visible
+
+func _hide_obsolete_talent_shortcut(node: Node) -> void:
+ # The old floating "Talente +" shortcut leaks above every modal on Android.
+ # It is redundant: talents remain accessible from the adventure navigation.
+ if node is Button and (node as Button).text.strip_edges().begins_with("Talente +"):
+  (node as Button).hide()
+ elif node is Label and (node as Label).text.strip_edges().begins_with("Talente +"):
+  (node as Label).hide()
+ for child in node.get_children():
+  _hide_obsolete_talent_shortcut(child)
+
+func _suppress_legacy_shortcut() -> void:
+ var root: Node = get_tree().current_scene
+ if root != null:
+  _hide_obsolete_talent_shortcut(root)
+
+func _raise_fullscreen_menu(menu: Control) -> void:
+ if menu == null:
+  return
+ menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ menu.mouse_filter = Control.MOUSE_FILTER_STOP
+ move_child(menu, get_child_count() - 1)
+
 func _open_menu(target: String) -> void:
- # Do not leave the previous modal visible behind a full-screen submenu.
+ _suppress_legacy_shortcut()
+ # Full-screen submenus must render above the HUD and block touches to the 3D scene.
  action_panel.hide()
+ for modal_name in ["ClassMenu", "SkillMenu", "TalentMenu"]:
+  var modal: Control = get_node_or_null(modal_name) as Control
+  if modal != null:
+   modal.hide()
+ if skin_shop_menu != null:
+  skin_shop_menu.hide()
  if target == "shop":
+  _raise_fullscreen_menu(skin_shop_menu)
   skin_shop_menu.open_menu()
   return
  if target == "team":
+  _raise_fullscreen_menu($ClassMenu)
   $ClassMenu.open_menu()
   return
  if target == "skills":
+  _raise_fullscreen_menu($SkillMenu)
   $SkillMenu.open_menu()
   return
  if target == "talents":
+  _raise_fullscreen_menu($TalentMenu)
   $TalentMenu.open_menu()
   return
  current_tab = target
@@ -725,20 +802,6 @@ func _upgrade_current_weapon_rarity() -> void:
   _append("System", "Waffenqualitaet fuer Held %d verbessert" % (weapon_hero_slot + 1))
  _refresh()
 
-func _matching_loot_indices() -> Array[int]:
- var matches: Array[int] = []
- for index in range(GameManager.equipment_inventory.size()):
-  if loot_selected_slot < 0 or int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
-   matches.append(index)
- return matches
-
-func _select_loot_slot(slot_index: int) -> void:
- loot_selected_slot = -1 if loot_selected_slot == slot_index else clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
- var matches := _matching_loot_indices()
- if not matches.is_empty():
-  loot_selected_index = matches[0]
- _refresh_loot()
-
 func _refresh_loot() -> void:
  _refresh()
 
@@ -867,6 +930,10 @@ func _confirm_loot_sale() -> void:
   loot_selected_index = 0 if GameManager.equipment_inventory.is_empty() else mini(loot_selected_index, GameManager.equipment_inventory.size() - 1)
  _refresh()
 
+func _choose_hardening_field(field_index: int) -> void:
+ hardening_field = clampi(field_index, 0, 3)
+ _refresh()
+
 func _next_hardening_field() -> void:
  hardening_field = (hardening_field + 1) % 4
  _refresh()
@@ -907,3 +974,19 @@ func _buy_astral_reward() -> void:
  if battle_manager != null:
   battle_manager.buy_astral_reward()
  _refresh()
+
+func _matching_loot_indices() -> Array[int]:
+ var matches: Array[int] = []
+ for index in range(GameManager.equipment_inventory.size()):
+  if loot_selected_slot < 0 or int(GameManager.equipment_inventory[index].get("slot", -1)) == loot_selected_slot:
+   matches.append(index)
+ return matches
+
+
+func _select_loot_slot(slot_index: int) -> void:
+ loot_selected_slot = -1 if loot_selected_slot == slot_index else clampi(slot_index, 0, GameManager.LOOT_SLOTS.size() - 1)
+ var matches := _matching_loot_indices()
+ if not matches.is_empty():
+  loot_selected_index = matches[0]
+ _refresh_loot()
+

@@ -126,6 +126,15 @@ jobs:
         shell: bash
         run: |
           godot --headless --path . --script res://tests/test_tank_interception_math.gd
+      - name: Test isolated character save slots
+        shell: bash
+        run: godot --headless --path . --script res://tests/test_character_save_slots.gd
+      - name: Test five independent character profiles
+        shell: bash
+        run: godot --headless --path . --script res://tests/test_character_profiles.gd
+      - name: Test character selection and fantasy UI regressions
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_fantasy_ui_regression.py' -v
       - name: Launch smoke test
         shell: bash
         run: |
