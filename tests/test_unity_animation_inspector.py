@@ -30,7 +30,7 @@ class InspectorTests(unittest.TestCase):
             clip = FakeObject("AnimationClip", {
                 "m_Name": "idle", "m_SampleRate": 30, "m_Legacy": False,
                 "m_MuscleClip": {"m_StartTime": 0.0, "m_StopTime": 1.25},
-                "m_PositionCurves": [{"path": "Root/Hips", "curve": {"m_Curve": [{}, {}]}}, {"path": "Root/Arm", "curve": {"m_Curve": [{}]}}], "m_RotationCurves": [{"path": "Root/Hips", "curve": {"m_Curve": [{}, {}, {}]}}]
+                "m_PositionCurves": [{"path": "Root/Hips", "curve": {"m_Curve": [{"time": 0.0}, {"time": 0.75}]}}, {"path": "Root/Arm", "curve": {"m_Curve": [{"time": 0.25}]}}], "m_RotationCurves": [{"path": "Root/Hips", "curve": {"m_Curve": [{"time": 0.0}, {"time": 0.5}, {"time": 1.25}]}}]
             })
             override = FakeObject("AnimatorOverrideController", {
                 "m_Name": "controller", "m_Clips": [
@@ -60,6 +60,7 @@ class InspectorTests(unittest.TestCase):
             self.assertEqual(by_name["idle.anim_ab"]["stop_time"], 1.25)
             self.assertEqual(by_name["idle.anim_ab"]["duration_seconds"], 1.25)
             self.assertEqual(by_name["idle.anim_ab"]["animated_path_count"], 2)
+            self.assertEqual(by_name["idle.anim_ab"]["keyframe_time_range"], {"first": 0.0, "last": 1.25})
             self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_override_count"], 2)
             self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_overrides"][0]["original"], {"file_id": 1, "path_id": "100"})
             self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_overrides"][0]["override"], {"file_id": 2, "path_id": "200"})
