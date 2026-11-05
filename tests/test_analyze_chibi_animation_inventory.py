@@ -39,6 +39,29 @@ class ChibiAnimationCoverageTests(unittest.TestCase):
         self.assertEqual(result["coverage"]["warrior"]["action_clip_counts"]["Walk"], 1)
         self.assertIn("Idle", result["coverage"]["warrior"]["missing_base_actions"])
 
+    def test_identical_keyframe_fingerprints_grouped(self):
+        same = "a" * 64
+        different = "b" * 64
+        data = make_inventory([
+            {"name": "Attack", "tracks": [{"key_count": 3}], "keyframe_fingerprint_sha256": same},
+            {"name": "Attack_001", "tracks": [{"key_count": 3}], "keyframe_fingerprint_sha256": same},
+            {"name": "Idle", "tracks": [{"key_count": 3}], "keyframe_fingerprint_sha256": different},
+        ])
+        result = analyze(data)
+        warrior = result["coverage"]["warrior"]
+        self.assertEqual(warrior["unique_keyframe_fingerprints"], 2)
+        self.assertEqual(warrior["identical_keyframe_clip_groups"], [["Attack", "Attack_001"]])
+        self.assertEqual(result["identical_keyframe_groups"], 1)
+
+    def test_missing_fingerprints_do_not_imply_duplicates(self):
+        data = make_inventory([
+            {"name": "Attack", "tracks": []},
+            {"name": "Attack_001", "tracks": []},
+        ])
+        result = analyze(data)
+        self.assertEqual(result["coverage"]["warrior"]["fingerprint_coverage"], 0)
+        self.assertEqual(result["identical_keyframe_groups"], 0)
+
     def test_missing_hero_rejected(self):
         data = make_inventory()
         data["heroes"].pop()
