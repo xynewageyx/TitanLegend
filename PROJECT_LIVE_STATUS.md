@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 19:18 UTC**
-Git-Stand: **6dd1452af0dd50b7d7abf6cef54d385e05f18427** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 19:45 UTC**
+Git-Stand: **325f6aa065c6157aef8cb2f1c5c539c13d13badf** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **6dd1452af0dd50b7d7abf6cef54d385e05f18427** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `7601dca` (2026-11-05): Connect Chibi controller to existing hero GLB animation events with legacy fallback
 - `cfd245f` (2026-11-05): Test walking attack recovery and idle transitions for Chibi controllers
-- `f8a1c5e` (2026-11-05): Return Chibi animation controller to idle after attack hit and dodge finish
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -25,10 +24,11 @@ Git-Stand: **6dd1452af0dd50b7d7abf6cef54d385e05f18427** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
+- `0ff2ed5` (2026-11-05): feat(talents): add death knight class weights for attack defense and healing
 - `f4256c0` (2026-11-05): Expose combat animation event API and guard against stale completion signals
 - `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 - `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
-- `a3a50a8` (2026-11-05): Restore walk or idle after combat animations based on movement state
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
