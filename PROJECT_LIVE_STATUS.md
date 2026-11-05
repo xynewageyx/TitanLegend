@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 15:14 UTC**
-Git-Stand: **1ecc357d256086145844bcfdc38b9a98f2a3e567** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 16:05 UTC**
+Git-Stand: **8193537b0ca34509c658591b49aed429ef664a7c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -48,10 +48,10 @@ Git-Stand: **1ecc357d256086145844bcfdc38b9a98f2a3e567** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `8193537` (2026-11-05): Report per-class Attack Dodge Hit Idle Walk clip coverage
 - `d6bbc54` (2026-11-05): fix(forest): force one-shot attack hit death clips and prevent death restart
 - `785eb5f` (2026-11-05): Restore complete 33-case AnimationPlayer smoke test after accidental truncation
 - `f321bc6` (2026-11-05): test(forest): ensure death is terminal and reused presenters reset on respawn
-- `8cb5246` (2026-11-04): Check procedural animation start/end keyframes and clarify interpolation-only test
 
 ## Regeln für alle Fach-Chats
 
