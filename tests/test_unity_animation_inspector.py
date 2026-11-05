@@ -66,6 +66,34 @@ class InspectorTests(unittest.TestCase):
             self.assertEqual(by_name["controller.overridecontroller_ab"]["clip_overrides"][0]["override"], {"file_id": 2, "path_id": "200"})
             json.dumps(rows)
 
+    def test_invalid_keyframe_times_are_ignored(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "bad_times.anim_ab").write_bytes(b"fixture")
+            clip = FakeObject("AnimationClip", {
+                "m_Name": "bad_times",
+                "m_MuscleClip": {"m_StartTime": float("nan"), "m_StopTime": float("inf")},
+                "m_PositionCurves": [{"path": "Root", "curve": {"m_Curve": [
+                    {"time": float("nan")}, {"time": float("inf")},
+                    {"time": -1}, {"time": 0.5}
+                ]}}]
+            })
+            original = sys.modules.get("UnityPy")
+            sys.modules["UnityPy"] = types.SimpleNamespace(
+                load=lambda _: types.SimpleNamespace(objects=[clip])
+            )
+            try:
+                rows = inspector.inspect(root)
+            finally:
+                if original is None:
+                    del sys.modules["UnityPy"]
+                else:
+                    sys.modules["UnityPy"] = original
+            item = rows[0]["objects"][0]
+            self.assertNotIn("duration_seconds", item)
+            self.assertEqual(item["keyframe_time_range"], {"first": 0.5, "last": 0.5})
+            json.dumps(rows, allow_nan=False)
+
     def test_corrupt_bundle_does_not_stop_scan(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
