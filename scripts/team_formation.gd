@@ -34,6 +34,10 @@ func set_talent_build_v2(hero_slot: int, level: int, proposed_build: Array) -> b
   builds = []
   for index in range(4):
    builds.append(TALENT_TREES_V2.empty_build())
+ else:
+  # Repair all hero slots before persisting, not only the edited hero.
+  for index in range(4):
+   builds[index] = TALENT_TREES_V2.validate_build(level, builds[index])
  builds[hero_slot] = TALENT_TREES_V2.validate_build(level, proposed_build)
  set_meta("talent_builds_v2", builds)
  team_changed.emit()
