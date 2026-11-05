@@ -64,8 +64,22 @@ def rig_and_animate():
           "Hand_R" if name=="Hand_R" else
           "Foot_L" if name=="Foot_L" else
           "Foot_R" if name=="Foot_R" else "Spine")
-  group=obj.vertex_groups.new(name=target)
-  group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
+  if name=="SculptedBody":
+   # Blend weights across the torso instead of moving the entire body rigidly.
+   hips=obj.vertex_groups.new(name="Hips")
+   spine=obj.vertex_groups.new(name="Spine")
+   chest=obj.vertex_groups.new(name="Chest")
+   for vertex in obj.data.vertices:
+    z=vertex.co.z
+    chest_weight=max(0.0,min(1.0,(z-1.12)/.34))
+    hips_weight=max(0.0,min(1.0,(.94-z)/.40))
+    spine_weight=max(0.0,1.0-chest_weight-hips_weight)
+    total=hips_weight+spine_weight+chest_weight
+    for group,weight in ((hips,hips_weight),(spine,spine_weight),(chest,chest_weight)):
+     if weight>0:group.add([vertex.index],weight/total,"REPLACE")
+  else:
+   group=obj.vertex_groups.new(name=target)
+   group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
   mod=obj.modifiers.new("Skin","ARMATURE");mod.object=arm
  clips={"Idle":(1,32),"Walk":(40,63),"Attack":(70,91),"Hit":(100,113),"Dodge":(120,139)}
  for clip,(start,end) in clips.items():
