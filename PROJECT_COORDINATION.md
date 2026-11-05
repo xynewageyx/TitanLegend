@@ -122,3 +122,10 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - **Gameplay / UI / Audio:** Klassenregistrierung und Balancing, Auswahl bei Charaktererstellung, Icons/Vorschau und klassenspezifische Kampfsounds; keine zweite Klassen- oder Ausrüstungsimplementierung.
 - **Gegner, Landschaften, Rendering, APK-Gesamtbuild und Integration/CI:** kompatible Animationen/Materialien, Ressourcen-Import und Gesamtintegration testen.
 - **Status:** diese Mitteilung ist eine verbindliche Koordinationsvorgabe, kein Nachweis, dass Klasse, Assets, Skills oder APK bereits implementiert oder getestet sind.
+
+## Ulala Character Design (2026-11-05)
+- **Ulala Character Design (zusätzlicher Charakterdesign-Fach-Chat):** analysiert vorhandene Ulala-Referenzordner und Charakterhierarchien im Repository und überträgt geeignete Gestaltungs- und Rigging-Prinzipien in eigenständige Titan-Legends-Charaktermodelle. Arbeitet mit dem bestehenden Charakterdesign-Chat im selben Godot-Projekt; keine parallelen Charakterimplementierungen.
+- **Stil:** stilisierte, ausdrucksstarke 3D-Cartoon-Charaktere mit gut lesbaren Proportionen, austauschbaren Haaren, Kleidung, Waffen und Rüstungen; eigene Assets und rechtlich zulässige Referenznutzung.
+- **Klassen:** den Todesritter ausdrücklich einbeziehen und alle anderen im Projekt festgelegten Klassen berücksichtigen.
+- **Schnittstellen:** Abstimmung mit Charakterdesign, Waffen/Rüstungsdesign, Skills/Animationen, UI, Grafik/Rendering und APK-Gesamtbuild zu Skelett-Hierarchien, Meshes, Materialien, Animationsankern, Performance und Godot-Import.
+- **Nachweis:** Dokumentation und CI-Erfolg ersetzen keine Sichtprüfung der Modelle und keine integrierten Android-Gerätetests.
