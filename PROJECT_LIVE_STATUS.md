@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 17:45 UTC**
-Git-Stand: **68fd7c14167c3140181f2e1681364bdef27560f8** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 18:44 UTC**
+Git-Stand: **feb3b55610ae70a5600b158393e89caa8e5a04c2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -43,7 +43,7 @@ Git-Stand: **68fd7c14167c3140181f2e1681364bdef27560f8** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `e628317` (2026-11-05): Fix Godot editor audio inspector plugin script path (#31)
+- `feb3b55` (2026-11-05): Audio: sichere Session-Lifecycle-Schnittstelle für Multiplayer (#32)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
