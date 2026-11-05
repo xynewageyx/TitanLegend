@@ -13,7 +13,8 @@ const CLASS_TREES := {
  "mage": ["fire", "frost", "arcane"],
  "ranger": ["precision", "wilderness", "trapper"],
  "priest": ["healing", "blessing", "light"],
- "assassin": ["shadow", "blades", "poison"]
+ "assassin": ["shadow", "blades", "poison"],
+ "death_knight": ["blood", "frost", "unholy"]
 }
 const SKILL_ANIMATIONS := {
  "shield_bash": "shield_bash",
