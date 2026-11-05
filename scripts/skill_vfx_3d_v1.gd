@@ -75,6 +75,10 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
     accent_mesh.radius = 0.35
     accent_mesh.height = 0.70
     destination = Vector3(0.0, 1.6, 0.0)
+   "interrupt_death_knight":
+    accent_mesh.radius = 0.26
+    accent_mesh.height = 0.52
+    destination = Vector3(0.0, 1.45, -1.2)
    "interrupt_mage", "interrupt_warlock", "interrupt_shaman":
     accent_mesh.radius = 0.24
     accent_mesh.height = 0.48
@@ -117,6 +121,9 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
     accent.scale = Vector3(1.0, 2.0, 1.0)
    "interrupt_brawler":
     accent.scale = Vector3(2.2, 0.7, 0.7)
+   "interrupt_death_knight":
+    # A dark spectral blade: tall, narrow and visibly different from other interrupts.
+    accent.scale = Vector3(0.5, 2.6, 0.9)
   tween.tween_property(accent, "position", destination, 0.42)
   # Different trajectories make each class readable even on low graphics.
   match skill_id:
@@ -132,6 +139,8 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
     tween.tween_property(accent, "scale", accent.scale * Vector3(0.65, 0.65, 1.4), 0.42)
    "interrupt_mage":
     tween.tween_property(accent, "rotation:x", 2.8, 0.42)
+   "interrupt_death_knight":
+    tween.tween_property(accent, "rotation:z", -1.65, 0.42)
   tween.tween_property(accent_material, "albedo_color:a", 0.0, 0.42)
   # A brief expanding impact disc emphasizes the end of the cast.
   # Reuse one primitive mesh; no particle emitter or dynamic light.
