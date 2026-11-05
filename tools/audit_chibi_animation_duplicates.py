@@ -26,11 +26,18 @@ def audit(inventory):
             )
             groups[signature].append(clip.get("name"))
         candidates = [names for names in groups.values() if len(names) > 1]
+        fingerprint_groups = defaultdict(list)
+        for clip in hero.get("clips", []):
+            fingerprint = clip.get("keyframe_fingerprint_sha256")
+            if fingerprint:
+                fingerprint_groups[(round(float(clip.get("duration", 0)), 5), fingerprint)].append(clip.get("name"))
+        matching_keyframes = [names for names in fingerprint_groups.values() if len(names) > 1]
         results.append({
             "hero": hero.get("hero"),
             "clip_count": len(hero.get("clips", [])),
             "empty_clips": empty,
             "metadata_identical_groups": candidates,
+            "matching_keyframe_fingerprint_groups": matching_keyframes,
             "metadata_identical_clip_count": sum(map(len, candidates)),
         })
     return {
@@ -38,8 +45,9 @@ def audit(inventory):
         "total_clips": sum(x["clip_count"] for x in results),
         "total_empty_clips": sum(len(x["empty_clips"]) for x in results),
         "total_metadata_identical_clip_candidates": sum(x["metadata_identical_clip_count"] for x in results),
+        "total_matching_keyframe_fingerprint_groups": sum(len(x["matching_keyframe_fingerprint_groups"]) for x in results),
         "heroes": results,
-        "warning": "Identical metadata does not establish identical keyframe values. Do not delete clips based on this report.",
+        "warning": "Matching fingerprints indicate identical serialized keyframe data and timing, not necessarily equivalent runtime behavior. Do not delete clips automatically.",
     }
 
 
