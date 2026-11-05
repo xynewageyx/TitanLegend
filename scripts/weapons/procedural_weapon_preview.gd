@@ -53,8 +53,48 @@ func build() -> void:
         else:
             add_piece(Vector3(0,shaft*0.6,0),Vector3(0.3*scale_factor,1.45*scale_factor,0.12),accent,rarity>=2)
         add_piece(Vector3(0,0.0,0),Vector3(0.65,0.12,0.2),metal)
+    _add_rarity_silhouette(accent, scale_factor)
     if rarity >= 3:
         for i in range(rarity-1):
             var y := 0.25 + float(i)*0.32
             add_piece(Vector3(-0.24,y,0),Vector3(0.23,0.12,0.15),accent,true)
             add_piece(Vector3(0.24,y,0),Vector3(0.23,0.12,0.15),accent,true)
+
+## Extra silhouette geometry is deliberately built from simple primitives for mobile preview.
+## Final production assets should replace these meshes with original beveled GLB models.
+func _add_rarity_silhouette(accent: Color, scale_factor: float) -> void:
+    if rarity < 1:
+        return
+    var is_staff := weapon_type in [8, 9]
+    var is_shield := weapon_type == 10
+    var is_ranged := weapon_type in [6, 7]
+    var is_claw := weapon_type == 11
+    var top_y := 0.65 if is_shield else (0.2 if is_ranged else 1.1)
+    if is_staff:
+        top_y = 0.65
+    if rarity >= 1:
+        add_piece(Vector3(0, top_y, 0.13), Vector3(0.32 * scale_factor, 0.18, 0.16), accent)
+    if rarity >= 2:
+        for side in [-1.0, 1.0]:
+            add_piece(Vector3(side * 0.34, top_y, 0.0), Vector3(0.16, 0.43, 0.19), accent, true)
+    if rarity >= 3:
+        for side in [-1.0, 1.0]:
+            var horn := MeshInstance3D.new()
+            var shape := CylinderMesh.new()
+            shape.top_radius = 0.0
+            shape.bottom_radius = 0.15
+            shape.height = 0.65 * scale_factor
+            horn.mesh = shape
+            horn.position = Vector3(side * 0.47, top_y + 0.3, 0)
+            horn.rotation.z = side * -0.48
+            var mat := StandardMaterial3D.new()
+            mat.albedo_color = accent
+            horn.material_override = mat
+            add_child(horn)
+    if rarity >= 4:
+        add_piece(Vector3(0, top_y + 0.34, 0.12), Vector3(0.3, 0.32, 0.23), accent, true)
+        if not is_ranged and not is_claw:
+            add_piece(Vector3(0, top_y + 0.72, 0), Vector3(0.12, 0.52, 0.12), accent, true)
+    if rarity >= 5:
+        for side in [-1.0, 1.0]:
+            add_piece(Vector3(side * 0.68, top_y + 0.5, 0), Vector3(0.22, 0.42, 0.22), accent, true)
