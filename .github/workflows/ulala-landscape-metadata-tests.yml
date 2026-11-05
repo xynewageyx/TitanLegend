@@ -4,12 +4,16 @@ on:
   push:
     paths:
       - 'tools/ulala_landscape_inventory.py'
+      - 'tools/ulala_landscape_decode.py'
       - 'tests/test_ulala_landscape_inventory.py'
+      - 'tests/test_ulala_landscape_decode.py'
       - '.github/workflows/ulala-landscape-metadata-tests.yml'
   pull_request:
     paths:
       - 'tools/ulala_landscape_inventory.py'
+      - 'tools/ulala_landscape_decode.py'
       - 'tests/test_ulala_landscape_inventory.py'
+      - 'tests/test_ulala_landscape_decode.py'
       - '.github/workflows/ulala-landscape-metadata-tests.yml'
   workflow_dispatch:
 
@@ -26,6 +30,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Syntax validation
-        run: python -m py_compile tools/ulala_landscape_inventory.py tests/test_ulala_landscape_inventory.py
+        run: python -m py_compile tools/ulala_landscape_inventory.py tools/ulala_landscape_decode.py tests/test_ulala_landscape_inventory.py tests/test_ulala_landscape_decode.py
       - name: UnityFS inventory unit tests
         run: python -m unittest discover -s tests -p 'test_ulala_landscape_inventory.py' -v
+      - name: Landscape decoder synthetic tests
+        run: python -m unittest discover -s tests -p 'test_ulala_landscape_decode.py' -v
