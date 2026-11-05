@@ -16,6 +16,8 @@ func configure(character_root: Node) -> bool:
     if animation_player == null:
         push_warning("ChibiAnimationController: no AnimationPlayer found")
         return false
+    if not animation_player.animation_finished.is_connected(_on_animation_finished):
+        animation_player.animation_finished.connect(_on_animation_finished)
     for action in ACTIONS:
         var candidates: Array[StringName] = []
         for clip_name in animation_player.get_animation_list():
@@ -40,6 +42,11 @@ func play_action(action: String, variant: int = 0) -> bool:
     animation_player.play(clip_name)
     active_action = action
     return true
+
+
+func _on_animation_finished(_animation_name: StringName) -> void:
+    if active_action == "Attack" or active_action == "Hit" or active_action == "Dodge":
+        return_to_idle()
 
 
 func return_to_idle() -> bool:
