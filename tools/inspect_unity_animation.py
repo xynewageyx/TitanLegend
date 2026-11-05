@@ -7,6 +7,7 @@ Do not commit or redistribute reference bundle payloads.
 """
 import argparse
 import json
+import math
 from pathlib import Path
 
 def inspect(root: Path):
@@ -38,7 +39,9 @@ def inspect(root: Path):
                             item["stop_time"] = muscle.get("m_StopTime")
                             start = item["start_time"]
                             stop = item["stop_time"]
-                            if isinstance(start, (int, float)) and isinstance(stop, (int, float)) and stop >= start:
+                            if (isinstance(start, (int, float)) and not isinstance(start, bool)
+                                    and isinstance(stop, (int, float)) and not isinstance(stop, bool)
+                                    and math.isfinite(start) and math.isfinite(stop) and stop >= start):
                                 item["duration_seconds"] = round(stop - start, 6)
                         curve_keys = (
                             "m_RotationCurves", "m_PositionCurves", "m_ScaleCurves",
@@ -68,7 +71,8 @@ def inspect(root: Path):
                                 for frame in data.get("m_Curve", []):
                                     if isinstance(frame, dict):
                                         t = frame.get("time")
-                                        if isinstance(t, (int, float)) and not isinstance(t, bool):
+                                        if (isinstance(t, (int, float)) and not isinstance(t, bool)
+                                                and math.isfinite(t) and t >= 0):
                                             times.append(float(t))
                         item["keyframe_time_range"] = (
                             {"first": min(times), "last": max(times)}
