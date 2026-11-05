@@ -103,12 +103,32 @@ def rig_and_animate():
  arm.animation_data.action=None
  return arm
 
+# Distinct class silhouettes without changing shared bone positions or animation clips.
+# Width/depth only: preserve rig alignment and equipment attachment heights.
+SILHOUETTES = {
+ "warrior": (1.02, 1.18, 1.12),
+ "paladin": (1.00, 1.12, 1.08),
+ "druid": (1.08, .94, .98),
+ "shaman": (1.10, .90, 1.02),
+ "hunter": (.98, .96, .92),
+ "rogue": (.92, .84, .90),
+ "mage": (1.12, .88, 1.04),
+ "warlock": (1.10, .92, 1.06),
+ "summoner": (1.08, .92, 1.00),
+ "priest": (1.10, .90, .96),
+ "brawler": (.96, 1.22, 1.14),
+ "death_knight": (1.02, 1.20, 1.16),
+}
+def silhouette_levels(levels, width, depth):
+ return [(z, rx*width, ry*depth, front) for z,rx,ry,front in levels]
+
 for idx,name in enumerate(NAMES):
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
+ head_width,body_width,body_depth=SILHOUETTES[name]
  skin=material("skin",(.72,.77,.82) if name=="death_knight" else (.92,.69,.51));hair=material("hair",COLORS[idx])
  white=material("white",(.72,.92,1.0) if name=="death_knight" else (1,.96,.89));dark=material("pupil",(.12,.75,1.0) if name=="death_knight" else (.05,.08,.12))
- loft("SculptedHead",[(1.53,.02,.02,0),(1.65,.34,.29,0),(1.82,.49,.38,-.03),(2.02,.47,.40,-.02),(2.20,.29,.28,0),(2.27,.02,.02,0)],skin)
- loft("SculptedBody",[(.45,.02,.02,0),(.60,.27,.22,0),(.95,.38,.29,0),(1.25,.34,.27,0),(1.52,.10,.11,0)],skin)
+ loft("SculptedHead",silhouette_levels([(1.53,.02,.02,0),(1.65,.34,.29,0),(1.82,.49,.38,-.03),(2.02,.47,.40,-.02),(2.20,.29,.28,0),(2.27,.02,.02,0)],head_width,head_width),skin)
+ loft("SculptedBody",silhouette_levels([(.45,.02,.02,0),(.60,.27,.22,0),(.95,.38,.29,0),(1.25,.34,.27,0),(1.52,.10,.11,0)],body_width,body_depth),skin)
  loft("HairCap",[(2.04,.33,.32,.08),(2.17,.44,.37,.04),(2.29,.26,.24,.03),(2.34,.02,.02,.03)],hair)
  for side in (-1,1):
   x=side*.19
