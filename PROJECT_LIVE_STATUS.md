@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 19:04 UTC**
-Git-Stand: **f4256c089894c961791d4230287468a4f3343e2b** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 19:06 UTC**
+Git-Stand: **08419693eade4219c5761d76b89f23c3bc3423e8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -28,7 +28,6 @@ Git-Stand: **f4256c089894c961791d4230287468a4f3343e2b** auf Branch **main**
 - `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 - `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
 - `a3a50a8` (2026-11-05): Restore walk or idle after combat animations based on movement state
-- `bb1805c` (2026-11-05): test(talents): check live refresh signal and freed-node guards
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -50,6 +49,7 @@ Git-Stand: **f4256c089894c961791d4230287468a4f3343e2b** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `0841969` (2026-11-05): feat(analysis): inventory Unity mesh names and animation clip durations safely
 - `68fd7c1` (2026-11-05): tools: add read-only UnityFS object inventory for reference monster bundles
 
 ## Regeln für alle Fach-Chats
