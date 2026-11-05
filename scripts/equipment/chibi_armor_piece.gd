@@ -4,6 +4,7 @@ extends Node3D
 @export_range(0,5) var rarity: int = 0
 @export_range(0,10) var class_id: int = 0
 const COLORS := [Color("#9aa2ae"),Color("#65c46b"),Color("#4b9eff"),Color("#f5ca55"),Color("#f18a3b"),Color("#b878f8")]
+const CLASS_ACCENTS := [Color("#a8b4c7"), Color("#e7c96b"), Color("#7f9c75"), Color("#b1a47e"), Color("#91a8e9"), Color("#e5d3a6"), Color("#9ebfba"), Color("#83bd7c"), Color("#b08bc9"), Color("#bda6df"), Color("#c7a18a")]
 const SIZES := [Vector3(0.58,0.30,0.57),Vector3(0.66,0.55,0.41),Vector3(0.46,0.55,0.10),Vector3(0.30,0.22,0.35),Vector3(0.30,0.22,0.35),Vector3(0.20,0.32,0.23),Vector3(0.20,0.32,0.23),Vector3(0.23,0.20,0.24),Vector3(0.23,0.20,0.24),Vector3(0.25,0.42,0.28),Vector3(0.25,0.42,0.28),Vector3(0.30,0.22,0.39),Vector3(0.30,0.22,0.39)]
 func _ready() -> void:
     var mesh := SphereMesh.new()
@@ -15,7 +16,7 @@ func _ready() -> void:
     piece.mesh = mesh
     piece.scale = SIZES[slot_index] * (1.0 + float(rarity)*0.055)
     var mat := StandardMaterial3D.new()
-    mat.albedo_color = COLORS[rarity]
+    mat.albedo_color = _class_tinted_color()
     mat.roughness = 0.5
     mat.metallic = 0.2
     if rarity >= 4:
@@ -30,7 +31,7 @@ func _ready() -> void:
 func _add_rarity_details() -> void:
     if rarity < 1:
         return
-    var accent: Color = COLORS[rarity]
+    var accent: Color = _class_tinted_color()
     var width: float = SIZES[slot_index].x
     if rarity >= 2:
         _detail(Vector3(0, 0.08, 0.17), Vector3(width * 0.6, 0.14, 0.12), accent, false)
@@ -68,3 +69,10 @@ func _detail(pos: Vector3, size: Vector3, color: Color, glow: bool) -> void:
         mat.emission_energy_multiplier = 0.35
     item.material_override = mat
     add_child(item)
+
+## Class accent makes otherwise similar rarity tiers easier to identify in combat.
+## The rarity hue remains dominant; class accents influence only 22% of color.
+func _class_tinted_color() -> Color:
+    var rarity_color: Color = COLORS[clampi(rarity, 0, 5)]
+    var class_color: Color = CLASS_ACCENTS[clampi(class_id, 0, 10)]
+    return rarity_color.lerp(class_color, 0.22)
