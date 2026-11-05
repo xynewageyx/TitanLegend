@@ -19,6 +19,7 @@ on:
       - tools/audit_chibi_animation_duplicates.py
       - tests/test_validate_skeleton3d_inventory.py
       - tests/test_analyze_chibi_animation_inventory.py
+      - tests/test_audit_chibi_animation_duplicates.py
 
 jobs:
   export-skeletons:
@@ -29,6 +30,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_validate_skeleton3d_inventory.py' -v
       - name: Test Chibi animation coverage analyzer
         run: python3 -m unittest discover -s tests -p 'test_analyze_chibi_animation_inventory.py' -v
+      - name: Test Chibi animation duplicate auditor
+        run: python3 -m unittest discover -s tests -p 'test_audit_chibi_animation_duplicates.py' -v
       - name: Install Godot headless
         run: |
           set -euo pipefail
