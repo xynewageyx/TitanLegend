@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 22:26 UTC**
-Git-Stand: **d771ca93492a0d927f76760a579da87d9a6907fc** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 22:46 UTC**
+Git-Stand: **3a57134806852159c1cc6b3ac36bd1a23a9a4dec** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,42 +10,43 @@ Git-Stand: **d771ca93492a0d927f76760a579da87d9a6907fc** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
 - `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
 - `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
-- `0ff2ed5` (2026-11-05): feat(talents): add death knight class weights for attack defense and healing
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `c125f4f` (2026-11-05): Run animation fingerprint duplicate regression tests in GitHub Actions
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
+- `325f6aa` (2026-11-05): feat(talents): define blood frost and unholy death knight talent trees
 
 ## Bereichsübergreifende Änderungen
 
