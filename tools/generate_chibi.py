@@ -30,12 +30,28 @@ def rig_and_animate():
  specs=[
   ("Root",None,(0,0,.1),(0,0,.5)),
   ("Hips","Root",(0,0,.5),(0,0,1.0)),
-  ("Spine","Hips",(0,0,1.0),(0,0,1.53)),
-  ("Head","Spine",(0,0,1.53),(0,0,2.12)),
-  ("Arm_L","Spine",(-.3,0,1.40),(-.48,0,.92)),
-  ("Arm_R","Spine",(.3,0,1.40),(.48,0,.92)),
-  ("Leg_L","Hips",(-.18,0,.66),(-.19,0,.23)),
-  ("Leg_R","Hips",(.18,0,.66),(.19,0,.23))]
+  ("Spine","Hips",(0,0,1.0),(0,0,1.34)),
+  ("Chest","Spine",(0,0,1.34),(0,0,1.50)),
+  ("Neck","Chest",(0,0,1.50),(0,0,1.60)),
+  ("Head","Neck",(0,0,1.60),(0,0,2.12)),
+  ("Arm_L","Chest",(-.3,0,1.40),(-.38,0,1.19)),
+  ("Shoulder_L","Arm_L",(-.38,0,1.19),(-.40,0,1.13)),
+  ("UpperArm_L","Shoulder_L",(-.40,0,1.13),(-.44,0,1.03)),
+  ("Forearm_L","UpperArm_L",(-.44,0,1.03),(-.47,0,.96)),
+  ("Hand_L","Forearm_L",(-.47,0,.96),(-.47,0,.86)),
+  ("Arm_R","Chest",(.3,0,1.40),(.38,0,1.19)),
+  ("Shoulder_R","Arm_R",(.38,0,1.19),(.40,0,1.13)),
+  ("UpperArm_R","Shoulder_R",(.40,0,1.13),(.44,0,1.03)),
+  ("Forearm_R","UpperArm_R",(.44,0,1.03),(.47,0,.96)),
+  ("Hand_R","Forearm_R",(.47,0,.96),(.47,0,.86)),
+  ("Leg_L","Hips",(-.18,0,.66),(-.18,0,.55)),
+  ("UpperLeg_L","Leg_L",(-.18,0,.55),(-.19,0,.40)),
+  ("LowerLeg_L","UpperLeg_L",(-.19,0,.40),(-.19,0,.25)),
+  ("Foot_L","LowerLeg_L",(-.19,0,.25),(-.19,-.10,.18)),
+  ("Leg_R","Hips",(.18,0,.66),(.18,0,.55)),
+  ("UpperLeg_R","Leg_R",(.18,0,.55),(.19,0,.40)),
+  ("LowerLeg_R","UpperLeg_R",(.19,0,.40),(.19,0,.25)),
+  ("Foot_R","LowerLeg_R",(.19,0,.25),(.19,-.10,.18))]
  for name,parent,head,tail in specs:
   bone=arm.data.edit_bones.new(name);bone.head=head;bone.tail=tail
   if parent:bone.parent=arm.data.edit_bones[parent]
@@ -44,10 +60,10 @@ def rig_and_animate():
   if obj.type!="MESH":continue
   name=obj.name
   target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")) else
-          "Arm_L" if name.endswith(".001") and ("Hand" in name) else
-          "Arm_R" if "Hand" in name else
-          "Leg_L" if name.endswith(".001") and "Foot" in name else
-          "Leg_R" if "Foot" in name else "Spine")
+          "Hand_L" if name=="Hand_L" else
+          "Hand_R" if name=="Hand_R" else
+          "Foot_L" if name=="Foot_L" else
+          "Foot_R" if name=="Foot_R" else "Spine")
   group=obj.vertex_groups.new(name=target)
   group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
   mod=obj.modifiers.new("Skin","ARMATURE");mod.object=arm
@@ -60,11 +76,11 @@ def rig_and_animate():
    for bone in arm.pose.bones:
     bone.rotation_mode="XYZ";bone.rotation_euler=(0,0,0)
     if clip=="Idle" and bone.name=="Head":bone.rotation_euler.z=.06*math.sin(phase*math.tau)
-    if clip=="Walk" and bone.name in ("Leg_L","Leg_R","Arm_L","Arm_R"):
+    if clip=="Walk" and bone.name in ("UpperLeg_L","UpperLeg_R","Arm_L","Arm_R"):
      sign=1 if bone.name.endswith("L") else -1
      if bone.name.startswith("Arm"):sign=-sign
      bone.rotation_euler.x=.48*sign*math.sin(phase*math.tau)
-    if clip=="Attack" and bone.name=="Arm_R":bone.rotation_euler.x=-1.1*math.sin(phase*math.pi)
+    if clip=="Attack" and bone.name=="UpperArm_R":bone.rotation_euler.x=-1.1*math.sin(phase*math.pi)
     if clip=="Hit" and bone.name=="Spine":bone.rotation_euler.x=.25*math.sin(phase*math.pi)
     if clip=="Dodge" and bone.name=="Spine":bone.rotation_euler.y=.35*math.sin(phase*math.pi)
     bone.keyframe_insert(data_path="rotation_euler",frame=frame,group=bone.name)
@@ -85,8 +101,8 @@ for idx,name in enumerate(NAMES):
   oval("EyeWhite",(x,-.37,1.90),(.13,.035,.16),white)
   oval("Iris",(x,-.405,1.90),(.075,.018,.11),dark)
   oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
-  oval("Hand",(side*.47,-.02,.94),(.12,.12,.13),skin)
-  oval("Foot",(side*.19,-.1,.23),(.15,.23,.12),skin)
+  oval("Hand_L" if side<0 else "Hand_R",(side*.47,-.02,.94),(.12,.12,.13),skin)
+  oval("Foot_L" if side<0 else "Foot_R",(side*.19,-.1,.23),(.15,.23,.12),skin)
  for k in range(5+idx%3):
   x=(k-2)*.15
   lock=loft("HairLock",[(2.04,.07,.08,-.29),(2.17,.10,.11,-.26),(2.29,.08,.08,-.18),(2.36,.01,.01,-.12)],hair)
