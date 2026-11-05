@@ -18,7 +18,7 @@ func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
     _clear(key)
     var visual := Node3D.new()
     visual.set_script(WEAPON_PREVIEW)
-    visual.set("weapon_type", clampi(weapon_type, 0, 11))
+    visual.set("weapon_type", clampi(weapon_type, 0, 12))
     visual.set("rarity", clampi(rarity, 0, 5))
     socket.add_child(visual)
     equipped_nodes[key] = visual
