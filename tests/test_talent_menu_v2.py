@@ -161,6 +161,10 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("is_instance_valid(panel)", MENU)
         self.assertIn("is_instance_valid(team)", MENU)
 
+    def test_selected_branch_spent_points_visible(self):
+        self.assertIn("for rank in build[selected_branch]:", MENU)
+        self.assertIn("Zweig: %d/75", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
