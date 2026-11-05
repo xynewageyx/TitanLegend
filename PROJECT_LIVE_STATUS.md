@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 19:06 UTC**
-Git-Stand: **08419693eade4219c5761d76b89f23c3bc3423e8** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 19:15 UTC**
+Git-Stand: **7601dca1869d1cd0234ece2a92288634a42d185d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `7601dca` (2026-11-05): Connect Chibi controller to existing hero GLB animation events with legacy fallback
 - `cfd245f` (2026-11-05): Test walking attack recovery and idle transitions for Chibi controllers
 - `f8a1c5e` (2026-11-05): Return Chibi animation controller to idle after attack hit and dodge finish
 
@@ -50,7 +51,6 @@ Git-Stand: **08419693eade4219c5761d76b89f23c3bc3423e8** auf Branch **main**
 ## Bereichsübergreifende Änderungen
 
 - `0841969` (2026-11-05): feat(analysis): inventory Unity mesh names and animation clip durations safely
-- `68fd7c1` (2026-11-05): tools: add read-only UnityFS object inventory for reference monster bundles
 
 ## Regeln für alle Fach-Chats
 
