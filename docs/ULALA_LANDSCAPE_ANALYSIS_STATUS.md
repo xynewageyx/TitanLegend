@@ -22,3 +22,10 @@ Archive listing and bundle paths documented. Full Unity object decoding for the 
 - It checks a fixed random seed and no collision bodies for distant forest details.
 - These are **static source assertions**, not evidence of a successful runtime test or measured Android FPS.
 - Before implementing any reference-inspired improvements, reconcile the live `biome_manager.gd` terrain with the standalone `tools/blender/generate_grasland.py` preview; do not assume they render together.
+
+## Confirmed runtime wiring on default branch (2026-11-05)
+- `scenes/main.tscn` has a `BiomeManager` node with `res://scripts/biome_manager.gd` and connected `WorldEnvironment` / `Sun` paths.
+- `biome_manager.gd::_ready()` creates `GeneratedTerrain` and calls `set_biome(BiomeType.NATURE)`.
+- `generate_terrain()` builds geometry using `VisualFactory`, `NatureArt.forest`, additional forest-detail functions and `organic_forest_trail.gd` for Nature.
+- The main scene does not reference the Blender generator or a generated grasland GLB. Blender pipeline outputs must not be assumed visible in gameplay without explicit import and scene wiring.
+- This is a source-level integration finding; no Android runtime frame was inspected.
