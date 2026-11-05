@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-05 18:54 UTC**
-Git-Stand: **75ea589b04e1fd692c70020a1451a81f9dc2c09a** auf Branch **main**
+Git-Stand: **d47995cf6ae10b723a9a4ff384c80fbfe7dd0a07** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -14,40 +14,44 @@ Git-Stand: **75ea589b04e1fd692c70020a1451a81f9dc2c09a** auf Branch **main**
 - `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### UI — UI-Chat
 - `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 - `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
 - `a3a50a8` (2026-11-05): Restore walk or idle after combat animations based on movement state
 - `bb1805c` (2026-11-05): test(talents): check live refresh signal and freed-node guards
 - `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Audio — Audio-Erstellung-Chat
 - `feb3b55` (2026-11-05): Audio: sichere Session-Lifecycle-Schnittstelle für Multiplayer (#32)
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `e67a277` (2026-11-05): Run imported Chibi animation controller smoke test in CI
+- `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
 
 ## Bereichsübergreifende Änderungen
 
