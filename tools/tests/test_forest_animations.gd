@@ -100,6 +100,18 @@ func _run_tests() -> void:
                 for clip in CLIPS:
                     if not presenter.call("play_clip", clip):
                         failures.append("%s: BattleManager presenter cannot play %s" % [ENEMIES[index], clip])
+                    else:
+                        var clip_player: AnimationPlayer = _find_player(presenter)
+                        if clip_player == null:
+                            failures.append("%s: presenter has no AnimationPlayer" % ENEMIES[index])
+                        else:
+                            var active_clip: Animation = clip_player.get_animation(clip_player.current_animation)
+                            if active_clip == null:
+                                failures.append("%s: %s animation unavailable" % [ENEMIES[index], clip])
+                            elif clip == "idle" and active_clip.loop_mode != Animation.LOOP_LINEAR:
+                                failures.append("%s: idle must loop" % ENEMIES[index])
+                            elif clip != "idle" and active_clip.loop_mode != Animation.LOOP_NONE:
+                                failures.append("%s: %s must not loop" % [ENEMIES[index], clip])
                 # Death is terminal: late hit/attack events must not resurrect a mob.
                 if presenter.call("play_clip", "attack"):
                     failures.append("%s: dead presenter accepted attack" % ENEMIES[index])
