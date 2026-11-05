@@ -18,6 +18,8 @@ def inspect_bundle(path, unitypy):
         env = unitypy.load(str(path))
         kinds = Counter()
         samples = []
+        metrics = []
+        read_errors = Counter()
         for obj in env.objects:
             kind = obj.type.name
             kinds[kind] += 1
@@ -27,11 +29,28 @@ def inspect_bundle(path, unitypy):
                     label = getattr(data, "m_Name", "")
                     if label and len(samples) < 80:
                         samples.append({"type": kind, "name": str(label)[:160]})
+                    if len(metrics) < 200 and kind in ("Mesh", "Texture2D", "Material", "TerrainData"):
+                        record = {"type": kind, "name": str(label)[:160]}
+                        for field in {
+                            "Mesh": ("m_VertexCount", "m_SubMeshes"),
+                            "Texture2D": ("m_Width", "m_Height", "m_MipCount"),
+                            "Material": ("m_ShaderKeywords",),
+                            "TerrainData": ("m_HeightmapResolution",),
+                        }[kind]:
+                            value = getattr(data, field, None)
+                            if field == "m_SubMeshes" and value is not None:
+                                record["submesh_count"] = len(value)
+                            elif field == "m_ShaderKeywords" and isinstance(value, str):
+                                record["shader_keyword_count"] = len(value.split())
+                            elif isinstance(value, (int, float, bool)):
+                                record[field] = value
+                        metrics.append(record)
                 except Exception as exc:
-                    if len(samples) < 80:
-                        samples.append({"type": kind, "read_error": type(exc).__name__})
+                    read_errors[type(exc).__name__] += 1
         entry["object_types"] = dict(kinds)
         entry["named_objects"] = samples
+        entry["numeric_metadata"] = metrics
+        entry["object_read_errors"] = dict(read_errors)
         entry["status"] = "decoded"
     except Exception as exc:
         entry["status"] = "error"
