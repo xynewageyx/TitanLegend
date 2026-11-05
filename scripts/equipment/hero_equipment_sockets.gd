@@ -34,7 +34,7 @@ func equip_armor_slot(slot: String, hero_class: int, rarity: int) -> bool:
     var visual := Node3D.new()
     visual.set_script(ARMOR_PREVIEW)
     visual.set("slot_index", SLOT_NAMES.find(slot))
-    visual.set("class_id", clampi(hero_class, 0, 10))
+    visual.set("class_id", clampi(hero_class, 0, 11))
     visual.set("rarity", clampi(rarity, 0, 5))
     socket.add_child(visual)
     equipped_nodes[slot] = visual
