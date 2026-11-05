@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-05 22:26 UTC**
-Git-Stand: **0f2796eab4e8575b721da0a56e9f2d6b54003637** auf Branch **main**
+Git-Stand: **d771ca93492a0d927f76760a579da87d9a6907fc** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -49,6 +49,7 @@ Git-Stand: **0f2796eab4e8575b721da0a56e9f2d6b54003637** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `d771ca9` (2026-11-05): Test duplicate animation fingerprints and missing fingerprint handling
 - `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 - `1d18c85` (2026-11-05): Add regression tests for animation keyframe fingerprint duplicate audit
 - `1da65d8` (2026-11-05): Distinguish matching keyframe fingerprints from metadata-only duplicate candidates
