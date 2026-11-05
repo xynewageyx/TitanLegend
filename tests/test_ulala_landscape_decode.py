@@ -1,0 +1,83 @@
+"""Synthetic tests for the read-only Ulala landscape decoder (no reference assets needed)."""
+import importlib.util
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import unittest
+
+SCRIPT = Path(__file__).resolve().parents[1] / "tools" / "ulala_landscape_decode.py"
+spec = importlib.util.spec_from_file_location("ulala_landscape_decode", SCRIPT)
+decoder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(decoder)
+
+class FakeType:
+    def __init__(self, name):
+        self.name = name
+
+class FakeObject:
+    def __init__(self, name, payload=None, fail=False):
+        self.type = FakeType(name)
+        self.payload = payload
+        self.fail = fail
+
+    def read(self):
+        if self.fail:
+            raise ValueError("synthetic object read error")
+        return self.payload
+
+class Payload:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+class FakeEnvironment:
+    def __init__(self, objects):
+        self.objects = objects
+
+class FakeUnityPy:
+    objects = []
+    @classmethod
+    def load(cls, path):
+        return FakeEnvironment(cls.objects)
+
+class LandscapeDecoderTests(unittest.TestCase):
+    def inspect(self, objects):
+        FakeUnityPy.objects = objects
+        with TemporaryDirectory() as temp:
+            path = Path(temp) / "forest.prefab_ab"
+            path.write_bytes(b"synthetic")
+            return decoder.inspect_bundle(path, FakeUnityPy)
+
+    def test_mesh_and_texture_metadata_without_payload(self):
+        result = self.inspect([
+            FakeObject("Mesh", Payload(m_Name="tree", m_VertexCount=300,
+                                       m_SubMeshes=[object(), object()])),
+            FakeObject("Texture2D", Payload(m_Name="leaves", m_Width=256,
+                                            m_Height=128, m_MipCount=5)),
+        ])
+        self.assertEqual(result["status"], "decoded")
+        self.assertEqual(result["object_types"], {"Mesh": 1, "Texture2D": 1})
+        self.assertEqual(result["numeric_metadata"][0]["m_VertexCount"], 300)
+        self.assertEqual(result["numeric_metadata"][0]["submesh_count"], 2)
+        self.assertEqual(result["numeric_metadata"][1]["m_Width"], 256)
+        self.assertNotIn("m_SubMeshes", result["numeric_metadata"][0])
+
+    def test_read_failure_reports_partial(self):
+        result = self.inspect([FakeObject("Mesh", fail=True),
+                               FakeObject("GameObject", Payload(m_Name="Forest"))])
+        self.assertEqual(result["status"], "partial")
+        self.assertEqual(result["object_read_errors"], {"ValueError": 1})
+        self.assertEqual(result["object_types"]["GameObject"], 1)
+
+    def test_unreadable_bundle_reports_error(self):
+        class BrokenUnityPy:
+            @staticmethod
+            def load(path):
+                raise RuntimeError("bad synthetic bundle")
+        with TemporaryDirectory() as temp:
+            path = Path(temp) / "bad.prefab_ab"
+            path.write_bytes(b"x")
+            result = decoder.inspect_bundle(path, BrokenUnityPy)
+        self.assertEqual(result["status"], "error")
+        self.assertIn("RuntimeError", result["error"])
+
+if __name__ == "__main__":
+    unittest.main()
