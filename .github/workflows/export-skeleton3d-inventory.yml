@@ -16,6 +16,7 @@ on:
       - scripts/animation/chibi_animation_controller.gd
       - tools/export_chibi_animation_inventory.gd
       - tools/analyze_chibi_animation_inventory.py
+      - tools/audit_chibi_animation_duplicates.py
       - tests/test_validate_skeleton3d_inventory.py
       - tests/test_analyze_chibi_animation_inventory.py
 
@@ -61,6 +62,9 @@ jobs:
       - name: Analyze imported Chibi animation coverage
         run: |
           python3 tools/analyze_chibi_animation_inventory.py build/chibi_animation_inventory.json --output build/chibi_animation_coverage.json
+      - name: Audit possible duplicate Chibi animation metadata
+        run: |
+          python3 tools/audit_chibi_animation_duplicates.py build/chibi_animation_inventory.json --output build/chibi_animation_duplicate_audit.json
       - name: Export skeleton hierarchy and rest poses
         run: |
           mkdir -p build
@@ -79,4 +83,5 @@ jobs:
             build/skeleton3d_validation.json
             build/chibi_animation_inventory.json
             build/chibi_animation_coverage.json
+            build/chibi_animation_duplicate_audit.json
           if-no-files-found: warn
