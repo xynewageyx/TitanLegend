@@ -1,47 +1,49 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 16:35 UTC**
-Git-Stand: **b2d185e2b2b7d3db80cbea2acfe67b895994b949** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 16:58 UTC**
+Git-Stand: **7bc7479fd5603eed4d220e55efbbbaed49c607f2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `7bc7479` (2026-11-05): Add reusable Chibi animation controller for imported idle walk attack hit dodge clips
 - `b2d185e` (2026-11-05): Add regression tests for five Chibi action types and numbered clip variants
 - `3ecfe9d` (2026-11-05): Fix malformed duplicated block in Chibi AnimationPlayer smoke test
 - `db093e4` (2026-11-05): Exercise idle run attack AnimationPlayer bone playback on all Chibi rigs
-- `599b3d9` (2026-11-04): Add real AnimationPlayer seek smoke test for eleven Chibi skeletons
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
