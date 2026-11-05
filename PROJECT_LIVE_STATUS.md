@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-05 18:54 UTC**
-Git-Stand: **a3a50a8818faa6c77ebc415f0f3c85444fe11827** auf Branch **main**
+Git-Stand: **75ea589b04e1fd692c70020a1451a81f9dc2c09a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `cfd245f` (2026-11-05): Test walking attack recovery and idle transitions for Chibi controllers
 - `f8a1c5e` (2026-11-05): Return Chibi animation controller to idle after attack hit and dodge finish
 - `e67a277` (2026-11-05): Run imported Chibi animation controller smoke test in CI
 - `9c5be79` (2026-11-05): Smoke-test Chibi animation controller on all 11 imported hero models
@@ -23,13 +24,12 @@ Git-Stand: **a3a50a8818faa6c77ebc415f0f3c85444fe11827** auf Branch **main**
 
 ### UI — UI-Chat
 - `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
-- `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
 - `a3a50a8` (2026-11-05): Restore walk or idle after combat animations based on movement state
 - `bb1805c` (2026-11-05): test(talents): check live refresh signal and freed-node guards
 - `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
-- `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
