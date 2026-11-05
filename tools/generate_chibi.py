@@ -1,9 +1,9 @@
-"""Generate eleven original chibi base GLBs with Blender 4.x; no third-party assets."""
+"""Generate twelve original chibi base GLBs with Blender 4.x; no third-party assets."""
 import bpy, math, os
 OUT=os.path.abspath("assets/heroes/chibi")
 os.makedirs(OUT,exist_ok=True)
-NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
-COLORS=[(.2,.12,.1),(.7,.5,.2),(.2,.4,.2),(.1,.3,.5),(.4,.25,.1),(.2,.15,.3),(.1,.2,.6),(.4,.2,.5),(.6,.4,.7),(.8,.7,.4),(.5,.2,.1)]
+NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler death_knight".split()
+COLORS=[(.2,.12,.1),(.7,.5,.2),(.2,.4,.2),(.1,.3,.5),(.4,.25,.1),(.2,.15,.3),(.1,.2,.6),(.4,.2,.5),(.6,.4,.7),(.8,.7,.4),(.5,.2,.1),(.16,.22,.27)]
 def material(name,color):
  m=bpy.data.materials.new(name);m.diffuse_color=(*color,1);return m
 def loft(name,levels,mat):
