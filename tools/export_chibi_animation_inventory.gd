@@ -28,7 +28,17 @@ func _initialize() -> void:
                         "type": animation.track_get_type(index),
                         "key_count": animation.track_get_key_count(index)
                     })
+                var fingerprint_parts: Array[String] = []
+                for index in range(animation.get_track_count()):
+                    fingerprint_parts.append(str(animation.track_get_path(index)))
+                    fingerprint_parts.append(str(animation.track_get_type(index)))
+                    fingerprint_parts.append(str(animation.track_get_interpolation_type(index)))
+                    for key_index in range(animation.track_get_key_count(index)):
+                        fingerprint_parts.append(str(animation.track_get_key_time(index, key_index)))
+                        fingerprint_parts.append(var_to_str(animation.track_get_key_value(index, key_index)))
+                        fingerprint_parts.append(str(animation.track_get_key_transition(index, key_index)))
                 clips.append({
+                    "keyframe_fingerprint_sha256": ("|".join(fingerprint_parts)).sha256_text(),
                     "player_path": str(root.get_path_to(player)),
                     "name": str(animation_name),
                     "duration": animation.length,
