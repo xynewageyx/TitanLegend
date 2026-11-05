@@ -51,7 +51,7 @@ def inspect_bundle(path, unitypy):
         entry["named_objects"] = samples
         entry["numeric_metadata"] = metrics
         entry["object_read_errors"] = dict(read_errors)
-        entry["status"] = "decoded"
+        entry["status"] = "partial" if read_errors else "decoded"
     except Exception as exc:
         entry["status"] = "error"
         entry["error"] = type(exc).__name__ + ": " + str(exc)[:300]
@@ -72,13 +72,15 @@ def main():
                    and any(word in p.as_posix().lower() for word in KEYWORDS)
                    and (p.name.endswith(("_ab", "_ab_shared"))))
     results = [inspect_bundle(p, UnityPy) for p in files]
-    output = {"scope": "object types and names only; no asset payloads",
+    output = {"scope": "object types, names and numeric metadata only; no asset payloads",
               "files_considered": len(files),
               "decoded": sum(r["status"] == "decoded" for r in results),
+              "partial": sum(r["status"] == "partial" for r in results),
+              "errors": sum(r["status"] == "error" for r in results),
               "results": results}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, indent=2, ensure_ascii=False), encoding="utf-8")
-    print("Decoded", output["decoded"], "of", len(files), "candidate bundles")
+    print("Decoded", output["decoded"], "partial", output["partial"], "errors", output["errors"], "of", len(files), "candidate bundles")
     print("Metadata report:", args.output)
 
 if __name__ == "__main__":
