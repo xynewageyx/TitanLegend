@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 17:05 UTC**
-Git-Stand: **b46fd149b49399255c76b766bfed1a04a0444aef** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 17:06 UTC**
+Git-Stand: **19afe2862a202ef8eb9534c3038a508c89ae104e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,9 +23,10 @@ Git-Stand: **b46fd149b49399255c76b766bfed1a04a0444aef** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
 - `89a61c1` (2026-11-05): test(talents): validate every hero build before persistence
 - `9354605` (2026-11-05): fix(talents): normalize all four hero talent builds before persisting edits
 - `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
@@ -53,7 +54,6 @@ Git-Stand: **b46fd149b49399255c76b766bfed1a04a0444aef** auf Branch **main**
 - `b46fd14` (2026-11-05): Mount opt-in Android multiplayer client in main scene
 - `8193537` (2026-11-05): Report per-class Attack Dodge Hit Idle Walk clip coverage
 - `d6bbc54` (2026-11-05): fix(forest): force one-shot attack hit death clips and prevent death restart
-- `785eb5f` (2026-11-05): Restore complete 33-case AnimationPlayer smoke test after accidental truncation
 
 ## Regeln für alle Fach-Chats
 
