@@ -24,6 +24,21 @@ class ChibiAnimationCoverageTests(unittest.TestCase):
         self.assertEqual(result["heroes_with_imported_clips"], 1)
         self.assertEqual(result["coverage"]["warrior"]["clips_with_keys"], 1)
 
+    def test_all_five_base_actions_detected(self):
+        clips = [{"name": action, "tracks": [{"key_count": 2}]}
+                 for action in ("Attack", "Dodge", "Hit", "Idle", "Walk")]
+        result = analyze(make_inventory(clips))
+        self.assertEqual(result["coverage"]["warrior"]["missing_base_actions"], [])
+        self.assertEqual(result["coverage"]["warrior"]["action_clip_counts"]["Attack"], 1)
+
+    def test_variants_count_without_false_prefix_match(self):
+        clips = [{"name": "Attack"}, {"name": "Attack_001"},
+                 {"name": "Attacker"}, {"name": "Walk_002"}]
+        result = analyze(make_inventory(clips))
+        self.assertEqual(result["coverage"]["warrior"]["action_clip_counts"]["Attack"], 2)
+        self.assertEqual(result["coverage"]["warrior"]["action_clip_counts"]["Walk"], 1)
+        self.assertIn("Idle", result["coverage"]["warrior"]["missing_base_actions"])
+
     def test_missing_hero_rejected(self):
         data = make_inventory()
         data["heroes"].pop()
