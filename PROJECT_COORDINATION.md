@@ -113,3 +113,12 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - **Verbindliche Stilrichtung:** Ulala-inspirierte, gut lesbare stilisierte 3D-Silhouetten beibehalten; je höher die Qualitäts-/Seltenheitsstufe, desto brutaler, gefährlicher, aufwendiger und eindrucksvoller wirken Waffen und Rüstungen. Die visuelle Steigerung muss auch auf Android bei kleiner Bildschirmgröße erkennbar sein.
 - **Schnittstellen:** Abstimmung mit Charakterdesign (Körper, Hände, Rigs und Ankerpunkte), Gameplay/Inventar (Ausrüstungsplätze und Werte), UI (Icons und Vorschau), Grafik/Rendering (LOD, Materialien, Performance), Skills/Animationen (Waffenbewegungen) sowie APK-Gesamtbuild (Import und End-to-End-Test).
 - **Freigabe:** keine Behauptung einer fertigen Integration ohne Assets, Godot-Import, Animationstests, visuelle Qualitätsprüfung und erfolgreiche Android-Gesamtbuild-Prüfung.
+
+## Neue Klasse: Todesritter (2026-11-05)
+- **Verbindliche Klassen-Erweiterung:** Todesritter gehört ab sofort zum gemeinsamen Titan-Legends-Klassenkatalog. Alle Fachbereiche berücksichtigen die Klasse bei zukünftiger Planung und Integration.
+- **Charakterdesign:** eigenständiges Todesritter-Modell im Ulala-inspirierten stilisierten 3D-Cartoon-Look; passende Silhouette, Rig, Animation-Anker und düstere optische Identität.
+- **Waffen und Rüstung Design:** Todesritter-spezifische Waffen und Rüstungen; steigende Seltenheit wirkt deutlich brutaler, bedrohlicher und imposanter bei erhaltener Lesbarkeit und Android-Performance.
+- **Skills und Animationen:** passende Fähigkeiten und Effekte nach den gemeinsamen Auto-Kampf-Regeln; Unterbrechen ist ein normaler Skill, keine Sondermechanik.
+- **Gameplay / UI / Audio:** Klassenregistrierung und Balancing, Auswahl bei Charaktererstellung, Icons/Vorschau und klassenspezifische Kampfsounds; keine zweite Klassen- oder Ausrüstungsimplementierung.
+- **Gegner, Landschaften, Rendering, APK-Gesamtbuild und Integration/CI:** kompatible Animationen/Materialien, Ressourcen-Import und Gesamtintegration testen.
+- **Status:** diese Mitteilung ist eine verbindliche Koordinationsvorgabe, kein Nachweis, dass Klasse, Assets, Skills oder APK bereits implementiert oder getestet sind.
