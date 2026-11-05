@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 20:22 UTC**
-Git-Stand: **cb31cab41eb1892a838402cd5673665ac43adbde** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 20:58 UTC**
+Git-Stand: **4468d7c5a0607496a4a795281f1a94f24dc9bc35** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,19 +11,19 @@ Git-Stand: **cb31cab41eb1892a838402cd5673665ac43adbde** auf Branch **main**
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
 - `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 - `7601dca` (2026-11-05): Connect Chibi controller to existing hero GLB animation events with legacy fallback
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Landschaften — Landschaften-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### UI — UI-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
@@ -33,26 +33,27 @@ Git-Stand: **cb31cab41eb1892a838402cd5673665ac43adbde** auf Branch **main**
 - `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Audio — Audio-Erstellung-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
-- `75ea589` (2026-11-05): feat(talents): display selected branch rank investment
+- `d47995c` (2026-11-05): test(talents): cover selected branch rank counter
 
 ## Bereichsübergreifende Änderungen
 
+- `4468d7c` (2026-11-05): Fingerprint imported animation keyframe values and timing for duplicate audit
 - `0841969` (2026-11-05): feat(analysis): inventory Unity mesh names and animation clip durations safely
 
 ## Regeln für alle Fach-Chats
