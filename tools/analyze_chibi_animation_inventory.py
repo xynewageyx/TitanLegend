@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+REQUIRED_ACTIONS = ("Attack", "Dodge", "Hit", "Idle", "Walk")
+
 HEROES = {"brawler", "druid", "hunter", "mage", "paladin", "priest",
           "rogue", "shaman", "summoner", "warlock", "warrior"}
 
@@ -23,12 +25,18 @@ def analyze(inventory):
     coverage = {}
     for entry in entries:
         clips = entry.get("clips", [])
+        actions = {action: [clip.get("name") for clip in clips
+                            if isinstance(clip.get("name"), str)
+                            and (clip["name"] == action or clip["name"].startswith(action + "_"))]
+                   for action in REQUIRED_ACTIONS}
         coverage[entry.get("hero")] = {
             "animation_players": entry.get("animation_players", 0),
             "clip_count": len(clips),
             "clips_with_keys": sum(any(track.get("key_count", 0) > 0
                                       for track in clip.get("tracks", [])) for clip in clips),
             "clip_names": [clip.get("name") for clip in clips],
+            "action_clip_counts": {action: len(names) for action, names in actions.items()},
+            "missing_base_actions": [action for action, names in actions.items() if not names],
         }
     return {
         "valid_inventory": not errors,
@@ -37,6 +45,9 @@ def analyze(inventory):
         "heroes_with_imported_clips": sum(v["clip_count"] > 0 for v in coverage.values()),
         "total_imported_clips": sum(v["clip_count"] for v in coverage.values()),
         "coverage": coverage,
+        "heroes_missing_base_actions": {hero: entry["missing_base_actions"]
+                                        for hero, entry in coverage.items()
+                                        if entry["missing_base_actions"]},
         "unity_retargeting_verified": False,
         "note": "Imported clip presence does not prove animation playback or Unity compatibility.",
     }
