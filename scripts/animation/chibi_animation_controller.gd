@@ -46,9 +46,24 @@ func play_action(action: String, variant: int = 0) -> bool:
     return true
 
 
-func _on_animation_finished(_animation_name: StringName) -> void:
+func _on_animation_finished(animation_name: StringName) -> void:
+    if animation_player == null or animation_player.current_animation != str(animation_name):
+        return
     if active_action == "Attack" or active_action == "Hit" or active_action == "Dodge":
         play_action(locomotion_action)
+
+
+## Call only when gameplay has confirmed the corresponding combat event.
+func on_attack(variant: int = 0) -> bool:
+    return play_action("Attack", variant)
+
+
+func on_hit(variant: int = 0) -> bool:
+    return play_action("Hit", variant)
+
+
+func on_dodge(variant: int = 0) -> bool:
+    return play_action("Dodge", variant)
 
 
 func set_moving(moving: bool) -> bool:
