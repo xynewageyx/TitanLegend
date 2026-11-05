@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 16:05 UTC**
-Git-Stand: **8193537b0ca34509c658591b49aed429ef664a7c** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 16:35 UTC**
+Git-Stand: **b2d185e2b2b7d3db80cbea2acfe67b895994b949** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `b2d185e` (2026-11-05): Add regression tests for five Chibi action types and numbered clip variants
 - `3ecfe9d` (2026-11-05): Fix malformed duplicated block in Chibi AnimationPlayer smoke test
 - `db093e4` (2026-11-05): Exercise idle run attack AnimationPlayer bone playback on all Chibi rigs
 - `599b3d9` (2026-11-04): Add real AnimationPlayer seek smoke test for eleven Chibi skeletons
@@ -44,7 +45,6 @@ Git-Stand: **8193537b0ca34509c658591b49aed429ef664a7c** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
-- `4042261` (2026-11-04): Preserve partial skeleton and animation reports when CI fails
 
 ## Bereichsübergreifende Änderungen
 
