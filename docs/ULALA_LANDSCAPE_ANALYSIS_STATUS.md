@@ -15,3 +15,10 @@
 
 ## Status
 Archive listing and bundle paths documented. Full Unity object decoding for the landscape **not yet independently verified in this branch**.
+
+## Cross-check against current game landscape implementation
+- Default-branch `tests/test_landscape_depth.py` checks `scripts/biome_manager.gd`, not the separate Blender preview generator.
+- The test asserts a 48 x 160 terrain footprint and a 160-unit path, plus a nature-only distant forest extension.
+- It checks a fixed random seed and no collision bodies for distant forest details.
+- These are **static source assertions**, not evidence of a successful runtime test or measured Android FPS.
+- Before implementing any reference-inspired improvements, reconcile the live `biome_manager.gd` terrain with the standalone `tools/blender/generate_grasland.py` preview; do not assume they render together.
