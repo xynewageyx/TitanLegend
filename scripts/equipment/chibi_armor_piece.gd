@@ -24,3 +24,47 @@ func _ready() -> void:
         mat.emission_energy_multiplier = 0.35
     piece.material_override = mat
     add_child(piece)
+    _add_rarity_details()
+
+## Add silhouette-defining original primitive details; keep FX optional on low-end.
+func _add_rarity_details() -> void:
+    if rarity < 1:
+        return
+    var accent := COLORS[rarity]
+    var width := SIZES[slot_index].x
+    if rarity >= 2:
+        _detail(Vector3(0, 0.08, 0.17), Vector3(width * 0.6, 0.14, 0.12), accent, false)
+    if rarity >= 3 and slot_index in [0, 3, 4, 5, 6]:
+        for side in [-1.0, 1.0]:
+            var horn := MeshInstance3D.new()
+            var mesh := CylinderMesh.new()
+            mesh.top_radius = 0.0
+            mesh.bottom_radius = 0.11
+            mesh.height = 0.38 + 0.09 * float(rarity - 3)
+            horn.mesh = mesh
+            horn.position = Vector3(side * width * 0.55, 0.22, 0)
+            horn.rotation.z = -side * 0.4
+            var mat := StandardMaterial3D.new()
+            mat.albedo_color = accent
+            horn.material_override = mat
+            add_child(horn)
+    if rarity >= 4:
+        _detail(Vector3(0, 0.0, 0.24), Vector3(width * 0.5, 0.22, 0.12), accent, true)
+    if rarity >= 5 and slot_index in [0, 1, 2, 3, 4]:
+        for side in [-1.0, 1.0]:
+            _detail(Vector3(side * width * 0.75, 0.32, 0), Vector3(0.14, 0.32, 0.16), accent, true)
+
+func _detail(pos: Vector3, size: Vector3, color: Color, glow: bool) -> void:
+    var item := MeshInstance3D.new()
+    var mesh := BoxMesh.new()
+    mesh.size = size
+    item.mesh = mesh
+    item.position = pos
+    var mat := StandardMaterial3D.new()
+    mat.albedo_color = color
+    if glow:
+        mat.emission_enabled = true
+        mat.emission = color
+        mat.emission_energy_multiplier = 0.35
+    item.material_override = mat
+    add_child(item)
