@@ -26,6 +26,7 @@ func _ready() -> void:
     piece.material_override = mat
     add_child(piece)
     _add_rarity_details()
+    _add_class_silhouette()
 
 ## Add silhouette-defining original primitive details; keep FX optional on low-end.
 func _add_rarity_details() -> void:
@@ -76,3 +77,51 @@ func _class_tinted_color() -> Color:
     var rarity_color: Color = COLORS[clampi(rarity, 0, 5)]
     var class_color: Color = CLASS_ACCENTS[clampi(class_id, 0, 10)]
     return rarity_color.lerp(class_color, 0.22)
+
+## Distinct original low-poly silhouettes for eleven hero classes.
+## These preview details are class cues, not production-ready skinned equipment.
+func _add_class_silhouette() -> void:
+    var tier_scale: float = 1.0 + float(rarity) * 0.09
+    var accent: Color = _class_tinted_color()
+    var shoulder: bool = slot_index in [3, 4]
+    var head: bool = slot_index == 0
+    var chest: bool = slot_index == 1
+    if not (shoulder or head or chest):
+        return
+    match class_id:
+        0: # Warrior: reinforced heavy plate
+            if shoulder or chest:
+                _detail(Vector3(0, 0.13, 0.18), Vector3(0.43, 0.22, 0.18) * tier_scale, accent, false)
+        1: # Paladin: shield-like polished crest
+            if chest or head:
+                _detail(Vector3(0, 0.16, 0.22), Vector3(0.22, 0.36, 0.15) * tier_scale, accent, rarity >= 4)
+        2: # Rogue: narrow segmented armor
+            if chest:
+                for side in [-1.0, 1.0]:
+                    _detail(Vector3(side * 0.16, 0, 0.2), Vector3(0.11, 0.42, 0.1), accent, false)
+        3: # Hunter: fur-like layered tabs
+            if shoulder:
+                for side in [-1.0, 1.0]:
+                    _detail(Vector3(side * 0.13, -0.12, 0.08), Vector3(0.15, 0.3, 0.14), accent, false)
+        4: # Mage: floating crystal geometry
+            if shoulder or head:
+                _detail(Vector3(0, 0.42 * tier_scale, 0), Vector3(0.18, 0.35, 0.18), accent, rarity >= 3)
+        5: # Priest: ceremonial vertical ornament
+            if chest or head:
+                _detail(Vector3(0, 0.17, 0.21), Vector3(0.12, 0.42, 0.14) * tier_scale, accent, rarity >= 4)
+        6: # Shaman: chunky totem decoration
+            if shoulder:
+                _detail(Vector3(0, 0.28, 0), Vector3(0.3, 0.3, 0.27) * tier_scale, accent, false)
+        7: # Druid: leaf-like overlapping plates
+            if shoulder or chest:
+                _detail(Vector3(0, 0.08, 0.2), Vector3(0.32, 0.48, 0.12) * tier_scale, accent, false)
+        8: # Warlock: tall shadow spikes
+            if shoulder or head:
+                _detail(Vector3(0, 0.39, 0), Vector3(0.12, 0.62, 0.14) * tier_scale, accent, rarity >= 4)
+        9: # Summoner: arcane focus blocks
+            if shoulder or chest:
+                for side in [-1.0, 1.0]:
+                    _detail(Vector3(side * 0.19, 0.23, 0.14), Vector3(0.14, 0.2, 0.16) * tier_scale, accent, rarity >= 4)
+        10: # Brawler: thick impact plates
+            if shoulder or chest:
+                _detail(Vector3(0, 0.0, 0.25), Vector3(0.48, 0.27, 0.25) * tier_scale, accent, false)
