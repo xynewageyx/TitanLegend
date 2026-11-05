@@ -156,6 +156,11 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("builds[index] = TALENT_TREES_V2.validate_build(level, builds[index])", setter)
         self.assertIn("builds[hero_slot] = TALENT_TREES_V2.validate_build(level, proposed_build)", setter)
 
+    def test_team_signal_refresh_has_validity_guards(self):
+        self.assertIn("team.team_changed.connect(_on_team_changed)", MENU)
+        self.assertIn("is_instance_valid(panel)", MENU)
+        self.assertIn("is_instance_valid(team)", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
