@@ -1,10 +1,10 @@
 @tool
 extends Node3D
 ## Titan Legends procedural weapon preview. Attach to an empty Node3D and run as a scene.
-## Set weapon_type (0-11) and rarity (0-5) in the inspector.
-@export_range(0, 11) var weapon_type: int = 0
+## Set weapon_type (0-12) and rarity (0-5) in the inspector.
+@export_range(0, 12) var weapon_type: int = 0
 @export_range(0, 5) var rarity: int = 0
-const TYPES = ["sword", "greatsword", "axe", "hammer", "dagger", "spear", "bow", "crossbow", "staff", "healer", "shield", "claw"]
+const TYPES = ["sword", "greatsword", "axe", "hammer", "dagger", "spear", "bow", "crossbow", "staff", "healer", "shield", "claw", "death_knight_runeblade"]
 const TIERS = ["common", "uncommon", "rare", "epic", "legendary", "mythic"]
 const COLORS = [Color(0.55,0.56,0.58),Color(0.18,0.7,0.29),Color(0.12,0.42,1),Color(1,0.75,0.12),Color(1,0.26,0.035),Color(0.62,0.14,1)]
 func _ready() -> void:
@@ -30,10 +30,12 @@ func build() -> void:
         child.queue_free()
     var accent: Color = COLORS[rarity]
     var metal := Color(0.16,0.18,0.22)
-    var big := weapon_type in [1,3,5]
+    var big := weapon_type in [1,3,5,12]
     var scale_factor := 1.0 + float(rarity) * 0.11
     var shaft := 1.8 if big else 1.0
-    if weapon_type in [6,7]:
+    if weapon_type == 12:
+        _build_death_knight_runeblade(scale_factor)
+    elif weapon_type in [6,7]:
         add_piece(Vector3(-0.5,0,0),Vector3(0.13,2.2,0.15),metal)
         add_piece(Vector3(0.5,0,0),Vector3(0.13,2.2,0.15),metal)
         add_piece(Vector3(0,0,0),Vector3(1.05,0.05,0.06),accent,rarity>=2)
@@ -98,3 +100,35 @@ func _add_rarity_silhouette(accent: Color, scale_factor: float) -> void:
     if rarity >= 5:
         for side in [-1.0, 1.0]:
             add_piece(Vector3(side * 0.68, top_y + 0.5, 0), Vector3(0.22, 0.42, 0.22), accent, true)
+
+## Death Knight: cursed two-handed runeblade. Low-poly prototype only.
+func _build_death_knight_runeblade(scale_factor: float) -> void:
+    var dark_metal := Color(0.10, 0.11, 0.17)
+    var bone := Color(0.62, 0.62, 0.68)
+    var rune := Color(0.52, 0.25, 0.91)
+    add_piece(Vector3(0, -0.68, 0), Vector3(0.18, 1.3, 0.18), dark_metal)
+    add_piece(Vector3(0, 0.48, 0), Vector3(0.48 * scale_factor, 1.9 * scale_factor, 0.16), dark_metal)
+    add_piece(Vector3(0, 0.54, 0.11), Vector3(0.16, 1.25 * scale_factor, 0.07), rune, rarity >= 2)
+    add_piece(Vector3(0, -0.02, 0), Vector3(1.05 * scale_factor, 0.19, 0.26), bone)
+    if rarity >= 2:
+        for side in [-1.0, 1.0]:
+            add_piece(Vector3(side * 0.28, 1.2, 0), Vector3(0.15, 0.65, 0.16), bone)
+    if rarity >= 3:
+        for side in [-1.0, 1.0]:
+            var spike := MeshInstance3D.new()
+            var spike_mesh := CylinderMesh.new()
+            spike_mesh.top_radius = 0.0
+            spike_mesh.bottom_radius = 0.13
+            spike_mesh.height = 0.65 * scale_factor
+            spike.mesh = spike_mesh
+            spike.position = Vector3(side * 0.5, 0.07, 0)
+            spike.rotation.z = -side * 0.8
+            var mat := StandardMaterial3D.new()
+            mat.albedo_color = bone
+            spike.material_override = mat
+            add_child(spike)
+    if rarity >= 4:
+        add_piece(Vector3(0, 1.18, 0.18), Vector3(0.35, 0.32, 0.14), rune, true)
+    if rarity >= 5:
+        for side in [-1.0, 1.0]:
+            add_piece(Vector3(side * 0.55, 1.53, 0), Vector3(0.17, 0.42, 0.18), rune, true)
