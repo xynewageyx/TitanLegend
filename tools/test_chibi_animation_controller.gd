@@ -37,6 +37,18 @@ func _run() -> void:
                 failures.append("%s: %s playback not started" % [hero_id, action])
                 continue
             checked += 1
+        if not controller.set_moving(true):
+            failures.append("%s: set_moving(true) failed" % hero_id)
+        elif controller.active_action != "Walk":
+            failures.append("%s: expected Walk while moving" % hero_id)
+        if controller.play_action("Attack"):
+            controller._on_animation_finished(StringName("Attack"))
+            if controller.active_action != "Walk":
+                failures.append("%s: attack did not restore Walk" % hero_id)
+        if not controller.set_moving(false):
+            failures.append("%s: set_moving(false) failed" % hero_id)
+        elif controller.active_action != "Idle":
+            failures.append("%s: expected Idle after stopping" % hero_id)
         if not controller.return_to_idle():
             failures.append("%s: return_to_idle failed" % hero_id)
         hero.queue_free()
