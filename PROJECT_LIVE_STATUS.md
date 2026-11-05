@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-05 21:39 UTC**
-Git-Stand: **1d18c858882820f75531b4d403c3218bd8fc8548** auf Branch **main**
+Git-Stand: **c125f4f43a071ceea3479d68771be1f6070ae98c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -45,6 +45,7 @@ Git-Stand: **1d18c858882820f75531b4d403c3218bd8fc8548** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `c125f4f` (2026-11-05): Run animation fingerprint duplicate regression tests in GitHub Actions
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
 
 ## Bereichsübergreifende Änderungen
@@ -52,7 +53,6 @@ Git-Stand: **1d18c858882820f75531b4d403c3218bd8fc8548** auf Branch **main**
 - `1d18c85` (2026-11-05): Add regression tests for animation keyframe fingerprint duplicate audit
 - `1da65d8` (2026-11-05): Distinguish matching keyframe fingerprints from metadata-only duplicate candidates
 - `4468d7c` (2026-11-05): Fingerprint imported animation keyframe values and timing for duplicate audit
-- `0841969` (2026-11-05): feat(analysis): inventory Unity mesh names and animation clip durations safely
 
 ## Regeln für alle Fach-Chats
 
