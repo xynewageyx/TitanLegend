@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 03:26 UTC**
-Git-Stand: **785eb5fa95e3a39149bd66e1b9c94660aa858e64** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 15:13 UTC**
+Git-Stand: **f55da2ba24871ae3861b1c7538edfe9b86f992ca** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,37 +12,37 @@ Git-Stand: **785eb5fa95e3a39149bd66e1b9c94660aa858e64** auf Branch **main**
 - `db093e4` (2026-11-05): Exercise idle run attack AnimationPlayer bone playback on all Chibi rigs
 - `599b3d9` (2026-11-04): Add real AnimationPlayer seek smoke test for eleven Chibi skeletons
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
-- `785b88c` (2026-11-04): Test Chibi animation coverage counting and incomplete inventories
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
@@ -51,6 +51,7 @@ Git-Stand: **785eb5fa95e3a39149bd66e1b9c94660aa858e64** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `d6bbc54` (2026-11-05): fix(forest): force one-shot attack hit death clips and prevent death restart
 - `785eb5f` (2026-11-05): Restore complete 33-case AnimationPlayer smoke test after accidental truncation
 - `f321bc6` (2026-11-05): test(forest): ensure death is terminal and reused presenters reset on respawn
 - `8cb5246` (2026-11-04): Check procedural animation start/end keyframes and clarify interpolation-only test
