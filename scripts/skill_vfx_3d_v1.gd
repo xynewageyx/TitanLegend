@@ -23,7 +23,7 @@ const SKILL_STYLE := {
  "interrupt_hunter": "nature", "interrupt_rogue": "shadow",
  "interrupt_mage": "frost", "interrupt_warlock": "shadow",
  "interrupt_summoner": "storm", "interrupt_priest": "holy",
- "interrupt_brawler": "fire"
+ "interrupt_brawler": "fire", "interrupt_death_knight": "shadow"
 }
 @export var max_active_effects: int = 12
 var _effects: Array[Node3D] = []
