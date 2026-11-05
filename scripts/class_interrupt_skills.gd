@@ -6,13 +6,13 @@ const NAMES: Array[String] = [
  "Schildramme", "Heiliger Bann", "Wurzelgriff",
  "Donnerunterbrechung", "Betaeubungspfeil", "Kehlenschnitt",
  "Arkaner Gegenzauber", "Seelenfessel", "Dimensionsgriff",
- "Heiliges Schweigen", "Betaeubender Haken"
+ "Heiliges Schweigen", "Betaeubender Haken", "Grabesstille"
 ]
 const VFX: Array[String] = [
  "interrupt_warrior", "interrupt_paladin", "interrupt_druid",
  "interrupt_shaman", "interrupt_hunter", "interrupt_rogue",
  "interrupt_mage", "interrupt_warlock", "interrupt_summoner",
- "interrupt_priest", "interrupt_brawler"
+ "interrupt_priest", "interrupt_brawler", "interrupt_death_knight"
 ]
 
 static func name_for_class(class_id: int) -> String:
