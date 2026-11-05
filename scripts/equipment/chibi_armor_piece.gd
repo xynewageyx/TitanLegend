@@ -2,9 +2,9 @@ extends Node3D
 ## Small local-space armor piece, designed for socket attachment on chibi heroes.
 @export_enum("HeadSocket","ChestSocket","BackSocket","ShoulderLeftSocket","ShoulderRightSocket","ArmLeftSocket","ArmRightSocket","GloveLeftSocket","GloveRightSocket","LegLeftSocket","LegRightSocket","BootLeftSocket","BootRightSocket") var slot_index: int = 0
 @export_range(0,5) var rarity: int = 0
-@export_range(0,10) var class_id: int = 0
+@export_range(0,11) var class_id: int = 0
 const COLORS := [Color("#9aa2ae"),Color("#65c46b"),Color("#4b9eff"),Color("#f5ca55"),Color("#f18a3b"),Color("#b878f8")]
-const CLASS_ACCENTS := [Color("#a8b4c7"), Color("#e7c96b"), Color("#7f9c75"), Color("#b1a47e"), Color("#91a8e9"), Color("#e5d3a6"), Color("#9ebfba"), Color("#83bd7c"), Color("#b08bc9"), Color("#bda6df"), Color("#c7a18a")]
+const CLASS_ACCENTS := [Color("#a8b4c7"), Color("#e7c96b"), Color("#7f9c75"), Color("#b1a47e"), Color("#91a8e9"), Color("#e5d3a6"), Color("#9ebfba"), Color("#83bd7c"), Color("#b08bc9"), Color("#bda6df"), Color("#c7a18a"), Color("#655d83")]
 const SIZES := [Vector3(0.58,0.30,0.57),Vector3(0.66,0.55,0.41),Vector3(0.46,0.55,0.10),Vector3(0.30,0.22,0.35),Vector3(0.30,0.22,0.35),Vector3(0.20,0.32,0.23),Vector3(0.20,0.32,0.23),Vector3(0.23,0.20,0.24),Vector3(0.23,0.20,0.24),Vector3(0.25,0.42,0.28),Vector3(0.25,0.42,0.28),Vector3(0.30,0.22,0.39),Vector3(0.30,0.22,0.39)]
 func _ready() -> void:
     var mesh := SphereMesh.new()
@@ -75,7 +75,7 @@ func _detail(pos: Vector3, size: Vector3, color: Color, glow: bool) -> void:
 ## The rarity hue remains dominant; class accents influence only 22% of color.
 func _class_tinted_color() -> Color:
     var rarity_color: Color = COLORS[clampi(rarity, 0, 5)]
-    var class_color: Color = CLASS_ACCENTS[clampi(class_id, 0, 10)]
+    var class_color: Color = CLASS_ACCENTS[clampi(class_id, 0, 11)]
     return rarity_color.lerp(class_color, 0.22)
 
 ## Distinct original low-poly silhouettes for eleven hero classes.
@@ -122,6 +122,12 @@ func _add_class_silhouette() -> void:
             if shoulder or chest:
                 for side in [-1.0, 1.0]:
                     _detail(Vector3(side * 0.19, 0.23, 0.14), Vector3(0.14, 0.2, 0.16) * tier_scale, accent, rarity >= 4)
+        11: # Death Knight: cursed bone armor, horned skull silhouette
+            if shoulder or head:
+                for side in [-1.0, 1.0]:
+                    _detail(Vector3(side * 0.19, 0.31, 0), Vector3(0.14, 0.55, 0.16) * tier_scale, accent, rarity >= 4)
+            if chest:
+                _detail(Vector3(0, 0.08, 0.25), Vector3(0.35, 0.4, 0.18) * tier_scale, accent, rarity >= 4)
         10: # Brawler: thick impact plates
             if shoulder or chest:
                 _detail(Vector3(0, 0.0, 0.25), Vector3(0.48, 0.27, 0.25) * tier_scale, accent, false)
