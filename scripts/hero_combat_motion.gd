@@ -52,7 +52,10 @@ func _part(parent: Node3D, part_name: String, at: Vector3) -> Node3D:
 func configure(hero_class: int) -> void:
  class_id = hero_class
  # Distinct, lightweight visual cues by class group.
- if class_id in [0, 1, 10]:
+ if class_id == 11:
+  class_fx_color = Color("#9c6ae3") # Death Knight: spectral shadow
+  class_fx_size = 0.32
+ elif class_id in [0, 1, 10]:
   class_fx_color = Color("#f0aa5c") # frontline impact
   class_fx_size = 0.28
  elif class_id in [2, 4]:
@@ -69,7 +72,9 @@ func configure(hero_class: int) -> void:
  left_leg = _part(self, "AnimatedLeftLeg", Vector3(-0.20, 0.60, 0.0))
  right_leg = _part(self, "AnimatedRightLeg", Vector3(0.20, 0.60, 0.0))
  var sleeve_color: Color = Color("#516b91")
- if class_id in [0, 1, 10]:
+ if class_id == 11:
+  sleeve_color = Color("#34334b")
+ elif class_id in [0, 1, 10]:
   sleeve_color = Color("#9d8e77")
  elif class_id in [2, 4]:
   sleeve_color = Color("#5caa72")
@@ -124,7 +129,7 @@ func configure(hero_class: int) -> void:
 
 func play_attack() -> void:
  attack_variant = (attack_variant + 1) % 2
- attack_duration = 0.34 if class_id in [2, 4, 10] else (0.52 if class_id in [0, 1] else 0.42)
+ attack_duration = 0.58 if class_id == 11 else (0.34 if class_id in [2, 4, 10] else (0.52 if class_id in [0, 1] else 0.42))
  attack_remaining = attack_duration
 
 func play_skill_cast(role: int, choice: int) -> void:
@@ -154,6 +159,7 @@ func play_skill_cast(role: int, choice: int) -> void:
    5, 7: tint = Color("#ad59ff") # Rogue / Warlock: shadow
    6: tint = Color("#59d6ff") # Mage: frost
    10: tint = Color("#ff4d1a") # Brawler: fire
+   11: tint = Color("#ad65eb") # Death Knight: spectral shadow
  var material: StandardMaterial3D = skill_flash.material_override as StandardMaterial3D
  if material != null:
   material.albedo_color = tint
@@ -234,13 +240,15 @@ func _process(delta: float) -> void:
  stride_blend = move_toward(stride_blend, 1.0 if walking else 0.0, delta * 5.0)
  var step_strength: float = stride_blend
  var speed: float = 8.0
- if class_id in [0, 1]:
+ if class_id == 11:
+  speed = 5.4
+ elif class_id in [0, 1]:
   speed = 6.0
  elif class_id in [4, 5, 10]:
   speed = 10.0
  # Tanks march with shorter, heavier steps; agile heroes run wider.
  # Support casters use restrained arm swings to keep spell poses readable.
- var leg_swing: float = 0.40 if class_id in [0, 1] else (0.58 if class_id in [4, 5, 10] else 0.46)
+ var leg_swing: float = 0.36 if class_id == 11 else (0.40 if class_id in [0, 1] else (0.58 if class_id in [4, 5, 10] else 0.46))
  var arm_swing: float = 0.17 if class_id in [3, 6, 7, 8, 9] else (0.31 if class_id in [4, 5, 10] else 0.24)
  var foot_height: float = 0.05 if class_id in [0, 1] else (0.09 if class_id in [4, 5, 10] else 0.07)
  var step: float = sin(elapsed * speed)
@@ -266,7 +274,12 @@ func _process(delta: float) -> void:
   var swing: float = strike * recovery
   var alternate: float = -1.0 if attack_variant == 0 else 1.0
   # Visual archetypes: heavy melee, quick strikes, ranged release, and casting.
-  if class_id in [0, 1, 10]:
+  if class_id == 11:
+   # Death Knight: deliberate overhead spectral greatblade cleave.
+   right_arm.rotation.x = 0.95 * windup * (1.0 - strike) - 2.45 * swing
+   left_arm.rotation.x = -0.55 * windup * recovery
+   right_arm.rotation.z = alternate * 0.48 * swing
+  elif class_id in [0, 1, 10]:
    right_arm.rotation.x = 0.42 * windup * (1.0 - strike) - 1.85 * swing
    left_arm.rotation.x = -0.40 * swing
    right_arm.rotation.z = alternate * 0.36 * swing
@@ -280,7 +293,12 @@ func _process(delta: float) -> void:
    right_arm.rotation.z = alternate * 0.12 * swing
   # Equipped skills use their own casting silhouette instead of a basic swing.
   if skill_cast_remaining > 0.0:
-   if skill_cast_role == 0:
+   if class_id == 11:
+    # Shadow ritual: raise the off-hand, then cut downward with the weapon.
+    left_arm.rotation.x = -1.45 * windup * recovery
+    right_arm.rotation.x = 0.80 * windup * (1.0 - strike) - 2.25 * swing
+    right_arm.rotation.z = alternate * 0.52 * swing
+   elif skill_cast_role == 0:
     # Frontline: brace, then deliver a heavy shield or weapon impact.
     left_arm.rotation.x = -0.85 * windup * recovery
     right_arm.rotation.x = 0.55 * windup * (1.0 - strike) - 2.05 * swing
