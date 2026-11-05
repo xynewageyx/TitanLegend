@@ -53,9 +53,13 @@ func play_clip(clip: String) -> bool:
   var short_name: String = animation_name.get_slice("/", animation_name.get_slice_count("/") - 1).get_slice(".", 0)
   if short_name == clip:
    var animation: Animation = _player.get_animation(animation_name)
-   if animation != null and clip == "idle":
-    animation.loop_mode = Animation.LOOP_LINEAR
+   if animation != null:
+    # Imported GLBs may mark every clip as looping. Only idle may loop;
+    # otherwise attack/hit never emit animation_finished and cannot return to idle.
+    animation.loop_mode = Animation.LOOP_LINEAR if clip == "idle" else Animation.LOOP_NONE
    if clip == "death":
+    if _dead:
+     return true
     _dead = true
    _player.stop()
    _player.play(animation_name)
