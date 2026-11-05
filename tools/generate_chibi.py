@@ -105,8 +105,8 @@ def rig_and_animate():
 
 for idx,name in enumerate(NAMES):
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
- skin=material("skin",(.92,.69,.51));hair=material("hair",COLORS[idx])
- white=material("white",(1,.96,.89));dark=material("pupil",(.05,.08,.12))
+ skin=material("skin",(.72,.77,.82) if name=="death_knight" else (.92,.69,.51));hair=material("hair",COLORS[idx])
+ white=material("white",(.72,.92,1.0) if name=="death_knight" else (1,.96,.89));dark=material("pupil",(.12,.75,1.0) if name=="death_knight" else (.05,.08,.12))
  loft("SculptedHead",[(1.53,.02,.02,0),(1.65,.34,.29,0),(1.82,.49,.38,-.03),(2.02,.47,.40,-.02),(2.20,.29,.28,0),(2.27,.02,.02,0)],skin)
  loft("SculptedBody",[(.45,.02,.02,0),(.60,.27,.22,0),(.95,.38,.29,0),(1.25,.34,.27,0),(1.52,.10,.11,0)],skin)
  loft("HairCap",[(2.04,.33,.32,.08),(2.17,.44,.37,.04),(2.29,.26,.24,.03),(2.34,.02,.02,.03)],hair)
@@ -123,6 +123,16 @@ for idx,name in enumerate(NAMES):
   lock.location.x=x
  oval("Nose",(0,-.42,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40,1.71),(.10,.018,.02),dark)
+ if name=="death_knight":
+  # Original class-specific face sculpt: angular brow, sunken cheeks, icy eyes.
+  shadow=material("death_knight_cheek_shadow",(.38,.46,.55))
+  brow=material("death_knight_brow",(.13,.18,.24))
+  for side in (-1,1):
+   oval("DeathKnightCheekShadow_L" if side<0 else "DeathKnightCheekShadow_R",
+        (side*.31,-.344,1.76),(.105,.018,.085),shadow)
+   oval("DeathKnightAngularBrow_L" if side<0 else "DeathKnightAngularBrow_R",
+        (side*.19,-.408,2.07),(.15,.035,.038),brow)
+  oval("DeathKnightForeheadMark",(0,-.405,2.13),(.045,.02,.075),dark)
  rig_and_animate()
  bpy.ops.object.select_all(action="SELECT")
  bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_animations=True,export_nla_strips=True)
