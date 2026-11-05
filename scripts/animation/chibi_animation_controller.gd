@@ -7,12 +7,14 @@ const ACTIONS := ["Idle", "Walk", "Attack", "Hit", "Dodge"]
 var animation_player: AnimationPlayer
 var action_clips: Dictionary = {}
 var active_action := ""
+var locomotion_action := "Idle"
 
 
 func configure(character_root: Node) -> bool:
     animation_player = _find_player(character_root)
     action_clips.clear()
     active_action = ""
+    locomotion_action = "Idle"
     if animation_player == null:
         push_warning("ChibiAnimationController: no AnimationPlayer found")
         return false
@@ -46,7 +48,14 @@ func play_action(action: String, variant: int = 0) -> bool:
 
 func _on_animation_finished(_animation_name: StringName) -> void:
     if active_action == "Attack" or active_action == "Hit" or active_action == "Dodge":
-        return_to_idle()
+        play_action(locomotion_action)
+
+
+func set_moving(moving: bool) -> bool:
+    locomotion_action = "Walk" if moving else "Idle"
+    if active_action == "Attack" or active_action == "Hit" or active_action == "Dodge":
+        return true
+    return play_action(locomotion_action)
 
 
 func return_to_idle() -> bool:
