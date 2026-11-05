@@ -99,7 +99,7 @@ func _ready() -> void:
 
 func _on_team_changed() -> void:
  # Refresh class names, ranks and bonuses when another team screen changes the team.
- if panel != null and panel.visible:
+ if panel != null and is_instance_valid(panel) and panel.visible and team != null and is_instance_valid(team):
   _refresh()
 
 func _toggle() -> void:
@@ -109,7 +109,7 @@ func _toggle() -> void:
   _refresh()
 
 func _refresh() -> void:
- if team == null or not team.has_method("get_talent_build_v2"):
+ if team == null or not is_instance_valid(team) or not team.has_method("get_talent_build_v2"):
   return
  if team.class_ids.is_empty():
   return
