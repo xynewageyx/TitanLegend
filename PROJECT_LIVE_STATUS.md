@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 19:45 UTC**
-Git-Stand: **f75ccd692b2d5f0c6b3c1ebd0f03126625c0f707** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 20:22 UTC**
+Git-Stand: **c1faf623a65c5527fe4730174014b2a050c0d9b3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 - `7601dca` (2026-11-05): Connect Chibi controller to existing hero GLB animation events with legacy fallback
 - `cfd245f` (2026-11-05): Test walking attack recovery and idle transitions for Chibi controllers
 
