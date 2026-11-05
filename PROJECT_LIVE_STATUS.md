@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 18:47 UTC**
-Git-Stand: **e6c054ad757aa21259f058b67eecf71cba923dd9** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 18:54 UTC**
+Git-Stand: **a3a50a8818faa6c77ebc415f0f3c85444fe11827** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,6 +26,7 @@ Git-Stand: **e6c054ad757aa21259f058b67eecf71cba923dd9** auf Branch **main**
 - `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `a3a50a8` (2026-11-05): Restore walk or idle after combat animations based on movement state
 - `bb1805c` (2026-11-05): test(talents): check live refresh signal and freed-node guards
 - `02fcb99` (2026-11-05): fix(talents): avoid refreshing menu with freed team or panel nodes
 - `19afe28` (2026-11-05): feat(talents): refresh open talent menu when team data changes
@@ -51,7 +52,6 @@ Git-Stand: **e6c054ad757aa21259f058b67eecf71cba923dd9** auf Branch **main**
 ## Bereichsübergreifende Änderungen
 
 - `68fd7c1` (2026-11-05): tools: add read-only UnityFS object inventory for reference monster bundles
-- `b46fd14` (2026-11-05): Mount opt-in Android multiplayer client in main scene
 
 ## Regeln für alle Fach-Chats
 
