@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-05 16:58 UTC**
-Git-Stand: **7bc7479fd5603eed4d220e55efbbbaed49c607f2** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 17:00 UTC**
+Git-Stand: **e628317c2ce85019a58238fb3362f69e0ac639d2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,41 +12,39 @@ Git-Stand: **7bc7479fd5603eed4d220e55efbbbaed49c607f2** auf Branch **main**
 - `b2d185e` (2026-11-05): Add regression tests for five Chibi action types and numbered clip variants
 - `3ecfe9d` (2026-11-05): Fix malformed duplicated block in Chibi AnimationPlayer smoke test
 - `db093e4` (2026-11-05): Exercise idle run attack AnimationPlayer bone playback on all Chibi rigs
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `f55da2b` (2026-11-05): test(forest): assert idle loops and combat animations remain one-shot
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- `e628317` (2026-11-05): Fix Godot editor audio inspector plugin script path (#31)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
