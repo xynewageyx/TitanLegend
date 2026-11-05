@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-04 23:02 UTC**
-Git-Stand: **3ecfe9dd905d4659a26704dd3680635a32745f7c** auf Branch **main**
+Automatisch erzeugt: **2026-11-05 03:26 UTC**
+Git-Stand: **785eb5fa95e3a39149bd66e1b9c94660aa858e64** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -48,10 +48,10 @@ Git-Stand: **3ecfe9dd905d4659a26704dd3680635a32745f7c** auf Branch **main**
 - `680c8a2` (2026-11-04): Run AnimationPlayer skeleton playback smoke test in CI
 - `4042261` (2026-11-04): Preserve partial skeleton and animation reports when CI fails
 - `a09f499` (2026-11-04): Run Chibi animation coverage regression tests in CI
-- `bb7254b` (2026-11-04): Publish imported Chibi animation coverage report in CI
 
 ## Bereichsübergreifende Änderungen
 
+- `785eb5f` (2026-11-05): Restore complete 33-case AnimationPlayer smoke test after accidental truncation
 - `f321bc6` (2026-11-05): test(forest): ensure death is terminal and reused presenters reset on respawn
 - `8cb5246` (2026-11-04): Check procedural animation start/end keyframes and clarify interpolation-only test
 
