@@ -1,0 +1,71 @@
+name: Guarded CI additional assertion repairs
+
+on:
+  workflow_run:
+    workflows: ["Titan Legends Core Regression"]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+jobs:
+  repair-extra-assertions:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repair only explicitly whitelisted assertion drift
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner,repo}=context.repo;
+            const run=context.payload.workflow_run;
+            if(run.head_repository?.full_name!==owner+'/'+repo) return;
+            const branch=run.head_branch;
+            if(!branch || ['main','master'].includes(branch) || branch.startsWith('automation/') || branch.startsWith('fix/ci-auto-repair/')) return;
+            const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:run.id,per_page:100});
+            const failed=jobs.filter(j=>j.conclusion==='failure');
+            if(failed.length!==1 || failed[0].name!=='python-regression') return;
+            const path='tests/test_formation_rows.py';
+            async function read(path,ref){
+             const res=await github.rest.repos.getContent({owner,repo,path,ref});
+             if(Array.isArray(res.data)||!res.data.content) throw Error('Not a text file: '+path);
+             return {sha:res.data.sha,text:Buffer.from(res.data.content,'base64').toString('utf8')};
+            }
+            const [test,source]=await Promise.all([read(path,run.head_sha),read('scripts/team_formation.gd',run.head_sha)]);
+            const cases=[
+             {id:'spacing',name:'test_spacing_provides_room_for_companions_on_portrait_phones',old:'var spacing: float = 2.45 if row.size() <= 3 else 1.95',next:'var spacing: float = 2.65 if row.size() <= 3 else 1.95'},
+             {id:'companion',name:'test_companions_stay_children_of_owner',old:'team.add_child(pet)',next:'hero.add_child(pet)'},
+             {id:'recovery',name:'test_rebuild_and_defeat_recovery_use_same_positions',old:'hero.position = POSITIONS[i]',next:'hero.position = _formation_position(i)'}
+            ];
+            const logs=await github.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs',{owner,repo,job_id:failed[0].id,request:{redirect:'follow'}});
+            const raw=logs.data;
+            const log=typeof raw==='string'?raw:Buffer.isBuffer(raw)?raw.toString('utf8'):raw instanceof ArrayBuffer?Buffer.from(raw).toString('utf8'):'';
+            if(!log){core.info('Missing plain-text logs');return;}
+            const matches=cases.filter(c=>{
+             const oldAssertion='self.assertIn('+JSON.stringify(c.old)+', body)';
+             const newAssertion='self.assertIn('+JSON.stringify(c.next)+', body)';
+             return source.text.includes(c.next) && !source.text.includes(c.old) &&
+             test.text.includes(oldAssertion) && !test.text.includes(newAssertion) &&
+             log.includes(c.name) && log.includes('AssertionError:') && log.includes(c.old);
+            });
+            if(matches.length!==1){core.info('No unique verified assertion drift');return;}
+            const c=matches[0];
+            const oldAssertion='self.assertIn('+JSON.stringify(c.old)+', body)';
+            const newAssertion='self.assertIn('+JSON.stringify(c.next)+', body)';
+            const current=await github.rest.git.getRef({owner,repo,ref:'heads/'+branch});
+            if(current.data.object.sha!==run.head_sha){core.info('Source branch moved');return;}
+            const repair='fix/ci-auto-repair/'+c.id+'-'+run.id;
+            let exists=true;
+            try{await github.rest.git.getRef({owner,repo,ref:'heads/'+repair});}catch(e){if(e.status!==404)throw e;exists=false;}
+            if(!exists)await github.rest.git.createRef({owner,repo,ref:'refs/heads/'+repair,sha:run.head_sha});
+            const actual=await read(path,repair);
+            const expected=test.text.replace(oldAssertion,newAssertion);
+            if(actual.text===test.text){
+             await github.rest.repos.createOrUpdateFileContents({owner,repo,path,branch:repair,sha:actual.sha,message:'test: repair verified '+c.id+' assertion drift',content:Buffer.from(expected).toString('base64')});
+            }else if(actual.text!==expected){core.setFailed('Unexpected repair branch content');return;}
+            const prs=await github.rest.pulls.list({owner,repo,head:owner+':'+repair,state:'all'});
+            if(prs.data.length){core.info('Repair PR already exists: '+prs.data[0].html_url);return;}
+            const pr=await github.rest.pulls.create({owner,repo,head:repair,base:branch,title:'test: repair verified '+c.id+' assertion drift',body:'Guarded automatic test-only repair for '+run.html_url+'. Exact failed test and source verified. Manual review required; no auto-merge.'});
+            core.info('Created '+pr.data.html_url);
