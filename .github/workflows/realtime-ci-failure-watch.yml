@@ -2,6 +2,10 @@ name: Real-time CI failure watch
 
 on:
   workflow_run:
+    workflows:
+      - Titan Legends Core Regression
+      - Godot project validation
+      - Titan Legends Live Coordination
     types: [completed]
   workflow_dispatch:
     inputs:
