@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 05:16 UTC**
-Git-Stand: **9df8158247aa7509ce80a8194a02f9e51472757c** auf Branch **main**
+Git-Stand: **a29dbeeda357555d650fce57afeb25f6bda3362f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,44 +10,41 @@ Git-Stand: **9df8158247aa7509ce80a8194a02f9e51472757c** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
 - `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7ecf44` (2026-11-06): Fix typed moderation controller access in Android launcher
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
 
 ### Audio — Audio-Erstellung-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
