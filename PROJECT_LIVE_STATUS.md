@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 14:55 UTC**
-Git-Stand: **3e64a0bafc34d17702b5e6cf2263ee63822f4534** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 16:16 UTC**
+Git-Stand: **2f545f20e52671156c3a27f02ad3c52b2dd51ff2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -42,6 +42,7 @@ Git-Stand: **3e64a0bafc34d17702b5e6cf2263ee63822f4534** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `2f545f2` (2026-11-06): Add event-driven GitHub Actions failure watcher (#38)
 - `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ## Bereichsübergreifende Änderungen
@@ -51,7 +52,6 @@ Git-Stand: **3e64a0bafc34d17702b5e6cf2263ee63822f4534** auf Branch **main**
 - `14289fb` (2026-11-06): fix(classes): assert every selectable class has a matching role description
 - `1521368` (2026-11-06): docs(analysis): aggregate verified Unity mesh triangle counts by bundle
 - `a44944a` (2026-11-06): docs: record byte-verified Ulala reference mesh vertex and triangle counts
-- `81c3309` (2026-11-06): test(analysis): verify triangle topology accounting
 
 ## Regeln für alle Fach-Chats
 
