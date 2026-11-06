@@ -8,6 +8,14 @@ func _initialize() -> void:
 func _run() -> void:
  var visual: Node3D = VFX.new()
  root.add_child(visual)
+ visual.set_effect_quality(0)
+ assert(visual.max_active_effects == 3, "Low quality must limit VFX to 3")
+ visual.set_effect_quality(1)
+ assert(visual.max_active_effects == 6, "Medium quality must limit VFX to 6")
+ visual.set_effect_quality(2)
+ assert(visual.max_active_effects == 9, "High quality must limit VFX to 9")
+ visual.set_effect_quality(3)
+ assert(visual.max_active_effects == 12, "Ultra quality must limit VFX to 12")
  visual.max_active_effects = 4
  var ids: Array[String] = [
   "interrupt_death_knight",
