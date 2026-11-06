@@ -147,10 +147,24 @@ for idx,name in enumerate(NAMES):
   oval("Ear",(side*.48*head_width,0,1.88),(.10,.08,.13),skin)
   oval("Hand_L" if side<0 else "Hand_R",(side*.47,-.02,.94),(.12,.12,.13),skin)
   oval("Foot_L" if side<0 else "Foot_R",(side*.19,-.1,.23),(.15,.23,.12),skin)
- for k in range(5+idx%3):
-  x=(k-2)*.15
-  lock=loft("HairLock",[(2.04,.07,.08,-.29),(2.17,.10,.11,-.26),(2.29,.08,.08,-.18),(2.36,.01,.01,-.12)],hair)
-  lock.location.x=x*head_width
+ # Hair is deliberately separate geometry for later modular customization.
+ # Strand count, height and sweep differ by class; no armor or weapons generated.
+ hair_profiles={
+  "warrior":(5,.07,.00), "paladin":(5,.04,.00),
+  "druid":(7,.12,-.04), "shaman":(6,.16,.06),
+  "hunter":(6,.10,-.08), "rogue":(5,.06,.12),
+  "mage":(7,.18,-.10), "warlock":(6,.14,.10),
+  "summoner":(7,.16,-.06), "priest":(6,.08,.00),
+  "brawler":(5,.03,.00), "death_knight":(7,.15,.14),
+ }
+ strand_count,extra_height,sweep=hair_profiles[name]
+ for k in range(strand_count):
+  x=(k-(strand_count-1)/2)*.15*head_width
+  lock=loft("HairLock",[(2.04,.07,.08,-.29),
+                         (2.17,.10,.11,-.26),
+                         (2.29+extra_height*.5,.08,.08,-.18+sweep*.5),
+                         (2.36+extra_height,.01,.01,-.12+sweep)],hair)
+  lock.location.x=x
  oval("Nose",(0,-.42*head_width,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40*head_width,1.71),(.10,.018,.02),dark)
  if name=="death_knight":
