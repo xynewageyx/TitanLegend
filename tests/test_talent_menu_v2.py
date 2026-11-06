@@ -165,6 +165,11 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("for rank in build[selected_branch]:", MENU)
         self.assertIn("Zweig: %d/75", MENU)
 
+    def test_death_knight_branch_names_follow_selected_hero(self):
+        self.assertIn("if class_index == 11:", MENU)
+        self.assertIn('return ["Blut", "Frost", "Unheilig"]', MENU)
+        self.assertIn("branch_picker.set_item_text(branch_index, branch_names[branch_index])", MENU)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
