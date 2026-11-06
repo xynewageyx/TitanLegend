@@ -3,6 +3,7 @@ class_name TitanTeamLiveBinder
 
 @export var hud: TitanTeamHUD
 @export var battle_manager: Node
+@export var class_menu: Control
 
 func _ready() -> void:
     if hud == null:
@@ -20,7 +21,17 @@ func _ready() -> void:
         formation.team_changed.connect(refresh)
     if GameManager.has_signal("character_level_changed"):
         GameManager.character_level_changed.connect(_on_level_changed)
+    if class_menu != null and hud != null and not hud.hero_selected.is_connected(_on_hero_selected):
+        hud.hero_selected.connect(_on_hero_selected)
     refresh()
+
+func _on_hero_selected(slot: int) -> void:
+    if class_menu == null or not is_instance_valid(class_menu):
+        return
+    class_menu.open_menu()
+    if class_menu.slot_selector != null:
+        class_menu.slot_selector.select(clampi(slot, 0, 3))
+        class_menu._sync_slot()
 
 func _on_level_changed(_level: int) -> void:
     refresh()
