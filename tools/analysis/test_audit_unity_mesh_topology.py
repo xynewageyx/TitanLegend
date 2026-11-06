@@ -70,5 +70,19 @@ class MeshTopologyTests(unittest.TestCase):
                 sub.indexCount = 7
                 self.assertEqual(mod._validate_index_buffer(mesh, [sub], 4)["status"], "invalid_layout")
 
+    def test_vertex_channel_layout_bounds(self):
+        channel = types.SimpleNamespace(dimension=3, stream=0, format=0, offset=0)
+        stream = types.SimpleNamespace(stride=12, offset=0)
+        vertex_data = types.SimpleNamespace(
+            m_VertexCount=4, m_Channels=[channel], m_Streams=[stream],
+            m_DataSize=bytes(48))
+        mesh = types.SimpleNamespace(m_VertexData=vertex_data)
+        self.assertEqual(mod._vertex_layout(mesh)["status"], "checked")
+        vertex_data.m_DataSize = bytes(47)
+        self.assertEqual(mod._vertex_layout(mesh)["status"], "invalid_layout")
+        vertex_data.m_DataSize = bytes(48)
+        channel.format = 999
+        self.assertEqual(mod._vertex_layout(mesh)["status"], "unknown_format")
+
 if __name__ == "__main__":
     unittest.main()
