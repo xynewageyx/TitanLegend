@@ -51,7 +51,8 @@ jobs:
                     "Identify root causes, exact relevant paths if visible, and safe fixes. "
                     "Do not claim changes were applied. Reply in German with concise markdown.\n\n"
                     + logs)
-          model = os.environ["GEMINI_MODEL"]
+          model = os.environ["GEMINI_MODEL"].removeprefix("models/").strip()
+          print("Using Gemini model:", model)
           url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent"
           payload = json.dumps({"contents":[{"parts":[{"text":prompt}]}]}).encode()
           request = urllib.request.Request(url, data=payload, headers={
@@ -61,7 +62,15 @@ jobs:
               with urllib.request.urlopen(request, timeout=90) as response:
                   result = json.load(response)
           except urllib.error.HTTPError as exc:
-              print(f"::error::Gemini HTTP {exc.code}; check model, key and quota")
+              body = exc.read(4096).decode("utf-8", errors="replace")
+              body = body.replace(os.environ["GEMINI_API_KEY"], "[REDACTED]")
+              try:
+                  details = json.loads(body).get("error", {})
+                  message = details.get("message", "No API error message")
+                  status = details.get("status", "UNKNOWN")
+                  print(f"::error::Gemini HTTP {exc.code} ({status}): {message[:1200]}")
+              except (ValueError, AttributeError):
+                  print(f"::error::Gemini HTTP {exc.code}; response could not be parsed")
               raise SystemExit(1)
           answer = "\n".join(p.get("text","") for c in result.get("candidates",[])
                              for p in c.get("content",{}).get("parts",[]) if "text" in p)
