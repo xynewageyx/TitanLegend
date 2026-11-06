@@ -177,6 +177,8 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     metrics = {"vertex_count": [], "submesh_count": [], "index_count": [],
                "triangle_count": [], "skinned_bone_refs": [], "decoded_indices": []}
     topologies = Counter()
+    unity_object_types = Counter()
+    serialized_objects = 0
     errors = Counter()
     index_validation = Counter()
     vertex_validation = Counter()
@@ -197,7 +199,9 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
             scanned += 1
             env = UnityPy.load(str(path))
             for obj in env.objects:
+                serialized_objects += 1
                 kind = obj.type.name
+                unity_object_types[kind] += 1
                 if kind not in ("Mesh", "SkinnedMeshRenderer"):
                     continue
                 try:
@@ -253,6 +257,8 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     return {
         "format": "aggregate Unity mesh topology audit v1",
         "scanned_bundles": scanned,
+        "serialized_objects": serialized_objects,
+        "unity_object_types": dict(sorted(unity_object_types.items())),
         "metrics": {key: _summary(values) for key, values in metrics.items()},
         "submesh_topology_codes": dict(sorted(topologies.items())),
         "index_validation": dict(sorted(index_validation.items())),
@@ -265,7 +271,7 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
             "Float32 and Float16 XYZ position channels are decoded in memory to check finite values and bounds; no coordinates or per-mesh bounds are exported.",
             "Unity version-specific vertex formats outside the known format map are marked unknown.",
             "Skinned bone references do not prove hierarchy, weights or bind poses.",
-            "No vertex coordinates, indices, names or original assets are exported."
+            "Unity object types and counts are aggregate only; no object names or asset payloads are exported."
         ],
     }
 
