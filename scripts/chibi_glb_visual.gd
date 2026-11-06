@@ -1,5 +1,6 @@
 extends Node3D
 ## Imported original chibi base mesh; preserve existing gameplay and equipment nodes.
+const SOCKET_BUILDER = preload("res://scripts/equipment/chibi_bone_socket_builder.gd")
 const NAMES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"]
 var animation_player: AnimationPlayer
 var active_clip: String = ""
@@ -17,6 +18,11 @@ func configure(class_id: int) -> void:
   return
  model.name = "ChibiSculptedModel"
  add_child(model)
+ var skeleton := _find_skeleton(model)
+ if skeleton != null:
+  var missing := SOCKET_BUILDER.ensure_sockets(skeleton)
+  if not missing.is_empty():
+   push_warning("Titan Legends: missing equipment bones for sockets: " + ", ".join(missing))
  # Hide only the old primitive body and face, never equipment, skills or companions.
  var hero: Node = get_parent()
  if hero != null:
@@ -26,6 +32,15 @@ func configure(class_id: int) -> void:
     old.visible = false
  animation_player = _find_animation_player(model)
  play_clip("Idle")
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+ if node is Skeleton3D:
+  return node as Skeleton3D
+ for child in node.get_children():
+  var found := _find_skeleton(child)
+  if found != null:
+   return found
+ return null
 
 func _find_animation_player(node: Node) -> AnimationPlayer:
  if node is AnimationPlayer:
