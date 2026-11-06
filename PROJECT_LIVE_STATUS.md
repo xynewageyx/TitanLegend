@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 19:03 UTC**
-Git-Stand: **8cb60f85ff34feca515f796bd0e194856168638e** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 19:24 UTC**
+Git-Stand: **b55e5e9e6df6582ccf2321c36021f0f29fa41932** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `5c8ed4f` (2026-11-06): fix(actions): specify monitored workflows for workflow_run trigger
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -41,11 +41,11 @@ Git-Stand: **8cb60f85ff34feca515f796bd0e194856168638e** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `b55e5e9` (2026-11-06): Fallback from overloaded Gemini 3.8 to 3.5 and 2.5 Flash (#56)
 - `8cb60f8` (2026-11-06): fix(ci): retry transient Gemini API errors with bounded backoff (#55)
 - `8b18802` (2026-11-06): ci: add guarded repairs for spacing companion and recovery assertion drift (#54)
 - `2b912a8` (2026-11-06): Show sanitized Gemini API error details and normalize model ID (#53)
 - `07447eb` (2026-11-06): Add Gemini model availability diagnostic workflow (#52)
-- `a7fc449` (2026-11-06): Add opt-in Gemini CI failure analysis workflow (#51)
 
 ## Bereichsübergreifende Änderungen
 
