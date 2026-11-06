@@ -129,3 +129,10 @@ Zweck: Verbindliche, von allen Entwicklungs-Chats lesbare Projektregeln. Diese D
 - **Klassen:** den Todesritter ausdrücklich einbeziehen und alle anderen im Projekt festgelegten Klassen berücksichtigen.
 - **Schnittstellen:** Abstimmung mit Charakterdesign, Waffen/Rüstungsdesign, Skills/Animationen, UI, Grafik/Rendering und APK-Gesamtbuild zu Skelett-Hierarchien, Meshes, Materialien, Animationsankern, Performance und Godot-Import.
 - **Nachweis:** Dokumentation und CI-Erfolg ersetzen keine Sichtprüfung der Modelle und keine integrierten Android-Gerätetests.
+
+## Ulala Ordner kopieren (2026-11-06)
+- **Ulala Ordner kopieren (neuer Fach-Chat):** koordiniert das Erfassen, strukturierte Analysieren und technisch geeignete Überführen von Referenzinformationen und zulässig nutzbaren Assets aus dem Ulala-Ordner in das **eine gemeinsame** Titan-Legends-Projekt. Keine separate Spielkopie und kein paralleles Repository.
+- **Wichtig zu Rechten:** fremde urheberrechtlich geschützte Spielassets nicht ohne entsprechende Nutzungsrechte in Titan Legends übernehmen; stattdessen eigene stilistisch inspirierte Modelle, Animationen und Materialien erzeugen. Quelldateien und Lizenzstatus dokumentieren.
+- **Abstimmung:** Ergebnisse und Dateipfade mit Ulala Character Design, Charakterdesign, Gegnerdesign, Landschaften, Skills/Animationen, Waffen/Rüstungen, UI und Audio teilen, indem nachvollziehbare Dokumentation/Commits im gemeinsamen Repository hinterlegt werden; keine automatische Chat-zu-Chat-Synchronisierung behaupten.
+- **Integration:** Godot-4.7.2-Import, Szenen-/Skeleton-Hierarchien, Materialien, Animationen, Android-Performance und gemeinsamen APK-Build mit den zuständigen Fachbereichen prüfen.
+- **Nachweis:** Registrierung bedeutet nicht, dass der gesamte Ordner bereits kopiert, analysiert oder rechtlich zur Nutzung freigegeben wurde.
