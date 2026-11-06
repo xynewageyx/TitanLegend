@@ -16,7 +16,8 @@ def obj(kind, data=None):
 class AnalyzeTests(unittest.TestCase):
     def test_inventory_counts_and_clip_durations(self):
         fake_env = SimpleNamespace(objects=[
-            obj("Mesh", {"m_Name": "CreatureMesh"}),
+            obj("Mesh", {"m_Name": "CreatureMesh", "m_VertexData": {"m_VertexCount": 248}}),
+            obj("SkinnedMeshRenderer", {"m_Bones": [1, 2, 3, 4]}),
             obj("AnimationClip", {"m_Name": "Attack", "m_StartTime": 0.25, "m_StopTime": 1.75}),
             obj("Animator"), obj("Transform"), obj("Material"),
         ])
@@ -25,6 +26,9 @@ class AnalyzeTests(unittest.TestCase):
             row = module.inspect(Path("sample.prefab_ab"))
         self.assertEqual(row["status"], "ok")
         self.assertEqual(row["mesh"], 1)
+        self.assertEqual(row["mesh_vertices_total"], 248)
+        self.assertEqual(row["skinned_mesh_renderer"], 1)
+        self.assertEqual(row["skinned_bones_max"], 4)
         self.assertEqual(row["animation_clip"], 1)
         self.assertEqual(row["clip_names"], "Attack")
         self.assertEqual(row["clip_durations_s"], "1.500")
