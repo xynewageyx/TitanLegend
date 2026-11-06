@@ -6,6 +6,8 @@ on:
       - 'tools/analysis/test_audit_unity_metadata.py'
       - 'tools/analysis/verify_ulala_volumes.py'
       - 'tools/analysis/test_verify_ulala_volumes.py'
+      - 'tools/analysis/audit_unity_mesh_topology.py'
+      - 'tools/analysis/test_audit_unity_mesh_topology.py'
       - '.github/workflows/ulala-metadata-tests.yml'
   push:
     branches: [main]
@@ -14,6 +16,8 @@ on:
       - 'tools/analysis/test_audit_unity_metadata.py'
       - 'tools/analysis/verify_ulala_volumes.py'
       - 'tools/analysis/test_verify_ulala_volumes.py'
+      - 'tools/analysis/audit_unity_mesh_topology.py'
+      - 'tools/analysis/test_audit_unity_mesh_topology.py'
       - '.github/workflows/ulala-metadata-tests.yml'
   workflow_dispatch:
 
@@ -33,5 +37,6 @@ jobs:
         run: |
           python3 -m unittest discover -s tools/analysis -p 'test_audit_unity_metadata.py' -v
           python3 -m unittest discover -s tools/analysis -p 'test_verify_ulala_volumes.py' -v
+          python3 -m unittest discover -s tools/analysis -p 'test_audit_unity_mesh_topology.py' -v
       - name: Check Python syntax
-        run: python3 -m py_compile tools/analysis/audit_unity_metadata.py tools/analysis/test_audit_unity_metadata.py tools/analysis/verify_ulala_volumes.py tools/analysis/test_verify_ulala_volumes.py
+        run: python3 -m py_compile tools/analysis/audit_unity_metadata.py tools/analysis/test_audit_unity_metadata.py tools/analysis/verify_ulala_volumes.py tools/analysis/test_verify_ulala_volumes.py tools/analysis/audit_unity_mesh_topology.py tools/analysis/test_audit_unity_mesh_topology.py
