@@ -21,6 +21,10 @@ class HeroGaitTests(unittest.TestCase):
         self.assertIn("right_leg.rotation.x = -step * leg_swing * step_strength", MOTION)
         self.assertIn("walking_finished.emit()", TEAM)
 
+    def test_death_knight_hit_reaction(self):
+        self.assertIn("if class_id == 11 else (0.36 if critical else 0.25)", MOTION)
+        self.assertIn("var hit_recoil: float = 0.14 if class_id == 11 else 0.10", MOTION)
+
     def test_animation_does_not_modify_combat(self):
         self.assertIn("func play_attack()", MOTION)
         self.assertIn("func play_skill_cast(role: int, choice: int)", MOTION)
