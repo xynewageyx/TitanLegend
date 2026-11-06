@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 05:25 UTC**
-Git-Stand: **6a29340aab4b9d83de5fd7c5f9cc7d74d0306d0c** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 05:26 UTC**
+Git-Stand: **6f582f2bbc8f32619a978a152cdd110e334a29fe** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,20 +11,18 @@ Git-Stand: **6a29340aab4b9d83de5fd7c5f9cc7d74d0306d0c** auf Branch **main**
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
 - `c17b4a4` (2026-11-06): fix(classes): show death knight tank and damage roles in central class menu
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
@@ -34,27 +32,26 @@ Git-Stand: **6a29340aab4b9d83de5fd7c5f9cc7d74d0306d0c** auf Branch **main**
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7ecf44` (2026-11-06): Fix typed moderation controller access in Android launcher
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
 
 ### Audio — Audio-Erstellung-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
 
 ## Bereichsübergreifende Änderungen
 
+- `6f582f2` (2026-11-06): feat(analysis): count triangle topology indices in Unity mesh submeshes
 - `9c2cef2` (2026-11-06): docs: record verified Unity mesh avatar and animation object names from backup
 
 ## Regeln für alle Fach-Chats
