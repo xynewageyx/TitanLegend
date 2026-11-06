@@ -129,6 +129,16 @@ jobs:
       - name: Test animated equipment sockets and Death Knight runtime
         shell: bash
         run: godot --headless --path . --script res://tests/test_equipment_socket_runtime.gd
+      - name: Audit real hero skeleton equipment sockets
+        shell: bash
+        run: godot --headless --path . --script res://tools/audit_hero_equipment_rigs.gd | tee equipment-rig-audit.log
+      - name: Upload equipment rig audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: equipment-rig-audit
+          path: equipment-rig-audit.log
+          if-no-files-found: ignore
       - name: Launch smoke test
         shell: bash
         run: |
