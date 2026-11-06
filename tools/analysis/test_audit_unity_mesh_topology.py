@@ -1,4 +1,5 @@
 import importlib.util
+import struct
 import sys
 import tempfile
 import types
@@ -52,6 +53,22 @@ class MeshTopologyTests(unittest.TestCase):
             self.assertEqual(report["metrics"]["skinned_bone_refs"]["max"], 4)
             self.assertEqual(report["submesh_topology_codes"], {"0": 1, "1": 1})
 
+
+    def test_uint16_and_uint32_index_buffer_validation(self):
+        for fmt, code in ((0, "<6H"), (1, "<6I")):
+            with self.subTest(fmt=fmt):
+                mesh = types.SimpleNamespace(
+                    m_IndexFormat=fmt,
+                    m_IndexBuffer=struct.pack(code, 0, 1, 2, 2, 3, 0))
+                sub = types.SimpleNamespace(
+                    firstByte=0, indexCount=6, baseVertex=0)
+                check = mod._validate_index_buffer(mesh, [sub], 4)
+                self.assertEqual(check["status"], "checked")
+                self.assertEqual(check["indices_checked"], 6)
+                self.assertEqual(check["invalid_indices"], 0)
+                self.assertEqual(mod._validate_index_buffer(mesh, [sub], 3)["invalid_indices"], 1)
+                sub.indexCount = 7
+                self.assertEqual(mod._validate_index_buffer(mesh, [sub], 4)["status"], "invalid_layout")
 
 if __name__ == "__main__":
     unittest.main()
