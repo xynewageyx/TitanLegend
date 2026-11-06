@@ -45,6 +45,7 @@ jobs:
             test_character_prototype.gd \
             test_rigged_blockout.gd \
             test_skinned_limb.gd \
+            test_skinned_torso.gd \
             test_full_body_prototype.gd; do
             echo "::group::$test"
             godot --headless --path . --script "res://tests/character/$test" 2>&1 | tee "/tmp/$test.log"
