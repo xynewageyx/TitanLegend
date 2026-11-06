@@ -70,7 +70,7 @@ jobs:
               'agent is required for automatic code changes.'
             ].join('\n');
             const existing = await github.paginate(github.rest.issues.listForRepo, {
-              owner, repo, state: 'all', per_page: 100, creator: 'github-actions[bot]'
+              owner, repo, state: 'open', per_page: 100
             });
             const issue = existing.find(item => !item.pull_request && item.title === title);
             if (issue) {
