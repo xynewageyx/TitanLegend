@@ -64,7 +64,10 @@ def rig_and_animate():
           "Hand_R" if name=="Hand_R" else
           "Foot_L" if name=="Foot_L" else
           "Foot_R" if name=="Foot_R" else "Spine")
-  if name=="SculptedBody":
+  if name=="SculptedNeck":
+   neck_group=obj.vertex_groups.new(name="Neck")
+   neck_group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
+  elif name=="SculptedBody":
    # Blend weights across the torso instead of moving the entire body rigidly.
    hips=obj.vertex_groups.new(name="Hips")
    spine=obj.vertex_groups.new(name="Spine")
@@ -138,6 +141,13 @@ for idx,name in enumerate(NAMES):
  white=material("white",(.72,.92,1.0) if name=="death_knight" else (1,.96,.89));dark=material("pupil",(.12,.75,1.0) if name=="death_knight" else (.05,.08,.12))
  loft("SculptedHead",silhouette_levels([(1.53,.02,.02,0),(1.65,.34,.29,0),(1.82,.49,.38,-.03),(2.02,.47,.40,-.02),(2.20,.29,.28,0),(2.27,.02,.02,0)],head_width,head_width),skin)
  loft("SculptedBody",silhouette_levels([(.45,.02,.02,0),(.60,.27,.22,0),(.95,.38,.29,0),(1.25,.34,.27,0),(1.52,.10,.11,0)],body_width,body_depth),skin)
+ # Tapered neck bridge reduces the visible gap between the large chibi head
+ # and torso. Keep its height aligned with the shared Neck bone.
+ neck_width=.155*(.85+.15*body_width)
+ loft("SculptedNeck",[(1.43,.14*body_width,.13*body_depth,0),
+                      (1.50,neck_width,.145,0),
+                      (1.60,neck_width*.96,.14,0),
+                      (1.69,.20*head_width,.18*head_width,0)],skin)
  loft("HairCap",silhouette_levels([(2.04,.33,.32,.08),(2.17,.44,.37,.04),(2.29,.26,.24,.03),(2.34,.02,.02,.03)],head_width,head_width),hair)
  for side in (-1,1):
   x=side*.19*head_width
