@@ -97,6 +97,11 @@ func _ready() -> void:
  column.add_child(talent_grid)
  _refresh()
 
+func _branch_names_for_class(class_index: int) -> Array[String]:
+ if class_index == 11:
+  return ["Blut", "Frost", "Unheilig"]
+ return ["Angriff", "Schutz", "Heilung"]
+
 func _on_team_changed() -> void:
  # Refresh class names, ranks and bonuses when another team screen changes the team.
  if panel != null and is_instance_valid(panel) and panel.visible and team != null and is_instance_valid(team):
@@ -119,6 +124,9 @@ func _refresh() -> void:
  var build: Array = TREES.validate_build(level, team.get_talent_build_v2(selected_hero))
  hero_picker.select(selected_hero)
  branch_picker.select(selected_branch)
+ var branch_names: Array[String] = _branch_names_for_class(int(team.class_ids[selected_hero]))
+ for branch_index in range(branch_picker.item_count):
+  branch_picker.set_item_text(branch_index, branch_names[branch_index])
  for hero_slot in range(hero_picker.item_count):
   var class_label: String = "Held"
   if hero_slot < team.class_ids.size():
