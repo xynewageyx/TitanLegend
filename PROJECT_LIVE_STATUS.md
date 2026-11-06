@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 05:17 UTC**
-Git-Stand: **3c184bd0862cc3320d82e01c4942f358cc1f7de7** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 05:18 UTC**
+Git-Stand: **3966dce2cb4c68fdf43d2a1348af0a50e47bb3e3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,18 +11,20 @@ Git-Stand: **3c184bd0862cc3320d82e01c4942f358cc1f7de7** auf Branch **main**
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### UI — UI-Chat
 - `c17b4a4` (2026-11-06): fix(classes): show death knight tank and damage roles in central class menu
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
@@ -32,28 +34,28 @@ Git-Stand: **3c184bd0862cc3320d82e01c4942f358cc1f7de7** auf Branch **main**
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7ecf44` (2026-11-06): Fix typed moderation controller access in Android launcher
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ## Bereichsübergreifende Änderungen
 
 - `9c2cef2` (2026-11-06): docs: record verified Unity mesh avatar and animation object names from backup
 - `94638de` (2026-11-06): Add Android-friendly manual ENet connection test panel
-- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 
 ## Regeln für alle Fach-Chats
 
