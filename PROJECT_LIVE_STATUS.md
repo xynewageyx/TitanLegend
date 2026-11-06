@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 14:49 UTC**
-Git-Stand: **8bcde07db1b8c08d622eb9dd5eca103d1a204d9c** auf Branch **main**
+Git-Stand: **09b30daa073ce864cf7e7c755775d4a80289c031** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,16 +11,17 @@ Git-Stand: **8bcde07db1b8c08d622eb9dd5eca103d1a204d9c** auf Branch **main**
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### UI — UI-Chat
 - `c17b4a4` (2026-11-06): fix(classes): show death knight tank and damage roles in central class menu
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
@@ -28,23 +29,25 @@ Git-Stand: **8bcde07db1b8c08d622eb9dd5eca103d1a204d9c** auf Branch **main**
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
 - `a406c39` (2026-11-06): Improve Android 3D model edges with quality-tiered MSAA
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 
 ## Bereichsübergreifende Änderungen
 
