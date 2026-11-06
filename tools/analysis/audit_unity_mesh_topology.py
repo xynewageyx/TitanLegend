@@ -59,6 +59,9 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
                             metrics["skinned_bone_refs"].append(len(bones))
                         continue
                     vertices = _safe_int(getattr(data, "m_VertexCount", None))
+                    if vertices is None:
+                        vertex_data = getattr(data, "m_VertexData", None)
+                        vertices = _safe_int(getattr(vertex_data, "m_VertexCount", None))
                     if vertices is not None:
                         metrics["vertex_count"].append(vertices)
                     subs = getattr(data, "m_SubMeshes", None)
