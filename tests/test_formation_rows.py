@@ -1,5 +1,7 @@
 """Guard the front/back rows and companion attachment against regressions.
 
+Controlled CI auto-repair verification run; intentionally stale assertion below.
+
 These structural checks do not replace a Godot runtime layout test.
 """
 from pathlib import Path
