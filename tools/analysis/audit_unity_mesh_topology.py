@@ -64,6 +64,60 @@ def _validate_index_buffer(mesh, submeshes, vertices):
             "indices_checked": checked, "invalid_indices": invalid}
 
 
+# Unity VertexFormat byte widths for common formats. Unknown formats are
+# reported rather than guessed. The buffer itself is never exported.
+FORMAT_WIDTH = {0: 4, 1: 2, 2: 1, 3: 1, 4: 1, 5: 1, 6: 2,
+                7: 2, 8: 4, 9: 4, 10: 4, 11: 4}
+
+
+def _vertex_layout(mesh):
+    """Inspect channel/stream byte layout without extracting vertex coordinates."""
+    vertex_data = getattr(mesh, "m_VertexData", None)
+    if vertex_data is None:
+        return {"status": "unavailable", "channels": 0}
+    channels = getattr(vertex_data, "m_Channels", None)
+    streams = getattr(vertex_data, "m_Streams", None)
+    if channels is None or streams is None:
+        return {"status": "unavailable", "channels": 0}
+    vertex_count = _safe_int(getattr(vertex_data, "m_VertexCount", None))
+    data = getattr(vertex_data, "m_DataSize", None)
+    try:
+        data_bytes = len(memoryview(data).cast("B"))
+    except (TypeError, ValueError):
+        data_bytes = None
+    if vertex_count is None or data_bytes is None:
+        return {"status": "unavailable", "channels": len(channels)}
+    invalid = 0
+    unknown = 0
+    active = 0
+    for channel in channels:
+        dimension = _safe_int(getattr(channel, "dimension", None))
+        if not dimension:
+            continue
+        active += 1
+        stream_idx = _safe_int(getattr(channel, "stream", None))
+        fmt = _safe_int(getattr(channel, "format", None))
+        offset = _safe_int(getattr(channel, "offset", None))
+        if fmt not in FORMAT_WIDTH:
+            unknown += 1
+            continue
+        if stream_idx is None or stream_idx >= len(streams) or offset is None:
+            invalid += 1
+            continue
+        stream = streams[stream_idx]
+        stride = _safe_int(getattr(stream, "stride", None))
+        start = _safe_int(getattr(stream, "offset", None))
+        width = dimension * FORMAT_WIDTH[fmt]
+        if stride is None or start is None or offset + width > stride:
+            invalid += 1
+            continue
+        if vertex_count and start + (vertex_count - 1) * stride + offset + width > data_bytes:
+            invalid += 1
+    status = "invalid_layout" if invalid else ("unknown_format" if unknown else "checked")
+    return {"status": status, "channels": active,
+            "invalid_channels": invalid, "unknown_channels": unknown}
+
+
 def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     import UnityPy
     metrics = {"vertex_count": [], "submesh_count": [], "index_count": [],
@@ -71,6 +125,7 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     topologies = Counter()
     errors = Counter()
     index_validation = Counter()
+    vertex_validation = Counter()
     scanned = 0
     for path in sorted(root.rglob("*")):
         if not path.is_file():
@@ -97,6 +152,10 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
                         if bones is not None:
                             metrics["skinned_bone_refs"].append(len(bones))
                         continue
+                    layout = _vertex_layout(data)
+                    vertex_validation[layout["status"]] += 1
+                    if layout.get("invalid_channels", 0):
+                        errors["invalid_vertex_channels"] += layout["invalid_channels"]
                     vertices = _safe_int(getattr(data, "m_VertexCount", None))
                     if vertices is None:
                         vertex_data = getattr(data, "m_VertexData", None)
@@ -138,11 +197,13 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
         "metrics": {key: _summary(values) for key, values in metrics.items()},
         "submesh_topology_codes": dict(sorted(topologies.items())),
         "index_validation": dict(sorted(index_validation.items())),
+        "vertex_layout_validation": dict(sorted(vertex_validation.items())),
         "errors": dict(sorted(errors.items())),
         "caveats": [
             "Triangle counts include only topology 0 triangle-list submeshes.",
             "Index counts come from submeshes; when present, raw uint16/uint32 index buffers are decoded in memory and bounds checked.",
-            "Vertex channel bytes and vertex coordinates are not decoded.",
+            "Vertex channel stream layouts and buffer bounds are validated; vertex coordinates are not exported or numerically decoded.",
+            "Unity version-specific vertex formats outside the known format map are marked unknown.",
             "Skinned bone references do not prove hierarchy, weights or bind poses.",
             "No vertex coordinates, indices, names or original assets are exported."
         ],
