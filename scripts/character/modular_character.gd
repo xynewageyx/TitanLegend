@@ -2,11 +2,11 @@ extends Node3D
 class_name TitanModularCharacter
 ## Original Titan Legends character assembly; does not include reference-game assets.
 
-const SLOT_NAMES: PackedStringArray = [
+const SLOT_NAMES = [
     "hair", "head", "torso", "gloves", "legs", "boots",
     "main_hand", "off_hand", "back"
 ]
-const CLASSES: PackedStringArray = [
+const CLASSES = [
     "warrior", "paladin", "druid", "shaman", "hunter", "rogue",
     "mage", "warlock", "summoner", "priest", "brawler", "death_knight"
 ]
