@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 05:26 UTC**
-Git-Stand: **81c3309703ea5c7831d5efbb7568656c046e9935** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 05:29 UTC**
+Git-Stand: **a44944a9b23ed6409c18c523783e46ced8d0490e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -38,7 +38,7 @@ Git-Stand: **81c3309703ea5c7831d5efbb7568656c046e9935** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `c7ecf44` (2026-11-06): Fix typed moderation controller access in Android launcher
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -51,6 +51,7 @@ Git-Stand: **81c3309703ea5c7831d5efbb7568656c046e9935** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `a44944a` (2026-11-06): docs: record byte-verified Ulala reference mesh vertex and triangle counts
 - `81c3309` (2026-11-06): test(analysis): verify triangle topology accounting
 - `6f582f2` (2026-11-06): feat(analysis): count triangle topology indices in Unity mesh submeshes
 
