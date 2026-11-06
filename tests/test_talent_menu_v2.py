@@ -170,6 +170,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn('return ["Blut", "Frost", "Unheilig"]', MENU)
         self.assertIn("branch_picker.set_item_text(branch_index, branch_names[branch_index])", MENU)
 
+    def test_death_knight_is_selectable_as_twelfth_class(self):
+        self.assertIn('"Raufbold", "Todesritter"]', TEAM)
+        self.assertIn("const MELEE_CLASSES := [0, 1, 5, 10, 11]", TEAM)
+        self.assertIn("[1], [0,1]]", TEAM)
+        self.assertIn('Color("#66577d")', TEAM)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
