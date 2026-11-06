@@ -61,6 +61,8 @@ jobs:
               exit 1
             fi
           done
+      - name: Verify Death Knight skill VFX routing
+        run: python3 -m unittest discover -s tests -p 'test_death_knight_skill_vfx.py' -v
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
