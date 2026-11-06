@@ -84,5 +84,19 @@ class MeshTopologyTests(unittest.TestCase):
         channel.format = 999
         self.assertEqual(mod._vertex_layout(mesh)["status"], "unknown_format")
 
+    def test_float32_xyz_position_decode(self):
+        ch = types.SimpleNamespace(format=0, dimension=3, stream=0, offset=0)
+        st = types.SimpleNamespace(stride=12, offset=0)
+        vd = types.SimpleNamespace(m_VertexCount=2, m_Channels=[ch],
+                                   m_Streams=[st],
+                                   m_DataSize=struct.pack("<6f", 0, 1, 2, 3, 5, 7))
+        report = mod._decode_positions(types.SimpleNamespace(m_VertexData=vd))
+        self.assertEqual(report["status"], "decoded")
+        self.assertEqual(report["extent"], [3.0, 4.0, 5.0])
+        vd.m_DataSize = struct.pack("<6f", float("nan"), 1, 2, 3, 5, 7)
+        self.assertEqual(mod._decode_positions(types.SimpleNamespace(m_VertexData=vd))["nonfinite_positions"], 1)
+        vd.m_DataSize = bytes(23)
+        self.assertEqual(mod._decode_positions(types.SimpleNamespace(m_VertexData=vd))["status"], "invalid_layout")
+
 if __name__ == "__main__":
     unittest.main()
