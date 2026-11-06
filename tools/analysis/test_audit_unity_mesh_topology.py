@@ -26,7 +26,7 @@ class MeshTopologyTests(unittest.TestCase):
             root = Path(directory)
             (root / "fixture.bundle").write_bytes(b"UnityFS\0" + b"0" * 16)
             mesh = types.SimpleNamespace(
-                m_VertexCount=120,
+                m_VertexData=types.SimpleNamespace(m_VertexCount=120),
                 m_SubMeshes=[
                     types.SimpleNamespace(indexCount=90, topology=0),
                     types.SimpleNamespace(indexCount=20, topology=1),
