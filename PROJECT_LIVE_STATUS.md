@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 16:54 UTC**
-Git-Stand: **063088c79b66eef140b746696ae2dda558e26f4c** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 17:46 UTC**
+Git-Stand: **12c15671bde5832d1aaf4abbd140f38b7f79b67a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,36 +9,37 @@ Git-Stand: **063088c79b66eef140b746696ae2dda558e26f4c** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `5c8ed4f` (2026-11-06): fix(actions): specify monitored workflows for workflow_run trigger
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `063088c` (2026-11-06): Add guarded automatic CI repair PRs for verified test drift (#42)
@@ -49,7 +50,7 @@ Git-Stand: **063088c79b66eef140b746696ae2dda558e26f4c** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `f988406` (2026-11-06): feat(analysis): inspect actual forest GLB triangle and vertex counts
+- `12c1567` (2026-11-06): Add scoped Titan Legends GitHub Copilot coding agent profile
 
 ## Regeln für alle Fach-Chats
 
