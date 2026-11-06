@@ -249,8 +249,8 @@ func _process(delta: float) -> void:
  # Tanks march with shorter, heavier steps; agile heroes run wider.
  # Support casters use restrained arm swings to keep spell poses readable.
  var leg_swing: float = 0.36 if class_id == 11 else (0.40 if class_id in [0, 1] else (0.58 if class_id in [4, 5, 10] else 0.46))
- var arm_swing: float = 0.17 if class_id in [3, 6, 7, 8, 9] else (0.31 if class_id in [4, 5, 10] else 0.24)
- var foot_height: float = 0.05 if class_id in [0, 1] else (0.09 if class_id in [4, 5, 10] else 0.07)
+ var arm_swing: float = 0.14 if class_id == 11 else (0.17 if class_id in [3, 6, 7, 8, 9] else (0.31 if class_id in [4, 5, 10] else 0.24))
+ var foot_height: float = 0.045 if class_id == 11 else (0.05 if class_id in [0, 1] else (0.09 if class_id in [4, 5, 10] else 0.07))
  var step: float = sin(elapsed * speed)
  # Foot lift follows the planted leg, reducing the sliding impression.
  # Independent gait phases and gentle idle sway avoid mechanical mirror motion.
