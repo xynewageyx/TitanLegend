@@ -49,15 +49,10 @@ jobs:
             const failures = jobs.filter(job => job.conclusion === 'failure');
             const details = failures.map(job => {
               const steps = (job.steps || []).filter(step => step.conclusion === 'failure');
-              const lines = steps.map(step => '- Step ' + step.number + ': ' + step.name).join('
-');
-              return '### ' + job.name + '
-' + (job.html_url || run.html_url) + '
-' +
+              const lines = steps.map(step => '- Step ' + step.number + ': ' + step.name).join('\n');
+              return '### ' + job.name + '\n' + (job.html_url || run.html_url) + '\n' +
                 (lines || '- Failed job; inspect logs');
-            }).join('
-
-');
+            }).join('\n\n');
             const title = '[CI failure] ' + run.name + ' (' + run.head_branch + ')';
             const body = [
               'GitHub Actions detected a failed run immediately after completion.',
@@ -73,8 +68,7 @@ jobs:
               'This watcher reports failures but does **not** execute untrusted workflow code,',
               'push commits, change main, or auto-merge. A separate authorized repair',
               'agent is required for automatic code changes.'
-            ].join('
-');
+            ].join('\n');
             const existing = await github.paginate(github.rest.issues.listForRepo, {
               owner, repo, state: 'all', per_page: 100, creator: 'github-actions[bot]'
             });
