@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 [ext_resource type="Script" path="res://scripts/biome_manager.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/team_formation.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/battle_manager.gd" id="3"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/world_transition.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/chat/chat_moderation_admin_launcher.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/network/titan_multiplayer_client.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/network/titan_multiplayer_connect_panel.gd" id="12"]
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
 background_color = Color(0.04, 0.12, 0.08, 1)
@@ -107,3 +108,6 @@ script = ExtResource("10")
 
 [node name="MultiplayerClient" type="Node" parent="."]
 script = ExtResource("11")
+
+[node name="MultiplayerConnectPanel" type="CanvasLayer" parent="."]
+script = ExtResource("12")
