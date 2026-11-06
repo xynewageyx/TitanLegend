@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 05:26 UTC**
-Git-Stand: **6f582f2bbc8f32619a978a152cdd110e334a29fe** auf Branch **main**
+Git-Stand: **81c3309703ea5c7831d5efbb7568656c046e9935** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -51,8 +51,8 @@ Git-Stand: **6f582f2bbc8f32619a978a152cdd110e334a29fe** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `81c3309` (2026-11-06): test(analysis): verify triangle topology accounting
 - `6f582f2` (2026-11-06): feat(analysis): count triangle topology indices in Unity mesh submeshes
-- `9c2cef2` (2026-11-06): docs: record verified Unity mesh avatar and animation object names from backup
 
 ## Regeln für alle Fach-Chats
 
