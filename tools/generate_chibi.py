@@ -186,6 +186,22 @@ for idx,name in enumerate(NAMES):
                          (2.29+extra_height*.5,.08,.08,-.18+sweep*.5),
                          (2.36+extra_height,.01,.01,-.12+sweep)],hair)
   lock.location.x=x
+ # Class-specific soft cheek volumes and brow shapes are separate head-skinned
+ # meshes, preserving the shared rig and keeping geometry Android-friendly.
+ cheek_width = {
+  "warrior":1.12,"paladin":1.06,"druid":1.10,"shaman":1.04,
+  "hunter":.96,"rogue":.86,"mage":1.02,"warlock":.92,
+  "summoner":1.03,"priest":1.08,"brawler":1.16,"death_knight":.82,
+ }[name]
+ brow_tint=material("brow_color",COLORS[idx] if name!="death_knight" else (.13,.18,.24))
+ for side in (-1,1):
+  cheek_x=side*.305*head_width
+  oval("Cheek_L" if side<0 else "Cheek_R",
+       (cheek_x,-.315*head_width,1.765),
+       (.135*cheek_width,.060,.105),skin)
+  oval("Brow_L" if side<0 else "Brow_R",
+       (side*.19*head_width,-.402*head_width,2.075),
+       (.14*eye_width,.025,.029 if name!="death_knight" else .043),brow_tint)
  oval("Nose",(0,-.42*head_width,1.78),(.04,.03,.03),skin)
  oval("Mouth",(0,-.40*head_width,1.71),(.10,.018,.02),dark)
  if name=="death_knight":
