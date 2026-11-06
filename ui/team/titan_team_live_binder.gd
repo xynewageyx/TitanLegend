@@ -39,12 +39,12 @@ func refresh() -> void:
             var classes: Array = formation.get("class_ids")
             var roles: Array = formation.get("role_ids")
             if slot < classes.size():
-                var names: Array = formation.get("CLASS_NAMES")
+                var names: Array = ["Krieger", "Paladin", "Druide", "Schamane", "Jaeger", "Schurke", "Magier", "Hexer", "Beschwoerer", "Priester", "Raufbold"] # mirrors TeamFormation class IDs
                 var class_id := int(classes[slot])
                 if class_id >= 0 and class_id < names.size():
                     title = str(names[class_id])
             if slot < roles.size():
-                var role_names: Array = formation.get("ROLE_NAMES")
+                var role_names: Array = ["Tank", "DD", "Heiler"]
                 var role_id := int(roles[slot])
                 if role_id >= 0 and role_id < role_names.size():
                     role = str(role_names[role_id])
