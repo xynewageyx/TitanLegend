@@ -1,0 +1,79 @@
+name: Titan Legends 10-Minuten-Koordination
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  issues: read
+
+concurrency:
+  group: titan-legends-ten-minute-check
+  cancel-in-progress: false
+
+jobs:
+  check-project:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspect shared project and recent workflow failures
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const {owner, repo} = context.repo;
+            const {data: runs} = await github.rest.actions.listWorkflowRunsForRepo({
+              owner, repo, branch: 'main', per_page: 40
+            });
+            const recent = runs.workflow_runs.filter(r =>
+              r.name !== 'Titan Legends 10-Minuten-Koordination' &&
+              r.name !== 'Titan Legends Live Coordination'
+            );
+            const latestByWorkflow = new Map();
+            for (const run of recent) {
+              if (!latestByWorkflow.has(run.name)) latestByWorkflow.set(run.name, run);
+            }
+            const failing = [...latestByWorkflow.values()].filter(r =>
+              r.status === 'completed' && ['failure', 'timed_out', 'action_required'].includes(r.conclusion)
+            );
+            const pending = [...latestByWorkflow.values()].filter(r => r.status !== 'completed');
+            const {data: issues} = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', per_page: 100
+            });
+            const openIssues = issues.filter(i => !i.pull_request);
+            const lines = [
+              '# Titan Legends – automatische 10-Minuten-Koordination',
+              '',
+              'Erstellt: ' + new Date().toISOString(),
+              'Repository: ' + owner + '/' + repo,
+              '',
+              '## Aktuelle GitHub-Workflows',
+              ...[...latestByWorkflow.values()].map(r =>
+                '- ' + r.name + ': ' + (r.conclusion || r.status) + ' – ' + r.html_url
+              ),
+              '',
+              '## Fehlgeschlagene letzte Workflow-Läufe',
+              ...(failing.length ? failing.map(r => '- ' + r.name + ': ' + r.html_url) : ['- Keine bei den zuletzt geprüften Läufen.']),
+              '',
+              '## Laufende oder wartende Workflows',
+              ...(pending.length ? pending.map(r => '- ' + r.name + ': ' + r.html_url) : ['- Keine.']),
+              '',
+              '## Offene GitHub-Issues (' + openIssues.length + ')',
+              ...(openIssues.length ? openIssues.slice(0,30).map(i => '- #' + i.number + ' ' + i.title + ' – ' + i.html_url) : ['- Keine offenen Issues.']),
+              '',
+              'Hinweis: Dieser Check überwacht den gemeinsamen Entwicklungsstand. Er startet keine ChatGPT-Fach-Chats und führt keine automatischen Codeänderungen aus.',
+              ''
+            ];
+            const report = lines.join('\n');
+            fs.writeFileSync('TITAN_COORDINATION_CHECK.md', report);
+            await core.summary.addRaw(report).write();
+            if (failing.length) core.warning(failing.length + ' Workflow(s) mit fehlgeschlagenem letztem Lauf');
+      - name: Save coordination report
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-coordination-report
+          path: TITAN_COORDINATION_CHECK.md
+          retention-days: 7
