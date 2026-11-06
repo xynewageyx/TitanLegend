@@ -6,6 +6,7 @@ indices, materials, bone transforms, names or per-mesh identifiable records.
 """
 import argparse
 import json
+import math
 import struct
 from collections import Counter
 from pathlib import Path
@@ -118,6 +119,56 @@ def _vertex_layout(mesh):
             "invalid_channels": invalid, "unknown_channels": unknown}
 
 
+def _decode_positions(mesh):
+    """Decode float32 position channel in memory; return aggregate diagnostics only.
+
+    Unity channel 0 is position for the supported layout. Other formats are
+    explicitly unsupported rather than guessed.
+    """
+    vd = getattr(mesh, "m_VertexData", None)
+    if vd is None:
+        return {"status": "unavailable"}
+    channels = getattr(vd, "m_Channels", None)
+    streams = getattr(vd, "m_Streams", None)
+    count = _safe_int(getattr(vd, "m_VertexCount", None))
+    if not channels or not streams or count is None:
+        return {"status": "unavailable"}
+    ch = channels[0]
+    if _safe_int(getattr(ch, "format", None)) != 0 or _safe_int(getattr(ch, "dimension", None)) != 3:
+        return {"status": "unsupported_format"}
+    stream_id = _safe_int(getattr(ch, "stream", None))
+    offset = _safe_int(getattr(ch, "offset", None))
+    if stream_id is None or stream_id >= len(streams) or offset is None:
+        return {"status": "invalid_layout"}
+    stream = streams[stream_id]
+    stride = _safe_int(getattr(stream, "stride", None))
+    start = _safe_int(getattr(stream, "offset", None))
+    try:
+        data = memoryview(getattr(vd, "m_DataSize")).cast("B")
+    except (TypeError, ValueError):
+        return {"status": "unavailable"}
+    if stride is None or start is None or offset + 12 > stride:
+        return {"status": "invalid_layout"}
+    if count and start + (count - 1) * stride + offset + 12 > len(data):
+        return {"status": "invalid_layout"}
+    minimum = [math.inf] * 3
+    maximum = [-math.inf] * 3
+    nonfinite = 0
+    for i in range(count):
+        xyz = struct.unpack_from("<fff", data, start + i * stride + offset)
+        if not all(math.isfinite(v) for v in xyz):
+            nonfinite += 1
+            continue
+        for axis, value in enumerate(xyz):
+            minimum[axis] = min(minimum[axis], value)
+            maximum[axis] = max(maximum[axis], value)
+    return {"status": "decoded", "positions_checked": count,
+            "nonfinite_positions": nonfinite,
+            "finite_positions": count - nonfinite,
+            "extent": [round(hi - lo, 4) for lo, hi in zip(minimum, maximum)]
+            if count > nonfinite else None}
+
+
 def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     import UnityPy
     metrics = {"vertex_count": [], "submesh_count": [], "index_count": [],
@@ -126,6 +177,7 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     errors = Counter()
     index_validation = Counter()
     vertex_validation = Counter()
+    position_validation = Counter()
     scanned = 0
     for path in sorted(root.rglob("*")):
         if not path.is_file():
@@ -152,6 +204,10 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
                         if bones is not None:
                             metrics["skinned_bone_refs"].append(len(bones))
                         continue
+                    positions = _decode_positions(data)
+                    position_validation[positions["status"]] += 1
+                    if positions.get("nonfinite_positions"):
+                        errors["nonfinite_positions"] += positions["nonfinite_positions"]
                     layout = _vertex_layout(data)
                     vertex_validation[layout["status"]] += 1
                     if layout.get("invalid_channels", 0):
@@ -198,11 +254,12 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
         "submesh_topology_codes": dict(sorted(topologies.items())),
         "index_validation": dict(sorted(index_validation.items())),
         "vertex_layout_validation": dict(sorted(vertex_validation.items())),
+        "position_decode_validation": dict(sorted(position_validation.items())),
         "errors": dict(sorted(errors.items())),
         "caveats": [
             "Triangle counts include only topology 0 triangle-list submeshes.",
             "Index counts come from submeshes; when present, raw uint16/uint32 index buffers are decoded in memory and bounds checked.",
-            "Vertex channel stream layouts and buffer bounds are validated; vertex coordinates are not exported or numerically decoded.",
+            "Float32 XYZ position channels are decoded in memory to check finite values and bounds; no coordinates or per-mesh bounds are exported.",
             "Unity version-specific vertex formats outside the known format map are marked unknown.",
             "Skinned bone references do not prove hierarchy, weights or bind poses.",
             "No vertex coordinates, indices, names or original assets are exported."
