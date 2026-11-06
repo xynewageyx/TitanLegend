@@ -30,6 +30,20 @@ const SKILL_STYLE := {
 @export var max_active_effects: int = 12
 var _effects: Array[Node3D] = []
 
+## 0 = Low, 1 = Medium, 2 = High, 3 = Ultra.
+## Changing quality affects only future effects; active effects finish normally.
+func set_effect_quality(level: int) -> void:
+ match clampi(level, 0, 3):
+  0:
+   max_active_effects = 3
+  1:
+   max_active_effects = 6
+  2:
+   max_active_effects = 9
+  3:
+   max_active_effects = 12
+
+
 func play_skill(skill_id: String, world_position: Vector3) -> void:
  # Scene transitions or external cleanup can free an effect before its tween ends.
  # Remove stale references before enforcing the Android draw-call budget.
