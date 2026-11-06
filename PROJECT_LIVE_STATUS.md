@@ -1,51 +1,51 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 16:26 UTC**
-Git-Stand: **fee088b7cbbfed284b933943b411772bf3d57f48** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 16:34 UTC**
+Git-Stand: **5c8ed4f0a78f8567369fc705ae7452141d8dfcf8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- `5c8ed4f` (2026-11-06): fix(actions): specify monitored workflows for workflow_run trigger
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `5c8ed4f` (2026-11-06): fix(actions): specify monitored workflows for workflow_run trigger
 - `fee088b` (2026-11-06): fix(ci): deduplicate failures against open issues only (#40)
 - `b6b7dce` (2026-11-06): fix(actions): escape JavaScript newlines in CI failure watcher
 - `2f545f2` (2026-11-06): Add event-driven GitHub Actions failure watcher (#38)
 - `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
-- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
 
 ## Bereichsübergreifende Änderungen
 
