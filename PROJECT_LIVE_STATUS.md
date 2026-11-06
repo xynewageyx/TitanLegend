@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 16:18 UTC**
-Git-Stand: **b6b7dce4bdfe8bfbc9f28e5fb9e3533e94152fc5** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 16:19 UTC**
+Git-Stand: **80020371e72c69c07ff3a64c2c236dfa0eb3809f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -51,7 +51,6 @@ Git-Stand: **b6b7dce4bdfe8bfbc9f28e5fb9e3533e94152fc5** auf Branch **main**
 - `f988406` (2026-11-06): feat(analysis): inspect actual forest GLB triangle and vertex counts
 - `871b82e` (2026-11-06): Reset ENet multiplayer peer on disconnect and failed connection to allow retries
 - `14289fb` (2026-11-06): fix(classes): assert every selectable class has a matching role description
-- `1521368` (2026-11-06): docs(analysis): aggregate verified Unity mesh triangle counts by bundle
 
 ## Regeln für alle Fach-Chats
 
