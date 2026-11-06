@@ -166,7 +166,7 @@ func play_skill_cast(role: int, choice: int) -> void:
 
 func play_hit(critical: bool = false) -> void:
  hit_critical = critical
- hit_duration = 0.36 if critical else 0.25
+ hit_duration = (0.42 if critical else 0.30) if class_id == 11 else (0.36 if critical else 0.25)
  hit_remaining = hit_duration
 
 func play_dodge() -> void:
@@ -333,7 +333,9 @@ func _process(delta: float) -> void:
   attack_lean = move_toward(attack_lean, 0.0, delta * 7.0)
  var recoil: float = hit_remaining / hit_duration
  var hit_power: float = 1.55 if hit_critical else 1.0
- rotation.x = -recoil * 0.10 * hit_power + attack_lean * 0.06
+ # Death Knight absorbs impacts with a heavy backward recoil, not a quick flinch.
+ var hit_recoil: float = 0.14 if class_id == 11 else 0.10
+ rotation.x = -recoil * hit_recoil * hit_power + attack_lean * 0.06
  rotation.z = sin(elapsed * 22.0) * recoil * 0.09 * hit_power
  if hit_remaining > 0.0:
   left_arm.rotation.z = -0.32 * recoil * hit_power
