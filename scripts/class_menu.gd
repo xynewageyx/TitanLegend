@@ -6,7 +6,7 @@ var class_selector: OptionButton
 var description: Label
 var role_selector: OptionButton
 var bonus_label: Label
-const CLASS_ROLES := ["Tank / DD", "Tank / DD / Heilung", "Tank / DD / Heilung", "Tank / DD / Heilung", "DD", "DD", "DD", "DD", "DD", "Heilung / DD", "DD"]
+const CLASS_ROLES := ["Tank / DD", "Tank / DD / Heilung", "Tank / DD / Heilung", "Tank / DD / Heilung", "DD", "DD", "DD", "DD", "DD", "Heilung / DD", "DD", "Tank / DD"]
 func _ready() -> void:
  visible = false
  mouse_filter = Control.MOUSE_FILTER_STOP
