@@ -1,0 +1,57 @@
+extends SceneTree
+## Verify the real imported chibi GLB skeletons can receive all equipment sockets.
+const BUILDER = preload("res://scripts/equipment/chibi_bone_socket_builder.gd")
+const CLASSES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"]
+
+func _initialize() -> void:
+    call_deferred("_run")
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+    if node is Skeleton3D:
+        return node as Skeleton3D
+    for child in node.get_children():
+        var found := _find_skeleton(child)
+        if found != null:
+            return found
+    return null
+
+func _run() -> void:
+    var failures := 0
+    for class_name in CLASSES:
+        var path := "res://assets/heroes/chibi/" + class_name + ".glb"
+        var packed := load(path) as PackedScene
+        if packed == null:
+            push_error("Missing GLB: " + path)
+            failures += 1
+            continue
+        var model := packed.instantiate()
+        root.add_child(model)
+        var skeleton := _find_skeleton(model)
+        if skeleton == null:
+            push_error("Missing Skeleton3D: " + path)
+            failures += 1
+            model.queue_free()
+            continue
+        var missing: PackedStringArray = BUILDER.ensure_sockets(skeleton)
+        if not missing.is_empty():
+            push_error("%s: missing bones for %s" % [class_name, ",".join(missing)])
+            failures += 1
+        var count := 0
+        for socket_name in BUILDER.SOCKET_BONES:
+            var marker := skeleton.find_child(socket_name, true, false)
+            if marker == null or not marker is Marker3D:
+                push_error("%s: missing marker %s" % [class_name, socket_name])
+                failures += 1
+                continue
+            if not marker.get_parent() is BoneAttachment3D:
+                push_error("%s: marker not attached to bone %s" % [class_name, socket_name])
+                failures += 1
+            else:
+                count += 1
+        print("Equipment sockets: %s -> %d/15" % [class_name, count])
+        model.queue_free()
+    if failures > 0:
+        quit(1)
+    else:
+        print("PASS: 11 imported chibi GLB rigs have 15 bone-mounted equipment sockets")
+        quit(0)
