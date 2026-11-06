@@ -65,8 +65,19 @@ def rig_and_animate():
           "Foot_L" if name=="Foot_L" else
           "Foot_R" if name=="Foot_R" else "Spine")
   if name=="SculptedNeck":
+   # Blend the neck into the chest at its base and the head at its top.
+   chest_group=obj.vertex_groups.new(name="Chest")
    neck_group=obj.vertex_groups.new(name="Neck")
-   neck_group.add(list(range(len(obj.data.vertices))),1.0,"REPLACE")
+   head_group=obj.vertex_groups.new(name="Head")
+   for vertex in obj.data.vertices:
+    z=vertex.co.z
+    chest_weight=max(0.0,min(1.0,(1.53-z)/.10))
+    head_weight=max(0.0,min(1.0,(z-1.59)/.10))
+    neck_weight=max(0.0,1.0-chest_weight-head_weight)
+    total=chest_weight+neck_weight+head_weight
+    for group,weight in ((chest_group,chest_weight),(neck_group,neck_weight),(head_group,head_weight)):
+     if weight>0:
+      group.add([vertex.index],weight/total,"REPLACE")
   elif name=="SculptedBody":
    # Blend weights across the torso instead of moving the entire body rigidly.
    hips=obj.vertex_groups.new(name="Hips")
