@@ -51,40 +51,50 @@ jobs:
                     "Identify root causes, exact relevant paths if visible, and safe fixes. "
                     "Do not claim changes were applied. Reply in German with concise markdown.\n\n"
                     + logs)
-          model = os.environ["GEMINI_MODEL"].removeprefix("models/").strip()
-          print("Using Gemini model:", model)
-          url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent"
+          primary = os.environ["GEMINI_MODEL"].removeprefix("models/").strip()
+          models = list(dict.fromkeys([primary, "gemini-3.5-flash", "gemini-2.5-flash"]))
           payload = json.dumps({"contents":[{"parts":[{"text":prompt}]}]}).encode()
-          request = urllib.request.Request(url, data=payload, headers={
-              "x-goog-api-key": os.environ["GEMINI_API_KEY"],
-              "Content-Type": "application/json"}, method="POST")
-          transient_codes = {429, 500, 502, 503, 504}
-          for attempt in range(1, 5):
-              try:
-                  with urllib.request.urlopen(request, timeout=90) as response:
-                      result = json.load(response)
-                  break
-              except urllib.error.HTTPError as exc:
-                  body = exc.read(4096).decode("utf-8", errors="replace")
-                  body = body.replace(os.environ["GEMINI_API_KEY"], "[REDACTED]")
+          key = os.environ["GEMINI_API_KEY"]
+          result = None
+          selected_model = None
+          for model in models:
+              print("Trying Gemini model:", model, flush=True)
+              url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent"
+              request = urllib.request.Request(url, data=payload, headers={
+                  "x-goog-api-key": key, "Content-Type": "application/json"}, method="POST")
+              for attempt in range(1, 4):
                   try:
-                      details = json.loads(body).get("error", {})
-                      message = details.get("message", "No API error message")
-                      status = details.get("status", "UNKNOWN")
-                      print(f"Gemini HTTP {exc.code} ({status}): {message[:1200]}")
-                  except (ValueError, AttributeError):
-                      print(f"Gemini HTTP {exc.code}; response could not be parsed")
-                  if exc.code not in transient_codes or attempt == 4:
-                      raise SystemExit(f"Gemini request failed after {attempt} attempt(s): HTTP {exc.code}")
-                  delay = min(30, 2 ** attempt) + random.uniform(0, 1)
-                  print(f"Transient Gemini HTTP {exc.code}; retry {attempt}/3 after {delay:.1f}s")
+                      with urllib.request.urlopen(request, timeout=45) as response:
+                          result = json.load(response)
+                      selected_model = model
+                      break
+                  except urllib.error.HTTPError as exc:
+                      body = exc.read(4096).decode("utf-8", errors="replace").replace(key, "[REDACTED]")
+                      try:
+                          details = json.loads(body).get("error", {})
+                          message = str(details.get("message", "No API error message")).replace(key, "[REDACTED]")
+                          status = details.get("status", "UNKNOWN")
+                          print(f"Gemini {model}: HTTP {exc.code} ({status}): {message[:800]}", flush=True)
+                      except (ValueError, AttributeError):
+                          print(f"Gemini {model}: HTTP {exc.code}", flush=True)
+                      if exc.code == 429:
+                          raise SystemExit("Gemini API quota/rate limit reached (429); stopping to avoid repeated requests")
+                      if exc.code not in {404, 500, 502, 503, 504}:
+                          raise SystemExit(f"Non-retryable Gemini HTTP {exc.code}")
+                      if exc.code == 404 or attempt == 3:
+                          break
+                  except (urllib.error.URLError, TimeoutError):
+                      print(f"Gemini {model}: temporary network error", flush=True)
+                      if attempt == 3:
+                          break
+                  delay = min(10, 2 ** attempt) + random.uniform(0, 1)
+                  print(f"Retry after {delay:.1f}s", flush=True)
                   time.sleep(delay)
-              except (urllib.error.URLError, TimeoutError) as exc:
-                  if attempt == 4:
-                      raise SystemExit(f"Gemini network request failed after {attempt} attempts: {type(exc).__name__}")
-                  delay = min(30, 2 ** attempt) + random.uniform(0, 1)
-                  print(f"Temporary Gemini network error; retry {attempt}/3 after {delay:.1f}s")
-                  time.sleep(delay)
+              if result is not None:
+                  break
+          if result is None:
+              raise SystemExit("All configured Gemini models failed; see errors above")
+          print("Successful Gemini model:", selected_model, flush=True)
           answer = "\n".join(p.get("text","") for c in result.get("candidates",[])
                              for p in c.get("content",{}).get("parts",[]) if "text" in p)
           if not answer.strip():
