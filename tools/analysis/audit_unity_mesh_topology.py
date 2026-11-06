@@ -134,8 +134,11 @@ def _decode_positions(mesh):
     if not channels or not streams or count is None:
         return {"status": "unavailable"}
     ch = channels[0]
-    if _safe_int(getattr(ch, "format", None)) != 0 or _safe_int(getattr(ch, "dimension", None)) != 3:
+    fmt = _safe_int(getattr(ch, "format", None))
+    if fmt not in (0, 1) or _safe_int(getattr(ch, "dimension", None)) != 3:
         return {"status": "unsupported_format"}
+    width = 4 if fmt == 0 else 2
+    unpack = "<fff" if fmt == 0 else "<eee"
     stream_id = _safe_int(getattr(ch, "stream", None))
     offset = _safe_int(getattr(ch, "offset", None))
     if stream_id is None or stream_id >= len(streams) or offset is None:
@@ -147,15 +150,15 @@ def _decode_positions(mesh):
         data = memoryview(getattr(vd, "m_DataSize")).cast("B")
     except (TypeError, ValueError):
         return {"status": "unavailable"}
-    if stride is None or start is None or offset + 12 > stride:
+    if stride is None or start is None or offset + 3 * width > stride:
         return {"status": "invalid_layout"}
-    if count and start + (count - 1) * stride + offset + 12 > len(data):
+    if count and start + (count - 1) * stride + offset + 3 * width > len(data):
         return {"status": "invalid_layout"}
     minimum = [math.inf] * 3
     maximum = [-math.inf] * 3
     nonfinite = 0
     for i in range(count):
-        xyz = struct.unpack_from("<fff", data, start + i * stride + offset)
+        xyz = struct.unpack_from(unpack, data, start + i * stride + offset)
         if not all(math.isfinite(v) for v in xyz):
             nonfinite += 1
             continue
@@ -259,7 +262,7 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
         "caveats": [
             "Triangle counts include only topology 0 triangle-list submeshes.",
             "Index counts come from submeshes; when present, raw uint16/uint32 index buffers are decoded in memory and bounds checked.",
-            "Float32 XYZ position channels are decoded in memory to check finite values and bounds; no coordinates or per-mesh bounds are exported.",
+            "Float32 and Float16 XYZ position channels are decoded in memory to check finite values and bounds; no coordinates or per-mesh bounds are exported.",
             "Unity version-specific vertex formats outside the known format map are marked unknown.",
             "Skinned bone references do not prove hierarchy, weights or bind poses.",
             "No vertex coordinates, indices, names or original assets are exported."
