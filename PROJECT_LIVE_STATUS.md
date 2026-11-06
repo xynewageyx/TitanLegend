@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 18:09 UTC**
-Git-Stand: **a7fc449fea3dc9676dce5d174ac7c239675125a1** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 18:45 UTC**
+Git-Stand: **07447ebc334c8a3f6257f527aa46b664ae847e25** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -26,7 +26,7 @@ Git-Stand: **a7fc449fea3dc9676dce5d174ac7c239675125a1** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `07447eb` (2026-11-06): Add Gemini model availability diagnostic workflow (#52)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -41,11 +41,11 @@ Git-Stand: **a7fc449fea3dc9676dce5d174ac7c239675125a1** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `07447eb` (2026-11-06): Add Gemini model availability diagnostic workflow (#52)
 - `a7fc449` (2026-11-06): Add opt-in Gemini CI failure analysis workflow (#51)
 - `c933608` (2026-11-06): fix(ci): safely resume repair after blocked PR creation (#46)
 - `063088c` (2026-11-06): Add guarded automatic CI repair PRs for verified test drift (#42)
 - `f747561` (2026-11-06): coordination: publish ten-minute continuation assignments for Titan Legends workstreams
-- `5c8ed4f` (2026-11-06): fix(actions): specify monitored workflows for workflow_run trigger
 
 ## Bereichsübergreifende Änderungen
 
