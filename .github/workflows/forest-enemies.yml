@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'tools/blender/generate_forest_mobs.py'
+      - 'tools/analysis/inspect_forest_glbs.py'
       - '.github/workflows/forest-enemies.yml'
       - 'tools/tests/test_forest_animations.gd'
       - 'scripts/battle_manager.gd'
@@ -20,6 +21,8 @@ jobs:
         run: blender --background --python-expr "import numpy; print('NumPy OK', numpy.__version__)"
       - name: Generate forest GLBs
         run: blender --background --python tools/blender/generate_forest_mobs.py -- --output build/forest
+      - name: Measure actual forest GLB geometry
+        run: python3 tools/analysis/inspect_forest_glbs.py --input build/forest --output build/forest-geometry-report.csv
       - name: Check generated files
         run: |
           test -s build/forest/forest_01_mooshuepfer.glb
@@ -111,6 +114,12 @@ jobs:
           set -o pipefail
           xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee godot-forest-animation-test.log
           grep -q 'FOREST ANIMATION TEST PASSED: 36 clips on 9 enemies' godot-forest-animation-test.log
+      - name: Upload measured forest geometry
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Geometry-Report
+          path: build/forest-geometry-report.csv
+          if-no-files-found: error
       - name: Upload forest animation test log
         if: always()
         uses: actions/upload-artifact@v4
