@@ -23,7 +23,9 @@ const SKILL_STYLE := {
  "interrupt_hunter": "nature", "interrupt_rogue": "shadow",
  "interrupt_mage": "frost", "interrupt_warlock": "shadow",
  "interrupt_summoner": "storm", "interrupt_priest": "holy",
- "interrupt_brawler": "fire", "interrupt_death_knight": "shadow"
+ "interrupt_brawler": "fire", "interrupt_death_knight": "shadow",
+ "death_knight_cleave": "shadow", "death_knight_storm": "shadow",
+ "death_knight_guard": "shadow"
 }
 @export var max_active_effects: int = 12
 var _effects: Array[Node3D] = []
@@ -53,12 +55,17 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
  effect.add_child(ring)
  ring.position.y = 0.12
  ring.scale = Vector3(0.2, 1.0, 0.2)
+ if skill_id == "death_knight_guard":
+  ring.scale = Vector3(0.8, 1.0, 0.8)
+ elif skill_id == "death_knight_storm":
+  ring.rotation.y = PI * 0.25
  var tween: Tween = create_tween()
  tween.set_parallel(true)
- tween.tween_property(ring, "scale", Vector3(2.2, 1.0, 2.2), 0.42)
+ tween.tween_property(ring, "scale", Vector3(2.8, 1.0, 2.8) if skill_id == "death_knight_storm" else Vector3(2.2, 1.0, 2.2), 0.42)
  tween.tween_property(material, "albedo_color:a", 0.0, 0.42)
- # Class-specific motion silhouettes reuse cheap primitive meshes on Android.
- if skill_id.begins_with("interrupt_"):
+ # Death Knight non-interrupt casts share the cheap silhouette system.
+ # No damage or shield logic is handled by the VFX layer.
+ if skill_id.begins_with("interrupt_") or skill_id.begins_with("death_knight_"):
   var accent := MeshInstance3D.new()
   var accent_mesh := SphereMesh.new()
   var destination := Vector3.ZERO
@@ -75,7 +82,7 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
     accent_mesh.radius = 0.35
     accent_mesh.height = 0.70
     destination = Vector3(0.0, 1.6, 0.0)
-   "interrupt_death_knight":
+   "interrupt_death_knight", "death_knight_cleave", "death_knight_storm", "death_knight_guard":
     accent_mesh.radius = 0.26
     accent_mesh.height = 0.52
     destination = Vector3(0.0, 1.45, -1.2)
@@ -121,9 +128,13 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
     accent.scale = Vector3(1.0, 2.0, 1.0)
    "interrupt_brawler":
     accent.scale = Vector3(2.2, 0.7, 0.7)
-   "interrupt_death_knight":
+   "interrupt_death_knight", "death_knight_cleave":
     # A dark spectral blade: tall, narrow and visibly different from other interrupts.
     accent.scale = Vector3(0.5, 2.6, 0.9)
+   "death_knight_storm":
+    accent.scale = Vector3(2.0, 0.5, 2.0)
+   "death_knight_guard":
+    accent.scale = Vector3(1.8, 1.6, 1.8)
   tween.tween_property(accent, "position", destination, 0.42)
   # Different trajectories make each class readable even on low graphics.
   match skill_id:
@@ -139,8 +150,12 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
     tween.tween_property(accent, "scale", accent.scale * Vector3(0.65, 0.65, 1.4), 0.42)
    "interrupt_mage":
     tween.tween_property(accent, "rotation:x", 2.8, 0.42)
-   "interrupt_death_knight":
+   "interrupt_death_knight", "death_knight_cleave":
     tween.tween_property(accent, "rotation:z", -1.65, 0.42)
+   "death_knight_storm":
+    tween.tween_property(accent, "rotation:y", TAU, 0.42)
+   "death_knight_guard":
+    tween.tween_property(accent, "scale", accent.scale * 1.3, 0.42)
   tween.tween_property(accent_material, "albedo_color:a", 0.0, 0.42)
   # A brief expanding impact disc emphasizes the end of the cast.
   # Reuse one primitive mesh; no particle emitter or dynamic light.
