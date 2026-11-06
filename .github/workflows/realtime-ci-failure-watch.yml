@@ -2,12 +2,6 @@ name: Real-time CI failure watch
 
 on:
   workflow_run:
-    workflows:
-      - "Titan Legends Core Regression"
-      - "Godot Project Validation"
-      - "Android Export"
-      - "Generate Chibi Hero GLBs"
-      - "Chat moderation validation"
     types: [completed]
   workflow_dispatch:
     inputs:
@@ -41,7 +35,7 @@ jobs:
               return;
             }
             const { data: run } = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: runId });
-            if (run.conclusion !== 'failure') {
+            if (run.name === 'Real-time CI failure watch') {\n              core.info('Ignoring watcher itself.');\n              return;\n            }\n            if (run.conclusion !== 'failure') {
               core.info('Workflow is not failed; no issue needed.');
               return;
             }
@@ -55,7 +49,7 @@ jobs:
               return '### ' + job.name + '\n' + (job.html_url || run.html_url) + '\n' +
                 (lines || '- Failed job; inspect logs');
             }).join('\n\n');
-            const title = '[CI failure] ' + run.name + ' #' + runId;
+            const title = '[CI failure] ' + run.name + ' (' + run.head_branch + ')';
             const body = [
               'GitHub Actions detected a failed run immediately after completion.',
               '',
