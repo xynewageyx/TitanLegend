@@ -1,0 +1,117 @@
+name: Guarded CI auto-repair
+
+on:
+  workflow_run:
+    workflows: ["Titan Legends Core Regression"]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+jobs:
+  repair-known-test-drift:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repair only verified formation test drift
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const run = context.payload.workflow_run;
+            const sourceRepo = run.head_repository;
+            if (!sourceRepo || sourceRepo.full_name !== `${owner}/${repo}`) {
+              core.info('Skip untrusted fork workflow.');
+              return;
+            }
+            const branch = run.head_branch;
+            if (!branch || ['main', 'master'].includes(branch) ||
+                branch.startsWith('automation/') || branch.startsWith('fix/ci-auto-repair/')) {
+              core.info('Skip protected or automation branch.');
+              return;
+            }
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+              owner, repo, run_id: run.id, per_page: 100
+            });
+            const regressionFailed = jobs.some(j =>
+              j.conclusion === 'failure' &&
+              (j.name === 'python-regression' || j.name.includes('regression')));
+            if (!regressionFailed) {
+              core.info('Not a failed Python regression job.');
+              return;
+            }
+            const path = 'tests/test_formation_rows.py';
+            const sourcePath = 'scripts/team_formation.gd';
+            const getText = async (file) => {
+              const response = await github.rest.repos.getContent({
+                owner, repo, path: file, ref: run.head_sha
+              });
+              if (Array.isArray(response.data) || !response.data.content) {
+                throw new Error('Expected a text file: ' + file);
+              }
+              return {
+                sha: response.data.sha,
+                text: Buffer.from(response.data.content, 'base64').toString('utf8')
+              };
+            };
+            const [test, source] = await Promise.all([getText(path), getText(sourcePath)]);
+            const oldText = 'MELEE_CLASSES := [0, 1, 5, 10]';
+            const newText = 'MELEE_CLASSES := [0, 1, 5, 10, 11]';
+            const oldAssertion = 'self.assertIn("' + oldText + '", SOURCE)';
+            const newAssertion = 'self.assertIn("' + newText + '", SOURCE)';
+            if (!source.text.includes('const ' + newText) ||
+                !test.text.includes(oldAssertion) ||
+                test.text.includes(newAssertion)) {
+              core.info('No known, safe formation test drift detected.');
+              return;
+            }
+            // Only repair a run whose logs prove this exact assertion failed.
+            const failedJobs = jobs.filter(j => j.conclusion === 'failure');
+            let confirmed = false;
+            for (const job of failedJobs) {
+              if (job.name !== 'python-regression') continue;
+              const logResponse = await github.request(
+                'GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs',
+                { owner, repo, job_id: job.id, request: { redirect: 'follow' } }
+              );
+              const logText = typeof logResponse.data === 'string'
+                ? logResponse.data : '';
+              if (logText.includes('test_tanks_and_melee_dealers_front') &&
+                  logText.includes("AssertionError: '" + oldText + "' not found")) {
+                confirmed = true;
+                break;
+              }
+            }
+            if (!confirmed) {
+              core.info('Could not confirm exact failure in job logs; no changes.');
+              return;
+            }
+            // Never update a moving branch from a stale workflow run.
+            const ref = await github.rest.git.getRef({
+              owner, repo, ref: 'heads/' + branch
+            });
+            if (ref.data.object.sha !== run.head_sha) {
+              core.info('Branch advanced after failure; no changes.');
+              return;
+            }
+            const repairBranch = 'fix/ci-auto-repair/formation-' + run.id;
+            await github.rest.git.createRef({
+              owner, repo, ref: 'refs/heads/' + repairBranch, sha: run.head_sha
+            });
+            await github.rest.repos.createOrUpdateFileContents({
+              owner, repo, path,
+              branch: repairBranch,
+              sha: test.sha,
+              message: 'test: include death knight in melee formation assertion',
+              content: Buffer.from(test.text.replace(oldAssertion, newAssertion)).toString('base64')
+            });
+            const pr = await github.rest.pulls.create({
+              owner, repo, base: branch, head: repairBranch,
+              title: 'test: fix verified death knight formation assertion',
+              body: 'Automatic narrowly scoped repair for failed run ' + run.html_url +
+                '. Only updates the stale test expectation after matching the job log. ' +
+                'Review and CI approval required; no automatic merge.'
+            });
+            core.info('Created repair PR: ' + pr.data.html_url);
