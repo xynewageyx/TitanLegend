@@ -13,7 +13,7 @@ from pathlib import Path
 FIELDS = ("bundle", "status", "object_count", "mesh", "skinned_mesh_renderer",
           "animation_clip", "animator", "material", "transform",
           "game_object", "other", "clip_names", "clip_durations_s", "mesh_names",
-          "mesh_vertices_total", "skinned_bones_max", "error")
+          "mesh_vertices_total", "mesh_triangles_total", "skinned_bones_max", "error")
 
 def inspect(path):
     import UnityPy
@@ -26,6 +26,7 @@ def inspect(path):
         clip_durations = []
         mesh_names = []
         vertex_counts = []
+        triangle_counts = []
         bone_counts = []
         for obj in env.objects:
             if obj.type.name not in ("AnimationClip", "Mesh", "SkinnedMeshRenderer"):
@@ -38,6 +39,14 @@ def inspect(path):
                     vertex_data = tree.get("m_VertexData", {})
                     if isinstance(vertex_data, dict) and isinstance(vertex_data.get("m_VertexCount"), int):
                         vertex_counts.append(vertex_data["m_VertexCount"])
+                    submeshes = tree.get("m_SubMeshes", [])
+                    if isinstance(submeshes, list):
+                        for submesh in submeshes:
+                            if not isinstance(submesh, dict):
+                                continue
+                            # Unity MeshTopology.Triangles == 0; indexCount counts indices, not triangles.
+                            if submesh.get("topology") == 0 and isinstance(submesh.get("indexCount"), int):
+                                triangle_counts.append(submesh["indexCount"] // 3)
                 elif obj.type.name == "SkinnedMeshRenderer":
                     bones = tree.get("m_Bones")
                     if isinstance(bones, list):
@@ -73,6 +82,7 @@ def inspect(path):
             "mesh_names": ";".join(mesh_names),
             "mesh_vertices_total": sum(vertex_counts) if vertex_counts else "",
             "skinned_bones_max": max(bone_counts) if bone_counts else "",
+            "mesh_triangles_total": sum(triangle_counts) if triangle_counts else "",
             "other": sum(v for k, v in counts.items() if k not in {
                 "Mesh", "SkinnedMeshRenderer", "AnimationClip", "Animator",
                 "Material", "Transform", "GameObject"}),
