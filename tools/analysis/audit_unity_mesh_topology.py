@@ -6,6 +6,7 @@ indices, materials, bone transforms, names or per-mesh identifiable records.
 """
 import argparse
 import json
+import struct
 from collections import Counter
 from pathlib import Path
 
@@ -26,12 +27,50 @@ def _summary(values):
          "mean": round(sum(values) / len(values), 2)} if values else {})}
 
 
+def _validate_index_buffer(mesh, submeshes, vertices):
+    """Decode indices in memory to validate submesh offsets and vertex bounds.
+
+    Returns aggregate validation counts only; never exports decoded indices.
+    Unity m_IndexFormat 0 = uint16, 1 = uint32.
+    """
+    raw = getattr(mesh, "m_IndexBuffer", None)
+    fmt = _safe_int(getattr(mesh, "m_IndexFormat", None))
+    if raw is None or fmt not in (0, 1):
+        return {"status": "unavailable", "indices_checked": 0, "invalid_indices": 0}
+    try:
+        view = memoryview(raw).cast("B")
+    except (TypeError, ValueError):
+        return {"status": "unavailable", "indices_checked": 0, "invalid_indices": 0}
+    width = 2 if fmt == 0 else 4
+    unpack = "<H" if fmt == 0 else "<I"
+    checked = 0
+    invalid = 0
+    for sub in submeshes:
+        first = _safe_int(getattr(sub, "firstByte", None))
+        count = _safe_int(getattr(sub, "indexCount", None))
+        base = _safe_int(getattr(sub, "baseVertex", 0))
+        if first is None or count is None or base is None or first % width:
+            return {"status": "invalid_layout", "indices_checked": checked,
+                    "invalid_indices": invalid}
+        if first + count * width > len(view):
+            return {"status": "invalid_layout", "indices_checked": checked,
+                    "invalid_indices": invalid}
+        for offset in range(first, first + count * width, width):
+            value = struct.unpack_from(unpack, view, offset)[0]
+            checked += 1
+            if vertices is not None and value + base >= vertices:
+                invalid += 1
+    return {"status": "checked" if vertices is not None else "bounds_unknown",
+            "indices_checked": checked, "invalid_indices": invalid}
+
+
 def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
     import UnityPy
     metrics = {"vertex_count": [], "submesh_count": [], "index_count": [],
-               "triangle_count": [], "skinned_bone_refs": []}
+               "triangle_count": [], "skinned_bone_refs": [], "decoded_indices": []}
     topologies = Counter()
     errors = Counter()
+    index_validation = Counter()
     scanned = 0
     for path in sorted(root.rglob("*")):
         if not path.is_file():
@@ -68,6 +107,12 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
                     if subs is None:
                         continue
                     metrics["submesh_count"].append(len(subs))
+                    check = _validate_index_buffer(data, subs, vertices)
+                    index_validation[check["status"]] += 1
+                    if check["status"] in ("checked", "bounds_unknown"):
+                        metrics["decoded_indices"].append(check["indices_checked"])
+                        if check["invalid_indices"]:
+                            errors["out_of_range_indices"] += check["invalid_indices"]
                     mesh_indices = 0
                     mesh_triangles = 0
                     for sub in subs:
@@ -92,10 +137,12 @@ def inspect(root, limit=0, max_bytes=250 * 1024 * 1024):
         "scanned_bundles": scanned,
         "metrics": {key: _summary(values) for key, values in metrics.items()},
         "submesh_topology_codes": dict(sorted(topologies.items())),
+        "index_validation": dict(sorted(index_validation.items())),
         "errors": dict(sorted(errors.items())),
         "caveats": [
             "Triangle counts include only topology 0 triangle-list submeshes.",
-            "Index count is taken from m_SubMeshes.indexCount; raw index buffers are not decoded.",
+            "Index counts come from submeshes; when present, raw uint16/uint32 index buffers are decoded in memory and bounds checked.",
+            "Vertex channel bytes and vertex coordinates are not decoded.",
             "Skinned bone references do not prove hierarchy, weights or bind poses.",
             "No vertex coordinates, indices, names or original assets are exported."
         ],
