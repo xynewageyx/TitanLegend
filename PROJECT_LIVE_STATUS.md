@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 05:17 UTC**
-Git-Stand: **73861d2c21207a6ce0f757fc971fa019199a340f** auf Branch **main**
+Git-Stand: **3c184bd0862cc3320d82e01c4942f358cc1f7de7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,52 +11,49 @@ Git-Stand: **73861d2c21207a6ce0f757fc971fa019199a340f** auf Branch **main**
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- `c17b4a4` (2026-11-06): fix(classes): show death knight tank and damage roles in central class menu
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 - `05787d9` (2026-11-06): test(classes): guard death knight class selection and combat role metadata
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
-- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - `c7ecf44` (2026-11-06): Fix typed moderation controller access in Android launcher
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
 
 ### Audio — Audio-Erstellung-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
-- `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ## Bereichsübergreifende Änderungen
 
 - `9c2cef2` (2026-11-06): docs: record verified Unity mesh avatar and animation object names from backup
 - `94638de` (2026-11-06): Add Android-friendly manual ENet connection test panel
 - `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
-- `4a4986b` (2026-11-06): test(analysis): verify Unity vertex totals and skinned bone reference counts
 
 ## Regeln für alle Fach-Chats
 
