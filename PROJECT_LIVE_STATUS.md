@@ -1,45 +1,46 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 14:53 UTC**
-Git-Stand: **735b5767ab430e3040a35b51deb635149c0b563a** auf Branch **main**
+Git-Stand: **edbc2c052c098cf9a0ca06d18f3a26fd43e79919** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
 - `a406c39` (2026-11-06): Improve Android 3D model edges with quality-tiered MSAA
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
