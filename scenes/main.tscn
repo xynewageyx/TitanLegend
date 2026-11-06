@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=14 format=3]
 [ext_resource type="Script" path="res://scripts/biome_manager.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/team_formation.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/battle_manager.gd" id="3"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://scripts/talent_menu.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/world_transition.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/chat/chat_moderation_admin_launcher.gd" id="10"]
+[ext_resource type="PackedScene" path="res://ui/team/titan_team_hud.tscn" id="11"]
+[ext_resource type="Script" path="res://ui/team/titan_team_live_binder.gd" id="12"]
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
 background_color = Color(0.04, 0.12, 0.08, 1)
@@ -103,3 +105,21 @@ biome_manager = NodePath("../BiomeManager")
 
 [node name="ModerationAdminLauncher" type="CanvasLayer" parent="."]
 script = ExtResource("10")
+
+[node name="TeamHUD" parent="HUD" instance=ExtResource("11")]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -244.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TeamHUDLiveBinder" type="Node" parent="HUD" node_paths=PackedStringArray("hud", "battle_manager")]
+script = ExtResource("12")
+hud = NodePath("../TeamHUD")
+battle_manager = NodePath("../../BattleManager")
