@@ -27,16 +27,21 @@ func connect_to_test_server() -> Error:
 	return OK
 
 func disconnect_from_test_server() -> void:
-	if multiplayer.has_multiplayer_peer():
-		multiplayer.multiplayer_peer.close()
-		multiplayer.multiplayer_peer = null
+	_release_peer()
 	connection_status_changed.emit("disconnected")
 
 func _on_connected() -> void:
 	connection_status_changed.emit("connected_unauthenticated")
 
 func _on_connection_failed() -> void:
+	_release_peer()
 	connection_status_changed.emit("connection_failed")
 
 func _on_disconnected() -> void:
+	_release_peer()
 	connection_status_changed.emit("disconnected")
+
+func _release_peer() -> void:
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
