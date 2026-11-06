@@ -681,9 +681,12 @@ func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
  if not is_instance_valid(hero):
   return
  var effect_id: String = "precision_shot"
+ var class_id: int = int(team_formation.class_ids[slot])
  if choice == 7:
-  var class_id: int = int(team_formation.class_ids[slot])
   effect_id = CLASS_INTERRUPTS.vfx_for_class(class_id)
+ elif class_id == 11:
+  # Visual-only Death Knight skills: shadow cleave, grave storm, or dark guard.
+  effect_id = "death_knight_guard" if role == 0 and choice in [2, 9] else ("death_knight_storm" if choice in [1, 4, 6] else "death_knight_cleave")
  elif role == 0:
   effect_id = "group_guard" if choice == 9 or choice == 2 else "shield_bash"
  elif role == 2:
