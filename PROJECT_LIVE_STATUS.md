@@ -1,47 +1,49 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 05:01 UTC**
-Git-Stand: **fb84a607555d7fc9b37aba0784ad5985600138b1** auf Branch **main**
+Git-Stand: **1fbabb9fc78452142ad961fcd4d20a6636095847** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
+- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ## Bereichsübergreifende Änderungen
 
@@ -51,7 +53,6 @@ Git-Stand: **fb84a607555d7fc9b37aba0784ad5985600138b1** auf Branch **main**
 - `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
 - `c79af5f` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
 - `d771ca9` (2026-11-05): Test duplicate animation fingerprints and missing fingerprint handling
-- `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
 
 ## Regeln für alle Fach-Chats
 
