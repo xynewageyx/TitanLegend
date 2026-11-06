@@ -73,8 +73,16 @@ jobs:
                 'GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs',
                 { owner, repo, job_id: job.id, request: { redirect: 'follow' } }
               );
-              const logText = typeof logResponse.data === 'string'
-                ? logResponse.data : '';
+              const rawLog = logResponse.data;
+              const logText = typeof rawLog === 'string'
+                ? rawLog
+                : Buffer.isBuffer(rawLog) ? rawLog.toString('utf8')
+                : rawLog instanceof ArrayBuffer ? Buffer.from(rawLog).toString('utf8')
+                : '';
+              if (!logText) {
+                core.info('Job logs unavailable as text; refusing automatic repair.');
+                continue;
+              }
               if (logText.includes('test_tanks_and_melee_dealers_front') &&
                   logText.includes("AssertionError: '" + oldText + "' not found")) {
                 confirmed = true;
