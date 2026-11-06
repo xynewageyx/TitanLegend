@@ -74,8 +74,11 @@ func _audit_node(node: Node, path: String) -> void:
                 socket_count += 1
             else:
                 missing.append(name)
-        findings.append("%s | Skeleton3D=%s | bones=%d | missing=%s" % [
-            path, str(node.get_path()), node.get_bone_count(), ",".join(missing)
+        var bone_names := PackedStringArray()
+        for bone_index in range(node.get_bone_count()):
+            bone_names.append(node.get_bone_name(bone_index))
+        findings.append("%s | Skeleton3D=%s | bones=%d | bone_names=%s | missing=%s" % [
+            path, str(node.name), node.get_bone_count(), ",".join(bone_names), ",".join(missing)
         ])
     for child in node.get_children():
         _audit_node(child, path)
