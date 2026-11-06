@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 04:14 UTC**
-Git-Stand: **4a4986b8a221d32e4303dbf16de57fdb74e944bf** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 04:23 UTC**
+Git-Stand: **26eaeb41cdd46b2ca8ccc0eb269991e84ed4f89f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -46,12 +46,12 @@ Git-Stand: **4a4986b8a221d32e4303dbf16de57fdb74e944bf** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 - `4a4986b` (2026-11-06): test(analysis): verify Unity vertex totals and skinned bone reference counts
 - `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
 - `c79af5f` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
 - `d771ca9` (2026-11-05): Test duplicate animation fingerprints and missing fingerprint handling
 - `0f2796e` (2026-11-05): Report identical imported animation keyframe fingerprints by class
-- `1d18c85` (2026-11-05): Add regression tests for animation keyframe fingerprint duplicate audit
 
 ## Regeln für alle Fach-Chats
 
