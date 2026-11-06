@@ -1,0 +1,43 @@
+name: Gemini model diagnostics
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+    steps:
+      - name: List models available for generateContent
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request, urllib.error
+          key = os.environ.get("GEMINI_API_KEY", "")
+          if not key:
+              raise SystemExit("Missing GEMINI_API_KEY repository secret")
+          request = urllib.request.Request(
+              "https://generativelanguage.googleapis.com/v1beta/models",
+              headers={"x-goog-api-key": key})
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  result = json.load(response)
+          except urllib.error.HTTPError as error:
+              print("Gemini model list HTTP status:", error.code)
+              print("Check API key permissions and Gemini API access.")
+              raise SystemExit(1)
+          models = [item.get("name", "").removeprefix("models/")
+                    for item in result.get("models", [])
+                    if "generateContent" in item.get("supportedGenerationMethods", [])]
+          selected = os.environ.get("GEMINI_MODEL", "")
+          print("Configured model:", selected)
+          print("Supported models:")
+          for name in models:
+              print(name)
+          if selected not in models:
+              raise SystemExit("Configured GEMINI_MODEL is not in the returned model list")
+          print("Configured model is available for generateContent")
+          PY
