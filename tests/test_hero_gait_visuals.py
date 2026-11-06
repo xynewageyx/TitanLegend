@@ -10,8 +10,9 @@ TEAM = (ROOT / "scripts/team_formation.gd").read_text(encoding="utf-8")
 class HeroGaitTests(unittest.TestCase):
     def test_heavy_agile_and_caster_gaits(self):
         self.assertIn("var leg_swing: float = 0.36 if class_id == 11 else (0.40 if class_id in [0, 1]", MOTION)
-        self.assertIn("var arm_swing: float = 0.17 if class_id in [3, 6, 7, 8, 9]", MOTION)
-        self.assertIn("var foot_height: float = 0.05 if class_id in [0, 1]", MOTION)
+        self.assertIn("0.17 if class_id in [3, 6, 7, 8, 9]", MOTION)
+        self.assertIn("var arm_swing: float = 0.14 if class_id == 11", MOTION)
+        self.assertIn("var foot_height: float = 0.045 if class_id == 11", MOTION)
 
     def test_walk_animation_respects_formation(self):
         self.assertIn('walking = bool(formation.get("is_walking"))', MOTION)
