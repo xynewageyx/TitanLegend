@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 03:40 UTC**
-Git-Stand: **668b7d494b890ba5141b9897de595ffabd37c14d** auf Branch **main**
+Git-Stand: **070fc6030175386e5ca90df594b8f8eaa6163636** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -12,39 +12,41 @@ Git-Stand: **668b7d494b890ba5141b9897de595ffabd37c14d** auf Branch **main**
 - `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
 - `c125f4f` (2026-11-05): Run animation fingerprint duplicate regression tests in GitHub Actions
 - `cb31cab` (2026-11-05): Export read-only Chibi animation duplicate candidate audit in CI
+- `c1faf62` (2026-11-05): Add read-only audit for suspicious metadata-identical Chibi animation clips
 
 ## Bereichsübergreifende Änderungen
 
