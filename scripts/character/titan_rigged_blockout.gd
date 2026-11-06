@@ -30,28 +30,25 @@ func build_character() -> bool:
         builder.free()
         if not success:
             return false
-    var old := get_node_or_null("BlockoutParts")
-    if old != null:
-        remove_child(old)
-        old.free()
-    var parts := Node3D.new()
-    parts.name = "BlockoutParts"
-    add_child(parts)
+    for child in skeleton.get_children():
+        if child is BoneAttachment3D and child.name.begins_with("Attach_"):
+            skeleton.remove_child(child)
+            child.free()
     var heavy: bool = hero_class in ["warrior", "paladin", "brawler", "death_knight"]
     var primary := Color("#4b526e") if hero_class == "death_knight" else Color("#6c8aaf")
-    _attach(parts, "head", "Head", Vector3(0, 0.24, 0), Vector3(0.35, 0.37, 0.34), Color("#eac49e"))
-    _attach(parts, "chest", "Torso", Vector3(0, -0.10, 0), Vector3(0.42 if heavy else 0.34, 0.35, 0.29), primary)
-    _attach(parts, "pelvis", "Hips", Vector3.ZERO, Vector3(0.30, 0.20, 0.26), primary.darkened(0.18))
+    _attach("head", "Head", Vector3(0, 0.24, 0), Vector3(0.35, 0.37, 0.34), Color("#eac49e"))
+    _attach("chest", "Torso", Vector3(0, -0.10, 0), Vector3(0.42 if heavy else 0.34, 0.35, 0.29), primary)
+    _attach("pelvis", "Hips", Vector3.ZERO, Vector3(0.30, 0.20, 0.26), primary.darkened(0.18))
     for side in ["l", "r"]:
-        _attach(parts, "upper_arm_" + side, "UpperArm_" + side, Vector3(0, -0.12, 0), Vector3(0.17, 0.27, 0.17), primary)
-        _attach(parts, "lower_arm_" + side, "Forearm_" + side, Vector3(0, -0.11, 0), Vector3(0.15, 0.24, 0.15), primary.lightened(0.12))
-        _attach(parts, "hand_" + side, "Hand_" + side, Vector3.ZERO, Vector3.ONE * 0.15, Color("#eac49e"))
-        _attach(parts, "upper_leg_" + side, "Thigh_" + side, Vector3(0, -0.14, 0), Vector3(0.19, 0.28, 0.19), primary.darkened(0.10))
-        _attach(parts, "lower_leg_" + side, "Shin_" + side, Vector3(0, -0.14, 0), Vector3(0.17, 0.27, 0.17), primary.darkened(0.25))
-        _attach(parts, "foot_" + side, "Boot_" + side, Vector3(0, -0.04, -0.09), Vector3(0.20, 0.14, 0.27), primary.darkened(0.4))
+        _attach("upper_arm_" + side, "UpperArm_" + side, Vector3(0, -0.12, 0), Vector3(0.17, 0.27, 0.17), primary)
+        _attach("lower_arm_" + side, "Forearm_" + side, Vector3(0, -0.11, 0), Vector3(0.15, 0.24, 0.15), primary.lightened(0.12))
+        _attach("hand_" + side, "Hand_" + side, Vector3.ZERO, Vector3.ONE * 0.15, Color("#eac49e"))
+        _attach("upper_leg_" + side, "Thigh_" + side, Vector3(0, -0.14, 0), Vector3(0.19, 0.28, 0.19), primary.darkened(0.10))
+        _attach("lower_leg_" + side, "Shin_" + side, Vector3(0, -0.14, 0), Vector3(0.17, 0.27, 0.17), primary.darkened(0.25))
+        _attach("foot_" + side, "Boot_" + side, Vector3(0, -0.04, -0.09), Vector3(0.20, 0.14, 0.27), primary.darkened(0.4))
     return true
 
-func _attach(parent: Node3D, bone: String, part_name: String, offset: Vector3, dimensions: Vector3, tint: Color) -> void:
+func _attach(bone: String, part_name: String, offset: Vector3, dimensions: Vector3, tint: Color) -> void:
     var idx := skeleton.find_bone(bone)
     if idx < 0:
         push_warning("Missing bone: " + bone)
@@ -59,9 +56,6 @@ func _attach(parent: Node3D, bone: String, part_name: String, offset: Vector3, d
     var attachment := BoneAttachment3D.new()
     attachment.name = "Attach_" + part_name
     attachment.bone_name = bone
-    parent.add_child(attachment)
-    # BoneAttachment3D must be a child of Skeleton3D to follow its bone.
-    parent.remove_child(attachment)
     skeleton.add_child(attachment)
     var mesh_instance := MeshInstance3D.new()
     mesh_instance.name = part_name
