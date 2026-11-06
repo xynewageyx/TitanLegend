@@ -20,6 +20,7 @@ var low_samples := 0
 var good_samples := 0
 var startup_grace_seconds := 10.0
 var last_effective_scale := -1.0
+var last_msaa_mode := -1
 var cached_visuals: Array[Node] = []
 var last_visual_profile := ""
 
@@ -64,6 +65,16 @@ func apply_settings() -> void:
 	if not is_equal_approx(effective_scale, last_effective_scale):
 		get_tree().root.scaling_3d_scale = effective_scale
 		last_effective_scale = effective_scale
+	# MSAA smooths 3D model edges. Reserve 4x for explicitly selected Ultra.
+	# Do not toggle it during adaptive FPS sampling to avoid GPU reallocations.
+	var msaa_mode := Viewport.MSAA_DISABLED
+	if quality == "high":
+		msaa_mode = Viewport.MSAA_2X
+	elif quality == "ultra":
+		msaa_mode = Viewport.MSAA_4X
+	if msaa_mode != last_msaa_mode:
+		get_tree().root.msaa_3d = msaa_mode
+		last_msaa_mode = msaa_mode
 	# Adaptive resolution changes must not rewrite every combat light/particle.
 	var visual_profile := "%s|%s|%s" % [quality, shadows_enabled, effects_enabled]
 	if visual_profile != last_visual_profile:
