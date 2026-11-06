@@ -35,11 +35,9 @@ jobs:
             const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
               owner, repo, run_id: run.id, per_page: 100
             });
-            const regressionFailed = jobs.some(j =>
-              j.conclusion === 'failure' &&
-              (j.name === 'python-regression' || j.name.includes('regression')));
-            if (!regressionFailed) {
-              core.info('Not a failed Python regression job.');
+            const failedJobs = jobs.filter(j => j.conclusion === 'failure');
+            if (failedJobs.length !== 1 || failedJobs[0].name !== 'python-regression') {
+              core.info('Failure is not exclusively the known Python regression job.');
               return;
             }
             const path = 'tests/test_formation_rows.py';
@@ -68,7 +66,6 @@ jobs:
               return;
             }
             // Only repair a run whose logs prove this exact assertion failed.
-            const failedJobs = jobs.filter(j => j.conclusion === 'failure');
             let confirmed = false;
             for (const job of failedJobs) {
               if (job.name !== 'python-regression') continue;
