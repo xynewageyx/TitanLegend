@@ -40,6 +40,8 @@ var boss_buff_active: bool = false
 var boss_buff_kind: String = ""
 var boss_resistance: float = 0.18
 
+const VFX_SETTINGS_PATH: String = "user://titan_vfx_quality.cfg"
+var skill_vfx_quality: int = 2
 var skill_vfx_node: Node3D
 var attack_timer: Timer
 var hero_attack_elapsed: Array[float] = [0.0, 0.0, 0.0, 0.0]
@@ -90,10 +92,29 @@ var _walking_for_encounter: bool = false
 var _encounter_request_id: int = 0
 var _resume_walk_after_pause: bool = false
 
+## Public hook for the graphics menu: 0 Low, 1 Medium, 2 High, 3 Ultra.
+func set_skill_vfx_quality(level: int) -> void:
+ skill_vfx_quality = clampi(level, 0, 3)
+ if is_instance_valid(skill_vfx_node):
+  skill_vfx_node.call("set_effect_quality", skill_vfx_quality)
+ var config := ConfigFile.new()
+ config.set_value("graphics", "skill_vfx_quality", skill_vfx_quality)
+ var error: Error = config.save(VFX_SETTINGS_PATH)
+ if error != OK:
+  push_warning("Could not save skill VFX quality: %s" % error)
+
+func _load_skill_vfx_quality() -> void:
+ var config := ConfigFile.new()
+ if config.load(VFX_SETTINGS_PATH) == OK:
+  skill_vfx_quality = clampi(int(config.get_value("graphics", "skill_vfx_quality", 2)), 0, 3)
+ if is_instance_valid(skill_vfx_node):
+  skill_vfx_node.call("set_effect_quality", skill_vfx_quality)
+
 func _ready() -> void:
  skill_vfx_node = SKILL_VFX.new()
  skill_vfx_node.name = "SkillVFX3D"
  add_child(skill_vfx_node)
+ _load_skill_vfx_quality()
  _last_player_input_ms = Time.get_ticks_msec()
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
