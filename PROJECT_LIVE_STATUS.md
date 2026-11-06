@@ -1,51 +1,54 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-06 14:49 UTC**
-Git-Stand: **14289fbb649c92d0c5d26959e89672f73d7bf6ef** auf Branch **main**
+Git-Stand: **871b82e56f494740440ded7f07ada58409929d78** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### UI — UI-Chat
-- `c17b4a4` (2026-11-06): fix(classes): show death knight tank and damage roles in central class menu
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
 - `a406c39` (2026-11-06): Improve Android 3D model edges with quality-tiered MSAA
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
+- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ## Bereichsübergreifende Änderungen
 
+- `871b82e` (2026-11-06): Reset ENet multiplayer peer on disconnect and failed connection to allow retries
 - `14289fb` (2026-11-06): fix(classes): assert every selectable class has a matching role description
 - `1521368` (2026-11-06): docs(analysis): aggregate verified Unity mesh triangle counts by bundle
 - `a44944a` (2026-11-06): docs: record byte-verified Ulala reference mesh vertex and triangle counts
