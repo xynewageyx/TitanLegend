@@ -102,16 +102,36 @@ jobs:
               return;
             }
             const repairBranch = 'fix/ci-auto-repair/formation-' + run.id;
-            await github.rest.git.createRef({
-              owner, repo, ref: 'refs/heads/' + repairBranch, sha: run.head_sha
+            let repairRef;
+            try {
+              repairRef = (await github.rest.git.getRef({
+                owner, repo, ref: 'heads/' + repairBranch
+              })).data.object.sha;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+            if (!repairRef) {
+              await github.rest.git.createRef({
+                owner, repo, ref: 'refs/heads/' + repairBranch, sha: run.head_sha
+              });
+              repairRef = run.head_sha;
+            }
+            const repairedFile = await github.rest.repos.getContent({
+              owner, repo, path, ref: repairBranch
             });
-            await github.rest.repos.createOrUpdateFileContents({
-              owner, repo, path,
-              branch: repairBranch,
-              sha: test.sha,
-              message: 'test: include death knight in melee formation assertion',
-              content: Buffer.from(test.text.replace(oldAssertion, newAssertion)).toString('base64')
-            });
+            const repairedText = Buffer.from(repairedFile.data.content, 'base64').toString('utf8');
+            if (repairedText === test.text) {
+              await github.rest.repos.createOrUpdateFileContents({
+                owner, repo, path,
+                branch: repairBranch,
+                sha: repairedFile.data.sha,
+                message: 'test: include death knight in melee formation assertion',
+                content: Buffer.from(test.text.replace(oldAssertion, newAssertion)).toString('base64')
+              });
+            } else if (repairedText !== test.text.replace(oldAssertion, newAssertion)) {
+              core.setFailed('Existing repair branch contains unexpected changes; manual review required.');
+              return;
+            }
             const pr = await github.rest.pulls.create({
               owner, repo, base: branch, head: repairBranch,
               title: 'test: fix verified death knight formation assertion',
