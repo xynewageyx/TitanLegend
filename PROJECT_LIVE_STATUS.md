@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 18:45 UTC**
-Git-Stand: **07447ebc334c8a3f6257f527aa46b664ae847e25** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 18:55 UTC**
+Git-Stand: **2b912a83e23adcbad0657bbe1c64d969818258a8** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,11 +41,11 @@ Git-Stand: **07447ebc334c8a3f6257f527aa46b664ae847e25** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `2b912a8` (2026-11-06): Show sanitized Gemini API error details and normalize model ID (#53)
 - `07447eb` (2026-11-06): Add Gemini model availability diagnostic workflow (#52)
 - `a7fc449` (2026-11-06): Add opt-in Gemini CI failure analysis workflow (#51)
 - `c933608` (2026-11-06): fix(ci): safely resume repair after blocked PR creation (#46)
 - `063088c` (2026-11-06): Add guarded automatic CI repair PRs for verified test drift (#42)
-- `f747561` (2026-11-06): coordination: publish ten-minute continuation assignments for Titan Legends workstreams
 
 ## Bereichsübergreifende Änderungen
 
