@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 16:16 UTC**
-Git-Stand: **2f545f20e52671156c3a27f02ad3c52b2dd51ff2** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 16:18 UTC**
+Git-Stand: **b6b7dce4bdfe8bfbc9f28e5fb9e3533e94152fc5** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -42,6 +42,7 @@ Git-Stand: **2f545f20e52671156c3a27f02ad3c52b2dd51ff2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `b6b7dce` (2026-11-06): fix(actions): escape JavaScript newlines in CI failure watcher
 - `2f545f2` (2026-11-06): Add event-driven GitHub Actions failure watcher (#38)
 - `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 
@@ -51,7 +52,6 @@ Git-Stand: **2f545f20e52671156c3a27f02ad3c52b2dd51ff2** auf Branch **main**
 - `871b82e` (2026-11-06): Reset ENet multiplayer peer on disconnect and failed connection to allow retries
 - `14289fb` (2026-11-06): fix(classes): assert every selectable class has a matching role description
 - `1521368` (2026-11-06): docs(analysis): aggregate verified Unity mesh triangle counts by bundle
-- `a44944a` (2026-11-06): docs: record byte-verified Ulala reference mesh vertex and triangle counts
 
 ## Regeln für alle Fach-Chats
 
