@@ -129,6 +129,9 @@ jobs:
       - name: Test animated equipment sockets and Death Knight runtime
         shell: bash
         run: godot --headless --path . --script res://tests/test_equipment_socket_runtime.gd
+      - name: Validate bone-mounted sockets on real chibi GLB models
+        shell: bash
+        run: godot --headless --path . --script res://tests/test_real_chibi_equipment_sockets.gd
       - name: Audit real hero skeleton equipment sockets
         shell: bash
         run: godot --headless --path . --script res://tools/audit_hero_equipment_rigs.gd | tee equipment-rig-audit.log
