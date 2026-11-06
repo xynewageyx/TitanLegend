@@ -119,30 +119,40 @@ SILHOUETTES = {
  "brawler": (.96, 1.22, 1.14),
  "death_knight": (1.02, 1.20, 1.16),
 }
-FACE_STYLES = {\n "warrior": (.96, 1.00), "paladin": (1.00, 1.05),\n "druid": (1.12, 1.15), "shaman": (1.10, 1.12),\n "hunter": (1.03, .92), "rogue": (.88, .90),\n "mage": (1.16, 1.18), "warlock": (1.06, .94),\n "summoner": (1.12, 1.08), "priest": (1.12, 1.16),\n "brawler": (.94, .94), "death_knight": (.90, .82),\n}\ndef silhouette_levels(levels, width, depth):
+FACE_STYLES = {
+ "warrior": (.96, 1.00), "paladin": (1.00, 1.05),
+ "druid": (1.12, 1.15), "shaman": (1.10, 1.12),
+ "hunter": (1.03, .92), "rogue": (.88, .90),
+ "mage": (1.16, 1.18), "warlock": (1.06, .94),
+ "summoner": (1.12, 1.08), "priest": (1.12, 1.16),
+ "brawler": (.94, .94), "death_knight": (.90, .82),
+}
+def silhouette_levels(levels, width, depth):
  return [(z, rx*width, ry*depth, front) for z,rx,ry,front in levels]
 
 for idx,name in enumerate(NAMES):
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
- head_width,body_width,body_depth=SILHOUETTES[name]\n eye_width,eye_height=FACE_STYLES[name]
+ head_width,body_width,body_depth=SILHOUETTES[name]
+ eye_width,eye_height=FACE_STYLES[name]
  skin=material("skin",(.72,.77,.82) if name=="death_knight" else (.92,.69,.51));hair=material("hair",COLORS[idx])
  white=material("white",(.72,.92,1.0) if name=="death_knight" else (1,.96,.89));dark=material("pupil",(.12,.75,1.0) if name=="death_knight" else (.05,.08,.12))
  loft("SculptedHead",silhouette_levels([(1.53,.02,.02,0),(1.65,.34,.29,0),(1.82,.49,.38,-.03),(2.02,.47,.40,-.02),(2.20,.29,.28,0),(2.27,.02,.02,0)],head_width,head_width),skin)
  loft("SculptedBody",silhouette_levels([(.45,.02,.02,0),(.60,.27,.22,0),(.95,.38,.29,0),(1.25,.34,.27,0),(1.52,.10,.11,0)],body_width,body_depth),skin)
  loft("HairCap",silhouette_levels([(2.04,.33,.32,.08),(2.17,.44,.37,.04),(2.29,.26,.24,.03),(2.34,.02,.02,.03)],head_width,head_width),hair)
  for side in (-1,1):
-  x=side*.19
-  oval("EyeWhite",(x,-.37,1.90),(.13,.035,.16),white)
-  oval("Iris",(x,-.405,1.90),(.075,.018,.11),dark)
-  oval("Ear",(side*.48,0,1.88),(.10,.08,.13),skin)
+  x=side*.19*head_width
+  face_front=-.37*head_width
+  oval("EyeWhite",(x,face_front,1.90),(.13*eye_width,.035,.16*eye_height),white)
+  oval("Iris",(x,face_front-.035,1.90),(.075*eye_width,.018,.11*eye_height),dark)
+  oval("Ear",(side*.48*head_width,0,1.88),(.10,.08,.13),skin)
   oval("Hand_L" if side<0 else "Hand_R",(side*.47,-.02,.94),(.12,.12,.13),skin)
   oval("Foot_L" if side<0 else "Foot_R",(side*.19,-.1,.23),(.15,.23,.12),skin)
  for k in range(5+idx%3):
   x=(k-2)*.15
   lock=loft("HairLock",[(2.04,.07,.08,-.29),(2.17,.10,.11,-.26),(2.29,.08,.08,-.18),(2.36,.01,.01,-.12)],hair)
   lock.location.x=x*head_width
- oval("Nose",(0,-.42,1.78),(.04,.03,.03),skin)
- oval("Mouth",(0,-.40,1.71),(.10,.018,.02),dark)
+ oval("Nose",(0,-.42*head_width,1.78),(.04,.03,.03),skin)
+ oval("Mouth",(0,-.40*head_width,1.71),(.10,.018,.02),dark)
  if name=="death_knight":
   # Original class-specific face sculpt: angular brow, sunken cheeks, icy eyes.
   shadow=material("death_knight_cheek_shadow",(.38,.46,.55))
