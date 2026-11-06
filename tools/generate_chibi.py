@@ -181,10 +181,10 @@ for idx,name in enumerate(NAMES):
  strand_count,extra_height,sweep=hair_profiles[name]
  for k in range(strand_count):
   x=(k-(strand_count-1)/2)*.15*head_width
-  lock=loft("HairLock",[(2.04,.07,.08,-.29),
-                         (2.17,.10,.11,-.26),
-                         (2.29+extra_height*.5,.08,.08,-.18+sweep*.5),
-                         (2.36+extra_height,.01,.01,-.12+sweep)],hair)
+  lock=loft("HairLock_%02d"%k,[(2.04,.07,.08,-.29),
+                                  (2.17,.10,.11,-.26),
+                                  (2.29+extra_height*.5,.08,.08,-.18+sweep*.5),
+                                  (2.36+extra_height,.01,.01,-.12+sweep)],hair)
   lock.location.x=x
  # Class-specific soft cheek volumes and brow shapes are separate head-skinned
  # meshes, preserving the shared rig and keeping geometry Android-friendly.
@@ -210,10 +210,10 @@ for idx,name in enumerate(NAMES):
   brow=material("death_knight_brow",(.13,.18,.24))
   for side in (-1,1):
    oval("DeathKnightCheekShadow_L" if side<0 else "DeathKnightCheekShadow_R",
-        (side*.31,-.344,1.76),(.105,.018,.085),shadow)
+        (side*.31*head_width,-.344*head_width,1.76),(.105,.018,.085),shadow)
    oval("DeathKnightAngularBrow_L" if side<0 else "DeathKnightAngularBrow_R",
-        (side*.19,-.408,2.07),(.15,.035,.038),brow)
-  oval("DeathKnightForeheadMark",(0,-.405,2.13),(.045,.02,.075),dark)
+        (side*.19*head_width,-.408*head_width,2.07),(.15,.035,.038),brow)
+  oval("DeathKnightForeheadMark",(0,-.405*head_width,2.13),(.045,.02,.075),dark)
  rig_and_animate()
  bpy.ops.object.select_all(action="SELECT")
  bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+".glb"),export_format="GLB",use_selection=True,export_animations=True,export_nla_strips=True)
