@@ -40,7 +40,7 @@ func build_limb(skeleton: Skeleton3D, upper_bone: String, lower_bone: String, ra
             var normal := (tangent * cos(angle) + bitangent * sin(angle)).normalized()
             vertices.append(center + normal * radius)
             normals.append(normal)
-            bones.append_array(PackedInt32Array([upper, lower, 0, 0]))
+            bones.append_array(PackedInt32Array([0, 1, 0, 0]))
             # Smoothly transition influence between the two joints.
             var lower_weight := smoothstep(0.15, 0.85, fraction)
             weights.append_array(PackedFloat32Array([1.0 - lower_weight, lower_weight, 0.0, 0.0]))
@@ -72,6 +72,6 @@ func build_limb(skeleton: Skeleton3D, upper_bone: String, lower_bone: String, ra
     mesh_instance.name = "SkinnedLimb"
     mesh_instance.mesh = mesh
     mesh_instance.skin = skin
-    mesh_instance.skeleton = mesh_instance.get_path_to(skeleton)
     add_child(mesh_instance)
+    mesh_instance.skeleton = mesh_instance.get_path_to(skeleton)
     return true
