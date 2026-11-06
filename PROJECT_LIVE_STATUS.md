@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 04:23 UTC**
-Git-Stand: **26eaeb41cdd46b2ca8ccc0eb269991e84ed4f89f** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 05:01 UTC**
+Git-Stand: **fb84a607555d7fc9b37aba0784ad5985600138b1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,7 +23,7 @@ Git-Stand: **26eaeb41cdd46b2ca8ccc0eb269991e84ed4f89f** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -42,10 +42,10 @@ Git-Stand: **26eaeb41cdd46b2ca8ccc0eb269991e84ed4f89f** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `668b7d4` (2026-11-06): ci: verify UnityFS reference analyzer with isolated synthetic object tests
-- `c125f4f` (2026-11-05): Run animation fingerprint duplicate regression tests in GitHub Actions
 
 ## Bereichsübergreifende Änderungen
 
+- `94638de` (2026-11-06): Add Android-friendly manual ENet connection test panel
 - `26eaeb4` (2026-11-06): docs: record verified Unity serialized object counts from eight Ulala reference bundles
 - `4a4986b` (2026-11-06): test(analysis): verify Unity vertex totals and skinned bone reference counts
 - `c275f4d` (2026-11-06): feat(analysis): count Unity mesh vertices and skinned renderer bone references
