@@ -1,6 +1,6 @@
 extends Node3D
 signal walking_finished
-const MELEE_CLASSES := [0, 1, 5, 10] # Warrior, Paladin, Rogue, Brawler
+const MELEE_CLASSES := [0, 1, 5, 10, 11] # Warrior, Paladin, Rogue, Brawler
 func _formation_position(slot: int) -> Vector3:
  var front_slots: Array[int] = []
  var back_slots: Array[int] = []
@@ -69,10 +69,10 @@ func get_talent_build_v2(hero_slot: int) -> Array:
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
-const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1]]
+const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1], [0,1]]
 signal team_changed
-const CLASS_NAMES := ["Krieger", "Paladin", "Druide", "Schamane", "Jaeger", "Schurke", "Magier", "Hexer", "Beschwoerer", "Priester", "Raufbold"]
-const CLASS_COLORS := [Color("#aab6c5"), Color("#f5d16c"), Color("#4bb77d"), Color("#4ca8e8"), Color("#4f9b50"), Color("#5d567e"), Color("#5086ef"), Color("#a45cd0"), Color("#ba78db"), Color("#e9e2ae"), Color("#ba6e51")]
+const CLASS_NAMES := ["Krieger", "Paladin", "Druide", "Schamane", "Jaeger", "Schurke", "Magier", "Hexer", "Beschwoerer", "Priester", "Raufbold", "Todesritter"]
+const CLASS_COLORS := [Color("#aab6c5"), Color("#f5d16c"), Color("#4bb77d"), Color("#4ca8e8"), Color("#4f9b50"), Color("#5d567e"), Color("#5086ef"), Color("#a45cd0"), Color("#ba78db"), Color("#e9e2ae"), Color("#ba6e51"), Color("#66577d")]
 var walk_tween: Tween
 var animation_clock: float = 0.0
 var is_walking: bool = false
