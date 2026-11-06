@@ -22,7 +22,7 @@ class FormationRowsTests(unittest.TestCase):
         body = method("_formation_position")
         self.assertIn("role_ids[i] == 0", body)
         self.assertIn("role_ids[i] == 1 and class_ids[i] in MELEE_CLASSES", body)
-        self.assertIn("MELEE_CLASSES := [0, 1, 5, 10]", SOURCE)
+        self.assertIn("MELEE_CLASSES := [0, 1, 5, 10, 11]", SOURCE)
         self.assertIn("-2.65 if in_front else 1.65", body)
 
     def test_spacing_provides_room_for_companions_on_portrait_phones(self):
