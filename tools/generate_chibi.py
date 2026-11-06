@@ -59,7 +59,7 @@ def rig_and_animate():
  for obj in list(bpy.context.scene.objects):
   if obj.type!="MESH":continue
   name=obj.name
-  target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth")) else
+  target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Forehead")) else
           "Hand_L" if name=="Hand_L" else
           "Hand_R" if name=="Hand_R" else
           "Foot_L" if name=="Foot_L" else
