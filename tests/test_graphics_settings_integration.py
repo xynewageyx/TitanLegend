@@ -44,6 +44,16 @@ class GraphicsSettingsIntegrationTests(unittest.TestCase):
         self.assertIn("func _rebuild_visual_cache()", code)
         self.assertIn("if not is_instance_valid(node):", code)
 
+    def test_3d_antialiasing_quality_tiers(self):
+        code = MANAGER.read_text(encoding="utf-8")
+        self.assertIn('if quality == "high":', code)
+        self.assertIn("msaa_mode = Viewport.MSAA_2X", code)
+        self.assertIn('elif quality == "ultra":', code)
+        self.assertIn("msaa_mode = Viewport.MSAA_4X", code)
+        self.assertIn("var msaa_mode := Viewport.MSAA_DISABLED", code)
+        self.assertIn("if msaa_mode != last_msaa_mode:", code)
+        self.assertIn("get_tree().root.msaa_3d = msaa_mode", code)
+
     def test_adaptive_quality_uses_hysteresis(self):
         code = MANAGER.read_text(encoding="utf-8")
         self.assertIn("if low_samples >= 2:", code)
