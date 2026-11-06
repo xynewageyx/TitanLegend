@@ -37,6 +37,7 @@ func _ready() -> void:
  class_selector = OptionButton.new()
  for i in range(team_formation.CLASS_NAMES.size()):
   class_selector.add_item(team_formation.CLASS_NAMES[i], i)
+ assert(CLASS_ROLES.size() == team_formation.CLASS_NAMES.size(), "Class role descriptions must cover every playable class")
  v.add_child(class_selector)
  role_selector = OptionButton.new()
  v.add_child(role_selector)
