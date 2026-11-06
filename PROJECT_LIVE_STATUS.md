@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 14:48 UTC**
-Git-Stand: **1521368345566a73121927e23d909d13afde04cd** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 14:49 UTC**
+Git-Stand: **8bcde07db1b8c08d622eb9dd5eca103d1a204d9c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,45 +9,42 @@ Git-Stand: **1521368345566a73121927e23d909d13afde04cd** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
 - `c17b4a4` (2026-11-06): fix(classes): show death knight tank and damage roles in central class menu
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 - `05787d9` (2026-11-06): test(classes): guard death knight class selection and combat role metadata
 - `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
+- `a406c39` (2026-11-06): Improve Android 3D model edges with quality-tiered MSAA
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
-- `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 
 ## Bereichsübergreifende Änderungen
 
