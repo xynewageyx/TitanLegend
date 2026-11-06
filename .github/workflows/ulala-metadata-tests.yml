@@ -4,12 +4,16 @@ on:
     paths:
       - 'tools/analysis/audit_unity_metadata.py'
       - 'tools/analysis/test_audit_unity_metadata.py'
+      - 'tools/analysis/verify_ulala_volumes.py'
+      - 'tools/analysis/test_verify_ulala_volumes.py'
       - '.github/workflows/ulala-metadata-tests.yml'
   push:
     branches: [main]
     paths:
       - 'tools/analysis/audit_unity_metadata.py'
       - 'tools/analysis/test_audit_unity_metadata.py'
+      - 'tools/analysis/verify_ulala_volumes.py'
+      - 'tools/analysis/test_verify_ulala_volumes.py'
       - '.github/workflows/ulala-metadata-tests.yml'
   workflow_dispatch:
 
@@ -26,6 +30,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run synthetic metadata audit tests
-        run: python3 -m unittest discover -s tools/analysis -p 'test_audit_unity_metadata.py' -v
+        run: |
+          python3 -m unittest discover -s tools/analysis -p 'test_audit_unity_metadata.py' -v
+          python3 -m unittest discover -s tools/analysis -p 'test_verify_ulala_volumes.py' -v
       - name: Check Python syntax
-        run: python3 -m py_compile tools/analysis/audit_unity_metadata.py tools/analysis/test_audit_unity_metadata.py
+        run: python3 -m py_compile tools/analysis/audit_unity_metadata.py tools/analysis/test_audit_unity_metadata.py tools/analysis/verify_ulala_volumes.py tools/analysis/test_verify_ulala_volumes.py
