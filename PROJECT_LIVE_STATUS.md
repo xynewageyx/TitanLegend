@@ -1,53 +1,53 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 14:49 UTC**
-Git-Stand: **871b82e56f494740440ded7f07ada58409929d78** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 14:53 UTC**
+Git-Stand: **735b5767ab430e3040a35b51deb635149c0b563a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `8bcde07` (2026-11-06): Test high and ultra 3D antialiasing graphics tiers
 - `a406c39` (2026-11-06): Improve Android 3D model edges with quality-tiered MSAA
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `735b576` (2026-11-06): ci(forest): measure generated GLB geometry and publish CSV artifact
 - `6a29340` (2026-11-06): ci: verify UnityPy installation and report installed package version
-- `3c184bd` (2026-11-06): test(talents): include death knight in all class talent combat checks
 
 ## Bereichsübergreifende Änderungen
 
+- `f988406` (2026-11-06): feat(analysis): inspect actual forest GLB triangle and vertex counts
 - `871b82e` (2026-11-06): Reset ENet multiplayer peer on disconnect and failed connection to allow retries
 - `14289fb` (2026-11-06): fix(classes): assert every selectable class has a matching role description
 - `1521368` (2026-11-06): docs(analysis): aggregate verified Unity mesh triangle counts by bundle
