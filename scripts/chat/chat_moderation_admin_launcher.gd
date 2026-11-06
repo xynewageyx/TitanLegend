@@ -4,7 +4,7 @@ class_name ChatModerationAdminLauncher
 # UI visibility is NOT authorization. The dedicated server must independently
 # authenticate every request through ChatModerationPeerAuthority.
 const ADMIN_SCENE := preload("res://scenes/chat_moderation_admin.tscn")
-var admin_view: Control
+var admin_view: ChatModerationAdminController
 var open_button: Button
 var server_granted_visibility := false
 
@@ -15,7 +15,7 @@ func _ready() -> void:
 	open_button.position = Vector2(12, 220)
 	open_button.pressed.connect(_toggle_panel)
 	add_child(open_button)
-	admin_view = ADMIN_SCENE.instantiate()
+	admin_view = ADMIN_SCENE.instantiate() as ChatModerationAdminController
 	admin_view.visible = false
 	add_child(admin_view)
 	var transport: ChatModerationRpcServer = admin_view.get_node_or_null("ModerationRpc") as ChatModerationRpcServer
