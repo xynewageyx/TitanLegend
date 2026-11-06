@@ -31,7 +31,12 @@ const SKILL_STYLE := {
 var _effects: Array[Node3D] = []
 
 func play_skill(skill_id: String, world_position: Vector3) -> void:
- if _effects.size() >= max_active_effects:
+ # Scene transitions or external cleanup can free an effect before its tween ends.
+ # Remove stale references before enforcing the Android draw-call budget.
+ for index in range(_effects.size() - 1, -1, -1):
+  if not is_instance_valid(_effects[index]) or _effects[index].is_queued_for_deletion():
+   _effects.remove_at(index)
+ if _effects.size() >= maxi(0, max_active_effects):
   return
  var style: String = str(SKILL_STYLE.get(skill_id, "holy"))
  var tint: Color = COLORS[style]
@@ -186,3 +191,10 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
   _effects.erase(effect)
   effect.queue_free()
  )
+
+func _exit_tree() -> void:
+ # Stop detached tweens when changing scenes to avoid callbacks on a freed VFX owner.
+ for effect in _effects:
+  if is_instance_valid(effect) and not effect.is_queued_for_deletion():
+   effect.queue_free()
+ _effects.clear()
