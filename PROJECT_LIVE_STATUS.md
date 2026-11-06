@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 05:16 UTC**
-Git-Stand: **a29dbeeda357555d650fce57afeb25f6bda3362f** auf Branch **main**
+Automatisch erzeugt: **2026-11-06 05:17 UTC**
+Git-Stand: **05787d991a5e96bfeca485036de1a76e37a1ae46** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
 
@@ -24,6 +25,8 @@ Git-Stand: **a29dbeeda357555d650fce57afeb25f6bda3362f** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `05787d9` (2026-11-06): test(classes): guard death knight class selection and combat role metadata
+- `04d65a0` (2026-11-06): feat(classes): add death knight to central hero selection with tank and damage roles
 - `9df8158` (2026-11-06): test(talents): verify death knight branch labels follow hero selection
 - `d3dd6e0` (2026-11-06): feat(talents): show Blood Frost Unholy branches for death knight hero
 - `fb84a60` (2026-11-06): Expose multiplayer connection diagnostics in Android main scene
