@@ -193,7 +193,7 @@ func play_skill(skill_id: String, world_position: Vector3) -> void:
  )
 
 func _exit_tree() -> void:
- # Stop detached tweens when changing scenes to avoid callbacks on a freed VFX owner.
+ # Release remaining effect nodes when changing scenes.
  for effect in _effects:
   if is_instance_valid(effect) and not effect.is_queued_for_deletion():
    effect.queue_free()
