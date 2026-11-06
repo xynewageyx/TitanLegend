@@ -61,6 +61,16 @@ jobs:
               exit 1
             fi
           done
+      - name: Exercise Death Knight VFX runtime and cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          export LIBGL_ALWAYS_SOFTWARE=1
+          xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script tests/test_death_knight_vfx_runtime.gd 2>&1 | tee /tmp/death-knight-vfx-runtime.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Assertion failed|Assertion failure|ERROR:' /tmp/death-knight-vfx-runtime.log; then
+            exit 1
+          fi
+          grep -F 'Death Knight VFX runtime passed' /tmp/death-knight-vfx-runtime.log
       - name: Verify Death Knight skill VFX routing
         run: python3 -m unittest discover -s tests -p 'test_death_knight_skill_vfx.py' -v
       - name: Test talent menu Android layout and team integration
