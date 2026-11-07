@@ -58,9 +58,9 @@ def propose(domain, files):
         }
     }).encode()
     key = os.environ["GEMINI_API_KEY"]
-    primary = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+    primary = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
     fallbacks = os.getenv("GEMINI_FALLBACK_MODELS",
-                          "gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash-lite")
+                          "gemini-3.5-flash-lite")
     models = list(dict.fromkeys(
         m.strip().removeprefix("models/") for m in [primary, *fallbacks.split(",")] if m.strip()
     ))
@@ -151,8 +151,9 @@ def main():
         if summary:
             with open(summary, "a", encoding="utf-8") as report:
                 report.write("### " + message + "\n")
-        if os.getenv("GITHUB_EVENT_NAME") in ("schedule", "workflow_run"):
-            return  # Automatic checks remain resumable after transient provider outages.
+        if (os.getenv("GITHUB_EVENT_NAME") in ("schedule", "workflow_run")
+                or os.getenv("EXTERNAL_SCHEDULER", "").lower() == "true"):
+            return  # External Cron dispatch is a workflow_dispatch event; do not mark quota outages as code failures.
         raise
     edits = result.get("edits", [])
     if not isinstance(edits, list) or not 1 <= len(edits) <= 2:
