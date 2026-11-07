@@ -8,12 +8,14 @@ on:
       - 'tests/**'
       - 'scripts/**'
       - 'tools/**'
+      - 'cloudflare/titan-legends-github-cron/**'
       - '.github/workflows/python-regression-tests.yml'
   pull_request:
     paths:
       - 'tests/**'
       - 'scripts/**'
       - 'tools/**'
+      - 'cloudflare/titan-legends-github-cron/**'
       - '.github/workflows/python-regression-tests.yml'
 
 permissions:
@@ -34,6 +36,8 @@ jobs:
           set -o pipefail
           mkdir -p build
           python3 -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tee build/python-regression.log
+      - name: Test Cloudflare GitHub dispatcher
+        run: node --test cloudflare/titan-legends-github-cron/worker.test.mjs
       - name: Upload regression log
         if: always()
         uses: actions/upload-artifact@v4
