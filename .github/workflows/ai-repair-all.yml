@@ -1,0 +1,99 @@
+name: AI Repair Failed Workflows
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+concurrency:
+  group: ai-repair-all
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Verify API key
+        env:
+          REPAIR_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$REPAIR_KEY" ]; then
+            echo "::warning::OPENAI_API_KEY secret is missing; AI repair disabled."
+            exit 0
+          fi
+      - name: Find unhandled failed workflow run
+        id: failed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess
+          repo=os.environ["GITHUB_REPOSITORY"]
+          runs=json.loads(subprocess.check_output(
+              ["gh","api",f"repos/{repo}/actions/runs?status=completed&per_page=50"],
+              text=True))["workflow_runs"]
+          for r in runs:
+              if r["conclusion"] != "failure" or r["name"].startswith("AI Repair"):
+                  continue
+              if r["head_repository"]["full_name"] != repo or r["head_branch"] not in ("main","feature/modular-hair-v3"):
+                  continue
+              marker=f"AI repair for failed run {r['id']}"
+              prs=json.loads(subprocess.check_output(
+                  ["gh","pr","list","--repo",repo,"--state","all","--search",marker,"--json","number"],text=True))
+              if prs:
+                  continue
+              with open(os.environ["GITHUB_OUTPUT"],"a") as out:
+                  print(f"run_id={r['id']}",file=out)
+                  print(f"branch={r['head_branch']}",file=out)
+              break
+          PY
+      - uses: actions/checkout@v4
+        if: steps.failed.outputs.run_id != ''
+        with:
+          ref: ${{ steps.failed.outputs.branch }}
+          persist-credentials: false
+      - name: Download failed logs
+        if: steps.failed.outputs.run_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ steps.failed.outputs.run_id }}
+        run: |
+          gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --log-failed > /tmp/failed-workflow.log || true
+          test -s /tmp/failed-workflow.log
+      - name: Install validation tools
+        if: steps.failed.outputs.run_id != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+          if ! command -v godot >/dev/null; then
+            echo "::warning::Godot not installed; GDScript repair candidates will fail closed."
+          fi
+      - name: Repair and validate
+        if: steps.failed.outputs.run_id != ''
+        id: fix
+        continue-on-error: true
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FAILURE_LOG: /tmp/failed-workflow.log
+        run: python3 tools/auto_repair_workflows.py
+      - name: Open review pull request
+        if: steps.fix.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ steps.failed.outputs.run_id }}
+          BASE_BRANCH: ${{ steps.failed.outputs.branch }}
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          branch="bot/repair-run-$RUN_ID"
+          git switch -c "$branch"
+          git add -u
+          git commit -m "fix(ci): AI repair for failed run $RUN_ID"
+          gh auth setup-git
+          git push origin "$branch"
+          gh pr create --base "$BASE_BRANCH" --head "$branch" \
+            --title "AI repair for failed run $RUN_ID" \
+            --body "AI repair for failed run $RUN_ID. Review required: no automatic merge. Validation is limited to the modified source files; rerun the original failing workflow before merging."
