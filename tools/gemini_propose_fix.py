@@ -127,11 +127,11 @@ try:
 except RuntimeError as exc:
     # API failures are not source-code failures. Preserve a diagnostic artifact.
     reason = str(exc)
-    report = ("# Gemini draft-fix diagnostic\\n\\n"
-              + "Target run: " + RUN_ID + "\\n\\n"
+    report = ("# Gemini draft-fix diagnostic\n\n"
+              + "Target run: " + RUN_ID + "\n\n"
               + "Verified source files: " + ", ".join(str(Path(p).relative_to(ROOT)) for p in files)
-              + "\\n\\nAPI status: " + reason + "\\n\\n"
-              + "No edits attempted; no PR created.\\n")
+              + "\n\nAPI status: " + reason + "\n\n"
+              + "No edits attempted; no PR created.\n")
     print(report, flush=True)
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
@@ -143,11 +143,11 @@ edits = proposal.get("edits", []) if isinstance(proposal, dict) else None
 reason = proposal.get("reason", "Gemini provided no explanation") if isinstance(proposal, dict) else "Invalid Gemini response"
 reason = str(reason)[:1000]
 if not isinstance(edits, list) or not 1 <= len(edits) <= MAX_EDITS:
-    report = ("# Gemini draft-fix diagnostic\\n\\n"
-              + "Target run: " + RUN_ID + "\\n\\n"
+    report = ("# Gemini draft-fix diagnostic\n\n"
+              + "Target run: " + RUN_ID + "\n\n"
               + "Verified source files: " + (", ".join(str(Path(p).relative_to(ROOT)) for p in files) or "none")
-              + "\\n\\nGemini explanation: " + reason + "\\n\\n"
-              + "No safe edits proposed; no PR created.\\n")
+              + "\n\nGemini explanation: " + reason + "\n\n"
+              + "No safe edits proposed; no PR created.\n")
     print(report, flush=True)
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
@@ -185,9 +185,9 @@ command("git", "add", "--", *[str(p.relative_to(ROOT)) for p in updated])
 command("git", "commit", "-m", "Propose Gemini-assisted fix for CI run " + RUN_ID)
 command("git", "push", "--set-upstream", "origin", branch)
 body = ("AI-generated, unreviewed proposed source edits for failed run #" + RUN_ID +
-        ".\\n\\n**Human review required. No auto-merge.** "
+        ".\n\n**Human review required. No auto-merge.** "
         "GitHub validation workflows should run on this PR. "
-        "Inspect changes carefully before merging.\\n")
+        "Inspect changes carefully before merging.\n")
 pr = command("gh", "pr", "create", "--draft", "--base", "main", "--head", branch,
              "--title", "AI proposal: investigate CI failure " + RUN_ID, "--body", body)
 print(pr.stdout)
