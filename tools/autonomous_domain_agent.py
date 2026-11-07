@@ -115,14 +115,14 @@ def validate_gd_indentation(before, after):
         if not added:
             continue
         if removed:
-            baseline = min(len(line) - len(line.lstrip(" \\t")) for line in removed)
+            baseline = min(len(line) - len(line.lstrip(" \t")) for line in removed)
         else:
             # Insertions inherit indentation from the immediately preceding
             # nonblank source line. Prefer false negatives to broken scripts.
             previous = next((line for line in reversed(old_lines[:a1]) if line.strip()), "")
-            baseline = len(previous) - len(previous.lstrip(" \\t"))
+            baseline = len(previous) - len(previous.lstrip(" \t"))
         for line in added:
-            indent = len(line) - len(line.lstrip(" \\t"))
+            indent = len(line) - len(line.lstrip(" \t"))
             if indent < baseline:
                 raise ValueError(
                     "GDScript edit reduces indentation; refusing unsafe proposal"
