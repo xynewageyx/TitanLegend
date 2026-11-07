@@ -68,8 +68,15 @@ def inspect(path, require_extended):
     missing_clips = EXPECTED_CLIPS - normalized
     if missing_clips:
         errors.append("missing named clips: " + ", ".join(sorted(missing_clips)))
+    if len(normalized) != len(animations):
+        errors.append("duplicate normalized animation names")
+    unexpected_clips = normalized - EXPECTED_CLIPS
+    if unexpected_clips:
+        errors.append("unexpected clips: " + ", ".join(sorted(unexpected_clips)))
 
     for clip in animations:
+        if not clip.get("channels") or not clip.get("samplers"):
+            errors.append(f"animation {clip.get('name', '<unnamed>')} has no channels or samplers")
         for channel in clip.get("channels", []):
             target = channel.get("target", {})
             idx = target.get("node")
