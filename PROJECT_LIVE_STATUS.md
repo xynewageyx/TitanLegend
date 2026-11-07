@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 18:25 UTC**
-Git-Stand: **e64f4e3d0b05777302380b5a00c9e412e338f989** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 18:29 UTC**
+Git-Stand: **2f00f916d6438336314478d3195cb0a7a90632fe** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -49,6 +49,7 @@ Git-Stand: **e64f4e3d0b05777302380b5a00c9e412e338f989** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `2f00f91` (2026-11-07): Integrate safe PR #7 UI toolkit and regression checks (#99)
 - `8b1e86f` (2026-11-07): agent(balancing): propose bounded improvement (#92)
 
 ## Regeln für alle Fach-Chats
