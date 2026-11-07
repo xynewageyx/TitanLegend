@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 17:30 UTC**
-Git-Stand: **d87b37c04ebe0a303639d1767e3064b7c2acc0f0** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 18:00 UTC**
+Git-Stand: **e9215f173aa1a4903d3df7d38ad5e60bc3c97d85** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -24,7 +24,7 @@ Git-Stand: **d87b37c04ebe0a303639d1767e3064b7c2acc0f0** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `4f9c350` (2026-11-07): fix: Death Knight visual loader and talent abilities (#81)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
