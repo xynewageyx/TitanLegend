@@ -753,7 +753,7 @@ func _refresh(_unused: int = 0) -> void:
   for field_index in range(hardening_slot_buttons.size()):
    var slot_button: Button = hardening_slot_buttons[field_index]
    var slot_level: int = int(GameManager.hardening_levels[weapon_hero_slot][field_index])
-   slot_button.text = "◆ %d\\nLv %d" % [field_index + 1, slot_level]
+   slot_button.text = "◆ %d\nLv %d" % [field_index + 1, slot_level]
    slot_button.button_pressed = field_index == hardening_field
   var hardening_level: int = int(GameManager.hardening_levels[weapon_hero_slot][hardening_field])
   var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
