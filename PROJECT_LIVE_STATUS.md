@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-07 13:02 UTC**
-Git-Stand: **22dd1426d9c24b26d48f60ef069a30ff92e63d7e** auf Branch **main**
+Git-Stand: **3b886ac74ff4bc686a9a7732ebd5b568c028b55d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -47,10 +47,10 @@ Git-Stand: **22dd1426d9c24b26d48f60ef069a30ff92e63d7e** auf Branch **main**
 - `2f209a4` (2026-11-07): fix(ci): replace broken traceback regex with literal markers (#63)
 - `3cda356` (2026-11-07): Introduce autonomous 10-minute Titan Legends development agents (#61)
 - `56e7e98` (2026-11-07): fix(ci): prioritize failing test tracebacks in Gemini analysis (#62)
-- `a61cc74` (2026-11-07): revert(ci): remove Claude fallback and restore Gemini-only review (#59)
 
 ## Bereichsübergreifende Änderungen
 
+- `3b886ac` (2026-11-07): Guard autonomous agent against malformed GDScript indentation (#67)
 - `69cf403` (2026-11-07): Fix autonomous agent Gemini timeouts and unavailable model fallbacks (#64)
 - `bf2117a` (2026-11-07): Preserve failure tracebacks and recognize absolute source paths (#60)
 
