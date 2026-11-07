@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-06 19:24 UTC**
-Git-Stand: **b55e5e9e6df6582ccf2321c36021f0f29fa41932** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 10:53 UTC**
+Git-Stand: **78c477a053c883b2304e327781cace7370f9848d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,11 +41,11 @@ Git-Stand: **b55e5e9e6df6582ccf2321c36021f0f29fa41932** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `78c477a` (2026-11-07): ci: add optional Claude fallback to Gemini CI review (#57)
 - `b55e5e9` (2026-11-06): Fallback from overloaded Gemini 3.8 to 3.5 and 2.5 Flash (#56)
 - `8cb60f8` (2026-11-06): fix(ci): retry transient Gemini API errors with bounded backoff (#55)
 - `8b18802` (2026-11-06): ci: add guarded repairs for spacing companion and recovery assertion drift (#54)
 - `2b912a8` (2026-11-06): Show sanitized Gemini API error details and normalize model ID (#53)
-- `07447eb` (2026-11-06): Add Gemini model availability diagnostic workflow (#52)
 
 ## Bereichsübergreifende Änderungen
 
