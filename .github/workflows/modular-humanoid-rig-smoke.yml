@@ -1,0 +1,58 @@
+name: Titan Modular Humanoid Rig Smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/character/modular_character.gd'
+      - 'scripts/character/titan_humanoid_rig_builder.gd'
+      - 'scenes/character/titan_modular_character.tscn'
+      - 'tests/character/test_humanoid_rig.gd'
+      - 'tests/character/test_modular_character.gd'
+      - '.github/workflows/modular-humanoid-rig-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  modular-rig-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version
+      - name: Import project and check scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf original_update168
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/modular-rig-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/modular-rig-import.log; then
+            exit 1
+          fi
+      - name: Test original rig bone hierarchy and anchors
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/character/test_humanoid_rig.gd 2>&1 | tee /tmp/rig-builder-smoke.log
+          grep -Fq 'RIG SMOKE PASSED:' /tmp/rig-builder-smoke.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/rig-builder-smoke.log; then
+            exit 1
+          fi
+      - name: Test twelve-class modular hero scene and bone sockets
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/character/test_modular_character.gd 2>&1 | tee /tmp/rig-scene-smoke.log
+          grep -Fq 'MODULAR RIG SCENE PASSED:' /tmp/rig-scene-smoke.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/rig-scene-smoke.log; then
+            exit 1
+          fi
