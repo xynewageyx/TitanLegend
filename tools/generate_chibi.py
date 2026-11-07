@@ -1,9 +1,9 @@
-"""Generate eleven original chibi base GLBs with Blender 4.x; no third-party assets."""
+"""Generate twelve original chibi base GLBs with Blender 4.x; no third-party assets."""
 import bpy, math, os
 OUT=os.path.abspath("assets/heroes/chibi")
 os.makedirs(OUT,exist_ok=True)
-NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
-COLORS=[(.2,.12,.1),(.7,.5,.2),(.2,.4,.2),(.1,.3,.5),(.4,.25,.1),(.2,.15,.3),(.1,.2,.6),(.4,.2,.5),(.6,.4,.7),(.8,.7,.4),(.5,.2,.1)]
+NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler death_knight".split()
+COLORS=[(.2,.12,.1),(.7,.5,.2),(.2,.4,.2),(.1,.3,.5),(.4,.25,.1),(.2,.15,.3),(.1,.2,.6),(.4,.2,.5),(.6,.4,.7),(.8,.7,.4),(.5,.2,.1),(.22,.15,.30)]
 def material(name,color):
  m=bpy.data.materials.new(name);m.diffuse_color=(*color,1)
  m.use_nodes=True
@@ -261,6 +261,11 @@ for idx,name in enumerate(NAMES):
   for side in (-1,1):
    oval("HairHorn",(side*.30,-.04,2.30),(.10,.10,.20),cloth)
   oval("ChestVoid",(0,-.36,1.21),(.14,.055,.19),dark)
+ elif name=="death_knight":
+  for side in (-1,1):
+   oval("BoneShoulder",(side*.41,-.01,1.41),(.21,.22,.16),dark)
+   oval("RuneHorn",(side*.24,-.02,2.30),(.10,.10,.22),dark)
+  oval("ChestRune",(0,-.36,1.18),(.16,.06,.19),gold)
  elif name=="summoner":
   for side in (-1,1):
    oval("HairCrystal",(side*.32,-.01,2.25),(.11,.11,.18),gold)

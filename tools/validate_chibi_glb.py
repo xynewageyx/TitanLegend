@@ -1,7 +1,7 @@
 """Validate generated GLB structure without installing Python packages."""
 import json,struct,pathlib,sys
 root=pathlib.Path("assets/heroes/chibi")
-names="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
+names="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler death_knight".split()
 errors=[]
 for name in names:
  path=root/(name+".glb")
@@ -30,4 +30,4 @@ for name in names:
  print(name,"skins",len(doc.get("skins",[])),"animations",len(doc.get("animations",[])))
 if errors:
  print("\n".join(errors),file=sys.stderr);sys.exit(1)
-print("All 11 chibi GLBs passed structural validation")
+print("All 12 chibi GLBs passed structural validation")

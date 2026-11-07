@@ -7,7 +7,7 @@ from mathutils import Vector
 SOURCE = os.path.abspath("assets/heroes/chibi")
 OUTPUT = os.path.abspath("build/chibi_previews")
 os.makedirs(OUTPUT, exist_ok=True)
-names = "warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
+names = "warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler death_knight".split()
 
 for name in names:
     bpy.ops.object.select_all(action="SELECT")
