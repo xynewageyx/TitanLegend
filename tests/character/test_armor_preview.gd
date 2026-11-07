@@ -25,6 +25,26 @@ func _run() -> void:
         push_error("Invalid tier accepted")
         quit(1)
         return
+    for hero_class in TitanModularCharacter.CLASSES:
+        if not armor.build_armor(hero.skeleton, "purple", hero_class):
+            push_error("Armor build failed for " + hero_class)
+            quit(1)
+            return
+        if not _check_count(hero.skeleton, 8):
+            quit(1)
+            return
+    if not armor.build_armor(hero.skeleton, "purple", "death_knight"):
+        quit(1)
+        return
+    var helmet := hero.skeleton.get_node_or_null("helmet")
+    if helmet == null or helmet.get_child_count() < 4:
+        push_error("Death knight helmet spikes missing")
+        quit(1)
+        return
+    if armor.build_armor(hero.skeleton, "purple", "unknown_class"):
+        push_error("Invalid class accepted")
+        quit(1)
+        return
     armor.clear_armor()
     if not _check_count(hero.skeleton, 0):
         quit(1)
