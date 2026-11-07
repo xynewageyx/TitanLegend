@@ -12,6 +12,9 @@ const CHAINS = [
 
 @export var use_weighted_limbs: bool = true
 @export var use_weighted_torso: bool = true
+@export var show_armor: bool = true
+@export_enum("white", "green", "blue", "yellow", "orange", "purple")
+var armor_quality: String = "white"
 
 func _ready() -> void:
     if not build_character():
@@ -21,6 +24,8 @@ func _ready() -> void:
         build_weighted_limbs()
     if use_weighted_torso:
         build_weighted_torso()
+    if show_armor:
+        build_armor_preview()
 
 func build_weighted_limbs() -> bool:
     if skeleton == null:
@@ -70,3 +75,13 @@ func build_weighted_torso() -> bool:
         if child is BoneAttachment3D and child.name == "Attach_Torso":
             child.visible = false
     return true
+
+func build_armor_preview() -> bool:
+    if skeleton == null:
+        return false
+    var armor := get_node_or_null("ArmorPreview") as TitanArmorPreview
+    if armor == null:
+        armor = TitanArmorPreview.new()
+        armor.name = "ArmorPreview"
+        add_child(armor)
+    return armor.build_armor(skeleton, armor_quality)
