@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 19:32 UTC**
-Git-Stand: **cc95389467d5d9a4f163d136cd409d66dd941bf7** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 19:48 UTC**
+Git-Stand: **a28f930e4df64dd5325877d8648748ce16845463** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -51,6 +51,7 @@ Git-Stand: **cc95389467d5d9a4f163d136cd409d66dd941bf7** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `a28f930` (2026-11-07): Improve Gemini source discovery from failing unittest tracebacks (#114)
 - `2f00f91` (2026-11-07): Integrate safe PR #7 UI toolkit and regression checks (#99)
 - `8b1e86f` (2026-11-07): agent(balancing): propose bounded improvement (#92)
 
