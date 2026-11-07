@@ -55,7 +55,8 @@ jobs:
           git switch -c "$branch"
           git add tools/generate_chibi.py
           git commit -m "fix(characters): AI-assisted Blender export repair"
-          git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "$branch"
+          gh auth setup-git
+          git push origin "$branch"
           gh pr create --base feature/modular-hair-v3 --head "$branch" \
             --title "fix(characters): validated Blender export repair" \
             --body "AI-generated fix, at most three repair attempts. Python syntax, Blender export and GLB rig validator passed. Review source diff and rendered models before merging."
