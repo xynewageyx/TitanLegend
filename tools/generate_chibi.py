@@ -60,6 +60,10 @@ def rig_and_animate():
   if obj.type!="MESH":continue
   name=obj.name
   target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Forehead")) else
+          "Arm_L" if name=="ShoulderJoint_L" else
+          "Arm_R" if name=="ShoulderJoint_R" else
+          "Leg_L" if name=="HipJoint_L" else
+          "Leg_R" if name=="HipJoint_R" else
           name if name in ("UpperArm_L","UpperArm_R","Forearm_L","Forearm_R",
                            "UpperLeg_L","UpperLeg_R","LowerLeg_L","LowerLeg_R") else
           "Hand_L" if name=="Hand_L" else
@@ -170,6 +174,11 @@ for idx,name in enumerate(NAMES):
   oval("Ear",(side*.48*head_width,0,1.88),(.10,.08,.13),skin)
   # Visible upper and lower arm volumes follow the existing 24-bone rig.
   # Separate pieces allow later silhouette tuning without changing animations.
+  # Rounded shoulder and hip joints bridge the torso to the animated limbs.
+  oval("ShoulderJoint_L" if side<0 else "ShoulderJoint_R",
+       (side*.355,0,1.255),(.155*body_width,.16*body_depth,.15),skin)
+  oval("HipJoint_L" if side<0 else "HipJoint_R",
+       (side*.18,0,.595),(.175*body_width,.17*body_depth,.16),skin)
   oval("UpperArm_L" if side<0 else "UpperArm_R",
        (side*.405,0,1.085),(.125,.135,.185),skin)
   oval("Forearm_L" if side<0 else "Forearm_R",
