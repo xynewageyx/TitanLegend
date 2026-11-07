@@ -13,7 +13,7 @@ func _socket(name: String) -> Node3D:
         return found as Node3D
     # Animated bone sockets may be siblings of this equipment controller.
     var hero := get_parent()
-    if hero != null:
+    if hero is Node3D:
         found = hero.find_child(name, true, false)
     return found as Node3D if found is Node3D else null
 func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
