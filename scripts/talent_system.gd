@@ -20,9 +20,9 @@ const TREE_NAMES := [
 ]
 # Klasse und Baum beeinflussen Angriff, Schadensminderung und Heilung unterschiedlich.
 # Zahlen sind Boni PRO RANG; Endboni werden gedeckelt.
-const OFFENSE := [0.006, 0.005, 0.004, 0.005, 0.007, 0.008, 0.008, 0.007, 0.006, 0.003, 0.007, 0.007
-const DEFENSE := [0.006, 0.007, 0.007, 0.006, 0.004, 0.004, 0.004, 0.005, 0.005, 0.006, 0.006, 0.007
-const SUPPORT := [0.003, 0.006, 0.008, 0.007, 0.003, 0.002, 0.004, 0.004, 0.005, 0.009, 0.003, 0.004
+const OFFENSE := [0.006, 0.005, 0.004, 0.005, 0.007, 0.008, 0.008, 0.007, 0.006, 0.003, 0.007, 0.007]
+const DEFENSE := [0.006, 0.007, 0.007, 0.006, 0.004, 0.004, 0.004, 0.005, 0.005, 0.006, 0.006, 0.007]
+const SUPPORT := [0.003, 0.006, 0.008, 0.007, 0.003, 0.002, 0.004, 0.004, 0.005, 0.009, 0.003, 0.004]
 
 # Meilensteine: je Talentbaum bei Rang 10, 25, 50 und 100.
 # Der Bonus wird zusaetzlich zum normalen passiven Talentwert berechnet.
