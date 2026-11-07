@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 18:00 UTC**
-Git-Stand: **e9215f173aa1a4903d3df7d38ad5e60bc3c97d85** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 18:02 UTC**
+Git-Stand: **8b1e86f1ee4e1f11b6ccdd8f6d8fda747dd0a361** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **e9215f173aa1a4903d3df7d38ad5e60bc3c97d85** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
-- `2085916` (2026-11-07): feat: generate and validate Death Knight chibi GLB alongside other classes (#82)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -31,7 +30,6 @@ Git-Stand: **e9215f173aa1a4903d3df7d38ad5e60bc3c97d85** auf Branch **main**
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
-- `2085916` (2026-11-07): feat: generate and validate Death Knight chibi GLB alongside other classes (#82)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -51,7 +49,7 @@ Git-Stand: **e9215f173aa1a4903d3df7d38ad5e60bc3c97d85** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `8b1e86f` (2026-11-07): agent(balancing): propose bounded improvement (#92)
 
 ## Regeln für alle Fach-Chats
 
