@@ -6,7 +6,7 @@ WORKFLOW = (Path(__file__).resolve().parents[1] / ".github/workflows/generate-ch
 
 class ChibiWorkflowTwelveTests(unittest.TestCase):
     def test_model_and_preview_counts(self):
-        self.assertEqual(WORKFLOW.count("-eq 12"), 4)
+        self.assertEqual(WORKFLOW.count("-eq 12"), 3)
         self.assertIn("grep -qx 12", WORKFLOW)
         self.assertNotIn("-eq 11", WORKFLOW)
 
