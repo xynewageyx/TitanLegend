@@ -69,7 +69,7 @@ if log_result.returncode or not log_result.stdout.strip():
 logs = log_result.stdout[-18000:]
 # Send only explicitly listed, bounded source files; no secrets or workflow/config files.
 files = []
-for match in re.findall(r"(?<![\\w./-])(?:scripts|scenes|tests|addons)/[\\w./-]+\\.(?:gd|py|tscn|tres)", logs):
+for match in re.findall(r"(?<![\w./-])(?:scripts|scenes|tests|addons)/[\w./-]+\.(?:gd|py|tscn|tres)", logs):
     try:
         p = safe_path(match)
         if str(p) not in files:
