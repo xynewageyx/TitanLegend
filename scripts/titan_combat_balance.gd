@@ -67,7 +67,7 @@ static func passive_pet_stats(class_id: int, pet_element: int, boss_element: int
  var crit: float = 0.02
  if class_id in [0, 1, 2, 3]:
   health += 0.025
- if class_id in [4, 5, 6, 7, 8, 10]:
+ if class_id in [4, 5, 6, 7, 8, 10, 11]:
   crit += 0.015
  return {"penetration":minf(penetration, 0.15), "health":minf(health, 0.08), "crit":minf(crit, 0.05)}
 
