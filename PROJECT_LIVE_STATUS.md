@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 12:32 UTC**
-Git-Stand: **2f209a47ec04f2b3179605633a3718ba6949f31c** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 12:38 UTC**
+Git-Stand: **69cf4030c99eb1fa4bea7f96d1ecadef6623781e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -49,6 +49,7 @@ Git-Stand: **2f209a47ec04f2b3179605633a3718ba6949f31c** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `69cf403` (2026-11-07): Fix autonomous agent Gemini timeouts and unavailable model fallbacks (#64)
 - `bf2117a` (2026-11-07): Preserve failure tracebacks and recognize absolute source paths (#60)
 
 ## Regeln für alle Fach-Chats
