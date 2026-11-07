@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Bounded, opt-in domain development: one reviewed draft PR per scheduled run."""
+import difflib
 import json
 import os
 from pathlib import Path
@@ -96,6 +97,38 @@ def propose(domain, files):
                 time.sleep(2)
     raise RuntimeError("All configured Gemini models unavailable")
 
+def validate_gd_indentation(before, after):
+    """Conservatively reject changed GDScript lines with reduced indentation.
+
+    An earlier autonomous proposal accidentally added a call at the same
+    indentation as a match-case label, making the GDScript invalid.
+    This is a structural guard, not a replacement for Godot validation.
+    """
+    old_lines = before.splitlines()
+    new_lines = after.splitlines()
+    matcher = difflib.SequenceMatcher(a=old_lines, b=new_lines, autojunk=False)
+    for tag, a1, a2, b1, b2 in matcher.get_opcodes():
+        if tag == "equal" or tag == "delete":
+            continue
+        removed = [line for line in old_lines[a1:a2] if line.strip()]
+        added = [line for line in new_lines[b1:b2] if line.strip()]
+        if not added:
+            continue
+        if removed:
+            baseline = min(len(line) - len(line.lstrip(" \t")) for line in removed)
+        else:
+            # Insertions inherit indentation from the immediately preceding
+            # nonblank source line. Prefer false negatives to broken scripts.
+            previous = next((line for line in reversed(old_lines[:a1]) if line.strip()), "")
+            baseline = len(previous) - len(previous.lstrip(" \t"))
+        for line in added:
+            indent = len(line) - len(line.lstrip(" \t"))
+            if indent < baseline:
+                raise ValueError(
+                    "GDScript edit reduces indentation; refusing unsafe proposal"
+                )
+
+
 def main():
     domain = os.environ.get("AGENT_DOMAIN", "rotate")
     if domain == "rotate":
@@ -138,6 +171,9 @@ def main():
         if base.count(old) != 1:
             raise SystemExit("Edit not uniquely applicable")
         staged[path] = base.replace(old, new, 1)
+    for path, updated in staged.items():
+        if path.endswith(".gd"):
+            validate_gd_indentation((ROOT / path).read_text(encoding="utf-8"), updated)
     for path, updated in staged.items():
         (ROOT / path).write_text(updated, encoding="utf-8")
     if not run("git", "diff", "--check", check=False).returncode == 0:
