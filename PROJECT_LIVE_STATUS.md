@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 12:50 UTC**
-Git-Stand: **cede11962d1c051e70a1cea41f2caa0ab6c161b3** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 12:52 UTC**
+Git-Stand: **ecd75837cce5973d73dd7a140d61bbfeb9109c22** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,11 +41,11 @@ Git-Stand: **cede11962d1c051e70a1cea41f2caa0ab6c161b3** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `ecd7583` (2026-11-07): ci: add manually runnable full Python regression suite (#66)
 - `2f209a4` (2026-11-07): fix(ci): replace broken traceback regex with literal markers (#63)
 - `3cda356` (2026-11-07): Introduce autonomous 10-minute Titan Legends development agents (#61)
 - `56e7e98` (2026-11-07): fix(ci): prioritize failing test tracebacks in Gemini analysis (#62)
 - `a61cc74` (2026-11-07): revert(ci): remove Claude fallback and restore Gemini-only review (#59)
-- `82802c9` (2026-11-07): Add guarded Gemini CI-fix agent creating draft PRs (#58)
 
 ## Bereichsübergreifende Änderungen
 
