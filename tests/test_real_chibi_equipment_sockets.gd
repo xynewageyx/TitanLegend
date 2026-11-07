@@ -17,8 +17,8 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 
 func _run() -> void:
     var failures := 0
-    for class_name in CLASSES:
-        var path := "res://assets/heroes/chibi/" + class_name + ".glb"
+    for hero_name in CLASSES:
+        var path := "res://assets/heroes/chibi/" + hero_name + ".glb"
         var packed := load(path) as PackedScene
         if packed == null:
             push_error("Missing GLB: " + path)
@@ -34,21 +34,21 @@ func _run() -> void:
             continue
         var missing: PackedStringArray = BUILDER.ensure_sockets(skeleton)
         if not missing.is_empty():
-            push_error("%s: missing bones for %s" % [class_name, ",".join(missing)])
+            push_error("%s: missing bones for %s" % [hero_name, ",".join(missing)])
             failures += 1
         var count := 0
         for socket_name in BUILDER.SOCKET_BONES:
             var marker := skeleton.find_child(socket_name, true, false)
             if marker == null or not marker is Marker3D:
-                push_error("%s: missing marker %s" % [class_name, socket_name])
+                push_error("%s: missing marker %s" % [hero_name, socket_name])
                 failures += 1
                 continue
             if not marker.get_parent() is BoneAttachment3D:
-                push_error("%s: marker not attached to bone %s" % [class_name, socket_name])
+                push_error("%s: marker not attached to bone %s" % [hero_name, socket_name])
                 failures += 1
             else:
                 count += 1
-        print("Equipment sockets: %s -> %d/15" % [class_name, count])
+        print("Equipment sockets: %s -> %d/15" % [hero_name, count])
         model.queue_free()
     if failures > 0:
         quit(1)
