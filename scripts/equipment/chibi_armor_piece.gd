@@ -21,6 +21,6 @@ func _ready() -> void:
     if rarity >= 4:
         mat.emission_enabled = true
         mat.emission = COLORS[rarity]
-        mat.emission_energy_multiplier = 0.35
+        mat.emission_energy_multiplier = 0.35 * float(rarity - 3)
     piece.material_override = mat
     add_child(piece)
