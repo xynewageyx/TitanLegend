@@ -536,7 +536,7 @@ func create_team() -> void:
    warrior_visual.set("hide_existing_visuals", true)
    hero.add_child(warrior_visual)
   # Prefer generated sculpted base models when the GLB has been committed.
-  var chibi_path: String = "res://assets/heroes/chibi/" + ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"][class_ids[i]] + ".glb"
+  var chibi_path: String = "res://assets/heroes/chibi/" + ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler", "death_knight"][class_ids[i]] + ".glb"
   if ResourceLoader.exists(chibi_path):
    var chibi_visual := Node3D.new()
    chibi_visual.name = "ChibiGLBVisual"
