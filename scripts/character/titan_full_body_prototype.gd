@@ -84,4 +84,4 @@ func build_armor_preview() -> bool:
         armor = TitanArmorPreview.new()
         armor.name = "ArmorPreview"
         add_child(armor)
-    return armor.build_armor(skeleton, armor_quality)
+    return armor.build_armor(skeleton, armor_quality, hero_class)
