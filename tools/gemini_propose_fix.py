@@ -82,7 +82,35 @@ for match in re.findall(r"(?<![\w.-])(?:scripts|scenes|tests|addons)/[\w./-]+\.(
     if len(files) >= 4:
         break
 if not files:
-    raise SystemExit("No safe existing source file referenced by failed logs; refusing speculative edits")
+    # Unittest failures often name only a test function or traceback file.
+    # Inspect matching tests to discover explicitly referenced implementation paths.
+    test_names = set(re.findall(r"(?:FAIL|ERROR):\\s+(test_[A-Za-z0-9_]+)", logs))
+    traceback_tests = set(re.findall(r"tests/(test_[\\w-]+\\.py)", logs))
+    candidates = []
+    for test_file in sorted((ROOT / "tests").glob("test_*.py")):
+        if test_file.name not in traceback_tests and not any(
+            re.search(r"\\b" + re.escape(name) + r"\\b", test_file.read_text(errors="replace"))
+            for name in test_names
+        ):
+            continue
+        candidates.append(test_file)
+        if len(candidates) >= 4:
+            break
+    for test_file in candidates:
+        test_text = test_file.read_text(errors="replace")[:50000]
+        for match in re.findall(r"(?:scripts|scenes|addons)/[\\w./-]+\\.(?:gd|py|tscn|tres)", test_text):
+            try:
+                p = safe_path(match)
+                if str(p) not in files:
+                    files.append(str(p))
+            except ValueError:
+                pass
+            if len(files) >= 4:
+                break
+        if len(files) >= 4:
+            break
+if not files:
+    raise SystemExit("No verified implementation file in failure logs or matching tests; refusing speculative edits")
 source = [{"path": str(Path(f).relative_to(ROOT)), "content": Path(f).read_text(errors="replace")[:30000]} for f in files]
 prompt = (
     "You are a conservative Godot 4.7.2 CI fix assistant for Titan Legends. "
