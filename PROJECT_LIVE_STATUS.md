@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 14:07 UTC**
-Git-Stand: **4f9c350c9d8018f2205b7720b6aad67951e7e715** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 14:22 UTC**
+Git-Stand: **208591666c3ba10c46c13e154ee15e9f10ceab7c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `2085916` (2026-11-07): feat: generate and validate Death Knight chibi GLB alongside other classes (#82)
 - `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -31,10 +32,9 @@ Git-Stand: **4f9c350c9d8018f2205b7720b6aad67951e7e715** auf Branch **main**
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
-- `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `2085916` (2026-11-07): feat: generate and validate Death Knight chibi GLB alongside other classes (#82)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
