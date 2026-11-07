@@ -60,6 +60,8 @@ def rig_and_animate():
   if obj.type!="MESH":continue
   name=obj.name
   target=("Head" if any(t in name for t in ("Head","Hair","Eye","Iris","Ear","Nose","Mouth","Cheek","Brow","Forehead")) else
+          name if name in ("UpperArm_L","UpperArm_R","Forearm_L","Forearm_R",
+                           "UpperLeg_L","UpperLeg_R","LowerLeg_L","LowerLeg_R") else
           "Hand_L" if name=="Hand_L" else
           "Hand_R" if name=="Hand_R" else
           "Foot_L" if name=="Foot_L" else
@@ -166,6 +168,16 @@ for idx,name in enumerate(NAMES):
   oval("EyeWhite",(x,face_front,1.90),(.13*eye_width,.035,.16*eye_height),white)
   oval("Iris",(x,face_front-.035,1.90),(.075*eye_width,.018,.11*eye_height),dark)
   oval("Ear",(side*.48*head_width,0,1.88),(.10,.08,.13),skin)
+  # Visible upper and lower arm volumes follow the existing 24-bone rig.
+  # Separate pieces allow later silhouette tuning without changing animations.
+  oval("UpperArm_L" if side<0 else "UpperArm_R",
+       (side*.405,0,1.085),(.125,.135,.185),skin)
+  oval("Forearm_L" if side<0 else "Forearm_R",
+       (side*.455,-.01,.985),(.105,.115,.125),skin)
+  oval("UpperLeg_L" if side<0 else "UpperLeg_R",
+       (side*.18,0,.49),(.16,.17,.19),skin)
+  oval("LowerLeg_L" if side<0 else "LowerLeg_R",
+       (side*.19,-.005,.325),(.135,.145,.14),skin)
   oval("Hand_L" if side<0 else "Hand_R",(side*.47,-.02,.94),(.12,.12,.13),skin)
   oval("Foot_L" if side<0 else "Foot_R",(side*.19,-.1,.23),(.15,.23,.12),skin)
  # Hair is deliberately separate geometry for later modular customization.
