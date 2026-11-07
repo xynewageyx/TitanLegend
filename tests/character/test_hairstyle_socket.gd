@@ -32,7 +32,7 @@ func _run() -> void:
     if hair.get_child_count() < 3 or int(hair.get("style")) != 1:
         _fail("Hairstyle meshes were not built")
         return
-    if Color(hair.get("hair_color")) != Color("#2a6aaf"):
+    if hair.get("hair_color") != Color("#2a6aaf"):
         _fail("Selected hair color was not preserved")
         return
 
