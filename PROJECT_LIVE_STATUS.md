@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 13:43 UTC**
-Git-Stand: **93fb7e5fd5a90f1e6a82ba4252580157dc5ce1f9** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 13:48 UTC**
+Git-Stand: **9d6b0b17bee8470087aa5d1413fa404c631c60e3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -52,8 +52,8 @@ Git-Stand: **93fb7e5fd5a90f1e6a82ba4252580157dc5ce1f9** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `9d6b0b1` (2026-11-07): fix: include Death Knight in damage-dealer pet crit bonus (#77)
 - `3b886ac` (2026-11-07): Guard autonomous agent against malformed GDScript indentation (#67)
-- `69cf403` (2026-11-07): Fix autonomous agent Gemini timeouts and unavailable model fallbacks (#64)
 
 ## Regeln für alle Fach-Chats
 
