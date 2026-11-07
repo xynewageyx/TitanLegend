@@ -1,0 +1,48 @@
+name: Modular Hairstyle Godot Smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/equipment/procedural_hairstyle.gd'
+      - 'scripts/equipment/hero_equipment_sockets.gd'
+      - 'scripts/equipment/chibi_armor_piece.gd'
+      - 'tests/character/test_hairstyle_socket.gd'
+      - '.github/workflows/modular-hairstyle-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hairstyle-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version
+      - name: Import game assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf original_update168
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/modular-hair-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/modular-hair-import.log; then
+            exit 1
+          fi
+      - name: Test hairstyle socket behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/character/test_hairstyle_socket.gd 2>&1 | tee /tmp/modular-hair-smoke.log
+          grep -Fq 'HAIR SOCKET SMOKE PASSED' /tmp/modular-hair-smoke.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/modular-hair-smoke.log; then
+            exit 1
+          fi
