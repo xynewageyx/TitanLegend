@@ -26,10 +26,10 @@ func _run() -> void:
         push_error("Invalid equipment slot was accepted")
         quit(1)
         return
-    for class_name in TitanModularCharacter.CLASSES:
-        hero.hero_class = class_name
+    for hero_class_name in TitanModularCharacter.CLASSES:
+        hero.hero_class = hero_class_name
         if not hero.validate_character().is_empty():
-            push_error("Class validation failed: " + class_name)
+            push_error("Class validation failed: " + hero_class_name)
             quit(1)
             return
     hero.clear_slot("hair")
