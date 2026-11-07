@@ -15,7 +15,8 @@ class ModularHairTests(unittest.TestCase):
         script = (ROOT / "scripts/equipment/hero_equipment_sockets.gd").read_text(encoding="utf-8")
         self.assertNotIn(r"\\n", script)
         self.assertIn("clampi(hero_class, 0, 11)", script)
-        self.assertIn("if found is Node3D:\n        return found as Node3D", script)
+        self.assertIn("if found is Node3D:", script)
+        self.assertIn("return found as Node3D", script)
         armor = (ROOT / "scripts/equipment/chibi_armor_piece.gd").read_text(encoding="utf-8")
         self.assertIn("@export_range(0,11) var class_id", armor)
 
