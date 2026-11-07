@@ -151,8 +151,8 @@ def main():
         if summary:
             with open(summary, "a", encoding="utf-8") as report:
                 report.write("### " + message + "\n")
-        if os.getenv("GITHUB_EVENT_NAME") == "schedule":
-            return  # Scheduled checks remain resumable after transient provider outages.
+        if os.getenv("GITHUB_EVENT_NAME") in ("schedule", "workflow_run"):
+            return  # Automatic checks remain resumable after transient provider outages.
         raise
     edits = result.get("edits", [])
     if not isinstance(edits, list) or not 1 <= len(edits) <= 2:
