@@ -17,7 +17,8 @@ const MORE_ENTRIES := [
  ["✥ Talente", "talents"],
  ["✧ Reinkarnation", "reincarnation"],
  ["✦ Astralprüfung", "astral"],
- ["▣ Kostüme", "shop"]
+ ["▣ Kostüme", "shop"],
+ ["⚔ Ausrüstung", "showroom"]
 ]
 const ROLE_ICONS := ["◆", "⚔", "✚"]
 const ROLE_TEXT := ["TANK", "SCHADEN", "HEILUNG"]
