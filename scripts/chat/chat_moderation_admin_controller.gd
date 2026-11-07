@@ -47,9 +47,10 @@ func _ready() -> void:
 	_select_case(0)
 
 func _connect_transport() -> void:
-	if moderation_rpc_path.is_empty():
-		return
-	rpc_transport = get_node_or_null(moderation_rpc_path) as ChatModerationRpcServer
+	# The embedded RPC node is the default transport for this scene.
+	# Resolve it even when an exported NodePath was not restored on instantiation.
+	var transport_path: NodePath = moderation_rpc_path if not moderation_rpc_path.is_empty() else NodePath("ModerationRpc")
+	rpc_transport = get_node_or_null(transport_path) as ChatModerationRpcServer
 	if rpc_transport == null:
 		push_warning("Moderation RPC transport not found")
 		return
