@@ -58,9 +58,9 @@ def propose(domain, files):
         }
     }).encode()
     key = os.environ["GEMINI_API_KEY"]
-    primary = os.getenv("GEMINI_MODEL", "gemini-4-argon")
+    primary = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
     fallbacks = os.getenv("GEMINI_FALLBACK_MODELS",
-                          "gemini-3.6-flash,gemini-3.5-flash-lite")
+                          "gemini-3.5-flash-lite")
     models = list(dict.fromkeys(
         m.strip().removeprefix("models/") for m in [primary, *fallbacks.split(",")] if m.strip()
     ))
