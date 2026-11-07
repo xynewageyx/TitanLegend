@@ -1,0 +1,127 @@
+name: Unity TypeTree inspector tests
+
+on:
+  push:
+    paths:
+      - "tools/inspect_unity_objects.py"
+      - "tools/inspect_unity_typetree.py"
+      - "tests/test_unity_typetree_inspector.py"
+      - "tools/check_bone_path_hashes.py"
+      - "tests/test_bone_path_hashes.py"
+      - "tools/verify_bone_hierarchy_hashes.py"
+      - "tests/test_verify_bone_hierarchy_hashes.py"
+      - "tools/audit_unity_transform_hierarchies.py"
+      - "tests/test_unity_transform_hierarchy_audit.py"
+      - "tools/audit_unity_external_dependencies.py"
+      - "tests/test_unity_external_dependencies.py"
+      - "tools/crosscheck_unity_cab_references.py"
+      - "tests/test_unity_cab_crosscheck.py"
+      - "tools/summarize_unity_animation_headers.py"
+      - "tests/test_unity_animation_header_summary.py"
+      - "tools/classify_unity_animation_candidates.py"
+      - "tests/test_unity_animation_candidates.py"
+      - "tools/summarize_unity_clip_value_probe.py"
+      - "tests/test_unity_clip_value_probe_summary.py"
+      - "tools/audit_unity_clip_failure_stages.py"
+      - "tests/test_unity_clip_failure_stages.py"
+      - "tools/validate_unity_clip_probe.py"
+      - "tests/test_validate_unity_clip_probe.py"
+      - "tools/unity_typetree_bounds.py"
+      - "tests/test_unity_typetree_bounds.py"
+      - "tools/crosscheck_unity_animation_legacy_failures.py"
+      - "tests/test_unity_animation_legacy_failures.py"
+      - "tools/inspect_unity_typetree_array_layouts.py"
+      - "tests/test_unity_typetree_array_layouts.py"
+      - "tools/decode_unity_animation_clip_values.py"
+      - "tests/test_unity_clip_alignment_fix.py"
+      - "tools/validate_titan_skeleton_mapping.py"
+      - "tests/test_titan_skeleton_mapping.py"
+      - "tools/compare_godot_unity_bone_names.py"
+      - "tests/test_compare_godot_unity_bone_names.py"
+      - ".github/workflows/unity-typetree-tests.yml"
+  pull_request:
+    paths:
+      - "tools/inspect_unity_objects.py"
+      - "tools/inspect_unity_typetree.py"
+      - "tests/test_unity_typetree_inspector.py"
+      - "tools/check_bone_path_hashes.py"
+      - "tests/test_bone_path_hashes.py"
+      - "tools/verify_bone_hierarchy_hashes.py"
+      - "tests/test_verify_bone_hierarchy_hashes.py"
+      - "tools/audit_unity_transform_hierarchies.py"
+      - "tests/test_unity_transform_hierarchy_audit.py"
+      - "tools/audit_unity_external_dependencies.py"
+      - "tests/test_unity_external_dependencies.py"
+      - "tools/crosscheck_unity_cab_references.py"
+      - "tests/test_unity_cab_crosscheck.py"
+      - "tools/summarize_unity_animation_headers.py"
+      - "tests/test_unity_animation_header_summary.py"
+      - "tools/classify_unity_animation_candidates.py"
+      - "tests/test_unity_animation_candidates.py"
+      - "tools/summarize_unity_clip_value_probe.py"
+      - "tests/test_unity_clip_value_probe_summary.py"
+      - "tools/audit_unity_clip_failure_stages.py"
+      - "tests/test_unity_clip_failure_stages.py"
+      - "tools/validate_unity_clip_probe.py"
+      - "tests/test_validate_unity_clip_probe.py"
+      - "tools/unity_typetree_bounds.py"
+      - "tests/test_unity_typetree_bounds.py"
+      - "tools/crosscheck_unity_animation_legacy_failures.py"
+      - "tests/test_unity_animation_legacy_failures.py"
+      - "tools/inspect_unity_typetree_array_layouts.py"
+      - "tests/test_unity_typetree_array_layouts.py"
+      - "tools/decode_unity_animation_clip_values.py"
+      - "tests/test_unity_clip_alignment_fix.py"
+      - "tools/validate_titan_skeleton_mapping.py"
+      - "tests/test_titan_skeleton_mapping.py"
+      - "tools/compare_godot_unity_bone_names.py"
+      - "tests/test_compare_godot_unity_bone_names.py"
+      - ".github/workflows/unity-typetree-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Unity animation decoder dependencies
+        run: python -m pip install "lz4>=4.3,<5"
+      - name: Compile all Unity analysis tools and tests
+        run: python -m compileall -q tools tests
+      - name: Run hierarchy-to-mesh hash validation tests
+        run: python -m unittest discover -s tests -p 'test_verify_bone_hierarchy_hashes.py' -v
+      - name: Run transform hierarchy integrity tests
+        run: python -m unittest discover -s tests -p 'test_unity_transform_hierarchy_audit.py' -v
+      - name: Run fixed AnimationClip alignment regression tests
+        run: python -m unittest discover -s tests -p 'test_unity_clip_alignment_fix.py' -v
+      - name: Run Godot-Unity bone inventory comparison tests
+        run: python -m unittest discover -s tests -p 'test_compare_godot_unity_bone_names.py' -v
+      - name: Run Godot skeleton mapping regression tests
+        run: python -m unittest discover -s tests -p 'test_titan_skeleton_mapping.py' -v
+      - name: Run TypeTree array-layout inspector tests
+        run: python -m unittest discover -s tests -p 'test_unity_typetree_array_layouts.py' -v
+      - name: Run legacy animation cross-check tests
+        run: python -m unittest discover -s tests -p 'test_unity_animation_legacy_failures.py' -v
+      - name: Run TypeTree array bounds tests
+        run: python -m unittest discover -s tests -p 'test_unity_typetree_bounds.py' -v
+      - name: Run decoded clip numeric validation tests
+        run: python -m unittest discover -s tests -p 'test_validate_unity_clip_probe.py' -v
+      - name: Run clip parser failure-stage tests
+        run: python -m unittest discover -s tests -p 'test_unity_clip_failure_stages.py' -v
+      - name: Run clip parser error classification tests
+        run: python -m unittest discover -s tests -p 'test_unity_clip_value_probe_summary.py' -v
+      - name: Run animation candidate classification tests
+        run: python -m unittest discover -s tests -p 'test_unity_animation_candidates.py' -v
+      - name: Run animation header summary tests
+        run: python -m unittest discover -s tests -p 'test_unity_animation_header_summary.py' -v
+      - name: Run CAB crosscheck tests
+        run: python -m unittest discover -s tests -p 'test_unity_cab_crosscheck.py' -v
+      - name: Run external dependency audit tests
+        run: python -m unittest discover -s tests -p 'test_unity_external_dependencies.py' -v
+      - name: Run synthetic bone path hash tests
+        run: python -m unittest discover -s tests -p 'test_bone_path_hashes.py' -v
+      - name: Run synthetic TypeTree tests
+        run: python -m unittest discover -s tests -p 'test_unity_typetree_inspector.py' -v

@@ -18,6 +18,23 @@ const SOCKETS := {
     "BootLeftSocket": Vector3(-0.17, 0.13, -0.07),
     "BootRightSocket": Vector3(0.17, 0.13, -0.07)
 }
+const BONE_SOCKETS := {
+    "RightHandSocket": "Hand_R",
+    "LeftHandSocket": "Hand_L",
+    "HeadSocket": "Head",
+    "ChestSocket": "Chest",
+    "BackSocket": "Chest",
+    "ShoulderLeftSocket": "Shoulder_L",
+    "ShoulderRightSocket": "Shoulder_R",
+    "ArmLeftSocket": "Forearm_L",
+    "ArmRightSocket": "Forearm_R",
+    "GloveLeftSocket": "Hand_L",
+    "GloveRightSocket": "Hand_R",
+    "LegLeftSocket": "LowerLeg_L",
+    "LegRightSocket": "LowerLeg_R",
+    "BootLeftSocket": "Foot_L",
+    "BootRightSocket": "Foot_R"
+}
 const CONTROLLER = preload("res://scripts/equipment/hero_equipment_sockets.gd")
 static func install(hero: Node3D) -> Node3D:
     if hero == null:
