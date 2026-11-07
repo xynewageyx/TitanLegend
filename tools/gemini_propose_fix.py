@@ -84,12 +84,12 @@ for match in re.findall(r"(?<![\w.-])(?:scripts|scenes|tests|addons)/[\w./-]+\.(
 if not files:
     # Unittest failures often name only a test function or traceback file.
     # Inspect matching tests to discover explicitly referenced implementation paths.
-    test_names = set(re.findall(r"(?:FAIL|ERROR):\\s+(test_[A-Za-z0-9_]+)", logs))
-    traceback_tests = set(re.findall(r"tests/(test_[\\w-]+\\.py)", logs))
+    test_names = set(re.findall(r"(?:FAIL|ERROR):\s+(test_[A-Za-z0-9_]+)", logs))
+    traceback_tests = set(re.findall(r"tests/(test_[\w-]+\.py)", logs))
     candidates = []
     for test_file in sorted((ROOT / "tests").glob("test_*.py")):
         if test_file.name not in traceback_tests and not any(
-            re.search(r"\\b" + re.escape(name) + r"\\b", test_file.read_text(errors="replace"))
+            re.search(r"\b" + re.escape(name) + r"\b", test_file.read_text(errors="replace"))
             for name in test_names
         ):
             continue
@@ -98,7 +98,7 @@ if not files:
             break
     for test_file in candidates:
         test_text = test_file.read_text(errors="replace")[:50000]
-        for match in re.findall(r"(?:scripts|scenes|addons)/[\\w./-]+\\.(?:gd|py|tscn|tres)", test_text):
+        for match in re.findall(r"(?:scripts|scenes|addons)/[\w./-]+\.(?:gd|py|tscn|tres)", test_text):
             try:
                 p = safe_path(match)
                 if str(p) not in files:
@@ -119,7 +119,7 @@ prompt = (
     "each with path, old, new. old must be a short exact substring appearing exactly once "
     "in the supplied source, new its minimal replacement. Do not modify features, "
     "credentials, workflows, tests to disable them, or permissions. "
-    "If uncertain, return {\\\"edits\\\":[]}.\\n"
+    "If uncertain, return an empty edits array and a reason.\n"
     + json.dumps({"failed_logs": logs, "sources": source}, ensure_ascii=False)
 )
 proposal = generate(prompt)
