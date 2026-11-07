@@ -122,7 +122,23 @@ prompt = (
     "If uncertain, return an empty edits array and a reason.\n"
     + json.dumps({"failed_logs": logs, "sources": source}, ensure_ascii=False)
 )
-proposal = generate(prompt)
+try:
+    proposal = generate(prompt)
+except RuntimeError as exc:
+    # API failures are not source-code failures. Preserve a diagnostic artifact.
+    reason = str(exc)
+    report = ("# Gemini draft-fix diagnostic\\n\\n"
+              + "Target run: " + RUN_ID + "\\n\\n"
+              + "Verified source files: " + ", ".join(str(Path(p).relative_to(ROOT)) for p in files)
+              + "\\n\\nAPI status: " + reason + "\\n\\n"
+              + "No edits attempted; no PR created.\\n")
+    print(report, flush=True)
+    summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary:
+        with open(summary, "a") as output:
+            output.write(report)
+    Path("gemini-draft-diagnostic.md").write_text(report)
+    raise SystemExit(0)
 edits = proposal.get("edits", []) if isinstance(proposal, dict) else None
 reason = proposal.get("reason", "Gemini provided no explanation") if isinstance(proposal, dict) else "Invalid Gemini response"
 reason = str(reason)[:1000]
