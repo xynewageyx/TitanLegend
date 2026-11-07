@@ -1,0 +1,49 @@
+name: Titan Legends autonomous domain agents
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'Development area (rotate selects next area)'
+        required: false
+        default: rotate
+        type: choice
+        options:
+          - rotate
+          - characters
+          - landscape
+          - enemies
+          - equipment
+          - skills
+          - balancing
+          - ui
+          - multiplayer
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: titan-autonomous-domain-agents
+  cancel-in-progress: false
+
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check Gemini secret
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY" || { echo "::error::Missing GEMINI_API_KEY"; exit 1; }
+      - name: Propose one safe domain change as draft PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.8-flash' }}
+          AGENT_DOMAIN: ${{ inputs.domain || 'rotate' }}
+        run: python3 tools/autonomous_domain_agent.py
