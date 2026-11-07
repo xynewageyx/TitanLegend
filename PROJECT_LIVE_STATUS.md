@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 11:02 UTC**
-Git-Stand: **82802c9e2a9d4fda9d696857791dedcbfc530018** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 11:04 UTC**
+Git-Stand: **a61cc745f38271c729feeaf47c74b227bffabe1c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,15 +41,15 @@ Git-Stand: **82802c9e2a9d4fda9d696857791dedcbfc530018** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `a61cc74` (2026-11-07): revert(ci): remove Claude fallback and restore Gemini-only review (#59)
 - `82802c9` (2026-11-07): Add guarded Gemini CI-fix agent creating draft PRs (#58)
 - `78c477a` (2026-11-07): ci: add optional Claude fallback to Gemini CI review (#57)
 - `b55e5e9` (2026-11-06): Fallback from overloaded Gemini 3.8 to 3.5 and 2.5 Flash (#56)
 - `8cb60f8` (2026-11-06): fix(ci): retry transient Gemini API errors with bounded backoff (#55)
-- `8b18802` (2026-11-06): ci: add guarded repairs for spacing companion and recovery assertion drift (#54)
 
 ## Bereichsübergreifende Änderungen
 
-- `12c1567` (2026-11-06): Add scoped Titan Legends GitHub Copilot coding agent profile
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
