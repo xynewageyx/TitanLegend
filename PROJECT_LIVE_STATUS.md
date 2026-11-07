@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 13:55 UTC**
-Git-Stand: **ce9a406844416c35d40864130b72c01c24133591** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 13:58 UTC**
+Git-Stand: **1713907396ca703b41924831bd5dd39c07bb2998** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
@@ -23,11 +23,11 @@ Git-Stand: **ce9a406844416c35d40864130b72c01c24133591** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
 - `93fb7e5` (2026-11-07): fix: give Death Knight its own talent progression (#73)
 - `9c25b22` (2026-11-07): test: extend combat simulation with damage crit and healing probes (#72)
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
 - `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
-- `b96868b` (2026-11-07): test: add deterministic combat timing simulator for 12 classes (#68)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
@@ -48,7 +48,6 @@ Git-Stand: **ce9a406844416c35d40864130b72c01c24133591** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - `ce9a406` (2026-11-07): Connect scheduled 10-minute coordination to autonomous Gemini agents (#79)
 - `adb3e22` (2026-11-07): Offset autonomous agent schedule away from minute zero (#71)
-- `ecd7583` (2026-11-07): ci: add manually runnable full Python regression suite (#66)
 
 ## Bereichsübergreifende Änderungen
 
