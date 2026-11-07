@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 11:04 UTC**
-Git-Stand: **a61cc745f38271c729feeaf47c74b227bffabe1c** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 11:44 UTC**
+Git-Stand: **bf2117a14ddf6f2d227480f573b9c4edb0fe4db3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -49,7 +49,7 @@ Git-Stand: **a61cc745f38271c729feeaf47c74b227bffabe1c** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- Keine in den letzten 15 Commits.
+- `bf2117a` (2026-11-07): Preserve failure tracebacks and recognize absolute source paths (#60)
 
 ## Regeln für alle Fach-Chats
 
