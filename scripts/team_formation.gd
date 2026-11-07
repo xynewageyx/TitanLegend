@@ -366,9 +366,7 @@ func _on_attack_step_finished(hero_index: int) -> void:
 
 const COLORS = [Color("#c8d0df"), Color("#4f85d9"), Color("#a06dd8"), Color("#6bc37d")]
 func _ready() -> void:
- var talent_menu: CanvasLayer = TALENT_MENU_V2.new()
- talent_menu.name = "TalentMenuV2"
- add_child(talent_menu)
+ # The canonical talent menu is managed by the UI; do not spawn a second CanvasLayer.
  add_to_group("talent_team")
  _load_classes()
  _load_roles()
