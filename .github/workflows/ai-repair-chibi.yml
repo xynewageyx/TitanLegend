@@ -1,0 +1,62 @@
+name: AI Repair Chibi Blender Export
+on:
+  workflow_run:
+    workflows: ["Generate Chibi Hero GLBs"]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: chibi-ai-repair-${{ github.event.workflow_run.head_sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  repair:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'failure' &&
+       github.event.workflow_run.head_repository.full_name == github.repository &&
+       github.event.workflow_run.head_branch == 'feature/modular-hair-v3')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check AI secret is configured
+        env:
+          REPAIR_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$REPAIR_KEY" ]; then
+            echo "::error::Set OPENAI_API_KEY in repository Actions secrets to enable AI repair."
+            exit 1
+          fi
+      - name: Checkout trusted character branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/modular-hair-v3
+          persist-credentials: false
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender python3-numpy
+      - name: Repair and rerun export (max 3 fixes)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          REPAIR_MODEL: gpt-4.1-mini
+        run: python3 tools/auto_repair_chibi.py
+      - name: Propose reviewed fix as pull request
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- tools/generate_chibi.py; then
+            echo "No generator changes needed."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          branch="bot/chibi-export-fix-${{ github.run_id }}"
+          git switch -c "$branch"
+          git add tools/generate_chibi.py
+          git commit -m "fix(characters): AI-assisted Blender export repair"
+          gh auth setup-git
+          git push origin "$branch"
+          gh pr create --base feature/modular-hair-v3 --head "$branch" \
+            --title "fix(characters): validated Blender export repair" \
+            --body "AI-generated fix, at most three repair attempts. Python syntax, Blender export and GLB rig validator passed. Review source diff and rendered models before merging."
