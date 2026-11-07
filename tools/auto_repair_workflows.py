@@ -72,11 +72,19 @@ def main():
     log = Path(os.environ["FAILURE_LOG"]).read_text(errors="replace")
     # Only inspect existing files mentioned verbatim in the failure output.
     candidates = []
-    for p in Path(".").rglob("*"):
+    # Prefer paths explicitly named by failing commands; never scan .git or assets.
+    import re
+    mentioned = set(re.findall(
+        r"[A-Za-z0-9_./-]+\\.(?:py|gd|yml|yaml|json|cfg|tscn|tres)", log
+    ))
+    for name in sorted(mentioned):
+        normalized = name.removeprefix("./")
+        if normalized.startswith((".git/", "/")):
+            continue
+        if allowed(normalized):
+            candidates.append(normalized)
         if len(candidates) >= 8:
             break
-        if allowed(str(p)) and str(p).removeprefix("./") in log:
-            candidates.append(str(p))
     if not candidates:
         print("No safely identifiable source files in failure log.")
         return 2
