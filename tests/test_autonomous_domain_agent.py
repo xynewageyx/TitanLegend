@@ -109,6 +109,37 @@ class AutonomousAgentModelTests(unittest.TestCase):
              mock.patch.object(agent, "propose", side_effect=RuntimeError("All configured Gemini models unavailable")):
             self.assertIsNone(agent.main())
 
+    def test_external_cron_quota_exceeded_skips_safely(self):
+        with tempfile.NamedTemporaryFile() as summary:
+            env = {
+                "GITHUB_EVENT_NAME": "workflow_dispatch",
+                "EXTERNAL_SCHEDULER": "true",
+                "AGENT_DOMAIN": "characters",
+                "GITHUB_STEP_SUMMARY": summary.name,
+            }
+            with mock.patch.dict(os.environ, env), \
+                 mock.patch.object(agent, "candidate_paths", return_value=[self.source_path]), \
+                 mock.patch.object(agent, "propose", side_effect=RuntimeError("Gemini quota exhausted; no more requests")):
+                self.assertIsNone(agent.main())
+            self.assertIn("quota exhausted", Path(summary.name).read_text(encoding="utf-8"))
+
+    def test_429_stops_before_requesting_more_models(self):
+        calls = []
+        def quota_error(req, timeout):
+            calls.append(req.full_url)
+            raise urllib.error.HTTPError(req.full_url, 429, "Quota", {}, None)
+        env = {
+            "GEMINI_API_KEY": "test-key",
+            "GEMINI_MODEL": "gemini-3.6-flash",
+            "GEMINI_FALLBACK_MODELS": "gemini-3.5-flash-lite",
+        }
+        with mock.patch.object(agent, "ROOT", self.root), \
+             mock.patch.dict(os.environ, env), \
+             mock.patch.object(agent.urllib.request, "urlopen", side_effect=quota_error):
+            with self.assertRaisesRegex(RuntimeError, "quota exhausted"):
+                agent.propose("characters", [self.source_path])
+        self.assertEqual(len(calls), 1)
+
     def test_manual_outage_still_fails_visibly(self):
         env = {"GITHUB_EVENT_NAME": "workflow_dispatch", "AGENT_DOMAIN": "characters"}
         with mock.patch.dict(os.environ, env), \
