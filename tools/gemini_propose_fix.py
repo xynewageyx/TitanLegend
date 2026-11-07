@@ -25,8 +25,9 @@ def safe_path(raw):
         raise ValueError("Only existing Godot/Python source files may be edited")
     if not raw.startswith(ALLOWED) or "\\" in raw or ".." in Path(raw).parts:
         raise ValueError("Disallowed edit path")
-    target = (ROOT / raw).resolve()
-    if not target.is_relative_to(ROOT) or not target.is_file() or target.is_symlink():
+    candidate = ROOT / raw
+    target = candidate.resolve()
+    if candidate.is_symlink() or not target.is_relative_to(ROOT) or not target.is_file():
         raise ValueError("File missing, symlink or outside repository")
     if target.stat().st_size > 100_000:
         raise ValueError("File too large")
