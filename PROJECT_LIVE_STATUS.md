@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 17:13 UTC**
-Git-Stand: **afc330dbca856917e0c78eebf512c5d510f9eb90** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 17:30 UTC**
+Git-Stand: **d87b37c04ebe0a303639d1767e3064b7c2acc0f0** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **afc330dbca856917e0c78eebf512c5d510f9eb90** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
 - `2085916` (2026-11-07): feat: generate and validate Death Knight chibi GLB alongside other classes (#82)
-- `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -19,14 +18,13 @@ Git-Stand: **afc330dbca856917e0c78eebf512c5d510f9eb90** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `d87b37c` (2026-11-07): Add modular hairstyles safely separated from PR #10
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `4f9c350` (2026-11-07): fix: Death Knight visual loader and talent abilities (#81)
-- `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -45,11 +43,11 @@ Git-Stand: **afc330dbca856917e0c78eebf512c5d510f9eb90** auf Branch **main**
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `d87b37c` (2026-11-07): Add modular hairstyles safely separated from PR #10
 - `1e88366` (2026-11-07): fix: keep autonomous agents running after invalid Gemini edit proposals (#96)
 - `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 - `37fcd6e` (2026-11-07): Avoid Cloudflare Cron false failures on Gemini quota exhaustion (#86)
-- `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
 
 ## Bereichsübergreifende Änderungen
 
