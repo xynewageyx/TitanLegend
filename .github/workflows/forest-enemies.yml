@@ -4,7 +4,12 @@ on:
   push:
     paths:
       - 'tools/blender/generate_forest_mobs.py'
+      - 'tools/analysis/inspect_forest_glbs.py'
       - '.github/workflows/forest-enemies.yml'
+      - 'tools/tests/test_forest_animations.gd'
+      - 'scripts/battle_manager.gd'
+      - 'scripts/forest_enemy_visual.gd'
+      - 'scripts/enemies/forest_enemy_visual.gd'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,6 +21,8 @@ jobs:
         run: blender --background --python-expr "import numpy; print('NumPy OK', numpy.__version__)"
       - name: Generate forest GLBs
         run: blender --background --python tools/blender/generate_forest_mobs.py -- --output build/forest
+      - name: Measure actual forest GLB geometry
+        run: python3 tools/analysis/inspect_forest_glbs.py --input build/forest --output build/forest-geometry-report.csv
       - name: Check generated files
         run: |
           test -s build/forest/forest_01_mooshuepfer.glb
@@ -40,11 +47,33 @@ jobs:
               doc = json.loads(data[20:20+chunk_size])
               names = {a.get('name', '').split('.')[0] for a in doc.get('animations', [])}
               required = {'idle', 'attack', 'hit', 'death'}
-              assert required.issubset(names), f'Missing animation clips in {path}: {required - names}; found {names}'
+              assert names == required, f'Expected exactly four animations in {path}; found {names}'
+              animations = doc.get('animations', [])
+              assert len(animations) == 4, f'Unexpected animation count in {path}: {len(animations)}'
+              for animation in animations:
+                  channels = animation.get('channels', [])
+                  samplers = animation.get('samplers', [])
+                  assert channels and samplers, f'Empty animation in {path}: {animation.get("name")}'
+                  targets = set()
+                  for channel in channels:
+                      assert 0 <= channel['sampler'] < len(samplers), f'Invalid sampler in {path}'
+                      target = channel['target']
+                      assert isinstance(target.get('node'), int), f'Animation target missing node in {path}'
+                      assert 0 <= target['node'] < len(doc.get('nodes', [])), f'Invalid animation node in {path}'
+                      assert target.get('path') in {'translation', 'rotation', 'scale', 'weights'}, f'Invalid animation path in {path}'
+                      key = (target.get('node'), target.get('path'))
+                      assert key not in targets, f'Duplicate animation target in {path}: {key}'
+                      targets.add(key)
+                  assert any(doc['nodes'][node].get('name', '').startswith('CreatureRoot') for node, _ in targets), f'Root motion missing from {path}: {animation["name"]}'
               meshes = doc.get('meshes', [])
               assert len(meshes) >= 8, f'Unexpectedly simple or empty mesh scene: {path} ({len(meshes)} meshes)'
               nodes = doc.get('nodes', [])
               assert nodes, f'No scene nodes: {path}'
+              assert doc.get('materials'), f'No GLB materials: {path}'
+              for mesh in meshes:
+                  for primitive in mesh.get('primitives', []):
+                      assert 'POSITION' in primitive.get('attributes', {}), f'Mesh missing positions: {path}'
+              assert any('CreatureRoot' in n.get('name','') for n in nodes), f'Missing animated root: {path}'
               print(path, len(data), 'bytes; meshes:', len(meshes), 'nodes:', len(nodes), 'animations:', sorted(names))
           PY
       - name: Package models at Godot resource paths
@@ -62,7 +91,7 @@ jobs:
       - name: Install Godot
         uses: chickensoft-games/setup-godot@v2
         with:
-          version: 4.4.1
+          version: 4.7.2
           use-dotnet: false
       - name: Install software OpenGL display
         run: sudo apt-get install -y xvfb libgl1-mesa-dri
@@ -78,6 +107,26 @@ jobs:
             echo 'Godot reported import or script errors'
             exit 1
           fi
+      - name: Test all forest animations in Godot
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          set -o pipefail
+          xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee godot-forest-animation-test.log
+          grep -q 'FOREST ANIMATION TEST PASSED: 36 clips on 9 enemies' godot-forest-animation-test.log
+      - name: Upload measured forest geometry
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Geometry-Report
+          path: build/forest-geometry-report.csv
+          if-no-files-found: error
+      - name: Upload forest animation test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Animation-Test-Log
+          path: godot-forest-animation-test.log
+          if-no-files-found: ignore
       - name: Upload Godot import diagnostic log
         if: always()
         uses: actions/upload-artifact@v4

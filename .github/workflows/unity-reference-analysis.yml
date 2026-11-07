@@ -1,0 +1,28 @@
+name: Unity reference analyzer checks
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/analysis/inspect_unity_bundles.py'
+      - 'tools/analysis/test_inspect_unity_bundles.py'
+      - '.github/workflows/unity-reference-analysis.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install UnityPy and verify import
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install UnityPy
+          python -c "import UnityPy; print('UnityPy installed:', getattr(UnityPy, '__version__', 'version not exposed'))"
+          python -m pip show UnityPy
+      - name: Verify analyzer
+        run: python -m unittest discover -s tools/analysis -p 'test_inspect_unity_bundles.py' -v
+      - name: Verify CLI help
+        run: python tools/analysis/inspect_unity_bundles.py --help
+# Reference bundles are not downloaded or published by this workflow.
+# Run the analyzer locally on legally held, extracted bundles.

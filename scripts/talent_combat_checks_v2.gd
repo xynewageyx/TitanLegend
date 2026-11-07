@@ -3,7 +3,7 @@ const ADAPTER = preload("res://scripts/talent_combat_adapter_v2.gd")
 const TREES = preload("res://scripts/talent_tree_v2.gd")
 static func run_checks() -> Dictionary:
  var failures: Array[String] = []
- for class_id in range(11):
+ for class_id in range(ADAPTER.CLASS_ATTACK_WEIGHTS.size()):
   var build: Array = TREES.empty_build()
   if not TREES.upgrade(2, build, 0, 0):
    failures.append("upgrade " + str(class_id))

@@ -21,18 +21,35 @@ static func spent_points(build: Array) -> int:
   if not branch is Array:
    continue
   for rank in branch:
-   total += clampi(int(rank), 0, MAX_RANK)
+   if not rank is int:
+    continue
+   total += clampi(rank, 0, MAX_RANK)
  return total
 
 static func available_points(level: int, build: Array) -> int:
+ # Unspent earned points remain visible even when all 225 talent ranks are filled.
  return maxi(0, BALANCE.talent_points_earned(level) - spent_points(build))
+
+static func remaining_rank_capacity(build: Array) -> int:
+ return maxi(0, BRANCH_COUNT * TALENTS_PER_BRANCH * MAX_RANK - spent_points(build))
 
 static func can_upgrade(level: int, build: Array, branch: int, talent: int) -> bool:
  if branch < 0 or branch >= BRANCH_COUNT or talent < 0 or talent >= TALENTS_PER_BRANCH:
   return false
- if build.size() != BRANCH_COUNT or not build[branch] is Array or build[branch].size() != TALENTS_PER_BRANCH:
+ if build.size() != BRANCH_COUNT:
   return false
- if available_points(level, build) <= 0 or int(build[branch][talent]) >= MAX_RANK:
+ for branch_ranks in build:
+  if not branch_ranks is Array or branch_ranks.size() != TALENTS_PER_BRANCH:
+   return false
+  for saved_rank in branch_ranks:
+   if not saved_rank is int or saved_rank < 0 or saved_rank > MAX_RANK:
+    return false
+ var current_rank: int = int(build[branch][talent])
+ if current_rank < 0 or current_rank >= MAX_RANK:
+  return false
+ if available_points(level, build) <= 0:
+  return false
+ if remaining_rank_capacity(build) <= 0:
   return false
  # Every row has three talents; unlock a new row after 5 ranks in earlier rows.
  var row: int = int(talent / 3)
@@ -60,7 +77,10 @@ static func validate_build(level: int, value: Variant) -> Array:
     continue
    for column in range(3):
     var index: int = row * 3 + column
-    var desired: int = clampi(int(value[branch][index]), 0, MAX_RANK)
+    var saved_value: Variant = value[branch][index]
+    if not saved_value is int:
+     continue
+    var desired: int = clampi(saved_value, 0, MAX_RANK)
     for rank in range(desired):
      if not upgrade(level, result, branch, index):
       break

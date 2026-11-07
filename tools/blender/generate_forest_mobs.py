@@ -1,7 +1,7 @@
 """Titan Legends forest creature procedural GLB generator.
 Run: blender --background --python tools/blender/generate_forest_mobs.py -- --output assets/enemies/forest
 """
-import bpy, math, os, sys, argparse
+import bpy, math, os, sys, argparse, json, struct
 from mathutils import Vector
 
 def material(name, rgba):
@@ -257,6 +257,119 @@ def sculpted_face_features(creature):
             brow = sphere("king_heavy_brow", (side*.43,-1.02,3.49),(.40,.16,.13),dark,16,10)
             brow.rotation_euler[1] = side*.22
             sphere("king_cheek_plate", (side*.61,-.92,2.88),(.24,.17,.32),dark,16,10)
+
+def tapered_limb(name, points, radii, mat, sides=12):
+    """Single connected, capped limb mesh with varying cross-section."""
+    if len(points) != len(radii) or len(points) < 2:
+        raise ValueError("Limb points and radii must match")
+    verts, faces = [], []
+    for i, point in enumerate(points):
+        center = Vector(point)
+        tangent = Vector(points[min(i+1,len(points)-1)]) - Vector(points[max(0,i-1)])
+        if tangent.length < 1e-6:
+            tangent = Vector((0,0,1))
+        tangent.normalize()
+        axis = tangent.cross(Vector((0,1,0)))
+        if axis.length < 1e-6:
+            axis = tangent.cross(Vector((1,0,0)))
+        axis.normalize()
+        side = tangent.cross(axis).normalized()
+        for j in range(sides):
+            theta = 2 * math.pi * j / sides
+            offset = radii[i] * (axis * math.cos(theta) + side * math.sin(theta))
+            verts.append(tuple(center + offset))
+        if i:
+            for j in range(sides):
+                a=(i-1)*sides+j
+                b=(i-1)*sides+(j+1)%sides
+                c=i*sides+(j+1)%sides
+                d=i*sides+j
+                faces.append((a,b,c,d))
+    faces.append(tuple(reversed(range(sides))))
+    faces.append(tuple((len(points)-1)*sides+j for j in range(sides)))
+    mesh=bpy.data.meshes.new(name+"_mesh")
+    mesh.from_pydata(verts, [], faces)
+    mesh.update()
+    obj=bpy.data.objects.new(name,mesh)
+    bpy.context.collection.objects.link(obj)
+    mesh.materials.append(mat)
+    for poly in mesh.polygons:
+        poly.use_smooth=True
+    return obj
+
+def sculpted_limb_details(creature):
+    """Readable organic limbs, independent of the original primitive appendages."""
+    wood=material("limb_wood",(.42,.27,.15))
+    green=material("limb_green",(.26,.56,.25))
+    fur=material("limb_fur",(.68,.43,.24))
+    pale=material("limb_pale",(.86,.77,.55))
+    specs={
+        "forest_01_mooshuepfer":(.49,1.05,.30,green),
+        "forest_02_pilzling":(.45,1.10,.28,pale),
+        "forest_03_wurzelkrabbler":(.62,.84,.22,wood),
+        "forest_04_blattfuchs":(.40,.79,.20,fur),
+        "forest_05_dorneneber":(.58,.98,.31,fur),
+        "forest_06_rankenwerfer":(.45,1.02,.17,green),
+        "forest_elite_01_rindenwaechter":(1.00,2.15,.39,wood),
+        "forest_elite_02_moosbestie":(.88,1.43,.40,green),
+        "forest_boss_01_wurzelkoenig":(1.42,3.05,.51,wood),
+    }
+    # Remove old primitive appendages only where the connected sculpted
+    # geometry is an intentional replacement. Keep paws/fists and facial
+    # details, which define each creature's readable silhouette.
+    replaced={
+        "forest_02_pilzling": ("tiny_hand",),
+        "forest_06_rankenwerfer": ("leaf_arm",),
+        "forest_elite_01_rindenwaechter": ("heavy_arm","root_leg"),
+        "forest_boss_01_wurzelkoenig": ("root_arm","root_leg"),
+    }
+    names=set(replaced.get(creature, ()))
+    for obj in list(bpy.context.scene.objects):
+        if obj.type=="MESH" and obj.name.split(".")[0] in names:
+            bpy.data.objects.remove(obj, do_unlink=True)
+    reach,height,radius,mat=specs[creature]
+    for sign in (-1,1):
+        tapered_limb("sculpted_arm_%s"%("L" if sign<0 else "R"),
+            [(sign*reach*.74,0,height),(sign*reach*1.13,-.10,height*.82),
+             (sign*reach*1.25,-.20,height*.55)],
+            [radius*.78,radius,radius*.62],mat)
+        if creature in ("forest_elite_01_rindenwaechter","forest_boss_01_wurzelkoenig"):
+            tapered_limb("sculpted_leg_%s"%("L" if sign<0 else "R"),
+                [(sign*reach*.35,.13,height*.62),(sign*reach*.42,.06,height*.37),
+                 (sign*reach*.47,-.13,.18)],
+                [radius*.88,radius*.76,radius*.95],mat)
+
+def reshape_primary_anatomy(creature):
+    """Replace perfectly ellipsoidal primary bodies with species-specific sculpted volume.
+
+    Sculpt in local mesh space, preserving materials, object names and animation
+    attachment. This runs before the organic surface and bevel passes.
+    """
+    profiles = {
+        "forest_01_mooshuepfer": ("round_body", .13, .08, .16),
+        "forest_02_pilzling": ("stem_body", .10, .04, -.08),
+        "forest_03_wurzelkrabbler": ("gnarled_body", .19, .13, -.06),
+        "forest_04_blattfuchs": ("fox_body", .13, .09, -.12),
+        "forest_05_dorneneber": ("barrel_body", .16, .06, -.18),
+        "forest_06_rankenwerfer": ("flower_head", .12, .12, .12),
+        "forest_elite_01_rindenwaechter": ("massive_torso", .22, .14, .10),
+        "forest_elite_02_moosbestie": ("hulking_body", .19, .12, -.12),
+        "forest_boss_01_wurzelkoenig": ("ancient_trunk", .24, .17, .06),
+    }
+    target, taper, lobes, posture = profiles[creature]
+    obj = bpy.data.objects.get(target)
+    if obj is None or obj.type != "MESH":
+        raise RuntimeError("Missing primary body for sculpt: " + creature)
+    for vertex in obj.data.vertices:
+        x,y,z = vertex.co
+        # Native UV sphere coordinates are within approximately [-1,1].
+        upper = (z + 1.0) * .5
+        waist = 1.0 + taper * math.sin(upper * math.pi) - taper * .35 * z
+        asymmetry = 1.0 + lobes * math.sin(3.0 * math.atan2(y,x) + 1.1*z)
+        vertex.co.x = x * waist * asymmetry + posture * .09 * (1.0-z*z)
+        vertex.co.y = y * (1.0 + taper * .35 * math.cos(2.5*z)) + posture * .13 * upper
+        vertex.co.z = z * (1.0 + lobes * .22 * math.cos(3.0*x))
+    obj.data.update()
 
 def sculpt_organic_silhouettes():
     """Non-destructive-to-rig vertex sculpting: asymmetry without new dependencies."""
@@ -573,8 +686,154 @@ def premium_creature_details(creature):
                 (side*.77,-.22,4.84),(side*.84,-.20,5.20)],.13,gold)
             sphere("king_fist_guard",(side*1.48,-.65,1.29),(.47,.12,.31),shade,20,14)
 
+def cartoon_material_finish():
+    """Soft storybook materials using GLB-compatible Principled settings."""
+    for mat in bpy.data.materials:
+        if not mat.use_nodes:
+            continue
+        shader = mat.node_tree.nodes.get("Principled BSDF")
+        if shader is None:
+            continue
+        for key,value in (("Roughness",.78),("Metallic",0.0),("Coat Weight",.08),("Coat Roughness",.32)):
+            if key in shader.inputs:
+                shader.inputs[key].default_value=value
+        if any(token in mat.name.lower() for token in ("shine","glint","gold","iris_highlight","heartwood")):
+            if "Roughness" in shader.inputs:
+                shader.inputs["Roughness"].default_value=.32
+            if "Emission Color" in shader.inputs:
+                shader.inputs["Emission Color"].default_value=shader.inputs["Base Color"].default_value
+            if "Emission Strength" in shader.inputs:
+                shader.inputs["Emission Strength"].default_value=.16
+
+def facial_depth_finish(creature):
+    """Species-specific dimensional cheek and chin geometry."""
+    cream=material("face_soft_cream",(.94,.81,.60))
+    bark=material("face_warm_bark",(.40,.26,.16))
+    moss=material("face_deep_green",(.20,.41,.19))
+    settings={
+        "forest_01_mooshuepfer":(.99,-.58,.32,.12,moss),
+        "forest_02_pilzling":(.84,-.43,.27,.10,cream),
+        "forest_03_wurzelkrabbler":(.86,-.53,.35,.12,bark),
+        "forest_04_blattfuchs":(1.00,-.85,.39,.15,cream),
+        "forest_05_dorneneber":(1.06,-1.02,.43,.13,bark),
+        "forest_06_rankenwerfer":(1.31,-.55,.31,.10,moss),
+        "forest_elite_01_rindenwaechter":(2.27,-.64,.45,.19,bark),
+        "forest_elite_02_moosbestie":(1.36,-1.28,.55,.18,moss),
+        "forest_boss_01_wurzelkoenig":(2.91,-1.02,.61,.21,bark),
+    }
+    z,front,spread,depth,mat=settings[creature]
+    for sign in (-1,1):
+        cheek=sphere("sculpted_cheek_%s"%("L" if sign<0 else "R"),
+                     (sign*spread,front,z),(.22+depth*.25,depth,.16+depth*.35),
+                     mat,20,14)
+        cheek.rotation_euler[1]=sign*.13
+    sphere("sculpted_chin",(0,front-.02,z-.23),(.21+depth*.30,depth*.65,.12+depth*.18),
+           mat,20,14)
+
+def sculpted_surface_identity(creature):
+    """Lightweight species-specific surface geometry, readable at phone scale."""
+    bark=material("surface_bark",(.24,.16,.10))
+    bark_light=material("surface_bark_light",(.58,.39,.21))
+    fur=material("surface_fur",(.88,.66,.40))
+    moss=material("surface_moss",(.18,.51,.25))
+    spot=material("surface_fungal_spot",(.99,.90,.68))
+    if creature in ("forest_03_wurzelkrabbler","forest_elite_01_rindenwaechter","forest_boss_01_wurzelkoenig"):
+        zbase,scale=((.86,.7) if "03_" in creature else ((1.55,1.0) if "elite" in creature else (2.45,1.4)))
+        for i in range(7):
+            theta=2*math.pi*i/7
+            x=scale*.64*math.cos(theta)
+            y=scale*.48*math.sin(theta)
+            ridge=sphere("bark_grain",(x,y,zbase+.23*math.sin(i*2)),
+                         (.055*scale,.07*scale,.33*scale),bark_light,12,8)
+            ridge.rotation_euler[1]=.20*math.sin(i)
+    elif creature in ("forest_04_blattfuchs","forest_05_dorneneber","forest_elite_02_moosbestie"):
+        # Species IDs are German: use exact identifiers, not English substrings.
+        profiles={
+            "forest_04_blattfuchs": (1.12,.43,.12,fur),
+            "forest_05_dorneneber": (1.32,.62,.20,moss),
+            "forest_elite_02_moosbestie": (1.90,.83,.25,moss),
+        }
+        base_z,radius,depth,coat=profiles[creature]
+        for i in range(9):
+            theta=2*math.pi*i/9
+            tuft=sphere("fur_layer",(radius*math.cos(theta),depth+radius*.60*math.sin(theta),
+                                     base_z+.10*math.sin(i)),
+                        (.15,.11,.18),coat,12,8)
+            tuft.rotation_euler[1]=.25*math.sin(theta)
+    elif creature=="forest_02_pilzling":
+        for i in range(8):
+            theta=2*math.pi*i/8
+            sphere("cap_texture_spot",(.70*math.cos(theta),.54*math.sin(theta),1.90),
+                   (.10,.08,.035),spot,12,8)
+    elif creature in ("forest_01_mooshuepfer","forest_06_rankenwerfer"):
+        for i in range(6):
+            theta=2*math.pi*i/6
+            x=.47*math.cos(theta)
+            y=.29*math.sin(theta)
+            z=1.40 if "01_" in creature else 1.70
+            leaf_mesh("foliage_surface",(x,y,z),.27,.11,moss,bend=.07*math.sin(theta))
+
+def merge_gltf_animation_tracks(path):
+    """Combine root and limb clips into exactly four glTF animations.
+
+    Blender can export object NLA actions as separate animations. A single
+    AnimationPlayer clip must include both root and secondary mesh channels.
+    Remap sampler indices when combining; binary keyframe data stays unchanged.
+    """
+    with open(path, "rb") as stream:
+        raw=stream.read()
+    magic,version,total=struct.unpack_from("<4sII",raw,0)
+    if magic!=b"glTF" or version!=2 or total!=len(raw):
+        raise RuntimeError("Invalid glTF container: "+path)
+    chunks=[]
+    cursor=12
+    while cursor<len(raw):
+        size,kind=struct.unpack_from("<II",raw,cursor)
+        cursor+=8
+        chunks.append((kind,raw[cursor:cursor+size]))
+        cursor+=size
+    if not chunks or chunks[0][0]!=0x4E4F534A:
+        raise RuntimeError("Missing glTF JSON chunk: "+path)
+    doc=json.loads(chunks[0][1].decode("utf-8").rstrip(" "))
+    source=doc.get("animations",[])
+    groups={clip:{"name":clip,"samplers":[],"channels":[]} for clip in ("idle","attack","hit","death")}
+    for animation in source:
+        name=animation.get("name","")
+        clip=next((c for c in groups if name==c or name.startswith(c+"_") or (name.startswith(c+".") and name[len(c)+1:].isdigit())),None)
+        if clip is None:
+            raise RuntimeError("Unexpected forest animation: "+name)
+        dest=groups[clip]
+        offset=len(dest["samplers"])
+        dest["samplers"].extend(animation.get("samplers",[]))
+        for channel in animation.get("channels",[]):
+            copy=dict(channel)
+            copy["sampler"]=channel["sampler"]+offset
+            dest["channels"].append(copy)
+    for clip,item in groups.items():
+        if not item["channels"]:
+            raise RuntimeError("Missing animation channels: "+clip)
+        unique=set()
+        for channel in item["channels"]:
+            target=channel.get("target",{})
+            key=(target.get("node"),target.get("path"))
+            if key in unique:
+                raise RuntimeError("Conflicting animated target in "+clip+": "+str(key))
+            unique.add(key)
+    doc["animations"]=list(groups.values())
+    encoded=json.dumps(doc,separators=(",",":"),ensure_ascii=False).encode("utf-8")
+    encoded+=b" " * ((-len(encoded))%4)
+    chunks[0]=(0x4E4F534A,encoded)
+    output=bytearray(struct.pack("<4sII",b"glTF",2,0))
+    for kind,payload in chunks:
+        output.extend(struct.pack("<II",len(payload),kind))
+        output.extend(payload)
+    struct.pack_into("<I",output,8,len(output))
+    with open(path,"wb") as stream:
+        stream.write(output)
+    print("MERGED ANIMATIONS",path,[(a["name"],len(a["channels"])) for a in doc["animations"]])
+
 def export(name,fn,out):
-    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpt_organic_silhouettes();organic_finish();animate_creature()
+    clear();fn();forest_surface_details(name);sculpted_face_features(name);expressive_details();storybook_creature_finish(name);creature_silhouette_upgrade(name);premium_creature_details(name);sculpted_limb_details(name);reshape_primary_anatomy(name);facial_depth_finish(name);sculpted_surface_identity(name);sculpt_organic_silhouettes();organic_finish();cartoon_material_finish();animate_creature()
     bpy.ops.object.select_all(action="SELECT")
     target=os.path.join(out,name+".glb")
     result=bpy.ops.export_scene.gltf(filepath=target,export_format="GLB",use_selection=True)
@@ -583,6 +842,7 @@ def export(name,fn,out):
     with open(target,"rb") as stream:
         if stream.read(4)!=b"glTF":
             raise RuntimeError("Invalid GLB magic: "+target)
+    merge_gltf_animation_tracks(target)
     print("EXPORTED",name,os.path.getsize(target),"bytes")
 
 def main():

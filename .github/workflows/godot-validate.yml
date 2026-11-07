@@ -43,14 +43,25 @@ jobs:
           # Archived scripts must retain their original checksums but are not game resources.
           # Exclude them only in the CI checkout to prevent duplicate global class registration.
           rm -rf original_update168
+          python3 tools/generate_audio_sfx.py
           xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee godot-validation-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' godot-validation-import.log; then
             echo 'Godot import or script errors detected'
             exit 1
           fi
+      - name: Validate Android graphics runtime and driver compatibility
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_android_graphics_compatibility.py' -v
+
+      - name: Test graphics settings integration and hidden FPS overlay
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_graphics_settings_integration.py' -v
       - name: Test talent menu Android layout and team integration
         shell: bash
         run: python3 -m unittest discover -s tests -p 'test_talent_menu_v2.py' -v
+      - name: Test optional eleven-class chibi GLB integration
+        shell: bash
+        run: python3 -m unittest discover -s tests -p 'test_chibi_glb_integration.py' -v
       - name: Test boss camera framing
         shell: bash
         run: |
@@ -191,6 +202,7 @@ jobs:
           # Archived scripts must retain their original checksums but are not game resources.
           # Exclude them only in the CI checkout to prevent duplicate global class registration.
           rm -rf original_update168
+          python3 tools/generate_audio_sfx.py
           xvfb-run -a godot --rendering-driver opengl3 --path . --editor --import --quit 2>&1 | tee build/android-godot-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR: Parameter "t" is null' build/android-godot-import.log; then
             echo 'Android resource import failed'

@@ -1,6 +1,6 @@
 extends Node3D
 signal walking_finished
-const MELEE_CLASSES := [0, 1, 5, 10] # Warrior, Paladin, Rogue, Brawler
+const MELEE_CLASSES := [0, 1, 5, 10, 11] # Warrior, Paladin, Rogue, Brawler
 func _formation_position(slot: int) -> Vector3:
  var front_slots: Array[int] = []
  var back_slots: Array[int] = []
@@ -15,9 +15,9 @@ func _formation_position(slot: int) -> Vector3:
  var index_in_row: int = row.find(slot)
  # Keep compact all-melee teams inside the path, but give mixed teams
  # enough lateral room for large helmets, weapons and passive companions.
- var spacing: float = 2.05 if row.size() <= 3 else 1.48
+ var spacing: float = 2.65 if row.size() <= 3 else 1.95
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
- return Vector3(x, 0.0, -2.15 if in_front else 1.25)
+ return Vector3(x, 0.0, -2.65 if in_front else 1.65)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
@@ -28,11 +28,16 @@ const TALENT_MENU_V2 = preload("res://scripts/talent_menu_v2.gd")
 func set_talent_build_v2(hero_slot: int, level: int, proposed_build: Array) -> bool:
  if hero_slot < 0 or hero_slot >= 4:
   return false
- var builds: Array = get_meta("talent_builds_v2", [])
+ var stored_builds: Variant = get_meta("talent_builds_v2", [])
+ var builds: Array = stored_builds if stored_builds is Array else []
  if builds.size() != 4:
   builds = []
   for index in range(4):
    builds.append(TALENT_TREES_V2.empty_build())
+ else:
+  # Repair all hero slots before persisting, not only the edited hero.
+  for index in range(4):
+   builds[index] = TALENT_TREES_V2.validate_build(level, builds[index])
  builds[hero_slot] = TALENT_TREES_V2.validate_build(level, proposed_build)
  set_meta("talent_builds_v2", builds)
  team_changed.emit()
@@ -53,18 +58,21 @@ func upgrade_talent_v2(hero_slot: int, branch: int, talent_index: int) -> bool:
 func get_talent_build_v2(hero_slot: int) -> Array:
  if hero_slot < 0 or hero_slot >= 4:
   return TALENT_TREES_V2.empty_build()
- var builds: Array = get_meta("talent_builds_v2", [])
- if builds.size() != 4:
+ var stored_builds: Variant = get_meta("talent_builds_v2", [])
+ if not stored_builds is Array:
   return TALENT_TREES_V2.empty_build()
- return builds[hero_slot].duplicate(true)
+ var builds: Array = stored_builds
+ if builds.size() != 4 or not builds[hero_slot] is Array:
+  return TALENT_TREES_V2.empty_build()
+ return TALENT_TREES_V2.validate_build(GameManager.character_level, builds[hero_slot])
 
 var role_ids: Array[int] = [0, 1, 1, 2] # 0 Tank, 1 DD, 2 Heiler
 var pet_element_ids: Array[int] = [0, 1, 2, 3]
 const ROLE_NAMES := ["Tank", "DD", "Heiler"]
-const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1]]
+const ALLOWED_ROLES := [[0,1], [0,1,2], [0,1,2], [0,1,2], [1], [1], [1], [1], [1], [1,2], [1], [0,1]]
 signal team_changed
-const CLASS_NAMES := ["Krieger", "Paladin", "Druide", "Schamane", "Jaeger", "Schurke", "Magier", "Hexer", "Beschwoerer", "Priester", "Raufbold"]
-const CLASS_COLORS := [Color("#aab6c5"), Color("#f5d16c"), Color("#4bb77d"), Color("#4ca8e8"), Color("#4f9b50"), Color("#5d567e"), Color("#5086ef"), Color("#a45cd0"), Color("#ba78db"), Color("#e9e2ae"), Color("#ba6e51")]
+const CLASS_NAMES := ["Krieger", "Paladin", "Druide", "Schamane", "Jaeger", "Schurke", "Magier", "Hexer", "Beschwoerer", "Priester", "Raufbold", "Todesritter"]
+const CLASS_COLORS := [Color("#aab6c5"), Color("#f5d16c"), Color("#4bb77d"), Color("#4ca8e8"), Color("#4f9b50"), Color("#5d567e"), Color("#5086ef"), Color("#a45cd0"), Color("#ba78db"), Color("#e9e2ae"), Color("#ba6e51"), Color("#66577d")]
 var walk_tween: Tween
 var animation_clock: float = 0.0
 var is_walking: bool = false
@@ -521,14 +529,14 @@ func create_team() -> void:
   # Optional chibi equipment attachment markers; no visuals equipped by default.
   preload("res://scripts/equipment/formation_equipment_adapter.gd").install(hero)
   # Optional imported 3D warrior: only class 0, and only when the GLB exists.
-  if class_ids[i] == 0 and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
+  if class_ids[i] == 0 and not ResourceLoader.exists("res://assets/heroes/chibi/warrior.glb") and ResourceLoader.exists("res://assets/characters/titan_warrior.glb"):
    var warrior_visual := Node3D.new()
    warrior_visual.name = "WarriorGLBVisual"
    warrior_visual.set_script(preload("res://scripts/warrior_glb_visual.gd"))
    warrior_visual.set("hide_existing_visuals", true)
    hero.add_child(warrior_visual)
   # Prefer generated sculpted base models when the GLB has been committed.
-  var chibi_path: String = "res://assets/heroes/chibi/" + ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"][class_ids[i]] + ".glb"
+  var chibi_path: String = "res://assets/heroes/chibi/" + ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler", "death_knight"][class_ids[i]] + ".glb"
   if ResourceLoader.exists(chibi_path):
    var chibi_visual := Node3D.new()
    chibi_visual.name = "ChibiGLBVisual"

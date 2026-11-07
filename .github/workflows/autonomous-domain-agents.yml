@@ -1,0 +1,113 @@
+name: Titan Legends autonomous domain agents
+on:
+  schedule:
+    - cron: '3,13,23,33,43,53 * * * *'
+  # Backup trigger: when the independently scheduled coordination check completes.
+  # Manual coordination runs and pull-request activity must not start an agent.
+  workflow_run:
+    workflows:
+      - Titan Legends 10-Minuten-Koordination
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'Development area (rotate selects next area)'
+        required: false
+        default: rotate
+        type: choice
+        options:
+          - rotate
+          - characters
+          - landscape
+          - enemies
+          - equipment
+          - skills
+          - balancing
+          - ui
+          - multiplayer
+      external_scheduler:
+        description: 'Set by the Cloudflare Cron Worker, not for manual runs'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: titan-autonomous-domain-agents
+  cancel-in-progress: false
+
+jobs:
+  develop:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'schedule' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Avoid duplicate automatic agent runs in the same 10-minute slot
+        id: dedupe
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.external_scheduler == true }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const {owner, repo} = context.repo;
+            const currentId = Number(context.runId);
+            const {data: current} = await github.rest.actions.getWorkflowRun({
+              owner, repo, run_id: currentId
+            });
+            // Use run creation time rather than runner start time to make
+            // runs queued by GitHub Actions concurrency deterministic.
+            const slot = Math.floor(Date.parse(current.created_at) / 600000);
+            const {data: history} = await github.rest.actions.listWorkflowRuns({
+              owner, repo, workflow_id: 'autonomous-domain-agents.yml', per_page: 50
+            });
+            let duplicate = false;
+            for (const previous of history.workflow_runs) {
+              if (previous.id >= currentId || previous.head_branch !== 'main' ||
+                  !['schedule', 'workflow_run', 'workflow_dispatch'].includes(previous.event) ||
+                  Math.floor(Date.parse(previous.created_at) / 600000) !== slot) {
+                continue;
+              }
+              const {data: jobs} = await github.rest.actions.listJobsForWorkflowRun({
+                owner, repo, run_id: previous.id, per_page: 30
+              });
+              // Skip prior runs that never passed the secret check (including
+              // manual coordination events with an ineligible downstream job).
+              // Count manually triggered agent runs as well to avoid duplicates.
+              if (jobs.jobs.some(job => (job.steps || []).some(step =>
+                step.name === 'Check Gemini secret' && step.conclusion === 'success'
+              ))) {
+                duplicate = true;
+                core.notice('Skipping duplicate; earlier agent run: ' + previous.html_url);
+                break;
+              }
+            }
+            core.setOutput('run_agent', String(!duplicate));
+      - name: Check Gemini secret
+        if: ${{ steps.dedupe.outputs.run_agent != 'false' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY" || { echo "::error::Missing GEMINI_API_KEY"; exit 1; }
+      - name: Propose one safe domain change as draft PR
+        if: ${{ steps.dedupe.outputs.run_agent != 'false' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Use Flash models only; repository variables may override these defaults.
+          GEMINI_MODEL: ${{ vars.AGENT_GEMINI_MODEL || 'gemini-3.6-flash' }}
+          GEMINI_FALLBACK_MODELS: ${{ vars.AGENT_GEMINI_FALLBACK_MODELS || 'gemini-3.5-flash-lite' }}
+          EXTERNAL_SCHEDULER: ${{ inputs.external_scheduler || false }}
+          AGENT_DOMAIN: ${{ inputs.domain || 'rotate' }}
+        run: python3 tools/autonomous_domain_agent.py

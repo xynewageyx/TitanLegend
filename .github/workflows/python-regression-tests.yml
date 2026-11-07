@@ -30,9 +30,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Python version
         run: python3 --version
-      - name: Install Python test dependencies
-        run: |
-          python3 -m pip install --user --break-system-packages 'lz4>=4,<5'
       - name: Run all Python regression tests
         shell: bash
         run: |

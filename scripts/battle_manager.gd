@@ -97,6 +97,8 @@ func _ready() -> void:
  _last_player_input_ms = Time.get_ticks_msec()
  if team_formation != null and team_formation.has_signal("walking_finished"):
   team_formation.walking_finished.connect(_on_walking_finished)
+ if biome_manager != null and biome_manager.has_signal("biome_changed"):
+  biome_manager.connect("biome_changed", Callable(self, "_on_audio_biome_changed"))
  var saved_progress: Vector2i = SaveManager.get_saved_battle_progress()
  current_level = maxi(1, saved_progress.x)
  current_wave = clampi(saved_progress.y, 1, BOSS_WAVE)
@@ -104,6 +106,8 @@ func _ready() -> void:
  # Restore the area's element before spawning bosses, including save-game loads.
  if biome_manager != null:
   biome_manager.call("update_biome_from_stage", current_level)
+  # Initial biome may already match the default and emit no change signal.
+  _on_audio_biome_changed(int(biome_manager.current_biome))
  var astral_progress: Dictionary = SaveManager.get_saved_astral()
  astral_floor = maxi(1, int(astral_progress.get("floor", 1)))
  astral_marks = maxi(0, int(astral_progress.get("marks", 0)))
@@ -112,6 +116,19 @@ func _ready() -> void:
  add_to_group("battle_manager")
  _reset_hero_health()
  _queue_next_encounter()
+
+# Area transitions are shared environment cues, not other players' combat sounds.
+# BiomeType order: FIRE, WATER, EARTH, NATURE, LIGHT, SHADOW,
+# WIND, ICE, LIGHTNING, CHAOS. WATER uses a separate sound from ICE.
+func _on_audio_biome_changed(biome: int) -> void:
+ const BIOME_AUDIO_EVENTS: Array[String] = [
+  "ambient_fire", "ambient_water", "ambient_earth",
+  "ambient_nature", "ambient_light", "ambient_shadow",
+  "ambient_wind", "ambient_frost", "ambient_lightning",
+  "ambient_chaos"
+ ]
+ if biome >= 0 and biome < BIOME_AUDIO_EVENTS.size():
+  AudioManager.play_ambience(BIOME_AUDIO_EVENTS[biome])
 
 func _process(delta: float) -> void:
  var now_ms: int = Time.get_ticks_msec()
@@ -573,6 +590,8 @@ func _begin_boss_cast() -> void:
  boss_next_cast_tick = skill_tick + 9
  _animate_boss_event("attack_windup")
  if boss_cc_required > 0:
+  AudioManager.play_event("boss_warning")
+ if boss_cc_required > 0:
   # Prepared hits were earned by the strict four-slot rotation earlier.
   # Each living hero can contribute at most one banked hit.
   for slot in range(4):
@@ -587,6 +606,14 @@ func _resolve_boss_cast() -> void:
  if not battle_active or not is_boss:
   return
  _animate_boss_event("attack_release")
+ if biome_manager != null:
+  const BOSS_ELEMENTS: Array[String] = [
+   "fire", "water", "earth", "nature", "light",
+   "shadow", "wind", "frost", "lightning", "chaos"
+  ]
+  var boss_biome_id: int = int(biome_manager.current_biome)
+  if boss_biome_id >= 0 and boss_biome_id < BOSS_ELEMENTS.size():
+   AudioManager.play_event("boss_element_" + BOSS_ELEMENTS[boss_biome_id])
  if boss_cast_kind == "self_heal":
   enemy_hp = mini(enemy_max_hp, enemy_hp + maxi(1, roundi(float(enemy_max_hp) * 0.05)))
   last_ability = "Boss: Selbstheilung"
@@ -661,6 +688,7 @@ func _attack_tick() -> void:
   _damage_heroes(damage, [target])
  if not battle_active:
   return
+ _play_forest_enemy_clip("attack")
  _boss_minions_attack()
  _boss_phase_two_tick()
  _refresh_tank_defense_visuals()
@@ -743,6 +771,31 @@ func _play_equipped_skill_vfx(slot: int, role: int, choice: int) -> void:
 
 func _execute_equipped_skill(slot: int, role: int, choice: int) -> void:
  _play_equipped_skill_vfx(slot, role, choice)
+ if team_formation != null and slot >= 0 and slot < team_formation.class_ids.size():
+  var sound_event: String = "class_skill_%d" % int(team_formation.class_ids[slot])
+  if role == 0 and choice == 8:
+   sound_event = "skill_taunt"
+  elif role == 0 and choice == 9:
+   sound_event = "skill_guard"
+  elif choice == 7:
+   sound_event = "skill_interrupt"
+  elif role == 2 and choice == 8:
+   sound_event = "skill_regeneration"
+  else:
+   var sound_skill: Dictionary = TitanSkillSystem.skill_for_role(role, choice)
+   if role == 2 and float(sound_skill.get("heal", 0.0)) > 0.0:
+    sound_event = "skill_heal"
+   elif role == 1:
+    var class_id: int = int(team_formation.class_ids[slot])
+    if class_id == 6:
+     sound_event = "element_ice" if choice == 7 else "element_fire"
+    elif class_id == 7:
+     sound_event = "element_shadow"
+    elif class_id == 2 or class_id == 3:
+     sound_event = "element_nature"
+    elif class_id == 9:
+     sound_event = "element_light"
+  AudioManager.play_local_hero_event(slot, sound_event)
  if team_formation != null and slot >= 0 and slot < team_formation.heroes.size():
   var glb_visual: Node = team_formation.heroes[slot].get_node_or_null("WarriorGLBVisual")
   if glb_visual != null and glb_visual.has_method("play_cast"):
@@ -837,6 +890,7 @@ func _deal_damage_to_enemy(slot: int, amount: int, is_area: bool = false) -> voi
  var vulnerability: float = 1.0 + INTERRUPT_BOSS_DAMAGE_BONUS if is_boss and skill_tick < boss_vulnerable_until_tick else 1.0
  if is_boss:
   _animate_boss_event("react_to_hit")
+ _play_forest_enemy_clip("hit", is_area)
  enemy_hp = maxi(0, enemy_hp - maxi(1, roundi(float(dealt) * (1.0 - defense) * vulnerability)))
  _update_enemy_casualties()
  if enemy_hp <= 0:
@@ -881,6 +935,8 @@ func _hero_attack(slot: int, role: int) -> void:
  var progression_attack: float = 1.0 + float(_hero_progression(slot).get("attack", 0.0)) + GameManager.weapon_attack_bonus(slot) + GameManager.hardening_bonus(slot, 0) + GameManager.loot_bonus(slot, 2)
  var actual_damage: int = maxi(1, roundi(float(normal_damage) * multiplier * progression_attack * (1.6 + GameManager.hardening_bonus(slot, 3) if critical else 1.0)))
  _deal_damage_to_enemy(slot, actual_damage)
+ if team_formation != null and slot < team_formation.class_ids.size():
+  AudioManager.play_local_hero_event(slot, "class_attack_%d" % int(team_formation.class_ids[slot]))
  if not battle_active:
   return
  last_ability = "Kritischer Treffer" if critical else "Standardangriff"
@@ -1051,6 +1107,8 @@ func finish_wave() -> void:
   return
  battle_active = false
  _finishing = true
+ if not afk_farming:
+  _play_forest_enemy_clip("death", true)
  if afk_farming:
   # Eine abgeschlossene AFK-Welle gibt maximal alle 60 Sekunden Belohnung.
   # Niemals Bossloot vergeben oder die gespeicherte Stage/Welle erhoehen.
@@ -1091,7 +1149,21 @@ func finish_wave() -> void:
  _finishing = false
  SaveManager.save_game()
  battle_status_changed.emit()
- _queue_next_encounter()
+ # Keep defeated forest GLBs on screen briefly before clearing them.
+ # Only visual pacing changes; rewards and progression are already committed.
+ var forest_death_visible: bool = false
+ for mob in enemy_visuals:
+  if is_instance_valid(mob) and mob.get_node_or_null("ForestModel") != null:
+   forest_death_visible = true
+   break
+ if forest_death_visible:
+  var request_id: int = _encounter_request_id
+  get_tree().create_timer(0.65).timeout.connect(func() -> void:
+   if is_inside_tree() and not _app_paused and not afk_farming and request_id == _encounter_request_id:
+    _queue_next_encounter()
+  )
+ else:
+  _queue_next_encounter()
 
 func _update_enemy_casualties() -> void:
  if is_boss or _enemy_unit_hp <= 0:
@@ -1100,12 +1172,32 @@ func _update_enemy_casualties() -> void:
  survivors = clampi(survivors, 0, enemy_visuals.size())
  for index in range(survivors, enemy_visuals.size()):
   var mob: Node3D = enemy_visuals[index]
-  if is_instance_valid(mob):
-   mob.visible = false
+  if is_instance_valid(mob) and mob.visible:
+   var presenter: Node = mob.get_node_or_null("ForestModel")
+   if presenter != null and presenter.has_method("play_clip") and presenter.call("play_clip", "death"):
+    var death_tween: Tween = create_tween()
+    death_tween.tween_interval(0.6)
+    death_tween.tween_callback(func() -> void:
+     if is_instance_valid(mob):
+      mob.visible = false
+    )
+   else:
+    mob.visible = false
  enemies_remaining = survivors
 
 # Visual-only boss animation bridge. Combat decisions, damage and timing
 # remain entirely in BattleManager; the animation may be absent safely.
+# Dispatch visual clips without changing damage, targeting or combat timing.
+func _play_forest_enemy_clip(clip: String, all_visible: bool = false) -> void:
+ for mob in enemy_visuals:
+  if not is_instance_valid(mob) or not mob.visible:
+   continue
+  var presenter: Node = mob.get_node_or_null("ForestModel")
+  if presenter != null and presenter.has_method("play_clip"):
+   presenter.call("play_clip", clip)
+   if not all_visible:
+    break
+
 func _animate_boss_event(event_name: String) -> void:
  if not is_boss or enemy_visuals.is_empty():
   return

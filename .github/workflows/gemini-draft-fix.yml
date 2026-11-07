@@ -1,0 +1,33 @@
+name: Gemini draft fix proposal
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Failed GitHub Actions run ID (required)"
+        required: true
+        type: string
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+concurrency:
+  group: gemini-draft-fix
+  cancel-in-progress: false
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.8-flash' }}
+      TARGET_RUN_ID: ${{ inputs.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check required secret
+        run: |
+          test -n "$GEMINI_API_KEY" || { echo "::error::Missing GEMINI_API_KEY"; exit 1; }
+      - name: Propose minimal source fix in draft PR
+        run: python3 tools/gemini_propose_fix.py

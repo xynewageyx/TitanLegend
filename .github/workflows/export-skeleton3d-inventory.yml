@@ -1,0 +1,90 @@
+name: Export Titan Legends Skeleton3D inventory
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/export-skeleton3d-inventory.yml
+      - tools/export_skeleton3d_inventory.gd
+      - tools/validate_skeleton3d_inventory.py
+      - tools/test_chibi_pose_smoke.gd
+      - tools/test_chibi_animation_keyframes.gd
+      - tools/test_chibi_animation_player_smoke.gd
+      - tools/test_chibi_animation_controller.gd
+      - scripts/animation/chibi_animation_controller.gd
+      - tools/export_chibi_animation_inventory.gd
+      - tools/analyze_chibi_animation_inventory.py
+      - tools/audit_chibi_animation_duplicates.py
+      - tests/test_validate_skeleton3d_inventory.py
+      - tests/test_analyze_chibi_animation_inventory.py
+      - tests/test_audit_chibi_animation_duplicates.py
+
+jobs:
+  export-skeletons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Skeleton3D inventory validator
+        run: python3 -m unittest discover -s tests -p 'test_validate_skeleton3d_inventory.py' -v
+      - name: Test Chibi animation coverage analyzer
+        run: python3 -m unittest discover -s tests -p 'test_analyze_chibi_animation_inventory.py' -v
+      - name: Test Chibi animation duplicate auditor
+        run: python3 -m unittest discover -s tests -p 'test_audit_chibi_animation_duplicates.py' -v
+      - name: Install Godot headless
+        run: |
+          set -euo pipefail
+          GODOT_VERSION="4.7.2"
+          URL="https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fL --retry 3 "$URL" -o /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          GODOT_BIN="$(find /tmp -maxdepth 1 -type f -name 'Godot_v*-stable_linux.x86_64' | head -n 1)"
+          test -n "$GODOT_BIN"
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+      - name: Import project
+        run: |
+          "$GODOT_BIN" --headless --editor --path . --import --quit
+      - name: Smoke-test Chibi bone posing
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_pose_smoke.gd
+      - name: Smoke-test Chibi animation keyframes
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_keyframes.gd
+      - name: Smoke-test actual AnimationPlayer bone posing
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_player_smoke.gd
+      - name: Smoke-test imported Chibi animation controller
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/test_chibi_animation_controller.gd
+      - name: Export imported Chibi animation metadata
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/export_chibi_animation_inventory.gd
+          test -s build/chibi_animation_inventory.json
+      - name: Analyze imported Chibi animation coverage
+        run: |
+          python3 tools/analyze_chibi_animation_inventory.py build/chibi_animation_inventory.json --output build/chibi_animation_coverage.json
+      - name: Audit possible duplicate Chibi animation metadata
+        run: |
+          python3 tools/audit_chibi_animation_duplicates.py build/chibi_animation_inventory.json --output build/chibi_animation_duplicate_audit.json
+      - name: Export skeleton hierarchy and rest poses
+        run: |
+          mkdir -p build
+          "$GODOT_BIN" --headless --path . --script res://tools/export_skeleton3d_inventory.gd -- --output build/skeleton3d_inventory.json
+          test -s build/skeleton3d_inventory.json
+      - name: Validate exported skeletons and rest poses
+        run: |
+          python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json
+      - name: Upload inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-skeleton3d-inventory
+          path: |
+            build/skeleton3d_inventory.json
+            build/skeleton3d_validation.json
+            build/chibi_animation_inventory.json
+            build/chibi_animation_coverage.json
+            build/chibi_animation_duplicate_audit.json
+          if-no-files-found: warn

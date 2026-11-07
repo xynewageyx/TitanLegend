@@ -1,0 +1,94 @@
+extends Node
+## Reusable animation-only adapter for imported Chibi GLB scenes.
+## Gameplay/skill decisions remain with BattleManager; this node only plays clips.
+class_name ChibiAnimationController
+
+const ACTIONS := ["Idle", "Walk", "Attack", "Hit", "Dodge"]
+var animation_player: AnimationPlayer
+var action_clips: Dictionary = {}
+var active_action := ""
+var locomotion_action := "Idle"
+
+
+func configure(character_root: Node) -> bool:
+    animation_player = _find_player(character_root)
+    action_clips.clear()
+    active_action = ""
+    locomotion_action = "Idle"
+    if animation_player == null:
+        push_warning("ChibiAnimationController: no AnimationPlayer found")
+        return false
+    if not animation_player.animation_finished.is_connected(_on_animation_finished):
+        animation_player.animation_finished.connect(_on_animation_finished)
+    for action in ACTIONS:
+        var candidates: Array[StringName] = []
+        for clip_name in animation_player.get_animation_list():
+            var label := str(clip_name)
+            if label == action or label.begins_with(action + "_"):
+                candidates.append(clip_name)
+        candidates.sort()
+        action_clips[action] = candidates
+    return true
+
+
+func play_action(action: String, variant: int = 0) -> bool:
+    if animation_player == null or not action_clips.has(action):
+        return false
+    var candidates: Array = action_clips[action]
+    if candidates.is_empty():
+        return false
+    var index := posmod(variant, candidates.size())
+    var clip_name: StringName = candidates[index]
+    if active_action == action and animation_player.is_playing() and animation_player.current_animation == str(clip_name):
+        return true
+    animation_player.play(clip_name)
+    active_action = action
+    return true
+
+
+func _on_animation_finished(animation_name: StringName) -> void:
+    if animation_player == null or animation_player.current_animation != str(animation_name):
+        return
+    if active_action == "Attack" or active_action == "Hit" or active_action == "Dodge":
+        play_action(locomotion_action)
+
+
+## Call only when gameplay has confirmed the corresponding combat event.
+func on_attack(variant: int = 0) -> bool:
+    return play_action("Attack", variant)
+
+
+func on_hit(variant: int = 0) -> bool:
+    return play_action("Hit", variant)
+
+
+func on_dodge(variant: int = 0) -> bool:
+    return play_action("Dodge", variant)
+
+
+func set_moving(moving: bool) -> bool:
+    locomotion_action = "Walk" if moving else "Idle"
+    if active_action == "Attack" or active_action == "Hit" or active_action == "Dodge":
+        return true
+    return play_action(locomotion_action)
+
+
+func return_to_idle() -> bool:
+    return play_action("Idle")
+
+
+func available_actions() -> Dictionary:
+    var counts := {}
+    for action in ACTIONS:
+        counts[action] = action_clips.get(action, []).size()
+    return counts
+
+
+func _find_player(node: Node) -> AnimationPlayer:
+    if node is AnimationPlayer:
+        return node as AnimationPlayer
+    for child in node.get_children():
+        var found := _find_player(child)
+        if found != null:
+            return found
+    return null

@@ -1,7 +1,7 @@
 extends RefCounted
 ## Titan Legends progression balance module (not wired into GameManager yet).
 const XP_PER_LEVEL := 3
-const AFK_XP_FACTOR := 0.70
+const AFK_XP_FACTOR := 0.72
 const AFK_GOLD_FACTOR := 0.60
 const AFK_MAX_SECONDS := 28800
 const AFK_START_SECONDS := 300
@@ -13,7 +13,8 @@ const CLASS_TREES := {
  "mage": ["fire", "frost", "arcane"],
  "ranger": ["precision", "wilderness", "trapper"],
  "priest": ["healing", "blessing", "light"],
- "assassin": ["shadow", "blades", "poison"]
+ "assassin": ["shadow", "blades", "poison"],
+ "death_knight": ["blood", "frost", "unholy"]
 }
 const SKILL_ANIMATIONS := {
  "shield_bash": "shield_bash",

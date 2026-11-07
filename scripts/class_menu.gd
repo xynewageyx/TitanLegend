@@ -6,7 +6,7 @@ var class_selector: OptionButton
 var description: Label
 var role_selector: OptionButton
 var bonus_label: Label
-const CLASS_ROLES := ["Tank / DD", "Tank / DD / Heilung", "Tank / DD / Heilung", "Tank / DD / Heilung", "DD", "DD", "DD", "DD", "DD", "Heilung / DD", "DD"]
+const CLASS_ROLES := ["Tank / DD", "Tank / DD / Heilung", "Tank / DD / Heilung", "Tank / DD / Heilung", "DD", "DD", "DD", "DD", "DD", "Heilung / DD", "DD", "Tank / DD"]
 func _ready() -> void:
  visible = false
  mouse_filter = Control.MOUSE_FILTER_STOP
@@ -37,6 +37,7 @@ func _ready() -> void:
  class_selector = OptionButton.new()
  for i in range(team_formation.CLASS_NAMES.size()):
   class_selector.add_item(team_formation.CLASS_NAMES[i], i)
+ assert(CLASS_ROLES.size() == team_formation.CLASS_NAMES.size(), "Class role descriptions must cover every playable class")
  v.add_child(class_selector)
  role_selector = OptionButton.new()
  v.add_child(role_selector)

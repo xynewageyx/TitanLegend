@@ -2,6 +2,12 @@ name: Titan Legends Android Debug APK
 
 on:
   workflow_dispatch:
+    inputs:
+      developer_fps:
+        description: "Enable developer-only FPS overlay in this manually triggered debug APK"
+        type: boolean
+        required: false
+        default: false
   push:
     paths:
       - 'export_presets.cfg'
@@ -15,9 +21,10 @@ on:
 permissions:
   contents: write
 
-# Only one preview build may publish the moving android-preview release.
+# Branch-isolated builds: a landscape branch must not cancel UI/character builds.
+# Only updates within the same branch/build flavor cancel one another.
 concurrency:
-  group: titan-legends-android-preview
+  group: titan-legends-android-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && inputs.developer_fps && 'developer-fps' || 'preview' }}
   cancel-in-progress: true
 
 jobs:
@@ -190,6 +197,29 @@ jobs:
               print(f"Godot import metadata OK: {model.name}")
           PY
 
+      - name: Validate forest models and combat animation presenters before APK export
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tools/tests/test_forest_animations.gd 2>&1 | tee /tmp/titan-android-forest-test.log
+          grep -Fq 'FOREST ANIMATION TEST PASSED: 36 clips on 9 enemies' /tmp/titan-android-forest-test.log
+
+      - name: Configure optional developer FPS diagnostics
+        shell: bash
+        env:
+          DEVELOPER_FPS: ${{ inputs.developer_fps || 'false' }}
+        run: |
+          if [ "$DEVELOPER_FPS" = "true" ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          preset = Path("export_presets.cfg")
+          data = preset.read_text(encoding="utf-8")
+          assert 'custom_features=""' in data
+          preset.write_text(data.replace('custom_features=""', 'custom_features="titan_developer"', 1), encoding="utf-8")
+          PY
+            echo "Developer FPS diagnostics enabled for this debug build only." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Export Android arm64 debug APK
         shell: bash
         run: |
@@ -208,7 +238,22 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Link branch-specific preview artifact
+        if: ${{ github.ref != 'refs/heads/main' }}
+        shell: bash
+        run: |
+          {
+            echo "### Branch-specific Android APK"
+            echo "- Branch: \`$GITHUB_REF_NAME\`"
+            echo "- [Download APK artifact for this run](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)"
+            echo "- Feature-branch APKs do not overwrite the shared android-preview release."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Only main updates the shared direct-download release.
+      # Feature branches publish an artifact only, and developer FPS builds
+      # always stay private to their workflow artifact.
       - name: Publish direct APK download on GitHub Releases
+        if: ${{ github.ref == 'refs/heads/main' && !(github.event_name == 'workflow_dispatch' && inputs.developer_fps) }}
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}

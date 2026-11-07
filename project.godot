@@ -11,6 +11,9 @@ AdManager="*res://scripts/ad_manager.gd"
 ShopManager="*res://scripts/shop_manager.gd"
 SaveManager="*res://scripts/save_manager.gd"
 AudioManager="*res://scripts/audio_manager.gd"
+GraphicsQualityManager="*res://scripts/graphics_quality_manager.gd"
+GraphicsSettingsMenu="*res://scripts/graphics_settings_menu.gd"
+DeveloperFPSOverlay="*res://scripts/developer_fps_overlay.gd"
 
 [display]
 window/size/viewport_width=720
@@ -24,3 +27,6 @@ textures/vram_compression/import_etc2_astc=true
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
+
+[editor_plugins]
+enabled=PackedStringArray("res://addons/titan_audio_inspector/plugin.cfg")

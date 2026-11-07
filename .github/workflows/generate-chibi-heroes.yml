@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - 'tools/generate_chibi.py'
+      - 'tools/validate_chibi_glb.py'
+      - '.github/workflows/generate-chibi-heroes.yml'
+      - 'tools/render_chibi_previews.py'
 permissions:
   contents: write
 jobs:
@@ -12,21 +15,53 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Blender
-        run: sudo apt-get update && sudo apt-get install -y blender
-      - name: Generate all eleven hero models
+        run: sudo apt-get update && sudo apt-get install -y blender python3-numpy libegl1 libgl1 libgl1-mesa-dri libosmesa6 xvfb
+      - name: Generate all twelve hero models
         run: blender -b --python tools/generate_chibi.py
       - name: Verify GLB outputs
         run: |
-          test "$(find assets/heroes/chibi -name '*.glb' -type f | wc -l)" -eq 11
-          find assets/heroes/chibi -name '*.glb' -type f -size +1k | wc -l | grep -qx 11
+          test "$(find assets/heroes/chibi -name '*.glb' -type f | wc -l)" -eq 12
+          find assets/heroes/chibi -name '*.glb' -type f -size +1k | wc -l | grep -qx 12
       - name: Validate skeletons and animations
         run: python3 tools/validate_chibi_glb.py
+      - name: Validate generated GLBs with Blender importer
+        run: |
+          blender -b --python tools/check_chibi_import.py
+      - name: Upload generated models for Android testing
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-legends-chibi-glb
+          path: assets/heroes/chibi/*.glb
+          if-no-files-found: warn
+      - name: Render visual previews of all twelve heroes
+        run: xvfb-run -a blender -b --python tools/render_chibi_previews.py
+      - name: Verify all twelve rendered PNG previews
+        run: |
+          test "$(find build/chibi_previews -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 12
+          test "$(find build/chibi_previews -maxdepth 1 -name '*.png' -type f -size +1k | wc -l)" -eq 12
+      - name: Upload character preview images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-legends-chibi-previews
+          path: build/chibi_previews/*.png
+          if-no-files-found: warn
       - name: Commit generated GLBs
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add assets/heroes/chibi/*.glb
           if ! git diff --cached --quiet; then
-            git commit -m 'Generate eleven original chibi hero GLB assets'
-            git push
+            git commit -m 'Generate twelve original chibi hero GLB assets'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              if git rebase origin/main && git push origin HEAD:main; then
+                exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((attempt * 2))
+            done
+            echo 'Could not push generated GLBs after retries' >&2
+            exit 1
           fi

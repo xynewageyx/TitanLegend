@@ -1,0 +1,49 @@
+name: Titan Legends Live Coordination
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: titan-legends-coordination
+  cancel-in-progress: false
+
+jobs:
+  update-project-status:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+          persist-credentials: true
+      - name: Generate shared coordination status
+        run: python3 tools/update_project_status.py
+      - name: Publish updated status to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Regenerate from the latest main on each attempt; never rebase generated files.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            python3 tools/update_project_status.py
+            git add PROJECT_LIVE_STATUS.md
+            if git diff --cached --quiet; then
+              echo "No status changes"
+              exit 0
+            fi
+            git commit -m "chore(coordination): refresh shared project status [skip ci]"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Concurrent push detected; retrying from latest main (${attempt}/5)"
+            sleep 2
+          done
+          echo "Unable to publish status after retries" >&2
+          exit 1
