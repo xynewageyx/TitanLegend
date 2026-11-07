@@ -41,29 +41,29 @@ class GeminiProposalSafetyTests(unittest.TestCase):
 
 
 class GeminiApiFailureTests(unittest.TestCase):
-    def call_generate(self, side_effect):
+    def call_generate(self):
         with patch.dict(NAMESPACE, {"MODEL": "test-model", "KEY": "dummy"}), \
-             patch("urllib.request.urlopen", side_effect=side_effect), \
              patch("time.sleep"):
             return NAMESPACE["generate"]("test prompt")
 
     def test_invalid_json_becomes_diagnostic_error(self):
         response = io.BytesIO(b"{invalid-json")
-        with self.assertRaisesRegex(RuntimeError, "invalid JSON"):
-            self.call_generate(response)
+        with patch("urllib.request.urlopen", return_value=response), \
+             self.assertRaisesRegex(RuntimeError, "invalid JSON"):
+            self.call_generate()
 
     def test_quota_exhaustion_stops_immediately(self):
         error = urllib.error.HTTPError("https://example.invalid", 429, "quota", {}, None)
         with patch("urllib.request.urlopen", side_effect=error) as request:
             with self.assertRaisesRegex(RuntimeError, "Quota exhausted"):
-                self.call_generate(error)
+                self.call_generate()
             self.assertEqual(request.call_count, 1)
 
     def test_service_unavailable_exhausts_fallbacks(self):
         error = urllib.error.HTTPError("https://example.invalid", 503, "unavailable", {}, None)
         with patch("urllib.request.urlopen", side_effect=error) as request:
             with self.assertRaisesRegex(RuntimeError, "No Gemini model available"):
-                self.call_generate(error)
+                self.call_generate()
             self.assertEqual(request.call_count, 6)
 
 
