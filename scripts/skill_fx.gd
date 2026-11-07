@@ -103,6 +103,7 @@ static func cast(parent: Node3D, team: Node3D, target: Node3D, tick: int) -> voi
    2: # Druid: offensive thorn magic
     _launch(parent, start, target_point, Color(0.32, 0.95, 0.48, 0.95), 0.19, 0.32)
    3: # Shaman: lightning and elemental totems
+    _launch(parent, start, target_point, Color(0.2, 0.85, 0.95, 0.95), 0.16, 0.28)
     _launch(parent, start, target_point, Color(0.35, 0.85, 0.95, 0.95), 0.21, 0.28)
    9: # Priest tank/other fallback: holy glow
     _launch(parent, start, target_point, Color(1.0, 0.93, 0.45, 0.95), 0.19, 0.3)
