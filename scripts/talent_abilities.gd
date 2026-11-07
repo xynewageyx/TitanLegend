@@ -16,10 +16,11 @@ const ABILITY_NAMES := [
  ["Geistersturm", "Runenwall", "Seelenheil"],
  ["Lichtlanze", "Glaubenswall", "Grossheilung"],
  ["Fausthagel", "Eisenfaust", "Kampfmut"],
+ ["Runenschlag", "Knochenschild", "Seelenentzug"],
 ]
 
 static func ability_name(class_id: int, tree: int) -> String:
- return str(ABILITY_NAMES[clampi(class_id, 0, 10)][clampi(tree, 0, 2)])
+ return str(ABILITY_NAMES[clampi(class_id, 0, 11)][clampi(tree, 0, 2)])
 
 static func cooldown_ticks(tree: int, branch: int) -> int:
  # Meisterpfad: etwas haeufigere Aktivierung ab Rang 25.
@@ -48,7 +49,7 @@ static func activate(class_id: int, tree: int, rank: int, branch: int, base_dama
    1: heal = int(round(float(max_hp) * 0.035))
    2: damage = int(round(float(base_damage) * 0.35))
  # Klassenidentitaet: zusaetzlicher Akzent auf der Hauptwirkung.
- if class_id in [4, 5, 6, 7, 10] and tree == 0:
+ if class_id in [4, 5, 6, 7, 10, 11] and tree == 0:
   damage = int(round(float(damage) * 1.12))
  if class_id in [0, 1, 2] and tree == 1:
   guard = minf(0.48, guard + 0.04)
