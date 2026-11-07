@@ -15,8 +15,24 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Blender
         run: sudo apt-get update && sudo apt-get install -y blender python3-numpy
+      - name: Check Blender version and generator syntax
+        run: |
+          blender --version | head -n 2
+          python3 -m py_compile tools/generate_chibi.py tools/validate_chibi_glb.py
       - name: Generate all twelve hero models
         run: blender -b --python tools/generate_chibi.py
+      - name: Report generated models
+        if: always()
+        run: |
+          mkdir -p assets/heroes/chibi
+          find assets/heroes/chibi -maxdepth 1 -name '*.glb' -type f -printf '%f %s bytes\n' | sort
+      - name: Upload generated GLBs for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chibi-blender-export
+          path: assets/heroes/chibi/*.glb
+          if-no-files-found: warn
       - name: Verify GLB outputs
         run: |
           test "$(find assets/heroes/chibi -name '*.glb' -type f | wc -l)" -eq 12
