@@ -71,6 +71,10 @@ func build_armor(target: Skeleton3D, quality: String = "white", hero_class: Stri
         if tier >= 2 and (slot == "helmet" or slot.begins_with("shoulder")):
             var spike_count: int = int(profile["spikes"]) + (1 if tier >= 4 else 0)
             _add_spikes(anchor, slot, spike_count, tier, armor_color)
+        if tier >= 3 and slot == "chestplate":
+            _add_emblem(anchor, tier, hero_class, armor_color)
+        if tier >= 4 and (slot == "helmet" or slot.begins_with("shoulder")):
+            _add_energy_gem(anchor, slot, tier, hero_class)
         # Track created anchors by metadata to clean them on rebuild.
         anchor.set_meta("titan_armor_preview", true)
     return true
@@ -121,3 +125,37 @@ func _add_spikes(anchor: BoneAttachment3D, slot: String, count: int, tier: int, 
         material.metallic = 0.55
         spike.material_override = material
         anchor.add_child(spike)
+
+func _add_emblem(anchor: BoneAttachment3D, tier: int, hero_class: String, tint: Color) -> void:
+    var emblem := MeshInstance3D.new()
+    emblem.name = "ChestEmblem"
+    var gem := SphereMesh.new()
+    gem.radius = 0.12 + float(tier) * 0.012
+    gem.height = gem.radius * 1.65
+    emblem.mesh = gem
+    emblem.position = Vector3(0, 0.06, -0.36)
+    emblem.scale = Vector3(1.0, 1.2, 0.35)
+    var mat := StandardMaterial3D.new()
+    mat.albedo_color = Color("#8fceff") if hero_class == "paladin" else tint.lightened(0.20)
+    if hero_class == "death_knight":
+        mat.albedo_color = Color("#9b69ed")
+    mat.metallic = 0.4
+    emblem.material_override = mat
+    anchor.add_child(emblem)
+
+func _add_energy_gem(anchor: BoneAttachment3D, slot: String, tier: int, hero_class: String) -> void:
+    var gem := MeshInstance3D.new()
+    gem.name = "EnergyGem"
+    var shape := SphereMesh.new()
+    shape.radius = 0.085 + 0.012 * float(tier - 4)
+    shape.height = shape.radius * 2.0
+    gem.mesh = shape
+    gem.position = Vector3(0, 0.38 if slot == "helmet" else 0.18, -0.24)
+    var mat := StandardMaterial3D.new()
+    mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+    mat.albedo_color = Color("#b783ff") if hero_class == "death_knight" else Color("#75d8ff")
+    mat.emission_enabled = true
+    mat.emission = mat.albedo_color
+    mat.emission_energy_multiplier = 1.0 + float(tier - 4) * 0.6
+    gem.material_override = mat
+    anchor.add_child(gem)
