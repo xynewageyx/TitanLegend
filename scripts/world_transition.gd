@@ -18,7 +18,6 @@ func _ready() -> void:
  var center := CenterContainer.new()
  center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  center.mouse_filter = Control.MOUSE_FILTER_IGNORE
- center.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
  shade.add_child(center)
  var stack := VBoxContainer.new()
  stack.add_theme_constant_override("separation", 14)
@@ -34,6 +33,7 @@ func _ready() -> void:
  stack.add_child(subtitle_label)
  element_bar = ColorRect.new()
  element_bar.custom_minimum_size = Vector2(190.0, 6.0)
+ element_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
  element_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
  stack.add_child(element_bar)
  shade.visible = false
