@@ -47,7 +47,16 @@ func _run() -> void:
                 push_error("%s: marker not attached to bone %s" % [hero_name, socket_name])
                 failures += 1
             else:
-                count += 1
+                var attachment := marker.get_parent() as BoneAttachment3D
+                var expected_bone: String = BUILDER.SOCKET_BONES[socket_name]
+                if attachment.bone_name != expected_bone:
+                    push_error("%s: %s attached to %s instead of %s" % [hero_name, socket_name, attachment.bone_name, expected_bone])
+                    failures += 1
+                elif skeleton.find_bone(expected_bone) < 0:
+                    push_error("%s: missing expected bone %s" % [hero_name, expected_bone])
+                    failures += 1
+                else:
+                    count += 1
         print("Equipment sockets: %s -> %d/15" % [hero_name, count])
         model.queue_free()
     if failures > 0:
