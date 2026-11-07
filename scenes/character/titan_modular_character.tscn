@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/character/modular_character.gd" id="1_controller"]
+
+[node name="TitanModularCharacter" type="Node3D"]
+script = ExtResource("1_controller")
+
+[node name="Skeleton3D" type="Skeleton3D" parent="."]
+
+[node name="Slots" type="Node3D" parent="."]
+
+[node name="hair" type="Node3D" parent="Slots"]
+
+[node name="head" type="Node3D" parent="Slots"]
+
+[node name="torso" type="Node3D" parent="Slots"]
+
+[node name="gloves" type="Node3D" parent="Slots"]
+
+[node name="legs" type="Node3D" parent="Slots"]
+
+[node name="boots" type="Node3D" parent="Slots"]
+
+[node name="main_hand" type="Node3D" parent="Slots"]
+
+[node name="off_hand" type="Node3D" parent="Slots"]
+
+[node name="back" type="Node3D" parent="Slots"]
