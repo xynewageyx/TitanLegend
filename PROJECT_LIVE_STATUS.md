@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 15:41 UTC**
-Git-Stand: **0db319fd1ef0c9e6b86e6c6f0e1fb3bf88d78169** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 15:42 UTC**
+Git-Stand: **5fa999d816263ca01817d3016206e1f444e1fe35** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -27,7 +27,6 @@ Git-Stand: **0db319fd1ef0c9e6b86e6c6f0e1fb3bf88d78169** auf Branch **main**
 ### Gameplay — Gameplay-/Talent-Chat
 - `4f9c350` (2026-11-07): fix: Death Knight visual loader and talent abilities (#81)
 - `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
-- `93fb7e5` (2026-11-07): fix: give Death Knight its own talent progression (#73)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -40,17 +39,17 @@ Git-Stand: **0db319fd1ef0c9e6b86e6c6f0e1fb3bf88d78169** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 - `37fcd6e` (2026-11-07): Avoid Cloudflare Cron false failures on Gemini quota exhaustion (#86)
 - `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
 - `5e47f78` (2026-11-07): Add Cloudflare Cron backup for autonomous agents
-- `ce9a406` (2026-11-07): Connect scheduled 10-minute coordination to autonomous Gemini agents (#79)
 
 ## Bereichsübergreifende Änderungen
 
