@@ -29,7 +29,7 @@ jobs:
           import re
           from pathlib import Path
           files = list(Path("assets/audio").rglob("*.wav"))
-          assert len(files) == 69, f"Expected 69 WAV files, got {len(files)}"
+          assert len(files) == 71, f"Expected 71 WAV files, got {len(files)}"
           catalog = Path("scripts/audio_event_catalog.gd").read_text()
           paths = set(re.findall(r'res://(assets/audio/[^"]+[.]wav)', catalog))
           generated = {p.as_posix() for p in files}
@@ -40,7 +40,7 @@ jobs:
                   assert audio.getframerate() == 22050
                   assert audio.getnchannels() == 1
                   assert audio.getsampwidth() == 2
-          print("69 audio files validated")
+          print("71 audio files validated")
           PY
       - uses: actions/upload-artifact@v4
         with:

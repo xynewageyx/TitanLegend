@@ -260,7 +260,7 @@ func clear_local_hero() -> void:
 # Call only after trusted slot ownership is established and the local class is known.
 # Avoid loading all 22 class cues into the Android audio cache at startup.
 func set_local_hero_class_id(class_id: int) -> void:
- if local_hero_slot < 0 or class_id < 0 or class_id > 10:
+ if local_hero_slot < 0 or class_id < 0 or class_id > 11:
   local_hero_class_id = -1
   return
  if local_hero_class_id == class_id:
@@ -295,7 +295,7 @@ func bind_local_hero_with_classes(owner_peer_ids: Array[int], class_ids: Array[i
  if not bind_local_hero_from_team(owner_peer_ids, local_peer_id):
   return false
  var class_id: int = class_ids[local_hero_slot]
- if class_id < 0 or class_id > 10:
+ if class_id < 0 or class_id > 11:
   clear_local_hero()
   return false
  set_local_hero_class_id(class_id)

@@ -28,6 +28,7 @@ SOUNDS.update({
  "classes/summoner_attack.wav": (0.294, 844, 467, "tone"),
  "classes/priest_attack.wav": (0.312, 927, 516, "tone"),
  "classes/brawler_attack.wav": (0.330, 1010, 565, "noise"),
+ "classes/death_knight_attack.wav": (0.410, 115, 43, "noise"),
 })
 SOUNDS.update({
  "classes/warrior_skill.wav": (0.300, 330, 700, "noise"),
@@ -41,6 +42,7 @@ SOUNDS.update({
  "classes/summoner_skill.wav": (0.484, 866, 1116, "tone"),
  "classes/priest_skill.wav": (0.507, 933, 1168, "tone"),
  "classes/brawler_skill.wav": (0.530, 1000, 1220, "noise"),
+ "classes/death_knight_skill.wav": (0.680, 165, 48, "tone"),
 })
 SOUNDS.update({
  "skills/taunt.wav": (0.32, 170, 320, "noise"),
@@ -113,11 +115,11 @@ def render(path, duration, start, end, mode):
     "hunter": (0.38, 3.0), "rogue": (0.48, 4.0),
     "mage": (0.32, 2.8), "warlock": (0.36, 1.35),
     "summoner": (0.22, 1.8), "priest": (0.20, 2.2),
-    "brawler": (0.52, 1.15),
+    "brawler": (0.52, 1.15), "death": (0.58, 0.72),
    }
    strength, harmonic = character.get(class_name, (0.2, 2.0))
    wave_value += math.sin(phase * harmonic) * strength * (0.65 if is_skill else 1.0)
-   if class_name in ("warrior", "hunter", "rogue", "brawler"):
+   if class_name in ("warrior", "hunter", "rogue", "brawler", "death"):
     wave_value += rng.uniform(-1, 1) * strength * math.exp(-25 * t)
    if is_skill:
     wave_value += math.sin(phase * 0.5) * 0.16 * math.sin(math.pi * t)

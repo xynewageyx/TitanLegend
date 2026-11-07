@@ -7,7 +7,7 @@ AUDIO = (Path(__file__).resolve().parents[1] / "scripts/audio_manager.gd").read_
 
 class LocalClassAudioTests(unittest.TestCase):
     def test_preload_requires_owned_slot_and_valid_class(self):
-        self.assertIn("if local_hero_slot < 0 or class_id < 0 or class_id > 10:", AUDIO)
+        self.assertIn("if local_hero_slot < 0 or class_id < 0 or class_id > 11:", AUDIO)
         self.assertIn('_get_event_stream("class_attack_%d" % class_id)', AUDIO)
         self.assertIn('_get_event_stream("class_skill_%d" % class_id)', AUDIO)
 
@@ -20,7 +20,7 @@ class LocalClassAudioTests(unittest.TestCase):
         self.assertIn("if class_ids.size() != 4:", AUDIO)
         self.assertIn("if not bind_local_hero_from_team(owner_peer_ids, local_peer_id):", AUDIO)
         self.assertIn("var class_id: int = class_ids[local_hero_slot]", AUDIO)
-        self.assertIn("if class_id < 0 or class_id > 10:", AUDIO)
+        self.assertIn("if class_id < 0 or class_id > 11:", AUDIO)
         self.assertIn("set_local_hero_class_id(class_id)", AUDIO)
 
     def test_remote_hero_events_remain_silent(self):
