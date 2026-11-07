@@ -152,6 +152,10 @@ def silhouette_levels(levels, width, depth):
 
 for idx,name in enumerate(NAMES):
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
+ # Blender keeps orphaned Action datablocks after deleting the previous rig.
+ # Clear them before building the next hero so GLTF does not export old clips.
+ for previous_action in list(bpy.data.actions):
+  bpy.data.actions.remove(previous_action,do_unlink=True)
  head_width,body_width,body_depth=SILHOUETTES[name]
  eye_width,eye_height=FACE_STYLES[name]
  skin=material("skin",(.72,.77,.82) if name=="death_knight" else (.92,.69,.51));hair=material("hair",COLORS[idx])
