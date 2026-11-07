@@ -66,10 +66,13 @@ if not re.fullmatch(r"[0-9]{6,20}", RUN_ID):
 log_result = command("gh", "run", "view", RUN_ID, "--repo", os.environ["GITHUB_REPOSITORY"], "--log-failed", check=False)
 if log_result.returncode or not log_result.stdout.strip():
     raise SystemExit("Failed-run logs unavailable")
-logs = log_result.stdout[-18000:]
+# Truncate each extremely long assertion BEFORE taking the tail; a failing
+# unittest may print entire source files in a single assertion line.
+log_lines = [line[:1600] for line in log_result.stdout.splitlines() if line.strip()]
+logs = "\n".join(log_lines)[-24000:]
 # Send only explicitly listed, bounded source files; no secrets or workflow/config files.
 files = []
-for match in re.findall(r"(?<![\w./-])(?:scripts|scenes|tests|addons)/[\w./-]+\.(?:gd|py|tscn|tres)", logs):
+for match in re.findall(r"(?<![\w.-])(?:scripts|scenes|tests|addons)/[\w./-]+\.(?:gd|py|tscn|tres)", logs):
     try:
         p = safe_path(match)
         if str(p) not in files:
