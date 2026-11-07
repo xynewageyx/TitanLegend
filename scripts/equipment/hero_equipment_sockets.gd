@@ -9,7 +9,13 @@ const SLOT_NAMES := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSoc
 var equipped_nodes: Dictionary = {}
 func _socket(name: String) -> Node3D:
     var found := find_child(name, true, false)
-    if found is Node3D:\n        return found as Node3D\n    # Bone-bound sockets may live under the hero Skeleton3D, outside this controller.\n    var hero := get_parent()\n    if hero != null:\n        found = hero.find_child(name, true, false)\n    return found as Node3D if found is Node3D else null
+    if found is Node3D:
+        return found as Node3D
+    # Bone-bound sockets may live under the hero Skeleton3D, outside this controller.
+    var hero := get_parent()
+    if hero != null:
+        found = hero.find_child(name, true, false)
+    return found as Node3D if found is Node3D else null
 func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
     var socket := _socket("LeftHandSocket" if offhand else "RightHandSocket")
     if socket == null:
