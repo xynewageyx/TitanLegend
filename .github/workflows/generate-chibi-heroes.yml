@@ -8,7 +8,7 @@ on:
       - '.github/workflows/generate-chibi-heroes.yml'
       - 'tools/render_chibi_previews.py'
 permissions:
-  contents: write
+  contents: read
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -47,21 +47,3 @@ jobs:
           name: titan-legends-chibi-previews
           path: build/chibi_previews/*.png
           if-no-files-found: warn
-      - name: Commit generated GLBs
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/heroes/chibi/*.glb
-          if ! git diff --cached --quiet; then
-            git commit -m 'Generate twelve original chibi hero GLB assets'
-            for attempt in 1 2 3 4 5; do
-              git fetch origin main
-              if git rebase origin/main && git push origin HEAD:main; then
-                exit 0
-              fi
-              git rebase --abort 2>/dev/null || true
-              sleep $((attempt * 2))
-            done
-            echo 'Could not push generated GLBs after retries' >&2
-            exit 1
-          fi
