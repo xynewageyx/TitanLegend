@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 15:42 UTC**
-Git-Stand: **5fa999d816263ca01817d3016206e1f444e1fe35** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 16:46 UTC**
+Git-Stand: **1e88366571f61cf914e4cb2322b31a8d4680017e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -45,15 +45,15 @@ Git-Stand: **5fa999d816263ca01817d3016206e1f444e1fe35** auf Branch **main**
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `1e88366` (2026-11-07): fix: keep autonomous agents running after invalid Gemini edit proposals (#96)
 - `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 - `37fcd6e` (2026-11-07): Avoid Cloudflare Cron false failures on Gemini quota exhaustion (#86)
 - `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
-- `5e47f78` (2026-11-07): Add Cloudflare Cron backup for autonomous agents
 
 ## Bereichsübergreifende Änderungen
 
-- `9d6b0b1` (2026-11-07): fix: include Death Knight in damage-dealer pet crit bonus (#77)
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
