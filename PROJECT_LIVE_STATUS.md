@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 14:52 UTC**
-Git-Stand: **67c6e201c46c0c748d66640a96c665cf32b86b31** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 14:57 UTC**
+Git-Stand: **37fcd6e1c77870de8ccdd5a43b032b0fbfb694f4** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -46,10 +46,10 @@ Git-Stand: **67c6e201c46c0c748d66640a96c665cf32b86b31** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `37fcd6e` (2026-11-07): Avoid Cloudflare Cron false failures on Gemini quota exhaustion (#86)
 - `67c6e20` (2026-11-07): fix: require 12 chibi GLBs and previews in Blender workflow (#84)
 - `5e47f78` (2026-11-07): Add Cloudflare Cron backup for autonomous agents
 - `ce9a406` (2026-11-07): Connect scheduled 10-minute coordination to autonomous Gemini agents (#79)
-- `adb3e22` (2026-11-07): Offset autonomous agent schedule away from minute zero (#71)
 
 ## Bereichsübergreifende Änderungen
 
