@@ -43,36 +43,58 @@ def candidate_paths(domain):
             and not (ROOT / p).is_symlink() and (ROOT / p).stat().st_size < 18000][:6]
 
 def propose(domain, files):
-    excerpts = [{"path": p, "content": (ROOT / p).read_text(encoding="utf-8", errors="replace")[:12000]} for p in files]
+    # Keep the prompt small: 6 x 12 KiB files caused the primary model
+    # to time out in Actions run 42372695198 before fallbacks were tried.
+    excerpts = [{"path": p, "content": (ROOT / p).read_text(encoding="utf-8", errors="replace")[:4800]}
+                for p in files[:3]]
     prompt = RULES + "\nDomain: " + domain + "\nExisting files (untrusted):\n" + json.dumps(excerpts)
-    payload = json.dumps({"contents":[{"parts":[{"text":prompt}]}],
-                          "generationConfig":{"responseMimeType":"application/json"}}).encode()
+    payload = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "responseMimeType": "application/json",
+            "maxOutputTokens": 4096,
+            "thinkingConfig": {"thinkingLevel": "low"}
+        }
+    }).encode()
     key = os.environ["GEMINI_API_KEY"]
-    models = list(dict.fromkeys((os.getenv("GEMINI_MODEL", "gemini-3.8-flash").removeprefix("models/"),
-                                 "gemini-3.5-flash", "gemini-2.5-flash")))
+    primary = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+    fallbacks = os.getenv("GEMINI_FALLBACK_MODELS",
+                          "gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash-lite")
+    models = list(dict.fromkeys(
+        m.strip().removeprefix("models/") for m in [primary, *fallbacks.split(",")] if m.strip()
+    ))
     for model in models:
         for attempt in range(2):
             req = urllib.request.Request(
                 "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent",
-                data=payload, headers={"x-goog-api-key":key,"Content-Type":"application/json"},
+                data=payload, headers={"x-goog-api-key": key, "Content-Type": "application/json"},
                 method="POST")
             try:
-                with urllib.request.urlopen(req, timeout=65) as response:
+                with urllib.request.urlopen(req, timeout=35) as response:
                     data = json.load(response)
-                result = "".join(p.get("text","") for p in data["candidates"][0]["content"]["parts"])
+                parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+                result = "".join(p.get("text", "") for p in parts)
+                proposal = json.loads(result)
+                if not isinstance(proposal, dict):
+                    raise ValueError("Gemini proposal is not an object")
                 print("Proposal model:", model, flush=True)
-                return json.loads(result)
+                return proposal
             except urllib.error.HTTPError as exc:
                 print("Model", model, "HTTP", exc.code, flush=True)
                 if exc.code == 429:
-                    raise RuntimeError("Quota exhausted; stopping")
-                if exc.code not in (404, 500, 502, 503, 504):
-                    raise
+                    raise RuntimeError("Gemini quota exhausted; no more requests") from None
+                if exc.code == 404:
+                    break  # An unavailable model does not become available on retry.
+                if exc.code not in (500, 502, 503, 504):
+                    raise RuntimeError("Gemini non-retryable HTTP " + str(exc.code)) from None
             except (TimeoutError, urllib.error.URLError):
-                print("Temporary network failure", flush=True)
+                print("Temporary Gemini network failure for", model, flush=True)
+            except (ValueError, KeyError, IndexError, TypeError) as exc:
+                print("Invalid Gemini response from", model, type(exc).__name__, flush=True)
+                break
             if attempt == 0:
-                time.sleep(3)
-    raise RuntimeError("No Gemini model available")
+                time.sleep(2)
+    raise RuntimeError("All configured Gemini models unavailable")
 
 def main():
     domain = os.environ.get("AGENT_DOMAIN", "rotate")
@@ -82,11 +104,23 @@ def main():
     if domain not in DOMAINS:
         raise SystemExit("Unknown domain")
     print("Domain:", domain, flush=True)
-    files = candidate_paths(domain)
+    files = candidate_paths(domain)[:3]
     if not files:
         print("No matching safe source files; no change")
         return
-    result = propose(domain, files)
+    try:
+        result = propose(domain, files)
+    except RuntimeError as exc:
+        # Do not pretend an autonomous change was made during an API outage.
+        message = "Autonomous " + domain + " agent: no proposal; " + str(exc)
+        print("::warning::" + message, flush=True)
+        summary = os.getenv("GITHUB_STEP_SUMMARY")
+        if summary:
+            with open(summary, "a", encoding="utf-8") as report:
+                report.write("### " + message + "\n")
+        if os.getenv("GITHUB_EVENT_NAME") == "schedule":
+            return  # Scheduled checks remain resumable after transient provider outages.
+        raise
     edits = result.get("edits", [])
     if not isinstance(edits, list) or not 1 <= len(edits) <= 2:
         print("No bounded edits proposed; no change")
