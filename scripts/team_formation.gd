@@ -18,7 +18,7 @@ func _formation_position(slot: int) -> Vector3:
  # enough lateral room for large helmets, weapons and passive companions.
  var spacing: float = 2.65 if row.size() <= 3 else 1.95
  var x: float = (float(index_in_row) - float(row.size() - 1) / 2.0) * spacing
- return Vector3(x, 0.0, -2.15 if in_front else 1.25)
+ return Vector3(x, 0.0, -2.65 if in_front else 1.65)
 var heroes: Array[Node3D] = []
 var class_ids: Array[int] = [0, 6, 4, 9]
 var talent_branches: Array = [[-1,-1,-1], [-1,-1,-1], [-1,-1,-1], [-1,-1,-1]]
@@ -366,9 +366,7 @@ func _on_attack_step_finished(hero_index: int) -> void:
 
 const COLORS = [Color("#c8d0df"), Color("#4f85d9"), Color("#a06dd8"), Color("#6bc37d")]
 func _ready() -> void:
- var talent_menu: CanvasLayer = TALENT_MENU_V2.new()
- talent_menu.name = "TalentMenuV2"
- add_child(talent_menu)
+ # The canonical talent menu is managed by the UI; do not spawn a second CanvasLayer.
  add_to_group("talent_team")
  _load_classes()
  _load_roles()

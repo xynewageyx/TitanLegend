@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/team/titan_team_card.gd" id="1_script"]
+
+[node name="TitanTeamCard" type="PanelContainer"]
+custom_minimum_size = Vector2(136, 110)
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+theme_override_constants/separation = 4
+
+[node name="Header" type="HBoxContainer" parent="Margin/Content"]
+
+[node name="LeaderMark" type="Label" parent="Margin/Content/Header"]
+unique_name_in_owner = true
+text = "★"
+
+[node name="HeroName" type="Label" parent="Margin/Content/Header"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+text = "Held"
+text_overrun_behavior = 3
+
+[node name="HeroLevel" type="Label" parent="Margin/Content/Header"]
+unique_name_in_owner = true
+text = "Lv. 1"
+
+[node name="HeroRole" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+text = "DD"
+
+[node name="HealthBar" type="ProgressBar" parent="Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="SelectButton" type="Button" parent="Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+text = "Auswählen"

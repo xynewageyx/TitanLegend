@@ -28,7 +28,9 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("TALENT_TREES_V2.upgrade(", section)
         self.assertIn("set_talent_build_v2(", section)
         self.assertIn("SaveManager.save_game()", section)
-        self.assertIn("TALENT_MENU_V2.new()", TEAM)
+        # The legacy CanvasLayer must not be spawned alongside the canonical UI.
+        self.assertNotIn("TALENT_MENU_V2.new()", TEAM)
+        self.assertIn('set_meta("talent_builds_v2", builds)', TEAM)
 
     def test_menu_uses_atomic_purchase_not_direct_mutation(self):
         start = MENU.index("func _upgrade(")

@@ -749,6 +749,12 @@ func _refresh(_unused: int = 0) -> void:
   else:
    weapon_rarity_button.text = "%s → %s: %d Gold" % [rarity_text, GameManager.WEAPON_RARITIES[weapon_rarity + 1], rarity_cost]
   weapon_rarity_button.disabled = rarity_cost <= 0 or GameManager.current_gold < rarity_cost
+  # Keep all four selectable hardening fields readable and visibly selected.
+  for field_index in range(hardening_slot_buttons.size()):
+   var slot_button: Button = hardening_slot_buttons[field_index]
+   var slot_level: int = int(GameManager.hardening_levels[weapon_hero_slot][field_index])
+   slot_button.text = "◆ %d\nLv %d" % [field_index + 1, slot_level]
+   slot_button.button_pressed = field_index == hardening_field
   var hardening_level: int = int(GameManager.hardening_levels[weapon_hero_slot][hardening_field])
   var hardening_cost: int = GameManager.hardening_upgrade_cost(weapon_hero_slot, hardening_field)
   var assigned_attribute: int = int(GameManager.hardening_attributes[weapon_hero_slot][hardening_field])
