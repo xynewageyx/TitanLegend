@@ -14,7 +14,7 @@ class DeathKnightTalentTests(unittest.TestCase):
             values = re.search(r"const " + key + r"\s*:=\s*\[([^]]+)\]", TALENTS)
             self.assertIsNotNone(values)
             self.assertEqual(len(values.group(1).split(",")), 12, key)
-            self.assertTrue(all(re.fullmatch(r"\\s*0\\.\\d+\\s*", value) for value in values.group(1).split(",")), key)
+            self.assertTrue(all(re.fullmatch(r"\s*0\.\d+\s*", value) for value in values.group(1).split(",")), key)
 
     def test_death_knight_talent_tree(self):
         self.assertIn('["Runenklinge", "Knochenpanzer", "Seelenmacht"]', TALENTS)
