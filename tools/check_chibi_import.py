@@ -1,6 +1,6 @@
 """Round-trip import each generated chibi GLB in Blender and verify animation data."""
 import bpy, os
-NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler".split()
+NAMES="warrior paladin druid shaman hunter rogue mage warlock summoner priest brawler death_knight".split()
 for name in NAMES:
  path=os.path.abspath("assets/heroes/chibi/"+name+".glb")
  bpy.ops.object.select_all(action="SELECT")
@@ -22,4 +22,4 @@ for name in NAMES:
   if not any(side in o.vertex_groups for o in meshes):
    raise RuntimeError(name+": no skin weights for "+side)
  print("PASS",name,len(arm.data.bones),"bones",len(meshes),"meshes")
-print("All eleven GLBs imported successfully")
+print("All twelve GLBs imported successfully")
