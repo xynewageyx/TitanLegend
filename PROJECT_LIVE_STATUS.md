@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 19:29 UTC**
-Git-Stand: **97fa919863a6df5b00dd76f2122a35dbe349532c** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 19:32 UTC**
+Git-Stand: **cc95389467d5d9a4f163d136cd409d66dd941bf7** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 - `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -36,17 +37,17 @@ Git-Stand: **97fa919863a6df5b00dd76f2122a35dbe349532c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 - `97fa919` (2026-11-07): Fix regression CI by installing lz4 for UnityFS inspector tests (#107)
 - `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
 - `e64f4e3` (2026-11-07): fix: use Flash models instead of Gemini 4 Argon for autonomous agents (#100)
 - `d87b37c` (2026-11-07): Add modular hairstyles safely separated from PR #10
-- `1e88366` (2026-11-07): fix: keep autonomous agents running after invalid Gemini edit proposals (#96)
 
 ## Bereichsübergreifende Änderungen
 
