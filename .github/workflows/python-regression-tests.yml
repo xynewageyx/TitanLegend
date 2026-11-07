@@ -1,0 +1,51 @@
+name: Python Regression Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/**'
+      - 'scripts/**'
+      - 'tools/**'
+      - 'cloudflare/titan-legends-github-cron/**'
+      - '.github/workflows/python-regression-tests.yml'
+  pull_request:
+    paths:
+      - 'tests/**'
+      - 'scripts/**'
+      - 'tools/**'
+      - 'cloudflare/titan-legends-github-cron/**'
+      - '.github/workflows/python-regression-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  python-regression:
+    name: Full Python unittest suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python version
+        run: python3 --version
+      - name: Install Python test dependencies
+        run: |
+          python3 -m pip install --user --break-system-packages 'lz4>=4,<5'
+      - name: Run all Python regression tests
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p build
+          python3 -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tee build/python-regression.log
+      - name: Test Cloudflare GitHub dispatcher
+        run: node --test cloudflare/titan-legends-github-cron/worker.test.mjs
+      - name: Upload regression log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-regression-log
+          path: build/python-regression.log
+          if-no-files-found: warn
+          retention-days: 14
