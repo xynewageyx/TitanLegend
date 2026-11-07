@@ -58,9 +58,9 @@ def propose(domain, files):
         }
     }).encode()
     key = os.environ["GEMINI_API_KEY"]
-    primary = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+    primary = os.getenv("GEMINI_MODEL", "gemini-4-argon")
     fallbacks = os.getenv("GEMINI_FALLBACK_MODELS",
-                          "gemini-3.5-flash-lite")
+                          "gemini-3.6-flash,gemini-3.5-flash-lite")
     models = list(dict.fromkeys(
         m.strip().removeprefix("models/") for m in [primary, *fallbacks.split(",")] if m.strip()
     ))
@@ -162,19 +162,27 @@ def main():
     staged = {}
     for edit in edits:
         if not isinstance(edit, dict):
-            raise SystemExit("Invalid edit")
+            print("::warning::Invalid edit object; no change", flush=True)
+            return
         path, old, new = (edit.get(k) for k in ("path", "old", "new"))
         if not all(isinstance(v, str) for v in (path, old, new)):
-            raise SystemExit("Invalid edit fields")
+            print("::warning::Invalid edit fields; no change", flush=True)
+            return
         if path not in files or not old or old == new or len(old) > 4000 or len(new) > 4000:
-            raise SystemExit("Edit violates allowlist or size limit")
+            print("::warning::Edit violates allowlist or size limit; no change", flush=True)
+            return
         base = staged.get(path, (ROOT / path).read_text(encoding="utf-8"))
         if base.count(old) != 1:
-            raise SystemExit("Edit not uniquely applicable")
+            print("::warning::Edit not uniquely applicable in " + path + "; no change", flush=True)
+            return
         staged[path] = base.replace(old, new, 1)
     for path, updated in staged.items():
         if path.endswith(".gd"):
-            validate_gd_indentation((ROOT / path).read_text(encoding="utf-8"), updated)
+            try:
+                validate_gd_indentation((ROOT / path).read_text(encoding="utf-8"), updated)
+            except ValueError as exc:
+                print("::warning::Unsafe GDScript proposal: " + str(exc) + "; no change", flush=True)
+                return
     for path, updated in staged.items():
         (ROOT / path).write_text(updated, encoding="utf-8")
     if not run("git", "diff", "--check", check=False).returncode == 0:
