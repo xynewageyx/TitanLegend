@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 12:58 UTC**
-Git-Stand: **b96868b7a79200683a4edc57364ef03756b73a6a** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 13:02 UTC**
+Git-Stand: **22dd1426d9c24b26d48f60ef069a30ff92e63d7e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,9 +23,11 @@ Git-Stand: **b96868b7a79200683a4edc57364ef03756b73a6a** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 - `b96868b` (2026-11-07): test: add deterministic combat timing simulator for 12 classes (#68)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
+- `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 - `cede119` (2026-11-07): Agent (skills): bounded improvement (#65)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
