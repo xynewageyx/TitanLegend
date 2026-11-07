@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 18:02 UTC**
-Git-Stand: **8b1e86f1ee4e1f11b6ccdd8f6d8fda747dd0a361** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 18:25 UTC**
+Git-Stand: **e64f4e3d0b05777302380b5a00c9e412e338f989** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,11 +41,11 @@ Git-Stand: **8b1e86f1ee4e1f11b6ccdd8f6d8fda747dd0a361** auf Branch **main**
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `e64f4e3` (2026-11-07): fix: use Flash models instead of Gemini 4 Argon for autonomous agents (#100)
 - `d87b37c` (2026-11-07): Add modular hairstyles safely separated from PR #10
 - `1e88366` (2026-11-07): fix: keep autonomous agents running after invalid Gemini edit proposals (#96)
 - `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 - `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
-- `37fcd6e` (2026-11-07): Avoid Cloudflare Cron false failures on Gemini quota exhaustion (#86)
 
 ## Bereichsübergreifende Änderungen
 
