@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 13:28 UTC**
-Git-Stand: **9c25b22491c7eb377376505d841589b423aa7523** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 13:43 UTC**
+Git-Stand: **93fb7e5fd5a90f1e6a82ba4252580157dc5ce1f9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,6 +23,7 @@ Git-Stand: **9c25b22491c7eb377376505d841589b423aa7523** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `93fb7e5` (2026-11-07): fix: give Death Knight its own talent progression (#73)
 - `9c25b22` (2026-11-07): test: extend combat simulation with damage crit and healing probes (#72)
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
 - `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
@@ -48,7 +49,6 @@ Git-Stand: **9c25b22491c7eb377376505d841589b423aa7523** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - `adb3e22` (2026-11-07): Offset autonomous agent schedule away from minute zero (#71)
 - `ecd7583` (2026-11-07): ci: add manually runnable full Python regression suite (#66)
-- `2f209a4` (2026-11-07): fix(ci): replace broken traceback regex with literal markers (#63)
 
 ## Bereichsübergreifende Änderungen
 
