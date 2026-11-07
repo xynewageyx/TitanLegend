@@ -43,8 +43,8 @@ def inspect(path, require_extended):
         errors.append("no mesh")
     if not skins:
         errors.append("missing skeleton skin")
-    if len(animations) < 5:
-        errors.append("fewer than five animations")
+    if len(animations) != len(EXPECTED_CLIPS):
+        errors.append(f"expected exactly {len(EXPECTED_CLIPS)} animations, got {len(animations)}")
 
     joint_indices = set()
     for skin in skins:
