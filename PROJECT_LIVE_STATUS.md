@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 19:53 UTC**
-Git-Stand: **6926f867956be21042d36aeac6764b912b186489** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 19:59 UTC**
+Git-Stand: **00907c8e0282098af4b9b1ad331313e968398684** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,7 +20,6 @@ Git-Stand: **6926f867956be21042d36aeac6764b912b186489** auf Branch **main**
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
-- `d87b37c` (2026-11-07): Add modular hairstyles safely separated from PR #10
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -44,11 +43,11 @@ Git-Stand: **6926f867956be21042d36aeac6764b912b186489** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `00907c8` (2026-11-07): Improve Gemini draft fix diagnostics and traceback matching (#115)
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
 - `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 - `97fa919` (2026-11-07): Fix regression CI by installing lz4 for UnityFS inspector tests (#107)
 - `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
-- `e64f4e3` (2026-11-07): fix: use Flash models instead of Gemini 4 Argon for autonomous agents (#100)
 
 ## Bereichsübergreifende Änderungen
 
