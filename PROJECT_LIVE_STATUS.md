@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 13:02 UTC**
-Git-Stand: **3b886ac74ff4bc686a9a7732ebd5b568c028b55d** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 13:08 UTC**
+Git-Stand: **9eb1d818157c10a906f82ba80b4ce5143439416b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -11,7 +11,7 @@ Git-Stand: **3b886ac74ff4bc686a9a7732ebd5b568c028b55d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
 
 ### Landschaften — Landschaften-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -23,10 +23,12 @@ Git-Stand: **3b886ac74ff4bc686a9a7732ebd5b568c028b55d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
 - `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 - `b96868b` (2026-11-07): test: add deterministic combat timing simulator for 12 classes (#68)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
+- `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
 - `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 - `cede119` (2026-11-07): Agent (skills): bounded improvement (#65)
 
@@ -52,7 +54,6 @@ Git-Stand: **3b886ac74ff4bc686a9a7732ebd5b568c028b55d** auf Branch **main**
 
 - `3b886ac` (2026-11-07): Guard autonomous agent against malformed GDScript indentation (#67)
 - `69cf403` (2026-11-07): Fix autonomous agent Gemini timeouts and unavailable model fallbacks (#64)
-- `bf2117a` (2026-11-07): Preserve failure tracebacks and recognize absolute source paths (#60)
 
 ## Regeln für alle Fach-Chats
 
