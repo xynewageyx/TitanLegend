@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 13:58 UTC**
-Git-Stand: **1713907396ca703b41924831bd5dd39c07bb2998** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 14:07 UTC**
+Git-Stand: **4f9c350c9d8018f2205b7720b6aad67951e7e715** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,11 +23,11 @@ Git-Stand: **1713907396ca703b41924831bd5dd39c07bb2998** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `4f9c350` (2026-11-07): fix: Death Knight visual loader and talent abilities (#81)
 - `1713907` (2026-11-07): fix: prevent Death Knight chibi model index error (#80)
 - `93fb7e5` (2026-11-07): fix: give Death Knight its own talent progression (#73)
 - `9c25b22` (2026-11-07): test: extend combat simulation with damage crit and healing probes (#72)
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
-- `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
