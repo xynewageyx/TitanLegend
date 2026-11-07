@@ -31,3 +31,11 @@ jobs:
           test -n "$GEMINI_API_KEY" || { echo "::error::Missing GEMINI_API_KEY"; exit 1; }
       - name: Propose minimal source fix in draft PR
         run: python3 tools/gemini_propose_fix.py
+      - name: Upload Gemini diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-draft-diagnostic
+          path: gemini-draft-diagnostic.md
+          if-no-files-found: ignore
+          retention-days: 7
