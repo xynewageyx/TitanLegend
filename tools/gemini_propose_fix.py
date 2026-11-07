@@ -48,7 +48,10 @@ def generate(prompt):
                 parts = result.get("candidates", [{}])[0].get("content", {}).get("parts", [])
                 response_text = "".join(part.get("text", "") for part in parts)
                 print("Gemini proposal model:", model, flush=True)
-                return json.loads(response_text)
+                try:
+                    return json.loads(response_text)
+                except json.JSONDecodeError:
+                    raise RuntimeError("Gemini returned invalid JSON; no edits attempted") from None
             except urllib.error.HTTPError as exc:
                 print("Gemini", model, "HTTP", exc.code, flush=True)
                 if exc.code == 429:
