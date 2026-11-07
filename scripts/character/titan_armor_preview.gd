@@ -27,10 +27,8 @@ func build_armor(target: Skeleton3D, quality: String = "white") -> bool:
     for bone_name in SLOTS.values():
         if target.find_bone(bone_name) < 0:
             return false
+    clear_armor()
     skeleton = target
-    for child in get_children():
-        remove_child(child)
-        child.free()
     var tier := TIERS.find(quality)
     var armor_color: Color = COLORS[tier]
     var bulk := 1.0 + float(tier) * 0.14
