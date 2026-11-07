@@ -23,6 +23,16 @@ func _run() -> void:
             push_error("Invalid weighted limb")
             quit(1)
             return
+    var torso := hero.get_node_or_null("WeightedTorso") as TitanSkinnedTorso
+    if torso == null or torso.mesh_instance == null:
+        push_error("Weighted torso was not integrated")
+        quit(1)
+        return
+    var rigid_torso := hero.skeleton.get_node_or_null("Attach_Torso") as BoneAttachment3D
+    if rigid_torso == null or rigid_torso.visible:
+        push_error("Rigid torso should be hidden")
+        quit(1)
+        return
     hero.motion = "run"
     hero.animate = true
     hero._process(0.1)
