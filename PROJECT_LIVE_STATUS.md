@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 13:16 UTC**
-Git-Stand: **adb3e2273982fbf661c8bdc427ff06b3b2e2e7fa** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 13:28 UTC**
+Git-Stand: **9c25b22491c7eb377376505d841589b423aa7523** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -23,6 +23,7 @@ Git-Stand: **adb3e2273982fbf661c8bdc427ff06b3b2e2e7fa** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `9c25b22` (2026-11-07): test: extend combat simulation with damage crit and healing probes (#72)
 - `9eb1d81` (2026-11-07): test: expand combat simulator with boss interrupt windows (#70)
 - `22dd142` (2026-11-07): test: extend combat simulator with skill charge rotation (#69)
 - `b96868b` (2026-11-07): test: add deterministic combat timing simulator for 12 classes (#68)
@@ -48,7 +49,6 @@ Git-Stand: **adb3e2273982fbf661c8bdc427ff06b3b2e2e7fa** auf Branch **main**
 - `adb3e22` (2026-11-07): Offset autonomous agent schedule away from minute zero (#71)
 - `ecd7583` (2026-11-07): ci: add manually runnable full Python regression suite (#66)
 - `2f209a4` (2026-11-07): fix(ci): replace broken traceback regex with literal markers (#63)
-- `3cda356` (2026-11-07): Introduce autonomous 10-minute Titan Legends development agents (#61)
 
 ## Bereichsübergreifende Änderungen
 
