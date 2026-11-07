@@ -74,7 +74,7 @@ jobs:
               '## Offene GitHub-Issues (' + openIssues.length + ')',
               ...(openIssues.length ? openIssues.slice(0,30).map(i => '- #' + i.number + ' ' + i.title + ' – ' + i.html_url) : ['- Keine offenen Issues.']),
               '',
-              'Hinweis: Dieser Check überwacht den gemeinsamen Entwicklungsstand. Er startet keine ChatGPT-Fach-Chats und führt keine automatischen Codeänderungen aus.',
+              'Hinweis: Dieser Check startet keine ChatGPT-Fach-Chats und ändert selbst keinen Code. Ein erfolgreicher geplanter Lauf kann den separaten Gemini-Agenten auslösen, der nur prüfpflichtige Draft-PRs erstellt. Manuelle Koordinationsläufe starten keinen Agenten.',
               ''
             ];
             const report = lines.join('\n');

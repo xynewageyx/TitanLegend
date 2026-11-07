@@ -102,6 +102,13 @@ class AutonomousAgentModelTests(unittest.TestCase):
         after = "   3: # Shaman\n    _launch(parent, start, target, Color.CYAN, 0.21, 0.28)\n"
         agent.validate_gd_indentation(before, after)
 
+    def test_coordination_triggered_outage_is_nonfatal(self):
+        env = {"GITHUB_EVENT_NAME": "workflow_run", "AGENT_DOMAIN": "characters"}
+        with mock.patch.dict(os.environ, env), \
+             mock.patch.object(agent, "candidate_paths", return_value=[self.source_path]), \
+             mock.patch.object(agent, "propose", side_effect=RuntimeError("All configured Gemini models unavailable")):
+            self.assertIsNone(agent.main())
+
     def test_manual_outage_still_fails_visibly(self):
         env = {"GITHUB_EVENT_NAME": "workflow_dispatch", "AGENT_DOMAIN": "characters"}
         with mock.patch.dict(os.environ, env), \
