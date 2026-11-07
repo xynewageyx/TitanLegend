@@ -80,6 +80,28 @@ class AutonomousAgentModelTests(unittest.TestCase):
                 self.assertIsNone(agent.main())
             self.assertIn("no proposal", Path(summary.name).read_text(encoding="utf-8"))
 
+    def test_rejects_bad_shaman_match_indentation(self):
+        before = (
+            "  match class_id:\n"
+            "   3: # Shaman\n"
+            "    _launch(parent, start, target, Color.BLUE, 0.19, 0.32)\n"
+            "   9: # Priest\n"
+        )
+        after = (
+            "  match class_id:\n"
+            "   3: # Shaman\n"
+            "    _launch(parent, start, target, Color.CYAN, 0.21, 0.28)\n"
+            "   _launch(parent, start, target, Color.BLUE, 0.19, 0.32)\n"
+            "   9: # Priest\n"
+        )
+        with self.assertRaisesRegex(ValueError, "indentation"):
+            agent.validate_gd_indentation(before, after)
+
+    def test_accepts_same_indentation_replacement(self):
+        before = "   3: # Shaman\n    _launch(parent, start, target, Color.BLUE, 0.19, 0.32)\n"
+        after = "   3: # Shaman\n    _launch(parent, start, target, Color.CYAN, 0.21, 0.28)\n"
+        agent.validate_gd_indentation(before, after)
+
     def test_manual_outage_still_fails_visibly(self):
         env = {"GITHUB_EVENT_NAME": "workflow_dispatch", "AGENT_DOMAIN": "characters"}
         with mock.patch.dict(os.environ, env), \
