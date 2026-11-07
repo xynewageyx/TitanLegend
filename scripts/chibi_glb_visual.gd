@@ -1,6 +1,6 @@
 extends Node3D
 ## Imported original chibi base mesh; preserve existing gameplay and equipment nodes.
-const NAMES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler"]
+const NAMES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler", "death_knight"]
 var animation_player: AnimationPlayer
 var active_clip: String = ""
 
