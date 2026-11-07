@@ -18,8 +18,6 @@ jobs:
     timeout-minutes: 8
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL || 'claude-sonnet-4-5' }}
       GH_TOKEN: ${{ github.token }}
       GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
     steps:
@@ -28,8 +26,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ -z "$GEMINI_API_KEY" ] && [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::error::Set GEMINI_API_KEY or ANTHROPIC_API_KEY in repository Actions secrets."
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::Set GEMINI_API_KEY in repository Actions secrets."
             exit 1
           fi
           RUN_ID="${{ inputs.run_id }}"
@@ -54,7 +52,7 @@ jobs:
                     "Do not claim changes were applied. Reply in German with concise markdown.\n\n"
                     + logs)
           primary = os.environ["GEMINI_MODEL"].removeprefix("models/").strip()
-          models = list(dict.fromkeys([primary, "gemini-3.5-flash", "gemini-2.5-flash"])) if os.environ.get("GEMINI_API_KEY") else []
+          models = list(dict.fromkeys([primary, "gemini-3.5-flash", "gemini-2.5-flash"]))
           payload = json.dumps({"contents":[{"parts":[{"text":prompt}]}]}).encode()
           key = os.environ["GEMINI_API_KEY"]
           result = None
@@ -80,8 +78,7 @@ jobs:
                       except (ValueError, AttributeError):
                           print(f"Gemini {model}: HTTP {exc.code}", flush=True)
                       if exc.code == 429:
-                          print("Gemini rate limit; attempting Claude fallback", flush=True)
-                          break
+                          raise SystemExit("Gemini API quota/rate limit reached (429); stopping to avoid repeated requests")
                       if exc.code not in {404, 500, 502, 503, 504}:
                           raise SystemExit(f"Non-retryable Gemini HTTP {exc.code}")
                       if exc.code == 404 or attempt == 3:
@@ -95,44 +92,14 @@ jobs:
                   time.sleep(delay)
               if result is not None:
                   break
-          provider = "Gemini"
-          answer = ""
-          if result is not None:
-              print("Successful Gemini model:", selected_model, flush=True)
-              answer = "\\n".join(p.get("text", "") for c in result.get("candidates", [])
-                                 for p in c.get("content", {}).get("parts", []) if "text" in p)
+          if result is None:
+              raise SystemExit("All configured Gemini models failed; see errors above")
+          print("Successful Gemini model:", selected_model, flush=True)
+          answer = "\n".join(p.get("text","") for c in result.get("candidates",[])
+                             for p in c.get("content",{}).get("parts",[]) if "text" in p)
           if not answer.strip():
-              claude_key = os.environ.get("ANTHROPIC_API_KEY", "")
-              if not claude_key:
-                  raise SystemExit("Gemini unavailable and ANTHROPIC_API_KEY not configured")
-              provider = "Claude"
-              model = os.environ["CLAUDE_MODEL"].strip()
-              print("Trying Claude fallback model:", model, flush=True)
-              claude_payload = json.dumps({"model": model, "max_tokens": 1800,
-                  "messages": [{"role": "user", "content": prompt}]}).encode()
-              claude_request = urllib.request.Request("https://api.anthropic.com/v1/messages",
-                  data=claude_payload, headers={"x-api-key": claude_key,
-                  "anthropic-version": "2023-06-01", "content-type": "application/json"}, method="POST")
-              for attempt in range(1, 4):
-                  try:
-                      with urllib.request.urlopen(claude_request, timeout=65) as response:
-                          claude_result = json.load(response)
-                      answer = "\\n".join(p.get("text", "") for p in claude_result.get("content", [])
-                                         if p.get("type") == "text")
-                      if not answer.strip():
-                          raise SystemExit("Claude returned no text")
-                      break
-                  except urllib.error.HTTPError as exc:
-                      print(f"Claude HTTP {exc.code}", flush=True)
-                      if exc.code not in {429, 500, 502, 503, 504} or attempt == 3:
-                          raise SystemExit(f"Claude fallback failed: HTTP {exc.code}")
-                  except (urllib.error.URLError, TimeoutError):
-                      if attempt == 3:
-                          raise SystemExit("Claude fallback network failure")
-                  delay = min(10, 2 ** attempt) + random.uniform(0, 1)
-                  print(f"Claude retry in {delay:.1f}s", flush=True)
-                  time.sleep(delay)
-          report = "# " + provider + " CI Analysis\\n\\n" + answer + "\\n"
+              raise SystemExit("Gemini returned no text")
+          report = "# Gemini CI Analysis\n\n" + answer + "\n"
           pathlib.Path("gemini-review.md").write_text(report)
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write(report[:900000])
