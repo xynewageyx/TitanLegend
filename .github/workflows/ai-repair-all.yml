@@ -16,14 +16,18 @@ jobs:
     timeout-minutes: 35
     steps:
       - name: Verify API key
+        id: key
         env:
           REPAIR_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           if [ -z "$REPAIR_KEY" ]; then
             echo "::warning::OPENAI_API_KEY secret is missing; AI repair disabled."
-            exit 0
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Find unhandled failed workflow run
+        if: steps.key.outputs.enabled == 'true'
         id: failed
         env:
           GH_TOKEN: ${{ github.token }}
