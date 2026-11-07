@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-07 19:27 UTC**
-Git-Stand: **2359b6a2b57e0f832ec9a0a96f41d61b7bbcc792** auf Branch **main**
+Automatisch erzeugt: **2026-11-07 19:29 UTC**
+Git-Stand: **97fa919863a6df5b00dd76f2122a35dbe349532c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -30,7 +30,7 @@ Git-Stand: **2359b6a2b57e0f832ec9a0a96f41d61b7bbcc792** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -39,14 +39,14 @@ Git-Stand: **2359b6a2b57e0f832ec9a0a96f41d61b7bbcc792** auf Branch **main**
 - `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `0db319f` (2026-11-07): Stop Android preview builds from cancelling other branches (#90)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `97fa919` (2026-11-07): Fix regression CI by installing lz4 for UnityFS inspector tests (#107)
 - `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
 - `e64f4e3` (2026-11-07): fix: use Flash models instead of Gemini 4 Argon for autonomous agents (#100)
 - `d87b37c` (2026-11-07): Add modular hairstyles safely separated from PR #10
 - `1e88366` (2026-11-07): fix: keep autonomous agents running after invalid Gemini edit proposals (#96)
-- `5fa999d` (2026-11-07): Audio: Todesritter als zwölfte Klasse mit eigenen Sounds (#35)
 
 ## Bereichsübergreifende Änderungen
 
