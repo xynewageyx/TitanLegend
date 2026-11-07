@@ -15,13 +15,14 @@ const TREE_NAMES := [
  ["Fluchmagie", "Seelenpanzer", "Lebensentzug"],
  ["Beschwoerungsmacht", "Runenschutz", "Seelenbund"],
  ["Lichtstrahl", "Glaubensschild", "Heilkunst"],
- ["Fauststurm", "Eisenhaut", "Kampftrance"]
+ ["Fauststurm", "Eisenhaut", "Kampftrance"],
+ ["Runenklinge", "Knochenpanzer", "Seelenmacht"]
 ]
 # Klasse und Baum beeinflussen Angriff, Schadensminderung und Heilung unterschiedlich.
 # Zahlen sind Boni PRO RANG; Endboni werden gedeckelt.
-const OFFENSE := [0.006, 0.005, 0.004, 0.005, 0.007, 0.008, 0.008, 0.007, 0.006, 0.003, 0.007]
-const DEFENSE := [0.006, 0.007, 0.007, 0.006, 0.004, 0.004, 0.004, 0.005, 0.005, 0.006, 0.006]
-const SUPPORT := [0.003, 0.006, 0.008, 0.007, 0.003, 0.002, 0.004, 0.004, 0.005, 0.009, 0.003]
+const OFFENSE := [0.006, 0.005, 0.004, 0.005, 0.007, 0.008, 0.008, 0.007, 0.006, 0.003, 0.007, 0.007]
+const DEFENSE := [0.006, 0.007, 0.007, 0.006, 0.004, 0.004, 0.004, 0.005, 0.005, 0.006, 0.006, 0.007]
+const SUPPORT := [0.003, 0.006, 0.008, 0.007, 0.003, 0.002, 0.004, 0.004, 0.005, 0.009, 0.003, 0.004]
 
 # Meilensteine: je Talentbaum bei Rang 10, 25, 50 und 100.
 # Der Bonus wird zusaetzlich zum normalen passiven Talentwert berechnet.
@@ -42,7 +43,7 @@ static func next_milestone(rank: int) -> String:
  return "Alle Meilensteine freigeschaltet"
 
 static func milestone_description(class_id: int, tree: int, rank: int) -> String:
- var name: String = str(TREE_NAMES[clampi(class_id, 0, 10)][clampi(tree, 0, 2)])
+ var name: String = str(TREE_NAMES[clampi(class_id, 0, 11)][clampi(tree, 0, 2)])
  var count: int = milestone_count(rank)
  return name + ": " + str(count) + "/4 | " + next_milestone(rank)
 
@@ -88,7 +89,7 @@ static func team_bonuses(class_ids: Array, talent_ranks: Array, branches: Array 
  var defense: float = 0.0
  var healing: float = 0.0
  for slot in range(mini(class_ids.size(), talent_ranks.size())):
-  var class_id: int = clampi(int(class_ids[slot]), 0, 10)
+  var class_id: int = clampi(int(class_ids[slot]), 0, 11)
   var ranks: Array = talent_ranks[slot]
   if ranks.size() < 3:
    continue

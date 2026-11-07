@@ -22,7 +22,7 @@ static func enemy_damage_scale(stage: int) -> float:
 # Individual progression; no party-wide stacking of four heroes' bonuses.
 # Talent effects apply only to their owner, including the healer's own spells.
 static func hero_progression(class_id: int, ranks: Array, jewel_level: int) -> Dictionary:
- var cls: int = clampi(class_id, 0, 10)
+ var cls: int = clampi(class_id, 0, 11)
  var attack_rank: int = maxi(0, int(ranks[0])) if ranks.size() > 0 else 0
  var defense_rank: int = maxi(0, int(ranks[1])) if ranks.size() > 1 else 0
  var support_rank: int = maxi(0, int(ranks[2])) if ranks.size() > 2 else 0
