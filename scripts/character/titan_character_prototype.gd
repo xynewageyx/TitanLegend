@@ -19,7 +19,7 @@ const PALETTE = {
 
 func build_preview() -> bool:
     if not PALETTE.has(hero_class):
-        push_error("Unknown hero class: " + hero_class)
+        push_warning("Unknown hero class: " + hero_class)
         return false
     var old := get_node_or_null("GeneratedPreview")
     if old != null:
