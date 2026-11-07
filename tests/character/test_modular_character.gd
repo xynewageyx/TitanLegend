@@ -26,10 +26,10 @@ func _run() -> void:
     if skeleton == null or skeleton.get_bone_count() != 18:
         _fail("Character must contain 18 original bones")
         return
-    for class_name in TitanModularCharacter.CLASSES:
-        hero.hero_class = class_name
+    for hero_type in TitanModularCharacter.CLASSES:
+        hero.hero_class = hero_type
         if not hero.validate_character().is_empty():
-            _fail("Hero class did not validate: " + class_name)
+            _fail("Hero class did not validate: " + hero_type)
             return
     if not hero.equip_socket_hairstyle(2, Color("#b56c3a")):
         _fail("Cannot equip hairstyle to head bone")
