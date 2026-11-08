@@ -1,0 +1,23 @@
+name: Gemini PR repair monitor
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: read
+concurrency:
+  group: gemini-pr-repair-monitor
+  cancel-in-progress: false
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find eligible failed PR and dispatch repair
+        run: python3 tools/gemini_pr_monitor.py
