@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/blender/generate_forest_mobs.py'
       - 'tools/analysis/inspect_forest_glbs.py'
+      - 'tools/analysis/test_inspect_forest_glbs.py'
       - '.github/workflows/forest-enemies.yml'
       - 'tools/tests/test_forest_animations.gd'
       - 'scripts/battle_manager.gd'
@@ -15,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test GLB geometry parser
+        run: python3 -m unittest discover -s tools/analysis -p 'test_inspect_forest_glbs.py' -v
       - name: Install Blender
         run: sudo apt-get update && sudo apt-get install -y blender python3-numpy
       - name: Verify Blender Python NumPy dependency
