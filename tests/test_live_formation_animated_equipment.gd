@@ -58,6 +58,38 @@ func _run() -> void:
   if skeleton.get_node("ChestSocket").get_child_count() != 1:
    _fail("Armor missing from live chest")
    return
+  # The old in-arm weapon AND the static class-role prop must be hidden,
+  # otherwise two weapons remain rendered on the same live combat hero.
+  var legacy_arm := hero.get_node_or_null("HeroCombatMotion/AnimatedRightArm/LegacyWeaponVisual") as Node3D
+  var legacy_role := hero.get_node_or_null("LegacyRoleWeapon") as Node3D
+  if legacy_arm == null or legacy_role == null:
+   _fail("Older weapon fallback groups were not created for hero %d" % index)
+   return
+  if legacy_arm.visible or legacy_role.visible:
+   _fail("Duplicated old weapon still visible after bone equipping: hero %d" % index)
+   return
+  # Removal restores the older fallback without removing the hero's armor.
+  controller.call("unequip", "mainhand")
+  await process_frame
+  if not legacy_arm.visible or not legacy_role.visible:
+   _fail("Older weapon fallback did not return on unequip: hero %d" % index)
+   return
+  if skeleton.get_node("RightHandSocket").get_child_count() != 0:
+   _fail("Bone weapon was not removed on unequip: hero %d" % index)
+   return
+  if skeleton.get_node("ChestSocket").get_child_count() != 1:
+   _fail("Unequipping weapon removed unrelated chest armor: hero %d" % index)
+   return
+  if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(int(team.class_ids[index])), 4)):
+   _fail("Could not re-equip bone weapon for hero %d" % index)
+   return
+  await process_frame
+  if legacy_arm.visible or legacy_role.visible:
+   _fail("Legacy weapon reappeared after re-equip: hero %d" % index)
+   return
+  if skeleton.get_node("RightHandSocket").get_child_count() != 1:
+   _fail("Re-equipping left a duplicate or missing bone weapon: hero %d" % index)
+   return
  var attacker: Node3D = team.heroes[0]
  var anim: AnimationPlayer = attacker.get_node("LiveFormationRig/Skeleton3D/TitanAnimations") as AnimationPlayer
  var rig: Skeleton3D = attacker.get_node("LiveFormationRig/Skeleton3D") as Skeleton3D
