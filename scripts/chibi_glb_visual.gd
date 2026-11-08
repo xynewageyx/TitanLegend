@@ -1,6 +1,7 @@
 extends Node3D
 ## Imported original chibi base mesh; preserve existing gameplay and equipment nodes.
 const RIG_BRIDGE = preload("res://scripts/rig/titan_skeleton_bridge.gd")
+const IMPORTED_SOCKETS = preload("res://scripts/equipment/chibi_imported_equipment_sockets.gd")
 const NAMES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler", "death_knight"]
 var imported_skeleton: Skeleton3D
 var rig_audit: Dictionary = {}
@@ -35,6 +36,19 @@ func configure(class_id: int) -> void:
   push_warning("Chibi model has no Skeleton3D: " + NAMES[index])
  elif not rig_audit["missing"].is_empty():
   push_warning("Chibi rig missing mapped bones for " + NAMES[index] + ": " + str(rig_audit["missing"]))
+ # Prefer actual imported skeletons for visual equipment when the original
+ # class mesh has the required bones; otherwise retain the helper rig.
+ if imported_skeleton != null and hero is Node3D:
+  var socket_ready: bool = IMPORTED_SOCKETS.install(imported_skeleton, hero as Node3D)
+  set_meta("imported_equipment_sockets_ready", socket_ready)
+  if socket_ready:
+   # Hide only extra primitive arm/leg meshes. Preserve combat FX, old weapon
+   # fallback groups, animation timers and gameplay nodes.
+   for part in ["AnimatedLeftArm/SculptedAnimatedArm", "AnimatedRightArm/SculptedAnimatedArm",
+                "AnimatedLeftLeg/SculptedAnimatedLeg", "AnimatedRightLeg/SculptedAnimatedLeg"]:
+    var limb: Node3D = hero.get_node_or_null(NodePath("HeroCombatMotion/" + part)) as Node3D
+    if limb != null:
+     limb.visible = false
  animation_player = _find_animation_player(model)
  play_clip("Idle")
 
