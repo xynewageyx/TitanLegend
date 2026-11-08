@@ -1,6 +1,7 @@
 extends Node3D
 class_name TitanModularCharacter
 ## Original Titan Legends character assembly; does not include reference-game assets.
+const EQUIPMENT_ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 
 const SLOT_NAMES = [
     "hair", "head", "torso", "gloves", "legs", "boots",
@@ -29,6 +30,12 @@ func _ready() -> void:
         builder.free()
     for slot_name in SLOT_NAMES:
         _ensure_slot(slot_name)
+    # The original prototype skeleton must exist before motion tracks are bound.
+    if skeleton != null:
+        var animator := skeleton.get_node_or_null("TitanAnimations") as AnimationPlayer
+        if animator != null and animator.has_method("setup_rig"):
+            if bool(animator.call("setup_rig", skeleton)):
+                animator.call("play_motion", "idle")
 
 func _ensure_slot(slot_name: String) -> Node3D:
     if _slots.has(slot_name) and is_instance_valid(_slots[slot_name]):
@@ -101,3 +108,32 @@ func equip_socket_hairstyle(style: int, color: Color = Color("#694333")) -> bool
     if controller == null:
         return false
     return bool(controller.call("equip_hairstyle", style, color))
+
+## Preview-only: assemble the actual twelve-class modular character scene.
+## Logical inventory, skill slots, class roles, and combat state are untouched.
+func equip_visual_loadout(rarity: int) -> bool:
+    if rarity < 0 or rarity > 5:
+        return false
+    var class_id: int = CLASSES.find(hero_class)
+    if class_id < 0:
+        return false
+    var controller := get_node_or_null("EquipmentController") as Node3D
+    if controller == null:
+        return false
+    if not bool(controller.call("equip_weapon", EQUIPMENT_ADAPTER.weapon_type_for_class(class_id), rarity)):
+        return false
+    var armor_count := 0
+    for socket_name in EQUIPMENT_ADAPTER.SOCKETS:
+        if socket_name in ["RightHandSocket", "LeftHandSocket"]:
+            continue
+        if not bool(controller.call("equip_armor_slot", socket_name, class_id, rarity)):
+            return false
+        armor_count += 1
+    return armor_count == 13
+
+func play_preview_motion(motion_name: String) -> bool:
+    var skeleton := get_node_or_null(skeleton_path) as Skeleton3D
+    if skeleton == null:
+        return false
+    var animator := skeleton.get_node_or_null("TitanAnimations") as AnimationPlayer
+    return bool(animator.call("play_motion", motion_name)) if animator != null and animator.has_method("play_motion") else false
