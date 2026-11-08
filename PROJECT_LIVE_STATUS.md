@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 12:33 UTC**
-Git-Stand: **8c9b557f149fe43109b2399c6392fbe353d5623e** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 12:36 UTC**
+Git-Stand: **701f927f1630aa4de79dc3c695def8c02b730e58** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -49,12 +49,12 @@ Git-Stand: **8c9b557f149fe43109b2399c6392fbe353d5623e** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `701f927` (2026-11-08): security: reject unsafe Gemini-generated execution primitives (#157)
 - `ca79726` (2026-11-08): security: reject Gemini proposals that rewrite tests or make no changes (#154)
 - `6e98f94` (2026-11-08): test: Gemini API failure regressions and symlink path protection (#123)
 - `6516278` (2026-11-08): Handle malformed Gemini JSON as safe diagnostic (#122)
 - `f7ed5eb` (2026-11-08): Render real newlines in Gemini diagnostics and PR description (#121)
 - `1533272` (2026-11-07): Write diagnostic artifact when Gemini API is unavailable or quota-limited (#116)
-- `a28f930` (2026-11-07): Improve Gemini source discovery from failing unittest tracebacks (#114)
 
 ## Regeln für alle Fach-Chats
 
