@@ -35,6 +35,10 @@ const BONE_SOCKETS := {
     "BootLeftSocket": "Foot_L",
     "BootRightSocket": "Foot_R"
 }
+const CLASS_WEAPONS := [1,0,9,8,6,4,8,8,8,9,11,1] # 12 classes; Death Knight uses greatsword.
+static func weapon_type_for_class(class_id: int) -> int:
+    return CLASS_WEAPONS[clampi(class_id, 0, CLASS_WEAPONS.size() - 1)]
+
 const CONTROLLER = preload("res://scripts/equipment/hero_equipment_sockets.gd")
 static func install(hero: Node3D) -> Node3D:
     if hero == null:

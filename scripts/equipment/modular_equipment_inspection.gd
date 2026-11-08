@@ -3,7 +3,7 @@ extends Node3D
 ## Standalone inspection rig for modular equipment; does not replace game hero rigs.
 const EQUIPMENT = preload("res://scripts/equipment/hero_equipment_sockets.gd")
 @export_range(0, 5) var rarity: int = 4
-@export_range(0, 10) var hero_class: int = 0
+@export_range(0, 11) var hero_class: int = 0
 @export_range(0, 2) var hairstyle: int = 1
 @export var hair_color: Color = Color("#694333")
 

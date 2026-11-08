@@ -3,7 +3,6 @@ extends RefCounted
 ## Does not modify loot, damage, inventory, save files or tank assignment.
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 const ARMOR_SLOTS := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSocket", "ShoulderRightSocket", "ArmLeftSocket", "ArmRightSocket", "GloveLeftSocket", "GloveRightSocket", "LegLeftSocket", "LegRightSocket", "BootLeftSocket", "BootRightSocket"]
-const CLASS_WEAPONS := [1,0,9,8,6,4,8,8,8,9,11]
 static func sync_team(team: Node3D) -> int:
     if team == null:
         return 0
@@ -29,7 +28,7 @@ static func sync_hero(hero: Node3D, hero_slot: int, class_id: int) -> bool:
     if controller == null:
         return false
     var weapon_rarity := clampi(int(GameManager.weapon_rarities[hero_slot]),0,5)
-    controller.call("equip_weapon", CLASS_WEAPONS[clampi(class_id,0,10)],weapon_rarity)
+    controller.call("equip_weapon", ADAPTER.weapon_type_for_class(class_id),weapon_rarity)
     # All thirteen loot slots map to separate visual anchors.
     for loot_slot in range(ARMOR_SLOTS.size()):
         var anchor: String = ARMOR_SLOTS[loot_slot]
@@ -39,5 +38,5 @@ static func sync_hero(hero: Node3D, hero_slot: int, class_id: int) -> bool:
             controller.call("unequip", anchor)
             continue
         var rarity := clampi(int(item.get("rarity",0)),0,5)
-        controller.call("equip_armor_slot", anchor,clampi(class_id,0,10),rarity)
+        controller.call("equip_armor_slot", anchor,clampi(class_id,0,11),rarity)
     return true

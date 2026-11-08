@@ -33,6 +33,20 @@ class EquipmentUiIntegrationTests(unittest.TestCase):
         self.assertIn('controller.call("equip_armor_slot", anchor,', bridge)
         self.assertIn('const MAX_LOOT_ITEMS: int = 120', manager)
 
+    def test_death_knight_class_equipment_visual_mapping(self):
+        import re
+        bridge = script("scripts/equipment/equipment_inventory_visual_bridge.gd")
+        adapter = script("scripts/equipment/formation_equipment_adapter.gd")
+        match = re.search(r"const CLASS_WEAPONS := \[([^\]]+)\]", adapter)
+        self.assertIsNotNone(match, "Expected a weapon mapping for all classes")
+        weapons = [int(value.strip()) for value in match.group(1).split(",")]
+        self.assertEqual(len(weapons), 12, "Visual weapon mapping must include the Death Knight")
+        self.assertEqual(weapons[11], 1, "Death Knight must use the greatsword preview")
+        self.assertIn('controller.call("equip_weapon", ADAPTER.weapon_type_for_class(class_id)', bridge)
+        self.assertIn('clampi(class_id,0,11)', bridge)
+        inspection = script("scripts/equipment/modular_equipment_inspection.gd")
+        self.assertIn("@export_range(0, 11) var hero_class", inspection)
+
     def test_archived_boss_motion_is_original(self):
         import hashlib
         archived = (ROOT / "original_update168/scripts/boss_motion.gd").read_bytes()
