@@ -2,7 +2,8 @@ extends RefCounted
 ## Bone-bound positions for Titan Legends' ORIGINAL imported chibi GLBs.
 ## Eight shared Blender bones (24 on Death Knight) drive the existing inventory.
 ## A child offset avoids changing BoneAttachment3D's automatically updated pose.
-const FORMATION_EQUIPMENT = preload("res://scripts/equipment/formation_equipment_adapter.gd")
+# Resolve installed formation markers directly to avoid circular preloads with
+# the equipment controller, which itself imports this socket helper.
 const SOCKET_BONES := {
  "RightHandSocket": "Arm_R",
  "LeftHandSocket": "Arm_L",
@@ -58,6 +59,9 @@ static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
  for socket_name in SOCKET_BONES:
   if selected_bone(skeleton, socket_name) == "":
    return false
+  # All fallback markers must already exist before changing the imported GLB.
+  if hero.get_node_or_null(NodePath("EquipmentController/" + socket_name)) == null:
+   return false
  for socket_name in SOCKET_BONES:
   var existing: Node = skeleton.get_node_or_null(NodePath(socket_name))
   if existing != null:
@@ -76,7 +80,8 @@ static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
   anchor.name = ANCHOR_NAME
   # Convert the existing formation's rest-position marker into the imported
   # bone-local coordinate frame. No vertices, skin matrices or rigs are edited.
-  var desired_global: Vector3 = hero.to_global(FORMATION_EQUIPMENT.SOCKETS[socket_name])
+  var marker: Node3D = hero.get_node_or_null(NodePath("EquipmentController/" + socket_name)) as Node3D
+  var desired_global: Vector3 = marker.global_position
   var desired_skeleton_local: Vector3 = skeleton.to_local(desired_global)
   var rest: Transform3D = skeleton.get_bone_global_rest(bone_idx)
   anchor.position = rest.affine_inverse() * desired_skeleton_local
