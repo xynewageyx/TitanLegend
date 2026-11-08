@@ -6,6 +6,7 @@ on:
       - 'tools/blender/generate_forest_mobs.py'
       - 'tools/analysis/inspect_forest_glbs.py'
       - 'tools/analysis/compare_forest_geometry.py'
+      - 'tools/analysis/estimate_forest_android_load.py'
       - 'tools/analysis/test_compare_forest_geometry.py'
       - 'tools/analysis/test_inspect_forest_glbs.py'
       - 'tools/tests/inspect_forest_imports.gd'
@@ -128,6 +129,18 @@ jobs:
             --source build/forest-geometry-report.csv \
             --godot-log godot-forest-geometry-import.log \
             --output build/forest-geometry-comparison.csv
+      - name: Estimate seven-enemy Android scene complexity
+        run: |
+          python3 tools/analysis/estimate_forest_android_load.py \
+            --comparison build/forest-geometry-comparison.csv \
+            --output build/forest-android-complexity.csv
+      - name: Upload Android complexity estimate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Android-Complexity
+          path: build/forest-android-complexity.csv
+          if-no-files-found: ignore
       - name: Upload geometry comparison
         if: always()
         uses: actions/upload-artifact@v4
