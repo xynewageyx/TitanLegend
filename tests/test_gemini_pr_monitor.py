@@ -45,6 +45,17 @@ class MonitorSelectionTests(unittest.TestCase):
         self.assertIsNone(self.select([pr()], result=runs()[:2]))
         self.assertIsNone(self.select([pr()], result=runs(conclusion="success")))
 
+    def test_prefers_newest_failed_workflow_deterministically(self):
+        candidates = runs()
+        candidates[0]["id"] = 101
+        candidates[0]["created_at"] = "2026-11-08T12:30:00Z"
+        candidates[1]["conclusion"] = "failure"
+        candidates[1]["id"] = 102
+        candidates[1]["created_at"] = "2026-11-08T12:45:00Z"
+        selected = self.select([pr()], result=candidates)
+        self.assertEqual(selected["run"], 102)
+        self.assertEqual(selected["sha"], "abc")
+
     def test_rejects_fork_pr(self):
         candidate = pr()
         candidate["head"]["repo"]["full_name"] = "someone/fork"
