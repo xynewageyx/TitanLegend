@@ -183,6 +183,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("CLASS_ROLES.size() == team_formation.CLASS_NAMES.size()", class_menu)
         self.assertIn("range(ADAPTER.CLASS_ATTACK_WEIGHTS.size())", checks)
 
+    def test_class_menu_validates_death_knight_role_before_apply(self):
+        class_menu = (ROOT / "scripts/class_menu.gd").read_text(encoding="utf-8")
+        self.assertIn("chosen_class = class_selector.get_selected_id()", class_menu)
+        self.assertIn("chosen_role not in team_formation.ALLOWED_ROLES[chosen_class]", class_menu)
+        self.assertIn("if not team_formation.set_class(slot, chosen_class):", class_menu)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
