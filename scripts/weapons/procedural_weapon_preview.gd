@@ -70,7 +70,7 @@ func _orb(where: Vector3, radius: float, color: Color, tag: String, emissive: bo
     orb.rings = 6
     _mesh(orb, where, _material(color, 0.2, emissive), tag)
 
-func _extrude(outline: PackedVector2Array, thickness: float, color: Color, tag: String) -> void:
+func _extrude(outline: PackedVector2Array, thickness: float, color: Color, tag: String, offset: Vector3 = Vector3.ZERO) -> void:
     ## One two-sided beveled silhouette instead of many glaring, flat boxes.
     var triangles: PackedInt32Array = Geometry2D.triangulate_polygon(outline)
     if triangles.is_empty():
@@ -96,7 +96,7 @@ func _extrude(outline: PackedVector2Array, thickness: float, color: Color, tag: 
             tool.add_vertex(v)
     tool.generate_normals()
     var solid: ArrayMesh = tool.commit()
-    _mesh(solid, Vector3.ZERO, _material(color, 0.72), tag)
+    _mesh(solid, offset, _material(color, 0.72), tag)
 
 func _blade_outline(height: float, half_width: float) -> PackedVector2Array:
     var points := PackedVector2Array()
@@ -164,7 +164,7 @@ func build() -> void:
             _crest(accent, Vector3(0, 1.05, 0.20))
         5: # Spear
             _rod(Vector3(0, 0.42, 0), 1.75, 0.065, LEATHER, "SpearShaft")
-            _extrude(_blade_outline(0.78 * width_factor, 0.13 * width_factor), 0.09, base.lightened(0.1), "SpearTip")
+            _extrude(_blade_outline(0.78 * width_factor, 0.13 * width_factor), 0.09, base.lightened(0.1), "SpearTip", Vector3(0, 0.92, 0))
             _crest(accent, Vector3(0, 0.48, 0.10))
         6, 7: # Bow and compact crossbow
             _rod(Vector3(-0.23, 0.43, 0), 1.40, 0.065, LEATHER, "LeftCurvedLimb", -0.28)
