@@ -40,6 +40,16 @@ class GeminiProposalSafetyTests(unittest.TestCase):
                     NAMESPACE["safe_path"]("scripts/linked.gd")
 
 
+class GeminiEditGuardTests(unittest.TestCase):
+    def test_proposals_cannot_rewrite_tests(self):
+        self.assertIn('path.relative_to(ROOT).parts[0] == "tests"', SOURCE)
+        self.assertIn('Gemini proposals cannot modify regression tests', SOURCE)
+
+    def test_noop_replacements_are_rejected(self):
+        self.assertIn('if old == new:', SOURCE)
+        self.assertIn('No-op replacement rejected', SOURCE)
+
+
 class GeminiApiFailureTests(unittest.TestCase):
     def call_generate(self):
         with patch.dict(NAMESPACE, {"MODEL": "test-model", "KEY": "dummy"}), \
