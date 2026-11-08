@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-08 21:05 UTC**
-Git-Stand: **4928963ea9be77a70ddf8baad05246034540b788** auf Branch **main**
+Git-Stand: **1e63335d215da9372989a775f44548c895ef030e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -15,35 +15,39 @@ Git-Stand: **4928963ea9be77a70ddf8baad05246034540b788** auf Branch **main**
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
 - `d4b841c` (2026-11-08): feat(forest): estimate seven-enemy Android geometry load from imported model metrics
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `358b44a` (2026-11-08): fix: avoid equipment mesh churn on unchanged inventory refresh (#210)
 - `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
