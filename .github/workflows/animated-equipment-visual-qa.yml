@@ -54,7 +54,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 180s xvfb-run -a -s '-screen 0 720x1280x24' godot \
-            --path . --rendering-method gl_compatibility \
+            --path . --rendering-method gl_compatibility --audio-driver Dummy \
             --script res://tools/render_live_equipment_qa.gd \
             2>&1 | tee /tmp/equipment-visual-qa.log
           grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=26 classes=12' /tmp/equipment-visual-qa.log
