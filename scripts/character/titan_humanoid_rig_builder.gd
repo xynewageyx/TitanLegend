@@ -40,7 +40,12 @@ const ANCHORS = {
     "BootLeftSocket": "foot_l",
     "BootRightSocket": "foot_r",
     "RightHandSocket": "hand_r",
-    "LeftHandSocket": "hand_l"
+    "LeftHandSocket": "hand_l",
+    # Compatibility with the original four-anchor prototype in PR #103.
+    "head_anchor": "head",
+    "main_hand_anchor": "hand_r",
+    "off_hand_anchor": "hand_l",
+    "back_anchor": "chest"
 }
 
 func build_rig(skeleton: Skeleton3D) -> bool:
