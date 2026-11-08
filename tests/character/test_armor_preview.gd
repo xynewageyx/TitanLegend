@@ -46,6 +46,15 @@ func _run() -> void:
         push_error("High-tier chest emblem missing")
         quit(1)
         return
+    if chest.get_node_or_null("RaisedRidge") == null:
+        push_error("Faceted armor ridge missing")
+        quit(1)
+        return
+    var chest_shell := chest.get_node_or_null("ArmorMesh") as MeshInstance3D
+    if chest_shell == null or not (chest_shell.mesh is BoxMesh):
+        push_error("Expected angular armor plate geometry")
+        quit(1)
+        return
     if helmet.get_node_or_null("EnergyGem") == null:
         push_error("High-tier helmet energy gem missing")
         quit(1)
