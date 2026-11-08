@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 11:26 UTC**
-Git-Stand: **ca7972682c26509c5d34911efc9ca7ca8bc0d30b** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 11:29 UTC**
+Git-Stand: **b733f69ec10de9b380137e28d4eed1f8eb2073bf** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
 - `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 
@@ -18,10 +19,10 @@ Git-Stand: **ca7972682c26509c5d34911efc9ca7ca8bc0d30b** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -42,10 +43,10 @@ Git-Stand: **ca7972682c26509c5d34911efc9ca7ca8bc0d30b** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 - `00907c8` (2026-11-07): Improve Gemini draft fix diagnostics and traceback matching (#115)
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
 - `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
-- `97fa919` (2026-11-07): Fix regression CI by installing lz4 for UnityFS inspector tests (#107)
 
 ## Bereichsübergreifende Änderungen
 
