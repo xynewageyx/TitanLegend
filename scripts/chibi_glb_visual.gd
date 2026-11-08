@@ -26,13 +26,22 @@ func configure(class_id: int) -> void:
   return
  model.name = "ChibiSculptedModel"
  add_child(model)
- # Hide only the old primitive body and face, never equipment, skills or companions.
+ # The hero was originally constructed from standalone primitive meshes.
+ # Those parts now intersect the imported chibi skin and the modular armor.
+ # Hide ONLY direct legacy MeshInstance3D children and the legacy cape/face,
+ # not equipment, the animation controller, the pet or battle FX.
  var hero: Node = get_parent()
  if hero != null:
-  for node_name in ["HeroSculptedTorso", "HeroHead", "HeroHair", "StorybookFace"]:
-   var old: Node3D = hero.get_node_or_null(node_name) as Node3D
-   if old != null:
-    old.visible = false
+  var hidden_legacy_meshes := 0
+  for old in hero.get_children():
+   if old is MeshInstance3D:
+    (old as MeshInstance3D).visible = false
+    hidden_legacy_meshes += 1
+  for node_name in ["HeroCape", "StorybookFace"]:
+   var obsolete: Node3D = hero.get_node_or_null(node_name) as Node3D
+   if obsolete != null:
+    obsolete.visible = false
+  set_meta("hidden_legacy_body_meshes", hidden_legacy_meshes)
  # Observe imported bone structure without changing the original model or equipment.
  imported_skeleton = RIG_BRIDGE.find_skeleton(model)
  rig_audit = RIG_BRIDGE.audit(imported_skeleton)
