@@ -16,6 +16,10 @@ end = next(i for i in range(start + 1, len(tree.body))
            and isinstance(tree.body[i].target, ast.Tuple))
 VALIDATION = compile(ast.Module(body=tree.body[start:end], type_ignores=[]),
                      str(SCRIPT), "exec")
+CHECKER = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
+               and node.name == "unsafe_python_calls")
+checker_namespace = {"ast": ast}
+exec(compile(ast.Module(body=[CHECKER], type_ignores=[]), str(SCRIPT), "exec"), checker_namespace)
 
 
 class GeminiProposalValidationTests(unittest.TestCase):
@@ -42,6 +46,7 @@ class GeminiProposalValidationTests(unittest.TestCase):
         namespace = {
             "ROOT": self.root, "files": [str(p) for p in allowed],
             "edits": edits, "safe_path": safe_path, "re": re,
+            "unsafe_python_calls": checker_namespace["unsafe_python_calls"],
         }
         exec(VALIDATION, namespace)
         return namespace["updated"]
@@ -61,6 +66,18 @@ class GeminiProposalValidationTests(unittest.TestCase):
                     self.validate([{"path": "scripts/example.gd",
                                     "old": "health = 10", "new": expression}])
                 self.assertIn("health = 10", self.source.read_text())
+
+    def test_indirect_python_execution_is_rejected(self):
+        py = self.root / "scripts" / "helper.py"
+        py.write_text("value = 10\n", encoding="utf-8")
+        for payload in ('getattr(__builtins__, "eval")("2+2")',
+                        '__import__("os").system("id")',
+                        'subprocess.Popen(["id"])'):
+            with self.subTest(payload=payload):
+                with self.assertRaises(SystemExit):
+                    self.validate([{"path": "scripts/helper.py",
+                                    "old": "value = 10", "new": payload}], allowed=[py])
+                self.assertEqual(py.read_text(), "value = 10\n")
 
     def test_nul_byte_is_rejected(self):
         with self.assertRaisesRegex(SystemExit, "NUL bytes"):

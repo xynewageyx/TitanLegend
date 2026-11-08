@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Opt-in Gemini proposals for a draft PR; never merge or push directly to main."""
+import ast
 import json
 import os
 from pathlib import Path
@@ -32,6 +33,29 @@ def safe_path(raw):
     if target.stat().st_size > 100_000:
         raise ValueError("File too large")
     return target
+
+def unsafe_python_calls(source):
+    """Identify executable call targets including indirect builtins access."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return set()
+    blocked = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if isinstance(func, ast.Name) and func.id in {"eval", "exec", "compile", "__import__"}:
+            blocked.add(func.id)
+        elif isinstance(func, ast.Attribute) and func.attr in {
+            "system", "popen", "Popen", "run", "call", "check_output", "check_call",
+        }:
+            blocked.add("command:" + func.attr)
+        elif isinstance(func, ast.Name) and func.id == "getattr":
+            if len(node.args) >= 2 and isinstance(node.args[1], ast.Constant):
+                if node.args[1].value in {"eval", "exec", "compile", "__import__", "system", "Popen"}:
+                    blocked.add("getattr:" + node.args[1].value)
+    return blocked
 
 def generate(prompt):
     payload = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
@@ -188,7 +212,10 @@ for edit in edits:
         raise SystemExit("No-op replacement rejected")
     if original.count(old) != 1:
         raise SystemExit("Replacement not uniquely located")
-    updated[path] = original.replace(old, new, 1)
+    candidate = original.replace(old, new, 1)
+    if path.suffix == ".py" and unsafe_python_calls(candidate) - unsafe_python_calls(original):
+        raise SystemExit("New indirect or obfuscated Python execution rejected")
+    updated[path] = candidate
 for path, content in updated.items():
     path.write_text(content)
 command("git", "diff", "--check")
