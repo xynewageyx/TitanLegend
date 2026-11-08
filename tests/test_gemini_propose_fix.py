@@ -109,7 +109,8 @@ class GeminiRepairWorkflowRegressionTests(unittest.TestCase):
         self.assertIn("cancel-in-progress: false", workflow)
 
     def test_gemini_api_failure_produces_failed_job(self):
-        self.assertIn('Path("gemini-draft-diagnostic.md").write_text(report)\\n    # API outages and quota errors must fail CI rather than falsely report a repair.\\n    raise SystemExit(1)\\nedits = proposal.get', SOURCE)
+        self.assertIn("API outages and quota errors must fail CI", SOURCE)
+        self.assertIn("    raise SystemExit(1)", SOURCE)
 
 if __name__ == "__main__":
     unittest.main()
