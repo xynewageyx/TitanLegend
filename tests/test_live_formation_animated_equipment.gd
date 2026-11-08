@@ -2,6 +2,7 @@ extends SceneTree
 ## Runtime integration test for the ACTUAL four-hero Titan Legends team.
 ## All changes are visual; no battle damage, inventory or persistent data are altered.
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
+const WEAPON = preload("res://scripts/weapons/procedural_weapon_preview.gd")
 
 func _initialize() -> void:
  call_deferred("_run")
@@ -9,6 +10,19 @@ func _initialize() -> void:
 func _fail(reason: String) -> void:
  push_error(reason)
  quit(1)
+
+## Decode the authored socket position in character-local rest coordinates,
+## independent of the currently playing attack or idle bone poses.
+func _socket_in_rest_local(hero: Node3D, skeleton: Skeleton3D, socket_name: String) -> Vector3:
+ var joint := skeleton.get_node_or_null(NodePath(socket_name)) as BoneAttachment3D
+ if joint == null:
+  return Vector3.INF
+ var child := joint.get_node_or_null("EquipmentAnchor") as Node3D
+ var idx: int = skeleton.find_bone(joint.bone_name)
+ if child == null or idx < 0:
+  return Vector3.INF
+ var rest_point: Vector3 = skeleton.get_bone_global_rest(idx) * child.position
+ return hero.to_local(skeleton.to_global(rest_point))
 
 func _run() -> void:
  # Load the formation only after the SceneTree/autoload initialization.
@@ -44,6 +58,27 @@ func _run() -> void:
   if imported_skeleton == null or not bool(imported_view.get_meta("imported_equipment_sockets_ready", false)):
    _fail("Imported GLB skeleton did not provide equipment anchors for hero %d" % index)
    return
+  # GLB-facing correction: capes behind body, breastplate in front,
+  # headpiece on the cranium rather than dangling below the mouth.
+  var rest_back := _socket_in_rest_local(hero, imported_skeleton, "BackSocket")
+  var rest_chest := _socket_in_rest_local(hero, imported_skeleton, "ChestSocket")
+  var rest_head := _socket_in_rest_local(hero, imported_skeleton, "HeadSocket")
+  if rest_back.z > -0.29 or rest_chest.z < 0.26 or rest_head.y < 1.97:
+   _fail("GLB front/back or helmet attachment is misaligned on hero %d: %s / %s / %s" %
+    [index, str(rest_back), str(rest_chest), str(rest_head)])
+   return
+  var rest_hand := _socket_in_rest_local(hero, imported_skeleton, "RightHandSocket")
+  if rest_hand.distance_to(Vector3(0.47, 0.94, 0.02)) > 0.025:
+   _fail("GLB hand grip anchor is too low or far from the hand for hero %d" % index)
+   return
+  var hand_joint := imported_skeleton.get_node("RightHandSocket") as BoneAttachment3D
+  var hand_anchor := hand_joint.get_node("EquipmentAnchor") as Node3D
+  var hand_bone_id: int = imported_skeleton.find_bone(hand_joint.bone_name)
+  var hand_rest_basis: Basis = (imported_skeleton.global_transform.basis *
+   imported_skeleton.get_bone_global_rest(hand_bone_id).basis * hand_anchor.basis).orthonormalized()
+  if not hand_rest_basis.is_equal_approx(hero.global_transform.basis.orthonormalized()):
+   _fail("GLB weapon orientation does not match upright hero axes on hero %d" % index)
+   return
   # No extra primitive costume/body may obscure the GLB mesh. Keep the
   # passive pet, HP bar and imported inventory equipment visible.
   var old_body_count := 0
@@ -77,6 +112,11 @@ func _run() -> void:
   var chest_anchor: Node3D = controller.call("_socket", "ChestSocket") as Node3D
   if weapon_anchor == null or weapon_anchor.get_child_count() != 1:
    _fail("Weapon missing from imported GLB bone")
+   return
+  var held_weapon: Node3D = weapon_anchor.get_child(0) as Node3D
+  var grip: Vector3 = WEAPON.grip_local_point(int(held_weapon.get("weapon_type")))
+  if held_weapon.to_global(grip).distance_to(weapon_anchor.global_position) > 0.0001:
+   _fail("Live weapon handle does not align to animated hand: hero %d" % index)
    return
   if chest_anchor == null or chest_anchor.get_child_count() != 1:
    _fail("Armor missing from imported GLB chest")
@@ -205,6 +245,11 @@ func _run() -> void:
  await process_frame
  var dk: Node3D = team.heroes[0]
  var dk_view: Node3D = dk.get_node("ChibiGLBVisual") as Node3D
+ var toned_surfaces: int = int(dk_view.get_meta("death_knight_tinted_surfaces", 0))
+ if toned_surfaces < 1:
+  _fail("Death Knight GLB white materials were not toned down")
+  return
+ print("DEATH_KNIGHT_MATERIAL_TINT_OK surfaces=%d" % toned_surfaces)
  var dk_skeleton: Skeleton3D = dk_view.get("imported_skeleton") as Skeleton3D
  var dk_controller: Node3D = dk.get_node("EquipmentController") as Node3D
  if dk_skeleton == null or dk_skeleton.get_bone_count() != 24:
@@ -223,6 +268,10 @@ func _run() -> void:
   _fail("Death Knight's imported socket lost its equipped weapon")
   return
  var dk_weapon: Node3D = dk_weapon_root.get_child(0) as Node3D
+ var dk_grip: Vector3 = WEAPON.grip_local_point(int(dk_weapon.get("weapon_type")))
+ if dk_weapon.to_global(dk_grip).distance_to(dk_weapon_root.global_position) > 0.0001:
+  _fail("Death Knight greatsword grip is not on the moving Hand_R_2")
+  return
  var dk_player: AnimationPlayer = dk_view.get("animation_player") as AnimationPlayer
  var dk_clip: Animation = dk_player.get_animation("Attack")
  var dk_start: float = maxf(0.0, dk_clip.length - 0.95)

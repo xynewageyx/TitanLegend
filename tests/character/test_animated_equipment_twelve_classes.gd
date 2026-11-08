@@ -3,6 +3,7 @@ extends SceneTree
 ## scene and original procedural assets (not imported reference-game meshes).
 const SCENE = preload("res://scenes/character/titan_modular_character.tscn")
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
+const WEAPON = preload("res://scripts/weapons/procedural_weapon_preview.gd")
 const RARITIES := [0, 3, 5]
 
 func _initialize() -> void:
@@ -70,6 +71,13 @@ func _run() -> void:
                 return
             if int(weapon.get("rarity")) != rarity or weapon.get_child_count() == 0:
                 _fail("Invalid weapon quality/geometry for class %d" % class_id)
+                return
+            var authored_grip: Vector3 = WEAPON.grip_local_point(int(weapon.get("weapon_type")))
+            # The actual grip, not the model origin, must match the animated
+            # hand joint even for the wide Death Knight greatsword.
+            var visual_node := weapon as Node3D
+            if visual_node == null or (visual_node.position + authored_grip).length() > 0.0001:
+                _fail("Weapon grip is displaced from hero's hand for class %d" % class_id)
                 return
         var equipped_weapon := (skeleton.get_node("RightHandSocket") as BoneAttachment3D).get_child(0) as Node3D
         var equipped_chest := (skeleton.get_node("ChestSocket") as BoneAttachment3D).get_child(0) as Node3D

@@ -200,6 +200,25 @@ func _run() -> void:
     return
    pictures += 1
    hero.rotation.y = 0.0
+  # Compare original rarity progression on both large-sword hero classes.
+  # The production battle still keeps its normal quality and inventory state.
+  if i in [0, 11]:
+   for sampled_quality in [0, 3]:
+    if not bool(ctrl.call("equip_weapon", ADAPTER.weapon_type_for_class(i), sampled_quality)):
+     _fail("Cannot preview sampled sword rarity")
+     return
+    for socket_name in ADAPTER.SOCKETS:
+     if socket_name in ["RightHandSocket", "LeftHandSocket"]:
+      continue
+     if not bool(ctrl.call("equip_armor_slot", socket_name, i, sampled_quality)):
+      _fail("Cannot preview sampled armor rarity")
+      return
+    await process_frame
+    chibi.call("play_clip", "Idle")
+    var label: String = CLASSES[i] + "_front_rarity_" + str(sampled_quality)
+    if not await _capture(label, hero, "front_rarity_" + str(sampled_quality), i):
+     return
+    pictures += 1
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")

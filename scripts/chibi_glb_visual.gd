@@ -26,6 +26,8 @@ func configure(class_id: int) -> void:
   return
  model.name = "ChibiSculptedModel"
  add_child(model)
+ if index == 11:
+  set_meta("death_knight_tinted_surfaces", _tone_death_knight_whites(model))
  # The hero was originally constructed from standalone primitive meshes.
  # Those parts now intersect the imported chibi skin and the modular armor.
  # Hide ONLY direct legacy MeshInstance3D children and the legacy cape/face,
@@ -65,6 +67,50 @@ func configure(class_id: int) -> void:
      limb.visible = false
  animation_player = _find_animation_player(model)
  play_clip("Idle")
+
+## The imported Death Knight uses several pure-white GLB materials.
+## Remap only overly bright surfaces on the original model, not player armor,
+## spell particles, UI or other classes. Every material is duplicated locally.
+func _tone_death_knight_whites(source: Node) -> int:
+ var edits := 0
+ if source is MeshInstance3D:
+  var item := source as MeshInstance3D
+  if item.mesh != null:
+   for surface in range(item.mesh.get_surface_count()):
+    var base_material: BaseMaterial3D = item.get_surface_override_material(surface) as BaseMaterial3D
+    if base_material == null:
+     base_material = item.mesh.surface_get_material(surface) as BaseMaterial3D
+    if base_material == null:
+     base_material = item.material_override as BaseMaterial3D
+    if base_material == null:
+     continue
+    var source_color: Color = base_material.albedo_color
+    if minf(source_color.r, minf(source_color.g, source_color.b)) < 0.78:
+     continue
+    var identifier: String = (String(item.name) + " " + String(base_material.resource_name)).to_lower()
+    var target: Color = Color("#96879b")
+    if identifier.contains("hair") or identifier.contains("horn") or identifier.contains("helmet") or identifier.contains("crown"):
+     target = Color("#4a4056")
+    elif identifier.contains("eye") or identifier.contains("glint"):
+     target = Color("#cbc5ce")
+    elif identifier.contains("bone") or identifier.contains("tooth"):
+     target = Color("#a99d9f")
+    elif identifier.contains("head") or identifier.contains("face") or identifier.contains("skin"):
+     target = Color("#a48e9d")
+    else:
+     target = Color("#817c90")
+    var tinted: BaseMaterial3D = base_material.duplicate(true) as BaseMaterial3D
+    if tinted == null:
+     continue
+    tinted.albedo_color = target
+    tinted.roughness = 0.68
+    if tinted.emission_enabled:
+     tinted.emission_energy_multiplier = minf(0.2, tinted.emission_energy_multiplier)
+    item.set_surface_override_material(surface, tinted)
+    edits += 1
+ for child in source.get_children():
+  edits += _tone_death_knight_whites(child)
+ return edits
 
 func _find_animation_player(node: Node) -> AnimationPlayer:
  if node is AnimationPlayer:

@@ -41,22 +41,78 @@ func _rounded(pos: Vector3, size: Vector3, color: Color) -> void:
     node.material_override = _material(color)
     add_child(node)
 
+func _chest_shell(size: Vector3, color: Color) -> void:
+    ## Eight-sided torso shell with a tapered waist and curved upper chest.
+    ## 4 rings x 12 segments is mobile-friendly and avoids a flat box bib.
+    var ring_profiles := [
+        Vector3(-0.50, 0.68, 0.76),
+        Vector3(-0.27, 0.91, 0.92),
+        Vector3(0.18, 1.02, 1.00),
+        Vector3(0.49, 0.72, 0.73)
+    ]
+    var ring_count := ring_profiles.size()
+    var sectors := 12
+    var vertices: Array[PackedVector3Array] = []
+    for ring in range(ring_count):
+        var profile: Vector3 = ring_profiles[ring]
+        var loop := PackedVector3Array()
+        for k in range(sectors):
+            var angle: float = TAU * float(k) / float(sectors)
+            loop.append(Vector3(
+                cos(angle) * size.x * 0.5 * profile.y,
+                size.y * profile.x,
+                sin(angle) * size.z * 0.5 * profile.z
+            ))
+        vertices.append(loop)
+    var tool := SurfaceTool.new()
+    tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+    for ring in range(ring_count - 1):
+        for k in range(sectors):
+            var next: int = (k + 1) % sectors
+            var low: Vector3 = vertices[ring][k]
+            var high: Vector3 = vertices[ring + 1][k]
+            var low_next: Vector3 = vertices[ring][next]
+            var high_next: Vector3 = vertices[ring + 1][next]
+            for v in [low, high, low_next, high, high_next, low_next]:
+                tool.add_vertex(v)
+    for k in range(sectors):
+        var next: int = (k + 1) % sectors
+        for v in [Vector3(0, size.y * ring_profiles[0].x, 0), vertices[0][k], vertices[0][next]]:
+            tool.add_vertex(v)
+        var top: int = ring_count - 1
+        for v in [Vector3(0, size.y * ring_profiles[top].x, 0), vertices[top][next], vertices[top][k]]:
+            tool.add_vertex(v)
+    tool.generate_normals()
+    var shell := MeshInstance3D.new()
+    shell.name = "CurvedChestShell"
+    shell.mesh = tool.commit()
+    shell.material_override = _material(color, 0.38)
+    add_child(shell)
+
 func _ready() -> void:
     var scale_factor := 1.0 + float(rarity) * 0.055
     var base_size: Vector3 = SIZES[clampi(slot_index, 0, SIZES.size() - 1)] * scale_factor
     var primary: Color = COLORS[clampi(rarity, 0, COLORS.size() - 1)]
     var shadow: Color = primary.darkened(0.32)
     var trim: Color = Color("#d8c49a") if class_id % 3 == 0 else Color("#d3dce6")
+    # Death Knight: keep the violet-tier identity, but replace glaring light
+    # armor with battleworn dark steel and muted bone. This is purely visual.
+    if class_id == 11:
+        primary = Color("#303540").lerp(primary.darkened(0.36), 0.40 + float(rarity) * 0.09)
+        shadow = primary.darkened(0.24)
+        trim = Color("#a5a0b4")
     # Distinct layered silhouettes replace the former single ellipsoid.
     match slot_index:
         0: # Helmet: crown, brow, and crest
             _rounded(Vector3.ZERO, base_size, primary)
             _box(Vector3(0, -0.09, -0.26), Vector3(0.56, 0.09, 0.13), shadow)
             _box(Vector3(0, 0.20, 0), Vector3(0.11, 0.22, 0.42), trim)
-        1: # Chest: breastplate, side plates, and central emblem
-            _rounded(Vector3.ZERO, base_size, primary)
-            _box(Vector3(0, -0.19, -0.19), Vector3(0.47, 0.12, 0.10), shadow)
-            _box(Vector3(0, 0.04, -0.22), Vector3(0.13, 0.31, 0.08), trim)
+        1: # Chest: tapered curved torso shell, softly layered ribs and emblem
+            _chest_shell(base_size, primary)
+            _rounded(Vector3(0, -base_size.y * 0.22, -base_size.z * 0.39),
+                Vector3(base_size.x * 0.62, 0.09, 0.09), shadow)
+            _rounded(Vector3(0, 0.04, -base_size.z * 0.48),
+                Vector3(0.105, 0.25, 0.075), trim)
         2: # Cape/backplate
             _box(Vector3(0, -0.09, 0), base_size, shadow)
             _box(Vector3(0, 0.15, -0.02), Vector3(0.43, 0.10, 0.16), trim)
@@ -76,6 +132,13 @@ func _ready() -> void:
             _box(Vector3(0, 0.09, -0.09), Vector3(0.24, 0.07, 0.11), trim)
 
     _rarity_details(base_size, primary, trim)
+    # High-tier Death Knight breastplates receive a subdued carved skull
+    # instead of the old featureless oversized purple square.
+    if class_id == 11 and rarity >= 4 and slot_index == 1:
+        var bone_tint: Color = Color("#ada5a5")
+        _rounded(Vector3(0.0, 0.07, -base_size.z * 0.55), Vector3(0.20, 0.22, 0.095), bone_tint)
+        _box(Vector3(-0.049, 0.085, -base_size.z * 0.62 - 0.045), Vector3(0.048, 0.038, 0.025), Color("#30303c"))
+        _box(Vector3(0.049, 0.085, -base_size.z * 0.62 - 0.045), Vector3(0.048, 0.038, 0.025), Color("#30303c"))
 
 
 func _spike(pos: Vector3, height: float, radius: float, color: Color, angle: float = 0.0) -> void:

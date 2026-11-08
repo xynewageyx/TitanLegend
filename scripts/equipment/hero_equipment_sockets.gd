@@ -66,6 +66,9 @@ func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
     visual.set_script(WEAPON_PREVIEW)
     visual.set("weapon_type", safe_type)
     visual.set("rarity", safe_rarity)
+    # Match the authored grip to the moving hand joint without interfering
+    # with main's equipment-refresh caching and instant mesh deduplication.
+    visual.position = -WEAPON_PREVIEW.grip_local_point(safe_type)
     socket.add_child(visual)
     equipped_nodes[key] = visual
     if not offhand:
