@@ -1,6 +1,9 @@
 extends Node3D
 ## Imported original chibi base mesh; preserve existing gameplay and equipment nodes.
+const RIG_BRIDGE = preload("res://scripts/rig/titan_skeleton_bridge.gd")
 const NAMES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler", "death_knight"]
+var imported_skeleton: Skeleton3D
+var rig_audit: Dictionary = {}
 var animation_player: AnimationPlayer
 var active_clip: String = ""
 
@@ -24,6 +27,14 @@ func configure(class_id: int) -> void:
    var old: Node3D = hero.get_node_or_null(node_name) as Node3D
    if old != null:
     old.visible = false
+ # Observe imported bone structure without changing the original model or equipment.
+ imported_skeleton = RIG_BRIDGE.find_skeleton(model)
+ rig_audit = RIG_BRIDGE.audit(imported_skeleton)
+ set_meta("rig_audit", rig_audit)
+ if imported_skeleton == null:
+  push_warning("Chibi model has no Skeleton3D: " + NAMES[index])
+ elif not rig_audit["missing"].is_empty():
+  push_warning("Chibi rig missing mapped bones for " + NAMES[index] + ": " + str(rig_audit["missing"]))
  animation_player = _find_animation_player(model)
  play_clip("Idle")
 
