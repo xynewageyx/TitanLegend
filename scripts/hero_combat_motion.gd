@@ -132,7 +132,8 @@ func _orient_attack_fx() -> void:
  # Put the cosmetic flash near the hand instead of over the face or torso.
  var hero: Node = get_parent()
  var chibi: Node = hero.get_node_or_null("ChibiGLBVisual") if hero != null else null
- attack_fx_forward = 1.0 if chibi != null and chibi.get("imported_skeleton") is Skeleton3D else -1.0
+ var imported: Skeleton3D = chibi.get("imported_skeleton") as Skeleton3D if chibi != null else null
+ attack_fx_forward = 1.0 if imported != null else -1.0
  if attack_flash_root != null:
   attack_flash_root.position = Vector3(0.34, 1.10, 0.70) if attack_fx_forward > 0.0 else Vector3(0.0, 1.45, -0.70)
 
