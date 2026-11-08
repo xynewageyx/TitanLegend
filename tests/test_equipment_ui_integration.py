@@ -36,7 +36,7 @@ class EquipmentUiIntegrationTests(unittest.TestCase):
     def test_death_knight_class_equipment_visual_mapping(self):
         import re
         bridge = script("scripts/equipment/equipment_inventory_visual_bridge.gd")
-        match = re.search(r"const CLASS_WEAPONS := \\[([^\\]]+)\\]", bridge)
+        match = re.search(r"const CLASS_WEAPONS := \[([^\]]+)\]", bridge)
         self.assertIsNotNone(match, "Expected a weapon mapping for all classes")
         weapons = [int(value.strip()) for value in match.group(1).split(",")]
         self.assertEqual(len(weapons), 12, "Visual weapon mapping must include the Death Knight")
