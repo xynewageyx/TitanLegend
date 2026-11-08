@@ -3,6 +3,7 @@ extends SceneTree
 ## Used to decide whether live equipment can eventually follow imported bones
 ## rather than the optional 18-bone preview overlay.
 const BRIDGE = preload("res://scripts/rig/titan_skeleton_bridge.gd")
+const IMPORTED_SOCKETS = preload("res://scripts/equipment/chibi_imported_equipment_sockets.gd")
 const CLASSES := [
  "warrior", "paladin", "druid", "shaman", "hunter", "rogue",
  "mage", "warlock", "summoner", "priest", "brawler", "death_knight"
@@ -28,6 +29,7 @@ func _find_animation_player(node: Node) -> AnimationPlayer:
 func _run() -> void:
  var total_bones := 0
  var animated := 0
+ var socket_count := 0
  for class_token in CLASSES:
   var hero_class: String = String(class_token)
   var path: String = "res://assets/heroes/chibi/" + hero_class + ".glb"
@@ -68,11 +70,33 @@ func _run() -> void:
      break
   if motion_matches == expected_motions.size():
    animated += 1
+  if not (model is Node3D) or not IMPORTED_SOCKETS.install(skeleton, model as Node3D):
+   _fail("Cannot attach original visual bone sockets for " + hero_class)
+   return
+  for socket_name in IMPORTED_SOCKETS.SOCKET_BONES:
+   var anchor: Node3D = IMPORTED_SOCKETS.resolve(skeleton, socket_name)
+   if anchor == null:
+    _fail("Missing imported socket " + socket_name + " on " + hero_class)
+    return
+   socket_count += 1
+  if player != null and player.has_animation("Attack"):
+   var arm_socket: Node3D = IMPORTED_SOCKETS.resolve(skeleton, "RightHandSocket")
+   player.play("Attack")
+   player.seek(0.0, true)
+   skeleton.force_update_all_bone_transforms()
+   await process_frame
+   var initial_transform: Transform3D = arm_socket.global_transform
+   player.seek(0.4, true)
+   skeleton.force_update_all_bone_transforms()
+   await process_frame
+   if initial_transform.basis.is_equal_approx(arm_socket.global_transform.basis):
+    _fail("Imported weapon socket did not rotate on attack for " + hero_class)
+    return
   total_bones += skeleton.get_bone_count()
   print("CHIBI_IMPORTED_RIG class=%s bones=%d clips=%s matched=%d" %
     [hero_class, skeleton.get_bone_count(), str(clips), motion_matches])
   root.remove_child(model)
   model.free()
- print("CHIBI_IMPORTED_RIG_AUDIT_OK classes=%d bones=%d full_clip_sets=%d" %
-  [CLASSES.size(), total_bones, animated])
+ print("CHIBI_IMPORTED_RIG_AUDIT_OK classes=%d bones=%d full_clip_sets=%d sockets=%d" %
+  [CLASSES.size(), total_bones, animated, socket_count])
  quit(0)
