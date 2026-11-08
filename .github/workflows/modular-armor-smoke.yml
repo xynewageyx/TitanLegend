@@ -6,6 +6,7 @@ on:
     paths:
       - 'scripts/equipment/chibi_armor_piece.gd'
       - 'scripts/equipment/equipment_inventory_visual_bridge.gd'
+      - 'scripts/equipment/formation_equipment_adapter.gd'
       - 'scripts/equipment/modular_equipment_inspection.gd'
       - 'tests/character/test_combat_equipment_visuals.gd'
       - 'tests/test_modular_armor_geometry.py'
