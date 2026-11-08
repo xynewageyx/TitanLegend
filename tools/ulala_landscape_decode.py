@@ -31,6 +31,9 @@ def inspect_bundle(path, unitypy):
                         samples.append({"type": kind, "name": str(label)[:160]})
                     if len(metrics) < 200 and kind in ("Mesh", "Texture2D", "Material", "TerrainData"):
                         record = {"type": kind, "name": str(label)[:160]}
+                        if kind == "Texture2D":
+                            record["path_id"] = getattr(obj, "path_id", None)
+                            record["source_bundle"] = path.name
                         for field in {
                             "Mesh": ("m_VertexCount", "m_SubMeshes"),
                             "Texture2D": ("m_Width", "m_Height", "m_MipCount", "m_TextureFormat", "m_CompleteImageSize", "m_IsReadable"),
