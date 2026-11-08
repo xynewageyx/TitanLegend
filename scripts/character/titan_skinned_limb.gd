@@ -21,9 +21,12 @@ func build_limb(skeleton: Skeleton3D, upper_bone: String, lower_bone: String, ra
     if length < 0.01:
         return false
     var direction := (end - start).normalized()
-    var tangent := direction.cross(Vector3.FORWARD).normalized()
-    if tangent.length_squared() < 0.1:
-        tangent = direction.cross(Vector3.RIGHT).normalized()
+    # Choose a nonparallel reference axis before normalizing the cross product.
+    # Normalizing a zero cross product can produce invalid mesh coordinates.
+    var reference_axis := Vector3.FORWARD
+    if absf(direction.dot(reference_axis)) > 0.95:
+        reference_axis = Vector3.RIGHT
+    var tangent := direction.cross(reference_axis).normalized()
     var bitangent := direction.cross(tangent).normalized()
     var vertices := PackedVector3Array()
     var normals := PackedVector3Array()
