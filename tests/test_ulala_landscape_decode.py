@@ -14,8 +14,9 @@ class FakeType:
         self.name = name
 
 class FakeObject:
-    def __init__(self, name, payload=None, fail=False):
+    def __init__(self, name, payload=None, fail=False, path_id=None):
         self.type = FakeType(name)
+        self.path_id = path_id
         self.payload = payload
         self.fail = fail
 
@@ -98,6 +99,17 @@ class LandscapeDecoderTests(unittest.TestCase):
         self.assertEqual(meta["embedded_image_bytes"], 12)
         self.assertNotIn("image_data", meta)
         self.assertNotIn("not-exported", str(result))
+
+    def test_texture_path_id_can_identify_unreferenced_resources(self):
+        result = self.inspect([
+            FakeObject("Texture2D", Payload(m_Name="water_extra",
+                       m_Width=128, m_Height=64, m_TextureFormat=10),
+                       path_id=2884993606383701065)
+        ])
+        meta = result["numeric_metadata"][0]
+        self.assertEqual(meta["path_id"], 2884993606383701065)
+        self.assertEqual(meta["source_bundle"], "forest.prefab_ab")
+        self.assertEqual(meta["name"], "water_extra")
 
     def test_texture_missing_optional_fields(self):
         result = self.inspect([
