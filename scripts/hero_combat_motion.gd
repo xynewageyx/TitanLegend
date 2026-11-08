@@ -129,6 +129,11 @@ func play_skill_cast(role: int, choice: int) -> void:
  # Distinct skill pulse; passive pets never cast or attack.
  skill_flash_remaining = skill_flash_duration
  play_attack()
+ # Spell/cast visual animation is independent from skill order, targeting and damage.
+ var hero: Node = get_parent()
+ var rig: Node = hero.get_node_or_null("LiveFormationRig") if hero != null else null
+ if rig != null and rig.has_method("play_motion"):
+  rig.call("play_motion", "cast")
  if skill_flash == null:
   return
  var tint := Color("#f3ba62")
