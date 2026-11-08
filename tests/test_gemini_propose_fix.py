@@ -102,6 +102,41 @@ class GeminiApiFailureTests(unittest.TestCase):
 
 
 
+class GeminiValidationDispatchTests(unittest.TestCase):
+    def test_validation_workflows_are_dispatched_for_pushed_branch(self):
+        dispatch_node = next(node for node in TREE.body if isinstance(node, ast.FunctionDef)
+                             and node.name == "dispatch_validations")
+        calls = []
+        scope = {
+            "os": __import__("os"),
+            "VALIDATION_WORKFLOWS": ("python-regression-tests.yml",
+                                     "core-regression.yml", "godot-validate.yml"),
+            "command": lambda *args: calls.append(args),
+        }
+        exec(compile(ast.Module(body=[dispatch_node], type_ignores=[]),
+                     str(SCRIPT), "exec"), scope)
+        with patch.dict(scope["os"].environ, {"GITHUB_REPOSITORY": "owner/game"}):
+            scope["dispatch_validations"]("agent/repair")
+        self.assertEqual(calls, [
+            ("gh", "workflow", "run", workflow,
+             "--repo", "owner/game", "--ref", "agent/repair")
+            for workflow in scope["VALIDATION_WORKFLOWS"]
+        ])
+
+    def test_workflow_token_can_dispatch_validation(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/gemini-draft-fix.yml").read_text()
+        permissions = workflow.split("permissions:", 1)[1].split("concurrency:", 1)[0]
+        self.assertIn("  actions: write", permissions)
+
+    def test_validation_is_dispatched_after_push_and_pr_update(self):
+        self.assertLess(SOURCE.rfind('command("git", "push"'),
+                        SOURCE.rfind("dispatch_validations(branch)"))
+        self.assertLess(SOURCE.rfind('command("gh", "pr", "comment"'),
+                        SOURCE.rfind("dispatch_validations(branch)"))
+        self.assertLess(SOURCE.rfind('command("gh", "pr", "create"'),
+                        SOURCE.rfind("dispatch_validations(branch)"))
+
+
 class GeminiExistingPrTests(unittest.TestCase):
     def test_existing_pr_receives_comment_instead_of_new_pr(self):
         self.assertIn('if PR_NUMBER:\n    # This branch already has an open PR.', SOURCE)

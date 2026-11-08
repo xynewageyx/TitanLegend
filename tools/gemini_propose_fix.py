@@ -18,9 +18,23 @@ PR_NUMBER = os.environ.get("TARGET_PR_NUMBER", "").strip()
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash").removeprefix("models/")
 ALLOWED = ("scripts/", "scenes/", "tests/", "addons/")
 MAX_EDITS = 3
+VALIDATION_WORKFLOWS = (
+    "python-regression-tests.yml",
+    "core-regression.yml",
+    "godot-validate.yml",
+)
 
 def command(*args, check=True):
     return subprocess.run(args, text=True, capture_output=True, check=check)
+
+def dispatch_validations(branch):
+    """GITHUB_TOKEN pushes do not trigger PR/push CI; use workflow_dispatch explicitly."""
+    repository = os.environ["GITHUB_REPOSITORY"]
+    for workflow in VALIDATION_WORKFLOWS:
+        command("gh", "workflow", "run", workflow,
+                "--repo", repository, "--ref", branch)
+        print("Dispatched validation:", workflow, "for", branch, flush=True)
+
 
 def safe_path(raw):
     if not isinstance(raw, str) or not raw.endswith((".gd", ".py", ".tscn", ".tres")):
@@ -311,3 +325,6 @@ else:
     pr = command("gh", "pr", "create", "--draft", "--base", "main", "--head", branch,
                  "--title", "AI proposal: investigate CI failure " + RUN_ID, "--body", body)
     print(pr.stdout)
+
+# Validate the pushed PR branch even though GITHUB_TOKEN pushes do not trigger CI.
+dispatch_validations(branch)
