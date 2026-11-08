@@ -81,6 +81,18 @@ func _run() -> void:
                 if parts <= 0 or parts < last_parts:
                     _fail("Armor lost its rarity details at %d/%d/%d" % [hero_class, armor_slot, tier])
                     return
+                if armor_slot == 1:
+                    var shaped_shell := armor.get_node_or_null("CurvedChestShell") as MeshInstance3D
+                    if shaped_shell == null or not (shaped_shell.mesh is ArrayMesh):
+                        _fail("Chest armor still uses an unshaped box/ellipsoid for class %d" % hero_class)
+                        return
+                    if shaped_shell.mesh.get_surface_count() != 1:
+                        _fail("Curved chest shell lacks a valid triangle surface")
+                        return
+                    var bounds: AABB = shaped_shell.mesh.get_aabb()
+                    if bounds.size.x < 0.30 or bounds.size.y < 0.20 or bounds.size.z < 0.15:
+                        _fail("Curved chest shell has invalid proportions")
+                        return
                 if hero_class == 11:
                     var base_part := armor.get_child(0) as MeshInstance3D
                     var base_mat := base_part.material_override as StandardMaterial3D
