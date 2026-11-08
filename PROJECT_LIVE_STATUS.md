@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 17:46 UTC**
-Git-Stand: **555ff1ca8541f26776d341b91db1b6ddbc35590a** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 18:32 UTC**
+Git-Stand: **61cfa8faa635234dc3ce95ffbf17b049ca87afce** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -43,14 +43,15 @@ Git-Stand: **555ff1ca8541f26776d341b91db1b6ddbc35590a** auf Branch **main**
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `61cfa8f` (2026-11-08): ci(forest): run GLB geometry parser unit tests before model generation
 - `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 - `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
-- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ## Bereichsübergreifende Änderungen
 
+- `ebd3a3e` (2026-11-08): test(forest): verify GLB triangle counting and malformed index rejection
 - `83010ff` (2026-11-08): fix: start Gemini repair validation before PR notifications (#190)
 - `cdcf754` (2026-11-08): fix: do not mark Gemini repair successful without a code patch (#189)
 - `04b2f58` (2026-11-08): fix: protect Gemini auto-repair from API 429 quota loops (#187)
