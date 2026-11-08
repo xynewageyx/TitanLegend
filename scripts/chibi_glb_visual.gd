@@ -67,7 +67,10 @@ func _find_animation_player(node: Node) -> AnimationPlayer:
  return null
 
 func play_clip(clip: String) -> void:
- if animation_player == null or clip == active_clip:
+ if animation_player == null:
+  return
+ # Restart non-looping imported clips when their previous playback ended.
+ if clip == active_clip and animation_player.is_playing():
   return
  # Blender may export accumulated NLA actions with _001, _002 ... suffixes.
  # Prefer the clip belonging to this character, not a previous class's action.
@@ -76,11 +79,20 @@ func play_clip(clip: String) -> void:
  if not animation_player.has_animation(chosen):
   return
  var animation: Animation = animation_player.get_animation(chosen)
- animation_player.play(chosen, 0.15)
  # Only trims the inactive lead-in of source clips. Already normalized clips
  # (shorter than their expected action window) remain unchanged.
  var window: float = float(CLIP_WINDOW.get(clip, animation.length))
  var motion_start: float = maxf(0.0, animation.length - window)
+ var playback_speed: float = 1.0
+ if clip == "Attack":
+  # Finish the cosmetic swing in the existing combat animation interval.
+  # Skill cooldowns, damage and real attack timing are never changed.
+  var hero: Node = get_parent()
+  var motion: Node = hero.get_node_or_null("HeroCombatMotion") if hero != null else null
+  if motion != null:
+   var attack_duration: float = maxf(0.20, float(motion.get("attack_duration")))
+   playback_speed = clampf((animation.length - motion_start) / attack_duration, 1.0, 3.0)
+ animation_player.play(chosen, 0.12, playback_speed)
  if motion_start > 0.0:
   animation_player.seek(motion_start, true)
  active_clip = clip
