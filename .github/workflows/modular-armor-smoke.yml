@@ -52,7 +52,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/character/test_combat_equipment_visuals.gd 2>&1 | tee /tmp/combat-equipment-smoke.log
+          timeout --signal=TERM --kill-after=5s 90s godot --headless --path . --quit-after 600 --script res://tests/character/test_combat_equipment_visuals.gd 2>&1 | tee /tmp/combat-equipment-smoke.log
           grep -Fq 'COMBAT_EQUIPMENT_VISUALS_OK: all 12 classes' /tmp/combat-equipment-smoke.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/combat-equipment-smoke.log; then
             exit 1
