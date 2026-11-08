@@ -57,6 +57,23 @@ def unsafe_python_calls(source):
                     blocked.add("getattr:" + node.args[1].value)
     return blocked
 
+def sanitize_ci_logs(raw):
+    """Bound CI log data and discard common role-spoofing instruction lines."""
+    injection = re.compile(
+        r"(?i)(?:ignore (?:all |any )?(?:previous|prior|above) instructions|"
+        r"system\s*prompt|developer\s*message|assistant\s*role|"
+        r"\[INST\]|<\|(?:im_start|im_end)\|>|"
+        r"you (?:must|should) (?:now |immediately )?(?:edit|change|delete|disable|run)|"
+        r"override (?:the )?(?:instructions|rules|policy))"
+    )
+    lines = []
+    for line in raw.splitlines():
+        line = line[:1600]
+        if line.strip() and not injection.search(line):
+            lines.append(line)
+    return "\n".join(lines)[-24000:]
+
+
 def generate(prompt):
     payload = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
                           "generationConfig": {"responseMimeType": "application/json"}}).encode()
@@ -99,8 +116,7 @@ if log_result.returncode or not log_result.stdout.strip():
     raise SystemExit("Failed-run logs unavailable")
 # Truncate each extremely long assertion BEFORE taking the tail; a failing
 # unittest may print entire source files in a single assertion line.
-log_lines = [line[:1600] for line in log_result.stdout.splitlines() if line.strip()]
-logs = "\n".join(log_lines)[-24000:]
+logs = sanitize_ci_logs(log_result.stdout)
 # Send only explicitly listed, bounded source files; no secrets or workflow/config files.
 files = []
 for match in re.findall(r"(?<![\w.-])(?:scripts|scenes|tests|addons)/[\w./-]+\.(?:gd|py|tscn|tres)", logs):
