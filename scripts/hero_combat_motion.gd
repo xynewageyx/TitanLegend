@@ -23,6 +23,9 @@ var right_arm: Node3D
 var left_leg: Node3D
 var right_leg: Node3D
 var magic_flash: MeshInstance3D
+var attack_flash_root: Node3D
+var attack_fx_forward: float = -1.0
+const MAX_ATTACK_FLASH_SCALE: float = 1.18
 var attack_duration: float = 0.42
 var attack_variant: int = 0
 # Visual-only secondary motion (no new meshes or combat timers).
@@ -110,10 +113,10 @@ func configure(hero_class: int) -> void:
  legacy_weapon.name = "LegacyWeaponVisual"
  right_arm.add_child(legacy_weapon)
  HeroWeapons47.equip(legacy_weapon, class_id)
- var flash_root: Node3D = _part(self, "AttackFlash", Vector3(0.0, 1.45, -0.7))
- magic_flash = VisualFactory.sphere(flash_root, class_fx_size, Vector3.ZERO, class_fx_color)
+ attack_flash_root = _part(self, "AttackFlash", Vector3(0.0, 1.45, -0.7))
+ magic_flash = VisualFactory.sphere(attack_flash_root, class_fx_size, Vector3.ZERO, class_fx_color)
  magic_flash.visible = false
- skill_flash = VisualFactory.sphere(flash_root, 0.45, Vector3(0.0, 0.18, -0.15), Color("#ffe59a"))
+ skill_flash = VisualFactory.sphere(attack_flash_root, 0.45, Vector3(0.0, 0.18, -0.15), Color("#ffe59a"))
  skill_flash.visible = false
  skill_flash.material_override = StandardMaterial3D.new()
  (skill_flash.material_override as StandardMaterial3D).shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -124,7 +127,17 @@ func configure(hero_class: int) -> void:
   defense_segments.append(segment)
  defense_ring.visible = false
 
+func _orient_attack_fx() -> void:
+ # Imported GLBs face +Z, unlike the original fallback geometry (-Z).
+ # Put the cosmetic flash near the hand instead of over the face or torso.
+ var hero: Node = get_parent()
+ var chibi: Node = hero.get_node_or_null("ChibiGLBVisual") if hero != null else null
+ attack_fx_forward = 1.0 if chibi != null and chibi.get("imported_skeleton") is Skeleton3D else -1.0
+ if attack_flash_root != null:
+  attack_flash_root.position = Vector3(0.34, 1.10, 0.70) if attack_fx_forward > 0.0 else Vector3(0.0, 1.45, -0.70)
+
 func play_attack() -> void:
+ _orient_attack_fx()
  attack_variant = (attack_variant + 1) % 2
  attack_duration = 0.34 if class_id in [2, 4, 10] else (0.52 if class_id in [0, 1] else 0.42)
  attack_remaining = attack_duration
@@ -279,10 +292,10 @@ func _process(delta: float) -> void:
   attack_lean = swing
   magic_flash.visible = true
   var fx_strength: float = 0.75 if class_id in [2, 4] else (1.25 if class_id in [0, 1, 10] else 1.0)
-  magic_flash.scale = Vector3.ONE * (0.65 + 1.55 * swing * fx_strength)
+  magic_flash.scale = Vector3.ONE * minf(MAX_ATTACK_FLASH_SCALE, 0.65 + 1.55 * swing * fx_strength)
   # Keep the impact flash close to the weapon for melee, but project
   # ranged and spell effects slightly forward for better portrait readability.
-  magic_flash.position.z = (-0.55 if class_id in [4, 5] else (-0.42 if class_id in [2, 3, 6, 7, 8, 9] else -0.22)) * swing
+  magic_flash.position.z = (0.55 if class_id in [4, 5] else (0.42 if class_id in [2, 3, 6, 7, 8, 9] else 0.22)) * swing * attack_fx_forward
   magic_flash.position.y = (0.18 if class_id in [3, 6, 7, 8, 9] else (0.08 if class_id in [2, 4, 5] else 0.0)) * swing
  else:
   magic_flash.visible = false
