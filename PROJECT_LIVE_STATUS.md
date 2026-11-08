@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:47 UTC**
-Git-Stand: **c4ac39b9ad275daef3132e51e05cc5ec5cf1c67c** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:52 UTC**
+Git-Stand: **20a04b0bbc85906afabab61af499a433f1ecd995** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,6 +41,7 @@ Git-Stand: **c4ac39b9ad275daef3132e51e05cc5ec5cf1c67c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `20a04b0` (2026-11-08): feat: safe dry-run mode for Gemini automatic PR monitor (#177)
 - `5976557` (2026-11-08): feat: enable bounded Gemini repairs for all same-repo PRs (#172)
 - `427156a` (2026-11-08): feat: automatically monitor labeled PR failures and dispatch bounded Gemini repairs (#171)
 - `877cef6` (2026-11-08): feat: Gemini can repair labeled existing pull requests (#170)
@@ -53,7 +54,6 @@ Git-Stand: **c4ac39b9ad275daef3132e51e05cc5ec5cf1c67c** auf Branch **main**
 - `37106e4` (2026-11-08): fix: safely reject malformed Gemini API response structures (#169)
 - `5d520d6` (2026-11-08): security: sanitize untrusted CI logs before Gemini proposals (#168)
 - `77627bd` (2026-11-08): security: detect indirect execution in Gemini Python proposals (#167)
-- `ceb0231` (2026-11-08): fix: behavioral tests for Gemini dangerous-edit rejection (#161)
 
 ## Regeln für alle Fach-Chats
 
