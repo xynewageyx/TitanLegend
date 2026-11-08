@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 12:45 UTC**
-Git-Stand: **7702adf3a00d5ca6ca5a77006e274bade467d2fb** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:01 UTC**
+Git-Stand: **10deca6cb00a9a68b9ad5ce2cfba1413c7ad781b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -18,6 +18,7 @@ Git-Stand: **7702adf3a00d5ca6ca5a77006e274bade467d2fb** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
 - `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
 - `b3736ea` (2026-11-08): Bind formation equipment to animated skeleton sockets when available (#159)
 - `8c9b557` (2026-11-08): feat: retain original PR103 rig anchors alongside equipment sockets (#158)
@@ -45,6 +46,7 @@ Git-Stand: **7702adf3a00d5ca6ca5a77006e274bade467d2fb** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 
 ## Bereichsübergreifende Änderungen
@@ -54,7 +56,6 @@ Git-Stand: **7702adf3a00d5ca6ca5a77006e274bade467d2fb** auf Branch **main**
 - `6e98f94` (2026-11-08): test: Gemini API failure regressions and symlink path protection (#123)
 - `6516278` (2026-11-08): Handle malformed Gemini JSON as safe diagnostic (#122)
 - `f7ed5eb` (2026-11-08): Render real newlines in Gemini diagnostics and PR description (#121)
-- `1533272` (2026-11-07): Write diagnostic artifact when Gemini API is unavailable or quota-limited (#116)
 
 ## Regeln für alle Fach-Chats
 
