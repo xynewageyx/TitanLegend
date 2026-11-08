@@ -190,6 +190,7 @@ func play_hero_defeat(i: int) -> void:
  if not is_instance_valid(hero):
   return
  fallen_heroes[i] = true
+ _live_rig_defeated(hero)
  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
  if glb_visual != null:
   glb_visual.play_hit()
@@ -215,6 +216,7 @@ func reset_individual_defeat_poses() -> void:
   if is_instance_valid(heroes[i]):
    heroes[i].position = _formation_position(i)
    heroes[i].rotation = Vector3.ZERO
+   _live_rig_restore(heroes[i])
    var glb_visual: Node = heroes[i].get_node_or_null("WarriorGLBVisual")
    if glb_visual != null:
     glb_visual.reset_defeat()
@@ -231,6 +233,7 @@ func play_team_defeat() -> void:
     active.kill()
   attack_tweens.erase(i)
   fallen_heroes[i] = true
+  _live_rig_defeated(hero)
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
@@ -261,6 +264,7 @@ func reset_team_defeat_pose() -> void:
    continue
   hero.position = _formation_position(i)
   hero.rotation = Vector3.ZERO
+  _live_rig_restore(hero)
 
 # Update 83: elemental boss impacts alter only the hit animation, not damage.
 func play_elemental_hit(element: int) -> void:
@@ -293,6 +297,7 @@ func play_hit_targets(targets: Array[int], critical: bool = false) -> void:
   var hero: Node3D = heroes[index]
   if not is_instance_valid(hero):
    continue
+  _live_rig_motion(hero, "hit")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
@@ -318,6 +323,7 @@ func play_team_hit() -> void:
  for hero in heroes:
   if not is_instance_valid(hero):
    continue
+  _live_rig_motion(hero, "hit")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
@@ -338,6 +344,7 @@ func play_attack_for_hero(i: int) -> void:
  var hero: Node3D = heroes[i]
  if not is_instance_valid(hero):
   return
+ _live_rig_motion(hero, "attack")
  if attack_tweens.has(i):
   var old_tween: Tween = attack_tweens[i] as Tween
   if old_tween != null and old_tween.is_running():
@@ -510,6 +517,31 @@ func _refresh_equipment_visuals() -> void:
 func _on_equipment_visual_upgrade(_slot: int, _level: int) -> void:
  _refresh_equipment_visuals()
 
+## Cosmetic-only skeleton bridge: gameplay, four-hero formation and pets are unchanged.
+const LIVE_RIG = preload("res://scripts/equipment/live_formation_rig_bridge.gd")
+func _install_live_rig(hero: Node3D) -> void:
+ if hero.get_node_or_null("LiveFormationRig") != null:
+  return
+ var bridge := Node3D.new()
+ bridge.name = "LiveFormationRig"
+ bridge.set_script(LIVE_RIG)
+ hero.add_child(bridge)
+
+func _live_rig_motion(hero: Node3D, motion_name: String) -> void:
+ var bridge := hero.get_node_or_null("LiveFormationRig")
+ if bridge != null and bridge.has_method("play_motion"):
+  bridge.call("play_motion", motion_name)
+
+func _live_rig_defeated(hero: Node3D) -> void:
+ var bridge := hero.get_node_or_null("LiveFormationRig")
+ if bridge != null and bridge.has_method("mark_defeated"):
+  bridge.call("mark_defeated")
+
+func _live_rig_restore(hero: Node3D) -> void:
+ var bridge := hero.get_node_or_null("LiveFormationRig")
+ if bridge != null and bridge.has_method("restore"):
+  bridge.call("restore")
+
 func create_team() -> void:
  # Rebuild on class/role changes and remove old nodes immediately.
  for hero in heroes:
@@ -526,6 +558,8 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
+  # Visual-only rig, installed before equipment marker creation and GLB import.
+  _install_live_rig(hero)
   # Optional chibi equipment attachment markers; no visuals equipped by default.
   preload("res://scripts/equipment/formation_equipment_adapter.gd").install(hero)
   # Optional imported 3D warrior: only class 0, and only when the GLB exists.
@@ -678,20 +712,25 @@ func _build_hero(hero: Node3D, role: int, color: Color) -> void:
   var shoulder: MeshInstance3D = VisualFactory.sphere(hero, 0.20, Vector3(shoulder_side * 0.50, 1.58, 0), color.lightened(0.16))
   shoulder.scale = Vector3(1.15, 0.70, 1.15)
  # Limbs are rendered exclusively by HeroCombatMotion so they animate without duplicates.
+ # Old static class-role props are retained only as fallback when no main-hand
+ # inventory weapon is equipped. Do not hide the headgear, shield or quiver.
+ var legacy_role_weapon := Node3D.new()
+ legacy_role_weapon.name = "LegacyRoleWeapon"
+ hero.add_child(legacy_role_weapon)
  if role == 0: # Krieger: Helm, Schild und Schwert
   VisualFactory.box(hero, Vector3(0.66, 0.22, 0.65), Vector3(0, 2.19, 0), Color("#9ea9b7"))
   VisualFactory.box(hero, Vector3(0.58, 0.75, 0.15), Vector3(-0.65, 1.2, -0.2), Color("#66798c"))
-  VisualFactory.box(hero, Vector3(0.12, 1.5, 0.12), Vector3(0.73, 1.5, -0.05), Color("#e0e5eb"))
+  VisualFactory.box(legacy_role_weapon, Vector3(0.12, 1.5, 0.12), Vector3(0.73, 1.5, -0.05), Color("#e0e5eb"))
  elif role == 1: # Magier: Stab und Kristall
-  VisualFactory.cylinder(hero, 2.25, 0.07, Vector3(0.66, 1.2, 0), Color("#69472c"))
-  VisualFactory.sphere(hero, 0.23, Vector3(0.66, 2.45, 0), Color("#53d7ff"))
+  VisualFactory.cylinder(legacy_role_weapon, 2.25, 0.07, Vector3(0.66, 1.2, 0), Color("#69472c"))
+  VisualFactory.sphere(legacy_role_weapon, 0.23, Vector3(0.66, 2.45, 0), Color("#53d7ff"))
   VisualFactory.sphere(hero, 0.46, Vector3(0, 2.25, 0), Color("#344f99"))
  elif role == 2: # Jaeger: Bogen und Kocher
-  VisualFactory.cylinder(hero, 1.7, 0.07, Vector3(0.67, 1.24, 0), Color("#a97542"))
+  VisualFactory.cylinder(legacy_role_weapon, 1.7, 0.07, Vector3(0.67, 1.24, 0), Color("#a97542"))
   VisualFactory.box(hero, Vector3(0.32, 0.85, 0.34), Vector3(-0.44, 1.25, 0.25), Color("#4a633a"))
  elif role == 3: # Heiler: Lichtkristall und Umhang
   VisualFactory.box(hero, Vector3(0.85, 1.4, 0.12), Vector3(0, 1.0, 0.4), Color("#e8d6a1"))
-  VisualFactory.sphere(hero, 0.28, Vector3(0.67, 1.52, -0.1), Color("#ffe888"))
+  VisualFactory.sphere(legacy_role_weapon, 0.28, Vector3(0.67, 1.52, -0.1), Color("#ffe888"))
 
 func _build_pet(pet: Node3D, role: int, color: Color) -> void:
  VisualFactory.sphere(pet, 0.31, Vector3(0, 0.44, 0), color.lightened(0.28))
@@ -717,6 +756,7 @@ func start_walking() -> void:
   return
  is_walking = true
  for hero in heroes:
+  _live_rig_motion(hero, "run")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_walk()
@@ -956,6 +996,7 @@ func stop_walking() -> void:
   walk_tween.kill()
  is_walking = false
  for hero in heroes:
+  _live_rig_motion(hero, "idle")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_idle()
@@ -965,6 +1006,7 @@ func _finish_walking() -> void:
   return
  is_walking = false
  for hero in heroes:
+  _live_rig_motion(hero, "idle")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_idle()

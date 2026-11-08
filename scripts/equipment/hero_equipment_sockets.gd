@@ -3,6 +3,7 @@ extends Node3D
 ## Expected optional Marker3D children: RightHandSocket, LeftHandSocket,
 ## HeadSocket, ChestSocket, BackSocket. Works with animated markers.
 const WEAPON_PREVIEW = preload("res://scripts/weapons/procedural_weapon_preview.gd")
+const IMPORTED_SOCKETS = preload("res://scripts/equipment/chibi_imported_equipment_sockets.gd")
 const ARMOR_PREVIEW = preload("res://scripts/equipment/chibi_armor_piece.gd")
 const HAIR_PREVIEW = preload("res://scripts/equipment/procedural_hairstyle.gd")
 const SLOT_NAMES := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSocket", "ShoulderRightSocket", "ArmLeftSocket", "ArmRightSocket", "GloveLeftSocket", "GloveRightSocket", "LegLeftSocket", "LegRightSocket", "BootLeftSocket", "BootRightSocket"]
@@ -11,7 +12,17 @@ func _socket(name: String) -> Node3D:
     # Prefer animated bone attachments over static formation markers.
     var hero := get_parent()
     if hero is Node3D:
-        var skeleton := hero.find_child("Skeleton3D", true, false) as Skeleton3D
+        # The original GLB model drives the visible character when available.
+        # Prefer its animated 8-/24-bone sockets, then the helper 18-bone rig.
+        var chibi := hero.get_node_or_null("ChibiGLBVisual")
+        if chibi != null:
+            var imported: Skeleton3D = chibi.get("imported_skeleton") as Skeleton3D
+            var glb_socket: Node3D = IMPORTED_SOCKETS.resolve(imported, name)
+            if glb_socket != null:
+                return glb_socket
+        var skeleton := hero.get_node_or_null("LiveFormationRig/Skeleton3D") as Skeleton3D
+        if skeleton == null:
+            skeleton = hero.find_child("Skeleton3D", true, false) as Skeleton3D
         if skeleton != null:
             var attached := skeleton.get_node_or_null(NodePath(name)) as BoneAttachment3D
             if attached != null:
@@ -36,6 +47,8 @@ func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
     visual.set("rarity", clampi(rarity, 0, 5))
     socket.add_child(visual)
     equipped_nodes[key] = visual
+    if not offhand:
+        _set_legacy_mainhand_visible(false)
     return true
 func equip_armor_slot(slot: String, hero_class: int, rarity: int) -> bool:
     if not SLOT_NAMES.has(slot):
@@ -55,12 +68,29 @@ func equip_armor_slot(slot: String, hero_class: int, rarity: int) -> bool:
     return true
 func unequip(slot: String) -> void:
     _clear(slot)
+## Only the older weapon-prop groups are hidden, never the hero's body,
+## shield, active offhand or other class accessories. Restore the fallbacks on
+## unequip so an inventory/UI failure does not leave the character unarmed.
+func _set_legacy_mainhand_visible(should_show: bool) -> void:
+    var hero := get_parent()
+    if hero == null:
+        return
+    for path in [
+        "HeroCombatMotion/AnimatedRightArm/LegacyWeaponVisual",
+        "LegacyRoleWeapon"
+    ]:
+        var legacy: Node3D = hero.get_node_or_null(NodePath(path)) as Node3D
+        if legacy != null:
+            legacy.visible = should_show
+
 func _clear(slot: String) -> void:
     if equipped_nodes.has(slot):
         var node: Node = equipped_nodes[slot]
         if is_instance_valid(node):
             node.queue_free()
         equipped_nodes.erase(slot)
+    if slot == "mainhand":
+        _set_legacy_mainhand_visible(true)
 
 ## Hair is cosmetic. It does not change combat or armor slot state.
 func equip_hairstyle(style: int, color: Color = Color("#694333")) -> bool:

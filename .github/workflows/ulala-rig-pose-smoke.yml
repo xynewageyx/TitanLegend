@@ -1,0 +1,41 @@
+name: Modular skeleton pose transfer (Godot 4.7.2)
+on:
+  pull_request:
+    paths:
+      - 'tests/test_modular_skeleton_pose_transfer.gd'
+      - '.github/workflows/ulala-rig-pose-smoke.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tests/test_modular_skeleton_pose_transfer.gd'
+      - '.github/workflows/ulala-rig-pose-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pose-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 -o /tmp/godot.zip 'https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip'
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version | grep -F '4.7.2.stable'
+      - name: Test synthetic modular Skeleton3D pose transfer (isolated Godot project)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/titan-rig-smoke
+          printf 'config_version=5\n[application]\nconfig/name="Titan Modular Rig Smoke"\n' > /tmp/titan-rig-smoke/project.godot
+          cp tests/test_modular_skeleton_pose_transfer.gd /tmp/titan-rig-smoke/test_modular_skeleton_pose_transfer.gd
+          timeout 60s godot --headless --path /tmp/titan-rig-smoke --script res://test_modular_skeleton_pose_transfer.gd 2>&1 | tee /tmp/modular-skeleton-pose.log
+          grep -Fq 'MODULAR_RIG_POSE_TRANSFER_OK shared=64 source=65 target=66 samples=5' /tmp/modular-skeleton-pose.log
+          grep -Fq 'MODULAR_RIG_ANIMATION_PLAYER_OK joint=CommonJoint_07' /tmp/modular-skeleton-pose.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/modular-skeleton-pose.log; then
+            exit 1
+          fi
