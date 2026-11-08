@@ -47,6 +47,12 @@ func _ready() -> void:
     var primary: Color = COLORS[clampi(rarity, 0, COLORS.size() - 1)]
     var shadow: Color = primary.darkened(0.32)
     var trim: Color = Color("#d8c49a") if class_id % 3 == 0 else Color("#d3dce6")
+    # Death Knight: keep the violet-tier identity, but replace glaring light
+    # armor with battleworn dark steel and muted bone. This is purely visual.
+    if class_id == 11:
+        primary = Color("#303540").lerp(primary.darkened(0.36), 0.40 + float(rarity) * 0.09)
+        shadow = primary.darkened(0.24)
+        trim = Color("#a5a0b4")
     # Distinct layered silhouettes replace the former single ellipsoid.
     match slot_index:
         0: # Helmet: crown, brow, and crest
@@ -76,6 +82,13 @@ func _ready() -> void:
             _box(Vector3(0, 0.09, -0.09), Vector3(0.24, 0.07, 0.11), trim)
 
     _rarity_details(base_size, primary, trim)
+    # High-tier Death Knight breastplates receive a subdued carved skull
+    # instead of the old featureless oversized purple square.
+    if class_id == 11 and rarity >= 4 and slot_index == 1:
+        var bone_tint: Color = Color("#ada5a5")
+        _rounded(Vector3(0.0, 0.07, -base_size.z * 0.55), Vector3(0.20, 0.22, 0.095), bone_tint)
+        _box(Vector3(-0.049, 0.085, -base_size.z * 0.62 - 0.045), Vector3(0.048, 0.038, 0.025), Color("#30303c"))
+        _box(Vector3(0.049, 0.085, -base_size.z * 0.62 - 0.045), Vector3(0.048, 0.038, 0.025), Color("#30303c"))
 
 
 func _spike(pos: Vector3, height: float, radius: float, color: Color, angle: float = 0.0) -> void:
