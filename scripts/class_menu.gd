@@ -65,6 +65,13 @@ func _ready() -> void:
 func open_menu() -> void:
  visible = true
  _sync_slot()
+
+func open_for_slot(slot: int) -> void:
+ if slot_selector == null or slot_selector.item_count == 0:
+  return
+ # Mobile party-card taps select the requested hero without changing their class.
+ slot_selector.select(clampi(slot, 0, slot_selector.item_count - 1))
+ open_menu()
 func _sync_slot() -> void:
  class_selector.select(team_formation.class_ids[slot_selector.selected])
  _refresh_description()
