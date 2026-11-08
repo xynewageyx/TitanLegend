@@ -227,7 +227,8 @@ except RuntimeError as exc:
         with open(summary, "a") as output:
             output.write(report)
     Path("gemini-draft-diagnostic.md").write_text(report)
-    raise SystemExit(0)
+    # API outages and quota errors must fail CI rather than falsely report a repair.
+    raise SystemExit(1)
 edits = proposal.get("edits", []) if isinstance(proposal, dict) else None
 reason = proposal.get("reason", "Gemini provided no explanation") if isinstance(proposal, dict) else "Invalid Gemini response"
 reason = str(reason)[:1000]
