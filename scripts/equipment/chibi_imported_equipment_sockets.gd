@@ -51,6 +51,20 @@ static func selected_bone(skeleton: Skeleton3D, socket_name: String) -> String:
  var base: String = SOCKET_BONES[socket_name]
  return base if skeleton.find_bone(base) >= 0 else ""
 
+## The GLB faces the +Z camera. Old formation markers were authored with
+## the opposite forward axis, causing the rear cape to cover the chest and the
+## headpiece to sit like a collar. Calibrate only the imported GLB attachments;
+## fallback markers, stats, and other skinning systems are unchanged.
+static func calibrated_local_marker(local_pos: Vector3, socket_name: String) -> Vector3:
+ match socket_name:
+  "BackSocket":
+   return Vector3(local_pos.x, local_pos.y, -maxf(0.33, absf(local_pos.z)))
+  "ChestSocket":
+   return Vector3(local_pos.x, local_pos.y + 0.07, 0.31)
+  "HeadSocket":
+   return Vector3(local_pos.x, 2.08, -0.04)
+ return local_pos
+
 static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
  if skeleton == null or hero == null or not skeleton.is_inside_tree():
   return false
@@ -81,7 +95,9 @@ static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
   # Convert the existing formation's rest-position marker into the imported
   # bone-local coordinate frame. No vertices, skin matrices or rigs are edited.
   var marker: Node3D = hero.get_node_or_null(NodePath("EquipmentController/" + socket_name)) as Node3D
-  var desired_global: Vector3 = marker.global_position
+  var legacy_local: Vector3 = hero.to_local(marker.global_position)
+  var calibrated_local: Vector3 = calibrated_local_marker(legacy_local, socket_name)
+  var desired_global: Vector3 = hero.to_global(calibrated_local)
   var desired_skeleton_local: Vector3 = skeleton.to_local(desired_global)
   var rest: Transform3D = skeleton.get_bone_global_rest(bone_idx)
   anchor.position = rest.affine_inverse() * desired_skeleton_local
