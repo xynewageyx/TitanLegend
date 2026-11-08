@@ -109,5 +109,25 @@ class LandscapeDecoderTests(unittest.TestCase):
         self.assertNotIn("embedded_image_bytes", meta)
         self.assertNotIn("m_TextureFormat", meta)
 
+
+    def test_mesh_index_and_submesh_structure(self):
+        submesh = Payload(firstByte=0, indexCount=6, topology=0,
+                          baseVertex=0, firstVertex=0, vertexCount=4)
+        vertex_data = Payload(m_VertexCount=4)
+        result = self.inspect([
+            FakeObject("Mesh", Payload(m_Name="quad", m_VertexCount=4,
+                                       m_SubMeshes=[submesh],
+                                       m_IndexBuffer=b"\\x00" * 12,
+                                       m_IndexFormat=0,
+                                       m_VertexData=vertex_data))
+        ])
+        meta = result["numeric_metadata"][0]
+        self.assertEqual(meta["index_buffer_bytes"], 12)
+        self.assertEqual(meta["index_format"], 0)
+        self.assertEqual(meta["vertex_count"], 4)
+        self.assertEqual(meta["submeshes"][0]["index_count"], 6)
+        self.assertEqual(meta["submeshes"][0]["topology"], 0)
+        self.assertNotIn("m_IndexBuffer", meta)
+
 if __name__ == "__main__":
     unittest.main()
