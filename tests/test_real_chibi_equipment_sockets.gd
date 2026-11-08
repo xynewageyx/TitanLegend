@@ -18,7 +18,7 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 func _run() -> void:
     var failures := 0
     for hero_name in CLASSES:
-        var path := "res://assets/heroes/chibi/" + hero_name + ".glb"
+        var path: String = "res://assets/heroes/chibi/%s.glb" % String(hero_name)
         var packed := load(path) as PackedScene
         if packed == null:
             push_error("Missing GLB: " + path)
