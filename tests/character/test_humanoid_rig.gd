@@ -25,5 +25,9 @@ func _run() -> void:
         push_error("Builder should not overwrite an existing rig")
         quit(1)
         return
-    print("RIG SMOKE PASSED: 18 original bones, 15 bone-mounted sockets, no overwrite")
+    print("RIG SMOKE PASSED: 18 original bones, 19 bone-mounted sockets, no overwrite")
+    # Release the prototype builder and attached scene nodes before headless exit.
+    builder.free()
+    skeleton.queue_free()
+    await process_frame
     quit(0)
