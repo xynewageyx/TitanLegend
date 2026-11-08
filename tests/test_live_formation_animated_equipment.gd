@@ -67,6 +67,18 @@ func _run() -> void:
    _fail("GLB front/back or helmet attachment is misaligned on hero %d: %s / %s / %s" %
     [index, str(rest_back), str(rest_chest), str(rest_head)])
    return
+  var rest_hand := _socket_in_rest_local(hero, imported_skeleton, "RightHandSocket")
+  if rest_hand.distance_to(Vector3(0.47, 0.94, 0.02)) > 0.025:
+   _fail("GLB hand grip anchor is too low or far from the hand for hero %d" % index)
+   return
+  var hand_joint := imported_skeleton.get_node("RightHandSocket") as BoneAttachment3D
+  var hand_anchor := hand_joint.get_node("EquipmentAnchor") as Node3D
+  var hand_bone_id: int = imported_skeleton.find_bone(hand_joint.bone_name)
+  var hand_rest_basis: Basis = (imported_skeleton.global_transform.basis *
+   imported_skeleton.get_bone_global_rest(hand_bone_id).basis * hand_anchor.basis).orthonormalized()
+  if not hand_rest_basis.is_equal_approx(hero.global_transform.basis.orthonormalized()):
+   _fail("GLB weapon orientation does not match upright hero axes on hero %d" % index)
+   return
   # No extra primitive costume/body may obscure the GLB mesh. Keep the
   # passive pet, HP bar and imported inventory equipment visible.
   var old_body_count := 0
