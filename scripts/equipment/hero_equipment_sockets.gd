@@ -11,7 +11,11 @@ func _socket(name: String) -> Node3D:
     # Prefer animated bone attachments over static formation markers.
     var hero := get_parent()
     if hero is Node3D:
-        var skeleton := hero.find_child("Skeleton3D", true, false) as Skeleton3D
+        # The live four-hero preview rig takes priority over imported GLB skeletons.
+        # Both the stable modular prefab and old static markers still work.
+        var skeleton := hero.get_node_or_null("LiveFormationRig/Skeleton3D") as Skeleton3D
+        if skeleton == null:
+            skeleton = hero.find_child("Skeleton3D", true, false) as Skeleton3D
         if skeleton != null:
             var attached := skeleton.get_node_or_null(NodePath(name)) as BoneAttachment3D
             if attached != null:
