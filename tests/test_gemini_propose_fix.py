@@ -154,8 +154,8 @@ class GeminiNoSafePatchTests(unittest.TestCase):
             "os": __import__("os"),
             "Path": Path,
         }
-        with patch.dict(namespace["os"].environ, {"GITHUB_STEP_SUMMARY": ""}), \\
-             patch.object(Path, "write_text") as write_diagnostic, \\
+        with patch.dict(namespace["os"].environ, {"GITHUB_STEP_SUMMARY": ""}), \
+             patch.object(Path, "write_text") as write_diagnostic, \
              self.assertRaises(SystemExit) as caught:
             exec(compile(ast.Module(body=[no_edits_branch], type_ignores=[]),
                          str(SCRIPT), "exec"), namespace)
