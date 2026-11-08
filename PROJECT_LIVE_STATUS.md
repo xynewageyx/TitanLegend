@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 20:08 UTC**
-Git-Stand: **b2254ac30186772b4354cc4ecabb7e5b606cbebc** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 20:09 UTC**
+Git-Stand: **e77ed303875fa6630f9a8676229b09da08ed9f9d** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -49,11 +49,11 @@ Git-Stand: **b2254ac30186772b4354cc4ecabb7e5b606cbebc** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `e77ed30` (2026-11-08): fix(forest): reject zero-triangle imports and validate triangle index counts
 - `8aab6ec` (2026-11-08): fix(classes): validate class and role before applying death knight selection
 - `b34e563` (2026-11-08): feat(forest): measure imported Godot triangles and assigned materials
 - `e32396d` (2026-11-08): feat(forest): inspect actual Godot imported GLB mesh surfaces and animations
 - `10ac8bd` (2026-11-08): test(analysis): verify scene triangle counts for repeated mesh instances
-- `0b52967` (2026-11-08): feat(analysis): distinguish GLB mesh-resource and instanced scene triangle counts
 
 ## Regeln für alle Fach-Chats
 
