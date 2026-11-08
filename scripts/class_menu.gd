@@ -65,6 +65,13 @@ func _ready() -> void:
 func open_menu() -> void:
  visible = true
  _sync_slot()
+
+func open_for_slot(slot: int) -> void:
+ if slot_selector == null or slot_selector.item_count == 0:
+  return
+ # Mobile party-card taps select the requested hero without changing their class.
+ slot_selector.select(clampi(slot, 0, slot_selector.item_count - 1))
+ open_menu()
 func _sync_slot() -> void:
  class_selector.select(team_formation.class_ids[slot_selector.selected])
  _refresh_description()
@@ -90,12 +97,21 @@ func _refresh_description() -> void:
 func _apply() -> void:
  var chosen_role: int = role_selector.get_selected_id()
  var slot: int = slot_selector.selected
+ var chosen_class: int = class_selector.get_selected_id()
+ if chosen_class < 0 or chosen_class >= team_formation.CLASS_NAMES.size():
+  description.text = "Bitte eine gueltige Klasse auswaehlen."
+  return
+ if chosen_role not in team_formation.ALLOWED_ROLES[chosen_class]:
+  description.text = "Bitte eine gueltige Rolle auswaehlen."
+  return
  if chosen_role == 0:
   for i in range(4):
    if i != slot and team_formation.role_ids[i] == 0:
     description.text = "Tankplatz belegt. Der bisherige Tank behaelt seine Rolle."
     return
- team_formation.set_class(slot, class_selector.selected)
+ if not team_formation.set_class(slot, chosen_class):
+  description.text = "Klassenwechsel abgelehnt."
+  return
  if not team_formation.set_role(slot, chosen_role):
   description.text = "Rollenwechsel abgelehnt: Tankplatz bereits belegt."
   return
