@@ -6,7 +6,7 @@ func _initialize() -> void:
  var inspected := 0
  var skeletons := 0
  for hero_class in CLASSES:
-  var path := "res://assets/heroes/chibi/" + hero_class + ".glb"
+  var path: String = "res://assets/heroes/chibi/" + str(hero_class) + ".glb"
   if not ResourceLoader.exists(path):
    print("RIG MODEL ABSENT: ", hero_class)
    continue
