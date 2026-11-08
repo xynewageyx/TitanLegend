@@ -60,7 +60,10 @@ jobs:
             if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' "/tmp/$test.log"; then
               exit 1
             fi
-            grep -q 'PASS:' "/tmp/$test.log"
+            if ! grep -Eq 'PASS:|SMOKE PASSED:|SCENE PASSED:' "/tmp/$test.log"; then
+              echo "Missing success marker for $test" >&2
+              exit 1
+            fi
             echo "::endgroup::"
           done
       - name: Verify animated equipment bone motion
