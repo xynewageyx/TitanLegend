@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Report actual triangle and vertex counts from generated GLB files.
 
-Counts mesh primitives once per mesh resource (not per instance). GLTF TRIANGLES
+Reports mesh-resource counts and scene-node instanced triangle counts separately. GLTF TRIANGLES
 mode=4, TRIANGLE_STRIP=5 and TRIANGLE_FAN=6 are handled separately; points/lines
 are not counted. Indexed and non-indexed primitives are supported.
 """
@@ -28,8 +28,10 @@ def analyze(path):
             raise ValueError(f"Invalid accessor index in {path}: {index}")
         return int(accessors[index]["count"])
     vertices = triangles = primitives = 0
+    mesh_triangles = []
     unsupported = []
     for mesh in doc.get("meshes", []):
+        mesh_triangle_count = 0
         for primitive in mesh.get("primitives", []):
             attrs = primitive.get("attributes", {})
             if "POSITION" not in attrs:
@@ -43,12 +45,25 @@ def analyze(path):
                 if nindices % 3:
                     raise ValueError(f"Triangle indices not divisible by 3 in {path}")
                 triangles += nindices // 3
+                mesh_triangle_count += nindices // 3
             elif mode in (5, 6):
                 triangles += max(0, nindices - 2)
+                mesh_triangle_count += max(0, nindices - 2)
             else:
                 unsupported.append(str(mode))
+        mesh_triangles.append(mesh_triangle_count)
+    mesh_instances = 0
+    scene_triangles = 0
+    for node in doc.get("nodes", []):
+        mesh_index = node.get("mesh")
+        if mesh_index is not None:
+            if not isinstance(mesh_index, int) or not 0 <= mesh_index < len(mesh_triangles):
+                raise ValueError(f"Invalid mesh reference in {path}: {mesh_index}")
+            mesh_instances += 1
+            scene_triangles += mesh_triangles[mesh_index]
     return dict(file=path.name, meshes=len(doc.get("meshes", [])),
                 primitives=primitives, vertices=vertices, triangles=triangles,
+                mesh_instances=mesh_instances, scene_triangles=scene_triangles,
                 nodes=len(doc.get("nodes", [])), skins=len(doc.get("skins", [])),
                 animations=len(doc.get("animations", [])),
                 non_triangle_modes=";".join(unsupported))
