@@ -14,6 +14,7 @@ import urllib.request
 ROOT = Path.cwd().resolve()
 KEY = os.environ["GEMINI_API_KEY"]
 RUN_ID = os.environ["TARGET_RUN_ID"]
+PR_NUMBER = os.environ.get("TARGET_PR_NUMBER", "").strip()
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash").removeprefix("models/")
 ALLOWED = ("scripts/", "scenes/", "tests/", "addons/")
 MAX_EDITS = 3
@@ -121,6 +122,37 @@ def generate(prompt):
             if attempt == 0:
                 time.sleep(3)
     raise RuntimeError("No Gemini model available")
+
+if PR_NUMBER:
+    if not re.fullmatch(r"[0-9]{1,10}", PR_NUMBER):
+        raise SystemExit("Invalid PR number")
+    pr_info = json.loads(command("gh", "api", "repos/" + os.environ["GITHUB_REPOSITORY"] +
+                                 "/pulls/" + PR_NUMBER).stdout)
+    if pr_info.get("state") != "open" or pr_info.get("base", {}).get("ref") != "main":
+        raise SystemExit("Only open PRs targeting main can be repaired")
+    head = pr_info.get("head", {})
+    if head.get("repo", {}).get("full_name") != os.environ["GITHUB_REPOSITORY"]:
+        raise SystemExit("Fork PRs are not writable by this agent")
+    branch_name = head.get("ref", "")
+    if not branch_name or branch_name in {"main", "master"}:
+        raise SystemExit("Protected PR branch")
+    labels = {label.get("name") for label in pr_info.get("labels", [])}
+    if "gemini-auto-fix" not in labels:
+        raise SystemExit("PR requires explicit gemini-auto-fix label")
+    commits = int(pr_info.get("commits", 0))
+    if commits > 100:
+        raise SystemExit("PR too large for automatic repair")
+    # Refuse stale branches and never force-push another contributor's changes.
+    expected_head = head["sha"]
+    run_info = json.loads(command("gh", "run", "view", RUN_ID, "--repo",
+                                  os.environ["GITHUB_REPOSITORY"], "--json",
+                                  "headSha,conclusion").stdout)
+    if run_info.get("headSha") != expected_head or run_info.get("conclusion") != "failure":
+        raise SystemExit("Failed CI run must belong to the current PR head")
+    command("git", "fetch", "origin", branch_name)
+    command("git", "checkout", "-B", branch_name, "FETCH_HEAD")
+    if command("git", "rev-parse", "HEAD").stdout.strip() != expected_head:
+        raise SystemExit("PR head changed while preparing repair")
 
 if not re.fullmatch(r"[0-9]{6,20}", RUN_ID):
     raise SystemExit("Invalid run ID")
@@ -251,13 +283,18 @@ command("git", "diff", "--check")
 changed = command("git", "diff", "--name-only").stdout.strip()
 if not changed:
     raise SystemExit("No code changes generated")
-branch = "gemini-fix-run-" + RUN_ID + "-" + os.environ["GITHUB_RUN_ID"]
+branch = branch_name if PR_NUMBER else "gemini-fix-run-" + RUN_ID + "-" + os.environ["GITHUB_RUN_ID"]
 command("git", "config", "user.name", "github-actions[bot]")
 command("git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
-command("git", "checkout", "-b", branch)
+if not PR_NUMBER:
+    command("git", "checkout", "-b", branch)
 command("git", "add", "--", *[str(p.relative_to(ROOT)) for p in updated])
 command("git", "commit", "-m", "Propose Gemini-assisted fix for CI run " + RUN_ID)
-command("git", "push", "--set-upstream", "origin", branch)
+if PR_NUMBER:
+    # Fast-forward only: never rewrite commits added by a human.
+    command("git", "push", "origin", "HEAD:refs/heads/" + branch)
+else:
+    command("git", "push", "--set-upstream", "origin", branch)
 body = ("AI-generated, unreviewed proposed source edits for failed run #" + RUN_ID +
         ".\n\n**Human review required. No auto-merge.** "
         "GitHub validation workflows should run on this PR. "

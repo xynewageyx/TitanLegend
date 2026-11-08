@@ -6,6 +6,10 @@ on:
         description: "Failed GitHub Actions run ID (required)"
         required: true
         type: string
+      pr_number:
+        description: "Existing PR to repair (optional; requires gemini-auto-fix label)"
+        required: false
+        type: string
 permissions:
   contents: write
   actions: read
@@ -22,6 +26,7 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.8-flash' }}
       TARGET_RUN_ID: ${{ inputs.run_id }}
+      TARGET_PR_NUMBER: ${{ inputs.pr_number }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,7 +34,7 @@ jobs:
       - name: Check required secret
         run: |
           test -n "$GEMINI_API_KEY" || { echo "::error::Missing GEMINI_API_KEY"; exit 1; }
-      - name: Propose minimal source fix in draft PR
+      - name: Propose minimal source fix or repair labeled PR
         run: python3 tools/gemini_propose_fix.py
       - name: Upload Gemini diagnostic
         if: always()
