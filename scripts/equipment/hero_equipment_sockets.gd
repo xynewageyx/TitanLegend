@@ -45,6 +45,9 @@ func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
     visual.set_script(WEAPON_PREVIEW)
     visual.set("weapon_type", clampi(weapon_type, 0, 11))
     visual.set("rarity", clampi(rarity, 0, 5))
+    # The socket is the animated palm. The blade origin isn't the grip:
+    # translate authored geometry so the actual handle follows the hand.
+    visual.position = -WEAPON_PREVIEW.grip_local_point(clampi(weapon_type, 0, 11))
     socket.add_child(visual)
     equipped_nodes[key] = visual
     if not offhand:
