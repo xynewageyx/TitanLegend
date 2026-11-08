@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/character/titan_armor_tier_gallery.gd" id="1_gallery"]
+
+[node name="ArmorTierGallery" type="Node3D"]
+script = ExtResource("1_gallery")
+hero_class = "death_knight"
+spacing = 1.7
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.1, -18)
+current = true
+fov = 48.0
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-45, -25, 0)
+light_energy = 1.4
+
+[node name="FillLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-20, 140, 0)
+light_energy = 0.5
