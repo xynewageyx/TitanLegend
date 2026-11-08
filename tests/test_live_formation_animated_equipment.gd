@@ -81,6 +81,12 @@ func _run() -> void:
  if chest_before.is_equal_approx(chest.global_transform.basis):
   _fail("Live armor did not move with torso bone")
   return
+ # Real skill cast visual now drives a separate bone animation without changing damage.
+ var combat_motion: Node3D = attacker.get_node("HeroCombatMotion") as Node3D
+ combat_motion.call("play_skill_cast", 1, 0)
+ if anim.current_animation != "titan/cast":
+  _fail("Skill cast visual did not start the skeletal cast animation")
+  return
  var victim: Node3D = team.heroes[1]
  team.play_hit_targets([1])
  var hit_anim: AnimationPlayer = victim.get_node("LiveFormationRig/Skeleton3D/TitanAnimations") as AnimationPlayer
