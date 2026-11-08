@@ -1,0 +1,48 @@
+name: Android HUD and network smoke
+on:
+  pull_request:
+    paths:
+      - 'scripts/network/titan_multiplayer_client.gd'
+      - 'scripts/network/titan_multiplayer_connect_panel.gd'
+      - 'scripts/graphics_settings_menu.gd'
+      - 'scripts/adventure_hud_overlay.gd'
+      - 'export_presets.cfg'
+      - 'tests/test_mobile_overlay_network.py'
+      - 'tests/test_mobile_overlay_network.gd'
+      - '.github/workflows/android-hud-network-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  hud-network:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+      - name: Static portrait layout and Android export checks
+        run: python3 -m unittest discover -s tests -p test_mobile_overlay_network.py -v
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf original_update168
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/android-hud-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/android-hud-import.log; then
+            exit 1
+          fi
+      - name: Test offline-peer networking and hidden debug panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s godot --headless --path . --script res://tests/test_mobile_overlay_network.gd 2>&1 | tee /tmp/android-hud-network.log
+          grep -Fq 'MOBILE_OVERLAY_NETWORK_SMOKE_OK' /tmp/android-hud-network.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/android-hud-network.log; then
+            exit 1
+          fi
