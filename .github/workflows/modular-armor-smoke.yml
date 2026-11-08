@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'scripts/equipment/chibi_armor_piece.gd'
+      - 'scripts/equipment/equipment_inventory_visual_bridge.gd'
+      - 'scripts/equipment/modular_equipment_inspection.gd'
+      - 'tests/character/test_combat_equipment_visuals.gd'
       - 'tests/test_modular_armor_geometry.py'
       - 'tests/character/test_modular_armor.gd'
       - '.github/workflows/modular-armor-smoke.yml'
@@ -43,5 +46,14 @@ jobs:
           godot --headless --path . --script res://tests/character/test_modular_armor.gd 2>&1 | tee /tmp/armor-smoke.log
           grep -Fq 'ARMOR SMOKE PASSED: 78 armor combinations' /tmp/armor-smoke.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/armor-smoke.log; then
+            exit 1
+          fi
+      - name: Verify combat equipment visuals for all 12 classes
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/character/test_combat_equipment_visuals.gd 2>&1 | tee /tmp/combat-equipment-smoke.log
+          grep -Fq 'COMBAT_EQUIPMENT_VISUALS_OK: all 12 classes' /tmp/combat-equipment-smoke.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/combat-equipment-smoke.log; then
             exit 1
           fi
