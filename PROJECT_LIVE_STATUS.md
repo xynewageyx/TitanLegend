@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-08 20:09 UTC**
-Git-Stand: **e77ed303875fa6630f9a8676229b09da08ed9f9d** auf Branch **main**
+Git-Stand: **657887a5cb0b21885feb4ee32473e43295acf70a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -44,16 +44,17 @@ Git-Stand: **e77ed303875fa6630f9a8676229b09da08ed9f9d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `657887a` (2026-11-08): ci(forest): publish source-versus-Godot geometry comparison artifact
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 - `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
 
 ## Bereichsübergreifende Änderungen
 
+- `31c9f15` (2026-11-08): feat(forest): compare source GLB and Godot-imported geometry in CSV report
 - `e77ed30` (2026-11-08): fix(forest): reject zero-triangle imports and validate triangle index counts
 - `8aab6ec` (2026-11-08): fix(classes): validate class and role before applying death knight selection
 - `b34e563` (2026-11-08): feat(forest): measure imported Godot triangles and assigned materials
 - `e32396d` (2026-11-08): feat(forest): inspect actual Godot imported GLB mesh surfaces and animations
-- `10ac8bd` (2026-11-08): test(analysis): verify scene triangle counts for repeated mesh instances
 
 ## Regeln für alle Fach-Chats
 
