@@ -104,8 +104,12 @@ func configure(hero_class: int) -> void:
   leg_surface.roughness = 0.88
   shin.material_override = leg_surface
   leg.add_child(shin)
- # Equipment remains attached to the animated right arm.
- HeroWeapons47.equip(right_arm, class_id)
+ # Keep older hand-built weapons as an explicit fall-back group. Once an
+ # inventory-driven bone weapon is equipped, the equipment controller hides it.
+ var legacy_weapon := Node3D.new()
+ legacy_weapon.name = "LegacyWeaponVisual"
+ right_arm.add_child(legacy_weapon)
+ HeroWeapons47.equip(legacy_weapon, class_id)
  var flash_root: Node3D = _part(self, "AttackFlash", Vector3(0.0, 1.45, -0.7))
  magic_flash = VisualFactory.sphere(flash_root, class_fx_size, Vector3.ZERO, class_fx_color)
  magic_flash.visible = false
