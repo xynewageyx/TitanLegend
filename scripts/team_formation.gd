@@ -190,6 +190,7 @@ func play_hero_defeat(i: int) -> void:
  if not is_instance_valid(hero):
   return
  fallen_heroes[i] = true
+ _live_rig_defeated(hero)
  var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
  if glb_visual != null:
   glb_visual.play_hit()
@@ -215,6 +216,7 @@ func reset_individual_defeat_poses() -> void:
   if is_instance_valid(heroes[i]):
    heroes[i].position = _formation_position(i)
    heroes[i].rotation = Vector3.ZERO
+   _live_rig_restore(heroes[i])
    var glb_visual: Node = heroes[i].get_node_or_null("WarriorGLBVisual")
    if glb_visual != null:
     glb_visual.reset_defeat()
@@ -231,6 +233,7 @@ func play_team_defeat() -> void:
     active.kill()
   attack_tweens.erase(i)
   fallen_heroes[i] = true
+  _live_rig_defeated(hero)
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
@@ -261,6 +264,7 @@ func reset_team_defeat_pose() -> void:
    continue
   hero.position = _formation_position(i)
   hero.rotation = Vector3.ZERO
+  _live_rig_restore(hero)
 
 # Update 83: elemental boss impacts alter only the hit animation, not damage.
 func play_elemental_hit(element: int) -> void:
@@ -293,6 +297,7 @@ func play_hit_targets(targets: Array[int], critical: bool = false) -> void:
   var hero: Node3D = heroes[index]
   if not is_instance_valid(hero):
    continue
+  _live_rig_motion(hero, "hit")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
@@ -318,6 +323,7 @@ func play_team_hit() -> void:
  for hero in heroes:
   if not is_instance_valid(hero):
    continue
+  _live_rig_motion(hero, "hit")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_hit()
@@ -338,6 +344,7 @@ func play_attack_for_hero(i: int) -> void:
  var hero: Node3D = heroes[i]
  if not is_instance_valid(hero):
   return
+ _live_rig_motion(hero, "attack")
  if attack_tweens.has(i):
   var old_tween: Tween = attack_tweens[i] as Tween
   if old_tween != null and old_tween.is_running():
@@ -510,6 +517,31 @@ func _refresh_equipment_visuals() -> void:
 func _on_equipment_visual_upgrade(_slot: int, _level: int) -> void:
  _refresh_equipment_visuals()
 
+## Cosmetic-only skeleton bridge: gameplay, four-hero formation and pets are unchanged.
+const LIVE_RIG = preload("res://scripts/equipment/live_formation_rig_bridge.gd")
+func _install_live_rig(hero: Node3D) -> void:
+ if hero.get_node_or_null("LiveFormationRig") != null:
+  return
+ var bridge := Node3D.new()
+ bridge.name = "LiveFormationRig"
+ bridge.set_script(LIVE_RIG)
+ hero.add_child(bridge)
+
+func _live_rig_motion(hero: Node3D, motion_name: String) -> void:
+ var bridge := hero.get_node_or_null("LiveFormationRig")
+ if bridge != null and bridge.has_method("play_motion"):
+  bridge.call("play_motion", motion_name)
+
+func _live_rig_defeated(hero: Node3D) -> void:
+ var bridge := hero.get_node_or_null("LiveFormationRig")
+ if bridge != null and bridge.has_method("mark_defeated"):
+  bridge.call("mark_defeated")
+
+func _live_rig_restore(hero: Node3D) -> void:
+ var bridge := hero.get_node_or_null("LiveFormationRig")
+ if bridge != null and bridge.has_method("restore"):
+  bridge.call("restore")
+
 func create_team() -> void:
  # Rebuild on class/role changes and remove old nodes immediately.
  for hero in heroes:
@@ -526,6 +558,8 @@ func create_team() -> void:
   heroes.append(hero)
   # Update 168's complete character models, weapons, faces and combat motion.
   _decorate_class(hero, class_ids[i], role_ids[i], i)
+  # Visual-only rig, installed before equipment marker creation and GLB import.
+  _install_live_rig(hero)
   # Optional chibi equipment attachment markers; no visuals equipped by default.
   preload("res://scripts/equipment/formation_equipment_adapter.gd").install(hero)
   # Optional imported 3D warrior: only class 0, and only when the GLB exists.
@@ -717,6 +751,7 @@ func start_walking() -> void:
   return
  is_walking = true
  for hero in heroes:
+  _live_rig_motion(hero, "run")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_walk()
@@ -956,6 +991,7 @@ func stop_walking() -> void:
   walk_tween.kill()
  is_walking = false
  for hero in heroes:
+  _live_rig_motion(hero, "idle")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_idle()
@@ -965,6 +1001,7 @@ func _finish_walking() -> void:
   return
  is_walking = false
  for hero in heroes:
+  _live_rig_motion(hero, "idle")
   var glb_visual: Node = hero.get_node_or_null("WarriorGLBVisual")
   if glb_visual != null:
    glb_visual.play_idle()
