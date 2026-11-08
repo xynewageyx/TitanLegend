@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/blender/generate_forest_mobs.py'
       - 'tools/analysis/inspect_forest_glbs.py'
+      - 'tools/analysis/compare_forest_geometry.py'
       - 'tools/analysis/test_inspect_forest_glbs.py'
       - 'tools/tests/inspect_forest_imports.gd'
       - '.github/workflows/forest-enemies.yml'
@@ -118,6 +119,19 @@ jobs:
           set -o pipefail
           xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script res://tools/tests/inspect_forest_imports.gd 2>&1 | tee godot-forest-geometry-import.log
           grep -q 'FOREST IMPORT INSPECTION PASSED: 9 scenes' godot-forest-geometry-import.log
+      - name: Compare source GLB with Godot imported geometry
+        run: |
+          python3 tools/analysis/compare_forest_geometry.py \
+            --source build/forest-geometry-report.csv \
+            --godot-log godot-forest-geometry-import.log \
+            --output build/forest-geometry-comparison.csv
+      - name: Upload geometry comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Geometry-Comparison
+          path: build/forest-geometry-comparison.csv
+          if-no-files-found: ignore
       - name: Upload imported geometry report
         if: always()
         uses: actions/upload-artifact@v4
