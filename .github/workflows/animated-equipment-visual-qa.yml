@@ -1,0 +1,75 @@
+name: Android-style GLB equipment visual QA
+on:
+  pull_request:
+    paths:
+      - 'scripts/chibi_glb_visual.gd'
+      - 'scripts/team_formation.gd'
+      - 'scripts/hero_combat_motion.gd'
+      - 'scripts/equipment/**'
+      - 'tools/render_live_equipment_qa.gd'
+      - '.github/workflows/animated-equipment-visual-qa.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/chibi_glb_visual.gd'
+      - 'scripts/team_formation.gd'
+      - 'scripts/hero_combat_motion.gd'
+      - 'scripts/equipment/**'
+      - 'tools/render_live_equipment_qa.gd'
+      - '.github/workflows/animated-equipment-visual-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  rendered-equipment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    env:
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      GALLIUM_DRIVER: "llvmpipe"
+      MESA_GL_VERSION_OVERRIDE: "3.3"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2 and software OpenGL display
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri libgl1 libglu1-mesa libx11-6
+          curl --fail --location --retry 3 -o /tmp/godot.zip 'https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip'
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version | grep -F '4.7.2.stable'
+      - name: Import original GLBs and scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf original_update168
+          python3 tools/generate_audio_sfx.py
+          timeout 180s godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/equipment-visual-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/equipment-visual-import.log; then exit 1; fi
+      - name: Render original twelve-class equipment in Godot OpenGL
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+            --path . --rendering-method gl_compatibility \
+            --script res://tools/render_live_equipment_qa.gd \
+            2>&1 | tee /tmp/equipment-visual-qa.log
+          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=26 classes=12' /tmp/equipment-visual-qa.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/equipment-visual-qa.log; then exit 1; fi
+          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 26
+          test -s build/animated_equipment_qa/manifest.json
+          test -s build/animated_equipment_qa/death_knight_front_attack.png
+          test -s build/animated_equipment_qa/warrior_side_attack.png
+      - name: Upload screenshot collection for Android review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Animated-Equipment-Visual-QA
+          path: |
+            build/animated_equipment_qa/*.png
+            build/animated_equipment_qa/manifest.json
+          if-no-files-found: warn
+          retention-days: 30
