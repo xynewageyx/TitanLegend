@@ -39,5 +39,23 @@ func _run() -> void:
         if counts[4] > counts[5]:
             _fail("Final rarity lost geometry details on slot %d" % slot_index)
             return
-    print("ARMOR SMOKE PASSED: %d armor combinations; 13 sockets, 6 rarities, death knight" % combinations)
+    # Guard class compatibility: all twelve classes must instantiate armor visuals.
+    for hero_class_id in range(12):
+        var class_armor := Node3D.new()
+        class_armor.set_script(ARMOR_SCRIPT)
+        class_armor.set("slot_index", 1)
+        class_armor.set("rarity", 5)
+        class_armor.set("class_id", hero_class_id)
+        root.add_child(class_armor)
+        await process_frame
+        if class_armor.get_child_count() < 2:
+            _fail("Armor not built for class %d" % hero_class_id)
+            return
+        for part in class_armor.get_children():
+            if not part is MeshInstance3D or part.mesh == null:
+                _fail("Invalid chest armor mesh for class %d" % hero_class_id)
+                return
+        class_armor.queue_free()
+        await process_frame
+    print("ARMOR SMOKE PASSED: %d armor combinations; 13 sockets, 6 rarities; 12 classes verified" % combinations)
     quit(0)
