@@ -6,6 +6,7 @@ on:
       - 'tools/blender/generate_forest_mobs.py'
       - 'tools/analysis/inspect_forest_glbs.py'
       - 'tools/analysis/test_inspect_forest_glbs.py'
+      - 'tools/tests/inspect_forest_imports.gd'
       - '.github/workflows/forest-enemies.yml'
       - 'tools/tests/test_forest_animations.gd'
       - 'scripts/battle_manager.gd'
@@ -110,6 +111,20 @@ jobs:
             echo 'Godot reported import or script errors'
             exit 1
           fi
+      - name: Inspect imported forest scenes in Godot
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          set -o pipefail
+          xvfb-run -a godot --headless --rendering-driver opengl3 --path . --script res://tools/tests/inspect_forest_imports.gd 2>&1 | tee godot-forest-geometry-import.log
+          grep -q 'FOREST IMPORT INSPECTION PASSED: 9 scenes' godot-forest-geometry-import.log
+      - name: Upload imported geometry report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TitanLegends-Forest-Godot-Geometry
+          path: godot-forest-geometry-import.log
+          if-no-files-found: ignore
       - name: Test all forest animations in Godot
         env:
           LIBGL_ALWAYS_SOFTWARE: '1'
