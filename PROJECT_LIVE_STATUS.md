@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-08 20:31 UTC**
-Git-Stand: **358b44aee7109298040e74f189d92af7bd8279fa** auf Branch **main**
+Git-Stand: **d0310038cc8289f2704ac0a0caeefcac6524eec9** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -51,10 +51,10 @@ Git-Stand: **358b44aee7109298040e74f189d92af7bd8279fa** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `d031003` (2026-11-08): test(forest): validate geometry comparison and missing-model errors
 - `31c9f15` (2026-11-08): feat(forest): compare source GLB and Godot-imported geometry in CSV report
 - `e77ed30` (2026-11-08): fix(forest): reject zero-triangle imports and validate triangle index counts
 - `8aab6ec` (2026-11-08): fix(classes): validate class and role before applying death knight selection
-- `b34e563` (2026-11-08): feat(forest): measure imported Godot triangles and assigned materials
 
 ## Regeln für alle Fach-Chats
 
