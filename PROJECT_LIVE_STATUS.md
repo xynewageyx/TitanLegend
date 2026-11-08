@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 18:38 UTC**
-Git-Stand: **97baff6178bf8d88c44983ea8cf12194612e14c3** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 19:08 UTC**
+Git-Stand: **e32396d718afd3acc1eb9540ad85e8aab6ad9d2b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -50,11 +50,11 @@ Git-Stand: **97baff6178bf8d88c44983ea8cf12194612e14c3** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `e32396d` (2026-11-08): feat(forest): inspect actual Godot imported GLB mesh surfaces and animations
 - `10ac8bd` (2026-11-08): test(analysis): verify scene triangle counts for repeated mesh instances
 - `0b52967` (2026-11-08): feat(analysis): distinguish GLB mesh-resource and instanced scene triangle counts
 - `ebd3a3e` (2026-11-08): test(forest): verify GLB triangle counting and malformed index rejection
 - `83010ff` (2026-11-08): fix: start Gemini repair validation before PR notifications (#190)
-- `cdcf754` (2026-11-08): fix: do not mark Gemini repair successful without a code patch (#189)
 
 ## Regeln für alle Fach-Chats
 
