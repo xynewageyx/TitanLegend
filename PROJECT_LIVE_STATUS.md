@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-08 20:09 UTC**
-Git-Stand: **657887a5cb0b21885feb4ee32473e43295acf70a** auf Branch **main**
+Git-Stand: **6aa9d4dd06a74a462b6c994bd1867cf65856fbac** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -13,13 +13,14 @@ Git-Stand: **657887a5cb0b21885feb4ee32473e43295acf70a** auf Branch **main**
 - `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### UI — UI-Chat
 - `a9a22f1` (2026-11-08): test(classes): guard class and role validation in mobile class menu
@@ -27,26 +28,29 @@ Git-Stand: **657887a5cb0b21885feb4ee32473e43295acf70a** auf Branch **main**
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `657887a` (2026-11-08): ci(forest): publish source-versus-Godot geometry comparison artifact
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 - `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ## Bereichsübergreifende Änderungen
 
