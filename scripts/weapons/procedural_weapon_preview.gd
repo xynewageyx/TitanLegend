@@ -53,6 +53,20 @@ func build() -> void:
         else:
             add_piece(Vector3(0,shaft*0.6,0),Vector3(0.3*scale_factor,1.45*scale_factor,0.12),accent,rarity>=2)
         add_piece(Vector3(0,0.0,0),Vector3(0.65,0.12,0.2),metal)
+    # High-quality weapons gain a sharper, more threatening cartoon silhouette.
+    # These accents are purely visual and do not affect combat statistics.
+    if rarity >= 2:
+        var ornament_count := rarity - 1
+        for i in range(ornament_count):
+            var side := -1.0 if i % 2 == 0 else 1.0
+            var y := 0.45 + float(i / 2) * 0.24
+            add_piece(Vector3(side * (0.36 + float(rarity) * 0.025), y, 0.0),
+                Vector3(0.15 + float(rarity) * 0.025, 0.19 + float(rarity) * 0.035, 0.14),
+                accent, rarity >= 4)
+    if rarity >= 5:
+        # Mythic weapons carry an oversized glowing crest.
+        add_piece(Vector3(0, 1.45 if big else 1.1, 0),
+            Vector3(0.25, 0.34, 0.25), accent, true)
     if rarity >= 3:
         for i in range(rarity-1):
             var y := 0.25 + float(i)*0.32
