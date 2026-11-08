@@ -11,6 +11,7 @@ on:
       - 'scripts/equipment/live_formation_rig_bridge.gd'
       - 'scripts/equipment/hero_equipment_sockets.gd'
       - 'tests/test_live_formation_animated_equipment.gd'
+      - 'tests/test_imported_chibi_rig_animation_audit.gd'
       - '.github/workflows/twelve-class-modular-rig.yml'
   push:
     branches: [main]
@@ -24,6 +25,7 @@ on:
       - 'scripts/equipment/live_formation_rig_bridge.gd'
       - 'scripts/equipment/hero_equipment_sockets.gd'
       - 'tests/test_live_formation_animated_equipment.gd'
+      - 'tests/test_imported_chibi_rig_animation_audit.gd'
       - '.github/workflows/twelve-class-modular-rig.yml'
   workflow_dispatch:
 
@@ -70,5 +72,14 @@ jobs:
           timeout 120s godot --headless --path . --quit-after 900 --script res://tests/test_live_formation_animated_equipment.gd 2>&1 | tee /tmp/titan-live-formation-rig.log
           grep -Fq 'LIVE_FORMATION_ANIMATED_EQUIPMENT_OK heroes=4 bone_sockets=60' /tmp/titan-live-formation-rig.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/titan-live-formation-rig.log; then
+            exit 1
+          fi
+      - name: Inspect twelve imported original GLB skeletons and animation clips
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s godot --headless --path . --script res://tests/test_imported_chibi_rig_animation_audit.gd 2>&1 | tee /tmp/titan-chibi-rig-audit.log
+          grep -Fq 'CHIBI_IMPORTED_RIG_AUDIT_OK classes=12' /tmp/titan-chibi-rig-audit.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/titan-chibi-rig-audit.log; then
             exit 1
           fi
