@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:25 UTC**
-Git-Stand: **877cef67369bca0eb7a14c988b0f2180b11fb64c** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:29 UTC**
+Git-Stand: **427156ace5f19bf26622b1c9098e3668b5fda396** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,7 +20,6 @@ Git-Stand: **877cef67369bca0eb7a14c988b0f2180b11fb64c** auf Branch **main**
 - `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
 - `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
 - `b3736ea` (2026-11-08): Bind formation equipment to animated skeleton sockets when available (#159)
-- `8c9b557` (2026-11-08): feat: retain original PR103 rig anchors alongside equipment sockets (#158)
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -44,6 +43,7 @@ Git-Stand: **877cef67369bca0eb7a14c988b0f2180b11fb64c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `427156a` (2026-11-08): feat: automatically monitor labeled PR failures and dispatch bounded Gemini repairs (#171)
 - `877cef6` (2026-11-08): feat: Gemini can repair labeled existing pull requests (#170)
 - `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
 
