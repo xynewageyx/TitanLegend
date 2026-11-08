@@ -28,8 +28,9 @@ func _find_animation_player(node: Node) -> AnimationPlayer:
 func _run() -> void:
  var total_bones := 0
  var animated := 0
- for hero_class in CLASSES:
-  var path := "res://assets/heroes/chibi/" + hero_class + ".glb"
+ for class_token in CLASSES:
+  var hero_class: String = String(class_token)
+  var path: String = "res://assets/heroes/chibi/" + hero_class + ".glb"
   if not ResourceLoader.exists(path):
    _fail("Missing chibi GLB: " + hero_class)
    return
