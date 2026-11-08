@@ -156,9 +156,13 @@ func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
  return true
 
 func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bool:
+ # Let the attack flash and imported bone pose reach a rendered frame before
+ # calculating the crop. Otherwise the flash can expand outside the frame
+ # between camera fitting and the next screenshot.
+ await RenderingServer.frame_post_draw
  if not _fit_camera_to_visible_hero(hero):
   return false
- # Render two actual GPU frames before saving to avoid stale viewport images.
+ # Render two more frames with the updated camera before reading pixels.
  await RenderingServer.frame_post_draw
  await RenderingServer.frame_post_draw
  var frame: Image = root.get_texture().get_image()
