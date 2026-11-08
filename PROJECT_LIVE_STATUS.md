@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:52 UTC**
-Git-Stand: **20a04b0bbc85906afabab61af499a433f1ecd995** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 14:52 UTC**
+Git-Stand: **f3b4370cbefad7a613134f449aa9c05200abb9d4** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -17,7 +17,7 @@ Git-Stand: **20a04b0bbc85906afabab61af499a433f1ecd995** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `f3b4370` (2026-11-08): Test all twelve classes in modular armor smoke (#179)
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -53,7 +53,6 @@ Git-Stand: **20a04b0bbc85906afabab61af499a433f1ecd995** auf Branch **main**
 - `2edf30a` (2026-11-08): fix: deterministic Gemini monitor selection and SHA audit (#173)
 - `37106e4` (2026-11-08): fix: safely reject malformed Gemini API response structures (#169)
 - `5d520d6` (2026-11-08): security: sanitize untrusted CI logs before Gemini proposals (#168)
-- `77627bd` (2026-11-08): security: detect indirect execution in Gemini Python proposals (#167)
 
 ## Regeln für alle Fach-Chats
 
