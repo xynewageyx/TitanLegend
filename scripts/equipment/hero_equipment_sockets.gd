@@ -8,11 +8,18 @@ const HAIR_PREVIEW = preload("res://scripts/equipment/procedural_hairstyle.gd")
 const SLOT_NAMES := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSocket", "ShoulderRightSocket", "ArmLeftSocket", "ArmRightSocket", "GloveLeftSocket", "GloveRightSocket", "LegLeftSocket", "LegRightSocket", "BootLeftSocket", "BootRightSocket"]
 var equipped_nodes: Dictionary = {}
 func _socket(name: String) -> Node3D:
+    # Prefer animated bone attachments over static formation markers.
+    var hero := get_parent()
+    if hero is Node3D:
+        var skeleton := hero.find_child("Skeleton3D", true, false) as Skeleton3D
+        if skeleton != null:
+            var attached := skeleton.get_node_or_null(NodePath(name)) as BoneAttachment3D
+            if attached != null:
+                return attached
     var found := find_child(name, true, false)
     if found is Node3D:
         return found as Node3D
     # Animated bone sockets may be siblings of this equipment controller.
-    var hero := get_parent()
     if hero is Node3D:
         found = hero.find_child(name, true, false)
     return found as Node3D if found is Node3D else null
