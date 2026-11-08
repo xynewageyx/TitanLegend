@@ -178,10 +178,10 @@ for edit in edits:
     if re.search(r"(?i)(api[_-]?key|password|secret|token)", old + new):
         raise SystemExit("Potential secret-related change rejected")
     # Refuse newly introduced dynamic execution or shell-command primitives.
-    dangerous = r"(?i)\\b(?:eval|exec|compile)\\s*\\(|\\b(?:os\\.system|os\\.execute|subprocess\\.(?:run|Popen|call|check_output|check_call))\\s*\\("
+    dangerous = r"(?i)\b(?:eval|exec|compile)\s*\(|\b(?:os\.system|os\.execute|subprocess\.(?:run|Popen|call|check_output|check_call))\s*\("
     if re.search(dangerous, new) and not re.search(dangerous, old):
         raise SystemExit("Potential dynamic execution or shell command rejected")
-    if "\\x00" in new or "\\x00" in old:
+    if "\x00" in new or "\x00" in old:
         raise SystemExit("NUL bytes in replacement rejected")
     original = updated.get(path, path.read_text())
     if old == new:
