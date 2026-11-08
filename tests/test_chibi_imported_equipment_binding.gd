@@ -26,14 +26,17 @@ func _run() -> void:
   if scene == null:
    _fail("GLB could not load: " + str(hero_class))
    return
-  var model: Node3D = scene.instantiate() as Node3D
-  if model == null:
-   _fail("GLB is not a Node3D: " + str(hero_class))
-   return
-  hero.add_child(model)
-  var skeleton: Skeleton3D = BRIDGE.find_skeleton(model)
-  if skeleton == null or not IMPORTED.install(skeleton, hero):
-   _fail("Missing imported inventory bone anchors: " + str(hero_class))
+  # Match the actual game hierarchy: EquipmentController locates imported
+  # anchors via hero/ChibiGLBVisual.imported_skeleton.
+  var chibi := Node3D.new()
+  chibi.name = "ChibiGLBVisual"
+  chibi.set_script(preload("res://scripts/chibi_glb_visual.gd"))
+  hero.add_child(chibi)
+  chibi.configure(inspected)
+  chibi.set_process(false) # This standalone smoke fixture has no combat team.
+  var skeleton: Skeleton3D = chibi.get("imported_skeleton") as Skeleton3D
+  if skeleton == null or not bool(chibi.get_meta("imported_equipment_sockets_ready", false)):
+   _fail("ChibiGLBVisual did not install inventory bone anchors: " + str(hero_class))
    return
   var controller: Node3D = hero.get_node("EquipmentController") as Node3D
   for slot in ADAPTER.SOCKETS:
