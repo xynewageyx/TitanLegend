@@ -75,6 +75,49 @@ func _make_scene() -> bool:
    item.visible = false
  return true
 
+func _vec3_metrics(value: Vector3) -> Array:
+ return [snappedf(value.x, 0.001), snappedf(value.y, 0.001), snappedf(value.z, 0.001)]
+
+func _visible_mesh_bounds(node: Node3D) -> Dictionary:
+ var found := false
+ var combined := AABB()
+ for descendant in _descendants(node):
+  var piece: MeshInstance3D = descendant as MeshInstance3D
+  if piece == null or piece.mesh == null or not piece.is_visible_in_tree():
+   continue
+  var bounds: AABB = piece.global_transform * piece.get_aabb()
+  if not found:
+   combined = bounds
+   found = true
+  else:
+   combined = combined.merge(bounds)
+ if not found:
+  return {}
+ return {"center_m": _vec3_metrics(combined.get_center()),
+         "size_m": _vec3_metrics(combined.size)}
+
+func _build_contact_sheet(pose: String) -> bool:
+ # A phone-friendly 4x3 overview avoids opening twelve separate screenshots.
+ var tile := Vector2i(225, 400)
+ var columns := 4
+ var sheet: Image = Image.create(tile.x * columns, tile.y * 3, false, Image.FORMAT_RGBA8)
+ sheet.fill(Color("#151d2d"))
+ for i in range(CLASSES.size()):
+  var source: String = OUTPUT + "/" + CLASSES[i] + "_" + pose + ".png"
+  var frame: Image = Image.load_from_file(source)
+  if frame == null or frame.is_empty():
+   _fail("Missing class pose for contact sheet: " + source)
+   return false
+  frame.convert(Image.FORMAT_RGBA8)
+  frame.resize(tile.x, tile.y, Image.INTERPOLATE_LANCZOS)
+  var destination := Vector2i((i % columns) * tile.x, int(i / columns) * tile.y)
+  sheet.blit_rect(frame, Rect2i(Vector2i.ZERO, tile), destination)
+ var filename: String = OUTPUT + "/overview_" + pose + ".png"
+ if sheet.save_png(filename) != OK:
+  _fail("Cannot write phone-friendly equipment overview: " + filename)
+  return false
+ return true
+
 func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bool:
  # Render two actual GPU frames before saving to avoid stale viewport images.
  await RenderingServer.frame_post_draw
@@ -102,6 +145,17 @@ func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bo
   if node is MeshInstance3D and (node as MeshInstance3D).is_visible_in_tree():
    visible_meshes += 1
  var weapon_glb_distance := hero.global_position.distance_to(weapon_anchor.global_position)
+ var equipped: Dictionary = controller.get("equipped_nodes")
+ var weapon_visual: Node3D = equipped.get("mainhand") as Node3D
+ var chest_visual: Node3D = equipped.get("ChestSocket") as Node3D
+ if not is_instance_valid(weapon_visual) or not is_instance_valid(chest_visual):
+  _fail("Missing inventory meshes in screenshot: " + label)
+  return false
+ var weapon_bounds: Dictionary = _visible_mesh_bounds(weapon_visual)
+ var chest_bounds: Dictionary = _visible_mesh_bounds(chest_visual)
+ if weapon_bounds.is_empty() or chest_bounds.is_empty():
+  _fail("Invisible or empty weapon/chest geometry in screenshot: " + label)
+  return false
  # This is a geometry/framing sanity limit, not a claim of aesthetic quality.
  if weapon_glb_distance > 3.5:
   _fail("Weapon anchor far away from imported hero: %s, %f" % [label, weapon_glb_distance])
@@ -114,6 +168,9 @@ func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bo
   "weapon_bone": skel.get_node("RightHandSocket").bone_name,
   "visible_meshes": visible_meshes,
   "weapon_anchor_distance_to_hero_m": snappedf(weapon_glb_distance, 0.001),
+  "weapon_bounds": weapon_bounds,
+  "chest_bounds": chest_bounds,
+  "weapon_to_chest_center_distance_m": snappedf(weapon_visual.global_position.distance_to(chest_visual.global_position), 0.001),
   "width": frame.get_width(),
   "height": frame.get_height()
  })
@@ -186,6 +243,8 @@ func _run() -> void:
   if not await _capture(CLASSES[i] + "_front_idle", hero, "front_idle", i):
    return
   pictures += 1
+  var weapon_socket: Node3D = ctrl.call("_socket", "RightHandSocket") as Node3D
+  var weapon_before: Transform3D = weapon_socket.get_child(0).global_transform
   hero.get_node("HeroCombatMotion").call("play_attack")
   chibi.call("play_clip", "Attack")
   var clip: Animation = animator.get_animation(animator.current_animation)
@@ -194,12 +253,17 @@ func _run() -> void:
   if not await _capture(CLASSES[i] + "_front_attack", hero, "front_attack", i):
    return
   pictures += 1
-  if i == 0 or i == 11:
-   hero.rotation.y = PI * 0.5
-   if not await _capture(CLASSES[i] + "_side_attack", hero, "side_attack", i):
-    return
-   pictures += 1
-   hero.rotation.y = 0.0
+  # A still weapon despite an imported attack pose is a rendering regression.
+  var weapon_after: Transform3D = weapon_socket.get_child(0).global_transform
+  if weapon_before.is_equal_approx(weapon_after):
+   _fail("Equipped weapon stayed static during attack: " + CLASSES[i])
+   return
+  # Every class gets a side view, revealing weapon/armor overlap on Android.
+  hero.rotation.y = PI * 0.5
+  if not await _capture(CLASSES[i] + "_side_attack", hero, "side_attack", i):
+   return
+  pictures += 1
+  hero.rotation.y = 0.0
   # Compare original rarity progression on both large-sword hero classes.
   # The production battle still keeps its normal quality and inventory state.
   if i in [0, 11]:
@@ -219,6 +283,8 @@ func _run() -> void:
     if not await _capture(label, hero, "front_rarity_" + str(sampled_quality), i):
      return
     pictures += 1
+ if not _build_contact_sheet("front_attack") or not _build_contact_sheet("side_attack"):
+  return
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
@@ -226,6 +292,8 @@ func _run() -> void:
  file.store_string(JSON.stringify({
    "generator": "Godot 4.7.2 live imported GLB equipment QA",
    "image_count": pictures, "class_count": CLASSES.size(),
+   "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png"],
+   "contact_sheet_order": CLASSES,
    "real_android_device_tested": false, "renders": results
   }, "  "))
  file.close()
