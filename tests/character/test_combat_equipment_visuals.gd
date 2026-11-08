@@ -1,7 +1,6 @@
 extends SceneTree
 ## Headless runtime check: class weapons and rare armor appear on the combat hero's sockets.
 ## Does not change live inventory or gameplay state.
-const BRIDGE = preload("res://scripts/equipment/equipment_inventory_visual_bridge.gd")
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 
 func _initialize() -> void:
@@ -12,10 +11,10 @@ func _fail(reason: String) -> void:
     quit(1)
 
 func _run() -> void:
-    if BRIDGE.CLASS_WEAPONS.size() != 12:
+    if ADAPTER.CLASS_WEAPONS.size() != 12:
         _fail("Weapon mapping must cover all twelve classes")
         return
-    if BRIDGE.weapon_type_for_class(11) != 1:
+    if ADAPTER.weapon_type_for_class(11) != 1:
         _fail("Death Knight must equip a greatsword, not the Brawler claws")
         return
     for class_id in range(12):
@@ -26,7 +25,7 @@ func _run() -> void:
         if controller == null:
             _fail("No equipment controller for class %d" % class_id)
             return
-        var weapon_type: int = BRIDGE.weapon_type_for_class(class_id)
+        var weapon_type: int = ADAPTER.weapon_type_for_class(class_id)
         if weapon_type < 0 or weapon_type > 11:
             _fail("Invalid weapon type for class %d" % class_id)
             return
