@@ -44,7 +44,9 @@ func _run_tests() -> void:
   return
  for slot in range(4):
   var tile: Control = hero_strip.get_node_or_null("PartySlot" + str(slot + 1)) as Control
-  var touch: Button = tile.get_node_or_null("SelectHero") as Button if tile != null else null
+  var touch: Button = null
+  if tile != null:
+   touch = tile.get_node_or_null("SelectHero") as Button
   if touch == null or party_buttons[slot] != touch or touch.disabled:
    _fail("Missing enabled hero card touch target: " + str(slot + 1))
    return
