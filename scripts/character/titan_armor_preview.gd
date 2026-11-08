@@ -73,6 +73,10 @@ func build_armor(target: Skeleton3D, quality: String = "white", hero_class: Stri
         if tier >= 2 and (slot == "helmet" or slot.begins_with("shoulder")):
             var spike_count: int = int(profile["spikes"]) + (1 if tier >= 4 else 0)
             _add_spikes(anchor, slot, spike_count, tier, armor_color)
+        if tier >= 2 and slot == "helmet":
+            _add_class_helmet(anchor, hero_class, tier, armor_color)
+        if tier >= 3 and slot.begins_with("shoulder"):
+            _add_shoulder_fin(anchor, slot, hero_class, tier, armor_color)
         if tier >= 3 and slot == "chestplate":
             _add_emblem(anchor, tier, hero_class, armor_color)
         if tier >= 4 and (slot == "helmet" or slot.begins_with("shoulder")):
@@ -176,3 +180,52 @@ func _add_plate_ridge(anchor: BoneAttachment3D, slot: String, tier: int, tint: C
     mat.roughness = 0.42
     ridge.material_override = mat
     anchor.add_child(ridge)
+
+func _add_class_helmet(anchor: BoneAttachment3D, hero_class: String, tier: int, tint: Color) -> void:
+    # Each class belongs to an original, readable cartoon-helmet silhouette family.
+    var shape := "crown"
+    if hero_class in ["death_knight", "warlock", "summoner"]:
+        shape = "horns"
+    elif hero_class in ["hunter", "rogue", "druid", "shaman"]:
+        shape = "crest"
+    elif hero_class in ["mage", "priest"]:
+        shape = "circlet"
+    var count := 2 if shape == "horns" else 1
+    for i in range(count):
+        var detail := MeshInstance3D.new()
+        detail.name = "ClassHelmetDetail_%d" % i
+        var mesh := CylinderMesh.new()
+        mesh.radial_segments = 6
+        mesh.top_radius = 0.0 if shape != "circlet" else 0.09
+        mesh.bottom_radius = 0.10 if shape != "circlet" else 0.12
+        mesh.height = 0.22 + 0.065 * float(tier)
+        detail.mesh = mesh
+        var side := -1.0 if i == 0 else 1.0
+        detail.position = Vector3(side * 0.25 if count == 2 else 0.0, 0.67, -0.02)
+        if shape == "horns":
+            detail.rotation.z = side * -0.42
+        elif shape == "crest":
+            detail.rotation.x = -0.45
+        elif shape == "circlet":
+            detail.position.y = 0.57
+        var mat := StandardMaterial3D.new()
+        mat.albedo_color = tint.lightened(0.28)
+        mat.metallic = 0.4
+        detail.material_override = mat
+        anchor.add_child(detail)
+
+func _add_shoulder_fin(anchor: BoneAttachment3D, slot: String, hero_class: String, tier: int, tint: Color) -> void:
+    var fin := MeshInstance3D.new()
+    fin.name = "ClassShoulderFin"
+    var mesh := PrismMesh.new()
+    var heavy := hero_class in ["warrior", "paladin", "brawler", "death_knight"]
+    mesh.size = Vector3(0.22 if heavy else 0.12, 0.24 + float(tier) * 0.055, 0.16)
+    fin.mesh = mesh
+    var side := -1.0 if slot.ends_with("_l") else 1.0
+    fin.position = Vector3(side * 0.16, 0.27, 0.0)
+    fin.rotation.z = -side * (0.3 if heavy else 0.15)
+    var mat := StandardMaterial3D.new()
+    mat.albedo_color = tint.darkened(0.14)
+    mat.metallic = 0.5
+    fin.material_override = mat
+    anchor.add_child(fin)
