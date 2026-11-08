@@ -167,6 +167,9 @@ for edit in edits:
     if not isinstance(edit, dict):
         raise SystemExit("Invalid edit format")
     path = safe_path(edit.get("path"))
+    # A proposal may inspect failing tests, but must not weaken or rewrite them.
+    if path.relative_to(ROOT).parts[0] == "tests":
+        raise SystemExit("Gemini proposals cannot modify regression tests")
     if str(path) not in files:
         raise SystemExit("Model proposed a file outside provided source")
     old, new = edit.get("old"), edit.get("new")
@@ -175,6 +178,8 @@ for edit in edits:
     if re.search(r"(?i)(api[_-]?key|password|secret|token)", old + new):
         raise SystemExit("Potential secret-related change rejected")
     original = updated.get(path, path.read_text())
+    if old == new:
+        raise SystemExit("No-op replacement rejected")
     if original.count(old) != 1:
         raise SystemExit("Replacement not uniquely located")
     updated[path] = original.replace(old, new, 1)
