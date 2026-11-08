@@ -138,6 +138,7 @@ func _build_party() -> void:
   tile.name = "PartySlot" + str(i + 1)
   tile.custom_minimum_size.y = 61
   tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0d7f3"), SKIN.WOOD, 15, 2))
+  tile.mouse_filter = Control.MOUSE_FILTER_PASS
   strip.add_child(tile)
   var line := HBoxContainer.new()
   line.add_theme_constant_override("separation", 7)
