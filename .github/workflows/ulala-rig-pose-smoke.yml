@@ -35,6 +35,7 @@ jobs:
           cp tests/test_modular_skeleton_pose_transfer.gd /tmp/titan-rig-smoke/test_modular_skeleton_pose_transfer.gd
           timeout 60s godot --headless --path /tmp/titan-rig-smoke --script res://test_modular_skeleton_pose_transfer.gd 2>&1 | tee /tmp/modular-skeleton-pose.log
           grep -Fq 'MODULAR_RIG_POSE_TRANSFER_OK shared=64 source=65 target=66 samples=5' /tmp/modular-skeleton-pose.log
+          grep -Fq 'MODULAR_RIG_ANIMATION_PLAYER_OK joint=CommonJoint_07' /tmp/modular-skeleton-pose.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/modular-skeleton-pose.log; then
             exit 1
           fi
