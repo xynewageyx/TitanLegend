@@ -6,6 +6,8 @@ on:
     paths:
       - 'scripts/rig/titan_skeleton_bridge.gd'
       - 'scripts/chibi_glb_visual.gd'
+      - 'scripts/equipment/chibi_imported_equipment_sockets.gd'
+      - 'tests/test_chibi_imported_equipment_binding.gd'
       - 'tests/test_chibi_imported_rigs.gd'
       - 'tests/test_titan_skeleton_bridge.gd'
       - '.github/workflows/titan-skeleton-bridge-smoke.yml'
@@ -47,3 +49,10 @@ jobs:
           godot --headless --path . --script res://tests/test_chibi_imported_rigs.gd 2>&1 | tee /tmp/chibi-rig-audit.log
           grep -Fq 'PASS: imported chibi GLB audit completed' /tmp/chibi-rig-audit.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/chibi-rig-audit.log; then exit 1; fi
+      - name: Verify imported equipment follows twelve-class GLB skeletons
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/test_chibi_imported_equipment_binding.gd 2>&1 | tee /tmp/chibi-equipment-binding.log
+          grep -Fq 'PASS: imported chibi equipment sockets bound to all 12 animated GLB rigs' /tmp/chibi-equipment-binding.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/chibi-equipment-binding.log; then exit 1; fi
