@@ -2,11 +2,16 @@
 """Select failed same-repository PRs for bounded Gemini repairs."""
 import json
 import os
+import re
 import subprocess
+from collections import Counter
+from datetime import datetime, timedelta, timezone
 
 REPO = os.environ["GITHUB_REPOSITORY"]
 MAX_ATTEMPTS = 2
 MAX_DISPATCHES_PER_RUN = 5
+QUOTA_BACKOFF_HOURS = 24
+PR_RETRY_COOLDOWN_HOURS = 6
 WORKFLOW = "gemini-draft-fix.yml"
 CHECKS = {
     "Python Regression Tests",
@@ -33,6 +38,55 @@ def gh_pages(endpoint, max_pages=20):
         if len(batch) < 100:
             return items
     raise RuntimeError("GitHub pagination limit reached; refusing partial scan")
+
+
+def comment_time(comment):
+    """Return a timezone-aware creation time or None for malformed metadata."""
+    try:
+        timestamp = datetime.fromisoformat(comment["created_at"].replace("Z", "+00:00"))
+        return timestamp if timestamp.tzinfo else None
+    except (KeyError, ValueError, TypeError, AttributeError):
+        return None
+
+
+def bot_comment(comment, marker):
+    return (comment.get("user", {}).get("login") == "github-actions[bot]"
+            and marker in comment.get("body", ""))
+
+
+def quota_backoff_active(comments, now, hours=QUOTA_BACKOFF_HOURS):
+    """Pause all dispatches after a confirmed Gemini 429 reported by the repair bot."""
+    cutoff = now - timedelta(hours=hours)
+    return any(bot_comment(comment, "[gemini-quota-backoff]")
+               and (timestamp := comment_time(comment)) is not None
+               and timestamp >= cutoff for comment in comments)
+
+
+def retry_cooldown_active(comments, now, hours=PR_RETRY_COOLDOWN_HOURS):
+    """Leave time for dispatched jobs to complete before another attempt."""
+    cutoff = now - timedelta(hours=hours)
+    return any(bot_comment(comment, "[gemini-repair-attempt]")
+               and (timestamp := comment_time(comment)) is not None
+               and timestamp >= cutoff for comment in comments)
+
+
+def count_chargeable_attempts(comments):
+    """Provider-quota failures refund the matching SHA's recorded dispatch attempt."""
+    attempts = Counter()
+    quota_failures = Counter()
+    for comment in comments:
+        if comment.get("user", {}).get("login") != "github-actions[bot]":
+            continue
+        body = comment.get("body", "")
+        match = re.search(r"\bfor ([0-9a-f]{40})\b", body)
+        if not match:
+            continue
+        sha = match.group(1)
+        if "[gemini-repair-attempt]" in body:
+            attempts[sha] += 1
+        elif "[gemini-quota-backoff]" in body:
+            quota_failures[sha] += 1
+    return sum(max(0, count - quota_failures[sha]) for sha, count in attempts.items())
 
 
 def choose_all(prs, get_runs, get_attempts, limit=MAX_DISPATCHES_PER_RUN):
@@ -73,6 +127,16 @@ def choose_all(prs, get_runs, get_attempts, limit=MAX_DISPATCHES_PER_RUN):
 
 
 def main():
+    now = datetime.now(timezone.utc)
+    dry_run = os.environ.get("GEMINI_MONITOR_DRY_RUN", "").lower() == "true"
+    if not dry_run:
+        since = (now - timedelta(hours=QUOTA_BACKOFF_HOURS)).isoformat(timespec="seconds").replace("+00:00", "Z")
+        recent_comments = gh_pages("repos/" + REPO + "/issues/comments?since=" + since
+                                   + "&sort=created&direction=desc")
+        if quota_backoff_active(recent_comments, now):
+            print("PAUSED: Gemini API quota exhausted in last 24 hours; no repair dispatched")
+            return
+
     prs = gh_pages("repos/" + REPO + "/pulls?state=open")
     if not isinstance(prs, list):
         raise RuntimeError("Invalid PR list")
@@ -83,17 +147,15 @@ def main():
 
     def get_attempts(number):
         comments = gh_pages("repos/" + REPO + "/issues/" + str(number) + "/comments")
-        return sum(
-            comment.get("user", {}).get("login") == "github-actions[bot]"
-            and "[gemini-repair-attempt]" in comment.get("body", "")
-            for comment in comments
-        )
+        if retry_cooldown_active(comments, now):
+            print("PR", number, "in 6-hour dispatch cooldown")
+            return MAX_ATTEMPTS  # Temporarily ineligible; does not consume an attempt.
+        return count_chargeable_attempts(comments)
 
     selected = choose_all(prs, get_runs, get_attempts)
     if not selected:
         print("No eligible failed PR")
         return
-    dry_run = os.environ.get("GEMINI_MONITOR_DRY_RUN", "").lower() == "true"
     if dry_run:
         for item in selected:
             print("DRY RUN: would dispatch PR", item["pr"], "failed run", item["run"],
