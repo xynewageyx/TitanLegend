@@ -57,24 +57,27 @@ func _run() -> void:
                     failures += 1
                 else:
                     count += 1
-        # Exercise bone-following behavior, not just attachment naming.
-        var right_marker := skeleton.find_child("RightHandSocket", true, false) as Marker3D
-        if right_marker != null:
-            var arm_index := skeleton.find_bone("Arm_R")
-            if arm_index >= 0:
-                var before := right_marker.global_transform.origin
-                var original_pose := skeleton.get_bone_pose(arm_index)
-                var changed_pose := original_pose.translated(Vector3(0.17, 0.0, 0.0))
-                skeleton.set_bone_pose(arm_index, changed_pose)
-                skeleton.force_update_all_bone_transforms()
-                await process_frame
-                await process_frame
-                var after := right_marker.global_transform.origin
-                if before.distance_to(after) < 0.01:
-                    push_error("%s: RightHandSocket did not follow Arm_R pose" % hero_name)
-                    failures += 1
-                skeleton.set_bone_pose(arm_index, original_pose)
-                skeleton.force_update_all_bone_transforms()
+        # Confirm weapon, helmet and boots follow animated bones after scene updates.
+        for socket_name in ["RightHandSocket", "LeftHandSocket", "HeadSocket", "BootLeftSocket", "BootRightSocket"]:
+            var marker := skeleton.find_child(socket_name, true, false) as Marker3D
+            var bone_name: String = BUILDER.SOCKET_BONES[socket_name]
+            var bone_index := skeleton.find_bone(bone_name)
+            if marker == null or bone_index < 0:
+                continue
+            var before := marker.global_transform.origin
+            var original_pose := skeleton.get_bone_pose(bone_index)
+            skeleton.set_bone_pose(bone_index, original_pose.translated(Vector3(0.17, 0.0, 0.0)))
+            skeleton.force_update_all_bone_transforms()
+            await process_frame
+            await process_frame
+            var after := marker.global_transform.origin
+            if before.distance_to(after) < 0.01:
+                push_error("%s: %s did not follow %s pose" % [hero_name, socket_name, bone_name])
+                failures += 1
+            skeleton.set_bone_pose(bone_index, original_pose)
+            skeleton.force_update_all_bone_transforms()
+            await process_frame
+            await process_frame
         print("Equipment sockets: %s -> %d/15" % [hero_name, count])
         model.queue_free()
     if failures > 0:
