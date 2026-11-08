@@ -55,7 +55,9 @@ func _make_scene() -> bool:
  camera.name = "EquipmentQACamera"
  camera.projection = Camera3D.PROJECTION_ORTHOGONAL
  camera.size = 3.65
- camera.position = Vector3(0.0, 2.45, -7.6)
+ # Blender's GLTF forward axis maps its facial -Y geometry to Godot +Z.
+ # Front portraits must look toward +Z to show the eyes, not the back of hair.
+ camera.position = Vector3(0.0, 2.45, 7.6)
  world.add_child(camera)
  camera.look_at(Vector3(0, 1.22, 0), Vector3.UP)
  camera.current = true
