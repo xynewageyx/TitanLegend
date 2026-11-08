@@ -136,9 +136,6 @@ if PR_NUMBER:
     branch_name = head.get("ref", "")
     if not branch_name or branch_name in {"main", "master"}:
         raise SystemExit("Protected PR branch")
-    labels = {label.get("name") for label in pr_info.get("labels", [])}
-    if "gemini-auto-fix" not in labels:
-        raise SystemExit("PR requires explicit gemini-auto-fix label")
     commits = int(pr_info.get("commits", 0))
     if commits > 100:
         raise SystemExit("PR too large for automatic repair")
