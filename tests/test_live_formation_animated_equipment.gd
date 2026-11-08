@@ -44,6 +44,22 @@ func _run() -> void:
   if imported_skeleton == null or not bool(imported_view.get_meta("imported_equipment_sockets_ready", false)):
    _fail("Imported GLB skeleton did not provide equipment anchors for hero %d" % index)
    return
+  # No extra primitive costume/body may obscure the GLB mesh. Keep the
+  # passive pet, HP bar and imported inventory equipment visible.
+  var old_body_count := 0
+  for child in hero.get_children():
+   if child is MeshInstance3D:
+    old_body_count += 1
+    if (child as MeshInstance3D).visible:
+     _fail("Old primitive overlaps imported GLB on hero %d: %s" % [index, child.name])
+     return
+  if old_body_count == 0:
+   _fail("Legacy body-visibility regression test lacked any old meshes")
+   return
+  var pet_visual: Node3D = hero.get_node_or_null("PassivePet") as Node3D
+  if pet_visual == null or not pet_visual.visible:
+   _fail("Legacy cleanup accidentally disabled passive companion")
+   return
   for socket_name in ADAPTER.SOCKETS:
    var glb_socket := imported_skeleton.get_node_or_null(NodePath(socket_name + "/EquipmentAnchor")) as Node3D
    if glb_socket == null or controller.call("_socket", socket_name) != glb_socket:
