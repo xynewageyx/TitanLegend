@@ -11,6 +11,19 @@ func _fail(reason: String) -> void:
  push_error(reason)
  quit(1)
 
+## Decode the authored socket position in character-local rest coordinates,
+## independent of the currently playing attack or idle bone poses.
+func _socket_in_rest_local(hero: Node3D, skeleton: Skeleton3D, socket_name: String) -> Vector3:
+ var joint := skeleton.get_node_or_null(NodePath(socket_name)) as BoneAttachment3D
+ if joint == null:
+  return Vector3.INF
+ var child := joint.get_node_or_null("EquipmentAnchor") as Node3D
+ var idx: int = skeleton.find_bone(joint.bone_name)
+ if child == null or idx < 0:
+  return Vector3.INF
+ var rest_point: Vector3 = skeleton.get_bone_global_rest(idx) * child.position
+ return hero.to_local(skeleton.to_global(rest_point))
+
 func _run() -> void:
  # Load the formation only after the SceneTree/autoload initialization.
  var formation_script: Script = load("res://scripts/team_formation.gd")
@@ -44,6 +57,15 @@ func _run() -> void:
   var imported_skeleton: Skeleton3D = imported_view.get("imported_skeleton") as Skeleton3D if imported_view != null else null
   if imported_skeleton == null or not bool(imported_view.get_meta("imported_equipment_sockets_ready", false)):
    _fail("Imported GLB skeleton did not provide equipment anchors for hero %d" % index)
+   return
+  # GLB-facing correction: capes behind body, breastplate in front,
+  # headpiece on the cranium rather than dangling below the mouth.
+  var rest_back := _socket_in_rest_local(hero, imported_skeleton, "BackSocket")
+  var rest_chest := _socket_in_rest_local(hero, imported_skeleton, "ChestSocket")
+  var rest_head := _socket_in_rest_local(hero, imported_skeleton, "HeadSocket")
+  if rest_back.z > -0.29 or rest_chest.z < 0.26 or rest_head.y < 1.97:
+   _fail("GLB front/back or helmet attachment is misaligned on hero %d: %s / %s / %s" %
+    [index, str(rest_back), str(rest_chest), str(rest_head)])
    return
   # No extra primitive costume/body may obscure the GLB mesh. Keep the
   # passive pet, HP bar and imported inventory equipment visible.
