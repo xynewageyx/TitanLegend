@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:36 UTC**
-Git-Stand: **2edf30a9d2b44a7fbdd160997cc651bdd6036173** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:44 UTC**
+Git-Stand: **a34690f5f925d22716b00f3d31101c3354c044ce** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -18,7 +18,6 @@ Git-Stand: **2edf30a9d2b44a7fbdd160997cc651bdd6036173** auf Branch **main**
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
-- `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -33,7 +32,7 @@ Git-Stand: **2edf30a9d2b44a7fbdd160997cc651bdd6036173** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -49,6 +48,7 @@ Git-Stand: **2edf30a9d2b44a7fbdd160997cc651bdd6036173** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `a34690f` (2026-11-08): feat: repair up to five failed PRs per Gemini monitor cycle (#174)
 - `2edf30a` (2026-11-08): fix: deterministic Gemini monitor selection and SHA audit (#173)
 - `37106e4` (2026-11-08): fix: safely reject malformed Gemini API response structures (#169)
 - `5d520d6` (2026-11-08): security: sanitize untrusted CI logs before Gemini proposals (#168)
