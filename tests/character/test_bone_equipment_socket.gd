@@ -62,6 +62,46 @@ func _run() -> void:
         push_error("Equipment did not return to the original orientation")
         quit(1)
         return
+    # Simulate weapon swings, chest turns and foot movement with bone poses.
+    # Each equipment attachment must move with its own bone and reset cleanly.
+    var motion_cases := [
+        ["RightHandSocket", "hand_r", Vector3.FORWARD, 55.0],
+        ["LeftHandSocket", "hand_l", Vector3.FORWARD, -40.0],
+        ["ChestSocket", "chest", Vector3.UP, 25.0],
+        ["BootRightSocket", "foot_r", Vector3.RIGHT, 30.0]
+    ]
+    for motion_case in motion_cases:
+        var socket_name: String = motion_case[0]
+        var bone_name: String = motion_case[1]
+        var axis: Vector3 = motion_case[2]
+        var degrees: float = motion_case[3]
+        var socket_node := controller.call("_socket", socket_name) as BoneAttachment3D
+        var bone_index := skeleton.find_bone(bone_name)
+        if socket_node == null or bone_index < 0:
+            push_error("Missing animated equipment attachment: " + socket_name)
+            quit(1)
+            return
+        var piece := Node3D.new()
+        socket_node.add_child(piece)
+        skeleton.force_update_all_bone_transforms()
+        await process_frame
+        var rest_basis := piece.global_transform.basis
+        skeleton.set_bone_pose_rotation(bone_index, Quaternion(axis, deg_to_rad(degrees)))
+        skeleton.force_update_all_bone_transforms()
+        await process_frame
+        if piece.global_transform.basis.is_equal_approx(rest_basis):
+            push_error("Equipment failed to follow bone rotation: " + socket_name)
+            quit(1)
+            return
+        skeleton.set_bone_pose_rotation(bone_index, Quaternion.IDENTITY)
+        skeleton.force_update_all_bone_transforms()
+        await process_frame
+        if not piece.global_transform.basis.is_equal_approx(rest_basis):
+            push_error("Equipment did not reset with bone: " + socket_name)
+            quit(1)
+            return
+        piece.queue_free()
+        await process_frame
     print("BONE EQUIPMENT SOCKET SMOKE PASSED")
     builder.free()
     hero.queue_free()
