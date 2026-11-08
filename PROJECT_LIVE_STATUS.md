@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:33 UTC**
-Git-Stand: **597655738041f4fa480836225defb9a5967e9550** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:36 UTC**
+Git-Stand: **2edf30a9d2b44a7fbdd160997cc651bdd6036173** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -19,7 +19,6 @@ Git-Stand: **597655738041f4fa480836225defb9a5967e9550** auf Branch **main**
 ### Ausrüstung — Ausrüstungs-Chat
 - `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
 - `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
-- `b3736ea` (2026-11-08): Bind formation equipment to animated skeleton sockets when available (#159)
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -50,6 +49,7 @@ Git-Stand: **597655738041f4fa480836225defb9a5967e9550** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `2edf30a` (2026-11-08): fix: deterministic Gemini monitor selection and SHA audit (#173)
 - `37106e4` (2026-11-08): fix: safely reject malformed Gemini API response structures (#169)
 - `5d520d6` (2026-11-08): security: sanitize untrusted CI logs before Gemini proposals (#168)
 - `77627bd` (2026-11-08): security: detect indirect execution in Gemini Python proposals (#167)
