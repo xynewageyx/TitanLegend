@@ -39,6 +39,7 @@ var party_names: Array[Label] = []
 var party_roles: Array[Label] = []
 var party_icons: Array[Label] = []
 var party_bars: Array[ProgressBar] = []
+var party_buttons: Array[Button] = []
 var party_bonus: Label
 var nav_buttons: Dictionary = {}
 var more_panel: PanelContainer
@@ -177,6 +178,17 @@ func _build_party() -> void:
   SKIN.small_bar(hp, SKIN.GREEN)
   column.add_child(hp)
   party_bars.append(hp)
+  # Full-card transparent touch target: no extra HUD button or layout change.
+  var select_hero := Button.new()
+  select_hero.name = "SelectHero"
+  select_hero.text = ""
+  select_hero.flat = true
+  select_hero.mouse_filter = Control.MOUSE_FILTER_STOP
+  select_hero.focus_mode = Control.FOCUS_ALL
+  select_hero.tooltip_text = "Held %d: Klasse und Rolle ansehen" % (i + 1)
+  select_hero.pressed.connect(_on_party_card_pressed.bind(i))
+  tile.add_child(select_hero)
+  party_buttons.append(select_hero)
  party_bonus = Label.new()
  party_bonus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  SKIN.title(party_bonus, 13)
@@ -286,6 +298,15 @@ func _process(_delta: float) -> void:
   hide()
  elif not modal_active and not visible:
   show()
+
+func _on_party_card_pressed(slot: int) -> void:
+ if hud == null or slot < 0 or slot >= party_buttons.size():
+  return
+ var class_menu: Control = hud.get_node_or_null("ClassMenu") as Control
+ if class_menu == null or not class_menu.has_method("open_for_slot"):
+  return
+ _on_navigation("team")
+ class_menu.call("open_for_slot", slot)
 
 func _on_navigation(target: String) -> void:
  if target == "more":
