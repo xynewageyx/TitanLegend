@@ -2,6 +2,7 @@ extends SceneTree
 ## Runtime integration test for the ACTUAL four-hero Titan Legends team.
 ## All changes are visual; no battle damage, inventory or persistent data are altered.
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
+const WEAPON = preload("res://scripts/weapons/procedural_weapon_preview.gd")
 
 func _initialize() -> void:
  call_deferred("_run")
@@ -77,6 +78,11 @@ func _run() -> void:
   var chest_anchor: Node3D = controller.call("_socket", "ChestSocket") as Node3D
   if weapon_anchor == null or weapon_anchor.get_child_count() != 1:
    _fail("Weapon missing from imported GLB bone")
+   return
+  var held_weapon: Node3D = weapon_anchor.get_child(0) as Node3D
+  var grip: Vector3 = WEAPON.grip_local_point(int(held_weapon.get("weapon_type")))
+  if held_weapon.to_global(grip).distance_to(weapon_anchor.global_position) > 0.0001:
+   _fail("Live weapon handle does not align to animated hand: hero %d" % index)
    return
   if chest_anchor == null or chest_anchor.get_child_count() != 1:
    _fail("Armor missing from imported GLB chest")
@@ -228,6 +234,10 @@ func _run() -> void:
   _fail("Death Knight's imported socket lost its equipped weapon")
   return
  var dk_weapon: Node3D = dk_weapon_root.get_child(0) as Node3D
+ var dk_grip: Vector3 = WEAPON.grip_local_point(int(dk_weapon.get("weapon_type")))
+ if dk_weapon.to_global(dk_grip).distance_to(dk_weapon_root.global_position) > 0.0001:
+  _fail("Death Knight greatsword grip is not on the moving Hand_R_2")
+  return
  var dk_player: AnimationPlayer = dk_view.get("animation_player") as AnimationPlayer
  var dk_clip: Animation = dk_player.get_animation("Attack")
  var dk_start: float = maxf(0.0, dk_clip.length - 0.95)
