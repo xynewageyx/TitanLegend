@@ -28,7 +28,7 @@ func _inspect() -> void:
         var counts := {"meshes": 0, "surfaces": 0, "materials": 0, "skinned": 0, "animations": 0, "vertices": 0, "triangles": 0}
         _visit(instance, counts)
         print("%s,%d,%d,%d,%d,%d,%d,%d" % [enemy, counts.meshes, counts.surfaces, counts.materials, counts.skinned, counts.animations, counts.vertices, counts.triangles])
-        if counts.meshes == 0 or counts.surfaces == 0:
+        if counts.meshes == 0 or counts.surfaces == 0 or counts.triangles == 0:
             failures.append("%s: imported scene has no mesh surfaces" % enemy)
         instance.queue_free()
     if not failures.is_empty():
@@ -57,7 +57,9 @@ func _visit(node: Node, counts: Dictionary) -> void:
                     var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
                     counts.vertices += positions.size()
                     var index_count: int = indices.size() if not indices.is_empty() else positions.size()
-                    counts.triangles += index_count / 3
+                    if index_count % 3 != 0:
+                        printerr("FOREST IMPORT INSPECTION: invalid triangle count in ", node.name)
+                    counts.triangles += int(index_count / 3)
             if mesh_node.skin != null or mesh_node.skeleton != NodePath(""):
                 counts.skinned += 1
     if node is AnimationPlayer:
