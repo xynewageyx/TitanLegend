@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 18:33 UTC**
-Git-Stand: **10ac8bd0e434739393f4a57a56e72455d6576da2** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 18:38 UTC**
+Git-Stand: **97baff6178bf8d88c44983ea8cf12194612e14c3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 - `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -20,12 +21,12 @@ Git-Stand: **10ac8bd0e434739393f4a57a56e72455d6576da2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
+- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `7bb8ce6` (2026-11-08): test(talents): cover death knight selection and combat check class count
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
-- `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -46,7 +47,6 @@ Git-Stand: **10ac8bd0e434739393f4a57a56e72455d6576da2** auf Branch **main**
 - `61cfa8f` (2026-11-08): ci(forest): run GLB geometry parser unit tests before model generation
 - `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
-- `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 
 ## Bereichsübergreifende Änderungen
 
