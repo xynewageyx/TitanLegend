@@ -45,7 +45,10 @@ def generate(prompt):
                 method="POST")
             try:
                 with urllib.request.urlopen(request, timeout=65) as response:
-                    result = json.load(response)
+                    try:
+                        result = json.load(response)
+                    except json.JSONDecodeError:
+                        raise RuntimeError("Gemini returned invalid JSON; no edits attempted") from None
                 parts = result.get("candidates", [{}])[0].get("content", {}).get("parts", [])
                 response_text = "".join(part.get("text", "") for part in parts)
                 print("Gemini proposal model:", model, flush=True)
