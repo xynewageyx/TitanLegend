@@ -227,6 +227,12 @@ except RuntimeError as exc:
         with open(summary, "a") as output:
             output.write(report)
     Path("gemini-draft-diagnostic.md").write_text(report)
+    if PR_NUMBER and reason == "Quota exhausted; no further calls":
+        # A bot-authored marker lets the monitor pause globally and refund this
+        # dispatch attempt. Never retry an exhausted provider in a tight loop.
+        quota_marker = ("[gemini-quota-backoff] for " + expected_head + " run " + RUN_ID
+                        + ": API returned HTTP 429. Automated repairs paused for 24 hours.")
+        command("gh", "pr", "comment", PR_NUMBER, "--body", quota_marker)
     # API outages and quota errors must fail CI rather than falsely report a repair.
     raise SystemExit(1)
 edits = proposal.get("edits", []) if isinstance(proposal, dict) else None
