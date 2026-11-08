@@ -90,11 +90,12 @@ func validate_character() -> PackedStringArray:
 
 ## Bone-bound visuals use the dedicated equipment controller. Logical Slots
 ## remain separate placeholders for future skinned equipment adapters.
-func equip_socket_armor(slot_name: String, class_index: int, rarity: int) -> bool:
+func equip_socket_armor(slot_name: String, class_index: int = -1, rarity: int = 0) -> bool:
     var controller := get_node_or_null("EquipmentController") as Node3D
     if controller == null:
         return false
-    return bool(controller.call("equip_armor_slot", slot_name, class_index, rarity))
+    var idx := class_index if class_index >= 0 else CLASSES.find(hero_class)
+    return bool(controller.call("equip_armor_slot", slot_name, max(0, idx), rarity))
 
 func equip_socket_hairstyle(style: int, color: Color = Color("#694333")) -> bool:
     var controller := get_node_or_null("EquipmentController") as Node3D
