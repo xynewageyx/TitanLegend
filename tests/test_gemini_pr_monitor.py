@@ -41,9 +41,9 @@ class MonitorSelectionTests(unittest.TestCase):
         self.assertEqual([], self.select([pr()], attempts=2))
 
     def test_ignores_stale_or_incomplete_checks(self):
-        self.assertIsNone(self.select([pr()], result=runs("old")))
-        self.assertIsNone(self.select([pr()], result=runs()[:2]))
-        self.assertIsNone(self.select([pr()], result=runs(conclusion="success")))
+        self.assertEqual([], self.select([pr()], result=runs("old")))
+        self.assertEqual([], self.select([pr()], result=runs()[:2]))
+        self.assertEqual([], self.select([pr()], result=runs(conclusion="success")))
 
     def test_prefers_newest_failed_workflow_deterministically(self):
         candidates = runs()
@@ -68,7 +68,7 @@ class MonitorSelectionTests(unittest.TestCase):
     def test_rejects_fork_pr(self):
         candidate = pr()
         candidate["head"]["repo"]["full_name"] = "someone/fork"
-        self.assertIsNone(self.select([candidate]))
+        self.assertEqual([], self.select([candidate]))
 
 
 if __name__ == "__main__":
