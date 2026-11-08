@@ -32,6 +32,11 @@ class MobileOverlayNetworkTests(unittest.TestCase):
         self.assertIn('network_panel.call("open_panel")', overlay)
         self.assertIn("func open_menu() -> void:", graphics)
         self.assertNotIn('open_button.text = "Grafik"', graphics)
+        talents = source("scripts/talent_menu_v2.gd")
+        self.assertIn('["✥ Talentbaum", "talents_v2"]', overlay)
+        self.assertIn('talent_editor.call("open_menu")', overlay)
+        self.assertIn("func open_menu() -> void:", talents)
+        self.assertNotIn('open_button.text = "Talente +"', talents)
 
     def test_android_debug_apk_has_network_permission(self):
         export = source("export_presets.cfg")
