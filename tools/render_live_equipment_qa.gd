@@ -118,7 +118,46 @@ func _build_contact_sheet(pose: String) -> bool:
   return false
  return true
 
+func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
+ # The oversized Mythic greatsword and lateral spell focuses can extend well
+ # outside a fixed portrait crop. Fit all visible 3D meshes in camera space
+ # while retaining a consistent viewing direction for front/side comparisons.
+ var view_inverse: Transform3D = camera.global_transform.affine_inverse()
+ var low := Vector2(INF, INF)
+ var high := Vector2(-INF, -INF)
+ var found := false
+ for node in _descendants(hero):
+  var piece: MeshInstance3D = node as MeshInstance3D
+  if piece == null or piece.mesh == null or not piece.is_visible_in_tree():
+   continue
+  var box: AABB = piece.get_aabb()
+  for index in range(8):
+   var world_point: Vector3 = piece.global_transform * box.get_endpoint(index)
+   var camera_point: Vector3 = view_inverse * world_point
+   low.x = minf(low.x, camera_point.x)
+   low.y = minf(low.y, camera_point.y)
+   high.x = maxf(high.x, camera_point.x)
+   high.y = maxf(high.y, camera_point.y)
+   found = true
+ if not found:
+  _fail("Cannot frame an empty character")
+  return false
+ var center := (low + high) * 0.5
+ camera.global_position += camera.global_transform.basis.x * center.x
+ camera.global_position += camera.global_transform.basis.y * center.y
+ var viewport_size: Vector2 = root.get_visible_rect().size
+ var aspect: float = maxf(0.1, viewport_size.x / maxf(1.0, viewport_size.y))
+ # Leave 0.45m safety margin for fast-moving cloth and weapon tips.
+ var needed: float = maxf(high.y - low.y + 0.45, (high.x - low.x + 0.45) / aspect)
+ camera.size = maxf(3.95, needed)
+ if is_nan(camera.size) or camera.size > 12.0:
+  _fail("Equipment is too far from hero for a readable QA frame")
+  return false
+ return true
+
 func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bool:
+ if not _fit_camera_to_visible_hero(hero):
+  return false
  # Render two actual GPU frames before saving to avoid stale viewport images.
  await RenderingServer.frame_post_draw
  await RenderingServer.frame_post_draw
@@ -171,6 +210,8 @@ func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bo
   "weapon_bounds": weapon_bounds,
   "chest_bounds": chest_bounds,
   "weapon_to_chest_center_distance_m": snappedf(weapon_visual.global_position.distance_to(chest_visual.global_position), 0.001),
+  "camera_view_height_m": snappedf(camera.size, 0.001),
+  "camera_view_width_m": snappedf(camera.size * (float(frame.get_width()) / maxf(1.0, float(frame.get_height()))), 0.001),
   "width": frame.get_width(),
   "height": frame.get_height()
  })
