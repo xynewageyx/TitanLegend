@@ -63,6 +63,10 @@ static func calibrated_local_marker(local_pos: Vector3, socket_name: String) -> 
    return Vector3(local_pos.x, local_pos.y + 0.07, 0.31)
   "HeadSocket":
    return Vector3(local_pos.x, 2.08, -0.04)
+  "RightHandSocket":
+   return Vector3(0.47, 0.94, 0.02)
+  "LeftHandSocket":
+   return Vector3(-0.47, 0.94, 0.02)
  return local_pos
 
 static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
@@ -101,6 +105,13 @@ static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
   var desired_skeleton_local: Vector3 = skeleton.to_local(desired_global)
   var rest: Transform3D = skeleton.get_bone_global_rest(bone_idx)
   anchor.position = rest.affine_inverse() * desired_skeleton_local
+  if socket_name in ["RightHandSocket", "LeftHandSocket"]:
+   # Imported Blender bone rest axes are not upright Godot weapon axes.
+   # Cancel ONLY the rest rotation; the animated bone delta still moves
+   # the weapon after this correction. Armor sockets remain unaffected.
+   var rest_world_basis: Basis = (skeleton.global_transform.basis * rest.basis).orthonormalized()
+   var desired_world_basis: Basis = hero.global_transform.basis.orthonormalized()
+   anchor.basis = rest_world_basis.inverse() * desired_world_basis
   joint.add_child(anchor)
  return true
 
