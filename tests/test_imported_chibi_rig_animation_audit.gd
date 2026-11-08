@@ -28,30 +28,30 @@ func _find_animation_player(node: Node) -> AnimationPlayer:
 func _run() -> void:
  var total_bones := 0
  var animated := 0
- for class_name in CLASSES:
-  var path := "res://assets/heroes/chibi/" + class_name + ".glb"
+ for hero_class in CLASSES:
+  var path := "res://assets/heroes/chibi/" + hero_class + ".glb"
   if not ResourceLoader.exists(path):
-   _fail("Missing chibi GLB: " + class_name)
+   _fail("Missing chibi GLB: " + hero_class)
    return
   var packed: PackedScene = load(path) as PackedScene
   if packed == null:
-   _fail("Unable to import chibi GLB: " + class_name)
+   _fail("Unable to import chibi GLB: " + hero_class)
    return
   var model: Node = packed.instantiate()
   if model == null:
-   _fail("Cannot instantiate chibi GLB: " + class_name)
+   _fail("Cannot instantiate chibi GLB: " + hero_class)
    return
   root.add_child(model)
   var skeleton: Skeleton3D = BRIDGE.find_skeleton(model)
   if skeleton == null:
-   _fail("No imported Skeleton3D on " + class_name)
+   _fail("No imported Skeleton3D on " + hero_class)
    return
   var missing := PackedStringArray()
   for bone in REQUIRED_BONES:
    if skeleton.find_bone(bone) < 0:
     missing.append(bone)
   if not missing.is_empty():
-   _fail("Missing imported rig bones for %s: %s" % [class_name, str(missing)])
+   _fail("Missing imported rig bones for %s: %s" % [hero_class, str(missing)])
    return
   var player := _find_animation_player(model)
   var clips := PackedStringArray()
@@ -69,7 +69,7 @@ func _run() -> void:
    animated += 1
   total_bones += skeleton.get_bone_count()
   print("CHIBI_IMPORTED_RIG class=%s bones=%d clips=%s matched=%d" %
-    [class_name, skeleton.get_bone_count(), str(clips), motion_matches])
+    [hero_class, skeleton.get_bone_count(), str(clips), motion_matches])
   root.remove_child(model)
   model.free()
  print("CHIBI_IMPORTED_RIG_AUDIT_OK classes=%d bones=%d full_clip_sets=%d" %
