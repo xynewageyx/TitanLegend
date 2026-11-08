@@ -40,10 +40,34 @@ def inspect_bundle(path, unitypy):
                             value = getattr(data, field, None)
                             if field == "m_SubMeshes" and value is not None:
                                 record["submesh_count"] = len(value)
+                                record["submeshes"] = [
+                                    {key: getattr(sub, attr) for key, attr in (
+                                        ("first_byte", "firstByte"),
+                                        ("index_count", "indexCount"),
+                                        ("topology", "topology"),
+                                        ("base_vertex", "baseVertex"),
+                                        ("first_vertex", "firstVertex"),
+                                        ("vertex_count", "vertexCount"),
+                                    ) if isinstance(getattr(sub, attr, None), int)}
+                                    for sub in value[:32]
+                                ]
                             elif field == "m_ShaderKeywords" and isinstance(value, str):
                                 record["shader_keyword_count"] = len(value.split())
                             elif isinstance(value, (int, float, bool)):
                                 record[field] = value
+                        if kind == "Mesh":
+                            index_buffer = getattr(data, "m_IndexBuffer", None)
+                            if isinstance(index_buffer, (bytes, bytearray, memoryview)):
+                                record["index_buffer_bytes"] = len(index_buffer)
+                            index_format = getattr(data, "m_IndexFormat", None)
+                            if isinstance(index_format, int):
+                                record["index_format"] = index_format
+                            vertex_data = getattr(data, "m_VertexData", None)
+                            if vertex_data is not None:
+                                for key, attr in (("vertex_count", "m_VertexCount"),):
+                                    val = getattr(vertex_data, attr, None)
+                                    if isinstance(val, int):
+                                        record[key] = val
                         if kind == "Texture2D":
                             stream = getattr(data, "m_StreamData", None)
                             if stream is not None:
