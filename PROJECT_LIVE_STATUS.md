@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 19:08 UTC**
-Git-Stand: **e32396d718afd3acc1eb9540ad85e8aab6ad9d2b** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 19:09 UTC**
+Git-Stand: **3de739dbe66bd4a8e04c637503b24ff0c2d19a20** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -44,6 +44,7 @@ Git-Stand: **e32396d718afd3acc1eb9540ad85e8aab6ad9d2b** auf Branch **main**
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
 - `61cfa8f` (2026-11-08): ci(forest): run GLB geometry parser unit tests before model generation
 - `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
@@ -54,7 +55,6 @@ Git-Stand: **e32396d718afd3acc1eb9540ad85e8aab6ad9d2b** auf Branch **main**
 - `10ac8bd` (2026-11-08): test(analysis): verify scene triangle counts for repeated mesh instances
 - `0b52967` (2026-11-08): feat(analysis): distinguish GLB mesh-resource and instanced scene triangle counts
 - `ebd3a3e` (2026-11-08): test(forest): verify GLB triangle counting and malformed index rejection
-- `83010ff` (2026-11-08): fix: start Gemini repair validation before PR notifications (#190)
 
 ## Regeln für alle Fach-Chats
 
