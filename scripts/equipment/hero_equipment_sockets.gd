@@ -40,6 +40,8 @@ func equip_weapon(weapon_type: int, rarity: int, offhand: bool = false) -> bool:
     visual.set("rarity", clampi(rarity, 0, 5))
     socket.add_child(visual)
     equipped_nodes[key] = visual
+    if not offhand:
+        _set_legacy_mainhand_visible(false)
     return true
 func equip_armor_slot(slot: String, hero_class: int, rarity: int) -> bool:
     if not SLOT_NAMES.has(slot):
@@ -59,12 +61,29 @@ func equip_armor_slot(slot: String, hero_class: int, rarity: int) -> bool:
     return true
 func unequip(slot: String) -> void:
     _clear(slot)
+## Only the older weapon-prop groups are hidden, never the hero's body,
+## shield, active offhand or other class accessories. Restore the fallbacks on
+## unequip so an inventory/UI failure does not leave the character unarmed.
+func _set_legacy_mainhand_visible(should_show: bool) -> void:
+    var hero := get_parent()
+    if hero == null:
+        return
+    for path in [
+        "HeroCombatMotion/AnimatedRightArm/LegacyWeaponVisual",
+        "LegacyRoleWeapon"
+    ]:
+        var legacy: Node3D = hero.get_node_or_null(NodePath(path)) as Node3D
+        if legacy != null:
+            legacy.visible = should_show
+
 func _clear(slot: String) -> void:
     if equipped_nodes.has(slot):
         var node: Node = equipped_nodes[slot]
         if is_instance_valid(node):
             node.queue_free()
         equipped_nodes.erase(slot)
+    if slot == "mainhand":
+        _set_legacy_mainhand_visible(true)
 
 ## Hair is cosmetic. It does not change combat or armor slot state.
 func equip_hairstyle(style: int, color: Color = Color("#694333")) -> bool:
