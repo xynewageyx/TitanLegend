@@ -108,6 +108,10 @@ func _run() -> void:
     if not all_bone_before[bone_id].is_equal_approx(skeleton.get_bone_global_pose(bone_id)):
      moved_names.append(skeleton.get_bone_name(bone_id))
    if hero_class == "death_knight":
+    var all_names := PackedStringArray()
+    for bone_id in range(skeleton.get_bone_count()):
+     all_names.append(skeleton.get_bone_name(bone_id))
+    print("DEATH_KNIGHT_FULL_BONE_NAMES=", str(all_names))
     print("DEATH_KNIGHT_IMPORT_MOTION_BONES=", str(moved_names))
    var bone_moved: bool = not initial_bone.is_equal_approx(final_bone)
    var socket_moved: bool = not initial_transform.is_equal_approx(final_transform)
