@@ -21,6 +21,34 @@ const SOCKET_BONES := {
  "BootRightSocket": "Leg_R"
 }
 const ANCHOR_NAME := "EquipmentAnchor"
+# The original Death Knight GLB has 24 bones, including a moving second arm
+# chain. Other eleven class GLBs use the basic eight-bone armature.
+const EXTENDED_BONES := {
+ "RightHandSocket": "Hand_R_2",
+ "LeftHandSocket": "Hand_L_2",
+ "HeadSocket": "Head",
+ "ChestSocket": "Chest",
+ "BackSocket": "Chest",
+ "ShoulderLeftSocket": "UpperArm_L_2",
+ "ShoulderRightSocket": "UpperArm_R_2",
+ "ArmLeftSocket": "Forearm_L_2",
+ "ArmRightSocket": "Forearm_R_2",
+ "GloveLeftSocket": "Hand_L_2",
+ "GloveRightSocket": "Hand_R_2",
+ "LegLeftSocket": "UpperLeg_L_2",
+ "LegRightSocket": "UpperLeg_R_2",
+ "BootLeftSocket": "Foot_L_2",
+ "BootRightSocket": "Foot_R_2"
+}
+
+static func selected_bone(skeleton: Skeleton3D, socket_name: String) -> String:
+ if skeleton == null or not SOCKET_BONES.has(socket_name):
+  return ""
+ var preferred: String = EXTENDED_BONES.get(socket_name, "")
+ if preferred != "" and skeleton.find_bone(preferred) >= 0:
+  return preferred
+ var base: String = SOCKET_BONES[socket_name]
+ return base if skeleton.find_bone(base) >= 0 else ""
 
 static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
  if skeleton == null or hero == null or not skeleton.is_inside_tree():
@@ -28,7 +56,7 @@ static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
  # Validate every required bone BEFORE creating any sockets, so the caller can
  # safely fall back to the existing synthetic 18-bone equipment rig.
  for socket_name in SOCKET_BONES:
-  if skeleton.find_bone(SOCKET_BONES[socket_name]) < 0:
+  if selected_bone(skeleton, socket_name) == "":
    return false
  for socket_name in SOCKET_BONES:
   var existing: Node = skeleton.get_node_or_null(NodePath(socket_name))
@@ -38,10 +66,11 @@ static func install(skeleton: Skeleton3D, hero: Node3D) -> bool:
    if existing.get_node_or_null(ANCHOR_NAME) == null:
     return false
    continue
-  var bone_idx: int = skeleton.find_bone(SOCKET_BONES[socket_name])
+  var bone_name: String = selected_bone(skeleton, socket_name)
+  var bone_idx: int = skeleton.find_bone(bone_name)
   var joint := BoneAttachment3D.new()
   joint.name = socket_name
-  joint.bone_name = SOCKET_BONES[socket_name]
+  joint.bone_name = bone_name
   skeleton.add_child(joint)
   var anchor := Node3D.new()
   anchor.name = ANCHOR_NAME
@@ -58,6 +87,6 @@ static func resolve(skeleton: Skeleton3D, socket_name: String) -> Node3D:
  if skeleton == null or not SOCKET_BONES.has(socket_name):
   return null
  var joint := skeleton.get_node_or_null(NodePath(socket_name)) as BoneAttachment3D
- if joint == null or joint.bone_name != SOCKET_BONES[socket_name]:
+ if joint == null or joint.bone_name != selected_bone(skeleton, socket_name):
   return null
  return joint.get_node_or_null(ANCHOR_NAME) as Node3D
