@@ -65,6 +65,14 @@ class MonitorSelectionTests(unittest.TestCase):
         selected = self.select(candidates)
         self.assertEqual([item["pr"] for item in selected], [1, 2, 3, 4, 5])
 
+    def test_monitor_workflow_can_comment_on_prs(self):
+        workflow = (Path(__file__).resolve().parents[1] /
+                    ".github/workflows/gemini-pr-monitor.yml").read_text()
+        permissions = workflow.split("\\npermissions:\\n", 1)[1].split("\\nconcurrency:\\n", 1)[0]
+        self.assertIn("  pull-requests: write", permissions)
+        self.assertIn("  issues: write", permissions)
+        self.assertIn("  actions: write", permissions)
+
     def test_rejects_fork_pr(self):
         candidate = pr()
         candidate["head"]["repo"]["full_name"] = "someone/fork"
