@@ -297,6 +297,11 @@ body = ("AI-generated, unreviewed proposed source edits for failed run #" + RUN_
         ".\n\n**Human review required. No auto-merge.** "
         "GitHub validation workflows should run on this PR. "
         "Inspect changes carefully before merging.\n")
-pr = command("gh", "pr", "create", "--draft", "--base", "main", "--head", branch,
-             "--title", "AI proposal: investigate CI failure " + RUN_ID, "--body", body)
-print(pr.stdout)
+if PR_NUMBER:
+    # This branch already has an open PR. Update its conversation, do not create a duplicate.
+    command("gh", "pr", "comment", PR_NUMBER, "--body", body)
+    print("Updated existing PR #" + PR_NUMBER + " on branch " + branch)
+else:
+    pr = command("gh", "pr", "create", "--draft", "--base", "main", "--head", branch,
+                 "--title", "AI proposal: investigate CI failure " + RUN_ID, "--body", body)
+    print(pr.stdout)
