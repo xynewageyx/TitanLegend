@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 21:23 UTC**
-Git-Stand: **f590c8678d827a08cc50ea263ede49c25c896b63** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 21:28 UTC**
+Git-Stand: **40d3b7e33ca111e66f387dec80be8f06db065226** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -18,6 +18,7 @@ Git-Stand: **f590c8678d827a08cc50ea263ede49c25c896b63** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `40d3b7e` (2026-11-08): test: verify hand weapons chest armor and boots follow bone motion (#166)
 - `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
 - `358b44a` (2026-11-08): fix: avoid equipment mesh churn on unchanged inventory refresh (#210)
 - `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
@@ -54,7 +55,6 @@ Git-Stand: **f590c8678d827a08cc50ea263ede49c25c896b63** auf Branch **main**
 
 - `d031003` (2026-11-08): test(forest): validate geometry comparison and missing-model errors
 - `31c9f15` (2026-11-08): feat(forest): compare source GLB and Godot-imported geometry in CSV report
-- `e77ed30` (2026-11-08): fix(forest): reject zero-triangle imports and validate triangle index counts
 
 ## Regeln für alle Fach-Chats
 
