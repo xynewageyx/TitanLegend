@@ -6,7 +6,7 @@ var animation_player: AnimationPlayer
 var active_clip: String = ""
 
 func configure(class_id: int) -> void:
- var index: int = clampi(class_id, 0, NAMES.size() - 1)
+ # Class 11 is the Death Knight; never silently display the Brawler GLB.\n if class_id < 0 or class_id >= NAMES.size():\n  push_warning("Titan Legends: no imported chibi GLB for class_id %d; keeping original hero body" % class_id)\n  return\n var index: int = class_id
  var path: String = "res://assets/heroes/chibi/" + NAMES[index] + ".glb"
  if not ResourceLoader.exists(path):
   return
