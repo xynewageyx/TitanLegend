@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 16:58 UTC**
-Git-Stand: **83010ff0402810d4066d5dfa6c9cfb6b28f17727** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 17:18 UTC**
+Git-Stand: **87b2164704e017653c46b6d606094bf162d01695** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -21,9 +21,10 @@ Git-Stand: **83010ff0402810d4066d5dfa6c9cfb6b28f17727** auf Branch **main**
 - `f3b4370` (2026-11-08): Test all twelve classes in modular armor smoke (#179)
 
 ### UI — UI-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 - `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
 
@@ -31,7 +32,7 @@ Git-Stand: **83010ff0402810d4066d5dfa6c9cfb6b28f17727** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -40,14 +41,14 @@ Git-Stand: **83010ff0402810d4066d5dfa6c9cfb6b28f17727** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 - `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
 - `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 - `e6c0733` (2026-11-08): fix: allow Gemini monitor to comment on target PRs (#178)
-- `20a04b0` (2026-11-08): feat: safe dry-run mode for Gemini automatic PR monitor (#177)
 
 ## Bereichsübergreifende Änderungen
 
