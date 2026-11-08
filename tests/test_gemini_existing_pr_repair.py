@@ -12,8 +12,8 @@ class ExistingPrRepairTests(unittest.TestCase):
     def test_script_is_valid_python(self):
         ast.parse(SOURCE)
 
-    def test_requires_explicit_label_and_same_repository(self):
-        self.assertIn('"gemini-auto-fix" not in labels', SOURCE)
+    def test_requires_same_repository(self):
+        self.assertNotIn('"gemini-auto-fix" not in labels', SOURCE)
         self.assertIn('head.get("repo", {}).get("full_name")', SOURCE)
         self.assertIn('pr_info.get("state") != "open"', SOURCE)
 

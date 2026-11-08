@@ -7,7 +7,7 @@ SOURCE = (Path(__file__).resolve().parents[1] / "tools" / "gemini_pr_monitor.py"
 tree = ast.parse(SOURCE)
 functions = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "choose"]
 namespace = {"CHECKS": {"Python Regression Tests", "Titan Legends Core Regression", "Godot project validation"},
-             "LABEL": "gemini-auto-fix", "REPO": "owner/game", "MAX_ATTEMPTS": 2}
+             "REPO": "owner/game", "MAX_ATTEMPTS": 2}
 exec(compile(ast.Module(body=functions, type_ignores=[]), "<monitor>", "exec"), namespace)
 choose = namespace["choose"]
 
@@ -33,9 +33,9 @@ class MonitorSelectionTests(unittest.TestCase):
     def test_selects_failed_opted_in_pr(self):
         self.assertEqual(self.select([pr()])["pr"], 12)
 
-    def test_requires_label_and_non_draft(self):
-        self.assertIsNone(self.select([pr(label=False)]))
-        self.assertIsNone(self.select([pr(draft=True)]))
+    def test_includes_unlabeled_and_draft_prs(self):
+        self.assertEqual(self.select([pr(label=False)])["pr"], 12)
+        self.assertEqual(self.select([pr(draft=True)])["pr"], 12)
 
     def test_stops_after_two_attempts(self):
         self.assertIsNone(self.select([pr()], attempts=2))

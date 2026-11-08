@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Select at most one opted-in failed PR for a bounded Gemini repair."""
+"""Select failed same-repository PRs for bounded Gemini repairs."""
 import json
 import os
 import subprocess
@@ -7,7 +7,6 @@ import sys
 
 REPO = os.environ["GITHUB_REPOSITORY"]
 MAX_ATTEMPTS = 2
-LABEL = "gemini-auto-fix"
 WORKFLOW = "gemini-draft-fix.yml"
 CHECKS = {
     "Python Regression Tests",
@@ -25,9 +24,7 @@ def gh(*args):
 def choose(prs, get_runs, get_attempts):
     """Pure selection: ignore unrelated runs and stop after two attempts."""
     for pr in prs:
-        if pr.get("draft") or pr.get("base", {}).get("ref") != "main":
-            continue
-        if LABEL not in {label.get("name") for label in pr.get("labels", [])}:
+        if pr.get("base", {}).get("ref") != "main":
             continue
         head = pr.get("head", {})
         if head.get("repo", {}).get("full_name") != REPO:
