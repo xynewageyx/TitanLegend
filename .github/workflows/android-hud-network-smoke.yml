@@ -5,6 +5,7 @@ on:
       - 'scripts/network/titan_multiplayer_client.gd'
       - 'scripts/network/titan_multiplayer_connect_panel.gd'
       - 'scripts/graphics_settings_menu.gd'
+      - 'scripts/talent_menu_v2.gd'
       - 'scripts/adventure_hud_overlay.gd'
       - 'export_presets.cfg'
       - 'tests/test_mobile_overlay_network.py'
