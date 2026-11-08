@@ -17,7 +17,9 @@ const MORE_ENTRIES := [
  ["✥ Talente", "talents"],
  ["✧ Reinkarnation", "reincarnation"],
  ["✦ Astralprüfung", "astral"],
- ["▣ Kostüme", "shop"]
+ ["▣ Kostüme", "shop"],
+ ["⚙ Grafik", "graphics"],
+ ["⌁ Netzwerk-Test", "network_test"]
 ]
 const ROLE_ICONS := ["◆", "⚔", "✚"]
 const ROLE_TEXT := ["TANK", "SCHADEN", "HEILUNG"]
@@ -237,7 +239,7 @@ func _build_navigation() -> void:
  more_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
  more_panel.offset_left = -366
  more_panel.offset_right = -10
- more_panel.offset_top = -344
+ more_panel.offset_top = -425
  more_panel.offset_bottom = -140
  more_panel.mouse_filter = Control.MOUSE_FILTER_STOP
  more_panel.add_theme_stylebox_override("panel", SKIN.plaque(SKIN.PAPER, SKIN.WOOD, 18, 4))
@@ -283,6 +285,20 @@ func _on_navigation(target: String) -> void:
   more_open = not more_open
   more_panel.visible = more_open
   _update_nav_selection()
+  return
+ if target == "graphics" or target == "network_test":
+  more_open = false
+  more_panel.hide()
+  _update_nav_selection()
+  if target == "graphics":
+   var settings := get_node_or_null("/root/GraphicsSettingsMenu")
+   if settings != null and settings.has_method("open_menu"):
+    settings.call("open_menu")
+  else:
+   var main_scene := get_tree().current_scene
+   var network_panel := main_scene.get_node_or_null("MultiplayerConnectPanel") if main_scene != null else null
+   if network_panel != null and network_panel.has_method("open_panel"):
+    network_panel.call("open_panel")
   return
  more_open = false
  more_panel.hide()
