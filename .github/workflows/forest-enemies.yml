@@ -6,6 +6,7 @@ on:
       - 'tools/blender/generate_forest_mobs.py'
       - 'tools/analysis/inspect_forest_glbs.py'
       - 'tools/analysis/compare_forest_geometry.py'
+      - 'tools/analysis/test_compare_forest_geometry.py'
       - 'tools/analysis/test_inspect_forest_glbs.py'
       - 'tools/tests/inspect_forest_imports.gd'
       - '.github/workflows/forest-enemies.yml'
@@ -19,7 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Test GLB geometry parser
-        run: python3 -m unittest discover -s tools/analysis -p 'test_inspect_forest_glbs.py' -v
+        run: |
+          python3 -m unittest discover -s tools/analysis -p 'test_inspect_forest_glbs.py' -v
+          python3 -m unittest discover -s tools/analysis -p 'test_compare_forest_geometry.py' -v
       - name: Install Blender
         run: sudo apt-get update && sudo apt-get install -y blender python3-numpy
       - name: Verify Blender Python NumPy dependency
