@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
 Automatisch erzeugt: **2026-11-08 18:32 UTC**
-Git-Stand: **61cfa8faa635234dc3ce95ffbf17b049ca87afce** auf Branch **main**
+Git-Stand: **cf2a8a30c6ae4c2a979d1e5028283531ce1714a0** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,38 +9,44 @@ Git-Stand: **61cfa8faa635234dc3ce95ffbf17b049ca87afce** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Landschaften — Landschaften-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### UI — UI-Chat
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 - `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Audio — Audio-Erstellung-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
+- `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `61cfa8f` (2026-11-08): ci(forest): run GLB geometry parser unit tests before model generation
