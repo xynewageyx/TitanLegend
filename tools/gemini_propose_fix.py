@@ -28,12 +28,20 @@ def command(*args, check=True):
     return subprocess.run(args, text=True, capture_output=True, check=check)
 
 def dispatch_validations(branch):
-    """GITHUB_TOKEN pushes do not trigger PR/push CI; use workflow_dispatch explicitly."""
+    """Dispatch every required check, even when one workflow cannot be started."""
     repository = os.environ["GITHUB_REPOSITORY"]
+    failures = []
     for workflow in VALIDATION_WORKFLOWS:
-        command("gh", "workflow", "run", workflow,
-                "--repo", repository, "--ref", branch)
-        print("Dispatched validation:", workflow, "for", branch, flush=True)
+        try:
+            command("gh", "workflow", "run", workflow,
+                    "--repo", repository, "--ref", branch)
+        except subprocess.CalledProcessError:
+            failures.append(workflow)
+            print("::error::Could not dispatch validation:", workflow, flush=True)
+        else:
+            print("Dispatched validation:", workflow, "for", branch, flush=True)
+    if failures:
+        raise RuntimeError("Required CI dispatch failed: " + ", ".join(failures))
 
 
 def safe_path(raw):
@@ -314,6 +322,9 @@ if PR_NUMBER:
     command("git", "push", "origin", "HEAD:refs/heads/" + branch)
 else:
     command("git", "push", "--set-upstream", "origin", branch)
+# The PR comment/create API can fail independently: start CI first after the push.
+dispatch_validations(branch)
+
 body = ("AI-generated, unreviewed proposed source edits for failed run #" + RUN_ID +
         ".\n\n**Human review required. No auto-merge.** "
         "GitHub validation workflows should run on this PR. "
@@ -327,5 +338,3 @@ else:
                  "--title", "AI proposal: investigate CI failure " + RUN_ID, "--body", body)
     print(pr.stdout)
 
-# Validate the pushed PR branch even though GITHUB_TOKEN pushes do not trigger CI.
-dispatch_validations(branch)
