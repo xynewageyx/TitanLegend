@@ -39,6 +39,8 @@ var party_names: Array[Label] = []
 var party_roles: Array[Label] = []
 var party_icons: Array[Label] = []
 var party_bars: Array[ProgressBar] = []
+var party_hp_labels: Array[Label] = []
+var party_hp_fills: Array[StyleBoxFlat] = []
 var party_buttons: Array[Button] = []
 var party_bonus: Label
 var nav_buttons: Dictionary = {}
@@ -134,13 +136,13 @@ func _build_party() -> void:
  strip.offset_left = 11
  strip.offset_right = 210
  strip.offset_top = 94
- strip.offset_bottom = 404
+ strip.offset_bottom = 434
  strip.add_theme_constant_override("separation", 5)
  add_child(strip)
  for i in range(4):
   var tile := PanelContainer.new()
   tile.name = "PartySlot" + str(i + 1)
-  tile.custom_minimum_size.y = 61
+  tile.custom_minimum_size.y = 70
   tile.add_theme_stylebox_override("panel", SKIN.plaque(Color("#fff0d7f3"), SKIN.WOOD, 15, 2))
   strip.add_child(tile)
   var line := HBoxContainer.new()
@@ -165,19 +167,33 @@ func _build_party() -> void:
   name_label.text = "Held " + str(i + 1)
   column.add_child(name_label)
   party_names.append(name_label)
+  var status_row := HBoxContainer.new()
+  status_row.add_theme_constant_override("separation", 3)
+  column.add_child(status_row)
   var role_label := Label.new()
   SKIN.title(role_label, 12)
   role_label.add_theme_color_override("font_color", SKIN.MUTED)
   role_label.text = "Teammitglied"
-  column.add_child(role_label)
+  role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+  role_label.clip_text = true
+  status_row.add_child(role_label)
   party_roles.append(role_label)
+  var hp_value := Label.new()
+  hp_value.name = "HPText"
+  SKIN.title(hp_value, 12)
+  hp_value.text = "—/—"
+  hp_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+  hp_value.mouse_filter = Control.MOUSE_FILTER_IGNORE
+  status_row.add_child(hp_value)
+  party_hp_labels.append(hp_value)
   var hp := ProgressBar.new()
   hp.max_value = 100
   hp.value = 100
-  hp.custom_minimum_size.y = 9
+  hp.custom_minimum_size.y = 16
   SKIN.small_bar(hp, SKIN.GREEN)
   column.add_child(hp)
   party_bars.append(hp)
+  party_hp_fills.append(hp.get_theme_stylebox("fill") as StyleBoxFlat)
   # Full-card transparent touch target: no extra HUD button or layout change.
   var select_hero := Button.new()
   select_hero.name = "SelectHero"
@@ -375,10 +391,19 @@ func refresh() -> void:
   party_names[i].text = str(team.CLASS_NAMES[class_id])
   party_roles[i].text = ROLE_TEXT[role_id]
   party_icons[i].text = ROLE_ICONS[role_id]
-  var hp: int = maxi(0, int(battle.hero_hp[i]))
-  var max_hp: int = maxi(1, int(battle.hero_max_hp[i]))
-  party_bars[i].value = 100.0 * float(hp) / float(max_hp)
-  party_bars[i].modulate = Color.WHITE if hp > 0 else Color("#a39a8e")
+  _update_party_health(i, int(battle.hero_hp[i]), int(battle.hero_max_hp[i]))
  var formation: bool = team.has_formation_bonus()
  party_bonus.text = "✦ FORMATIONS-BONUS" if formation else "4 HELDEN · 1 TEAM"
  party_bonus.add_theme_color_override("font_color", Color("#3a845b") if formation else SKIN.MUTED)
+
+func _update_party_health(slot: int, hp: int, maximum: int) -> void:
+ if slot < 0 or slot >= party_bars.size() or slot >= party_hp_labels.size() or slot >= party_hp_fills.size():
+  return
+ var safe_max: int = maxi(1, maximum)
+ var safe_hp: int = clampi(hp, 0, safe_max)
+ var fraction: float = float(safe_hp) / float(safe_max)
+ party_bars[slot].value = fraction * 100.0
+ party_hp_labels[slot].text = "%d/%d" % [safe_hp, safe_max]
+ var health_tint: Color = Color("#de594c") if fraction <= 0.25 else (Color("#e6ad44") if fraction <= 0.55 else SKIN.GREEN)
+ party_hp_fills[slot].bg_color = health_tint
+ party_hp_labels[slot].add_theme_color_override("font_color", Color("#b02d28") if fraction <= 0.25 else SKIN.INK)
