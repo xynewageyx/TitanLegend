@@ -14,7 +14,7 @@ func _initialize() -> void:
 
 func _inspect() -> void:
     var failures: Array[String] = []
-    print("enemy,mesh_instances,surfaces,material_slots,skin_instances,animations")
+    print("enemy,mesh_instances,surfaces,material_slots,skin_instances,animations,imported_vertices,imported_triangles")
     for enemy in ENEMIES:
         var scene := load("res://assets/enemies/forest/%s.glb" % enemy) as PackedScene
         if scene == null:
@@ -25,9 +25,9 @@ func _inspect() -> void:
             failures.append("%s: cannot instantiate imported GLB" % enemy)
             continue
         root.add_child(instance)
-        var counts := {"meshes": 0, "surfaces": 0, "materials": 0, "skinned": 0, "animations": 0}
+        var counts := {"meshes": 0, "surfaces": 0, "materials": 0, "skinned": 0, "animations": 0, "vertices": 0, "triangles": 0}
         _visit(instance, counts)
-        print("%s,%d,%d,%d,%d,%d" % [enemy, counts.meshes, counts.surfaces, counts.materials, counts.skinned, counts.animations])
+        print("%s,%d,%d,%d,%d,%d,%d,%d" % [enemy, counts.meshes, counts.surfaces, counts.materials, counts.skinned, counts.animations, counts.vertices, counts.triangles])
         if counts.meshes == 0 or counts.surfaces == 0:
             failures.append("%s: imported scene has no mesh surfaces" % enemy)
         instance.queue_free()
@@ -45,7 +45,19 @@ func _visit(node: Node, counts: Dictionary) -> void:
         if mesh_node.mesh != null:
             counts.meshes += 1
             counts.surfaces += mesh_node.mesh.get_surface_count()
-            counts.materials += mesh_node.mesh.get_surface_count()
+            for surface_index in range(mesh_node.mesh.get_surface_count()):
+                var surface_material: Material = mesh_node.get_surface_override_material(surface_index)
+                if surface_material == null:
+                    surface_material = mesh_node.mesh.surface_get_material(surface_index)
+                if surface_material != null or mesh_node.material_override != null:
+                    counts.materials += 1
+                if mesh_node.mesh.surface_get_primitive_type(surface_index) == Mesh.PRIMITIVE_TRIANGLES:
+                    var arrays: Array = mesh_node.mesh.surface_get_arrays(surface_index)
+                    var positions: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+                    var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+                    counts.vertices += positions.size()
+                    var index_count: int = indices.size() if not indices.is_empty() else positions.size()
+                    counts.triangles += index_count / 3
             if mesh_node.skin != null or mesh_node.skeleton != NodePath(""):
                 counts.skinned += 1
     if node is AnimationPlayer:
