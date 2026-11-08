@@ -65,6 +65,26 @@ func _run() -> void:
         if int(weapon_socket.get_child(0).get("rarity")) != 3 or int(chest_socket.get_child(0).get("rarity")) != 3:
             _fail("Equipment rarity was not updated for class %d" % class_id)
             return
+        # Every rarity tier must update both visuals without leaving old nodes.
+        for tier in range(6):
+            if not controller.call("equip_weapon", weapon_type, tier):
+                _fail("Weapon rarity %d failed for class %d" % [tier, class_id])
+                return
+            if not controller.call("equip_armor_slot", "ChestSocket", class_id, tier):
+                _fail("Armor rarity %d failed for class %d" % [tier, class_id])
+                return
+            await process_frame
+            if weapon_socket.get_child_count() != 1 or chest_socket.get_child_count() != 1:
+                _fail("Stacked equipment at rarity %d for class %d" % [tier, class_id])
+                return
+            var active_weapon: Node = weapon_socket.get_child(0)
+            var active_armor: Node = chest_socket.get_child(0)
+            if int(active_weapon.get("rarity")) != tier or int(active_armor.get("rarity")) != tier:
+                _fail("Incorrect rarity %d for class %d" % [tier, class_id])
+                return
+            if active_weapon.get_child_count() == 0 or active_armor.get_child_count() < 2:
+                _fail("Missing equipment geometry at rarity %d for class %d" % [tier, class_id])
+                return
         hero.free()
     print("COMBAT_EQUIPMENT_VISUALS_OK: all 12 classes including Death Knight")
     quit(0)
