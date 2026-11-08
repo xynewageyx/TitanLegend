@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 11:17 UTC**
-Git-Stand: **6e98f94faa613e88ebf696bd9910f758f70cf58b** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 11:26 UTC**
+Git-Stand: **ca7972682c26509c5d34911efc9ca7ca8bc0d30b** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **6e98f94faa613e88ebf696bd9910f758f70cf58b** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
 - `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
-- `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -19,7 +18,7 @@ Git-Stand: **6e98f94faa613e88ebf696bd9910f758f70cf58b** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -47,10 +46,10 @@ Git-Stand: **6e98f94faa613e88ebf696bd9910f758f70cf58b** auf Branch **main**
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
 - `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 - `97fa919` (2026-11-07): Fix regression CI by installing lz4 for UnityFS inspector tests (#107)
-- `2359b6a` (2026-11-07): Add layered original chibi armor with tiered rarity spikes
 
 ## Bereichsübergreifende Änderungen
 
+- `ca79726` (2026-11-08): security: reject Gemini proposals that rewrite tests or make no changes (#154)
 - `6e98f94` (2026-11-08): test: Gemini API failure regressions and symlink path protection (#123)
 - `6516278` (2026-11-08): Handle malformed Gemini JSON as safe diagnostic (#122)
 - `f7ed5eb` (2026-11-08): Render real newlines in Gemini diagnostics and PR description (#121)
