@@ -3,6 +3,12 @@ on:
   schedule:
     - cron: "*/30 * * * *"
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Preview eligible repairs without comments or dispatch"
+        required: false
+        type: boolean
+        default: true
 permissions:
   actions: write
   contents: read
@@ -17,6 +23,7 @@ jobs:
     timeout-minutes: 5
     env:
       GH_TOKEN: ${{ github.token }}
+      GEMINI_MONITOR_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
     steps:
       - uses: actions/checkout@v4
       - name: Find eligible failed PR and dispatch repair

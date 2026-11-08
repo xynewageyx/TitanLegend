@@ -93,6 +93,12 @@ def main():
     if not selected:
         print("No eligible failed PR")
         return
+    dry_run = os.environ.get("GEMINI_MONITOR_DRY_RUN", "").lower() == "true"
+    if dry_run:
+        for item in selected:
+            print("DRY RUN: would dispatch PR", item["pr"], "failed run", item["run"],
+                  "attempt", item["attempt"])
+        return
     for item in selected:
         # Record attempt before dispatch so retries are bounded even if dispatch fails.
         number = item["pr"]
