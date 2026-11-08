@@ -205,6 +205,11 @@ func _run() -> void:
  await process_frame
  var dk: Node3D = team.heroes[0]
  var dk_view: Node3D = dk.get_node("ChibiGLBVisual") as Node3D
+ var toned_surfaces: int = int(dk_view.get_meta("death_knight_tinted_surfaces", 0))
+ if toned_surfaces < 1:
+  _fail("Death Knight GLB white materials were not toned down")
+  return
+ print("DEATH_KNIGHT_MATERIAL_TINT_OK surfaces=%d" % toned_surfaces)
  var dk_skeleton: Skeleton3D = dk_view.get("imported_skeleton") as Skeleton3D
  var dk_controller: Node3D = dk.get_node("EquipmentController") as Node3D
  if dk_skeleton == null or dk_skeleton.get_bone_count() != 24:
