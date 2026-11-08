@@ -199,6 +199,25 @@ func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bo
  if weapon_glb_distance > 3.5:
   _fail("Weapon anchor far away from imported hero: %s, %f" % [label, weapon_glb_distance])
   return false
+ var flash_metrics: Dictionary = {}
+ if pose in ["front_attack", "side_attack"]:
+  var motion: Node3D = hero.get_node_or_null("HeroCombatMotion") as Node3D
+  var fx_root: Node3D = motion.get_node_or_null("AttackFlash") as Node3D if motion != null else null
+  var flash: MeshInstance3D = motion.get("magic_flash") as MeshInstance3D if motion != null else null
+  if fx_root == null or flash == null:
+   _fail("Missing combat flash in screenshot: " + label)
+   return false
+  if fx_root.position.z <= 0.0 or float(motion.get("attack_fx_forward")) <= 0.0:
+   _fail("Imported GLB attack effect appears behind its hero: " + label)
+   return false
+  if flash.scale.x > 1.181 or flash.scale.y > 1.181 or flash.scale.z > 1.181:
+   _fail("Combat flash obscures equipment with excessive scale: " + label)
+   return false
+  flash_metrics = {
+   "origin_hero_local_m": _vec3_metrics(fx_root.position),
+   "pulse_scale": snappedf(flash.scale.x, 0.001),
+   "faces_imported_forward": true
+  }
  results.append({
   "image": label + ".png",
   "class": CLASSES[class_index],
@@ -210,6 +229,7 @@ func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bo
   "weapon_bounds": weapon_bounds,
   "chest_bounds": chest_bounds,
   "weapon_to_chest_center_distance_m": snappedf(weapon_visual.global_position.distance_to(chest_visual.global_position), 0.001),
+  "attack_flash": flash_metrics,
   "camera_view_height_m": snappedf(camera.size, 0.001),
   "camera_view_width_m": snappedf(camera.size * (float(frame.get_width()) / maxf(1.0, float(frame.get_height()))), 0.001),
   "width": frame.get_width(),
