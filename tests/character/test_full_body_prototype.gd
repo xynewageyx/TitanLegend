@@ -33,6 +33,12 @@ func _run() -> void:
         push_error("Rigid torso should be hidden")
         quit(1)
         return
+    for part_name in ["UpperArm_l", "UpperArm_r", "Forearm_l", "Forearm_r", "Thigh_l", "Thigh_r", "Shin_l", "Shin_r"]:
+        var rigid := hero.skeleton.get_node_or_null("Attach_" + part_name) as BoneAttachment3D
+        if rigid == null or rigid.visible:
+            push_error("Rigid duplicate still visible: " + part_name)
+            quit(1)
+            return
     hero.motion = "run"
     hero.animate = true
     hero._process(0.1)
