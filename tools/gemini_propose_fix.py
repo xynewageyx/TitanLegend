@@ -144,6 +144,11 @@ if PR_NUMBER:
         raise SystemExit("PR too large for automatic repair")
     # Refuse stale branches and never force-push another contributor's changes.
     expected_head = head["sha"]
+    run_info = json.loads(command("gh", "run", "view", RUN_ID, "--repo",
+                                  os.environ["GITHUB_REPOSITORY"], "--json",
+                                  "headSha,conclusion").stdout)
+    if run_info.get("headSha") != expected_head or run_info.get("conclusion") != "failure":
+        raise SystemExit("Failed CI run must belong to the current PR head")
     command("git", "fetch", "origin", branch_name)
     command("git", "checkout", "-B", branch_name, "FETCH_HEAD")
     if command("git", "rev-parse", "HEAD").stdout.strip() != expected_head:
@@ -286,9 +291,8 @@ if not PR_NUMBER:
 command("git", "add", "--", *[str(p.relative_to(ROOT)) for p in updated])
 command("git", "commit", "-m", "Propose Gemini-assisted fix for CI run " + RUN_ID)
 if PR_NUMBER:
-    # Lease prevents overwriting changes pushed by a human during analysis.
-    command("git", "push", "--force-with-lease=refs/heads/" + branch + ":" + expected_head,
-            "origin", "HEAD:refs/heads/" + branch)
+    # Fast-forward only: never rewrite commits added by a human.
+    command("git", "push", "origin", "HEAD:refs/heads/" + branch)
 else:
     command("git", "push", "--set-upstream", "origin", branch)
 body = ("AI-generated, unreviewed proposed source edits for failed run #" + RUN_ID +
