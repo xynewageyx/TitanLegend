@@ -45,16 +45,12 @@ func build_weighted_limbs() -> bool:
             remove_child(container)
             container.free()
             return false
-    # Avoid rendering the original rigid upper limb sections on top of the skinned ones.
-    for bone_name in ["upper_arm_l", "upper_arm_r", "upper_leg_l", "upper_leg_r"]:
-        for child in skeleton.get_children():
-            if child is BoneAttachment3D and child.name == "Attach_" + _rigid_part_name(bone_name):
-                child.visible = false
+    # Both upper AND lower rigid pieces would otherwise overlap the skinned mesh.
+    for part_name in ["UpperArm_l", "UpperArm_r", "Forearm_l", "Forearm_r", "Thigh_l", "Thigh_r", "Shin_l", "Shin_r"]:
+        var rigid := skeleton.get_node_or_null("Attach_" + part_name) as BoneAttachment3D
+        if rigid != null:
+            rigid.visible = false
     return true
-
-func _rigid_part_name(bone_name: String) -> String:
-    var prefix := "UpperArm_" if bone_name.begins_with("upper_arm_") else "Thigh_"
-    return prefix + bone_name.substr(bone_name.length() - 1)
 
 func build_weighted_torso() -> bool:
     if skeleton == null:
