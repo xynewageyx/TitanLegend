@@ -75,6 +75,7 @@ jobs:
           set -euo pipefail
           timeout 120s godot --headless --path . --quit-after 900 --script res://tests/test_live_formation_animated_equipment.gd 2>&1 | tee /tmp/titan-live-formation-rig.log
           grep -Fq 'LIVE_FORMATION_ANIMATED_EQUIPMENT_OK heroes=4 bone_sockets=60 imported_sockets=4' /tmp/titan-live-formation-rig.log
+          grep -Fq 'LIVE_DEATH_KNIGHT_24BONE_OK weapon_bone=Hand_R_2' /tmp/titan-live-formation-rig.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/titan-live-formation-rig.log; then
             exit 1
           fi
