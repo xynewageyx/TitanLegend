@@ -86,7 +86,7 @@ func _run() -> void:
    var chosen_name: String = owned_name if player.has_animation(owned_name) else "Attack"
    var attack: Animation = player.get_animation(chosen_name)
    var arm_socket: Node3D = IMPORTED_SOCKETS.resolve(skeleton, "RightHandSocket")
-   var arm_idx: int = skeleton.find_bone("Arm_R")
+   var arm_idx: int = skeleton.find_bone(IMPORTED_SOCKETS.selected_bone(skeleton, "RightHandSocket"))
    var actual_start: float = maxf(0.0, attack.length - 0.95)
    var actual_peak: float = maxf(actual_start, attack.length - 0.35)
    player.play(chosen_name)
@@ -118,13 +118,9 @@ func _run() -> void:
    print("CHIBI_IMPORTED_POSE_PROBE class=%s name=%s bone_moved=%s socket_moved=%s start=%f peak=%f length=%f" %
     [hero_class, chosen_name, str(bone_moved), str(socket_moved), actual_start, actual_peak, attack.length])
    if not bone_moved or not socket_moved:
-    if hero_class == "death_knight":
-     print("DEATH_KNIGHT_IMPORT_ATTACK_UNVERIFIED: original clip does not move Arm_R")
-    else:
-     _fail("Imported GLB animation did not move its weapon bone and socket for " + hero_class)
-     return
-   else:
-    moving_arms += 1
+    _fail("Imported GLB animation did not move its selected weapon bone and socket for " + hero_class)
+    return
+   moving_arms += 1
   total_bones += skeleton.get_bone_count()
   print("CHIBI_IMPORTED_RIG class=%s bones=%d clips=%s matched=%d" %
     [hero_class, skeleton.get_bone_count(), str(clips), motion_matches])
