@@ -712,20 +712,25 @@ func _build_hero(hero: Node3D, role: int, color: Color) -> void:
   var shoulder: MeshInstance3D = VisualFactory.sphere(hero, 0.20, Vector3(shoulder_side * 0.50, 1.58, 0), color.lightened(0.16))
   shoulder.scale = Vector3(1.15, 0.70, 1.15)
  # Limbs are rendered exclusively by HeroCombatMotion so they animate without duplicates.
+ # Old static class-role props are retained only as fallback when no main-hand
+ # inventory weapon is equipped. Do not hide the headgear, shield or quiver.
+ var legacy_role_weapon := Node3D.new()
+ legacy_role_weapon.name = "LegacyRoleWeapon"
+ hero.add_child(legacy_role_weapon)
  if role == 0: # Krieger: Helm, Schild und Schwert
   VisualFactory.box(hero, Vector3(0.66, 0.22, 0.65), Vector3(0, 2.19, 0), Color("#9ea9b7"))
   VisualFactory.box(hero, Vector3(0.58, 0.75, 0.15), Vector3(-0.65, 1.2, -0.2), Color("#66798c"))
-  VisualFactory.box(hero, Vector3(0.12, 1.5, 0.12), Vector3(0.73, 1.5, -0.05), Color("#e0e5eb"))
+  VisualFactory.box(legacy_role_weapon, Vector3(0.12, 1.5, 0.12), Vector3(0.73, 1.5, -0.05), Color("#e0e5eb"))
  elif role == 1: # Magier: Stab und Kristall
-  VisualFactory.cylinder(hero, 2.25, 0.07, Vector3(0.66, 1.2, 0), Color("#69472c"))
-  VisualFactory.sphere(hero, 0.23, Vector3(0.66, 2.45, 0), Color("#53d7ff"))
+  VisualFactory.cylinder(legacy_role_weapon, 2.25, 0.07, Vector3(0.66, 1.2, 0), Color("#69472c"))
+  VisualFactory.sphere(legacy_role_weapon, 0.23, Vector3(0.66, 2.45, 0), Color("#53d7ff"))
   VisualFactory.sphere(hero, 0.46, Vector3(0, 2.25, 0), Color("#344f99"))
  elif role == 2: # Jaeger: Bogen und Kocher
-  VisualFactory.cylinder(hero, 1.7, 0.07, Vector3(0.67, 1.24, 0), Color("#a97542"))
+  VisualFactory.cylinder(legacy_role_weapon, 1.7, 0.07, Vector3(0.67, 1.24, 0), Color("#a97542"))
   VisualFactory.box(hero, Vector3(0.32, 0.85, 0.34), Vector3(-0.44, 1.25, 0.25), Color("#4a633a"))
  elif role == 3: # Heiler: Lichtkristall und Umhang
   VisualFactory.box(hero, Vector3(0.85, 1.4, 0.12), Vector3(0, 1.0, 0.4), Color("#e8d6a1"))
-  VisualFactory.sphere(hero, 0.28, Vector3(0.67, 1.52, -0.1), Color("#ffe888"))
+  VisualFactory.sphere(legacy_role_weapon, 0.28, Vector3(0.67, 1.52, -0.1), Color("#ffe888"))
 
 func _build_pet(pet: Node3D, role: int, color: Color) -> void:
  VisualFactory.sphere(pet, 0.31, Vector3(0, 0.44, 0), color.lightened(0.28))
