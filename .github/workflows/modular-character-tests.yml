@@ -75,3 +75,12 @@ jobs:
             exit 1
           fi
           grep -q 'BONE EQUIPMENT SOCKET SMOKE PASSED' /tmp/bone-equipment-motion.log
+      - name: Verify all twelve combat equipment visuals
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/character/test_combat_equipment_visuals.gd 2>&1 | tee /tmp/combat-equipment-visuals.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/combat-equipment-visuals.log; then
+            exit 1
+          fi
+          grep -q 'COMBAT_EQUIPMENT_VISUALS_OK: all 12 classes including Death Knight' /tmp/combat-equipment-visuals.log
