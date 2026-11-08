@@ -3,6 +3,7 @@ extends Node3D
 ## Expected optional Marker3D children: RightHandSocket, LeftHandSocket,
 ## HeadSocket, ChestSocket, BackSocket. Works with animated markers.
 const WEAPON_PREVIEW = preload("res://scripts/weapons/procedural_weapon_preview.gd")
+const IMPORTED_SOCKETS = preload("res://scripts/equipment/chibi_imported_equipment_sockets.gd")
 const ARMOR_PREVIEW = preload("res://scripts/equipment/chibi_armor_piece.gd")
 const HAIR_PREVIEW = preload("res://scripts/equipment/procedural_hairstyle.gd")
 const SLOT_NAMES := ["HeadSocket", "ChestSocket", "BackSocket", "ShoulderLeftSocket", "ShoulderRightSocket", "ArmLeftSocket", "ArmRightSocket", "GloveLeftSocket", "GloveRightSocket", "LegLeftSocket", "LegRightSocket", "BootLeftSocket", "BootRightSocket"]
@@ -11,8 +12,14 @@ func _socket(name: String) -> Node3D:
     # Prefer animated bone attachments over static formation markers.
     var hero := get_parent()
     if hero is Node3D:
-        # The live four-hero preview rig takes priority over imported GLB skeletons.
-        # Both the stable modular prefab and old static markers still work.
+        # The original GLB model drives the visible character when available.
+        # Prefer its animated 8-/24-bone sockets, then the helper 18-bone rig.
+        var chibi := hero.get_node_or_null("ChibiGLBVisual")
+        if chibi != null:
+            var imported: Skeleton3D = chibi.get("imported_skeleton") as Skeleton3D
+            var glb_socket: Node3D = IMPORTED_SOCKETS.resolve(imported, name)
+            if glb_socket != null:
+                return glb_socket
         var skeleton := hero.get_node_or_null("LiveFormationRig/Skeleton3D") as Skeleton3D
         if skeleton == null:
             skeleton = hero.find_child("Skeleton3D", true, false) as Skeleton3D
