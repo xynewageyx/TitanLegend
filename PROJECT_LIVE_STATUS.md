@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:44 UTC**
-Git-Stand: **a34690f5f925d22716b00f3d31101c3354c044ce** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:47 UTC**
+Git-Stand: **c4ac39b9ad275daef3132e51e05cc5ec5cf1c67c** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -17,7 +17,7 @@ Git-Stand: **a34690f5f925d22716b00f3d31101c3354c044ce** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -44,10 +44,10 @@ Git-Stand: **a34690f5f925d22716b00f3d31101c3354c044ce** auf Branch **main**
 - `5976557` (2026-11-08): feat: enable bounded Gemini repairs for all same-repo PRs (#172)
 - `427156a` (2026-11-08): feat: automatically monitor labeled PR failures and dispatch bounded Gemini repairs (#171)
 - `877cef6` (2026-11-08): feat: Gemini can repair labeled existing pull requests (#170)
-- `10deca6` (2026-11-08): Test animated equipment attachment movement and restore pose in Godot (#162)
 
 ## Bereichsübergreifende Änderungen
 
+- `c4ac39b` (2026-11-08): fix: paginate Gemini PR discovery and repair attempt history (#176)
 - `a34690f` (2026-11-08): feat: repair up to five failed PRs per Gemini monitor cycle (#174)
 - `2edf30a` (2026-11-08): fix: deterministic Gemini monitor selection and SHA audit (#173)
 - `37106e4` (2026-11-08): fix: safely reject malformed Gemini API response structures (#169)
