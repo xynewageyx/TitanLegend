@@ -244,7 +244,11 @@ func _run() -> void:
    return
   pictures += 1
   var weapon_socket: Node3D = ctrl.call("_socket", "RightHandSocket") as Node3D
-  var weapon_before: Transform3D = weapon_socket.get_child(0).global_transform
+  var active_weapon: Node3D = weapon_socket.get_child(0) as Node3D if weapon_socket != null and weapon_socket.get_child_count() == 1 else null
+  if active_weapon == null:
+   _fail("Missing bone-bound weapon before attack: " + CLASSES[i])
+   return
+  var weapon_before: Transform3D = active_weapon.global_transform
   hero.get_node("HeroCombatMotion").call("play_attack")
   chibi.call("play_clip", "Attack")
   var clip: Animation = animator.get_animation(animator.current_animation)
@@ -254,7 +258,7 @@ func _run() -> void:
    return
   pictures += 1
   # A still weapon despite an imported attack pose is a rendering regression.
-  var weapon_after: Transform3D = weapon_socket.get_child(0).global_transform
+  var weapon_after: Transform3D = active_weapon.global_transform
   if weapon_before.is_equal_approx(weapon_after):
    _fail("Equipped weapon stayed static during attack: " + CLASSES[i])
    return
