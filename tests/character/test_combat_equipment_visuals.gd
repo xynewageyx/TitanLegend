@@ -36,7 +36,6 @@ func _run() -> void:
         if not controller.call("equip_armor_slot", "ChestSocket", class_id, 5):
             _fail("Could not equip armor for class %d" % class_id)
             return
-        await process_frame
         var weapon_socket := controller.get_node_or_null("RightHandSocket") as Node3D
         var chest_socket := controller.get_node_or_null("ChestSocket") as Node3D
         if weapon_socket == null or chest_socket == null:
@@ -53,7 +52,6 @@ func _run() -> void:
         if weapon_visual.get_child_count() == 0 or armor_visual.get_child_count() < 2:
             _fail("Empty weapon or armor geometry for class %d" % class_id)
             return
-        hero.queue_free()
-        await process_frame
+        hero.free()
     print("COMBAT_EQUIPMENT_VISUALS_OK: all 12 classes including Death Knight")
     quit(0)
