@@ -41,7 +41,7 @@ func setup_rig(skeleton: Skeleton3D) -> bool:
     if skeleton == null or get_parent() != skeleton or skeleton.get_bone_count() == 0:
         return false
     # Do not overwrite hand-authored animations or imported animation libraries.
-    if get_animation_library("titan") != null:
+    if has_animation_library("titan"):
         return true
     for motion_name in MOTIONS:
         for bone_name in MOTIONS[motion_name]:
