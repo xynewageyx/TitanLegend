@@ -1,14 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 17:18 UTC**
-Git-Stand: **87b2164704e017653c46b6d606094bf162d01695** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 17:46 UTC**
+Git-Stand: **555ff1ca8541f26776d341b91db1b6ddbc35590a** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -18,7 +18,6 @@ Git-Stand: **87b2164704e017653c46b6d606094bf162d01695** auf Branch **main**
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
-- `f3b4370` (2026-11-08): Test all twelve classes in modular armor smoke (#179)
 
 ### UI — UI-Chat
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
@@ -44,11 +43,11 @@ Git-Stand: **87b2164704e017653c46b6d606094bf162d01695** auf Branch **main**
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 - `87b2164` (2026-11-08): Fix Android HUD overlays, network error_22, and More-menu access (#191)
 - `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
 - `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
-- `e6c0733` (2026-11-08): fix: allow Gemini monitor to comment on target PRs (#178)
 
 ## Bereichsübergreifende Änderungen
 
