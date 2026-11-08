@@ -39,6 +39,22 @@ class ForestGeometryTests(unittest.TestCase):
             write_glb(p, [{"attributes": {"POSITION": 0}, "mode": 5}], [5])
             self.assertEqual(module.analyze(p)["triangles"], 3)
 
+    def test_mesh_instancing_counts_scene_triangles(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p = Path(temp) / "instanced.glb"
+            write_glb(p, [{"attributes": {"POSITION": 0}, "indices": 1}], [3, 6])
+            raw = p.read_bytes()
+            length = struct.unpack_from("<I", raw, 12)[0]
+            doc = json.loads(raw[20:20 + length])
+            doc["nodes"] = [{"mesh": 0}, {"mesh": 0}, {"mesh": 0}]
+            chunk = json.dumps(doc).encode("utf-8")
+            chunk += b" " * (-len(chunk) % 4)
+            p.write_bytes(struct.pack("<4sIIII", b"glTF", 2, 20 + len(chunk), len(chunk), 0x4E4F534A) + chunk)
+            row = module.analyze(p)
+            self.assertEqual(row["triangles"], 2)
+            self.assertEqual(row["mesh_instances"], 3)
+            self.assertEqual(row["scene_triangles"], 6)
+
     def test_invalid_triangle_indices_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             p = Path(temp) / "bad.glb"
