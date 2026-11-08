@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 14:52 UTC**
-Git-Stand: **f3b4370cbefad7a613134f449aa9c05200abb9d4** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 14:53 UTC**
+Git-Stand: **e6c0733d270df1c1629c955c4302ccffbc655629** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -41,6 +41,7 @@ Git-Stand: **f3b4370cbefad7a613134f449aa9c05200abb9d4** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `e6c0733` (2026-11-08): fix: allow Gemini monitor to comment on target PRs (#178)
 - `20a04b0` (2026-11-08): feat: safe dry-run mode for Gemini automatic PR monitor (#177)
 - `5976557` (2026-11-08): feat: enable bounded Gemini repairs for all same-repo PRs (#172)
 - `427156a` (2026-11-08): feat: automatically monitor labeled PR failures and dispatch bounded Gemini repairs (#171)
@@ -52,7 +53,6 @@ Git-Stand: **f3b4370cbefad7a613134f449aa9c05200abb9d4** auf Branch **main**
 - `a34690f` (2026-11-08): feat: repair up to five failed PRs per Gemini monitor cycle (#174)
 - `2edf30a` (2026-11-08): fix: deterministic Gemini monitor selection and SHA audit (#173)
 - `37106e4` (2026-11-08): fix: safely reject malformed Gemini API response structures (#169)
-- `5d520d6` (2026-11-08): security: sanitize untrusted CI logs before Gemini proposals (#168)
 
 ## Regeln für alle Fach-Chats
 
