@@ -70,3 +70,18 @@ For an independently authored, stylized Godot 4.7.2 forest intended for Android,
 - `ulala_forest_lightmap_assignment_2026_11_08.csv`
 
 **Remaining:** inspect `skymat2` reference, identify referenced original shader metadata/programs, validate scene light probes, compare quality and performance across Android Godot renderers. **No game graphics changed.**
+
+
+## Skybox source bundle verified end-to-end
+
+The scene's `RenderSettings.m_SkyboxMaterial` pointer (`fileID=11, pathID=-8064568243870292543`) maps through the Forest external dependency table to `assets/environment/materials/skymat2.mat_ab_shared` (serialized CAB `CAB-3883c56e6f974269502c6e71ee578691`). The exact **classID 21 Material** with that pathID is named `SkyMat2`.
+
+- The material's `_Tex` pointer resolves to the **classID 89 Cubemap**, `pathID=9004076750916660870`, named `SkyMat2`.
+- Original Cubemap metadata: **1024 × 1024**, **6 faces**, **RGBA32** (TextureFormat 4), **1 mip level**, **4,194,304 bytes per face** and **25,165,824 streamed bytes** in total (**24 MiB**).
+- The material stores shader keywords `_EMISSION _SUNDISK_HIGH_QUALITY`, `_Exposure=0.53`, `_SunSize=0.04`, `_SunDisk=2`, `_AtmosphereThickness=1` and `_Rotation=0`. These are **serialized parameters**, not proof of a particular compiled sky shader or runtime appearance.
+- The same source bundle contains Texture2D objects `Forest_FR1` (**1024² ETC_RGB4**), `Forest_UP` (**1024² ETC_RGB4**) and `Forest_BT` (**1×1 RGB24**). The decoded `SkyMat2` Cubemap's six `m_SourceTextures` pointers are null; these other textures should **not** be asserted to be live inputs to the cubemap shader.
+- The source resource stream size is **26,563,956 bytes**. Its four image ranges occupy the stream exactly except for **one alignment byte at offset 1,398,131**; all stream ends and serialized object boundaries validate.
+
+This verifies a **large pre-existing baked Cubemap sky asset** (not six shaders running per frame). Its memory footprint is material for mobile device budget discussions, but this source is not a justified Godot runtime memory estimate. No texture pixels or source material programs were copied.
+
+Companion metadata report: `ulala_forest_skybox_skymat2_direct_verified_2026_11_08.json`.
