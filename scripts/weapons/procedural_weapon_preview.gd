@@ -16,6 +16,30 @@ const OBSIDIAN := Color("#242631")
 const BONE := Color("#b4a5a0")
 const LEATHER := Color("#5c423b")
 
+## Grip point in authored weapon-local coordinates. The equipment controller
+## offsets the weapon by the *negative* grip, placing the actual handle at the
+## animated BoneAttachment3D origin instead of putting the object center there.
+## These points match the geometry defined in build(), and never depend on rarity.
+static func grip_local_point(kind: int) -> Vector3:
+    match clampi(kind, 0, 11):
+        0, 1, 4:
+            return Vector3(0.0, -0.21, 0.0) # LeatherGrip
+        2:
+            return Vector3(0.0, -0.15, 0.0) # AxeHaft
+        3:
+            return Vector3(0.0, -0.15, 0.0) # HammerHandle
+        5:
+            return Vector3(0.0, -0.18, 0.0) # SpearShaft
+        6, 7:
+            return Vector3(0.0, 0.43, 0.0) # Bow / crossbow center grip
+        8, 9:
+            return Vector3(0.0, -0.12, 0.0) # StaffCore
+        10:
+            return Vector3(0.0, 0.53, 0.0) # KiteShield hand grip
+        11:
+            return Vector3(0.0, -0.05, 0.0) # ClawGrip
+    return Vector3.ZERO
+
 func _ready() -> void:
     build()
 
