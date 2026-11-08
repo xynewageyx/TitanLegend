@@ -7,9 +7,14 @@ var imported_skeleton: Skeleton3D
 var rig_audit: Dictionary = {}
 var animation_player: AnimationPlayer
 var active_clip: String = ""
+var class_index: int = 0
+# Blender's original GLB exports contain clips with an absolute keyframe
+# offset. Seek into their actual motion interval to avoid seconds of stillness.
+const CLIP_WINDOW := {"Idle": 1.4, "Walk": 1.1, "Attack": 0.95, "Hit": 0.65, "Dodge": 0.90}
 
 func configure(class_id: int) -> void:
  var index: int = clampi(class_id, 0, NAMES.size() - 1)
+ class_index = index
  var path: String = "res://assets/heroes/chibi/" + NAMES[index] + ".glb"
  if not ResourceLoader.exists(path):
   return
@@ -64,11 +69,21 @@ func _find_animation_player(node: Node) -> AnimationPlayer:
 func play_clip(clip: String) -> void:
  if animation_player == null or clip == active_clip:
   return
- for name in animation_player.get_animation_list():
-  if String(name).ends_with(clip):
-   animation_player.play(name, 0.15)
-   active_clip = clip
-   return
+ # Blender may export accumulated NLA actions with _001, _002 ... suffixes.
+ # Prefer the clip belonging to this character, not a previous class's action.
+ var owned_clip: String = clip + "_%03d" % class_index
+ var chosen: String = owned_clip if class_index > 0 and animation_player.has_animation(owned_clip) else clip
+ if not animation_player.has_animation(chosen):
+  return
+ var animation: Animation = animation_player.get_animation(chosen)
+ animation_player.play(chosen, 0.15)
+ # Only trims the inactive lead-in of source clips. Already normalized clips
+ # (shorter than their expected action window) remain unchanged.
+ var window: float = float(CLIP_WINDOW.get(clip, animation.length))
+ var motion_start: float = maxf(0.0, animation.length - window)
+ if motion_start > 0.0:
+  animation_player.seek(motion_start, true)
+ active_clip = clip
 
 func _process(_delta: float) -> void:
  var hero: Node = get_parent()
