@@ -114,13 +114,16 @@ func _run() -> void:
  if anim.current_animation != "titan/attack":
   _fail("Attack event did not start bone animation")
   return
+ var attack: Animation = glb_player.get_animation("Attack")
+ var motion_start: float = maxf(0.0, attack.length - 0.95)
+ var motion_peak: float = maxf(motion_start, attack.length - 0.35)
  glb_player.play("Attack")
- glb_player.seek(0.0, true)
+ glb_player.seek(motion_start, true)
  rig.force_update_all_bone_transforms()
  await process_frame
  var weapon_before: Basis = weapon.global_transform.basis
  var chest_before: Basis = chest.global_transform.basis
- glb_player.seek(0.40, true)
+ glb_player.seek(motion_peak, true)
  rig.force_update_all_bone_transforms()
  await process_frame
  if weapon_before.is_equal_approx(weapon.global_transform.basis):
