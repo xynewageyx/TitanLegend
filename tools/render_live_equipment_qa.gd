@@ -150,7 +150,7 @@ func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
  # Leave 0.45m safety margin for fast-moving cloth and weapon tips.
  var needed: float = maxf(high.y - low.y + 0.45, (high.x - low.x + 0.45) / aspect)
  camera.size = maxf(3.95, needed)
- if not is_finite(camera.size) or camera.size > 12.0:
+ if is_nan(camera.size) or camera.size > 12.0:
   _fail("Equipment is too far from hero for a readable QA frame")
   return false
  return true
