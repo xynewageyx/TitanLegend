@@ -185,7 +185,7 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
 
     def test_class_menu_validates_death_knight_role_before_apply(self):
         class_menu = (ROOT / "scripts/class_menu.gd").read_text(encoding="utf-8")
-        self.assertIn("chosen_class = class_selector.get_selected_id()", class_menu)
+        self.assertIn("var chosen_class: int = class_selector.get_selected_id()", class_menu)
         self.assertIn("chosen_role not in team_formation.ALLOWED_ROLES[chosen_class]", class_menu)
         self.assertIn("if not team_formation.set_class(slot, chosen_class):", class_menu)
 

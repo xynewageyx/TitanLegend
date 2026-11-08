@@ -37,6 +37,39 @@ func _run_tests() -> void:
   if hero_strip.get_node_or_null("PartySlot" + str(slot)) == null:
    _fail("Hero portrait slot missing: " + str(slot))
    return
+ # Portrait health must be readable in numbers as well as bar colors.
+ var hp_labels: Array = overlay.get("party_hp_labels")
+ var hp_bars: Array = overlay.get("party_bars")
+ var hp_fills: Array = overlay.get("party_hp_fills")
+ if hp_labels.size() != 4 or hp_bars.size() != 4 or hp_fills.size() != 4:
+  _fail("Expected numeric health and a fill style for every hero")
+  return
+ var hp_samples := [311, 140, 25, 0]
+ for i in range(4):
+  overlay.call("_update_party_health", i, hp_samples[i], 311)
+  var label: Label = hp_labels[i] as Label
+  var bar: ProgressBar = hp_bars[i] as ProgressBar
+  var fill_style: StyleBoxFlat = hp_fills[i] as StyleBoxFlat
+  if label == null or bar == null or fill_style == null:
+   _fail("Hero health UI component missing: " + str(i))
+   return
+  if label.text != "%d/311" % hp_samples[i]:
+   _fail("Hero health number is incorrect at slot " + str(i))
+   return
+  # Godot ProgressBar rounds to its step (1% by default).
+  if absf(bar.value - 100.0 * float(hp_samples[i]) / 311.0) > 0.51:
+   _fail("Hero health progress is incorrect at slot " + str(i))
+   return
+  if label.get_theme_color("font_color") == Color.TRANSPARENT:
+   _fail("Health label cannot be transparent")
+   return
+ if hp_fills[0].bg_color == hp_fills[1].bg_color or hp_fills[1].bg_color == hp_fills[2].bg_color:
+  _fail("Health must distinguish safe, wounded and critical states")
+  return
+ overlay.call("_update_party_health", 0, -20, 0)
+ if hp_labels[0].text != "0/1" or not is_equal_approx(hp_bars[0].value, 0.0):
+  _fail("Health display should safely handle invalid values")
+  return
  # Each hero portrait must be a real touch target that opens the correct slot.
  var party_buttons: Array = overlay.get("party_buttons")
  if party_buttons.size() != 4:
