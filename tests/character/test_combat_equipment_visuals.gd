@@ -66,6 +66,7 @@ func _run() -> void:
             _fail("Equipment rarity was not updated for class %d" % class_id)
             return
         # Every rarity tier must update both visuals without leaving old nodes.
+        var previous_weapon_meshes := 0
         for tier in range(6):
             if not controller.call("equip_weapon", weapon_type, tier):
                 _fail("Weapon rarity %d failed for class %d" % [tier, class_id])
@@ -85,6 +86,10 @@ func _run() -> void:
             if active_weapon.get_child_count() == 0 or active_armor.get_child_count() < 2:
                 _fail("Missing equipment geometry at rarity %d for class %d" % [tier, class_id])
                 return
+            if active_weapon.get_child_count() < previous_weapon_meshes:
+                _fail("Higher rarity lost weapon details at tier %d for class %d" % [tier, class_id])
+                return
+            previous_weapon_meshes = active_weapon.get_child_count()
         hero.free()
     print("COMBAT_EQUIPMENT_VISUALS_OK: all 12 classes including Death Knight")
     quit(0)
