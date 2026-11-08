@@ -67,6 +67,8 @@ func _run() -> void:
                 var changed_pose := original_pose.translated(Vector3(0.17, 0.0, 0.0))
                 skeleton.set_bone_pose(arm_index, changed_pose)
                 skeleton.force_update_all_bone_transforms()
+                await process_frame
+                await process_frame
                 var after := right_marker.global_transform.origin
                 if before.distance_to(after) < 0.01:
                     push_error("%s: RightHandSocket did not follow Arm_R pose" % hero_name)
