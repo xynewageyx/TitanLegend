@@ -48,7 +48,8 @@ jobs:
             test_skinned_torso.gd \
             test_full_body_prototype.gd \
             test_armor_preview.gd \
-            test_armor_showcase.gd; do
+            test_armor_showcase.gd \
+            test_armor_tier_gallery.gd; do
             echo "::group::$test"
             godot --headless --path . --script "res://tests/character/$test" 2>&1 | tee "/tmp/$test.log"
             if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' "/tmp/$test.log"; then
