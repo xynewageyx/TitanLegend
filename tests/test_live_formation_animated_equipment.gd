@@ -168,6 +168,10 @@ func _run() -> void:
    return
  # Class-specific imported NLA suffixes must be selected automatically,
  # otherwise mage/paladin/etc can accidentally play a previous class's clip.
+ # Clear the prior hit reaction first: hit intentionally has higher priority.
+ var mage_motion: Node3D = team.heroes[1].get_node("HeroCombatMotion") as Node3D
+ mage_motion.set("hit_remaining", 0.0)
+ mage_motion.set("dodge_remaining", 0.0)
  team.play_attack_for_hero(1) # Default team second hero = mage, class 6.
  await process_frame
  var mage_view: Node3D = team.heroes[1].get_node("ChibiGLBVisual") as Node3D
