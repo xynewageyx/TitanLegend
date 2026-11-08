@@ -264,7 +264,8 @@ if not isinstance(edits, list) or not 1 <= len(edits) <= MAX_EDITS:
         with open(summary, "a") as output:
             output.write(report)
     Path("gemini-draft-diagnostic.md").write_text(report)
-    raise SystemExit(0)
+    # No patch was committed; do not report a green repair job.
+    raise SystemExit(1)
 updated = {}
 for edit in edits:
     if not isinstance(edit, dict):
