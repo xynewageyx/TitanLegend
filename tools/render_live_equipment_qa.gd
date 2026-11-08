@@ -30,16 +30,16 @@ func _make_scene() -> bool:
  settings.background_color = Color("#202936")
  settings.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
  settings.ambient_light_color = Color("#ffffff")
- settings.ambient_light_energy = 1.25
+ settings.ambient_light_energy = 0.70
  environment.environment = settings
  world.add_child(environment)
  var sun := DirectionalLight3D.new()
- sun.light_energy = 1.3
+ sun.light_energy = 1.0
  sun.rotation_degrees = Vector3(-42, 30, 0)
  world.add_child(sun)
  var fill := OmniLight3D.new()
  fill.position = Vector3(3.0, 4.5, 3.5)
- fill.light_energy = 1.4
+ fill.light_energy = 0.35
  fill.omni_range = 12.0
  world.add_child(fill)
  var floor := MeshInstance3D.new()
@@ -150,6 +150,12 @@ func _run() -> void:
   hero.rotation = Vector3.ZERO
   for other in range(1, team.heroes.size()):
    team.heroes[other].visible = false
+  # The gallery is for character geometry only, not UI or passive companions.
+  # The live battle retains both; only this isolated QA camera hides them.
+  for qa_hidden in ["HeroHealthBar", "PassivePet"]:
+   var extra: Node3D = hero.get_node_or_null(qa_hidden) as Node3D
+   if extra != null:
+    extra.visible = false
   var ctrl: Node3D = hero.get_node_or_null("EquipmentController")
   if ctrl == null:
    _fail("Missing equipment controller for " + CLASSES[i])
