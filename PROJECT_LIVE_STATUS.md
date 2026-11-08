@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 16:13 UTC**
-Git-Stand: **cdcf754af44e431e9e450c5674ef0b73fc91de7d** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 16:58 UTC**
+Git-Stand: **83010ff0402810d4066d5dfa6c9cfb6b28f17727** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -51,10 +51,10 @@ Git-Stand: **cdcf754af44e431e9e450c5674ef0b73fc91de7d** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `83010ff` (2026-11-08): fix: start Gemini repair validation before PR notifications (#190)
 - `cdcf754` (2026-11-08): fix: do not mark Gemini repair successful without a code patch (#189)
 - `04b2f58` (2026-11-08): fix: protect Gemini auto-repair from API 429 quota loops (#187)
 - `f4b246f` (2026-11-08): fix: update existing PR after Gemini repair instead of creating duplicate (#184)
-- `c4ac39b` (2026-11-08): fix: paginate Gemini PR discovery and repair attempt history (#176)
 
 ## Regeln für alle Fach-Chats
 
