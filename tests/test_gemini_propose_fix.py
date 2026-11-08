@@ -137,6 +137,38 @@ class GeminiValidationDispatchTests(unittest.TestCase):
                         SOURCE.rfind("dispatch_validations(branch)"))
 
 
+class GeminiNoSafePatchTests(unittest.TestCase):
+    def test_empty_proposal_fails_and_keeps_diagnostic(self):
+        no_edits_branch = next(
+            node for node in TREE.body
+            if isinstance(node, ast.If)
+            and "not 1 <= len(edits) <= MAX_EDITS" in ast.unparse(node.test)
+        )
+        namespace = {
+            "edits": [],
+            "MAX_EDITS": 3,
+            "RUN_ID": "42493250796",
+            "ROOT": Path("/tmp"),
+            "files": [],
+            "reason": "No safe source replacement",
+            "os": __import__("os"),
+            "Path": Path,
+        }
+        with patch.dict(namespace["os"].environ, {"GITHUB_STEP_SUMMARY": ""}), \\
+             patch.object(Path, "write_text") as write_diagnostic, \\
+             self.assertRaises(SystemExit) as caught:
+            exec(compile(ast.Module(body=[no_edits_branch], type_ignores=[]),
+                         str(SCRIPT), "exec"), namespace)
+        self.assertEqual(caught.exception.code, 1)
+        write_diagnostic.assert_called_once()
+        self.assertIn("No safe edits proposed", write_diagnostic.call_args.args[0])
+
+    def test_diagnostics_upload_even_when_repair_fails(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/gemini-draft-fix.yml").read_text()
+        self.assertIn("if: always()", workflow)
+        self.assertIn("gemini-draft-diagnostic.md", workflow)
+
+
 class GeminiExistingPrTests(unittest.TestCase):
     def test_existing_pr_receives_comment_instead_of_new_pr(self):
         self.assertIn('if PR_NUMBER:\n    # This branch already has an open PR.', SOURCE)
