@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/character/modular_character.gd" id="1_controller"]
 [ext_resource type="Script" path="res://scripts/equipment/hero_equipment_sockets.gd" id="2_equipment"]
+[ext_resource type="Script" path="res://scripts/character/titan_modular_rig_animation.gd" id="3_motion"]
 
 [node name="TitanModularCharacter" type="Node3D"]
 script = ExtResource("1_controller")
 
 [node name="Skeleton3D" type="Skeleton3D" parent="."]
+
+[node name="TitanAnimations" type="AnimationPlayer" parent="Skeleton3D"]
+script = ExtResource("3_motion")
 
 [node name="Slots" type="Node3D" parent="."]
 
