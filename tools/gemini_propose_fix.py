@@ -90,13 +90,26 @@ def generate(prompt):
                         result = json.load(response)
                     except json.JSONDecodeError:
                         raise RuntimeError("Gemini returned invalid JSON; no edits attempted") from None
-                parts = result.get("candidates", [{}])[0].get("content", {}).get("parts", [])
-                response_text = "".join(part.get("text", "") for part in parts)
-                print("Gemini proposal model:", model, flush=True)
+                if not isinstance(result, dict):
+                    raise RuntimeError("Gemini response is not an object; no edits attempted")
+                candidates = result.get("candidates")
+                if not isinstance(candidates, list) or not candidates or not isinstance(candidates[0], dict):
+                    raise RuntimeError("Gemini response has no valid candidates; no edits attempted")
+                content = candidates[0].get("content")
+                if not isinstance(content, dict) or not isinstance(content.get("parts"), list):
+                    raise RuntimeError("Gemini response has no valid parts; no edits attempted")
+                parts = content["parts"]
+                if not parts or any(not isinstance(part, dict) or not isinstance(part.get("text"), str) for part in parts):
+                    raise RuntimeError("Gemini response contains invalid text parts; no edits attempted")
+                response_text = "".join(part["text"] for part in parts)
                 try:
-                    return json.loads(response_text)
+                    proposal = json.loads(response_text)
                 except json.JSONDecodeError:
                     raise RuntimeError("Gemini returned invalid JSON; no edits attempted") from None
+                if not isinstance(proposal, dict) or not isinstance(proposal.get("edits"), list):
+                    raise RuntimeError("Gemini proposal schema is invalid; no edits attempted")
+                print("Gemini proposal model:", model, flush=True)
+                return proposal
             except urllib.error.HTTPError as exc:
                 print("Gemini", model, "HTTP", exc.code, flush=True)
                 if exc.code == 429:
