@@ -102,6 +102,13 @@ class GeminiApiFailureTests(unittest.TestCase):
 
 
 
+class GeminiExistingPrTests(unittest.TestCase):
+    def test_existing_pr_receives_comment_instead_of_new_pr(self):
+        self.assertIn('if PR_NUMBER:\n    # This branch already has an open PR.', SOURCE)
+        self.assertIn('command("gh", "pr", "comment", PR_NUMBER, "--body", body)', SOURCE)
+        self.assertIn('else:\n    pr = command("gh", "pr", "create"', SOURCE)
+
+
 class GeminiRepairWorkflowRegressionTests(unittest.TestCase):
     def test_concurrency_key_is_scoped_to_target_pr(self):
         workflow = (SCRIPT.parents[1] / ".github/workflows/gemini-draft-fix.yml").read_text()
