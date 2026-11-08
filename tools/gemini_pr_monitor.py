@@ -6,6 +6,7 @@ import subprocess
 
 REPO = os.environ["GITHUB_REPOSITORY"]
 MAX_ATTEMPTS = 2
+MAX_DISPATCHES_PER_RUN = 5
 WORKFLOW = "gemini-draft-fix.yml"
 CHECKS = {
     "Python Regression Tests",
@@ -20,8 +21,9 @@ def gh(*args):
     ).stdout)
 
 
-def choose(prs, get_runs, get_attempts):
-    """Pure selection: ignore unrelated runs and stop after two attempts."""
+def choose_all(prs, get_runs, get_attempts, limit=MAX_DISPATCHES_PER_RUN):
+    """Pure selection: select up to limit independent failed PRs."""
+    selected = []
     for pr in prs:
         if pr.get("base", {}).get("ref") != "main":
             continue
@@ -49,8 +51,11 @@ def choose(prs, get_runs, get_attempts):
             continue
         # Prefer a deterministic failed run; repair one run at a time.
         failures.sort(key=lambda run: (run.get("created_at", ""), run["id"]), reverse=True)
-        return {"pr": pr["number"], "run": failures[0]["id"], "attempt": attempts + 1, "sha": sha}
-    return None
+        selected.append({"pr": pr["number"], "run": failures[0]["id"],
+                         "attempt": attempts + 1, "sha": sha})
+        if len(selected) >= limit:
+            break
+    return selected
 
 
 def main():
@@ -70,24 +75,25 @@ def main():
             for comment in comments
         )
 
-    selected = choose(prs, get_runs, get_attempts)
-    if selected is None:
+    selected = choose_all(prs, get_runs, get_attempts)
+    if not selected:
         print("No eligible failed PR")
         return
-    # Record attempt before dispatch so retries are bounded even if dispatch fails.
-    number = selected["pr"]
-    body = ("[gemini-repair-attempt] Attempt " + str(selected["attempt"]) + "/" +
-            str(MAX_ATTEMPTS) + " for " + selected["sha"])
-    subprocess.run(
-        ["gh", "api", "-X", "POST", "repos/" + REPO + "/issues/" + str(number) + "/comments",
-         "-f", "body=" + body], check=True,
-    )
-    subprocess.run(
-        ["gh", "workflow", "run", WORKFLOW, "--repo", REPO,
-         "-f", "run_id=" + str(selected["run"]),
-         "-f", "pr_number=" + str(number)], check=True,
-    )
-    print("Dispatched PR", number, "failed run", selected["run"])
+    for item in selected:
+        # Record attempt before dispatch so retries are bounded even if dispatch fails.
+        number = item["pr"]
+        body = ("[gemini-repair-attempt] Attempt " + str(item["attempt"]) + "/" +
+                str(MAX_ATTEMPTS) + " for " + item["sha"])
+        subprocess.run(
+            ["gh", "api", "-X", "POST", "repos/" + REPO + "/issues/" + str(number) + "/comments",
+             "-f", "body=" + body], check=True,
+        )
+        subprocess.run(
+            ["gh", "workflow", "run", WORKFLOW, "--repo", REPO,
+             "-f", "run_id=" + str(item["run"]),
+             "-f", "pr_number=" + str(number)], check=True,
+        )
+        print("Dispatched PR", number, "failed run", item["run"])
 
 
 if __name__ == "__main__":
