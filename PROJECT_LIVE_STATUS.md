@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 13:15 UTC**
-Git-Stand: **77627bd9f904113783d589c0e019224389f4b776** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 13:18 UTC**
+Git-Stand: **5d520d603fb08b04909fd1cf6a68ae2691ca3de1** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -51,11 +51,11 @@ Git-Stand: **77627bd9f904113783d589c0e019224389f4b776** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `5d520d6` (2026-11-08): security: sanitize untrusted CI logs before Gemini proposals (#168)
 - `77627bd` (2026-11-08): security: detect indirect execution in Gemini Python proposals (#167)
 - `ceb0231` (2026-11-08): fix: behavioral tests for Gemini dangerous-edit rejection (#161)
 - `701f927` (2026-11-08): security: reject unsafe Gemini-generated execution primitives (#157)
 - `ca79726` (2026-11-08): security: reject Gemini proposals that rewrite tests or make no changes (#154)
-- `6e98f94` (2026-11-08): test: Gemini API failure regressions and symlink path protection (#123)
 
 ## Regeln für alle Fach-Chats
 
