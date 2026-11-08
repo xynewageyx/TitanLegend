@@ -41,6 +41,15 @@ func _run() -> void:
         push_error("Death knight helmet spikes missing")
         quit(1)
         return
+    if helmet.get_node_or_null("ClassHelmetDetail_0") == null or helmet.get_node_or_null("ClassHelmetDetail_1") == null:
+        push_error("Death knight class horns missing")
+        quit(1)
+        return
+    var shoulder := hero.skeleton.get_node_or_null("shoulder_l")
+    if shoulder == null or shoulder.get_node_or_null("ClassShoulderFin") == null:
+        push_error("High-tier shoulder fin missing")
+        quit(1)
+        return
     var chest := hero.skeleton.get_node_or_null("chestplate")
     if chest == null or chest.get_node_or_null("ChestEmblem") == null:
         push_error("High-tier chest emblem missing")
