@@ -18,13 +18,7 @@ func _ready() -> void:
  team = get_parent()
  if team != null and team.has_signal("team_changed"):
   team.team_changed.connect(_on_team_changed)
- open_button = Button.new()
- open_button.text = "Talente +"
- open_button.custom_minimum_size = Vector2(130, 52)
- open_button.set_anchors_preset(Control.PRESET_TOP_LEFT)
- open_button.position = Vector2(12, 140)
- add_child(open_button)
- open_button.pressed.connect(_toggle)
+ # Open from the adventure HUD's Mehr > Talentbaum entry, not over the hero cards.
  panel = PanelContainer.new()
  panel.visible = false
  panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -107,9 +101,14 @@ func _on_team_changed() -> void:
  if panel != null and is_instance_valid(panel) and panel.visible and team != null and is_instance_valid(team):
   _refresh()
 
+func open_menu() -> void:
+ if panel == null:
+  return
+ panel.show()
+ _refresh()
+
 func _toggle() -> void:
  panel.visible = not panel.visible
- open_button.visible = not panel.visible
  if panel.visible:
   _refresh()
 
