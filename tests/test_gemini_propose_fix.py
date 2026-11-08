@@ -49,6 +49,11 @@ class GeminiEditGuardTests(unittest.TestCase):
         self.assertIn('if old == new:', SOURCE)
         self.assertIn('No-op replacement rejected', SOURCE)
 
+    def test_dangerous_edits_and_nul_bytes_are_rejected(self):
+        self.assertIn("Potential dynamic execution or shell command rejected", SOURCE)
+        self.assertIn("NUL bytes in replacement rejected", SOURCE)
+        self.assertIn("re.search(dangerous, new)", SOURCE)
+
 
 class GeminiApiFailureTests(unittest.TestCase):
     def call_generate(self):
