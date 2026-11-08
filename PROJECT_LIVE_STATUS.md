@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 15:28 UTC**
-Git-Stand: **21666a200223efcbab4b1869924e6260025250c1** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 15:33 UTC**
+Git-Stand: **04b2f589e087859a0f11476bf792cb9d5f5b56d2** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -46,10 +46,10 @@ Git-Stand: **21666a200223efcbab4b1869924e6260025250c1** auf Branch **main**
 - `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 - `e6c0733` (2026-11-08): fix: allow Gemini monitor to comment on target PRs (#178)
 - `20a04b0` (2026-11-08): feat: safe dry-run mode for Gemini automatic PR monitor (#177)
-- `5976557` (2026-11-08): feat: enable bounded Gemini repairs for all same-repo PRs (#172)
 
 ## Bereichsübergreifende Änderungen
 
+- `04b2f58` (2026-11-08): fix: protect Gemini auto-repair from API 429 quota loops (#187)
 - `f4b246f` (2026-11-08): fix: update existing PR after Gemini repair instead of creating duplicate (#184)
 - `c4ac39b` (2026-11-08): fix: paginate Gemini PR discovery and repair attempt history (#176)
 - `a34690f` (2026-11-08): feat: repair up to five failed PRs per Gemini monitor cycle (#174)
