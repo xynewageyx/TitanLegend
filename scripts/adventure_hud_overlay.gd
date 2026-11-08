@@ -20,7 +20,7 @@ const MORE_ENTRIES := [
  ["▣ Kostüme", "shop"]
 ]
 const ROLE_ICONS := ["◆", "⚔", "✚"]
-const ROLE_TEXT := ["TANK", "SCHADEN", "HEILUNG"]
+const ROLE_TEXT := ["TANK", "SCHADEN", "HEILER"]
 
 var hud: Control
 var battle: Node3D
