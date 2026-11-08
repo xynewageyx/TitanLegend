@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 12:40 UTC**
-Git-Stand: **b3736ea99cdba5c63c182cf9c1d0cdac7684aa3d** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 12:45 UTC**
+Git-Stand: **7702adf3a00d5ca6ca5a77006e274bade467d2fb** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
@@ -17,6 +18,7 @@ Git-Stand: **b3736ea99cdba5c63c182cf9c1d0cdac7684aa3d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
 - `b3736ea` (2026-11-08): Bind formation equipment to animated skeleton sockets when available (#159)
 - `8c9b557` (2026-11-08): feat: retain original PR103 rig anchors alongside equipment sockets (#158)
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
@@ -34,7 +36,7 @@ Git-Stand: **b3736ea99cdba5c63c182cf9c1d0cdac7684aa3d** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `7702adf` (2026-11-08): Finalize modular chibi integration: retain main CI dependencies and apply remaining Godot fixes (#112)
 
 ### Audio — Audio-Erstellung-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -44,7 +46,6 @@ Git-Stand: **b3736ea99cdba5c63c182cf9c1d0cdac7684aa3d** auf Branch **main**
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
-- `00907c8` (2026-11-07): Improve Gemini draft fix diagnostics and traceback matching (#115)
 
 ## Bereichsübergreifende Änderungen
 
