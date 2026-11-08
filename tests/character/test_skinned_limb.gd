@@ -28,6 +28,16 @@ func _run() -> void:
         push_error("Invalid skinned mesh vertex/weight count")
         quit(1)
         return
+    for vertex in vertices:
+        if not vertex.is_finite():
+            push_error("Non-finite limb vertex detected")
+            quit(1)
+            return
+    for weight in weights:
+        if not is_finite(weight):
+            push_error("Non-finite skin weight detected")
+            quit(1)
+            return
     if limb.build_limb(skeleton, "head", "foot_l"):
         push_error("Non-parent chain should be rejected")
         quit(1)
