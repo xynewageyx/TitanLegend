@@ -1,0 +1,58 @@
+name: Modular character Godot smoke tests
+on:
+  push:
+    branches: [feature/modular-hair-v3]
+    paths:
+      - 'scripts/character/**'
+      - 'scenes/character/**'
+      - 'tests/character/**'
+      - '.github/workflows/modular-character-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  character-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q /tmp/godot.zip -d /tmp
+          sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version
+      - name: Import and parse scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf original_update168
+          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/character-import.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/character-import.log; then
+            exit 1
+          fi
+      - name: Run character tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in \
+            test_modular_character.gd \
+            test_humanoid_rig.gd \
+            test_character_prototype.gd \
+            test_rigged_blockout.gd \
+            test_skinned_limb.gd \
+            test_skinned_torso.gd \
+            test_full_body_prototype.gd \
+            test_armor_preview.gd; do
+            echo "::group::$test"
+            godot --headless --path . --script "res://tests/character/$test" 2>&1 | tee "/tmp/$test.log"
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' "/tmp/$test.log"; then
+              exit 1
+            fi
+            grep -q 'PASS:' "/tmp/$test.log"
+            echo "::endgroup::"
+          done
