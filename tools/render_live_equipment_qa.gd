@@ -162,8 +162,8 @@ func _capture(label: String, hero: Node3D, pose: String, class_index: int) -> bo
  await RenderingServer.frame_post_draw
  if not _fit_camera_to_visible_hero(hero):
   return false
- # Render two more frames with the updated camera before reading pixels.
- await RenderingServer.frame_post_draw
+ # Keep the original two-frame total so a short attack clip does not end
+ # before the movement assertion; only the second frame uses the fitted camera.
  await RenderingServer.frame_post_draw
  var frame: Image = root.get_texture().get_image()
  if frame == null or frame.is_empty():
