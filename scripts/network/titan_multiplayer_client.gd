@@ -9,7 +9,9 @@ signal connection_status_changed(status: String)
 @export_range(1024, 65535) var server_port := 24567
 
 func connect_to_test_server() -> Error:
-	if multiplayer.has_multiplayer_peer():
+	# Godot starts with an OfflineMultiplayerPeer, which is not an active network session.
+	var current_peer: MultiplayerPeer = multiplayer.multiplayer_peer
+	if current_peer != null and not (current_peer is OfflineMultiplayerPeer):
 		return ERR_ALREADY_IN_USE
 	var peer := ENetMultiplayerPeer.new()
 	var result := peer.create_client(server_host, server_port)
@@ -42,6 +44,8 @@ func _on_disconnected() -> void:
 	connection_status_changed.emit("disconnected")
 
 func _release_peer() -> void:
-	if multiplayer.has_multiplayer_peer():
-		multiplayer.multiplayer_peer.close()
-		multiplayer.multiplayer_peer = null
+	var current_peer: MultiplayerPeer = multiplayer.multiplayer_peer
+	if current_peer != null and not (current_peer is OfflineMultiplayerPeer):
+		current_peer.close()
+	# Restore Godot's offline authority when the test connection ends.
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
