@@ -33,7 +33,7 @@ def inspect_bundle(path, unitypy):
                         record = {"type": kind, "name": str(label)[:160]}
                         for field in {
                             "Mesh": ("m_VertexCount", "m_SubMeshes"),
-                            "Texture2D": ("m_Width", "m_Height", "m_MipCount"),
+                            "Texture2D": ("m_Width", "m_Height", "m_MipCount", "m_TextureFormat", "m_CompleteImageSize", "m_IsReadable"),
                             "Material": ("m_ShaderKeywords",),
                             "TerrainData": ("m_HeightmapResolution",),
                         }[kind]:
@@ -44,6 +44,17 @@ def inspect_bundle(path, unitypy):
                                 record["shader_keyword_count"] = len(value.split())
                             elif isinstance(value, (int, float, bool)):
                                 record[field] = value
+                        if kind == "Texture2D":
+                            stream = getattr(data, "m_StreamData", None)
+                            if stream is not None:
+                                record["stream"] = {
+                                    "path": str(getattr(stream, "path", ""))[:240],
+                                    "offset": getattr(stream, "offset", None),
+                                    "size": getattr(stream, "size", None),
+                                }
+                            image = getattr(data, "image_data", None)
+                            if isinstance(image, (bytes, bytearray, memoryview)):
+                                record["embedded_image_bytes"] = len(image)
                         metrics.append(record)
                 except Exception as exc:
                     read_errors[type(exc).__name__] += 1
