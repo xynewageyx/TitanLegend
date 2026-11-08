@@ -41,7 +41,7 @@ static func button(button_node: Button, chosen: bool = false, compact: bool = fa
  button_node.add_theme_color_override("font_hover_color", INK)
  button_node.add_theme_color_override("font_pressed_color", WOOD_DARK)
  button_node.add_theme_color_override("font_focus_color", INK)
- button_node.add_theme_color_override("font_disabled_color", MUTED)
+ button_node.add_theme_color_override("font_disabled_color", Color("#493b2c"))
  button_node.add_theme_font_size_override("font_size", 18 if compact else 20)
  button_node.custom_minimum_size.y = 56 if compact else 64
  button_node.clip_text = true
