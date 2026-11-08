@@ -56,10 +56,10 @@ func build_armor(target: Skeleton3D, quality: String = "white", hero_class: Stri
         # Armor remains under the skeleton so BoneAttachment3D can follow its bone.
         var shell := MeshInstance3D.new()
         shell.name = "ArmorMesh"
-        var sphere := SphereMesh.new()
-        sphere.radius = 0.5
-        sphere.height = 1.0
-        shell.mesh = sphere
+        # Angular, bevel-friendly plates instead of generic spherical armor blobs.
+        var plate := BoxMesh.new()
+        plate.size = Vector3.ONE
+        shell.mesh = plate
         shell.scale = _size_for(slot) * bulk
         shell.position = _offset_for(slot)
         var mat := StandardMaterial3D.new()
@@ -68,6 +68,8 @@ func build_armor(target: Skeleton3D, quality: String = "white", hero_class: Stri
         mat.roughness = 0.45
         shell.material_override = mat
         anchor.add_child(shell)
+        if tier >= 2 and (slot == "chestplate" or slot.begins_with("shoulder")):
+            _add_plate_ridge(anchor, slot, tier, armor_color)
         if tier >= 2 and (slot == "helmet" or slot.begins_with("shoulder")):
             var spike_count: int = int(profile["spikes"]) + (1 if tier >= 4 else 0)
             _add_spikes(anchor, slot, spike_count, tier, armor_color)
@@ -159,3 +161,18 @@ func _add_energy_gem(anchor: BoneAttachment3D, slot: String, tier: int, hero_cla
     mat.emission_energy_multiplier = 1.0 + float(tier - 4) * 0.6
     gem.material_override = mat
     anchor.add_child(gem)
+
+func _add_plate_ridge(anchor: BoneAttachment3D, slot: String, tier: int, tint: Color) -> void:
+    # A raised central ridge makes the armor silhouette visibly faceted.
+    var ridge := MeshInstance3D.new()
+    ridge.name = "RaisedRidge"
+    var ridge_mesh := PrismMesh.new()
+    ridge_mesh.size = Vector3(0.16 + tier * 0.025, 0.30 + tier * 0.035, 0.16)
+    ridge.mesh = ridge_mesh
+    ridge.position = Vector3(0.0, -0.08 if slot == "chestplate" else 0.02, -0.36 if slot == "chestplate" else -0.20)
+    var mat := StandardMaterial3D.new()
+    mat.albedo_color = tint.lightened(0.18)
+    mat.metallic = 0.5
+    mat.roughness = 0.42
+    ridge.material_override = mat
+    anchor.add_child(ridge)
