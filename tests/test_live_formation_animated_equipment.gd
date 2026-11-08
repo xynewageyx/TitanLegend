@@ -88,7 +88,8 @@ func _run() -> void:
   _fail("Skill cast visual did not start the skeletal cast animation")
   return
  var victim: Node3D = team.heroes[1]
- team.play_hit_targets([1])
+ var hit_targets: Array[int] = [1]
+ team.play_hit_targets(hit_targets)
  var hit_anim: AnimationPlayer = victim.get_node("LiveFormationRig/Skeleton3D/TitanAnimations") as AnimationPlayer
  if hit_anim.current_animation != "titan/hit":
   _fail("Targeted hit did not reach the correct hero")
