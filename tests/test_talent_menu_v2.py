@@ -176,6 +176,13 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn("[1], [0,1]]", TEAM)
         self.assertIn('Color("#66577d")', TEAM)
 
+    def test_death_knight_class_menu_and_combat_checks(self):
+        class_menu = (ROOT / "scripts/class_menu.gd").read_text(encoding="utf-8")
+        checks = (ROOT / "scripts/talent_combat_checks_v2.gd").read_text(encoding="utf-8")
+        self.assertIn('"Heilung / DD", "DD", "Tank / DD"]', class_menu)
+        self.assertIn("CLASS_ROLES.size() == team_formation.CLASS_NAMES.size()", class_menu)
+        self.assertIn("range(ADAPTER.CLASS_ATTACK_WEIGHTS.size())", checks)
+
     def test_save_and_combat_connections_exist(self):
         self.assertIn('"talent_builds_v2"', SAVE)
         self.assertIn("get_saved_talent_builds_v2()", TEAM)
