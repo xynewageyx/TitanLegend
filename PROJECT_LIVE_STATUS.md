@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 19:37 UTC**
-Git-Stand: **b34e56397bbe09a516e5e9486dcf28707180b417** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 19:38 UTC**
+Git-Stand: **a9a22f187262898654a05e0385fae1a747f6d39f** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,7 +9,6 @@ Git-Stand: **b34e56397bbe09a516e5e9486dcf28707180b417** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
-- `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -21,6 +20,7 @@ Git-Stand: **b34e56397bbe09a516e5e9486dcf28707180b417** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### UI — UI-Chat
+- `a9a22f1` (2026-11-08): test(classes): guard class and role validation in mobile class menu
 - `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Gameplay — Gameplay-/Talent-Chat
@@ -44,10 +44,10 @@ Git-Stand: **b34e56397bbe09a516e5e9486dcf28707180b417** auf Branch **main**
 ### Integration/CI — GitHub-/Integrations-Chat
 - `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
 - `61cfa8f` (2026-11-08): ci(forest): run GLB geometry parser unit tests before model generation
-- `555ff1c` (2026-11-08): Add non-destructive Skeleton3D bone bridge for chibi rigs (#164)
 
 ## Bereichsübergreifende Änderungen
 
+- `8aab6ec` (2026-11-08): fix(classes): validate class and role before applying death knight selection
 - `b34e563` (2026-11-08): feat(forest): measure imported Godot triangles and assigned materials
 - `e32396d` (2026-11-08): feat(forest): inspect actual Godot imported GLB mesh surfaces and animations
 - `10ac8bd` (2026-11-08): test(analysis): verify scene triangle counts for repeated mesh instances
