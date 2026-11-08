@@ -67,6 +67,25 @@ class GeminiApiFailureTests(unittest.TestCase):
              self.assertRaisesRegex(RuntimeError, "invalid JSON"):
             self.call_generate()
 
+    def test_malformed_api_envelopes_fail_without_edits(self):
+        invalid = [
+            [],
+            {},
+            {"candidates": []},
+            {"candidates": [None]},
+            {"candidates": [{"content": None}]},
+            {"candidates": [{"content": {"parts": [None]}}]},
+            {"candidates": [{"content": {"parts": [{"text": 123}]}}]},
+            {"candidates": [{"content": {"parts": [{"text": "{}"}]}}]},
+            {"candidates": [{"content": {"parts": [{"text": "[]"}]}}]},
+        ]
+        for payload in invalid:
+            with self.subTest(payload=payload):
+                response = io.BytesIO(json.dumps(payload).encode())
+                with patch("urllib.request.urlopen", return_value=response), \
+                     self.assertRaisesRegex(RuntimeError, "no edits attempted"):
+                    self.call_generate()
+
     def test_quota_exhaustion_stops_immediately(self):
         error = urllib.error.HTTPError("https://example.invalid", 429, "quota", {}, None)
         with patch("urllib.request.urlopen", side_effect=error) as request:
