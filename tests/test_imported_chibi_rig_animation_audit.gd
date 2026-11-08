@@ -4,6 +4,7 @@ extends SceneTree
 ## rather than the optional 18-bone preview overlay.
 const BRIDGE = preload("res://scripts/rig/titan_skeleton_bridge.gd")
 const IMPORTED_SOCKETS = preload("res://scripts/equipment/chibi_imported_equipment_sockets.gd")
+const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 const CLASSES := [
  "warrior", "paladin", "druid", "shaman", "hunter", "rogue",
  "mage", "warlock", "summoner", "priest", "brawler", "death_knight"
@@ -71,7 +72,13 @@ func _run() -> void:
      break
   if motion_matches == expected_motions.size():
    animated += 1
-  if not (model is Node3D) or not IMPORTED_SOCKETS.install(skeleton, model as Node3D):
+  # Mirror production setup: the formation adapter creates the rest-position
+  # markers before the imported skeleton's bone attachments are installed.
+  if not (model is Node3D):
+   _fail("Imported GLB root is not a Node3D: " + hero_class)
+   return
+  ADAPTER.install(model as Node3D)
+  if not IMPORTED_SOCKETS.install(skeleton, model as Node3D):
    _fail("Cannot attach original visual bone sockets for " + hero_class)
    return
   for socket_name in IMPORTED_SOCKETS.SOCKET_BONES:
