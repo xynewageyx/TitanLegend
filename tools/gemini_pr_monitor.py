@@ -21,6 +21,20 @@ def gh(*args):
     ).stdout)
 
 
+def gh_pages(endpoint, max_pages=20):
+    """Read bounded paginated API collections without silently truncating at 100."""
+    items = []
+    for page in range(1, max_pages + 1):
+        separator = "&" if "?" in endpoint else "?"
+        batch = gh(endpoint + separator + "per_page=100&page=" + str(page))
+        if not isinstance(batch, list):
+            raise RuntimeError("Unexpected paginated API response")
+        items.extend(batch)
+        if len(batch) < 100:
+            return items
+    raise RuntimeError("GitHub pagination limit reached; refusing partial scan")
+
+
 def choose_all(prs, get_runs, get_attempts, limit=MAX_DISPATCHES_PER_RUN):
     """Pure selection: select up to limit independent failed PRs."""
     selected = []
@@ -59,7 +73,7 @@ def choose_all(prs, get_runs, get_attempts, limit=MAX_DISPATCHES_PER_RUN):
 
 
 def main():
-    prs = gh("repos/" + REPO + "/pulls?state=open&per_page=100")
+    prs = gh_pages("repos/" + REPO + "/pulls?state=open")
     if not isinstance(prs, list):
         raise RuntimeError("Invalid PR list")
 
@@ -68,7 +82,7 @@ def main():
         return data.get("workflow_runs", [])
 
     def get_attempts(number):
-        comments = gh("repos/" + REPO + "/issues/" + str(number) + "/comments?per_page=100")
+        comments = gh_pages("repos/" + REPO + "/issues/" + str(number) + "/comments")
         return sum(
             comment.get("user", {}).get("login") == "github-actions[bot]"
             and "[gemini-repair-attempt]" in comment.get("body", "")
