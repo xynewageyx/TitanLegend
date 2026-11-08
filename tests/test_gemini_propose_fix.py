@@ -101,5 +101,16 @@ class GeminiApiFailureTests(unittest.TestCase):
             self.assertEqual(request.call_count, 6)
 
 
+
+class GeminiRepairWorkflowRegressionTests(unittest.TestCase):
+    def test_concurrency_key_is_scoped_to_target_pr(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/gemini-draft-fix.yml").read_text()
+        self.assertIn('group: gemini-draft-fix-${{ inputs.pr_number || inputs.run_id }}', workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+
+    def test_gemini_api_failure_produces_failed_job(self):
+        self.assertIn("API outages and quota errors must fail CI", SOURCE)
+        self.assertIn("    raise SystemExit(1)", SOURCE)
+
 if __name__ == "__main__":
     unittest.main()

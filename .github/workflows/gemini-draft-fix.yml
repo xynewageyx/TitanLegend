@@ -15,7 +15,7 @@ permissions:
   actions: read
   pull-requests: write
 concurrency:
-  group: gemini-draft-fix
+  group: gemini-draft-fix-${{ inputs.pr_number || inputs.run_id }}
   cancel-in-progress: false
 jobs:
   propose:
