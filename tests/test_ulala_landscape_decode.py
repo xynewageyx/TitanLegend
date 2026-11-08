@@ -79,5 +79,35 @@ class LandscapeDecoderTests(unittest.TestCase):
         self.assertEqual(result["status"], "error")
         self.assertIn("RuntimeError", result["error"])
 
+
+    def test_texture_stream_metadata_is_recorded_without_bytes(self):
+        stream = Payload(path="archive.resS", offset=4096, size=8192)
+        result = self.inspect([
+            FakeObject("Texture2D", Payload(
+                m_Name="water", m_Width=512, m_Height=256,
+                m_TextureFormat=47, m_MipCount=9,
+                m_CompleteImageSize=8192, m_IsReadable=False,
+                m_StreamData=stream, image_data=b"not-exported"))
+        ])
+        self.assertEqual(result["status"], "decoded")
+        meta = result["numeric_metadata"][0]
+        self.assertEqual(meta["m_Height"], 256)
+        self.assertEqual(meta["m_TextureFormat"], 47)
+        self.assertEqual(meta["m_MipCount"], 9)
+        self.assertEqual(meta["stream"], {"path": "archive.resS", "offset": 4096, "size": 8192})
+        self.assertEqual(meta["embedded_image_bytes"], 12)
+        self.assertNotIn("image_data", meta)
+        self.assertNotIn("not-exported", str(result))
+
+    def test_texture_missing_optional_fields(self):
+        result = self.inspect([
+            FakeObject("Texture2D", Payload(m_Name="minimal", m_Width=32, m_Height=16))
+        ])
+        self.assertEqual(result["status"], "decoded")
+        meta = result["numeric_metadata"][0]
+        self.assertNotIn("stream", meta)
+        self.assertNotIn("embedded_image_bytes", meta)
+        self.assertNotIn("m_TextureFormat", meta)
+
 if __name__ == "__main__":
     unittest.main()
