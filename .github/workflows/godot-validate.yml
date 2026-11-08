@@ -1,7 +1,7 @@
 name: Godot project validation
 on:
   push:
-    branches: [main]
+    branches: [main, feature/brutal-equipment-art-direction]
   pull_request:
   workflow_dispatch:
 
