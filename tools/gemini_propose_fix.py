@@ -25,8 +25,9 @@ def safe_path(raw):
         raise ValueError("Only existing Godot/Python source files may be edited")
     if not raw.startswith(ALLOWED) or "\\" in raw or ".." in Path(raw).parts:
         raise ValueError("Disallowed edit path")
-    target = (ROOT / raw).resolve()
-    if not target.is_relative_to(ROOT) or not target.is_file() or target.is_symlink():
+    candidate = ROOT / raw
+    target = candidate.resolve()
+    if candidate.is_symlink() or not target.is_relative_to(ROOT) or not target.is_file():
         raise ValueError("File missing, symlink or outside repository")
     if target.stat().st_size > 100_000:
         raise ValueError("File too large")
@@ -44,7 +45,10 @@ def generate(prompt):
                 method="POST")
             try:
                 with urllib.request.urlopen(request, timeout=65) as response:
-                    result = json.load(response)
+                    try:
+                        result = json.load(response)
+                    except json.JSONDecodeError:
+                        raise RuntimeError("Gemini returned invalid JSON; no edits attempted") from None
                 parts = result.get("candidates", [{}])[0].get("content", {}).get("parts", [])
                 response_text = "".join(part.get("text", "") for part in parts)
                 print("Gemini proposal model:", model, flush=True)
