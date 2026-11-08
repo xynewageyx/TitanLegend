@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 15:33 UTC**
-Git-Stand: **04b2f589e087859a0f11476bf792cb9d5f5b56d2** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 15:55 UTC**
+Git-Stand: **ee7e1692627d450890bb065bbeccfbd22daaedf4** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -24,6 +24,7 @@ Git-Stand: **04b2f589e087859a0f11476bf792cb9d5f5b56d2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
+- `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
@@ -42,6 +43,7 @@ Git-Stand: **04b2f589e087859a0f11476bf792cb9d5f5b56d2** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `ee7e169` (2026-11-08): fix: run required CI explicitly after Gemini repairs (#188)
 - `21666a2` (2026-11-08): Fix Death Knight combat equipment visuals and 12-class smoke (#183)
 - `91cb731` (2026-11-08): fix: prevent Gemini repair cancellations and false-green API failures (#181)
 - `e6c0733` (2026-11-08): fix: allow Gemini monitor to comment on target PRs (#178)
@@ -53,7 +55,6 @@ Git-Stand: **04b2f589e087859a0f11476bf792cb9d5f5b56d2** auf Branch **main**
 - `f4b246f` (2026-11-08): fix: update existing PR after Gemini repair instead of creating duplicate (#184)
 - `c4ac39b` (2026-11-08): fix: paginate Gemini PR discovery and repair attempt history (#176)
 - `a34690f` (2026-11-08): feat: repair up to five failed PRs per Gemini monitor cycle (#174)
-- `2edf30a` (2026-11-08): fix: deterministic Gemini monitor selection and SHA audit (#173)
 
 ## Regeln für alle Fach-Chats
 
