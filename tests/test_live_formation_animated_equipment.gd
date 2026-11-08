@@ -39,10 +39,15 @@ func _run() -> void:
   if skeleton.get_bone_count() != 18:
    _fail("Incorrect live rig bone count for hero %d" % index)
    return
+  var imported_view: Node3D = hero.get_node_or_null("ChibiGLBVisual") as Node3D
+  var imported_skeleton: Skeleton3D = imported_view.get("imported_skeleton") as Skeleton3D if imported_view != null else null
+  if imported_skeleton == null or not bool(imported_view.get_meta("imported_equipment_sockets_ready", false)):
+   _fail("Imported GLB skeleton did not provide equipment anchors for hero %d" % index)
+   return
   for socket_name in ADAPTER.SOCKETS:
-   var bone_socket := skeleton.get_node_or_null(NodePath(socket_name)) as BoneAttachment3D
-   if bone_socket == null or controller.call("_socket", socket_name) != bone_socket:
-    _fail("Equipment controller failed to select animated bone socket: %s" % socket_name)
+   var glb_socket := imported_skeleton.get_node_or_null(NodePath(socket_name + "/EquipmentAnchor")) as Node3D
+   if glb_socket == null or controller.call("_socket", socket_name) != glb_socket:
+    _fail("Equipment controller failed to select imported GLB bone socket: %s" % socket_name)
     return
    checked_sockets += 1
   if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(int(team.class_ids[index])), 5)):
@@ -52,11 +57,13 @@ func _run() -> void:
    _fail("Cannot equip live formation chestplate")
    return
   await process_frame
-  if skeleton.get_node("RightHandSocket").get_child_count() != 1:
-   _fail("Weapon missing from live bone")
+  var weapon_anchor: Node3D = controller.call("_socket", "RightHandSocket") as Node3D
+  var chest_anchor: Node3D = controller.call("_socket", "ChestSocket") as Node3D
+  if weapon_anchor == null or weapon_anchor.get_child_count() != 1:
+   _fail("Weapon missing from imported GLB bone")
    return
-  if skeleton.get_node("ChestSocket").get_child_count() != 1:
-   _fail("Armor missing from live chest")
+  if chest_anchor == null or chest_anchor.get_child_count() != 1:
+   _fail("Armor missing from imported GLB chest")
    return
   # The old in-arm weapon AND the static class-role prop must be hidden,
   # otherwise two weapons remain rendered on the same live combat hero.
@@ -74,10 +81,10 @@ func _run() -> void:
   if not legacy_arm.visible or not legacy_role.visible:
    _fail("Older weapon fallback did not return on unequip: hero %d" % index)
    return
-  if skeleton.get_node("RightHandSocket").get_child_count() != 0:
+  if weapon_anchor.get_child_count() != 0:
    _fail("Bone weapon was not removed on unequip: hero %d" % index)
    return
-  if skeleton.get_node("ChestSocket").get_child_count() != 1:
+  if chest_anchor.get_child_count() != 1:
    _fail("Unequipping weapon removed unrelated chest armor: hero %d" % index)
    return
   if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(int(team.class_ids[index])), 4)):
@@ -87,24 +94,33 @@ func _run() -> void:
   if legacy_arm.visible or legacy_role.visible:
    _fail("Legacy weapon reappeared after re-equip: hero %d" % index)
    return
-  if skeleton.get_node("RightHandSocket").get_child_count() != 1:
+  if weapon_anchor.get_child_count() != 1:
    _fail("Re-equipping left a duplicate or missing bone weapon: hero %d" % index)
    return
  var attacker: Node3D = team.heroes[0]
  var anim: AnimationPlayer = attacker.get_node("LiveFormationRig/Skeleton3D/TitanAnimations") as AnimationPlayer
- var rig: Skeleton3D = attacker.get_node("LiveFormationRig/Skeleton3D") as Skeleton3D
- var weapon: Node3D = rig.get_node("RightHandSocket").get_child(0) as Node3D
- var chest: Node3D = rig.get_node("ChestSocket").get_child(0) as Node3D
+ var chibi: Node3D = attacker.get_node("ChibiGLBVisual") as Node3D
+ var rig: Skeleton3D = chibi.get("imported_skeleton") as Skeleton3D
+ var glb_player: AnimationPlayer = chibi.get("animation_player") as AnimationPlayer
+ if rig == null or glb_player == null or not glb_player.has_animation("Attack"):
+  _fail("Missing imported warrior GLB animation")
+  return
+ var controller: Node3D = attacker.get_node("EquipmentController") as Node3D
+ var active_weapon: Node3D = controller.call("_socket", "RightHandSocket") as Node3D
+ var active_chest: Node3D = controller.call("_socket", "ChestSocket") as Node3D
+ var weapon: Node3D = active_weapon.get_child(0) as Node3D
+ var chest: Node3D = active_chest.get_child(0) as Node3D
  team.play_attack_for_hero(0)
  if anim.current_animation != "titan/attack":
   _fail("Attack event did not start bone animation")
   return
- anim.seek(0.0, true)
+ glb_player.play("Attack")
+ glb_player.seek(0.0, true)
  rig.force_update_all_bone_transforms()
  await process_frame
  var weapon_before: Basis = weapon.global_transform.basis
  var chest_before: Basis = chest.global_transform.basis
- anim.seek(0.30, true)
+ glb_player.seek(0.40, true)
  rig.force_update_all_bone_transforms()
  await process_frame
  if weapon_before.is_equal_approx(weapon.global_transform.basis):
@@ -147,7 +163,7 @@ func _run() -> void:
   if player.current_animation != "titan/idle":
    _fail("Hero did not restore idle motion")
    return
- print("LIVE_FORMATION_ANIMATED_EQUIPMENT_OK heroes=4 bone_sockets=%d" % checked_sockets)
+ print("LIVE_FORMATION_ANIMATED_EQUIPMENT_OK heroes=4 bone_sockets=%d imported_sockets=4" % checked_sockets)
  team.queue_free()
  await process_frame
  quit(0)
