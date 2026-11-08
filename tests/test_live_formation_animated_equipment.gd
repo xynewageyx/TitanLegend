@@ -166,6 +166,59 @@ func _run() -> void:
   if player.current_animation != "titan/idle":
    _fail("Hero did not restore idle motion")
    return
+ # Class-specific imported NLA suffixes must be selected automatically,
+ # otherwise mage/paladin/etc can accidentally play a previous class's clip.
+ team.play_attack_for_hero(1) # Default team second hero = mage, class 6.
+ await process_frame
+ var mage_view: Node3D = team.heroes[1].get_node("ChibiGLBVisual") as Node3D
+ var mage_anim: AnimationPlayer = mage_view.get("animation_player") as AnimationPlayer
+ if mage_anim == null or mage_anim.current_animation != "Attack_006":
+  _fail("Mage did not select its own imported Attack_006 clip")
+  return
+ if mage_anim.current_animation_position < mage_anim.get_animation("Attack_006").length - 1.10:
+  _fail("Mage attack clip did not skip Blender's inactive lead-in")
+  return
+ # Death Knight has 24 bones and its moving weapon bone is Hand_R_2.
+ # Rebuild only this CI scene; the user save and combat stats remain untouched.
+ team.class_ids[0] = 11
+ team.create_team()
+ await process_frame
+ var dk: Node3D = team.heroes[0]
+ var dk_view: Node3D = dk.get_node("ChibiGLBVisual") as Node3D
+ var dk_skeleton: Skeleton3D = dk_view.get("imported_skeleton") as Skeleton3D
+ var dk_controller: Node3D = dk.get_node("EquipmentController") as Node3D
+ if dk_skeleton == null or dk_skeleton.get_bone_count() != 24:
+  _fail("Death Knight missing the extended 24-bone original GLB rig")
+  return
+ var dk_attachment: BoneAttachment3D = dk_skeleton.get_node_or_null("RightHandSocket") as BoneAttachment3D
+ if dk_attachment == null or dk_attachment.bone_name != "Hand_R_2":
+  _fail("Death Knight weapon was not bound to the animated Hand_R_2 bone")
+  return
+ if not bool(dk_controller.call("equip_weapon", 1, 5)):
+  _fail("Death Knight could not equip a high-rarity greatsword")
+  return
+ var dk_weapon_root: Node3D = dk_controller.call("_socket", "RightHandSocket") as Node3D
+ await process_frame
+ if dk_weapon_root == null or dk_weapon_root.get_child_count() != 1:
+  _fail("Death Knight's imported socket lost its equipped weapon")
+  return
+ var dk_weapon: Node3D = dk_weapon_root.get_child(0) as Node3D
+ var dk_player: AnimationPlayer = dk_view.get("animation_player") as AnimationPlayer
+ var dk_clip: Animation = dk_player.get_animation("Attack")
+ var dk_start: float = maxf(0.0, dk_clip.length - 0.95)
+ team.play_attack_for_hero(0)
+ dk_player.play("Attack")
+ dk_player.seek(dk_start, true)
+ dk_skeleton.force_update_all_bone_transforms()
+ await process_frame
+ var dk_before: Basis = dk_weapon.global_transform.basis
+ dk_player.seek(maxf(dk_start, dk_clip.length - 0.35), true)
+ dk_skeleton.force_update_all_bone_transforms()
+ await process_frame
+ if dk_before.is_equal_approx(dk_weapon.global_transform.basis):
+  _fail("Death Knight's imported 24-bone greatsword did not follow attack")
+  return
+ print("LIVE_DEATH_KNIGHT_24BONE_OK weapon_bone=Hand_R_2")
  print("LIVE_FORMATION_ANIMATED_EQUIPMENT_OK heroes=4 bone_sockets=%d imported_sockets=4" % checked_sockets)
  team.queue_free()
  await process_frame
