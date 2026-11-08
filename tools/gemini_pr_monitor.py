@@ -3,7 +3,6 @@
 import json
 import os
 import subprocess
-import sys
 
 REPO = os.environ["GITHUB_REPOSITORY"]
 MAX_ATTEMPTS = 2
@@ -48,8 +47,9 @@ def choose(prs, get_runs, get_attempts):
         attempts = get_attempts(pr["number"])
         if attempts >= MAX_ATTEMPTS:
             continue
-        # Fail closed when there are multiple failed checks: repair one run at a time.
-        return {"pr": pr["number"], "run": failures[0]["id"], "attempt": attempts + 1}
+        # Prefer a deterministic failed run; repair one run at a time.
+        failures.sort(key=lambda run: (run.get("created_at", ""), run["id"]), reverse=True)
+        return {"pr": pr["number"], "run": failures[0]["id"], "attempt": attempts + 1, "sha": sha}
     return None
 
 
@@ -76,7 +76,8 @@ def main():
         return
     # Record attempt before dispatch so retries are bounded even if dispatch fails.
     number = selected["pr"]
-    body = "[gemini-repair-attempt] Attempt " + str(selected["attempt"]) + "/" + str(MAX_ATTEMPTS)
+    body = ("[gemini-repair-attempt] Attempt " + str(selected["attempt"]) + "/" +
+            str(MAX_ATTEMPTS) + " for " + selected["sha"])
     subprocess.run(
         ["gh", "api", "-X", "POST", "repos/" + REPO + "/issues/" + str(number) + "/comments",
          "-f", "body=" + body], check=True,
