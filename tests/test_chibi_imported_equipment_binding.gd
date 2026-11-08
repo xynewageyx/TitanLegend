@@ -64,6 +64,47 @@ func _run() -> void:
   if hand.get_child_count() != 1 or chest.get_child_count() != 1:
    _fail("Missing or duplicate bone-bound equipment: " + str(hero_class))
    return
+  # Refreshing unchanged inventory must retain each live Node3D, not allocate
+  # new meshes or briefly display a second weapon in the same frame.
+  var first_equipped: Dictionary = controller.get("equipped_nodes")
+  var first_weapon: Node3D = first_equipped["mainhand"] as Node3D
+  var first_chest: Node3D = first_equipped["ChestSocket"] as Node3D
+  for refresh in range(3):
+   if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(inspected), 5)):
+    _fail("Refreshing unchanged weapon failed: " + str(hero_class))
+    return
+   if not bool(controller.call("equip_armor_slot", "ChestSocket", inspected, 5)):
+    _fail("Refreshing unchanged armor failed: " + str(hero_class))
+    return
+   var repeated: Dictionary = controller.get("equipped_nodes")
+   if repeated["mainhand"] != first_weapon or repeated["ChestSocket"] != first_chest:
+    _fail("Unchanged equipment was recreated: " + str(hero_class))
+    return
+   if hand.get_child_count() != 1 or chest.get_child_count() != 1:
+    _fail("Equipment refresh duplicated an attached mesh: " + str(hero_class))
+    return
+  # A real rarity upgrade must replace exactly one visual synchronously,
+  # preserving the imported bone anchor and unrelated equipment.
+  if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(inspected), 4)):
+   _fail("Replacing weapon failed: " + str(hero_class))
+   return
+  if not bool(controller.call("equip_armor_slot", "ChestSocket", inspected, 4)):
+   _fail("Replacing armor failed: " + str(hero_class))
+   return
+  var upgraded: Dictionary = controller.get("equipped_nodes")
+  if upgraded["mainhand"] == first_weapon or upgraded["ChestSocket"] == first_chest:
+   _fail("Changed rarity did not replace visual: " + str(hero_class))
+   return
+  if first_weapon.get_parent() != null or first_chest.get_parent() != null:
+   _fail("Replaced visual remains in a live socket: " + str(hero_class))
+   return
+  if hand.get_child_count() != 1 or chest.get_child_count() != 1:
+   _fail("Rarity switch created overlapping equipment: " + str(hero_class))
+   return
+  await process_frame
+  if hand.get_child_count() != 1 or chest.get_child_count() != 1:
+   _fail("Rarity switch lost bone attachments: " + str(hero_class))
+   return
   hero.queue_free()
   await process_frame
   inspected += 1
