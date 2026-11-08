@@ -26,12 +26,15 @@ jobs:
           unzip -q /tmp/godot.zip -d /tmp
           sudo install -m 755 /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
           godot --version | grep -F '4.7.2.stable'
-      - name: Test synthetic modular Skeleton3D pose transfer
+      - name: Test synthetic modular Skeleton3D pose transfer (isolated Godot project)
         shell: bash
         run: |
           set -euo pipefail
-          timeout 60s godot --headless --path . --script res://tests/test_modular_skeleton_pose_transfer.gd 2>&1 | tee /tmp/modular-skeleton-pose.log
+          mkdir -p /tmp/titan-rig-smoke
+          printf 'config_version=5\n[application]\nconfig/name="Titan Modular Rig Smoke"\n' > /tmp/titan-rig-smoke/project.godot
+          cp tests/test_modular_skeleton_pose_transfer.gd /tmp/titan-rig-smoke/test_modular_skeleton_pose_transfer.gd
+          timeout 60s godot --headless --path /tmp/titan-rig-smoke --script res://test_modular_skeleton_pose_transfer.gd 2>&1 | tee /tmp/modular-skeleton-pose.log
           grep -Fq 'MODULAR_RIG_POSE_TRANSFER_OK shared=64 source=65 target=66 samples=5' /tmp/modular-skeleton-pose.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/modular-skeleton-pose.log; then
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/modular-skeleton-pose.log; then
             exit 1
           fi
