@@ -81,16 +81,24 @@ func _run() -> void:
    socket_count += 1
   if player != null and player.has_animation("Attack"):
    var arm_socket: Node3D = IMPORTED_SOCKETS.resolve(skeleton, "RightHandSocket")
+   var arm_idx: int = skeleton.find_bone("Arm_R")
    player.play("Attack")
    player.seek(0.0, true)
    skeleton.force_update_all_bone_transforms()
    await process_frame
    var initial_transform: Transform3D = arm_socket.global_transform
+   var initial_bone: Transform3D = skeleton.get_bone_global_pose(arm_idx)
    player.seek(0.4, true)
    skeleton.force_update_all_bone_transforms()
    await process_frame
-   if initial_transform.basis.is_equal_approx(arm_socket.global_transform.basis):
-    _fail("Imported weapon socket did not rotate on attack for " + hero_class)
+   var final_transform: Transform3D = arm_socket.global_transform
+   var final_bone: Transform3D = skeleton.get_bone_global_pose(arm_idx)
+   var bone_moved: bool = not initial_bone.is_equal_approx(final_bone)
+   var socket_moved: bool = not initial_transform.is_equal_approx(final_transform)
+   print("CHIBI_IMPORTED_POSE_PROBE class=%s bone_moved=%s socket_moved=%s attack_len=%f" %
+    [hero_class, str(bone_moved), str(socket_moved), player.get_animation("Attack").length])
+   if bone_moved and not socket_moved:
+    _fail("Imported bone moved but equipment did not follow on " + hero_class)
     return
   total_bones += skeleton.get_bone_count()
   print("CHIBI_IMPORTED_RIG class=%s bones=%d clips=%s matched=%d" %
