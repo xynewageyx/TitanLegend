@@ -109,6 +109,7 @@ class GeminiValidationDispatchTests(unittest.TestCase):
         calls = []
         scope = {
             "os": __import__("os"),
+            "subprocess": __import__("subprocess"),
             "VALIDATION_WORKFLOWS": ("python-regression-tests.yml",
                                      "core-regression.yml", "godot-validate.yml"),
             "command": lambda *args: calls.append(args),
@@ -123,18 +124,39 @@ class GeminiValidationDispatchTests(unittest.TestCase):
             for workflow in scope["VALIDATION_WORKFLOWS"]
         ])
 
+    def test_one_dispatch_failure_does_not_skip_other_workflows(self):
+        dispatch_node = next(node for node in TREE.body if isinstance(node, ast.FunctionDef)
+                             and node.name == "dispatch_validations")
+        attempted = []
+        def record_dispatch(*args):
+            attempted.append(args)
+            if args[3] == "core-regression.yml":
+                raise __import__("subprocess").CalledProcessError(1, args)
+        scope = {
+            "os": __import__("os"),
+            "subprocess": __import__("subprocess"),
+            "VALIDATION_WORKFLOWS": ("python-regression-tests.yml",
+                                     "core-regression.yml", "godot-validate.yml"),
+            "command": record_dispatch,
+        }
+        exec(compile(ast.Module(body=[dispatch_node], type_ignores=[]),
+                     str(SCRIPT), "exec"), scope)
+        with patch.dict(scope["os"].environ, {"GITHUB_REPOSITORY": "owner/game"}), \
+             self.assertRaisesRegex(RuntimeError, "core-regression.yml"):
+            scope["dispatch_validations"]("agent/repair")
+        self.assertEqual([call[3] for call in attempted],
+                         list(scope["VALIDATION_WORKFLOWS"]))
+
     def test_workflow_token_can_dispatch_validation(self):
         workflow = (SCRIPT.parents[1] / ".github/workflows/gemini-draft-fix.yml").read_text()
         permissions = workflow.split("permissions:", 1)[1].split("concurrency:", 1)[0]
         self.assertIn("  actions: write", permissions)
 
-    def test_validation_is_dispatched_after_push_and_pr_update(self):
-        self.assertLess(SOURCE.rfind('command("git", "push"'),
-                        SOURCE.rfind("dispatch_validations(branch)"))
-        self.assertLess(SOURCE.rfind('command("gh", "pr", "comment"'),
-                        SOURCE.rfind("dispatch_validations(branch)"))
-        self.assertLess(SOURCE.rfind('command("gh", "pr", "create"'),
-                        SOURCE.rfind("dispatch_validations(branch)"))
+    def test_validation_starts_after_push_but_before_pr_notifications(self):
+        dispatch = SOURCE.rfind("\ndispatch_validations(branch)\n")
+        self.assertGreater(dispatch, SOURCE.rfind('command("git", "push"'))
+        self.assertLess(dispatch, SOURCE.rfind('command("gh", "pr", "comment"'))
+        self.assertLess(dispatch, SOURCE.rfind('command("gh", "pr", "create"'))
 
 
 class GeminiNoSafePatchTests(unittest.TestCase):
