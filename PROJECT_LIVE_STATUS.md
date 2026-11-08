@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 11:29 UTC**
-Git-Stand: **b733f69ec10de9b380137e28d4eed1f8eb2073bf** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 12:33 UTC**
+Git-Stand: **8c9b557f149fe43109b2399c6392fbe353d5623e** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -10,7 +10,6 @@ Git-Stand: **b733f69ec10de9b380137e28d4eed1f8eb2073bf** auf Branch **main**
 ### Charaktere — Charaktere-Chat
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
-- `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -19,6 +18,7 @@ Git-Stand: **b733f69ec10de9b380137e28d4eed1f8eb2073bf** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `8c9b557` (2026-11-08): feat: retain original PR103 rig anchors alongside equipment sockets (#158)
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 
 ### UI — UI-Chat
@@ -46,7 +46,6 @@ Git-Stand: **b733f69ec10de9b380137e28d4eed1f8eb2073bf** auf Branch **main**
 - `b733f69` (2026-11-08): Integrate non-conflicting PR #103 character and Unity tooling files (#155)
 - `00907c8` (2026-11-07): Improve Gemini draft fix diagnostics and traceback matching (#115)
 - `6926f86` (2026-11-07): Fix chibi hero GLB workflow rebase conflicts (#113)
-- `cc95389` (2026-11-07): Extract original 18-bone modular character rig from PR #10 (#109)
 
 ## Bereichsübergreifende Änderungen
 
