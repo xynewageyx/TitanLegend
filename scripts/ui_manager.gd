@@ -67,6 +67,7 @@ var attribute_select_index: int = 0
 var attribute_select_button: Button
 var attribute_apply_button: Button
 var attribute_reroll_button: Button
+var graphics_vfx_menu: Control
 var skin_shop_menu: Control
 var adventure_overlay: Control
 
@@ -82,11 +83,15 @@ func _ready() -> void:
  adventure_overlay.set_script(ADVENTURE_OVERLAY)
  adventure_overlay.call("initialize", self, battle_manager, biome_manager)
  add_child(adventure_overlay)
+ graphics_vfx_menu = Control.new()
+ graphics_vfx_menu.set_script(load("res://scripts/graphics_vfx_menu.gd"))
+ graphics_vfx_menu.call("initialize", battle_manager)
+ add_child(graphics_vfx_menu)
  skin_shop_menu = Control.new()
  skin_shop_menu.set_script(load("res://scripts/skin_shop_menu.gd"))
  add_child(skin_shop_menu)
  # Restyle all existing functional full-screen submenus.
- for menu in [$ClassMenu, $SkillMenu, $TalentMenu, skin_shop_menu]:
+ for menu in [$ClassMenu, $SkillMenu, $TalentMenu, skin_shop_menu, graphics_vfx_menu]:
   ADVENTURE_THEME.style_menu_tree(menu)
  if battle_manager != null and battle_manager.team_formation != null:
   battle_manager.team_formation.team_changed.connect(_refresh)
@@ -446,6 +451,9 @@ func _make_hud() -> void:
 func _open_menu(target: String) -> void:
  # Do not leave the previous modal visible behind a full-screen submenu.
  action_panel.hide()
+ if target == "graphics":
+  graphics_vfx_menu.call("open_menu")
+  return
  if target == "shop":
   skin_shop_menu.open_menu()
   return
