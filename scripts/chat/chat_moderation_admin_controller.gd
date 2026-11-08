@@ -23,6 +23,7 @@ func _ready() -> void:
 	layout.add_child(navigation)
 	refresh_button = Button.new()
 	refresh_button.text = "Sperrantraege aktualisieren"
+	refresh_button.tooltip_text = "Aktualisiert die Liste der ausstehenden Sperrantraege vom Server"
 	refresh_button.pressed.connect(refresh_cases)
 	navigation.add_child(refresh_button)
 	previous_button = Button.new()
