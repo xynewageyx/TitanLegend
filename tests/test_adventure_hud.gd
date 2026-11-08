@@ -56,7 +56,8 @@ func _run_tests() -> void:
   if label.text != "%d/311" % hp_samples[i]:
    _fail("Hero health number is incorrect at slot " + str(i))
    return
-  if not is_equal_approx(bar.value, 100.0 * float(hp_samples[i]) / 311.0):
+  # Godot ProgressBar rounds to its step (1% by default).
+  if absf(bar.value - 100.0 * float(hp_samples[i]) / 311.0) > 0.51:
    _fail("Hero health progress is incorrect at slot " + str(i))
    return
   if label.get_theme_color("font_color") == Color.TRANSPARENT:
