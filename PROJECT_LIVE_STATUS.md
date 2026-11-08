@@ -1,56 +1,53 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 20:09 UTC**
-Git-Stand: **6aa9d4dd06a74a462b6c994bd1867cf65856fbac** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 20:16 UTC**
+Git-Stand: **82cba1fbfc6cf77606900fb4847c987c29d99478** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 - `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### UI — UI-Chat
 - `a9a22f1` (2026-11-08): test(classes): guard class and role validation in mobile class menu
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Gameplay — Gameplay-/Talent-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
 - `657887a` (2026-11-08): ci(forest): publish source-versus-Godot geometry comparison artifact
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 - `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
-- `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ## Bereichsübergreifende Änderungen
 
@@ -58,7 +55,6 @@ Git-Stand: **6aa9d4dd06a74a462b6c994bd1867cf65856fbac** auf Branch **main**
 - `e77ed30` (2026-11-08): fix(forest): reject zero-triangle imports and validate triangle index counts
 - `8aab6ec` (2026-11-08): fix(classes): validate class and role before applying death knight selection
 - `b34e563` (2026-11-08): feat(forest): measure imported Godot triangles and assigned materials
-- `e32396d` (2026-11-08): feat(forest): inspect actual Godot imported GLB mesh surfaces and animations
 
 ## Regeln für alle Fach-Chats
 
