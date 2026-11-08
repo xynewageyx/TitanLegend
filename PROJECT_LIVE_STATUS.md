@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 20:16 UTC**
-Git-Stand: **82cba1fbfc6cf77606900fb4847c987c29d99478** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 20:31 UTC**
+Git-Stand: **358b44aee7109298040e74f189d92af7bd8279fa** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -19,6 +19,7 @@ Git-Stand: **82cba1fbfc6cf77606900fb4847c987c29d99478** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `358b44a` (2026-11-08): fix: avoid equipment mesh churn on unchanged inventory refresh (#210)
 - `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 
@@ -47,7 +48,6 @@ Git-Stand: **82cba1fbfc6cf77606900fb4847c987c29d99478** auf Branch **main**
 - `82cba1f` (2026-11-08): fix: decouple imported Chibi equipment sockets and validate 12 GLB rigs (#206)
 - `657887a` (2026-11-08): ci(forest): publish source-versus-Godot geometry comparison artifact
 - `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
-- `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
 
 ## Bereichsübergreifende Änderungen
 
