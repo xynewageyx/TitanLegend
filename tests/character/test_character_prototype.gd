@@ -23,5 +23,10 @@ func _run() -> void:
         push_error("Invalid class accepted")
         quit(1)
         return
+    var preserved := preview.get_node_or_null("GeneratedPreview")
+    if preserved == null or preserved.get_child_count() < 10:
+        push_error("Invalid class must preserve the last valid character preview")
+        quit(1)
+        return
     print("PASS: all twelve original character blockout silhouettes")
     quit(0)
