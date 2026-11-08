@@ -1,7 +1,6 @@
 extends SceneTree
 ## Runtime integration test for the ACTUAL four-hero Titan Legends team.
 ## All changes are visual; no battle damage, inventory or persistent data are altered.
-const FORMATION = preload("res://scripts/team_formation.gd")
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 
 func _initialize() -> void:
@@ -12,9 +11,16 @@ func _fail(reason: String) -> void:
  quit(1)
 
 func _run() -> void:
- var team := Node3D.new()
+ # Load the formation only after the SceneTree/autoload initialization.
+ var formation_script: Script = load("res://scripts/team_formation.gd")
+ if formation_script == null:
+  _fail("Formation script could not be loaded after autoload setup")
+  return
+ var team: Variant = formation_script.new()
+ if not (team is Node3D):
+  _fail("Formation script did not instantiate a Node3D")
+  return
  team.name = "LiveTeamSmoke"
- team.set_script(FORMATION)
  root.add_child(team)
  await process_frame
  if team.heroes.size() != 4:
