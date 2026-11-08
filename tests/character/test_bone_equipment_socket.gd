@@ -45,9 +45,11 @@ func _run() -> void:
     var visual := Node3D.new()
     attachment.add_child(visual)
     skeleton.force_update_all_bone_transforms()
+    await process_frame
     var initial_transform := visual.global_transform
     skeleton.set_bone_pose_rotation(head_idx, Quaternion(Vector3.UP, deg_to_rad(35.0)))
     skeleton.force_update_all_bone_transforms()
+    await process_frame
     var animated_transform := visual.global_transform
     if initial_transform.basis.is_equal_approx(animated_transform.basis):
         push_error("Equipment did not rotate with the animated head bone")
@@ -55,9 +57,13 @@ func _run() -> void:
         return
     skeleton.set_bone_pose_rotation(head_idx, Quaternion.IDENTITY)
     skeleton.force_update_all_bone_transforms()
+    await process_frame
     if not visual.global_transform.basis.is_equal_approx(initial_transform.basis):
         push_error("Equipment did not return to the original orientation")
         quit(1)
         return
     print("BONE EQUIPMENT SOCKET SMOKE PASSED")
+    builder.free()
+    hero.queue_free()
+    await process_frame
     quit(0)
