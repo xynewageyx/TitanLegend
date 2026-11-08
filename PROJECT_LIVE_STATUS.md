@@ -1,13 +1,14 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 19:45 UTC**
-Git-Stand: **0af3db6d622d4c8cf4acf9deeeef4680dcb3a86c** auf Branch **main**
+Automatisch erzeugt: **2026-11-08 20:08 UTC**
+Git-Stand: **b2254ac30186772b4354cc4ecabb7e5b606cbebc** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
 ## Zuständigkeiten und letzte Änderungen
 
 ### Charaktere — Charaktere-Chat
+- `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 - `0af3db6` (2026-11-08): Improve portrait hero HP labels and visual states (#202)
 - `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
@@ -18,20 +19,20 @@ Git-Stand: **0af3db6d622d4c8cf4acf9deeeef4680dcb3a86c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 
 ### UI — UI-Chat
 - `a9a22f1` (2026-11-08): test(classes): guard class and role validation in mobile class menu
 - `97baff6` (2026-11-08): Make all four adventure HUD hero cards tappable (#194)
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `7bb8ce6` (2026-11-08): test(talents): cover death knight selection and combat check class count
+- `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -43,6 +44,7 @@ Git-Stand: **0af3db6d622d4c8cf4acf9deeeef4680dcb3a86c** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `b2254ac` (2026-11-08): Animate live Titan Legends equipment on original GLB rigs (12 classes, 180 sockets) (#193)
 - `3de739d` (2026-11-08): ci(forest): validate imported Godot geometry and publish inspection log
 
 ## Bereichsübergreifende Änderungen
