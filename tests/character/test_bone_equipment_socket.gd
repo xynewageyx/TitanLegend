@@ -102,6 +102,52 @@ func _run() -> void:
             return
         piece.queue_free()
         await process_frame
+    # Combined motion: rotate torso and both arms while the hero moves.
+    # Verify weapon attachments stay on their respective bones, including reset.
+    var combined_sockets := ["RightHandSocket", "LeftHandSocket", "ChestSocket"]
+    var combined_pieces: Array[Node3D] = []
+    for socket_name in combined_sockets:
+        var bone_socket := controller.call("_socket", socket_name) as BoneAttachment3D
+        if bone_socket == null:
+            push_error("Missing combined-motion socket: " + socket_name)
+            quit(1)
+            return
+        var equipment_piece := Node3D.new()
+        bone_socket.add_child(equipment_piece)
+        combined_pieces.append(equipment_piece)
+    skeleton.force_update_all_bone_transforms()
+    await process_frame
+    var rest_transforms: Array[Transform3D] = []
+    for equipment_piece in combined_pieces:
+        rest_transforms.append(equipment_piece.global_transform)
+    var combined_bones := ["chest", "upper_arm_r", "lower_arm_r", "hand_r", "upper_arm_l", "lower_arm_l", "hand_l"]
+    var combined_angles := [18.0, 28.0, 35.0, 22.0, -25.0, -32.0, -18.0]
+    for i in range(combined_bones.size()):
+        var idx := skeleton.find_bone(combined_bones[i])
+        if idx < 0:
+            push_error("Missing combined-motion bone: " + combined_bones[i])
+            quit(1)
+            return
+        skeleton.set_bone_pose_rotation(idx, Quaternion(Vector3.FORWARD, deg_to_rad(combined_angles[i])))
+    skeleton.force_update_all_bone_transforms()
+    await process_frame
+    for i in range(combined_pieces.size()):
+        if combined_pieces[i].global_transform.basis.is_equal_approx(rest_transforms[i].basis):
+            push_error("Combined motion did not move equipment: " + combined_sockets[i])
+            quit(1)
+            return
+    for bone_name in combined_bones:
+        skeleton.set_bone_pose_rotation(skeleton.find_bone(bone_name), Quaternion.IDENTITY)
+    skeleton.force_update_all_bone_transforms()
+    await process_frame
+    for i in range(combined_pieces.size()):
+        if not combined_pieces[i].global_transform.is_equal_approx(rest_transforms[i]):
+            push_error("Combined motion did not restore equipment: " + combined_sockets[i])
+            quit(1)
+            return
+    for equipment_piece in combined_pieces:
+        equipment_piece.queue_free()
+    await process_frame
     print("BONE EQUIPMENT SOCKET SMOKE PASSED")
     builder.free()
     hero.queue_free()
