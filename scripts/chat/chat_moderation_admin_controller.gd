@@ -49,6 +49,8 @@ func _ready() -> void:
 func _connect_transport() -> void:
 	if moderation_rpc_path.is_empty():
 		return
+	if rpc_transport != null:
+		return
 	rpc_transport = get_node_or_null(moderation_rpc_path) as ChatModerationRpcServer
 	if rpc_transport == null:
 		push_warning("Moderation RPC transport not found")
