@@ -59,7 +59,6 @@ func equip_scene(slot_name: String, scene: PackedScene) -> bool:
         return false
     var slot := _ensure_slot(slot_name)
     for child in slot.get_children():
-        slot.remove_child(child)
         child.queue_free()
     var part := scene.instantiate()
     if not (part is Node3D):
