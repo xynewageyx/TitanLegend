@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-08 22:14 UTC**
-Git-Stand: **76552ed7f436be129f8292032f4b12772f492bbc** auf Branch **main**
+Automatisch erzeugt: **2026-11-09 15:20 UTC**
+Git-Stand: **8af2070605302bd58f0c776013bebb8eb690cf63** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -18,6 +18,7 @@ Git-Stand: **76552ed7f436be129f8292032f4b12772f492bbc** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
+- `8af2070` (2026-11-09): test: verify synchronized torso and arm motion keeps equipment attached (#215)
 - `9f38e4d` (2026-11-08): qa: prevent large animated weapons from clipping portrait screenshots (#213)
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
 - `40d3b7e` (2026-11-08): test: verify hand weapons chest armor and boots follow bone motion (#166)
@@ -55,7 +56,7 @@ Git-Stand: **76552ed7f436be129f8292032f4b12772f492bbc** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
-- `d031003` (2026-11-08): test(forest): validate geometry comparison and missing-model errors
+- Keine in den letzten 15 Commits.
 
 ## Regeln für alle Fach-Chats
 
