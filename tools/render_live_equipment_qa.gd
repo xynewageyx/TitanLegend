@@ -250,6 +250,71 @@ func _descendants(parent: Node) -> Array[Node]:
   items.append_array(_descendants(child))
  return items
 
+func _screen_bounds_for_meshes(subtree: Node3D) -> Rect2:
+ # Conservative pixel-space projected AABB; NOT a true silhouette mask or
+ # occlusion/collision detector. Used for reproducible formation QA only.
+ var minimum := Vector2(INF, INF)
+ var maximum := Vector2(-INF, -INF)
+ var has_geometry := false
+ for descendant in _descendants(subtree):
+  var mesh_piece: MeshInstance3D = descendant as MeshInstance3D
+  if mesh_piece == null or mesh_piece.mesh == null or not mesh_piece.is_visible_in_tree():
+   continue
+  var bounds: AABB = mesh_piece.get_aabb()
+  for corner in range(8):
+   var position_world: Vector3 = mesh_piece.global_transform * bounds.get_endpoint(corner)
+   if camera.is_position_behind(position_world):
+    continue
+   var pixel: Vector2 = camera.unproject_position(position_world)
+   minimum.x = minf(minimum.x, pixel.x)
+   minimum.y = minf(minimum.y, pixel.y)
+   maximum.x = maxf(maximum.x, pixel.x)
+   maximum.y = maxf(maximum.y, pixel.y)
+   has_geometry = true
+ if not has_geometry:
+  return Rect2()
+ return Rect2(minimum, maximum - minimum)
+
+
+func _four_hero_screen_visibility() -> Dictionary:
+ var viewport: Rect2 = root.get_visible_rect()
+ var frames: Array[Dictionary] = []
+ var rectangles: Array[Rect2] = []
+ var minimum_fraction: float = 1.0
+ for index in range(team.heroes.size()):
+  var hero: Node3D = team.heroes[index]
+  var visual: Node3D = hero.get_node_or_null("ChibiGLBVisual") as Node3D
+  if visual == null:
+   return {"valid": false, "reason": "missing imported hero visual"}
+  # Keep imported body separate from mythic weapons/armor and passive pets.
+  var box: Rect2 = _screen_bounds_for_meshes(visual)
+  if box.size.x < 1.0 or box.size.y < 1.0:
+   return {"valid": false, "reason": "empty projected imported GLB"}
+  var visible: Rect2 = box.intersection(viewport)
+  var fraction: float = (visible.size.x * visible.size.y) / maxf(1.0, box.size.x * box.size.y)
+  minimum_fraction = minf(minimum_fraction, fraction)
+  rectangles.append(box)
+  frames.append({"class": CLASSES[team.class_ids[index]], "slot": index,
+   "body_bbox_px": [snappedf(box.position.x, 0.1), snappedf(box.position.y, 0.1),
+    snappedf(box.size.x, 0.1), snappedf(box.size.y, 0.1)],
+   "body_viewport_fraction": snappedf(fraction, 0.001)})
+ var pair_overlap: Array[Dictionary] = []
+ var maximum_overlap: float = 0.0
+ for first in range(rectangles.size()):
+  for second in range(first + 1, rectangles.size()):
+   var overlap: Rect2 = rectangles[first].intersection(rectangles[second])
+   var a: float = rectangles[first].size.x * rectangles[first].size.y
+   var b: float = rectangles[second].size.x * rectangles[second].size.y
+   var ratio: float = (overlap.size.x * overlap.size.y) / maxf(1.0, minf(a,b))
+   maximum_overlap = maxf(maximum_overlap, ratio)
+   pair_overlap.append({"slots": [first, second], "overlap_of_smaller_bbox": snappedf(ratio, 0.001)})
+ return {"valid": minimum_fraction >= 0.95, "body_frames": frames,
+  "minimum_body_viewport_fraction": snappedf(minimum_fraction, 0.001),
+  "maximum_pair_bbox_overlap": snappedf(maximum_overlap, 0.001),
+  "pairs": pair_overlap,
+  "metric_description": "Projected geometry AABB overlap is a conservative screen-space proxy, not pixel-accurate occlusion or mesh clipping."}
+
+
 func _capture_four_hero_formation() -> int:
  # Four practical combat roles, including Death Knight's distinct 24-bone rig.
  # The formation remains temporary QA data; no class setup or save is altered.
@@ -320,8 +385,13 @@ func _capture_four_hero_formation() -> int:
     _fail("Formation contains missing or duplicate weapon during " + action)
     return -1
    anchor_count += 1
+  var visibility: Dictionary = _four_hero_screen_visibility()
+  if not bool(visibility.get("valid", false)):
+   _fail("Formation body geometry falls outside portrait frame in " + action + ": " + str(visibility))
+   return -1
   results.append({"image": name, "class": "formation", "pose": action.to_lower(),
    "hero_count": 4, "class_ids": [0,6,11,2], "weapon_anchors": anchor_count,
+   "screen_visibility": visibility,
    "width": snapshot.get_width(), "height": snapshot.get_height()})
   print("TITAN_FORMATION_VISUAL_QA_FRAME pose=%s weapons=%d" % [action, anchor_count])
   captured += 1
