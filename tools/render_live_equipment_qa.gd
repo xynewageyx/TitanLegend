@@ -389,6 +389,7 @@ func _capture_four_hero_formation() -> int:
   if not bool(visibility.get("valid", false)):
    _fail("Formation body geometry falls outside portrait frame in " + action + ": " + str(visibility))
    return -1
+  print("TITAN_FORMATION_SCREEN_COVERAGE pose=%s details=%s" % [action, JSON.stringify(visibility)])
   results.append({"image": name, "class": "formation", "pose": action.to_lower(),
    "hero_count": 4, "class_ids": [0,6,11,2], "weapon_anchors": anchor_count,
    "screen_visibility": visibility,
