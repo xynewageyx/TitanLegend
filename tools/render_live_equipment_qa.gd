@@ -302,6 +302,9 @@ func _run() -> void:
   if animator == null:
    _fail("Missing original GLB animation for " + CLASSES[i])
    return
+  # Freeze only the automatic combat selector in this isolated screenshot scene.
+  # Manual AnimationPlayer playback must not be overridden before readback.
+  chibi.set_process(false)
   # Front and attack frames for every class; side view for the hero and death
   # knight. Screenshots use real GLB body and actual rarity-5 equipment.
   chibi.call("play_clip", "Idle")
