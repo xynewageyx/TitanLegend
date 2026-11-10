@@ -1,0 +1,17 @@
+item,count,status,notes
+AnimationClip bundles,88,decoded,88 of 88 parsed in local reference pass
+Animation bindings,19794,decoded,GenericBinding records
+Unique animation path hashes,702,decoded,CRC32 candidates
+CRC32 unique transform paths,698,candidate,Not necessarily bone
+Skinned renderer referenced hashes,650,referenced,Referenced by m_Bones in sample prefab universe
+Transform only hashes,48,unverified_skinning,Do not treat as skinning bones
+Empty root hash,1,root,0x00000000
+Unmatched hashes,3,open,0x281802a4 0x2ea001e6 0xaefcf88b
+Selected meshes,57,inspected,Five Unity Shared bundles
+Inspected bindposes,457,inspected,Local renderer references
+Max abs error <= 0.001,402,matched,Compared with computed Prefab rest transform
+Max abs error <= 0.01,439,matched,Includes 402 stronger matches
+Max abs error > 0.01,18,open,Four meshes
+Finger-bone outliers,16,open,Eight per dly ndly variant
+Weapon-hand outliers,2,open,One per dly ndly variant
+Godot class pose compatibility,0,not_verified,All 12 class imports must be measured
