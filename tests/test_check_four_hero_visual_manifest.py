@@ -95,6 +95,14 @@ class FormationManifestTests(unittest.TestCase):
         manifest = example()
         manifest["renders"][2]["screen_visibility"]["depth_silhouette_masks"]["heroes"][0]["weapon_hidden_body_pixels"] = 50
         self.assertFalse(audit(manifest)["valid"])
+    def test_opaque_attack_flash_over_35_percent_fails(self):
+        manifest = example()
+        dk = manifest["renders"][2]["screen_visibility"]["depth_silhouette_masks"]["heroes"][2]
+        dk["effect_visible_body_pixels"] = 7000
+        dk["effect_hidden_body_pixels"] = 5000
+        self.assertFalse(audit(manifest)["valid"])
+    def test_attack_flash_below_35_percent_passes(self):
+        self.assertTrue(audit(example())["valid"])
     def test_wider_fx_rectangle_is_a_measurement_not_pixel_collision(self):
         manifest = example()
         manifest["renders"][2]["screen_visibility"]["max_effect_vs_body_bbox_overlap"] = 0.9
