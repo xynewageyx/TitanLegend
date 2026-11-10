@@ -67,3 +67,16 @@ The local metadata-only exports are:
 - `ulala_plain_flower_vertex_height_summary_2026_11_10.csv` — short side-by-side summary.
 
 **Next:** inspect the flower prefab Transform scaling and orientation, then optionally join actual Plain-scene instance transforms if camera/world-space bounds are needed. **No change to Titan Legends graphics.**
+
+
+## Source prefab Transform scales also verified (separate finding)
+
+The same two original serialized prefab CABs were independently parsed for all classID **33 MeshFilter** and classID **4 Transform** objects. Each MeshFilter's `m_GameObject` pointer was matched to its owning Transform's `m_GameObject` pointer; the Transform type tree confirms `m_LocalScale` is a three-component Float32 vector at the decoded field offset.
+
+- The `hua_001` mesh is referenced by **two** original prefab MeshFilters: one with local scale **(1,1,1)** and another with **(20,20,20)**.
+- The `hua_002` mesh is likewise referenced by **two** original prefab MeshFilters: local scale **(1,1,1)** and **(20,20,20)**.
+- Both occurrences per mesh were checked by actual signed Mesh `pathID` and GameObject/Transform pointers, not by object naming.
+- This means the original stored Mesh-local Y interval can occur under at least these two source prefab scales. A simple 20× scaling would make the largest positive original mesh-local Y approximately **0.789817** in that prefab's scaled local space, *before considering scene-level transforms or other transformations*.
+- **No claim is made that every Plain scene flower placement uses scale 20.** Saved scene-instance transformations and parent transforms would have to be decoded separately.
+
+Metadata-only companion: `ulala_plain_flower_prefab_transform_variants_2026_11_10.json`.
