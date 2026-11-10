@@ -1,7 +1,7 @@
 extends RefCounted
 ## Titan Legends progression balance module (not wired into GameManager yet).
 const XP_PER_LEVEL := 3
-const AFK_XP_FACTOR := 0.72
+const AFK_XP_FACTOR := 0.75
 const AFK_GOLD_FACTOR := 0.60
 const AFK_MAX_SECONDS := 28800
 const AFK_START_SECONDS := 300
