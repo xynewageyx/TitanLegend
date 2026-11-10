@@ -43,6 +43,24 @@ def audit(manifest):
         pets = [x for x in vis.get("pet_effect_frames", []) if x.get("category") == "pet"]
         if len(pets) != 4:
             errors.append(pose + f": expected four visible pet bboxes, got {len(pets)}")
+        if pose == "attack":
+            differential = vis.get("pixel_differential", {})
+            if not differential.get("valid", False):
+                errors.append("attack: missing real pixel-difference analysis")
+            categories = differential.get("categories", {})
+            for category in ("weapon", "pet", "effect"):
+                stats = categories.get(category, {})
+                if not stats.get("valid", False):
+                    errors.append(f"attack: missing {category} counterfactual metrics")
+                    continue
+                if int(stats.get("total_pixels", 0)) <= 0:
+                    errors.append(f"attack: invalid {category} pixel dimensions")
+                if not 0 <= int(stats.get("changed_pixels", -1)) <= int(stats.get("total_pixels", -1)):
+                    errors.append(f"attack: invalid {category} changed pixel count")
+                if len(stats.get("body_regions", [])) != 4:
+                    errors.append(f"attack: incomplete {category} body region breakdown")
+                if stats.get("counterfactual_image") != f"formation_mythic_attack_without_{category}.png":
+                    errors.append(f"attack: wrong {category} counterfactual filename")
         expected_fx = 4 if pose == "attack" else 0
         if len(effects) != expected_fx:
             errors.append(pose + f": expected {expected_fx} visible attack FX bboxes, got {len(effects)}")
@@ -52,7 +70,8 @@ def audit(manifest):
             "weapon_to_other_body_bbox_overlap": vis.get("max_weapon_vs_other_body_bbox_overlap"),
             "pet_to_other_body_bbox_overlap": vis.get("max_pet_vs_other_body_bbox_overlap"),
             "attack_fx_to_body_bbox_overlap": vis.get("max_effect_vs_body_bbox_overlap"),
-            "pet_count": len(pets), "active_attack_fx_count": len(effects)
+            "pet_count": len(pets), "active_attack_fx_count": len(effects),
+            "pixel_differential": vis.get("pixel_differential") if pose == "attack" else None
         })
     return {
         "valid": not errors, "errors": errors, "actions": result,
