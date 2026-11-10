@@ -8,6 +8,8 @@ on:
     paths:
       - .github/workflows/export-skeleton3d-inventory.yml
       - tools/audit_titan_twelve_rigs.py
+      - tools/audit_titan_rig_pose_compatibility.py
+      - tests/test_audit_titan_rig_pose_compatibility.py
       - tests/test_audit_titan_twelve_rigs.py
       - tools/export_skeleton3d_inventory.gd
       - tools/validate_skeleton3d_inventory.py
@@ -41,6 +43,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_validate_skeleton3d_inventory.py' -v
       - name: Test twelve-class rig coverage auditor
         run: python3 -m unittest discover -s tests -p 'test_audit_titan_twelve_rigs.py' -v
+      - name: Test twelve-class rest-pose and equipment-socket auditor
+        run: python3 -m unittest discover -s tests -p 'test_audit_titan_rig_pose_compatibility.py' -v
       - name: Test Chibi animation coverage analyzer
         run: python3 -m unittest discover -s tests -p 'test_analyze_chibi_animation_inventory.py' -v
       - name: Test Chibi animation duplicate auditor
@@ -98,6 +102,16 @@ jobs:
           else
             printf '{"complete": false, "error": "Skeleton3D inventory missing"}\n' > build/twelve_class_rig_coverage.json
           fi
+      - name: Audit twelve-class rest poses and equipment sockets
+        if: always()
+        run: |
+          if [ -s build/skeleton3d_inventory.json ]; then
+            python3 tools/audit_titan_rig_pose_compatibility.py build/skeleton3d_inventory.json --output build/twelve_class_pose_compatibility.json
+          else
+            mkdir -p build
+            printf '{"valid": false, "error": "Skeleton3D inventory missing"}\n' > build/twelve_class_pose_compatibility.json
+            exit 1
+          fi
       - name: Upload inventory
         if: always()
         uses: actions/upload-artifact@v4
@@ -107,6 +121,7 @@ jobs:
             build/skeleton3d_inventory.json
             build/skeleton3d_validation.json
             build/twelve_class_rig_coverage.json
+            build/twelve_class_pose_compatibility.json
             build/chibi_animation_inventory.json
             build/chibi_animation_coverage.json
             build/chibi_animation_duplicate_audit.json
