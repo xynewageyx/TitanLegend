@@ -118,7 +118,7 @@ func _build_contact_sheet(pose: String) -> bool:
   return false
  return true
 
-func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
+func _fit_camera_to_visible_hero(hero: Node3D, formation: bool = false) -> bool:
  # The oversized Mythic greatsword and lateral spell focuses can extend well
  # outside a fixed portrait crop. Fit all visible 3D meshes in camera space
  # while retaining a consistent viewing direction for front/side comparisons.
@@ -150,7 +150,7 @@ func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
  # Leave 0.45m safety margin for fast-moving cloth and weapon tips.
  var needed: float = maxf(high.y - low.y + 0.45, (high.x - low.x + 0.45) / aspect)
  camera.size = maxf(3.95, needed)
- if is_nan(camera.size) or camera.size > 12.0:
+ if is_nan(camera.size) or camera.size > (24.0 if formation else 12.0):
   _fail("Equipment is too far from hero for a readable QA frame")
   return false
  return true
@@ -249,6 +249,80 @@ func _descendants(parent: Node) -> Array[Node]:
   items.append(child)
   items.append_array(_descendants(child))
  return items
+
+func _capture_four_hero_formation() -> int:
+ # Four practical combat roles, including Death Knight's distinct 24-bone rig.
+ # The formation remains temporary QA data; no class setup or save is altered.
+ team.class_ids = [0, 6, 11, 2]
+ team.role_ids = [0, 1, 1, 2]
+ team.create_team()
+ await process_frame
+ if team.heroes.size() != 4:
+  _fail("Formation QA requires exactly four heroes")
+  return -1
+ for index in range(4):
+  var hero: Node3D = team.heroes[index]
+  hero.visible = true
+  var view: Node3D = hero.get_node_or_null("ChibiGLBVisual") as Node3D
+  var controller: Node3D = hero.get_node_or_null("EquipmentController") as Node3D
+  if view == null or controller == null:
+   _fail("Formation hero missing imported visual or equipment controller")
+   return -1
+  view.set_process(false)
+  if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(team.class_ids[index]), 5)):
+   _fail("Formation mythic weapon could not be equipped at slot " + str(index))
+   return -1
+  if not bool(controller.call("equip_armor_slot", "ChestSocket", team.class_ids[index], 5)):
+   _fail("Formation mythic chest armor could not be equipped at slot " + str(index))
+   return -1
+ camera.position = Vector3(0.0, 4.2, 14.0)
+ camera.look_at(Vector3(0.0, 1.25, 0.0), Vector3.UP)
+ var captured := 0
+ for action in ["Idle", "Walk", "Attack", "Dodge"]:
+  for hero in team.heroes:
+   var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+   var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
+   var skeleton: Skeleton3D = view.get("imported_skeleton") as Skeleton3D
+   if player == null or skeleton == null:
+    _fail("Four-hero formation lacks imported animation")
+    return -1
+   view.call("play_clip", action)
+   var selected: String = str(player.current_animation)
+   if not (selected == action or selected.begins_with(action + "_")):
+    _fail("Formation selected unexpected animation: " + selected)
+    return -1
+   var animation: Animation = player.get_animation(selected)
+   var range_seconds: float = 1.4 if action == "Idle" else 1.1 if action == "Walk" else 0.95 if action == "Attack" else 0.90
+   player.seek(maxf(0.0, animation.length - 0.45 * range_seconds), true)
+   player.pause()
+   skeleton.force_update_all_bone_transforms()
+  await RenderingServer.frame_post_draw
+  if not _fit_camera_to_visible_hero(team, true):
+   return -1
+  await RenderingServer.frame_post_draw
+  var snapshot: Image = root.get_texture().get_image()
+  if snapshot == null or snapshot.is_empty():
+   _fail("Formation screenshot readback empty for " + action)
+   return -1
+  var name: String = "formation_mythic_" + action.to_lower() + ".png"
+  if snapshot.save_png(OUTPUT + "/" + name) != OK:
+   _fail("Formation screenshot could not be written: " + name)
+   return -1
+  var anchor_count := 0
+  for hero in team.heroes:
+   var controller: Node3D = hero.get_node("EquipmentController") as Node3D
+   var anchor: Node3D = controller.call("_socket", "RightHandSocket") as Node3D
+   if anchor == null or anchor.get_child_count() != 1:
+    _fail("Formation contains missing or duplicate weapon during " + action)
+    return -1
+   anchor_count += 1
+  results.append({"image": name, "class": "formation", "pose": action.to_lower(),
+   "hero_count": 4, "class_ids": [0,6,11,2], "weapon_anchors": anchor_count,
+   "width": snapshot.get_width(), "height": snapshot.get_height()})
+  print("TITAN_FORMATION_VISUAL_QA_FRAME pose=%s weapons=%d" % [action, anchor_count])
+  captured += 1
+ return captured
+
 
 func _run() -> void:
  if DisplayServer.get_name() == "headless":
@@ -378,6 +452,10 @@ func _run() -> void:
     pictures += 1
  if not _build_contact_sheet("front_attack") or not _build_contact_sheet("side_attack") or not _build_contact_sheet("front_walk") or not _build_contact_sheet("front_dodge"):
   return
+ var team_captures: int = await _capture_four_hero_formation()
+ if team_captures != 4:
+  return
+ pictures += team_captures
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
@@ -385,6 +463,7 @@ func _run() -> void:
  file.store_string(JSON.stringify({
    "generator": "Godot 4.7.2 live imported GLB equipment QA",
    "image_count": pictures, "class_count": CLASSES.size(),
+   "formation_capture_count": team_captures, "formation_classes": ["warrior", "mage", "death_knight", "druid"],
    "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png", "overview_front_walk.png", "overview_front_dodge.png"],
    "contact_sheet_order": CLASSES,
    "real_android_device_tested": false, "renders": results
