@@ -63,3 +63,8 @@ No Unity animation retargeting is claimed.
 
 - [Bestätigte 75-Renderbilder-Pixelanalyse](TITAN_2026_11_10_PIXEL_COUNTERFACTUAL_RESULTS.md): im Attack-Frame ändern sich beim Ausblenden von Waffen 1,806 %, von Begleitern 4,778 % und von Angriffsblitzen 1,512 % aller 720×1280 Bildpixel. **Keine direkte Verdeckungs- oder Mesh-Kollisionsmessung.**
 - [Methodik und Grenzen](TITAN_2026_11_10_PIXEL_COUNTERFACTUAL_QA.md) · [Erfolgreicher Pixeltest](https://github.com/xynewageyx/TitanLegend/actions/runs/42852858921)
+
+## Tiefengeprüfte 4-Helden-Silhouetten
+
+- [Maskenmessung mit echter OpenGL-Tiefenprüfung](TITAN_2026_11_10_DEPTH_SILHOUETTE_RESULTS.md): Waffen 0 % Körperabdeckung, Begleiter bis 0,22 %, deckende Angriffseffekte als **konservative Obergrenze** etwa 21–24 % je Charakter in der getesteten Attack-Pose.
+- [Erfolgreicher Masken-CI-Lauf](https://github.com/xynewageyx/TitanLegend/actions/runs/42902300703) · 16 zusätzliche Tiefenmasken und insgesamt 91 PNGs. Transparenz und Android-Gameplay-Kamera bleiben separat zu prüfen.
