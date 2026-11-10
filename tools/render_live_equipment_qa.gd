@@ -337,12 +337,48 @@ func _four_hero_screen_visibility() -> Dictionary:
    maximum_weapon_overlap = maxf(maximum_weapon_overlap, ratio)
    weapon_other_body_overlap.append({"weapon_slot": weapon_index, "body_slot": target,
     "fraction_of_other_body_bbox": snappedf(ratio, 0.001)})
+ # Distinguish visible companion and transient FX footprint from weapon geometry.
+ # A projected AABB intersection is a broad-phase visual warning only.
+ var extras: Array[Dictionary] = []
+ var maximum_pet_vs_other_body: float = 0.0
+ var maximum_fx_vs_body: float = 0.0
+ for source_index in range(team.heroes.size()):
+  var source_hero: Node3D = team.heroes[source_index]
+  for category in ["pet", "effect"]:
+   var subtree: Node3D = source_hero.get_node_or_null("PassivePet" if category == "pet" else "HeroCombatMotion") as Node3D
+   if subtree == null or not subtree.is_visible_in_tree():
+    continue
+   var projected: Rect2 = _screen_bounds_for_meshes(subtree)
+   if projected.size.x < 1.0 or projected.size.y < 1.0:
+    continue
+   var viewport_box: Rect2 = projected.intersection(viewport)
+   var viewport_fraction: float = (viewport_box.size.x * viewport_box.size.y) / maxf(1.0, projected.size.x * projected.size.y)
+   var overlaps: Array[Dictionary] = []
+   for body_index in range(rectangles.size()):
+    if body_index == source_index and category == "pet":
+     continue
+    var cover: Rect2 = projected.intersection(rectangles[body_index])
+    var body_area: float = rectangles[body_index].size.x * rectangles[body_index].size.y
+    var ratio: float = (cover.size.x * cover.size.y) / maxf(1.0, body_area)
+    overlaps.append({"body_slot": body_index, "fraction_of_body_bbox": snappedf(ratio, 0.001)})
+    if category == "pet":
+     maximum_pet_vs_other_body = maxf(maximum_pet_vs_other_body, ratio)
+    else:
+     maximum_fx_vs_body = maxf(maximum_fx_vs_body, ratio)
+   extras.append({"source_slot": source_index, "category": category,
+    "viewport_fraction": snappedf(viewport_fraction, 0.001),
+    "bbox_px": [snappedf(projected.position.x, 0.1), snappedf(projected.position.y, 0.1),
+     snappedf(projected.size.x, 0.1), snappedf(projected.size.y, 0.1)],
+    "overlaps": overlaps})
  return {"valid": minimum_fraction >= 0.95, "body_frames": frames,
   "minimum_body_viewport_fraction": snappedf(minimum_fraction, 0.001),
   "maximum_pair_bbox_overlap": snappedf(maximum_overlap, 0.001),
   "pairs": pair_overlap, "weapon_frames": weapon_frames,
   "max_weapon_vs_other_body_bbox_overlap": snappedf(maximum_weapon_overlap, 0.001),
   "weapon_vs_other_body": weapon_other_body_overlap,
+  "pet_effect_frames": extras,
+  "max_pet_vs_other_body_bbox_overlap": snappedf(maximum_pet_vs_other_body, 0.001),
+  "max_effect_vs_body_bbox_overlap": snappedf(maximum_fx_vs_body, 0.001),
   "metric_description": "Projected geometry AABB overlap is a conservative screen-space proxy, not pixel-accurate occlusion or mesh clipping."}
 
 
