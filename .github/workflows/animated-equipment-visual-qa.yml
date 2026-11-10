@@ -9,6 +9,8 @@ on:
       - 'scripts/weapons/procedural_weapon_preview.gd'
       - 'tests/test_weapon_armor_silhouette_v2.gd'
       - 'tools/render_live_equipment_qa.gd'
+      - 'tools/check_four_hero_visual_manifest.py'
+      - 'tests/test_check_four_hero_visual_manifest.py'
       - 'tests/test_death_knight_locomotion_polish.gd'
       - 'scripts/animation/death_knight_locomotion_polish.gd'
       - 'tests/test_chibi_weapon_animation_grip.gd'
@@ -99,6 +101,13 @@ jobs:
           test -s build/animated_equipment_qa/formation_mythic_attack.png
           test -s build/animated_equipment_qa/formation_mythic_dodge.png
           grep -Fq 'TITAN_FORMATION_VISUAL_QA_FRAME pose=Dodge weapons=4' /tmp/equipment-visual-qa.log
+      - name: Audit four-hero camera, pet and attack-effect visibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_check_four_hero_visual_manifest.py' -v
+          python3 tools/check_four_hero_visual_manifest.py build/animated_equipment_qa/manifest.json --output build/animated_equipment_qa/formation_visibility_audit.json
+          test -s build/animated_equipment_qa/formation_visibility_audit.json
       - name: Upload screenshot collection for Android review
         if: always()
         uses: actions/upload-artifact@v4
@@ -107,5 +116,6 @@ jobs:
           path: |
             build/animated_equipment_qa/*.png
             build/animated_equipment_qa/manifest.json
+            build/animated_equipment_qa/formation_visibility_audit.json
           if-no-files-found: warn
           retention-days: 30
