@@ -22,3 +22,10 @@ python3 tools/audit_titan_twelve_rigs.py build/skeleton3d_inventory.json --outpu
 ```
 
 The validator checks that every class, including `death_knight`, has exactly one nonempty imported skeleton under a scene filename matching its class name. It does not assess retargeting compatibility or prove that all actual character GLBs were imported. Three synthetic test cases were exercised locally while authoring the tool; a real project import remains pending.
+
+## Verified Godot twelve-class rest poses
+
+- [Direct audit from GitHub Actions Skeleton3D export](TITAN_2026_11_10_12_CLASS_REST_AUDIT.md)
+- [Successful rest-pose and equipment-socket CI run](https://github.com/xynewageyx/TitanLegend/actions/runs/42759238280): all twelve GLBs have required socket bones; eleven standard rigs match their baseline rest pose; Death Knight 24-bone extended rig is intentionally different. Artifact: `titan-skeleton3d-inventory`, including `twelve_class_pose_compatibility.json`.
+
+No Unity animation retargeting is claimed.
