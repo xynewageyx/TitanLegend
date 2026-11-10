@@ -43,3 +43,9 @@ No Unity animation retargeting is claimed.
 ## Death Knight 24-bone action motion
 
 - [Per-bone runtime motion measurements](TITAN_2026_11_10_DEATH_KNIGHT_BONE_MOTION.md): the original Death Knight attack hand rotates 62.145 degrees and translates 0.18977 units during sampled active clip motion; idle and walk are subtler. [Successful CI motion audit](https://github.com/xynewageyx/TitanLegend/actions/runs/42762080319). Static attack is a regression, subtle idle/walk are advisory.
+
+## Four-hero real Godot visual QA
+
+- [Original Death Knight Idle/Walk locomotion polish](TITAN_2026_11_10_DK_IDLE_WALK_POLISH.md)
+- [Verified four-hero high-rarity formation: 4 actions, 4 weapons](TITAN_2026_11_10_FOUR_HERO_FORMATION_VISUAL_QA.md)
+- [Successful OpenGL visual run](https://github.com/xynewageyx/TitanLegend/actions/runs/42764316137): 72 PNGs; four team screenshots in Idle, Walk, Attack and Dodge; camera elevated for distinct front/back row silhouettes. No real Android/GPU measurement is claimed.
