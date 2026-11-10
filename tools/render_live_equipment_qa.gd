@@ -524,7 +524,14 @@ func _capture_depth_silhouette_masks() -> Dictionary:
  matte_black.albedo_color = Color.BLACK
  matte_black.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
  matte_black.cull_mode = BaseMaterial3D.CULL_DISABLED
- var background: Environment = (world.get_node("WorldEnvironment") as WorldEnvironment).environment
+ var world_environment: WorldEnvironment
+ for child in world.get_children():
+  if child is WorldEnvironment:
+   world_environment = child as WorldEnvironment
+   break
+ if world_environment == null:
+  return {"valid": false, "error": "missing scene environment"}
+ var background: Environment = world_environment.environment
  var saved_background_mode: int = background.background_mode
  var saved_background_color: Color = background.background_color
  background.background_mode = Environment.BG_COLOR
