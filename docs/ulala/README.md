@@ -49,3 +49,7 @@ No Unity animation retargeting is claimed.
 - [Original Death Knight Idle/Walk locomotion polish](TITAN_2026_11_10_DK_IDLE_WALK_POLISH.md)
 - [Verified four-hero high-rarity formation: 4 actions, 4 weapons](TITAN_2026_11_10_FOUR_HERO_FORMATION_VISUAL_QA.md)
 - [Successful OpenGL visual run](https://github.com/xynewageyx/TitanLegend/actions/runs/42764316137): 72 PNGs; four team screenshots in Idle, Walk, Attack and Dodge; camera elevated for distinct front/back row silhouettes. No real Android/GPU measurement is claimed.
+
+## Formation screen visibility and mythic weapon geometry
+
+- [Projected screen coverage and inter-character weapon overlap](TITAN_2026_11_10_FORMATION_SCREEN_COVERAGE.md). Successful [OpenGL CI](https://github.com/xynewageyx/TitanLegend/actions/runs/42782647069): all four imported-body AABBs fully within viewport and no projected body-body or mythic-weapon-to-other-body AABB overlap, for four selected action frames. These are static mesh bounding-box proxies and do not prove full skin deformation, per-pixel occlusion, pet/VFX visibility or Android GPU performance.
