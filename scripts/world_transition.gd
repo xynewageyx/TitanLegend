@@ -20,6 +20,7 @@ func _ready() -> void:
  center.mouse_filter = Control.MOUSE_FILTER_IGNORE
  shade.add_child(center)
  var stack := VBoxContainer.new()
+ stack.alignment = BoxContainer.ALIGNMENT_CENTER
  stack.add_theme_constant_override("separation", 14)
  center.add_child(stack)
  title_label = Label.new()
