@@ -33,3 +33,9 @@ No Unity animation retargeting is claimed.
 ## Animated equipment verification
 
 - [Successful 12-class weapon grip continuity test](TITAN_2026_11_10_WEAPON_GRIP_ANIMATION_TEST.md): 144 grip-to-socket samples across Idle, Walk, Attack and Dodge, run [42759744859](https://github.com/xynewageyx/TitanLegend/actions/runs/42759744859). Actual hand-to-finger alignment and Android rendering still require a visual check.
+
+## OpenGL screenshot validation (2026-11-10)
+
+- [Actual screenshot review: 64 scenes and four contact sheets](TITAN_2026_11_10_VISUAL_SCREENSHOT_AUDIT.md)
+- [Per-class RGB differences across Attack, Walk and Dodge](TITAN_2026_11_10_VISUAL_FRAME_DIFFERENCES.csv)
+- [Successful screenshot CI workflow](https://github.com/xynewageyx/TitanLegend/actions/runs/42760356033), artifact `TitanLegends-Rarity-Silhouette-V2-Visual-QA`. The Death Knight shows notably less 2D image change; camera and effects influence the metric. Visual clipping and Android performance remain unverified.
