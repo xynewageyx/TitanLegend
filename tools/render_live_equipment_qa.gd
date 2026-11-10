@@ -468,6 +468,153 @@ func _capture_counterfactual_attack_frames(reference: Image, visibility: Diction
   "note": "Pixel deltas include transparent blending, lighting, exposed background and potentially overlapping props; they are not a direct hidden-body mask."}
 
 
+
+func _body_mask_pixel_count(image: Image) -> int:
+ # Opaque unshaded white represents ONLY the selected GLB body. Everything
+ # else is hidden or rendered opaque black, respecting the depth buffer.
+ var data: Image = image.duplicate() as Image
+ data.convert(Image.FORMAT_RGB8)
+ var rgb: PackedByteArray = data.get_data()
+ var found := 0
+ for offset in range(0, rgb.size(), 3):
+  if int(rgb[offset]) >= 240 and int(rgb[offset+1]) >= 240 and int(rgb[offset+2]) >= 240:
+   found += 1
+ return found
+
+
+func _category_meshes(category: String) -> Array[MeshInstance3D]:
+ var meshes: Array[MeshInstance3D] = []
+ for hero in team.heroes:
+  var subtree: Node3D
+  if category == "pet":
+   subtree = hero.get_node_or_null("PassivePet") as Node3D
+  elif category == "effect":
+   subtree = hero.get_node_or_null("HeroCombatMotion/AttackFlash") as Node3D
+  else:
+   var ctrl: Node3D = hero.get_node_or_null("EquipmentController") as Node3D
+   var equipped: Dictionary = ctrl.get("equipped_nodes") if ctrl != null else {}
+   subtree = equipped.get("mainhand") as Node3D
+  if subtree == null:
+   continue
+  for node in _descendants(subtree):
+   if node is MeshInstance3D and (node as MeshInstance3D).is_visible_in_tree():
+    meshes.append(node as MeshInstance3D)
+ return meshes
+
+
+func _capture_depth_silhouette_masks() -> Dictionary:
+ # A BODY-specific white unshaded pass plus three black-occluder passes.
+ # Godot's normal depth test determines exactly which white body pixels remain.
+ # This is a QA-only drawing override. Original visual state is restored.
+ var all_meshes: Array[MeshInstance3D] = []
+ var prior: Array[Dictionary] = []
+ for node in _descendants(world):
+  if node is MeshInstance3D:
+   var mesh: MeshInstance3D = node as MeshInstance3D
+   all_meshes.append(mesh)
+   prior.append({"visible": mesh.visible, "override": mesh.material_override,
+    "shadow": mesh.cast_shadow})
+ var matte_white := StandardMaterial3D.new()
+ matte_white.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+ matte_white.albedo_color = Color.WHITE
+ matte_white.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+ matte_white.cull_mode = BaseMaterial3D.CULL_DISABLED
+ var matte_black := StandardMaterial3D.new()
+ matte_black.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+ matte_black.albedo_color = Color.BLACK
+ matte_black.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+ matte_black.cull_mode = BaseMaterial3D.CULL_DISABLED
+ var background: Environment = (world.get_node("WorldEnvironment") as WorldEnvironment).environment
+ var saved_background_mode: int = background.background_mode
+ var saved_background_color: Color = background.background_color
+ background.background_mode = Environment.BG_COLOR
+ background.background_color = Color.BLACK
+ var results_by_hero: Array[Dictionary] = []
+ var saved_process: Array[bool] = []
+ for hero in team.heroes:
+  var visual: Node3D = hero.get_node_or_null("HeroCombatMotion") as Node3D
+  saved_process.append(visual.is_processing() if visual != null else false)
+  if visual != null:
+   visual.set_process(false)
+ for slot in range(team.heroes.size()):
+  var hero: Node3D = team.heroes[slot]
+  var body: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+  var body_meshes: Array[MeshInstance3D] = []
+  for node in _descendants(body):
+   if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+    body_meshes.append(node as MeshInstance3D)
+  var data: Dictionary = {"slot": slot, "class": CLASSES[team.class_ids[slot]]}
+  for category in ["baseline", "weapon", "pet", "effect"]:
+   for mesh in all_meshes:
+    mesh.visible = false
+    mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+   for mesh in body_meshes:
+    mesh.visible = true
+    mesh.material_override = matte_white
+   if category != "baseline":
+    for mesh in _category_meshes_for_mask(category):
+     if not body_meshes.has(mesh):
+      mesh.visible = true
+      mesh.material_override = matte_black
+   await RenderingServer.frame_post_draw
+   var image: Image = root.get_texture().get_image()
+   var pixels: int = _body_mask_pixel_count(image)
+   var filename: String = "formation_mask_" + str(slot) + "_" + category + ".png"
+   if image.save_png(OUTPUT + "/" + filename) != OK:
+    return {"valid": false, "error": "Cannot save " + filename}
+   data[category + "_visible_body_pixels"] = pixels
+   data[category + "_image"] = filename
+  var baseline: int = int(data["baseline_visible_body_pixels"])
+  for category in ["weapon", "pet", "effect"]:
+   var visible_pixels: int = int(data[category + "_visible_body_pixels"])
+   data[category + "_hidden_body_pixels"] = maxi(0, baseline - visible_pixels)
+   data[category + "_hidden_body_fraction"] = snappedf(float(maxi(0, baseline-visible_pixels)) / float(maxi(1,baseline)), 0.00001)
+  if baseline <= 0:
+   data["error"] = "no white baseline body pixels"
+  results_by_hero.append(data)
+ for index in range(all_meshes.size()):
+  all_meshes[index].visible = bool(prior[index]["visible"])
+  all_meshes[index].material_override = prior[index]["override"]
+  all_meshes[index].cast_shadow = prior[index]["shadow"]
+ background.background_mode = saved_background_mode
+ background.background_color = saved_background_color
+ for i in range(team.heroes.size()):
+  var visual: Node3D = team.heroes[i].get_node_or_null("HeroCombatMotion") as Node3D
+  if visual != null:
+   visual.set_process(saved_process[i])
+ var valid := true
+ for item in results_by_hero:
+  if item.has("error"):
+   valid = false
+ return {"valid": valid, "heroes": results_by_hero,
+  "mask_images": team.heroes.size() * 4,
+  "measurement": "opaque white unshaded imported GLB geometry, black depth-tested selected props at frozen attack pose",
+  "limitations": "Only imported body geometry; excludes armor and hair outside GLB and excludes alpha-transparent original material appearance."}
+
+
+func _category_meshes_for_mask(category: String) -> Array[MeshInstance3D]:
+ # Use current scene membership, not visibility, because each pass has
+ # just hidden all mesh nodes. Preserve only meshes that were visible when
+ # the attack snapshot was taken, via the category source nodes.
+ var result: Array[MeshInstance3D] = []
+ for hero in team.heroes:
+  var subtree: Node3D
+  if category == "pet":
+   subtree = hero.get_node_or_null("PassivePet") as Node3D
+  elif category == "effect":
+   subtree = hero.get_node_or_null("HeroCombatMotion/AttackFlash") as Node3D
+  else:
+   var controller: Node3D = hero.get_node("EquipmentController") as Node3D
+   var equipped: Dictionary = controller.get("equipped_nodes")
+   subtree = equipped.get("mainhand") as Node3D
+  if subtree == null:
+   continue
+  for node in _descendants(subtree):
+   if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+    result.append(node as MeshInstance3D)
+ return result
+
+
 func _capture_four_hero_formation() -> int:
  # Four practical combat roles, including Death Knight's distinct 24-bone rig.
  # The formation remains temporary QA data; no class setup or save is altered.
@@ -577,6 +724,12 @@ func _capture_four_hero_formation() -> int:
     return -1
    visibility["pixel_differential"] = pixel_result
    print("TITAN_FORMATION_PIXEL_DIFFERENTIAL " + JSON.stringify(pixel_result))
+   var depth_masks: Dictionary = await _capture_depth_silhouette_masks()
+   if not bool(depth_masks.get("valid", false)):
+    _fail("Four-hero depth silhouette mask audit failed: " + str(depth_masks))
+    return -1
+   visibility["depth_silhouette_masks"] = depth_masks
+   print("TITAN_FORMATION_DEPTH_MASKS " + JSON.stringify(depth_masks))
   print("TITAN_FORMATION_SCREEN_COVERAGE pose=%s details=%s" % [action, JSON.stringify(visibility)])
   results.append({"image": name, "class": "formation", "pose": action.to_lower(),
    "hero_count": 4, "class_ids": [0,6,11,2], "weapon_anchors": anchor_count,
@@ -718,7 +871,7 @@ func _run() -> void:
  var team_captures: int = await _capture_four_hero_formation()
  if team_captures != 4:
   return
- pictures += team_captures + 3 # three attack counterfactual comparison PNGs
+ pictures += team_captures + 3 + 16 # three comparison and sixteen depth-mask PNGs
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
