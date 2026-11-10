@@ -345,7 +345,7 @@ func _four_hero_screen_visibility() -> Dictionary:
  for source_index in range(team.heroes.size()):
   var source_hero: Node3D = team.heroes[source_index]
   for category in ["pet", "effect"]:
-   var subtree: Node3D = source_hero.get_node_or_null("PassivePet" if category == "pet" else "HeroCombatMotion") as Node3D
+   var subtree: Node3D = source_hero.get_node_or_null("PassivePet" if category == "pet" else "HeroCombatMotion/AttackFlash") as Node3D
    if subtree == null or not subtree.is_visible_in_tree():
     continue
    var projected: Rect2 = _screen_bounds_for_meshes(subtree)
@@ -432,6 +432,18 @@ func _capture_four_hero_formation() -> int:
    player.seek(maxf(0.0, animation.length - 0.45 * range_seconds), true)
    player.pause()
    skeleton.force_update_all_bone_transforms()
+  # Exercise actual in-game cosmetic attack flashes, not a fabricated mesh.
+  # Other test poses reset the flash to avoid contaminating their measurements.
+  for hero in team.heroes:
+   var motion: Node3D = hero.get_node_or_null("HeroCombatMotion") as Node3D
+   if motion == null:
+    _fail("Formation hero has no cosmetic combat motion")
+    return -1
+   if action == "Attack":
+    motion.call("play_attack")
+   else:
+    motion.set("attack_remaining", 0.0)
+  await process_frame
   await RenderingServer.frame_post_draw
   if not _fit_camera_to_visible_hero(team, true):
    return -1
@@ -453,6 +465,14 @@ func _capture_four_hero_formation() -> int:
     return -1
    anchor_count += 1
   var visibility: Dictionary = _four_hero_screen_visibility()
+  if action == "Attack":
+   var effect_count: int = 0
+   for record in visibility.get("pet_effect_frames", []):
+    if record.get("category", "") == "effect":
+     effect_count += 1
+   if effect_count != 4:
+    _fail("Expected four active cosmetic attack flashes; measured " + str(effect_count))
+    return -1
   if not bool(visibility.get("valid", false)):
    _fail("Formation body geometry falls outside portrait frame in " + action + ": " + str(visibility))
    return -1
