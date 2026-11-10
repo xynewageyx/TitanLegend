@@ -27,7 +27,6 @@ func _run() -> void:
   _fail("Missing Death Knight source GLB")
   return
  var original := original_scene.instantiate()
- root.add_child(original)
  var original_player: AnimationPlayer = _find_player(original)
  if original_player == null:
   _fail("Missing original AnimationPlayer")
@@ -39,6 +38,8 @@ func _run() -> void:
   return
  var original_idle_tracks: int = original_idle.get_track_count()
  var original_walk_tracks: int = original_walk.get_track_count()
+ # Inspect original clip resources without entering the rendering tree.
+ original.free()
  var hero := Node3D.new()
  root.add_child(hero)
  var view := Node3D.new()
@@ -84,7 +85,7 @@ func _run() -> void:
   if skeleton.get_bone_pose_rotation(right).angle_to(initial_right) > 0.03:
    _fail(action + ": shoulder pose did not return near loop baseline")
    return
- if original_player.get_animation("Idle").get_track_count() != original_idle_tracks or original_player.get_animation("Walk").get_track_count() != original_walk_tracks:
+ if original_idle.get_track_count() != original_idle_tracks or original_walk.get_track_count() != original_walk_tracks:
   _fail("The original shared imported GLB animation resources were changed")
   return
  for action in ["Attack", "Dodge"]:
@@ -93,7 +94,6 @@ func _run() -> void:
    return
  player.stop()
  hero.queue_free()
- original.queue_free()
  await process_frame
  await process_frame
  print("PASS: Death Knight private Idle Walk polish actions=%d added_tracks=6 original_glb_unchanged=true" % changed)
