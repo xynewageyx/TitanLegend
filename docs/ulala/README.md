@@ -29,3 +29,7 @@ The validator checks that every class, including `death_knight`, has exactly one
 - [Successful rest-pose and equipment-socket CI run](https://github.com/xynewageyx/TitanLegend/actions/runs/42759238280): all twelve GLBs have required socket bones; eleven standard rigs match their baseline rest pose; Death Knight 24-bone extended rig is intentionally different. Artifact: `titan-skeleton3d-inventory`, including `twelve_class_pose_compatibility.json`.
 
 No Unity animation retargeting is claimed.
+
+## Animated equipment verification
+
+- [Successful 12-class weapon grip continuity test](TITAN_2026_11_10_WEAPON_GRIP_ANIMATION_TEST.md): 144 grip-to-socket samples across Idle, Walk, Attack and Dodge, run [42759744859](https://github.com/xynewageyx/TitanLegend/actions/runs/42759744859). Actual hand-to-finger alignment and Android rendering still require a visual check.
