@@ -21,6 +21,23 @@ def example():
                 "max_weapon_vs_other_body_bbox_overlap": 0.0,
                 "max_pet_vs_other_body_bbox_overlap": 0.006,
                 "max_effect_vs_body_bbox_overlap": 0.146 if pose == "attack" else 0.0,
+                "depth_silhouette_masks": ({
+                    "valid": True,
+                    "mask_images": 16,
+                    "heroes": [
+                        {
+                            "slot": idx, "class": hero_name,
+                            "baseline_visible_body_pixels": 12000,
+                            "baseline_image": f"formation_mask_{idx}_baseline.png",
+                            **{
+                                f"{category}_{field}": (11500 if field == "visible_body_pixels" else 500 if field == "hidden_body_pixels" else f"formation_mask_{idx}_{category}.png")
+                                for category in ("weapon", "pet", "effect")
+                                for field in ("visible_body_pixels", "hidden_body_pixels", "image")
+                            }
+                        }
+                        for idx, hero_name in enumerate(EXPECTED_CLASSES)
+                    ],
+                } if pose == "attack" else {}),
                 "pixel_differential": ({
                     "valid": True,
                     "categories": {
@@ -69,6 +86,14 @@ class FormationManifestTests(unittest.TestCase):
         manifest = example()
         metrics = manifest["renders"][2]["screen_visibility"]["pixel_differential"]["categories"]["effect"]
         metrics["changed_pixels"] = metrics["total_pixels"] + 1
+        self.assertFalse(audit(manifest)["valid"])
+    def test_missing_depth_mask_fails(self):
+        manifest = example()
+        manifest["renders"][2]["screen_visibility"]["depth_silhouette_masks"]["heroes"].pop()
+        self.assertFalse(audit(manifest)["valid"])
+    def test_inconsistent_depth_pixel_counts_fail(self):
+        manifest = example()
+        manifest["renders"][2]["screen_visibility"]["depth_silhouette_masks"]["heroes"][0]["weapon_hidden_body_pixels"] = 50
         self.assertFalse(audit(manifest)["valid"])
     def test_wider_fx_rectangle_is_a_measurement_not_pixel_collision(self):
         manifest = example()
