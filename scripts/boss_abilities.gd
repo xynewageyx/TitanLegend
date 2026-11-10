@@ -76,9 +76,9 @@ static func affected_heroes(team: Node3D, element: int, fusion: bool) -> Array[i
  return affected
 
 static func _zone_shapes(element: int, fusion: bool) -> Array[Vector3]:
- var width: float = 1.6 if fusion else 1.25
- var depth: float = 1.5 if fusion else 1.0
- return [Vector3(0.0, width, depth)].25
+ var count: int = 1
+ var width: float = 1.25
+ var depth: float = 1.25
  match element:
   0: count = 3; width = 0.65; depth = 2.7
   1: count = 3; width = 1.15; depth = 1.15
@@ -98,50 +98,9 @@ static func _zone_shapes(element: int, fusion: bool) -> Array[Vector3]:
  return shapes
 
 static func _floor_telegraph(parent: Node3D, center: Vector3, tint: Color, element: int, fusion: bool) -> void:
- var count: int = 1
- var width: float = 1.25
- var depth: float = 1.25
- match element:
-  0: # Fire: three advancing lanes
-   count = 3
-   width = 0.65
-   depth = 2.7
-  1: # Water: concentric pools
-   count = 3
-   width = 1.15
-   depth = 1.15
-  2: # Earth: broad impact slab
-   width = 3.2
-   depth = 2.3
-  3: # Nature: root patches
-   count = 4
-   width = 0.75
-   depth = 1.6
-  4: # Light: focused pillar marker
-   width = 1.05
-   depth = 1.05
-  5: # Shadow: twin dark zones
-   count = 2
-   width = 1.45
-   depth = 1.5
-  6: # Wind: long sweeping lanes
-   count = 3
-   width = 0.35
-   depth = 3.5
-  7: # Ice: sharp crystal lanes
-   count = 3
-   width = 0.45
-   depth = 2.4
-  8: # Lightning: scattered strike points
-   count = 4
-   width = 0.55
-   depth = 0.55
-  9: # Chaos: unstable cross pattern
-   count = 4
-   width = 0.7
-   depth = 2.2
- var mult: float = 1.3 if fusion else 1.0
- for i in range(count):
+ # Share zone definitions with affected_heroes so warnings align with damage.
+ var shapes: Array[Vector3] = _zone_shapes(element, fusion)
+ for zone in shapes:
   var marker := MeshInstance3D.new()
   var mesh := CylinderMesh.new()
   mesh.top_radius = 0.5
@@ -159,12 +118,9 @@ static func _floor_telegraph(parent: Node3D, center: Vector3, tint: Color, eleme
   material.no_depth_test = false
   marker.material_override = material
   parent.add_child(marker)
-  var offset := Vector3.ZERO
-  if count > 1:
-   offset.x = (float(i) - float(count - 1) * 0.5) * (0.95 if element != 8 else 1.15)
-  marker.global_position = Vector3(center.x + offset.x, 0.075, center.z + offset.z)
+  marker.global_position = Vector3(center.x + zone.x, 0.075, center.z)
   marker.scale = Vector3(0.05, 1.0, 0.05)
-  var target := Vector3(width * mult, 1.0, depth * mult)
+  var target := Vector3(zone.y * 2.0, 1.0, zone.z * 2.0)
   var tween := parent.create_tween()
   tween.tween_property(marker, "scale", target, 0.28).set_trans(Tween.TRANS_SINE)
   tween.tween_interval(0.22)
