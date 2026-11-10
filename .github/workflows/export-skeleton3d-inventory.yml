@@ -9,6 +9,7 @@ on:
       - .github/workflows/export-skeleton3d-inventory.yml
       - tools/audit_titan_twelve_rigs.py
       - tools/audit_titan_rig_pose_compatibility.py
+      - tools/export_twelve_class_bone_motion.gd
       - tests/test_audit_titan_rig_pose_compatibility.py
       - tests/test_audit_titan_twelve_rigs.py
       - tools/export_skeleton3d_inventory.gd
@@ -112,6 +113,10 @@ jobs:
             printf '{"valid": false, "error": "Skeleton3D inventory missing"}\n' > build/twelve_class_pose_compatibility.json
             exit 1
           fi
+      - name: Quantify bone movement in four original GLB actions
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/export_twelve_class_bone_motion.gd
+          test -s build/twelve_class_bone_motion.json
       - name: Upload inventory
         if: always()
         uses: actions/upload-artifact@v4
@@ -122,6 +127,7 @@ jobs:
             build/skeleton3d_validation.json
             build/twelve_class_rig_coverage.json
             build/twelve_class_pose_compatibility.json
+            build/twelve_class_bone_motion.json
             build/chibi_animation_inventory.json
             build/chibi_animation_coverage.json
             build/chibi_animation_duplicate_audit.json
