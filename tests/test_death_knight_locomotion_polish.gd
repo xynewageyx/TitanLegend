@@ -66,6 +66,8 @@ func _run() -> void:
  for action in ACTIONS:
   view.call("play_clip", action)
   var selected: String = str(player.current_animation)
+  # Avoid blend-overhang from prior Idle/Walk when asserting the source keys.
+  player.play(selected, 0.0)
   var clip: Animation = player.get_animation(selected)
   var start: float = maxf(0.0, clip.length - float(WINDOWS[action]))
   player.seek(start, true)
