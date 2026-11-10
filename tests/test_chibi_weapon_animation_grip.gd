@@ -20,7 +20,7 @@ func _abort(reason: String) -> void:
 func _run() -> void:
  var samples := 0
  for class_index in range(CLASSES.size()):
-  var class_name: String = CLASSES[class_index]
+  var hero_id: String = CLASSES[class_index]
   var hero := Node3D.new()
   hero.name = "EquipmentAnimationSmoke"
   root.add_child(hero)
@@ -34,23 +34,23 @@ func _run() -> void:
   var skeleton: Skeleton3D = view.get("imported_skeleton") as Skeleton3D
   var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
   if skeleton == null or player == null:
-   _abort(class_name + ": missing imported skeleton or AnimationPlayer")
+   _abort(hero_id + ": missing imported skeleton or AnimationPlayer")
    return
   if not bool(view.get_meta("imported_equipment_sockets_ready", false)):
-   _abort(class_name + ": imported equipment sockets not ready")
+   _abort(hero_id + ": imported equipment sockets not ready")
    return
-  var expected_bone := "Hand_R_2" if class_name == "death_knight" else "Arm_R"
+  var expected_bone := "Hand_R_2" if hero_id == "death_knight" else "Arm_R"
   if IMPORTED.selected_bone(skeleton, "RightHandSocket") != expected_bone:
-   _abort(class_name + ": incorrect right hand bone")
+   _abort(hero_id + ": incorrect right hand bone")
    return
   var controller: Node3D = hero.get_node("EquipmentController") as Node3D
   if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(class_index), 5)):
-   _abort(class_name + ": cannot equip weapon")
+   _abort(hero_id + ": cannot equip weapon")
    return
   await process_frame
   var anchor: Node3D = IMPORTED.resolve(skeleton, "RightHandSocket")
   if anchor == null or anchor.get_child_count() != 1:
-   _abort(class_name + ": missing or duplicate equipped weapon")
+   _abort(hero_id + ": missing or duplicate equipped weapon")
    return
   var weapon: Node3D = anchor.get_child(0) as Node3D
   var grip: Vector3 = WEAPON.grip_local_point(int(weapon.get("weapon_type")))
@@ -58,11 +58,11 @@ func _run() -> void:
    view.call("play_clip", action)
    var selected: String = str(player.current_animation)
    if not (selected == action or selected.begins_with(action + "_")):
-    _abort(class_name + ": wrong clip for " + action + " (got " + selected + ")")
+    _abort(hero_id + ": wrong clip for " + action + " (got " + selected + ")")
     return
    var animation: Animation = player.get_animation(selected)
    if animation == null or animation.get_track_count() == 0:
-    _abort(class_name + ": empty imported clip " + action)
+    _abort(hero_id + ": empty imported clip " + action)
     return
    var start: float = maxf(0.0, animation.length - float(WINDOW[action]))
    var timestamps: Array[float] = [start, start + (animation.length - start) * 0.5, animation.length - 0.001]
@@ -72,7 +72,7 @@ func _run() -> void:
     await process_frame
     var gap: float = weapon.to_global(grip).distance_to(anchor.global_position)
     if not is_finite(gap) or gap > GRIP_TOLERANCE:
-     _abort("%s: grip detached in %s at %.3f (gap=%.6f)" % [class_name, action, timestamp, gap])
+     _abort("%s: grip detached in %s at %.3f (gap=%.6f)" % [hero_id, action, timestamp, gap])
      return
     samples += 1
   hero.queue_free()
