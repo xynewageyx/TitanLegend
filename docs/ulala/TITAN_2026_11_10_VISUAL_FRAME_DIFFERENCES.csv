@@ -1,0 +1,13 @@
+class,attack_vs_walk_pct,attack_vs_dodge_pct,walk_vs_dodge_pct
+warrior,22.76,26.49,27.55
+paladin,22.71,26.44,25.68
+druid,13.57,23.68,25.77
+shaman,15.77,24.30,23.28
+hunter,16.76,29.36,30.75
+rogue,13.50,23.46,23.88
+mage,13.85,24.11,24.14
+warlock,12.31,23.96,24.56
+summoner,12.82,24.26,25.01
+priest,11.86,24.75,25.92
+brawler,18.08,25.78,24.11
+death_knight,6.67,13.54,11.84
