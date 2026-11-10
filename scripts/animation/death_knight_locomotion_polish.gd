@@ -27,7 +27,7 @@ static func install(player: AnimationPlayer, skeleton: Skeleton3D) -> Dictionary
   return report
  var staged: Dictionary = {}
  for action in ACTIONS:
-  var chosen := action
+  var chosen: String = str(action)
   if not private_library.has_animation(chosen):
    # Names may be suffixed when exported in a combined NLA library.
    chosen = ""
