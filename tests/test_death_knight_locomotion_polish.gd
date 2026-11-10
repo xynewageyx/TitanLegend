@@ -91,5 +91,10 @@ func _run() -> void:
   if player.get_animation(action) == null:
    _fail("Death Knight original " + action + " was overwritten")
    return
+ player.stop()
+ hero.queue_free()
+ original.queue_free()
+ await process_frame
+ await process_frame
  print("PASS: Death Knight private Idle Walk polish actions=%d added_tracks=6 original_glb_unchanged=true" % changed)
  quit(0)
