@@ -253,8 +253,11 @@ func _descendants(parent: Node) -> Array[Node]:
 func _capture_four_hero_formation() -> int:
  # Four practical combat roles, including Death Knight's distinct 24-bone rig.
  # The formation remains temporary QA data; no class setup or save is altered.
- team.class_ids = [0, 6, 11, 2]
- team.role_ids = [0, 1, 1, 2]
+ var lineup: Array[int] = [0, 6, 11, 2]
+ var roles: Array[int] = [0, 1, 1, 2]
+ for index in range(4):
+  team.class_ids[index] = lineup[index]
+  team.role_ids[index] = roles[index]
  team.create_team()
  await process_frame
  if team.heroes.size() != 4:
