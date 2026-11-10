@@ -60,6 +60,10 @@ def audit(manifest):
                     hidden = int(mask.get(category + "_hidden_body_pixels", -1))
                     if visible < 0 or hidden != max(0, baseline-visible):
                         errors.append(f"attack: invalid {category} depth mask delta for slot {hero_index}")
+                    # Conservative opaque-depth reference limit: any future
+                    # effect geometry covering >35% of its own body fails QA.
+                    if category == "effect" and baseline > 0 and hidden / baseline > 0.35:
+                        errors.append(f"attack: excessive opaque attack FX silhouette coverage for slot {hero_index}")
                     if mask.get(category + "_image") != f"formation_mask_{hero_index}_{category}.png":
                         errors.append(f"attack: missing depth mask image for {hero_index}/{category}")
             differential = vis.get("pixel_differential", {})
