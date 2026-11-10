@@ -66,3 +66,10 @@ These numbers are **geometric conditional frustum results**: they do **not** imp
 - Local read-only reproducibility script: `audit_ulala_plain_flower_camera_frustum_2026_11_10.py`.
 
 **Next reference task:** inspect original Unity MonoBehaviour/scene trigger references to determine whether the ten disabled flower groups are enabled at runtime. Without that, reporting runtime visible flowers is not supported. **No changes to Titan Legends visuals.**
+
+
+### Verified component ownership of the ten disabled flower groups
+
+For each of the ten `hua_001_group` and `hua_002_group` GameObjects, the original classID-1 `m_Component` array contains **exactly one PPtr**, resolving to its own **Transform (classID 4)**. None of the ten group GameObjects has a directly attached `MonoBehaviour (classID 114)` or other component. This does **not** rule out activation by scripts on other objects, scene managers, or dynamically loaded code.
+
+The original serialized `Plain` scene has **28,692 active and 17 inactive GameObjects** overall. Ten of those inactive ones are the flower-group parents. These flags were obtained from the aligned `m_IsActive` field after the variable-length component array and GameObject name, not inferred from MeshRenderer settings.
