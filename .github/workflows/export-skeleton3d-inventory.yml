@@ -2,6 +2,15 @@ name: Export Titan Legends Skeleton3D inventory
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/export-skeleton3d-inventory.yml
+      - tools/audit_titan_twelve_rigs.py
+      - tests/test_audit_titan_twelve_rigs.py
+      - tools/export_skeleton3d_inventory.gd
+      - tools/validate_skeleton3d_inventory.py
   push:
     branches:
       - main
@@ -83,6 +92,7 @@ jobs:
       - name: Audit twelve imported class rigs
         if: always()
         run: |
+          mkdir -p build
           if [ -s build/skeleton3d_inventory.json ]; then
             python3 tools/audit_titan_twelve_rigs.py build/skeleton3d_inventory.json --output build/twelve_class_rig_coverage.json || true
           else
