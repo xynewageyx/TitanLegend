@@ -36,8 +36,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/skeleton-import.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/skeleton-import.log; then exit 1; fi
+          for attempt in 1 2 3; do
+            set +e
+            godot --headless --audio-driver Dummy --path . --editor --import --quit 2>&1 | tee /tmp/skeleton-import.log
+            status=${PIPESTATUS[0]}
+            set -e
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/skeleton-import.log; then exit 1; fi
+            if [ "$status" -eq 0 ]; then break; fi
+            if [ "$status" -ne 134 ] || [ "$attempt" -eq 3 ]; then
+              echo "::error::Skeleton import failed with $status after attempt $attempt"
+              exit "$status"
+            fi
+            echo "::warning::Transient Godot 4.7.2 import crash (134); retrying with clean cache"
+            rm -rf .godot
+            sleep 2
+          done
       - name: Verify skeleton bridge
         shell: bash
         run: |
