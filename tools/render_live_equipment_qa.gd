@@ -308,10 +308,41 @@ func _four_hero_screen_visibility() -> Dictionary:
    var ratio: float = (overlap.size.x * overlap.size.y) / maxf(1.0, minf(a,b))
    maximum_overlap = maxf(maximum_overlap, ratio)
    pair_overlap.append({"slots": [first, second], "overlap_of_smaller_bbox": snappedf(ratio, 0.001)})
+ var weapon_rectangles: Array[Rect2] = []
+ var weapon_frames: Array[Dictionary] = []
+ var weapon_other_body_overlap: Array[Dictionary] = []
+ var maximum_weapon_overlap: float = 0.0
+ for index in range(team.heroes.size()):
+  var controller: Node3D = team.heroes[index].get_node_or_null("EquipmentController") as Node3D
+  if controller == null:
+   return {"valid": false, "reason": "missing equipment controller"}
+  var equipped: Dictionary = controller.get("equipped_nodes")
+  var weapon: Node3D = equipped.get("mainhand") as Node3D
+  if weapon == null:
+   return {"valid": false, "reason": "missing equipped mythic weapon"}
+  var weapon_box: Rect2 = _screen_bounds_for_meshes(weapon)
+  if weapon_box.size.x < 1.0 or weapon_box.size.y < 1.0:
+   return {"valid": false, "reason": "empty projected mythic weapon"}
+  weapon_rectangles.append(weapon_box)
+  weapon_frames.append({"class": CLASSES[team.class_ids[index]], "slot": index,
+   "bbox_px": [snappedf(weapon_box.position.x, 0.1), snappedf(weapon_box.position.y, 0.1),
+    snappedf(weapon_box.size.x, 0.1), snappedf(weapon_box.size.y, 0.1)]})
+ for weapon_index in range(weapon_rectangles.size()):
+  for target in range(rectangles.size()):
+   if weapon_index == target:
+    continue
+   var intersection: Rect2 = weapon_rectangles[weapon_index].intersection(rectangles[target])
+   var target_area: float = rectangles[target].size.x * rectangles[target].size.y
+   var ratio: float = intersection.size.x * intersection.size.y / maxf(1.0, target_area)
+   maximum_weapon_overlap = maxf(maximum_weapon_overlap, ratio)
+   weapon_other_body_overlap.append({"weapon_slot": weapon_index, "body_slot": target,
+    "fraction_of_other_body_bbox": snappedf(ratio, 0.001)})
  return {"valid": minimum_fraction >= 0.95, "body_frames": frames,
   "minimum_body_viewport_fraction": snappedf(minimum_fraction, 0.001),
   "maximum_pair_bbox_overlap": snappedf(maximum_overlap, 0.001),
-  "pairs": pair_overlap,
+  "pairs": pair_overlap, "weapon_frames": weapon_frames,
+  "max_weapon_vs_other_body_bbox_overlap": snappedf(maximum_weapon_overlap, 0.001),
+  "weapon_vs_other_body": weapon_other_body_overlap,
   "metric_description": "Projected geometry AABB overlap is a conservative screen-space proxy, not pixel-accurate occlusion or mesh clipping."}
 
 
