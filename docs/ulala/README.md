@@ -39,3 +39,7 @@ No Unity animation retargeting is claimed.
 - [Actual screenshot review: 64 scenes and four contact sheets](TITAN_2026_11_10_VISUAL_SCREENSHOT_AUDIT.md)
 - [Per-class RGB differences across Attack, Walk and Dodge](TITAN_2026_11_10_VISUAL_FRAME_DIFFERENCES.csv)
 - [Successful screenshot CI workflow](https://github.com/xynewageyx/TitanLegend/actions/runs/42760356033), artifact `TitanLegends-Rarity-Silhouette-V2-Visual-QA`. The Death Knight shows notably less 2D image change; camera and effects influence the metric. Visual clipping and Android performance remain unverified.
+
+## Death Knight 24-bone action motion
+
+- [Per-bone runtime motion measurements](TITAN_2026_11_10_DEATH_KNIGHT_BONE_MOTION.md): the original Death Knight attack hand rotates 62.145 degrees and translates 0.18977 units during sampled active clip motion; idle and walk are subtler. [Successful CI motion audit](https://github.com/xynewageyx/TitanLegend/actions/runs/42762080319). Static attack is a regression, subtle idle/walk are advisory.
