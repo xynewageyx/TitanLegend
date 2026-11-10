@@ -382,6 +382,92 @@ func _four_hero_screen_visibility() -> Dictionary:
   "metric_description": "Projected geometry AABB overlap is a conservative screen-space proxy, not pixel-accurate occlusion or mesh clipping."}
 
 
+
+func _pixel_delta_stats(reference: Image, counterfactual: Image, body_frames: Array) -> Dictionary:
+ # Compare the actual framebuffer readbacks pixel by pixel. This is NOT a
+ # depth-buffer object-ID mask or proof that body pixels were hidden.
+ if reference == null or counterfactual == null or reference.get_size() != counterfactual.get_size():
+  return {"valid": false, "reason": "pixel comparison dimensions differ"}
+ var a: Image = reference.duplicate() as Image
+ var b: Image = counterfactual.duplicate() as Image
+ a.convert(Image.FORMAT_RGB8)
+ b.convert(Image.FORMAT_RGB8)
+ var raw_a: PackedByteArray = a.get_data()
+ var raw_b: PackedByteArray = b.get_data()
+ var bounds: Array[Rect2i] = []
+ var hits: Array[int] = []
+ var totals: Array[int] = []
+ for item in body_frames:
+  var rect: Array = item.get("body_bbox_px", [])
+  if rect.size() != 4:
+   return {"valid": false, "reason": "missing projected body rectangle"}
+  var x0: int = clampi(int(floor(float(rect[0]))), 0, a.get_width())
+  var y0: int = clampi(int(floor(float(rect[1]))), 0, a.get_height())
+  var x1: int = clampi(int(ceil(float(rect[0]) + float(rect[2]))), 0, a.get_width())
+  var y1: int = clampi(int(ceil(float(rect[1]) + float(rect[3]))), 0, a.get_height())
+  bounds.append(Rect2i(x0, y0, maxi(0, x1 - x0), maxi(0, y1 - y0)))
+  hits.append(0)
+  totals.append(maxi(1, (x1 - x0) * (y1 - y0)))
+ var changed := 0
+ for y in range(a.get_height()):
+  for x in range(a.get_width()):
+   var offset: int = (y * a.get_width() + x) * 3
+   if absi(int(raw_a[offset]) - int(raw_b[offset])) <= 24 and absi(int(raw_a[offset+1]) - int(raw_b[offset+1])) <= 24 and absi(int(raw_a[offset+2]) - int(raw_b[offset+2])) <= 24:
+    continue
+   changed += 1
+   for index in range(bounds.size()):
+    if bounds[index].has_point(Vector2i(x,y)):
+     hits[index] += 1
+ var by_hero: Array[Dictionary] = []
+ for index in range(bounds.size()):
+  by_hero.append({"slot": index, "changed_pixels": hits[index],
+   "body_rectangle_area_px": totals[index],
+   "changed_fraction_of_body_rectangle": snappedf(float(hits[index]) / float(totals[index]), 0.00001)})
+ return {"valid": true, "pixel_threshold_max_rgb_8bit": 24,
+  "changed_pixels": changed,
+  "total_pixels": a.get_width() * a.get_height(),
+  "changed_fraction_of_frame": snappedf(float(changed) / float(maxi(1, a.get_width() * a.get_height())), 0.00001),
+  "body_regions": by_hero,
+  "method": "same-camera framebuffer counterfactual difference, not hidden body pixel or 3D collision percentage"}
+
+
+func _capture_counterfactual_attack_frames(reference: Image, visibility: Dictionary) -> Dictionary:
+ var changes: Dictionary = {}
+ for category in ["weapon", "pet", "effect"]:
+  var roots: Array[Node3D] = []
+  for hero in team.heroes:
+   var target: Node3D
+   if category == "pet":
+    target = hero.get_node_or_null("PassivePet") as Node3D
+   elif category == "effect":
+    target = hero.get_node_or_null("HeroCombatMotion/AttackFlash") as Node3D
+   else:
+    var controller: Node3D = hero.get_node_or_null("EquipmentController") as Node3D
+    var equipped: Dictionary = controller.get("equipped_nodes") if controller != null else {}
+    target = equipped.get("mainhand") as Node3D
+   if target == null or not target.is_visible_in_tree():
+    return {"valid": false, "reason": category + " has no visible source on every hero"}
+   roots.append(target)
+  for target in roots:
+   target.visible = false
+  await RenderingServer.frame_post_draw
+  var without: Image = root.get_texture().get_image()
+  var result: Dictionary = _pixel_delta_stats(reference, without, visibility.get("body_frames", []))
+  var filename: String = "formation_mythic_attack_without_" + category + ".png"
+  if without == null or without.save_png(OUTPUT + "/" + filename) != OK:
+   for target in roots:
+    target.visible = true
+   return {"valid": false, "reason": "could not save " + filename}
+  for target in roots:
+   target.visible = true
+  if not bool(result.get("valid", false)):
+   return result
+  result["counterfactual_image"] = filename
+  changes[category] = result
+ return {"valid": changes.size() == 3, "categories": changes,
+  "note": "Pixel deltas include transparent blending, lighting, exposed background and potentially overlapping props; they are not a direct hidden-body mask."}
+
+
 func _capture_four_hero_formation() -> int:
  # Four practical combat roles, including Death Knight's distinct 24-bone rig.
  # The formation remains temporary QA data; no class setup or save is altered.
@@ -439,6 +525,7 @@ func _capture_four_hero_formation() -> int:
    if motion == null:
     _fail("Formation hero has no cosmetic combat motion")
     return -1
+   motion.set_process(true)
    if action == "Attack":
     motion.call("play_attack")
    else:
@@ -476,6 +563,20 @@ func _capture_four_hero_formation() -> int:
   if not bool(visibility.get("valid", false)):
    _fail("Formation body geometry falls outside portrait frame in " + action + ": " + str(visibility))
    return -1
+  if action == "Attack":
+   # Lock cosmetic motion and passive pet processing for identical frame poses.
+   for hero in team.heroes:
+    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+    motion.set_process(false)
+    var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
+    if pet != null:
+     pet.set_process(false)
+   var pixel_result: Dictionary = await _capture_counterfactual_attack_frames(snapshot, visibility)
+   if not bool(pixel_result.get("valid", false)):
+    _fail("Pixel-difference attack QA failed: " + str(pixel_result))
+    return -1
+   visibility["pixel_differential"] = pixel_result
+   print("TITAN_FORMATION_PIXEL_DIFFERENTIAL " + JSON.stringify(pixel_result))
   print("TITAN_FORMATION_SCREEN_COVERAGE pose=%s details=%s" % [action, JSON.stringify(visibility)])
   results.append({"image": name, "class": "formation", "pose": action.to_lower(),
    "hero_count": 4, "class_ids": [0,6,11,2], "weapon_anchors": anchor_count,
@@ -617,7 +718,7 @@ func _run() -> void:
  var team_captures: int = await _capture_four_hero_formation()
  if team_captures != 4:
   return
- pictures += team_captures
+ pictures += team_captures + 3 # three attack counterfactual comparison PNGs
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
