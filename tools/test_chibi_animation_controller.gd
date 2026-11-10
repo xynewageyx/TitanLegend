@@ -46,7 +46,7 @@ func _run() -> void:
         elif controller.active_action != "Walk":
             failures.append("%s: expected Walk while moving" % hero_id)
         if controller.play_action("Attack"):
-            controller._on_animation_finished(StringName("Attack"))
+            controller._on_animation_finished(StringName(controller.animation_player.current_animation))
             if controller.active_action != "Walk":
                 failures.append("%s: attack did not restore Walk" % hero_id)
         if not controller.set_moving(false):
