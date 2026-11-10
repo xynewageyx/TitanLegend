@@ -76,9 +76,8 @@ static func affected_heroes(team: Node3D, element: int, fusion: bool) -> Array[i
  return affected
 
 static func _zone_shapes(element: int, fusion: bool) -> Array[Vector3]:
- var count: int = 1
- var width: float = 1.25
- var depth: float = 1.25
+ var w: float = 1.8 if fusion else 1.25
+ return [Vector3(0.0, w, 2.5)].25
  match element:
   0: count = 3; width = 0.65; depth = 2.7
   1: count = 3; width = 1.15; depth = 1.15
