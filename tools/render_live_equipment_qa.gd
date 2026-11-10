@@ -327,6 +327,27 @@ func _run() -> void:
   if weapon_before.is_equal_approx(weapon_after):
    _fail("Equipped weapon stayed static during attack: " + CLASSES[i])
    return
+  # Also capture imported Walk and Dodge for all classes. Keep the original
+  # animation at its active movement interval, including DK's 24-bone rig.
+  for moving_pose in ["Walk", "Dodge"]:
+   chibi.call("play_clip", moving_pose)
+   var moving_name: String = str(animator.current_animation)
+   if not (moving_name == moving_pose or moving_name.begins_with(moving_pose + "_")):
+    _fail("Wrong imported animation for %s / %s: %s" % [CLASSES[i], moving_pose, moving_name])
+    return
+   var moving_clip: Animation = animator.get_animation(moving_name)
+   if moving_clip == null or moving_clip.get_track_count() == 0:
+    _fail("Empty moving animation for %s / %s" % [CLASSES[i], moving_pose])
+    return
+   var motion_window: float = 1.1 if moving_pose == "Walk" else 0.9
+   animator.seek(maxf(0.0, moving_clip.length - 0.45 * motion_window), true)
+   var moving_label: String = "front_" + moving_pose.to_lower()
+   if not await _capture(CLASSES[i] + "_" + moving_label, hero, moving_label, i):
+    return
+   pictures += 1
+  # Restore attack pose for consistent side-by-side attack visuals.
+  chibi.call("play_clip", "Attack")
+  animator.seek(midpoint, true)
   # Every class gets a side view, revealing weapon/armor overlap on Android.
   hero.rotation.y = PI * 0.5
   if not await _capture(CLASSES[i] + "_side_attack", hero, "side_attack", i):
@@ -352,7 +373,7 @@ func _run() -> void:
     if not await _capture(label, hero, "front_rarity_" + str(sampled_quality), i):
      return
     pictures += 1
- if not _build_contact_sheet("front_attack") or not _build_contact_sheet("side_attack"):
+ if not _build_contact_sheet("front_attack") or not _build_contact_sheet("side_attack") or not _build_contact_sheet("front_walk") or not _build_contact_sheet("front_dodge"):
   return
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
@@ -361,7 +382,7 @@ func _run() -> void:
  file.store_string(JSON.stringify({
    "generator": "Godot 4.7.2 live imported GLB equipment QA",
    "image_count": pictures, "class_count": CLASSES.size(),
-   "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png"],
+   "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png", "overview_front_walk.png", "overview_front_dodge.png"],
    "contact_sheet_order": CLASSES,
    "real_android_device_tested": false, "renders": results
   }, "  "))
