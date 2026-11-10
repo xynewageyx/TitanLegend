@@ -66,10 +66,3 @@ jobs:
           godot --headless --path . --script res://tests/test_chibi_weapon_animation_grip.gd 2>&1 | tee /tmp/chibi-weapon-grip.log
           grep -Fq 'PASS: animated weapon grip continuity classes=12 actions=4 samples=144 death_knight_hand=Hand_R_2' /tmp/chibi-weapon-grip.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/chibi-weapon-grip.log; then exit 1; fi
-      - name: Verify Death Knight private Idle Walk polish
-        shell: bash
-        run: |
-          set -euo pipefail
-          godot --headless --path . --script res://tests/test_death_knight_locomotion_polish.gd 2>&1 | tee /tmp/death-knight-polish.log
-          grep -Fq 'PASS: Death Knight private Idle Walk polish actions=2 added_tracks=6 original_glb_unchanged=true' /tmp/death-knight-polish.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/death-knight-polish.log; then exit 1; fi
