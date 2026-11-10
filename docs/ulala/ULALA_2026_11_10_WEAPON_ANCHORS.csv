@@ -1,0 +1,3 @@
+variant,renderer_path,hand_bone_path,root_bone_is_single_skin_bone,renderer_local_x,renderer_local_y,renderer_local_z,hand_relative_x,hand_relative_y,hand_relative_z
+DLY,DLY/DLY_PuGongYing_Weapon,DLY/kid_Bip001/kid_Bip001_M_Hand,true,0.339315027,-0.029690258,0.004377628,-0.58779978,-0.17253294,0.40747089
+NDLY,NDLY/NDLY_PuGongYing_Weapon,NDLY/kid_Bip001/kid_Bip001_M_Hand,true,0.352561265,0.049093235,-0.000000134,-0.50966234,-0.15567531,0.41091011
