@@ -56,8 +56,24 @@ jobs:
           set -euo pipefail
           rm -rf original_update168
           python3 tools/generate_audio_sfx.py
-          timeout 180s godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/equipment-visual-import.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/equipment-visual-import.log; then exit 1; fi
+          # Godot 4.7.2 editor import intermittently aborts on Mesa runners
+          # (double-free or internal index failure, process exit 134).
+          # Only retry that engine abort; never suppress parse/script errors.
+          for attempt in 1 2 3; do
+            set +e
+            timeout 180s godot --headless --audio-driver Dummy --path . --editor --import --quit 2>&1 | tee /tmp/equipment-visual-import.log
+            status=${PIPESTATUS[0]}
+            set -e
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/equipment-visual-import.log; then exit 1; fi
+            if [ "$status" -eq 0 ]; then break; fi
+            if [ "$status" -ne 134 ] || [ "$attempt" -eq 3 ]; then
+              echo "::error::Godot visual import failed with $status after attempt $attempt"
+              exit "$status"
+            fi
+            echo "::warning::Transient Godot editor-import abort 134; resetting cache and retrying ($attempt/3)"
+            rm -rf .godot
+            sleep 2
+          done
       - name: Validate all 72 weapon rarities and 156 armor profiles
         shell: bash
         run: |
