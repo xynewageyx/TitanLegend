@@ -44,6 +44,24 @@ def audit(manifest):
         if len(pets) != 4:
             errors.append(pose + f": expected four visible pet bboxes, got {len(pets)}")
         if pose == "attack":
+            depth = vis.get("depth_silhouette_masks", {})
+            heroes = depth.get("heroes", [])
+            if not depth.get("valid", False) or depth.get("mask_images") != 16 or len(heroes) != 4:
+                errors.append("attack: incomplete depth-tested hero silhouette masks")
+            for hero_index, mask in enumerate(heroes):
+                if mask.get("slot") != hero_index or mask.get("class") != EXPECTED_CLASSES[hero_index]:
+                    errors.append(f"attack: mask identity mismatch for slot {hero_index}")
+                    continue
+                baseline = int(mask.get("baseline_visible_body_pixels", 0))
+                if baseline <= 0:
+                    errors.append(f"attack: no body baseline for slot {hero_index}")
+                for category in ("weapon", "pet", "effect"):
+                    visible = int(mask.get(category + "_visible_body_pixels", -1))
+                    hidden = int(mask.get(category + "_hidden_body_pixels", -1))
+                    if visible < 0 or hidden != max(0, baseline-visible):
+                        errors.append(f"attack: invalid {category} depth mask delta for slot {hero_index}")
+                    if mask.get(category + "_image") != f"formation_mask_{hero_index}_{category}.png":
+                        errors.append(f"attack: missing depth mask image for {hero_index}/{category}")
             differential = vis.get("pixel_differential", {})
             if not differential.get("valid", False):
                 errors.append("attack: missing real pixel-difference analysis")
@@ -71,7 +89,8 @@ def audit(manifest):
             "pet_to_other_body_bbox_overlap": vis.get("max_pet_vs_other_body_bbox_overlap"),
             "attack_fx_to_body_bbox_overlap": vis.get("max_effect_vs_body_bbox_overlap"),
             "pet_count": len(pets), "active_attack_fx_count": len(effects),
-            "pixel_differential": vis.get("pixel_differential") if pose == "attack" else None
+            "pixel_differential": vis.get("pixel_differential") if pose == "attack" else None,
+            "depth_silhouette_masks": vis.get("depth_silhouette_masks") if pose == "attack" else None
         })
     return {
         "valid": not errors, "errors": errors, "actions": result,
