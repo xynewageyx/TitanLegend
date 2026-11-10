@@ -9,6 +9,7 @@ on:
       - 'scripts/weapons/procedural_weapon_preview.gd'
       - 'tests/test_weapon_armor_silhouette_v2.gd'
       - 'tools/render_live_equipment_qa.gd'
+      - 'tests/test_chibi_weapon_animation_grip.gd'
       - '.github/workflows/animated-equipment-visual-qa.yml'
   push:
     branches: [main]
@@ -64,13 +65,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 180s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+          timeout 300s xvfb-run -a -s '-screen 0 720x1280x24' godot \
             --path . --rendering-method gl_compatibility --audio-driver Dummy \
             --script res://tools/render_live_equipment_qa.gd \
             2>&1 | tee /tmp/equipment-visual-qa.log
-          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=40 classes=12' /tmp/equipment-visual-qa.log
+          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=64 classes=12' /tmp/equipment-visual-qa.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/equipment-visual-qa.log; then exit 1; fi
-          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 42
+          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 68
           test -s build/animated_equipment_qa/manifest.json
           test -s build/animated_equipment_qa/death_knight_front_attack.png
           test -s build/animated_equipment_qa/warrior_side_attack.png
@@ -78,6 +79,9 @@ jobs:
           test -s build/animated_equipment_qa/mage_side_attack.png
           test -s build/animated_equipment_qa/overview_front_attack.png
           test -s build/animated_equipment_qa/overview_side_attack.png
+          test -s build/animated_equipment_qa/overview_front_walk.png
+          test -s build/animated_equipment_qa/overview_front_dodge.png
+          test -s build/animated_equipment_qa/death_knight_front_dodge.png
       - name: Upload screenshot collection for Android review
         if: always()
         uses: actions/upload-artifact@v4
