@@ -53,3 +53,8 @@ No Unity animation retargeting is claimed.
 ## Formation screen visibility and mythic weapon geometry
 
 - [Projected screen coverage and inter-character weapon overlap](TITAN_2026_11_10_FORMATION_SCREEN_COVERAGE.md). Successful [OpenGL CI](https://github.com/xynewageyx/TitanLegend/actions/runs/42782647069): all four imported-body AABBs fully within viewport and no projected body-body or mythic-weapon-to-other-body AABB overlap, for four selected action frames. These are static mesh bounding-box proxies and do not prove full skin deformation, per-pixel occlusion, pet/VFX visibility or Android GPU performance.
+
+## Four-hero pets and active attack FX screen metrics
+
+- [Measured weapon/pet/attack-flash screen coverage](TITAN_2026_11_10_FOUR_HERO_PET_FX_COVERAGE.md): all four original class bodies and passive pets are visible; maximum projected pet-to-other-body box intersection 0.6%, active attack FX 14.6%. These are **screen-space bounds proxies, not actual hidden-pixel counts or collision**.
+- [Validated GitHub Actions test](https://github.com/xynewageyx/TitanLegend/actions/runs/42786662858): 72 screenshots, `manifest.json` and `formation_visibility_audit.json`; the four-pose visibility regression passed.
