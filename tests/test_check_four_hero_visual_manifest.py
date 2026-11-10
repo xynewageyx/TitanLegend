@@ -21,6 +21,21 @@ def example():
                 "max_weapon_vs_other_body_bbox_overlap": 0.0,
                 "max_pet_vs_other_body_bbox_overlap": 0.006,
                 "max_effect_vs_body_bbox_overlap": 0.146 if pose == "attack" else 0.0,
+                "pixel_differential": ({
+                    "valid": True,
+                    "categories": {
+                        kind: {
+                            "valid": True,
+                            "total_pixels": 720 * 1280,
+                            "changed_pixels": 4000,
+                            "counterfactual_image": f"formation_mythic_attack_without_{kind}.png",
+                            "body_regions": [
+                                {"slot": idx, "changed_pixels": 250, "body_rectangle_area_px": 10000}
+                                for idx in range(4)
+                            ],
+                        } for kind in ("weapon", "pet", "effect")
+                    },
+                } if pose == "attack" else {}),
             }
         })
     return {"renders": frames}
@@ -45,6 +60,15 @@ class FormationManifestTests(unittest.TestCase):
     def test_missing_pet_fails(self):
         manifest = example()
         manifest["renders"][3]["screen_visibility"]["pet_effect_frames"].pop()
+        self.assertFalse(audit(manifest)["valid"])
+    def test_missing_pixel_category_fails(self):
+        manifest = example()
+        manifest["renders"][2]["screen_visibility"]["pixel_differential"]["categories"].pop("pet")
+        self.assertFalse(audit(manifest)["valid"])
+    def test_pixel_count_cannot_exceed_frame(self):
+        manifest = example()
+        metrics = manifest["renders"][2]["screen_visibility"]["pixel_differential"]["categories"]["effect"]
+        metrics["changed_pixels"] = metrics["total_pixels"] + 1
         self.assertFalse(audit(manifest)["valid"])
     def test_wider_fx_rectangle_is_a_measurement_not_pixel_collision(self):
         manifest = example()
