@@ -10,6 +10,8 @@ on:
       - tools/audit_titan_twelve_rigs.py
       - tools/audit_titan_rig_pose_compatibility.py
       - tools/export_twelve_class_bone_motion.gd
+      - tools/analyze_twelve_class_bone_motion.py
+      - tests/test_analyze_twelve_class_bone_motion.py
       - tests/test_audit_titan_rig_pose_compatibility.py
       - tests/test_audit_titan_twelve_rigs.py
       - tools/export_skeleton3d_inventory.gd
@@ -46,6 +48,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_audit_titan_twelve_rigs.py' -v
       - name: Test twelve-class rest-pose and equipment-socket auditor
         run: python3 -m unittest discover -s tests -p 'test_audit_titan_rig_pose_compatibility.py' -v
+      - name: Test twelve-class motion analyzer
+        run: python3 -m unittest discover -s tests -p 'test_analyze_twelve_class_bone_motion.py' -v
       - name: Test Chibi animation coverage analyzer
         run: python3 -m unittest discover -s tests -p 'test_analyze_chibi_animation_inventory.py' -v
       - name: Test Chibi animation duplicate auditor
@@ -117,6 +121,9 @@ jobs:
         run: |
           "$GODOT_BIN" --headless --path . --script res://tools/export_twelve_class_bone_motion.gd
           test -s build/twelve_class_bone_motion.json
+      - name: Evaluate Death Knight hand motion and Idle Walk observations
+        run: |
+          python3 tools/analyze_twelve_class_bone_motion.py build/twelve_class_bone_motion.json --output build/twelve_class_motion_report.json
       - name: Upload inventory
         if: always()
         uses: actions/upload-artifact@v4
@@ -128,6 +135,7 @@ jobs:
             build/twelve_class_rig_coverage.json
             build/twelve_class_pose_compatibility.json
             build/twelve_class_bone_motion.json
+            build/twelve_class_motion_report.json
             build/chibi_animation_inventory.json
             build/chibi_animation_coverage.json
             build/chibi_animation_duplicate_audit.json
