@@ -83,9 +83,9 @@ jobs:
             --path . --rendering-method gl_compatibility --audio-driver Dummy \
             --script res://tools/render_live_equipment_qa.gd \
             2>&1 | tee /tmp/equipment-visual-qa.log
-          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=68 classes=12' /tmp/equipment-visual-qa.log
+          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=71 classes=12' /tmp/equipment-visual-qa.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/equipment-visual-qa.log; then exit 1; fi
-          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 72
+          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 75
           test -s build/animated_equipment_qa/manifest.json
           test -s build/animated_equipment_qa/death_knight_front_attack.png
           test -s build/animated_equipment_qa/warrior_side_attack.png
@@ -100,6 +100,10 @@ jobs:
           test -s build/animated_equipment_qa/formation_mythic_walk.png
           test -s build/animated_equipment_qa/formation_mythic_attack.png
           test -s build/animated_equipment_qa/formation_mythic_dodge.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_without_weapon.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_without_pet.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_without_effect.png
+          grep -Fq "TITAN_FORMATION_PIXEL_DIFFERENTIAL" /tmp/equipment-visual-qa.log
           grep -Fq 'TITAN_FORMATION_VISUAL_QA_FRAME pose=Dodge weapons=4' /tmp/equipment-visual-qa.log
       - name: Audit four-hero camera, pet and attack-effect visibility
         shell: bash
