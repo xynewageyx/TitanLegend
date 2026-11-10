@@ -13,6 +13,7 @@ extends Node3D
 @export var show_legs := true
 @export var show_boots := true
 @export var show_back := true
+@export var pulse_glow := true
 const TIER_COLORS := [Color("#777b80"), Color("#328e48"), Color("#317bd9"), Color("#e7bb48"), Color("#f16b22"), Color("#9e45ef")]
 const METAL := Color("#292d37")
 const CLOTH := Color("#242532")
