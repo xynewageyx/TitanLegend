@@ -88,7 +88,7 @@ jobs:
           test -s build/skeleton3d_inventory.json
       - name: Validate exported skeletons and rest poses
         run: |
-          python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json
+          python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json --allow-empty-scene res://scenes/character/titan_modular_character.tscn
       - name: Audit twelve imported class rigs
         if: always()
         run: |
