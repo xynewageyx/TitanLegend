@@ -7,7 +7,7 @@ const BONES := ["Shoulder_R", "Shoulder_L", "Chest"]
 const WINDOWS := {"Idle": 1.4, "Walk": 1.1}
 
 static func install(player: AnimationPlayer, skeleton: Skeleton3D) -> Dictionary:
- var report := {"installed": false, "animations": [], "tracks": 0, "warnings": []}
+ var report := {"installed": false, "source_library_isolated": false, "animations": [], "tracks": 0, "warnings": []}
  if player == null or skeleton == null or skeleton.get_bone_count() != 24:
   report["warnings"].append("Expected original Death Knight 24-bone imported rig")
   return report
@@ -25,6 +25,7 @@ static func install(player: AnimationPlayer, skeleton: Skeleton3D) -> Dictionary
  if private_library == null:
   report["warnings"].append("Cannot duplicate animation library")
   return report
+ report["source_library_isolated"] = private_library.get_instance_id() != original_library.get_instance_id()
  var staged: Dictionary = {}
  for action in ACTIONS:
   var chosen: String = str(action)
