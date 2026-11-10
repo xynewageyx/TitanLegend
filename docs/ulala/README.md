@@ -6,6 +6,8 @@ These files capture **abstract technical reference findings**, not transferable 
 - [Aggregated mapping status](ULALA_2026_11_10_MAPPING_STATUS.csv)
 - [Avatar skeleton and pose audit](ULALA_2026_11_10_AVATAR_POSE_AUDIT.md)
 - [Resolved DLY/NDLY Avatar indices and weapon/shoe ordering](ULALA_2026_11_10_AVATAR_INDEX_RESOLUTION.md)
+- [Weapon renderer and hand-root-bone offset audit](ULALA_2026_11_10_WEAPON_ATTACHMENT_AUDIT.md)
+- [Variant weapon anchor metadata CSV](ULALA_2026_11_10_WEAPON_ANCHORS.csv)
 
 Earlier upstream analysis remains in `docs/ULALA_EQUIPMENT_BUNDLE_SCAN.md`, `docs/ULALA_CHARACTER_HIERARCHIES.md`, `docs/ULALA_AGGREGATED_MESH_COMPLEXITY.md` and `tools/analysis/ulala_rig_fullbody_compatibility.md`.
 
