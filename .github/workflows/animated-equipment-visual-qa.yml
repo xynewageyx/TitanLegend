@@ -9,6 +9,8 @@ on:
       - 'scripts/weapons/procedural_weapon_preview.gd'
       - 'tests/test_weapon_armor_silhouette_v2.gd'
       - 'tools/render_live_equipment_qa.gd'
+      - 'tests/test_death_knight_locomotion_polish.gd'
+      - 'scripts/animation/death_knight_locomotion_polish.gd'
       - 'tests/test_chibi_weapon_animation_grip.gd'
       - '.github/workflows/animated-equipment-visual-qa.yml'
   push:
@@ -61,6 +63,16 @@ jobs:
           timeout 120s godot --headless --path . --script res://tests/test_weapon_armor_silhouette_v2.gd 2>&1 | tee /tmp/titan-silhouette-v2.log
           grep -Fq 'TITAN_SILHOUETTE_V2_OK weapons=72 armors=156 faceted=36 rarities=6' /tmp/titan-silhouette-v2.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/titan-silhouette-v2.log; then exit 1; fi
+      - name: Verify Death Knight Idle Walk polish with real OpenGL renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+            --path . --rendering-method gl_compatibility --audio-driver Dummy \
+            --script res://tests/test_death_knight_locomotion_polish.gd \
+            2>&1 | tee /tmp/death-knight-opengl-polish.log
+          grep -Fq 'PASS: Death Knight private Idle Walk polish actions=2 added_tracks=6 original_glb_unchanged=true' /tmp/death-knight-opengl-polish.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/death-knight-opengl-polish.log; then exit 1; fi
       - name: Render original twelve-class equipment in Godot OpenGL
         shell: bash
         run: |
