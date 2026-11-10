@@ -58,3 +58,8 @@ No Unity animation retargeting is claimed.
 
 - [Measured weapon/pet/attack-flash screen coverage](TITAN_2026_11_10_FOUR_HERO_PET_FX_COVERAGE.md): all four original class bodies and passive pets are visible; maximum projected pet-to-other-body box intersection 0.6%, active attack FX 14.6%. These are **screen-space bounds proxies, not actual hidden-pixel counts or collision**.
 - [Validated GitHub Actions test](https://github.com/xynewageyx/TitanLegend/actions/runs/42786662858): 72 screenshots, `manifest.json` and `formation_visibility_audit.json`; the four-pose visibility regression passed.
+
+## Pixelbasierte Waffen-/Begleiter-/Effekt-Gegenproben
+
+- [Bestätigte 75-Renderbilder-Pixelanalyse](TITAN_2026_11_10_PIXEL_COUNTERFACTUAL_RESULTS.md): im Attack-Frame ändern sich beim Ausblenden von Waffen 1,806 %, von Begleitern 4,778 % und von Angriffsblitzen 1,512 % aller 720×1280 Bildpixel. **Keine direkte Verdeckungs- oder Mesh-Kollisionsmessung.**
+- [Methodik und Grenzen](TITAN_2026_11_10_PIXEL_COUNTERFACTUAL_QA.md) · [Erfolgreicher Pixeltest](https://github.com/xynewageyx/TitanLegend/actions/runs/42852858921)
