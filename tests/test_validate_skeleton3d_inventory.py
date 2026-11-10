@@ -46,6 +46,13 @@ class SkeletonInventoryValidationTests(unittest.TestCase):
         b["rest_basis"] = [[0, -1, 0], [1, 0, 0], [0, 0, 1]]
         self.assertTrue(validate(inventory([b]))["valid"])
 
+    def test_explicit_empty_prototype_only(self):
+        entry = inventory([])
+        entry["skeletons"][0]["scene"] = "res://scenes/character/titan_modular_character.tscn"
+        self.assertFalse(validate(entry)["valid"])
+        self.assertTrue(validate(entry, allow_empty_scenes=["res://scenes/character/titan_modular_character.tscn"])["valid"])
+        self.assertFalse(validate(entry, allow_empty_scenes=["res://wrong.tscn"])["valid"])
+
     def test_no_skeletons(self):
         self.assertFalse(validate({"skeletons": []})["valid"])
 
