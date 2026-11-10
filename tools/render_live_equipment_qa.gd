@@ -278,8 +278,9 @@ func _capture_four_hero_formation() -> int:
   if not bool(controller.call("equip_armor_slot", "ChestSocket", team.class_ids[index], 5)):
    _fail("Formation mythic chest armor could not be equipped at slot " + str(index))
    return -1
- camera.position = Vector3(0.0, 4.2, 14.0)
- camera.look_at(Vector3(0.0, 1.25, 0.0), Vector3.UP)
+ # Elevated 4-hero battle view separates front and back row silhouettes.
+ camera.position = Vector3(0.0, 10.0, 12.0)
+ camera.look_at(Vector3(0.0, 1.2, 0.0), Vector3.UP)
  var captured := 0
  for action in ["Idle", "Walk", "Attack", "Dodge"]:
   for hero in team.heroes:
