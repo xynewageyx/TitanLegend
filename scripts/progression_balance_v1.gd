@@ -14,7 +14,12 @@ const CLASS_TREES := {
  "ranger": ["precision", "wilderness", "trapper"],
  "priest": ["healing", "blessing", "light"],
  "assassin": ["shadow", "blades", "poison"],
- "death_knight": ["blood", "frost", "unholy"]
+ "death_knight": ["blood", "frost", "unholy"],
+ "shaman": ["elements", "restoration", "enhancement"],
+ "druid": ["balance", "feral", "restoration"],
+ "warlock": ["affliction", "demonology", "destruction"],
+ "bard": ["harmony", "dissonance", "support"],
+ "gladiator": ["arena", "brawl", "tactics"]
 }
 const SKILL_ANIMATIONS := {
  "shield_bash": "shield_bash",
