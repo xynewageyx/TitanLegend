@@ -21,6 +21,13 @@ def example():
                 "max_weapon_vs_other_body_bbox_overlap": 0.0,
                 "max_pet_vs_other_body_bbox_overlap": 0.006,
                 "max_effect_vs_body_bbox_overlap": 0.146 if pose == "attack" else 0.0,
+                "attack_flash_transparency_comparison": ({
+                    "valid": True,
+                    "production_alpha": 0.55,
+                    "opaque_reference_image": "formation_mythic_attack_opaque_reference.png",
+                    "total_pixels": 921600,
+                    "changed_pixels": 1000,
+                } if pose == "attack" else {}),
                 "depth_silhouette_masks": ({
                     "valid": True,
                     "mask_images": 16,
@@ -64,6 +71,14 @@ class FormationManifestTests(unittest.TestCase):
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(len(report["actions"]), 4)
         self.assertEqual(report["actions"][2]["active_attack_fx_count"], 4)
+    def test_opaque_attack_alpha_is_rejected(self):
+        manifest = example()
+        manifest["renders"][2]["screen_visibility"]["attack_flash_transparency_comparison"]["production_alpha"] = 1.0
+        self.assertFalse(audit(manifest)["valid"])
+    def test_no_visible_alpha_difference_is_rejected(self):
+        manifest = example()
+        manifest["renders"][2]["screen_visibility"]["attack_flash_transparency_comparison"]["changed_pixels"] = 0
+        self.assertFalse(audit(manifest)["valid"])
     def test_missing_attack_fx_fails(self):
         manifest = example()
         manifest["renders"][2]["screen_visibility"]["pet_effect_frames"] = [
