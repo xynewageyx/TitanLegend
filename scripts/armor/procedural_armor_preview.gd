@@ -13,7 +13,7 @@ extends Node3D
 @export var show_legs := true
 @export var show_boots := true
 @export var show_back := true
-const TIER_COLORS := [Color("#777b80"), Color("#328e48"), Color("#317bd9"), Color("#e7bb48"), Color("#f16b22"), Color("#9e45ef")]
+@export var tier_colors: Array[Color] = [Color("#777b80"), Color("#328e48"), Color("#317bd9"), Color("#e7bb48"), Color("#f16b22"), Color("#9e45ef")]
 const METAL := Color("#292d37")
 const CLOTH := Color("#242532")
 func _ready() -> void:
@@ -38,7 +38,7 @@ func rebuild() -> void:
     for c in get_children():
         remove_child(c)
         c.queue_free()
-    var tint: Color = TIER_COLORS[rarity]
+    var tint: Color = tier_colors[clampi(rarity, 0, tier_colors.size() - 1)]
     var bulk := 1.0 + float(rarity) * 0.09
     var heavy := armor_class == 0 or armor_class == 1 or armor_class == 4
     var width := 0.6 * bulk if heavy else 0.46 * bulk
