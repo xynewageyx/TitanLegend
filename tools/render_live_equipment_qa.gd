@@ -731,6 +731,40 @@ func _capture_four_hero_formation() -> int:
     return -1
    visibility["pixel_differential"] = pixel_result
    print("TITAN_FORMATION_PIXEL_DIFFERENTIAL " + JSON.stringify(pixel_result))
+   # Compare against fully opaque impact spheres with the SAME attack pose,
+   # camera and weapons; only QA temporarily modifies the material alpha.
+   var fx_materials: Array[StandardMaterial3D] = []
+   var fx_alphas: Array[float] = []
+   for hero in team.heroes:
+    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+    var sphere: MeshInstance3D = motion.get("magic_flash") as MeshInstance3D
+    var mat: StandardMaterial3D = sphere.material_override as StandardMaterial3D
+    if mat == null or mat.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA or absf(mat.albedo_color.a - 0.55) > 0.001:
+     _fail("Expected translucent attack sphere material in visual QA")
+     return -1
+    fx_materials.append(mat)
+    fx_alphas.append(mat.albedo_color.a)
+    var full: Color = mat.albedo_color
+    full.a = 1.0
+    mat.albedo_color = full
+   await RenderingServer.frame_post_draw
+   var opaque_frame: Image = root.get_texture().get_image()
+   var opaque_path: String = OUTPUT + "/formation_mythic_attack_opaque_reference.png"
+   if opaque_frame == null or opaque_frame.save_png(opaque_path) != OK:
+    _fail("Cannot capture opaque attack FX comparison")
+    return -1
+   for index in range(fx_materials.size()):
+    var restored: Color = fx_materials[index].albedo_color
+    restored.a = fx_alphas[index]
+    fx_materials[index].albedo_color = restored
+   var alpha_comparison: Dictionary = _pixel_delta_stats(snapshot, opaque_frame, visibility.get("body_frames", []))
+   if not bool(alpha_comparison.get("valid", false)):
+    _fail("Attack alpha comparison failed")
+    return -1
+   alpha_comparison["opaque_reference_image"] = "formation_mythic_attack_opaque_reference.png"
+   alpha_comparison["production_alpha"] = 0.55
+   visibility["attack_flash_transparency_comparison"] = alpha_comparison
+   print("TITAN_FORMATION_ATTACK_ALPHA_COMPARISON " + JSON.stringify(alpha_comparison))
    var depth_masks: Dictionary = await _capture_depth_silhouette_masks()
    if not bool(depth_masks.get("valid", false)):
     _fail("Four-hero depth silhouette mask audit failed: " + str(depth_masks))
@@ -878,7 +912,7 @@ func _run() -> void:
  var team_captures: int = await _capture_four_hero_formation()
  if team_captures != 4:
   return
- pictures += team_captures + 3 + 16 # three comparison and sixteen depth-mask PNGs
+ pictures += team_captures + 3 + 16 + 1 # 3 comparison, 16 masks, 1 opaque reference
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
