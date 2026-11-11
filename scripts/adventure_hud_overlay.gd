@@ -23,7 +23,7 @@ const MORE_ENTRIES := [
  ["✥ Talentbaum", "talents_v2"]
 ]
 const ROLE_ICONS := ["◆", "⚔", "✚"]
-const ROLE_TEXT := ["TANK", "SCHADEN", "HEILUNG"]
+const ROLE_TEXT := ["TANK", "SCHADEN", "HEILER"]
 
 var hud: Control
 var battle: Node3D
