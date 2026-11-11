@@ -66,6 +66,11 @@ def audit(manifest):
                         errors.append(f"attack: excessive opaque attack FX silhouette coverage for slot {hero_index}")
                     if mask.get(category + "_image") != f"formation_mask_{hero_index}_{category}.png":
                         errors.append(f"attack: missing depth mask image for {hero_index}/{category}")
+            alpha = vis.get("attack_flash_transparency_comparison", {})
+            if alpha.get("production_alpha") != 0.55 or alpha.get("opaque_reference_image") != "formation_mythic_attack_opaque_reference.png":
+                errors.append("attack: invalid translucent-versus-opaque FX reference")
+            if not alpha.get("valid", False) or int(alpha.get("total_pixels", 0)) <= 0 or int(alpha.get("changed_pixels", 0)) <= 0:
+                errors.append("attack: translucent impact FX produces no verified pixel difference")
             differential = vis.get("pixel_differential", {})
             if not differential.get("valid", False):
                 errors.append("attack: missing real pixel-difference analysis")
