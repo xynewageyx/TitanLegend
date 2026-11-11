@@ -72,3 +72,7 @@ No Unity animation retargeting is claimed.
 ## Halbtransparente Angriffsblitze (2026-11-11)
 
 - [Bestätigter 55-%-gegen-100-%-OpenGL-Vergleich](TITAN_2026_11_11_ATTACK_FLASH_ALPHA_QA.md): 13.405 veränderte Pixel im identischen Attack-Frame, 92 PNG-Aufnahmen und zwei Berichte im [erfolgreichen GitHub-Actions-Lauf](https://github.com/xynewageyx/TitanLegend/actions/runs/43074302659). Die Transparenz betrifft nur die kosmetische magic_flash-Kugel, nicht Schaden, Waffen oder Begleiter.
+
+## Originale Spielkamera und Linux-Framezeit (2026-11-11)
+
+- [Echte perspektivische Kamera, Idle-Attack-Verifikation und 90-Frame-Diagnose](TITAN_2026_11_11_GAMEPLAY_CAMERA_PERFORMANCE.md): 56° FOV, alle vier Helden im Portraitbild und 30.713 veränderte Idle-Attack-Pixel, CI [43076803728](https://github.com/xynewageyx/TitanLegend/actions/runs/43076803728). Der Linux-Software-Renderer liefert ausschließlich diagnostische Framezeiten; **keine Android-FPS-Behauptung**.
