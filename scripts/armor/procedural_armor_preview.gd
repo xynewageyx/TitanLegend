@@ -31,7 +31,7 @@ func piece(p: Vector3, dimensions: Vector3, tint: Color, emissive: bool = false)
     if emissive:
         material.emission_enabled = true
         material.emission = tint
-        material.emission_energy_multiplier = 1.2
+        material.emission_energy_multiplier = 0.8 + float(rarity) * 0.25
     m.material_override = material
     add_child(m)
 func rebuild() -> void:
