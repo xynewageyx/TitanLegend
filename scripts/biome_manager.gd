@@ -82,7 +82,7 @@ func generate_terrain() -> void:
   _add_forest_variation()
   _add_forest_pines()
   _add_forest_path_details()
-  preload("res://scripts/organic_forest_trail.gd").create(terrain)
+  preload("res://scripts/organic_forest_trail.gd").generate(terrain)).create(terrain)
 
 func _add_forest_depth() -> void:
  # Fill distant forest edges without extra physics bodies or textures.
