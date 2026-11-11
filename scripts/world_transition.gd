@@ -58,8 +58,12 @@ func _on_biome_changed(index: int) -> void:
   tween.kill()
  shade.visible = true
  shade.color.a = 0.0
- tween = create_tween()
+ title_label.scale = Vector2(0.85, 0.85)
+ title_label.pivot_offset = title_label.size * 0.5
+ tween = create_tween().set_parallel(true)
  tween.tween_property(shade, "color:a", 0.83, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
- tween.tween_interval(1.25)
- tween.tween_property(shade, "color:a", 0.0, 0.65).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
- tween.tween_callback(func() -> void: shade.visible = false)
+ tween.tween_property(title_label, "scale", Vector2.ONE, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+ var seq := create_tween()
+ seq.tween_interval(1.65)
+ seq.tween_property(shade, "color:a", 0.0, 0.65).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+ seq.tween_callback(func() -> void: shade.visible = false)
