@@ -4,7 +4,7 @@ extends Node3D
 ## Attach to Node3D. Units assume a humanoid ~1.8 m tall, origin at feet.
 ## Visual only: stats, save data, skinning and equipment inventory are separate.
 @export_enum("Tank", "Warrior", "Assassin", "Mage", "Paladin", "Healer") var armor_class: int = 0
-@export_enum("Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic") var rarity: int = 0
+@export_enum("Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic") var rarity: int = 0: set(v): rarity = v; if is_inside_tree(): rebuild()
 @export var show_helmet := true
 @export var show_chest := true
 @export var show_shoulders := true
