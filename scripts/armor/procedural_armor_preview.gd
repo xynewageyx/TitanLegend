@@ -3,7 +3,7 @@ extends Node3D
 ## Procedural visual armor prototype for Titan Legends.
 ## Attach to Node3D. Units assume a humanoid ~1.8 m tall, origin at feet.
 ## Visual only: stats, save data, skinning and equipment inventory are separate.
-@export_enum("Tank", "Warrior", "Assassin", "Mage", "Paladin", "Healer") var armor_class: int = 0
+@export_enum("Tank", "Warrior", "Assassin", "Mage", "Paladin", "Healer", "Death Knight", "Hunter", "Shaman", "Druid", "Warlock", "Bard") var armor_class: int = 0
 @export_enum("Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic") var rarity: int = 0
 @export var show_helmet := true
 @export var show_chest := true
@@ -40,7 +40,7 @@ func rebuild() -> void:
         c.queue_free()
     var tint: Color = TIER_COLORS[rarity]
     var bulk := 1.0 + float(rarity) * 0.09
-    var heavy := armor_class == 0 or armor_class == 1 or armor_class == 4
+    var heavy := armor_class == 0 or armor_class == 1 or armor_class == 4 or armor_class == 6
     var width := 0.6 * bulk if heavy else 0.46 * bulk
     if show_chest:
         piece(Vector3(0,1.28,0),Vector3(width,0.62,0.29),METAL if heavy else CLOTH)
