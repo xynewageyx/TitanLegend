@@ -9,6 +9,8 @@ on:
       - 'scripts/weapons/procedural_weapon_preview.gd'
       - 'tests/test_weapon_armor_silhouette_v2.gd'
       - 'tools/render_live_equipment_qa.gd'
+      - 'tools/check_gameplay_camera_benchmark.py'
+      - 'tests/test_check_gameplay_camera_benchmark.py'
       - 'tools/check_four_hero_visual_manifest.py'
       - 'tests/test_check_four_hero_visual_manifest.py'
       - 'tests/test_death_knight_locomotion_polish.gd'
@@ -138,6 +140,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_check_four_hero_visual_manifest.py' -v
           python3 tools/check_four_hero_visual_manifest.py build/animated_equipment_qa/manifest.json --output build/animated_equipment_qa/formation_visibility_audit.json
           test -s build/animated_equipment_qa/formation_visibility_audit.json
+          python3 -m unittest discover -s tests -p 'test_check_gameplay_camera_benchmark.py' -v
+          python3 tools/check_gameplay_camera_benchmark.py build/animated_equipment_qa/gameplay_camera_benchmark.json
       - name: Upload screenshot collection for Android review
         if: always()
         uses: actions/upload-artifact@v4
