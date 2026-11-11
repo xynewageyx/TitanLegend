@@ -95,13 +95,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 420s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+          timeout 480s xvfb-run -a -s '-screen 0 720x1280x24' godot \
             --path . --rendering-method gl_compatibility --audio-driver Dummy \
             --script res://tools/render_live_equipment_qa.gd \
             2>&1 | tee /tmp/equipment-visual-qa.log
-          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=88 classes=12' /tmp/equipment-visual-qa.log
+          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=90 classes=12' /tmp/equipment-visual-qa.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/equipment-visual-qa.log; then exit 1; fi
-          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 92
+          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 94
           test -s build/animated_equipment_qa/manifest.json
           test -s build/animated_equipment_qa/death_knight_front_attack.png
           test -s build/animated_equipment_qa/warrior_side_attack.png
@@ -125,6 +125,10 @@ jobs:
           test -s build/animated_equipment_qa/formation_mask_2_effect.png
           test -s build/animated_equipment_qa/formation_mask_3_pet.png
           test -s build/animated_equipment_qa/formation_mythic_attack_opaque_reference.png
+          test -s build/animated_equipment_qa/formation_gameplay_camera_idle.png
+          test -s build/animated_equipment_qa/formation_gameplay_camera_attack.png
+          test -s build/animated_equipment_qa/gameplay_camera_benchmark.json
+          grep -Fq "TITAN_GAMEPLAY_CAMERA_BENCHMARK" /tmp/equipment-visual-qa.log
           grep -Fq "TITAN_FORMATION_ATTACK_ALPHA_COMPARISON" /tmp/equipment-visual-qa.log
           grep -Fq 'TITAN_FORMATION_VISUAL_QA_FRAME pose=Dodge weapons=4' /tmp/equipment-visual-qa.log
       - name: Audit four-hero camera, pet and attack-effect visibility
@@ -143,5 +147,6 @@ jobs:
             build/animated_equipment_qa/*.png
             build/animated_equipment_qa/manifest.json
             build/animated_equipment_qa/formation_visibility_audit.json
+            build/animated_equipment_qa/gameplay_camera_benchmark.json
           if-no-files-found: warn
           retention-days: 30
