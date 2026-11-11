@@ -26,6 +26,9 @@ def validate(data):
             errors.append("Missing class visibility measurements")
         if not 0 <= float(capture.get("minimum_body_viewport_fraction", -1)) <= 1:
             errors.append("Invalid body viewport fraction")
+    motion_delta = data.get("idle_vs_attack_pixel_delta", {})
+    if not motion_delta.get("valid") or int(motion_delta.get("changed_pixels", 0)) < 100:
+        errors.append("Gameplay Idle and Attack screenshot content is not visually distinguishable")
     if bench.get("measured_frames") != 90 or bench.get("warmup_frames") != 20:
         errors.append("Insufficient measured render frames")
     for metric in ("mean_frame_ms", "median_frame_ms", "p95_frame_ms", "estimated_mean_fps"):
