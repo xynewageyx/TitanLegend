@@ -12,6 +12,7 @@ def fixture():
              "minimum_body_viewport_fraction":0.87}
             for action in ("idle","attack")
         ],
+        "idle_vs_attack_pixel_delta": {"valid":True,"changed_pixels":1200,"total_pixels":921600},
         "benchmark": {"warmup_frames":20,"measured_frames":90,"mean_frame_ms":21.5,
                       "median_frame_ms":20,"p95_frame_ms":27,"estimated_mean_fps":46.5,
                       "renderer":"Godot Mesa Linux","real_android_device_tested":False}
@@ -20,6 +21,10 @@ def fixture():
 class BenchmarkAuditTests(unittest.TestCase):
     def test_correct_capture_is_valid(self):
         self.assertTrue(validate(fixture())["valid"])
+    def test_identical_action_images_fail(self):
+        data=fixture()
+        data["idle_vs_attack_pixel_delta"]["changed_pixels"]=0
+        self.assertFalse(validate(data)["valid"])
     def test_wrong_camera_is_rejected(self):
         data=fixture();data["camera"]["source_script"]="res://tools/qa_camera.gd"
         self.assertFalse(validate(data)["valid"])
