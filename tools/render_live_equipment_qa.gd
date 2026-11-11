@@ -781,6 +781,119 @@ func _capture_four_hero_formation() -> int:
  return captured
 
 
+
+func _measure_gameplay_camera_performance() -> Dictionary:
+ # This uses the REAL portrait CameraFollow script from scenes/main.tscn, not
+ # the orthographic inspection camera. Linux xvfb/Mesa timing is diagnostic.
+ var gallery_camera: Camera3D = camera
+ var play_camera := Camera3D.new()
+ play_camera.name = "ActualGameplayCameraQA"
+ play_camera.set_script(load("res://scripts/camera_follow.gd"))
+ play_camera.set("target_path", NodePath("../EquipmentQATeam"))
+ world.add_child(play_camera)
+ play_camera.set_process(false)
+ gallery_camera.current = false
+ play_camera.current = true
+ camera = play_camera
+ var camera_data := {
+  "projection": "perspective",
+  "fov_degrees": snappedf(play_camera.fov, 0.01),
+  "source_script": "res://scripts/camera_follow.gd",
+  "camera_position": _vec3_metrics(play_camera.global_position),
+  "gameplay_offset": _vec3_metrics(play_camera.get("camera_offset")),
+  "gameplay_look_ahead": _vec3_metrics(play_camera.get("look_ahead"))
+ }
+ var captures: Array[Dictionary] = []
+ for action in ["Idle", "Attack"]:
+  for hero in team.heroes:
+   var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+   var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
+   var skeleton: Skeleton3D = view.get("imported_skeleton") as Skeleton3D
+   view.call("play_clip", action)
+   var selected: String = str(player.current_animation)
+   if not (selected == action or selected.begins_with(action + "_")):
+    return {"valid": false, "reason": "wrong gameplay clip " + selected}
+   var clip: Animation = player.get_animation(selected)
+   var active_window: float = 1.4 if action == "Idle" else 0.95
+   player.seek(maxf(0.0, clip.length - active_window * 0.45), true)
+   player.pause()
+   skeleton.force_update_all_bone_transforms()
+   var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+   motion.set_process(true)
+   if action == "Attack":
+    motion.call("play_attack")
+   else:
+    motion.set("attack_remaining", 0.0)
+  await process_frame
+  for hero in team.heroes:
+   var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+   motion.set_process(false)
+  await RenderingServer.frame_post_draw
+  var screenshot: Image = root.get_texture().get_image()
+  var name: String = "formation_gameplay_camera_" + action.to_lower() + ".png"
+  if screenshot == null or screenshot.is_empty() or screenshot.save_png(OUTPUT + "/" + name) != OK:
+   return {"valid": false, "reason": "gameplay camera snapshot failed " + action}
+  var visibility: Dictionary = _four_hero_screen_visibility()
+  captures.append({"pose": action.to_lower(), "image": name,
+   "body_visibility": visibility.get("body_frames", []),
+   "minimum_body_viewport_fraction": visibility.get("minimum_body_viewport_fraction", 0.0),
+   "frame_width": screenshot.get_width(), "frame_height": screenshot.get_height()})
+ # Now run the same original four GLBs with their imported AnimationPlayers
+ # and cosmetic effects active (no screenshots or readback in timed interval).
+ for hero in team.heroes:
+  var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+  view.set_process(true)
+  var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
+  player.play("Attack")
+  var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+  motion.set_process(true)
+  var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
+  if pet != null:
+   pet.set_process(true)
+ for index in range(20):
+  await RenderingServer.frame_post_draw
+ var elapsed_ms: Array[float] = []
+ for index in range(90):
+  if index % 18 == 0:
+   for hero in team.heroes:
+    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+    motion.call("play_attack")
+  var started: int = Time.get_ticks_usec()
+  await RenderingServer.frame_post_draw
+  elapsed_ms.append(float(Time.get_ticks_usec() - started) / 1000.0)
+ elapsed_ms.sort()
+ var sum_ms := 0.0
+ for frame_ms in elapsed_ms:
+  sum_ms += frame_ms
+ var mean_ms: float = sum_ms / float(elapsed_ms.size())
+ var bench := {
+  "valid": captures.size() == 2 and elapsed_ms.size() == 90,
+  "camera": camera_data,
+  "captures": captures,
+  "benchmark": {"warmup_frames": 20, "measured_frames": elapsed_ms.size(),
+   "mean_frame_ms": snappedf(mean_ms, 0.001),
+   "median_frame_ms": snappedf(elapsed_ms[44], 0.001),
+   "p95_frame_ms": snappedf(elapsed_ms[85], 0.001),
+   "estimated_mean_fps": snappedf(1000.0 / maxf(mean_ms, 0.001), 0.01),
+   "renderer": "Godot 4.7.2 gl_compatibility via xvfb Mesa on GitHub Linux",
+   "device": OS.get_name(),
+   "real_android_device_tested": false,
+   "performance_claim": "diagnostic CI runner render-loop timing; not device FPS or a performance guarantee"},
+  "note": "Camera script matches the normal non-boss gameplay view. Scripted boss framing, HUD and Android GPU have not been tested in this capture."
+ }
+ var file := FileAccess.open(OUTPUT + "/gameplay_camera_benchmark.json", FileAccess.WRITE)
+ if file == null:
+  return {"valid": false, "reason": "cannot write gameplay benchmark"}
+ file.store_string(JSON.stringify(bench, "  ") + "\n")
+ file.close()
+ camera = gallery_camera
+ gallery_camera.current = true
+ play_camera.current = false
+ play_camera.queue_free()
+ print("TITAN_GAMEPLAY_CAMERA_BENCHMARK " + JSON.stringify(bench))
+ return bench
+
+
 func _run() -> void:
  if DisplayServer.get_name() == "headless":
   _fail("Visual QA requires a display renderer, not Godot headless mode")
@@ -913,6 +1026,11 @@ func _run() -> void:
  if team_captures != 4:
   return
  pictures += team_captures + 3 + 16 + 1 # 3 comparison, 16 masks, 1 opaque reference
+ var gameplay_metrics: Dictionary = await _measure_gameplay_camera_performance()
+ if not bool(gameplay_metrics.get("valid", false)):
+  _fail("Gameplay camera / performance QA failed: " + str(gameplay_metrics))
+  return
+ pictures += 2 # actual perspective gameplay camera, Idle and Attack
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
@@ -921,6 +1039,7 @@ func _run() -> void:
    "generator": "Godot 4.7.2 live imported GLB equipment QA",
    "image_count": pictures, "class_count": CLASSES.size(),
    "formation_capture_count": team_captures, "formation_classes": ["warrior", "mage", "death_knight", "druid"],
+   "gameplay_camera": gameplay_metrics,
    "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png", "overview_front_walk.png", "overview_front_dodge.png"],
    "contact_sheet_order": CLASSES,
    "real_android_device_tested": false, "renders": results
