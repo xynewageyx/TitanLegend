@@ -68,3 +68,7 @@ No Unity animation retargeting is claimed.
 
 - [Maskenmessung mit echter OpenGL-Tiefenprüfung](TITAN_2026_11_10_DEPTH_SILHOUETTE_RESULTS.md): Waffen 0 % Körperabdeckung, Begleiter bis 0,22 %, deckende Angriffseffekte als **konservative Obergrenze** etwa 21–24 % je Charakter in der getesteten Attack-Pose.
 - [Erfolgreicher Masken-CI-Lauf](https://github.com/xynewageyx/TitanLegend/actions/runs/42902300703) · 16 zusätzliche Tiefenmasken und insgesamt 91 PNGs. Transparenz und Android-Gameplay-Kamera bleiben separat zu prüfen.
+
+## Halbtransparente Angriffsblitze (2026-11-11)
+
+- [Bestätigter 55-%-gegen-100-%-OpenGL-Vergleich](TITAN_2026_11_11_ATTACK_FLASH_ALPHA_QA.md): 13.405 veränderte Pixel im identischen Attack-Frame, 92 PNG-Aufnahmen und zwei Berichte im [erfolgreichen GitHub-Actions-Lauf](https://github.com/xynewageyx/TitanLegend/actions/runs/43074302659). Die Transparenz betrifft nur die kosmetische magic_flash-Kugel, nicht Schaden, Waffen oder Begleiter.
