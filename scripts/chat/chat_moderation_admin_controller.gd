@@ -71,7 +71,7 @@ func _on_pending_cases(cases: Array) -> void:
 func _select_case(index: int) -> void:
 	selected_index = clampi(index, 0, maxi(pending_cases.size() - 1, 0))
 	previous_button.disabled = selected_index <= 0
-	next_button.disabled = selected_index >= pending_cases.size() - 1
+	next_button.disabled = pending_cases.is_empty() or selected_index >= pending_cases.size() - 1
 	evidence_output.text = ""
 	if pending_cases.is_empty():
 		panel.show_case({})
