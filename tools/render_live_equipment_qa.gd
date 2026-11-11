@@ -804,6 +804,8 @@ func _measure_gameplay_camera_performance() -> Dictionary:
   "gameplay_look_ahead": _vec3_metrics(play_camera.get("look_ahead"))
  }
  var captures: Array[Dictionary] = []
+ var idle_image: Image
+ var action_delta: Dictionary = {}
  for action in ["Idle", "Attack"]:
   for hero in team.heroes:
    var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
@@ -815,24 +817,32 @@ func _measure_gameplay_camera_performance() -> Dictionary:
     return {"valid": false, "reason": "wrong gameplay clip " + selected}
    var clip: Animation = player.get_animation(selected)
    var active_window: float = 1.4 if action == "Idle" else 0.95
+   player.play(selected, 0.0)
    player.seek(maxf(0.0, clip.length - active_window * 0.45), true)
    player.pause()
    skeleton.force_update_all_bone_transforms()
    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
-   motion.set_process(true)
+   motion.set_process(false)
    if action == "Attack":
     motion.call("play_attack")
+    # Sample the real existing cosmetic attack progression at a meaningful
+    # mid-strike time, rather than recording its zero-intensity first frame.
+    motion.call("_process", 0.19)
    else:
     motion.set("attack_remaining", 0.0)
-  await process_frame
-  for hero in team.heroes:
-   var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
-   motion.set_process(false)
+    motion.call("_process", 0.01)
+  await RenderingServer.frame_post_draw
   await RenderingServer.frame_post_draw
   var screenshot: Image = root.get_texture().get_image()
   var name: String = "formation_gameplay_camera_" + action.to_lower() + ".png"
   if screenshot == null or screenshot.is_empty() or screenshot.save_png(OUTPUT + "/" + name) != OK:
    return {"valid": false, "reason": "gameplay camera snapshot failed " + action}
+  if action == "Idle":
+   idle_image = screenshot.duplicate()
+  else:
+   action_delta = _pixel_delta_stats(idle_image, screenshot, [])
+   if not bool(action_delta.get("valid", false)) or int(action_delta.get("changed_pixels", 0)) < 100:
+    return {"valid": false, "reason": "Gameplay Attack and Idle frames are visually identical or near identical", "pixel_delta": action_delta}
   var visibility: Dictionary = _four_hero_screen_visibility()
   captures.append({"pose": action.to_lower(), "image": name,
    "body_visibility": visibility.get("body_frames", []),
@@ -870,6 +880,7 @@ func _measure_gameplay_camera_performance() -> Dictionary:
   "valid": captures.size() == 2 and elapsed_ms.size() == 90,
   "camera": camera_data,
   "captures": captures,
+  "idle_vs_attack_pixel_delta": action_delta,
   "benchmark": {"warmup_frames": 20, "measured_frames": elapsed_ms.size(),
    "mean_frame_ms": snappedf(mean_ms, 0.001),
    "median_frame_ms": snappedf(elapsed_ms[44], 0.001),
