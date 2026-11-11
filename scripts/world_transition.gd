@@ -33,6 +33,7 @@ func _ready() -> void:
  stack.add_child(subtitle_label)
  element_bar = ColorRect.new()
  element_bar.custom_minimum_size = Vector2(190.0, 6.0)
+ element_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
  element_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
  stack.add_child(element_bar)
  shade.visible = false
