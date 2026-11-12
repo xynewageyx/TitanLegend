@@ -9,6 +9,10 @@ on:
       - 'scripts/weapons/procedural_weapon_preview.gd'
       - 'tests/test_weapon_armor_silhouette_v2.gd'
       - 'tools/render_live_equipment_qa.gd'
+      - 'tools/render_boss_gameplay_camera_qa.gd'
+      - 'tools/boss_camera_qa_state.gd'
+      - 'tools/check_boss_gameplay_camera_report.py'
+      - 'tests/test_check_boss_gameplay_camera_report.py'
       - 'tools/check_gameplay_camera_benchmark.py'
       - 'tests/test_check_gameplay_camera_benchmark.py'
       - 'tools/check_four_hero_visual_manifest.py'
@@ -142,6 +146,20 @@ jobs:
           test -s build/animated_equipment_qa/formation_visibility_audit.json
           python3 -m unittest discover -s tests -p 'test_check_gameplay_camera_benchmark.py' -v
           python3 tools/check_gameplay_camera_benchmark.py build/animated_equipment_qa/gameplay_camera_benchmark.json
+      - name: Render real elemental boss models with production boss camera
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 150s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+            --path . --rendering-method gl_compatibility --audio-driver Dummy \
+            --script res://tools/render_boss_gameplay_camera_qa.gd \
+            2>&1 | tee /tmp/boss-camera-qa.log
+          grep -Fq 'TITAN_BOSS_CAMERA_QA_OK scenarios=2 images=4' /tmp/boss-camera-qa.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/boss-camera-qa.log; then exit 1; fi
+          test "$(find build/boss_gameplay_camera_qa -name '*.png' | wc -l)" -eq 4
+          test -s build/boss_gameplay_camera_qa/boss_camera_report.json
+          python3 -m unittest discover -s tests -p 'test_check_boss_gameplay_camera_report.py' -v
+          python3 tools/check_boss_gameplay_camera_report.py build/boss_gameplay_camera_qa/boss_camera_report.json
       - name: Upload screenshot collection for Android review
         if: always()
         uses: actions/upload-artifact@v4
@@ -152,5 +170,7 @@ jobs:
             build/animated_equipment_qa/manifest.json
             build/animated_equipment_qa/formation_visibility_audit.json
             build/animated_equipment_qa/gameplay_camera_benchmark.json
+            build/boss_gameplay_camera_qa/*.png
+            build/boss_gameplay_camera_qa/boss_camera_report.json
           if-no-files-found: warn
           retention-days: 30
