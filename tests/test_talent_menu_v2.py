@@ -170,6 +170,12 @@ class TalentMenuV2IntegrationTests(unittest.TestCase):
         self.assertIn('return ["Blut", "Frost", "Unheilig"]', MENU)
         self.assertIn("branch_picker.set_item_text(branch_index, branch_names[branch_index])", MENU)
 
+    def test_class_menu_preselects_available_role(self):
+        menu = (ROOT / "scripts/class_menu.gd").read_text(encoding="utf-8")
+        self.assertIn("not role_selector.is_item_disabled(idx)", menu)
+        self.assertIn("if not selected_valid_role:", menu)
+        self.assertIn("role_selector.select(idx)", menu)
+
     def test_death_knight_is_selectable_as_twelfth_class(self):
         self.assertIn('"Raufbold", "Todesritter"]', TEAM)
         self.assertIn("const MELEE_CLASSES := [0, 1, 5, 10, 11]", TEAM)
