@@ -10,8 +10,17 @@ def example():
         "boss_art_source":"res://scripts/boss_art.gd",
         "boss_motion_source":"res://scripts/boss_motion.gd",
         "real_android_device_tested":False,"hud_production_validated":False,
+        "hud_battle_state_live":False,
+        "hud_widget_source":"res://scripts/ui_manager.gd",
+        "hud_production_widgets_rendered":True,
         "scenarios":[{
             "scenario":name,"boss_body_box":b(),"boss_warning_box":b(),
+            "hud_layout":{"source_script":"res://scripts/ui_manager.gd",
+                "boss_health_visible":True,"boss_timer_visible":True,"chat_visible":True,
+                "boss_timer_text":"Boss-Zeit: 00:45","boss_name":"Titan",
+                "boss_panel_rect":[216,240,485,145],
+                "chat_panel_rect":[12,1071,696,68]},
+            "hud_warning_layout":{"boss_name":"⚠ Boss-Angriff · Unterbrechen"},
             "hero_boxes":[{**b(),"bbox_px":[120,600,150,200]} for _ in range(4)],
             "boss_warning_visible":True,"fov_degrees":56.0,
             "windup_changed_pixels_without_hud_text":250,
@@ -50,6 +59,18 @@ class BossCameraTests(unittest.TestCase):
     def test_boss_warning_overlaps_team_fails(self):
         r=example()
         r["scenarios"][0]["hero_boxes"][0]["bbox_px"][1]=445
+        self.assertFalse(validate(r)["valid"])
+    def test_missing_production_hud_fails(self):
+        r=example();r["hud_production_widgets_rendered"]=False
+        self.assertFalse(validate(r)["valid"])
+    def test_boss_timer_missing_fails(self):
+        r=example();r["scenarios"][0]["hud_layout"]["boss_timer_text"]=""
+        self.assertFalse(validate(r)["valid"])
+    def test_real_cast_warning_missing_fails(self):
+        r=example();r["scenarios"][0]["hud_warning_layout"]["boss_name"]="Titan"
+        self.assertFalse(validate(r)["valid"])
+    def test_chat_clipped_fails(self):
+        r=example();r["scenarios"][0]["hud_layout"]["chat_panel_rect"]=[12,1250,696,68]
         self.assertFalse(validate(r)["valid"])
     def test_too_small_boss_fails(self):
         r=example();r["scenarios"][0]["boss_body_box"]["bbox_px"][2]=10
