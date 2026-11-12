@@ -1,7 +1,6 @@
 extends SceneTree
 ## Godot 4.7.2 display-only QA: real boss meshes/motion + real CameraFollow boss branch.
 ## Captures active-boss and warning telegraph with a clearly marked HUD QA overlay.
-const TEAM = preload("res://scripts/team_formation.gd")
 const BOSS_ART = preload("res://scripts/boss_art.gd")
 const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
@@ -81,7 +80,10 @@ func _make_stage() -> bool:
  var sun := DirectionalLight3D.new()
  sun.rotation_degrees = Vector3(-50,-30,0)
  stage.add_child(sun)
- team = TEAM.new() as Node3D
+ var team_script: Script = load("res://scripts/team_formation.gd")
+ if team_script == null:
+  return false
+ team = team_script.new() as Node3D
  team.name = "EquipmentQATeam"
  team.position = Vector3(0,0,3) # matches scenes/main.tscn
  stage.add_child(team)
