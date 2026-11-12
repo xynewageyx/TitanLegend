@@ -76,3 +76,7 @@ No Unity animation retargeting is claimed.
 ## Originale Spielkamera und Linux-Framezeit (2026-11-11)
 
 - [Echte perspektivische Kamera, Idle-Attack-Verifikation und 90-Frame-Diagnose](TITAN_2026_11_11_GAMEPLAY_CAMERA_PERFORMANCE.md): 56° FOV, alle vier Helden im Portraitbild und 30.713 veränderte Idle-Attack-Pixel, CI [43076803728](https://github.com/xynewageyx/TitanLegend/actions/runs/43076803728). Der Linux-Software-Renderer liefert ausschließlich diagnostische Framezeiten; **keine Android-FPS-Behauptung**.
+
+## Bosskamera und Elementar-Warnringe (2026-11-12)
+
+- [Getestete Feuer-/Erdbosse mit echtem Boss-Kamerazweig](TITAN_2026_11_12_REAL_BOSS_CAMERA_QA.md): Beide Bosse und alle vier Helden vollständig im Bild. Die originale 3D-Angriffsanimation verändert ohne HUD-Hinweis 7.976 bzw. 7.562 Pixel. [Erfolgreicher GitHub-CI-Lauf](https://github.com/xynewageyx/TitanLegend/actions/runs/43248060128), 98 PNGs. Das im Test gezeichnete Boss-HP-Overlay ist nicht das vollständige produktive HUD.
