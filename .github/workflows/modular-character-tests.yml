@@ -4,6 +4,9 @@ on:
     branches: [feature/modular-hair-v3]
     paths:
       - 'scripts/character/**'
+      - 'scripts/weapons/**'
+      - 'scripts/equipment/**'
+      - 'scripts/weapons/**'
       - 'scenes/character/**'
       - 'tests/character/**'
       - '.github/workflows/modular-character-tests.yml'
