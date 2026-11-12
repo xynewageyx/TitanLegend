@@ -11,6 +11,23 @@ from collections import Counter
 from pathlib import Path
 
 TARGETS = ("hua_001_group", "hua_002_group")
+EXPECTED_SERIALIZED_OBJECTS = 105075
+EXPECTED_GAMEOBJECTS = 28709
+
+
+def assess_coverage(total_objects, gameobjects, unreadable, group_total):
+    """Compare with the original BuildPlayer-Plain inventory; fail conservatively."""
+    issues = []
+    if total_objects != EXPECTED_SERIALIZED_OBJECTS:
+        issues.append("serialized_object_count_mismatch")
+    if gameobjects != EXPECTED_GAMEOBJECTS:
+        issues.append("gameobject_count_mismatch")
+    if group_total != 10:
+        issues.append("flower_group_count_mismatch")
+    if any(unreadable.values()):
+        issues.append("unreadable_type_trees")
+    return issues
+
 
 
 def pointer_ids(value):
@@ -107,7 +124,13 @@ def main():
             if "hua_" in clip_repr or "flower" in clip_repr:
                 potential_clips["name_heuristic_only"] += 1
 
+    issues = assess_coverage(len(objects), gameobjects_total, unreadable, sum(group_counts.values()))
     report = {
+        "coverage_complete_against_saved_scene_inventory": not issues,
+        "coverage_issues": issues,
+        "expected_serialized_objects": EXPECTED_SERIALIZED_OBJECTS,
+        "observed_serialized_objects": len(objects),
+        "expected_gameobjects": EXPECTED_GAMEOBJECTS,
         "status": "reference_scan_only",
         "scene_file": args.scene.name,
         "groups_found_by_name": dict(group_counts),
@@ -126,7 +149,7 @@ def main():
         "animation_clip_name_leads_only": dict(potential_clips),
         "activation_proven": False,
         "result_interpretation": (
-            "partial_scan_unreadable_objects" if any(unreadable.values()) else
+            "incomplete_or_mismatched_source_inventory" if issues else
             "direct_reference_candidates_found" if any(reference_classes.values()) else
             "no_direct_references_in_scanned_classes"
         ),
@@ -136,7 +159,8 @@ def main():
             "Serialized clip bindings, animation state machines and managed runtime code are not fully analyzed.",
             "Only locally stored pointers (m_FileID==0) are compared.",
             "Readability of the TypeTree is necessary to identify serialized references.",
-            "Objects in other UnityFS bundles may reference this scene indirectly."
+            "Objects in other UnityFS bundles may reference this scene indirectly.",
+            "Saved-scene object-count agreement does not prove that every script body executes or is available."
         ]
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
