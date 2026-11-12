@@ -6,7 +6,6 @@ const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 const CAMERA_SCRIPT = preload("res://scripts/camera_follow.gd")
 const QA_STATE = preload("res://tools/boss_camera_qa_state.gd")
-const REAL_HUD_QA = preload("res://tools/boss_camera_real_hud_qa.gd")
 const OUTPUT := "res://build/boss_gameplay_camera_qa"
 var stage: Node3D
 var team: Node3D
@@ -126,9 +125,13 @@ func _make_stage() -> bool:
  overlay = CanvasLayer.new()
  overlay.name = "BossHudProductionWidgetsQA"
  stage.add_child(overlay)
+ var hud_script: Script = load("res://tools/boss_camera_real_hud_qa.gd") as Script
+ if hud_script == null:
+  push_error("Cannot dynamically load production HUD adapter")
+  return false
  production_hud = Control.new()
  production_hud.name = "UIManagerWidgetsPreview"
- production_hud.set_script(REAL_HUD_QA)
+ production_hud.set_script(hud_script)
  overlay.add_child(production_hud)
 
  return true
