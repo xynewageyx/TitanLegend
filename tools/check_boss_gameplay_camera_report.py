@@ -76,6 +76,23 @@ def validate(report):
             issues.append(f"{name}: production boss warning label missing")
         if hud.get("source_script") != "res://scripts/ui_manager.gd":
             issues.append(f"{name}: HUD layout does not originate from UIManager")
+        # Layout geometry is actually sourced from production UIManager._make_hud.
+        # Keep the boss below its status panel and the rear heroes above chat.
+        boss_rect=item.get("boss_body_box",{}).get("bbox_px",[])
+        hp_rect=hud.get("boss_panel_rect",[])
+        chat_rect=hud.get("chat_panel_rect",[])
+        if len(boss_rect)==4 and len(hp_rect)==4:
+            boss_top=float(boss_rect[1])
+            hp_bottom=float(hp_rect[1])+float(hp_rect[3])
+            if boss_top-hp_bottom < 15:
+                issues.append(f"{name}: boss silhouette overlaps real boss status panel")
+        if len(chat_rect)==4 and hero_boxes:
+            chat_top=float(chat_rect[1])
+            hero_bottoms=[
+                float(h["bbox_px"][1])+float(h["bbox_px"][3])
+                for h in hero_boxes if h.get("valid") and len(h.get("bbox_px",[]))==4]
+            if hero_bottoms and chat_top-max(hero_bottoms) < 15:
+                issues.append(f"{name}: chat panel overlaps rear hero silhouettes")
         for component in ("boss_panel_rect","chat_panel_rect"):
             rect=hud.get(component,[])
             if len(rect)!=4 or float(rect[2])<=0 or float(rect[3])<=0:
