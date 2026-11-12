@@ -155,6 +155,22 @@ func _make_stage() -> bool:
  stack.add_child(callout)
  return true
 
+func _changed_pixels(a: Image, b: Image) -> int:
+ if a == null or b == null or a.get_size() != b.get_size():
+  return -1
+ var first: Image = a.duplicate()
+ var second: Image = b.duplicate()
+ first.convert(Image.FORMAT_RGB8)
+ second.convert(Image.FORMAT_RGB8)
+ var pixels_a: PackedByteArray = first.get_data()
+ var pixels_b: PackedByteArray = second.get_data()
+ var changed := 0
+ for i in range(0, pixels_a.size(), 3):
+  if absi(int(pixels_a[i]) - int(pixels_b[i])) > 24 or absi(int(pixels_a[i+1]) - int(pixels_b[i+1])) > 24 or absi(int(pixels_a[i+2]) - int(pixels_b[i+2])) > 24:
+   changed += 1
+ return changed
+
+
 func _snapshot(filename: String) -> bool:
  await RenderingServer.frame_post_draw
  var image: Image = root.get_texture().get_image()
@@ -206,11 +222,20 @@ func _run() -> void:
   if not await _snapshot(idle_image):
    _fail("Cannot render " + idle_image)
    return
+  var idle_pixels: Image = Image.load_from_file(OUTPUT + "/" + idle_image)
   motion.call("attack_windup")
   motion.call("_process",0.12)
   var warning: MeshInstance3D = motion.get("warning_ring") as MeshInstance3D
   if warning == null or not warning.visible:
    _fail("Missing real boss windup ring")
+   return
+  # Compare while the diagnostic HUD warning is still hidden, so the real
+  # in-world 3D windup must visibly change at least one substantial pixel area.
+  await RenderingServer.frame_post_draw
+  var warning_pixels: Image = root.get_texture().get_image()
+  var windup_delta: int = _changed_pixels(idle_pixels,warning_pixels)
+  if windup_delta < 20:
+   _fail("Original 3D boss windup invisible (changed pixels " + str(windup_delta) + ")")
    return
   var label: Label = overlay.find_child("CastWarning",true,false) as Label
   if label != null:
@@ -226,6 +251,7 @@ func _run() -> void:
    "fusion":scenario["fusion"],"idle_image":idle_image,"windup_image":warning_image,
    "boss_body_box":baseline_box,"boss_warning_box":warning_box,
    "hero_boxes":hero_boxes,"boss_warning_visible":warning.visible,
+   "windup_changed_pixels_without_hud_text":windup_delta,
    "camera_position":[camera.position.x,camera.position.y,camera.position.z],
    "fov_degrees":camera.fov})
   enemy_spawn.remove_child(boss)
