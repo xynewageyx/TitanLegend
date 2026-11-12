@@ -88,10 +88,20 @@ func _refresh_description() -> void:
      tank_taken = true
    role_selector.set_item_disabled(role_selector.item_count - 1, tank_taken)
  var current_role: int = team_formation.role_ids[slot]
+ var selected_valid_role: bool = false
  for idx in range(role_selector.item_count):
-  if role_selector.get_item_id(idx) == current_role:
+  if role_selector.get_item_id(idx) == current_role and not role_selector.is_item_disabled(idx):
    role_selector.select(idx)
+   selected_valid_role = true
    break
+ if not selected_valid_role:
+  for idx in range(role_selector.item_count):
+   if not role_selector.is_item_disabled(idx):
+    role_selector.select(idx)
+    selected_valid_role = true
+    break
+ if not selected_valid_role:
+  role_selector.select(-1)
  description.text = "Moegliche Rollen: " + CLASS_ROLES[selected_class] + "\nBegleiter bleiben passiv."
  bonus_label.text = "Teambonus +5%: " + ("AKTIV" if team_formation.has_formation_bonus() else "INAKTIV")
 func _apply() -> void:
