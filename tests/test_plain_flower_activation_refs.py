@@ -1,7 +1,7 @@
 """Source-independent tests for local Unity PPtr filtering."""
 import unittest
 from collections import Counter
-from tools.audit_plain_flower_activation_refs import pointer_ids, assess_coverage
+from tools.audit_plain_flower_activation_refs import pointer_ids, assess_coverage, inspect_group_components
 
 
 class PointerTests(unittest.TestCase):
@@ -20,6 +20,32 @@ class PointerTests(unittest.TestCase):
 
     def test_unreadable_component_is_incomplete(self):
         self.assertIn("unreadable_type_trees", assess_coverage(105075, 28709, Counter({"MonoBehaviour": 1}), 10))
+
+    def test_group_inactive_with_single_transform(self):
+        data = {"m_IsActive": False, "m_Component": [
+            {"component": {"m_FileID": 0, "m_PathID": 77}}]}
+        refs, issues = inspect_group_components(data, {77: "Transform"})
+        self.assertEqual(refs, [(0, 77)])
+        self.assertEqual(issues, [])
+
+    def test_group_active_is_not_accepted(self):
+        data = {"m_IsActive": True, "m_Component": [
+            {"component": {"m_FileID": 0, "m_PathID": 77}}]}
+        self.assertIn("group_not_serialized_inactive",
+                      inspect_group_components(data, {77: "Transform"})[1])
+
+    def test_group_with_wrong_component_class_is_not_accepted(self):
+        data = {"m_IsActive": False, "m_Component": [
+            {"component": {"m_FileID": 0, "m_PathID": 77}}]}
+        self.assertIn("group_component_not_local_transform",
+                      inspect_group_components(data, {77: "MonoBehaviour"})[1])
+
+    def test_group_with_extra_component_is_not_accepted(self):
+        data = {"m_IsActive": False, "m_Component": [
+            {"component": {"m_FileID": 0, "m_PathID": 77}},
+            {"component": {"m_FileID": 0, "m_PathID": 88}}]}
+        self.assertIn("unexpected_group_component_count",
+                      inspect_group_components(data, {77: "Transform", 88: "MonoBehaviour"})[1])
 
     def test_empty(self):
         self.assertEqual(list(pointer_ids({"none": [1, "x", None]})), [])
