@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-12 18:14 UTC**
-Git-Stand: **936258a9dd86e68938867ebb09bf592d134fd9aa** auf Branch **main**
+Automatisch erzeugt: **2026-11-12 18:52 UTC**
+Git-Stand: **47b72c43a16b96349fcc3a6f629207fabc45d6a3** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -21,7 +21,6 @@ Git-Stand: **936258a9dd86e68938867ebb09bf592d134fd9aa** auf Branch **main**
 - `9f38e4d` (2026-11-08): qa: prevent large animated weapons from clipping portrait screenshots (#213)
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
 - `40d3b7e` (2026-11-08): test: verify hand weapons chest armor and boots follow bone motion (#166)
-- `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -36,7 +35,6 @@ Git-Stand: **936258a9dd86e68938867ebb09bf592d134fd9aa** auf Branch **main**
 - `76552ed` (2026-11-08): fix: face Chibi attack flashes forward and reduce oversized impact orbs (#216)
 - `9f38e4d` (2026-11-08): qa: prevent large animated weapons from clipping portrait screenshots (#213)
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
-- `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -48,8 +46,8 @@ Git-Stand: **936258a9dd86e68938867ebb09bf592d134fd9aa** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `47b72c4` (2026-11-12): chore: remove obsolete Update 168 import workflows
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
-- `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
 
 ## Bereichsübergreifende Änderungen
 
