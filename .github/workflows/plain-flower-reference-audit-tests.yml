@@ -1,0 +1,21 @@
+name: Plain flower reference audit tests
+on:
+  pull_request:
+    paths:
+      - "tools/audit_plain_flower_activation_refs.py"
+      - "tests/test_plain_flower_activation_refs.py"
+      - ".github/workflows/plain-flower-reference-audit-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  audit-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate Python syntax
+        run: python -m py_compile tools/audit_plain_flower_activation_refs.py tests/test_plain_flower_activation_refs.py
+      - name: Check PPtr traversal fixtures (no Ulala assets needed)
+        run: python -m unittest discover -s tests -p test_plain_flower_activation_refs.py -v
