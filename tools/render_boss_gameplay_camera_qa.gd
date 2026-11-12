@@ -6,6 +6,7 @@ const BOSS_MOTION = preload("res://scripts/boss_motion.gd")
 const ADAPTER = preload("res://scripts/equipment/formation_equipment_adapter.gd")
 const CAMERA_SCRIPT = preload("res://scripts/camera_follow.gd")
 const QA_STATE = preload("res://tools/boss_camera_qa_state.gd")
+const REAL_HUD_QA = preload("res://tools/boss_camera_real_hud_qa.gd")
 const OUTPUT := "res://build/boss_gameplay_camera_qa"
 var stage: Node3D
 var team: Node3D
@@ -13,6 +14,7 @@ var enemy_spawn: Node3D
 var boss_state: Node3D
 var camera: Camera3D
 var overlay: CanvasLayer
+var production_hud: Control
 
 func _initialize() -> void:
  call_deferred("_run")
@@ -119,40 +121,16 @@ func _make_stage() -> bool:
  camera.set("battle_manager_path",NodePath("../BossState"))
  stage.add_child(camera)
  camera.set_process(false)
- # Explicit diagnostic HUD. The real game's UIManager is separately tested.
- # This overlay verifies that boss health/timer and cast text fit the framing.
+ # Use real production UIManager._make_hud() controls through a QA-only subclass.
+ # Values are fixed diagnostic state; production BattleManager is not running.
  overlay = CanvasLayer.new()
- overlay.name = "BossHudQAOverlay"
+ overlay.name = "BossHudProductionWidgetsQA"
  stage.add_child(overlay)
- var layer := Control.new()
- layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- overlay.add_child(layer)
- var box := PanelContainer.new()
- box.name = "BossStatus"
- box.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
- box.offset_left = 24
- box.offset_right = -24
- box.offset_top = 90
- box.offset_bottom = 164
- layer.add_child(box)
- var stack := VBoxContainer.new()
- box.add_child(stack)
- var caption := Label.new()
- caption.name = "BossCaption"
- caption.text = "BOSS · HP 70% · 00:45   [QA HUD preview]"
- caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- stack.add_child(caption)
- var health := ProgressBar.new()
- health.name = "BossHP"
- health.value = 70
- health.show_percentage = false
- stack.add_child(health)
- var callout := Label.new()
- callout.name = "CastWarning"
- callout.text = "WARNUNG: Boss-Angriff"
- callout.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- callout.visible = false
- stack.add_child(callout)
+ production_hud = Control.new()
+ production_hud.name = "UIManagerWidgetsPreview"
+ production_hud.set_script(REAL_HUD_QA)
+ overlay.add_child(production_hud)
+
  return true
 
 func _changed_pixels(a: Image, b: Image) -> int:
@@ -218,6 +196,12 @@ func _run() -> void:
    if not bool(hero_box.get("valid",false)):
     _fail("Team hero not projected")
     return
+  production_hud.call("set_boss_qa_values", str(scenario["name"]).capitalize() + "-Titan", false)
+  await process_frame
+  var hud_layout: Dictionary = production_hud.call("get_qa_layout")
+  if not bool(hud_layout.get("boss_health_visible", false)) or not bool(hud_layout.get("boss_timer_visible", false)) or not bool(hud_layout.get("chat_visible", false)):
+   _fail("Real UIManager boss HP, countdown or chat widgets are not visible")
+   return
   var idle_image: String = "boss_" + str(scenario["name"]) + "_idle.png"
   if not await _snapshot(idle_image):
    _fail("Cannot render " + idle_image)
@@ -237,18 +221,20 @@ func _run() -> void:
   if windup_delta < 20:
    _fail("Original 3D boss windup invisible (changed pixels " + str(windup_delta) + ")")
    return
-  var label: Label = overlay.find_child("CastWarning",true,false) as Label
-  if label != null:
-   label.visible = true
+  production_hud.call("set_boss_qa_values", str(scenario["name"]).capitalize() + "-Titan", true)
   var warning_image: String = "boss_" + str(scenario["name"]) + "_windup.png"
   if not await _snapshot(warning_image):
    _fail("Cannot render " + warning_image)
    return
-  if label != null:
-   label.visible = false
+  var hud_warning_layout: Dictionary = production_hud.call("get_qa_layout")
+  if not str(hud_warning_layout.get("boss_name", "")).contains("Unterbrechen"):
+   _fail("Production boss label failed to display cast warning")
+   return
+  production_hud.call("set_boss_qa_values", str(scenario["name"]).capitalize() + "-Titan", false)
   var warning_box: Dictionary = _screen_box(boss)
   output.append({"scenario":scenario["name"],"element":scenario["element"],
    "fusion":scenario["fusion"],"idle_image":idle_image,"windup_image":warning_image,
+   "hud_layout":hud_layout,"hud_warning_layout":hud_warning_layout,
    "boss_body_box":baseline_box,"boss_warning_box":warning_box,
    "hero_boxes":hero_boxes,"boss_warning_visible":warning.visible,
    "windup_changed_pixels_without_hud_text":windup_delta,
@@ -259,9 +245,12 @@ func _run() -> void:
   await process_frame
  var summary := {"valid":output.size()==2,"source_camera":"res://scripts/camera_follow.gd",
   "boss_art_source":"res://scripts/boss_art.gd","boss_motion_source":"res://scripts/boss_motion.gd",
-  "hero_count":4,"scenarios":output,"screenshots":4,"ui":"diagnostic QA boss health/countdown overlay; NOT production UIManager",
+  "hero_count":4,"scenarios":output,"screenshots":4,
+  "ui":"Production UIManager._make_hud widgets through QA subclass with fixed diagnostic boss values",
+  "hud_widget_source":"res://scripts/ui_manager.gd", "hud_production_widgets_rendered":true,
   "real_android_device_tested":false,"hud_production_validated":false,
-  "limitations":"No full game HUD, boss timer gameplay progression or physical Android device"}
+  "hud_battle_state_live":false,
+  "limitations":"True UIManager widget layout but QA-supplied battle values; no production HUD _ready wiring, boss timer progression or physical Android device"}
  var file := FileAccess.open(OUTPUT + "/boss_camera_report.json",FileAccess.WRITE)
  if file == null:
   _fail("Cannot save boss report")
