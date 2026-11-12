@@ -18,6 +18,10 @@ def validate(report):
         issues.append("Expected 4 boss preview screenshots")
     if report.get("real_android_device_tested") is not False or report.get("hud_production_validated") is not False:
         issues.append("Do not claim a real Android or production HUD test")
+    if report.get("hud_widget_source") != "res://scripts/ui_manager.gd" or not report.get("hud_production_widgets_rendered"):
+        issues.append("Boss camera does not render production UIManager widgets")
+    if report.get("hud_battle_state_live") is not False:
+        issues.append("QA fixture cannot claim live BattleManager data")
     cases=report.get("scenarios",[])
     if len(cases)!=2 or [x.get("scenario") for x in cases]!=["fire","earth"]:
         issues.append("Expected fire and earth original Titan boss variants")
@@ -62,6 +66,23 @@ def validate(report):
                     issues.append(f"{name}: boss warning lacks 20px visual gap above front row")
         if int(item.get("windup_changed_pixels_without_hud_text", 0)) < 20:
             issues.append(f"{name}: no real windup pixel change without HUD text")
+        hud=item.get("hud_layout",{})
+        warning=item.get("hud_warning_layout",{})
+        if not all(hud.get(key) is True for key in ("boss_health_visible","boss_timer_visible","chat_visible")):
+            issues.append(f"{name}: real HUD widgets not visible")
+        if not str(hud.get("boss_timer_text","")).startswith("Boss-Zeit:"):
+            issues.append(f"{name}: production countdown label missing")
+        if not str(warning.get("boss_name","")).find("Unterbrechen") >= 0:
+            issues.append(f"{name}: production boss warning label missing")
+        if hud.get("source_script") != "res://scripts/ui_manager.gd":
+            issues.append(f"{name}: HUD layout does not originate from UIManager")
+        for component in ("boss_panel_rect","chat_panel_rect"):
+            rect=hud.get(component,[])
+            if len(rect)!=4 or float(rect[2])<=0 or float(rect[3])<=0:
+                issues.append(f"{name}: invalid production {component}")
+                continue
+            if float(rect[0])<0 or float(rect[1])<0 or float(rect[0])+float(rect[2])>721 or float(rect[1])+float(rect[3])>1281:
+                issues.append(f"{name}: production {component} extends outside portrait viewport")
         if not item.get("boss_warning_visible"):
             issues.append(f"{name}: real warning ring inactive")
         if float(item.get("fov_degrees",0))!=56.0:
