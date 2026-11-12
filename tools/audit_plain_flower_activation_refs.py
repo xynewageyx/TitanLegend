@@ -30,6 +30,24 @@ def assess_coverage(total_objects, gameobjects, unreadable, group_total):
 
 
 
+def inspect_group_components(record, class_by_id):
+    """Check a flower parent has exactly one local Transform and is inactive."""
+    components = record.get("m_Component")
+    if not isinstance(components, list):
+        return [], ["components_missing_or_invalid"]
+    pointers = [pointer for item in components for pointer in pointer_ids(item)]
+    problems = []
+    if len(components) != 1 or len(pointers) != 1:
+        problems.append("unexpected_group_component_count")
+    if len(pointers) == 1:
+        fid, pid = pointers[0]
+        if fid != 0 or class_by_id.get(pid) != "Transform":
+            problems.append("group_component_not_local_transform")
+    if record.get("m_IsActive") not in (False, 0):
+        problems.append("group_not_serialized_inactive")
+    return pointers, problems
+
+
 def pointer_ids(value):
     """Find explicit Unity PPtr path references, not arbitrary numeric values."""
     if isinstance(value, dict):
@@ -65,9 +83,11 @@ def main():
     except Exception as exc:
         p.error(f"Cannot open input scene: {type(exc).__name__}: {exc}")
     objects = list(env.objects)
+    class_by_id = {int(obj.path_id): display_type(obj) for obj in objects}
     go_ids = set()
     transform_ids = set()
     group_counts = Counter()
+    group_invariant_failures = Counter()
     unreadable = Counter()
     gameobjects_total = 0
     for obj in objects:
@@ -84,10 +104,11 @@ def main():
             continue
         group_counts[name] += 1
         go_ids.add(int(obj.path_id))
-        for component in record.get("m_Component", []):
-            for file_id, path_id in pointer_ids(component):
-                if file_id == 0:
-                    transform_ids.add(path_id)
+        pointers, problems = inspect_group_components(record, class_by_id)
+        group_invariant_failures.update(problems)
+        for file_id, path_id in pointers:
+            if file_id == 0 and class_by_id.get(path_id) == "Transform":
+                transform_ids.add(path_id)
 
     if sum(group_counts.values()) != 10:
         raise SystemExit(
@@ -125,6 +146,10 @@ def main():
                 potential_clips["name_heuristic_only"] += 1
 
     issues = assess_coverage(len(objects), gameobjects_total, unreadable, sum(group_counts.values()))
+    if group_invariant_failures:
+        issues.append("flower_group_invariants_failed")
+    if len(transform_ids) != 10:
+        issues.append("unique_flower_transforms_not_ten")
     report = {
         "coverage_complete_against_saved_scene_inventory": not issues,
         "coverage_issues": issues,
@@ -135,6 +160,7 @@ def main():
         "scene_file": args.scene.name,
         "groups_found_by_name": dict(group_counts),
         "group_total": sum(group_counts.values()),
+        "flower_group_invariant_failures": dict(group_invariant_failures),
         "gameobjects_total": gameobjects_total,
         "gameobjects_scanned": gameobjects_total - unreadable["GameObject"],
         "gameobject_scan_complete": unreadable["GameObject"] == 0,
