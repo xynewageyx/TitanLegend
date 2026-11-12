@@ -51,3 +51,14 @@ direct references aggregated by component class.
 
 The workflow's Python tests use synthetic pointer records only. They do not
 decode the original `BuildPlayer-Plain` scene nor validate runtime visibility.
+
+## Source-integrity gate
+
+The probe now compares the loaded scene to the previously verified original
+`BuildPlayer-Plain` inventory: **105,075 serialized objects** and
+**28,709 GameObjects**. If either total differs or any relevant TypeTree is
+unreadable, `coverage_complete_against_saved_scene_inventory=false` and the
+result is classified as `incomplete_or_mismatched_source_inventory`.
+This is a conservative cross-check, not proof that all runtime code is known.
+The ten inactive flower groups and 496 descendant flowers remain the saved
+state only; do not report any of them as actually rendered without runtime data.
