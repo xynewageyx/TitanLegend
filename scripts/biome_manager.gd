@@ -77,12 +77,8 @@ func generate_terrain() -> void:
  # Elementare Landmarken als sichtbare Unterscheidung der Gebiete.
  DesignDetails.scenery(terrain, current_biome)
  if current_biome == 3:
-  NatureArt.forest(terrain)
-  _add_forest_depth()
-  _add_forest_variation()
-  _add_forest_pines()
-  _add_forest_path_details()
-  preload("res://scripts/organic_forest_trail.gd").create(terrain)
+  if HasScript.has_nature_art():
+   NatureArt.forest(terrain)).create(terrain)
 
 func _add_forest_depth() -> void:
  # Fill distant forest edges without extra physics bodies or textures.
