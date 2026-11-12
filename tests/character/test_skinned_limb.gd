@@ -38,6 +38,30 @@ func _run() -> void:
             push_error("Non-finite skin weight detected")
             quit(1)
             return
+    var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+    var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+    if indices.size() != 288 or bones.size() != vertices.size() * 4:
+        push_error("Invalid limb triangle or bone-index count")
+        quit(1)
+        return
+    for i in range(vertices.size()):
+        var total := 0.0
+        for influence in range(4):
+            var w := weights[i * 4 + influence]
+            if w < 0.0 or w > 1.0:
+                push_error("Invalid skin weight range")
+                quit(1)
+                return
+            total += w
+        if absf(total - 1.0) > 0.0001:
+            push_error("Skin weights do not sum to one")
+            quit(1)
+            return
+    for index in indices:
+        if index < 0 or index >= vertices.size():
+            push_error("Limb triangle index out of bounds")
+            quit(1)
+            return
     if limb.build_limb(skeleton, "head", "foot_l"):
         push_error("Non-parent chain should be rejected")
         quit(1)
