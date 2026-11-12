@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-12 18:13 UTC**
-Git-Stand: **614069202b7d7374c67b18a9fec5ad7a68b9cb30** auf Branch **main**
+Automatisch erzeugt: **2026-11-12 18:14 UTC**
+Git-Stand: **936258a9dd86e68938867ebb09bf592d134fd9aa** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -9,13 +9,12 @@ Git-Stand: **614069202b7d7374c67b18a9fec5ad7a68b9cb30** auf Branch **main**
 
 ### Charaktere — Charaktere-Chat
 - `76552ed` (2026-11-08): fix: face Chibi attack flashes forward and reduce oversized impact orbs (#216)
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
 
 ### Gegner/Bosse — Gegner-/Boss-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Landschaften — Landschaften-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Ausrüstung — Ausrüstungs-Chat
 - `8af2070` (2026-11-09): test: verify synchronized torso and arm motion keeps equipment attached (#215)
@@ -25,35 +24,32 @@ Git-Stand: **614069202b7d7374c67b18a9fec5ad7a68b9cb30** auf Branch **main**
 - `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
 
 ### UI — UI-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
 - `facd9ba` (2026-11-08): Agent (skills): bounded improvement (#89)
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `76552ed` (2026-11-08): fix: face Chibi attack flashes forward and reduce oversized impact orbs (#216)
 - `9f38e4d` (2026-11-08): qa: prevent large animated weapons from clipping portrait screenshots (#213)
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
 - `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
 
 ### Titan Chat / Moderation — Titan-Chat-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Audio — Audio-Erstellung-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### APK-Gesamtbuild — APK-Erstellung-des-gesamten-Projekts-Chat
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
 - `f590c86` (2026-11-08): Titan Legends V2.1 – hand-aligned weapons and curved animated chest armor (#211)
-- `4928963` (2026-11-08): ci(forest): publish Android seven-enemy scene complexity estimate
 
 ## Bereichsübergreifende Änderungen
 
