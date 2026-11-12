@@ -34,3 +34,20 @@ prefab-instantiation, dynamically loaded scenes, or native runtime code.
 - Follow-up after obtaining its aggregate JSON: check cross-bundle references,
   named animation bindings and managed activation callsites before claiming
   actual runtime visibility.
+
+## Scan completeness / interpretation
+
+The current probe also counts all GameObjects encountered and reports how many
+TypeTrees could not be read. Its candidate classes include MonoBehaviour,
+AnimationClip, Animator, AnimatorController and PlayableDirector, with candidate
+direct references aggregated by component class.
+
+- `partial_scan_unreadable_objects`: results are incomplete; a zero cannot
+  establish absence of references.
+- `direct_reference_candidates_found`: serialized references exist, but
+  actual activation remains unproven.
+- `no_direct_references_in_scanned_classes`: only a negative for the enumerated
+  objects, PPtr format and classes in the supplied scene, not for external code.
+
+The workflow's Python tests use synthetic pointer records only. They do not
+decode the original `BuildPlayer-Plain` scene nor validate runtime visibility.
