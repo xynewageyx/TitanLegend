@@ -11,6 +11,7 @@ on:
       - 'tools/render_live_equipment_qa.gd'
       - 'tools/render_boss_gameplay_camera_qa.gd'
       - 'tools/boss_camera_qa_state.gd'
+      - 'tools/boss_camera_real_hud_qa.gd'
       - 'tools/check_boss_gameplay_camera_report.py'
       - 'tests/test_check_boss_gameplay_camera_report.py'
       - 'tools/check_gameplay_camera_benchmark.py'
