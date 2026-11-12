@@ -3,7 +3,7 @@ from tools.check_boss_gameplay_camera_report import validate
 
 def example():
     def b():
-        return {"valid":True,"viewport_fraction":1.0,"bbox_px":[120,240,150,200],"behind_vertices":0}
+        return {"valid":True,"viewport_fraction":1.0,"bbox_px":[120,420,150,180],"behind_vertices":0}
     return {
         "valid":True,"hero_count":4,"screenshots":4,
         "source_camera":"res://scripts/camera_follow.gd",
@@ -21,7 +21,7 @@ def example():
                 "boss_panel_rect":[216,240,485,145],
                 "chat_panel_rect":[12,1071,696,68]},
             "hud_warning_layout":{"boss_name":"⚠ Boss-Angriff · Unterbrechen"},
-            "hero_boxes":[{**b(),"bbox_px":[120,600,150,200]} for _ in range(4)],
+            "hero_boxes":[{**b(),"bbox_px":[120,680,150,190]} for _ in range(4)],
             "boss_warning_visible":True,"fov_degrees":56.0,
             "windup_changed_pixels_without_hud_text":250,
             "idle_image":f"boss_{name}_idle.png",
@@ -71,6 +71,14 @@ class BossCameraTests(unittest.TestCase):
         self.assertFalse(validate(r)["valid"])
     def test_chat_clipped_fails(self):
         r=example();r["scenarios"][0]["hud_layout"]["chat_panel_rect"]=[12,1250,696,68]
+        self.assertFalse(validate(r)["valid"])
+    def test_production_boss_bar_collision_fails(self):
+        r=example()
+        r["scenarios"][0]["boss_body_box"]["bbox_px"][1]=378
+        self.assertFalse(validate(r)["valid"])
+    def test_production_chat_collision_fails(self):
+        r=example()
+        r["scenarios"][0]["hero_boxes"][3]["bbox_px"][1]=920
         self.assertFalse(validate(r)["valid"])
     def test_too_small_boss_fails(self):
         r=example();r["scenarios"][0]["boss_body_box"]["bbox_px"][2]=10
