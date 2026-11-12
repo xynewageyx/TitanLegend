@@ -15,7 +15,7 @@ permissions:
 jobs:
   character-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Install Godot 4.7.2
@@ -31,7 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf original_update168
-          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/character-import.log
+          timeout 180s godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/character-import.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/character-import.log; then
             exit 1
           fi
@@ -51,10 +51,20 @@ jobs:
             test_armor_showcase.gd \
             test_armor_tier_gallery.gd; do
             echo "::group::$test"
-            godot --headless --path . --script "res://tests/character/$test" 2>&1 | tee "/tmp/$test.log"
+            timeout 90s godot --headless --path . --script "res://tests/character/$test" 2>&1 | tee "/tmp/$test.log"
             if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' "/tmp/$test.log"; then
               exit 1
             fi
             grep -q 'PASS:' "/tmp/$test.log"
             echo "::endgroup::"
           done
+      - name: Upload Godot diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: modular-character-godot-logs
+          path: |
+            /tmp/character-import.log
+            /tmp/test_*.gd.log
+          if-no-files-found: warn
+          retention-days: 14
