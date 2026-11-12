@@ -67,6 +67,8 @@ func refresh_cases() -> void:
 func _on_pending_cases(cases: Array) -> void:
 	pending_cases = cases.duplicate(true)
 	_select_case(0)
+	if panel != null:
+		panel.status_label.text = "Sperrantraege geladen: %d" % pending_cases.size()
 
 func _select_case(index: int) -> void:
 	selected_index = clampi(index, 0, maxi(pending_cases.size() - 1, 0))
