@@ -40,6 +40,8 @@ def validate(report):
         for i,hero in enumerate(hero_boxes):
             if not hero.get("valid") or float(hero.get("viewport_fraction",0)) < 0.80:
                 issues.append(f"{name}: hero {i} is not sufficiently visible")
+        if int(item.get("windup_changed_pixels_without_hud_text", 0)) < 20:
+            issues.append(f"{name}: no real windup pixel change without HUD text")
         if not item.get("boss_warning_visible"):
             issues.append(f"{name}: real warning ring inactive")
         if float(item.get("fov_degrees",0))!=56.0:
