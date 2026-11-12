@@ -3,7 +3,7 @@ extends Node3D
 ## Procedural visual armor prototype for Titan Legends.
 ## Attach to Node3D. Units assume a humanoid ~1.8 m tall, origin at feet.
 ## Visual only: stats, save data, skinning and equipment inventory are separate.
-@export_enum("Tank", "Warrior", "Assassin", "Mage", "Paladin", "Healer") var armor_class: int = 0
+@export_enum("Tank", "Warrior", "Assassin", "Mage", "Paladin", "Healer", "Death Knight") var armor_class: int = 0
 @export_enum("Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic") var rarity: int = 0
 @export var show_helmet := true
 @export var show_chest := true
