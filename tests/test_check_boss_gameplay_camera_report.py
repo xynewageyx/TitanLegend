@@ -14,6 +14,7 @@ def example():
             "scenario":name,"boss_body_box":b(),"boss_warning_box":b(),
             "hero_boxes":[b() for _ in range(4)],
             "boss_warning_visible":True,"fov_degrees":56.0,
+            "windup_changed_pixels_without_hud_text":250,
             "idle_image":f"boss_{name}_idle.png",
             "windup_image":f"boss_{name}_windup.png",
         } for name in ("fire","earth")]
@@ -24,6 +25,9 @@ class BossCameraTests(unittest.TestCase):
         self.assertTrue(validate(example())["valid"])
     def test_missing_boss_warning_fails(self):
         r=example();r["scenarios"][0]["boss_warning_visible"]=False
+        self.assertFalse(validate(r)["valid"])
+    def test_text_only_warning_fails(self):
+        r=example();r["scenarios"][0]["windup_changed_pixels_without_hud_text"]=0
         self.assertFalse(validate(r)["valid"])
     def test_clipped_hero_fails(self):
         r=example();r["scenarios"][1]["hero_boxes"][3]["viewport_fraction"]=0.1
