@@ -80,3 +80,8 @@ No Unity animation retargeting is claimed.
 ## Bosskamera und Elementar-Warnringe (2026-11-12)
 
 - [Getestete Feuer-/Erdbosse mit echtem Boss-Kamerazweig](TITAN_2026_11_12_REAL_BOSS_CAMERA_QA.md): Beide Bosse und alle vier Helden vollständig im Bild. Die originale 3D-Angriffsanimation verändert ohne HUD-Hinweis 7.976 bzw. 7.562 Pixel. [Erfolgreicher GitHub-CI-Lauf](https://github.com/xynewageyx/TitanLegend/actions/runs/43248060128), 98 PNGs. Das im Test gezeichnete Boss-HP-Overlay ist nicht das vollständige produktive HUD.
+
+## Bosskamera – 12. November 2026
+
+- [Boss-Framing-Audit mit Feuerboss und Erd-Fusionsboss](TITAN_2026_11_12_BOSS_CAMERA_FRAMING_AUDIT.md). Realer CameraFollow-Bosszwei­g, 4/4 Helden und beide Bosse vollständig im Bild; tatsächliche Bosswarnungs-Bewegung gemessen. Die Bossanzeige ist eine QA-Testanzeige, noch nicht der produktive UIManager.
+- [Verschärfter CI-Test erfolgreich](https://github.com/xynewageyx/TitanLegend/actions/runs/43275726886): Abbruch bei Boss-/Heldencrop, Warnobjekt hinter Kamera oder zu geringem Abstand zwischen Bosswarnung und Frontreihe.
