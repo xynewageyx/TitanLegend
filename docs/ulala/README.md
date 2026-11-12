@@ -85,3 +85,7 @@ No Unity animation retargeting is claimed.
 
 - [Boss-Framing-Audit mit Feuerboss und Erd-Fusionsboss](TITAN_2026_11_12_BOSS_CAMERA_FRAMING_AUDIT.md). Realer CameraFollow-Bosszwei­g, 4/4 Helden und beide Bosse vollständig im Bild; tatsächliche Bosswarnungs-Bewegung gemessen. Die Bossanzeige ist eine QA-Testanzeige, noch nicht der produktive UIManager.
 - [Verschärfter CI-Test erfolgreich](https://github.com/xynewageyx/TitanLegend/actions/runs/43275726886): Abbruch bei Boss-/Heldencrop, Warnobjekt hinter Kamera oder zu geringem Abstand zwischen Bosswarnung und Frontreihe.
+
+## Bosskamera mit produktiven UIManager-Widgets (2026-11-12)
+
+- [Echtes UIManager-Widgetlayout in Feuer- und Erd-Fusionsboss-Screenshots](TITAN_2026_11_12_REAL_HUD_BOSS_CAMERA_QA.md): Produktions-Bosslebensbalken, Countdown, Chat, Ressourcen und Navigation werden verwendet; Kampfwerte stammen ausdrücklich aus der isolierten QA-Szene. Der Test meldet nun auch Kollisionen zwischen Boss und Boss-HUD sowie hinterer Teamreihe und Chat. [Erfolgreicher OpenGL-Test](https://github.com/xynewageyx/TitanLegend/actions/runs/43278930970).
