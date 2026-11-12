@@ -43,7 +43,10 @@ def main():
     except ImportError as exc:
         p.error("UnityPy required (pip install UnityPy)")
 
-    env = UnityPy.load(str(args.scene))
+    try:
+        env = UnityPy.load(str(args.scene))
+    except Exception as exc:
+        p.error(f"Cannot open input scene: {type(exc).__name__}: {exc}")
     objects = list(env.objects)
     go_ids = set()
     transform_ids = set()
@@ -76,12 +79,14 @@ def main():
     targets = go_ids | transform_ids
     matches = Counter()
     scanned = Counter()
+    totals = Counter()
     potential_clips = Counter()
     for obj in objects:
         cls = display_type(obj)
         if cls not in ("MonoBehaviour", "AnimationClip", "Animator",
                        "AnimatorController", "PlayableDirector"):
             continue
+        totals[cls] += 1
         try:
             tree = obj.read_typetree()
         except Exception:
@@ -105,11 +110,14 @@ def main():
         "group_total": sum(group_counts.values()),
         "target_gameobjects": len(go_ids),
         "candidate_component_ids": len(transform_ids),
+        "component_classes_total": dict(totals),
         "component_classes_scanned": dict(scanned),
+        "monobehaviour_scan_complete": unreadable["MonoBehaviour"] == 0,
         "unreadable_type_trees": dict(unreadable),
         "monobehaviours_with_direct_local_pptr_to_group_or_component": matches["MonoBehaviour"],
         "animation_clip_name_leads_only": dict(potential_clips),
         "activation_proven": False,
+        "result_interpretation": ("direct_reference_candidates_found" if matches["MonoBehaviour"] else "no_readable_direct_references_found"),
         "limitations": [
             "A direct PPtr reference does not establish that SetActive(true) executes.",
             "Zero direct references cannot exclude dynamic name searches or loaded scenes.",
