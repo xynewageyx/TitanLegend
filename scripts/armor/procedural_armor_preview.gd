@@ -60,7 +60,7 @@ func rebuild() -> void:
         if show_boots:
             piece(Vector3(side*0.17,0.13,-0.07),Vector3(0.27,0.26,0.42),tint)
         if rarity >= 3 and show_shoulders:
-            piece(Vector3(side*(width*0.7+0.09),1.72,0),Vector3(0.12,0.34+0.06*rarity,0.14),tint,rarity>=4)
+            piece(Vector3(side*(width*0.7+0.09),1.72,0),Vector3(0.12,0.34+0.06*float(rarity),0.14),tint,rarity>=4)
     if show_back:
         piece(Vector3(0,1.32,0.23),Vector3(0.38,0.55,0.08),tint,rarity>=4)
     if rarity >= 4:
