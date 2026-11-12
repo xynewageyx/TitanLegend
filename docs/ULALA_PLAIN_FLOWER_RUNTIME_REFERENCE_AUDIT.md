@@ -62,3 +62,17 @@ result is classified as `incomplete_or_mismatched_source_inventory`.
 This is a conservative cross-check, not proof that all runtime code is known.
 The ten inactive flower groups and 496 descendant flowers remain the saved
 state only; do not report any of them as actually rendered without runtime data.
+
+## Ten-parent invariant validation
+
+Before interpreting any scanned references, the script now verifies every
+target group as an *inactive serialized GameObject* whose component list
+contains exactly one local PPtr resolving to a `Transform` object. All ten
+transforms must be distinct. Any mismatch marks
+`coverage_complete_against_saved_scene_inventory=false`, and the report
+lists aggregate invariant failures rather than pretending the previous
+source hierarchy is unchanged.
+
+This closes a possible false-positive gap in earlier checks, which matched
+group names and counted references without independently validating the
+source component identities and saved activation bits.
