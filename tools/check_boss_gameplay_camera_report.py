@@ -30,6 +30,10 @@ def validate(report):
                 continue
             if not 0.0 <= float(box.get("viewport_fraction",-1)) <= 1.0:
                 issues.append(f"{name} {key}: invalid viewport measurement")
+            if float(box.get("viewport_fraction",-1)) < 0.98:
+                issues.append(f"{name} {key}: boss clipped beyond 2 percent")
+            if int(box.get("behind_vertices",-1)) != 0:
+                issues.append(f"{name} {key}: boss corners behind camera")
             width=float(box.get("bbox_px",[0,0,0,0])[2])
             height=float(box.get("bbox_px",[0,0,0,0])[3])
             if width < 25 or height < 40:
@@ -38,8 +42,24 @@ def validate(report):
         if len(hero_boxes)!=4:
             issues.append(f"{name}: missing 4 heroes")
         for i,hero in enumerate(hero_boxes):
-            if not hero.get("valid") or float(hero.get("viewport_fraction",0)) < 0.80:
+            if not hero.get("valid") or float(hero.get("viewport_fraction",0)) < 0.98 or int(hero.get("behind_vertices",-1)) != 0:
                 issues.append(f"{name}: hero {i} is not sufficiently visible")
+        # Ensure the warning does not intersect the four body bounding boxes.
+        # This is a portrait-composition check, not a claim about the real HUD.
+        warning_box=item.get("boss_warning_box", {})
+        bb=warning_box.get("bbox_px", [0,0,0,0])
+        if len(bb)==4:
+            boss_top=float(bb[1])
+            boss_bottom=float(bb[1])+float(bb[3])
+            if boss_top < 180:
+                issues.append(f"{name}: boss silhouette overlaps QA HUD safety zone")
+            if hero_boxes:
+                top_of_team=min(
+                    float(h.get("bbox_px",[0,0,0,0])[1])
+                    for h in hero_boxes if h.get("valid")
+                ) if any(h.get("valid") for h in hero_boxes) else 0
+                if top_of_team-boss_bottom < 20:
+                    issues.append(f"{name}: boss warning lacks 20px visual gap above front row")
         if int(item.get("windup_changed_pixels_without_hud_text", 0)) < 20:
             issues.append(f"{name}: no real windup pixel change without HUD text")
         if not item.get("boss_warning_visible"):
