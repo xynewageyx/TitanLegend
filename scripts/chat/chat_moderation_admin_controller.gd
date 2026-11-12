@@ -62,7 +62,7 @@ func refresh_cases() -> void:
 		panel.status_label.text = "Keine Serververbindung."
 		return
 	rpc_transport.request_pending_cases.rpc_id(1)
-	panel.status_label.text = "Sperrantraege werden angefordert."
+	panel.status_label.text = "Sperrantraege werden angefordert..."
 
 func _on_pending_cases(cases: Array) -> void:
 	pending_cases = cases.duplicate(true)
