@@ -52,9 +52,11 @@ def main():
     transform_ids = set()
     group_counts = Counter()
     unreadable = Counter()
+    gameobjects_total = 0
     for obj in objects:
         if display_type(obj) != "GameObject":
             continue
+        gameobjects_total += 1
         try:
             record = obj.read_typetree()
         except Exception:
@@ -78,6 +80,7 @@ def main():
 
     targets = go_ids | transform_ids
     matches = Counter()
+    reference_classes = Counter()
     scanned = Counter()
     totals = Counter()
     potential_clips = Counter()
@@ -93,11 +96,12 @@ def main():
             unreadable[cls] += 1
             continue
         scanned[cls] += 1
-        if cls == "MonoBehaviour":
-            refs = set(pointer_ids(tree))
-            if any(fid == 0 and pid in targets for fid, pid in refs):
+        refs = set(pointer_ids(tree))
+        if any(fid == 0 and pid in targets for fid, pid in refs):
+            reference_classes[cls] += 1
+            if cls == "MonoBehaviour":
                 matches[cls] += 1
-        elif cls == "AnimationClip":
+        if cls == "AnimationClip":
             # Animation binding names alone are leads, not runtime evidence.
             clip_repr = str(tree.get("m_Name", "")).lower()
             if "hua_" in clip_repr or "flower" in clip_repr:
@@ -108,21 +112,30 @@ def main():
         "scene_file": args.scene.name,
         "groups_found_by_name": dict(group_counts),
         "group_total": sum(group_counts.values()),
+        "gameobjects_total": gameobjects_total,
+        "gameobjects_scanned": gameobjects_total - unreadable["GameObject"],
+        "gameobject_scan_complete": unreadable["GameObject"] == 0,
         "target_gameobjects": len(go_ids),
         "candidate_component_ids": len(transform_ids),
         "component_classes_total": dict(totals),
         "component_classes_scanned": dict(scanned),
+        "objects_with_direct_local_references_by_class": dict(reference_classes),
         "monobehaviour_scan_complete": unreadable["MonoBehaviour"] == 0,
         "unreadable_type_trees": dict(unreadable),
         "monobehaviours_with_direct_local_pptr_to_group_or_component": matches["MonoBehaviour"],
         "animation_clip_name_leads_only": dict(potential_clips),
         "activation_proven": False,
-        "result_interpretation": ("direct_reference_candidates_found" if matches["MonoBehaviour"] else "no_readable_direct_references_found"),
+        "result_interpretation": (
+            "partial_scan_unreadable_objects" if any(unreadable.values()) else
+            "direct_reference_candidates_found" if any(reference_classes.values()) else
+            "no_direct_references_in_scanned_classes"
+        ),
         "limitations": [
             "A direct PPtr reference does not establish that SetActive(true) executes.",
             "Zero direct references cannot exclude dynamic name searches or loaded scenes.",
             "Serialized clip bindings, animation state machines and managed runtime code are not fully analyzed.",
             "Only locally stored pointers (m_FileID==0) are compared.",
+            "Readability of the TypeTree is necessary to identify serialized references.",
             "Objects in other UnityFS bundles may reference this scene indirectly."
         ]
     }
