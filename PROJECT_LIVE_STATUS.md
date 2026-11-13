@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-12 18:52 UTC**
-Git-Stand: **47b72c43a16b96349fcc3a6f629207fabc45d6a3** auf Branch **main**
+Automatisch erzeugt: **2026-11-13 03:34 UTC**
+Git-Stand: **6bf696232e0f7ad0cd5bf5d1fc437fe0e321a163** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -20,7 +20,6 @@ Git-Stand: **47b72c43a16b96349fcc3a6f629207fabc45d6a3** auf Branch **main**
 - `8af2070` (2026-11-09): test: verify synchronized torso and arm motion keeps equipment attached (#215)
 - `9f38e4d` (2026-11-08): qa: prevent large animated weapons from clipping portrait screenshots (#213)
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
-- `40d3b7e` (2026-11-08): test: verify hand weapons chest armor and boots follow bone motion (#166)
 
 ### UI — UI-Chat
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
@@ -51,6 +50,7 @@ Git-Stand: **47b72c43a16b96349fcc3a6f629207fabc45d6a3** auf Branch **main**
 
 ## Bereichsübergreifende Änderungen
 
+- `6bf6962` (2026-11-13): chore: remove unused Update 168 document restorer
 - `6140692` (2026-11-12): test(classes): guard available-role selection for death knight
 - `7398305` (2026-11-12): fix(classes): preselect an available role when changing to death knight or other classes
 - `1b69ade` (2026-11-10): docs: Ulala animation hash and bindpose verification (metadata only) (#256)
