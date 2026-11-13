@@ -1,7 +1,7 @@
 extends SceneTree
-## Integration smoke test: imported clips + ChibiAnimationController, all eleven heroes.
+## Integration smoke test: imported clips + ChibiAnimationController, all twelve heroes.
 const ControllerScript = preload("res://scripts/animation/chibi_animation_controller.gd")
-const HEROES := ["brawler", "druid", "hunter", "mage", "paladin", "priest", "rogue", "shaman", "summoner", "warlock", "warrior"]
+const HEROES := ["brawler", "death_knight", "druid", "hunter", "mage", "paladin", "priest", "rogue", "shaman", "summoner", "warlock", "warrior"]
 const ACTIONS := ["Idle", "Walk", "Attack", "Hit", "Dodge"]
 
 
@@ -37,12 +37,16 @@ func _run() -> void:
                 failures.append("%s: %s playback not started" % [hero_id, action])
                 continue
             checked += 1
+        # Explicitly end the final Dodge action before testing ground locomotion.
+        # set_moving() intentionally defers transitions while a combat animation plays.
+        if not controller.return_to_idle():
+            failures.append("%s: cannot reset to Idle before locomotion" % hero_id)
         if not controller.set_moving(true):
             failures.append("%s: set_moving(true) failed" % hero_id)
         elif controller.active_action != "Walk":
             failures.append("%s: expected Walk while moving" % hero_id)
         if controller.play_action("Attack"):
-            controller._on_animation_finished(StringName("Attack"))
+            controller._on_animation_finished(StringName(controller.animation_player.current_animation))
             if controller.active_action != "Walk":
                 failures.append("%s: attack did not restore Walk" % hero_id)
         if not controller.set_moving(false):

@@ -26,6 +26,8 @@ var magic_flash: MeshInstance3D
 var attack_flash_root: Node3D
 var attack_fx_forward: float = -1.0
 const MAX_ATTACK_FLASH_SCALE: float = 1.18
+# Translucent cosmetic impact sphere preserves character silhouettes in portrait combat.
+const ATTACK_FLASH_ALPHA: float = 0.55
 var attack_duration: float = 0.42
 var attack_variant: int = 0
 # Visual-only secondary motion (no new meshes or combat timers).
@@ -115,6 +117,13 @@ func configure(hero_class: int) -> void:
  HeroWeapons47.equip(legacy_weapon, class_id)
  attack_flash_root = _part(self, "AttackFlash", Vector3(0.0, 1.45, -0.7))
  magic_flash = VisualFactory.sphere(attack_flash_root, class_fx_size, Vector3.ZERO, class_fx_color)
+ # Use an instance-local material; never alter the shared weapon or pet palette.
+ var impact_mat := StandardMaterial3D.new()
+ impact_mat.albedo_color = Color(class_fx_color.r, class_fx_color.g, class_fx_color.b, ATTACK_FLASH_ALPHA)
+ impact_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+ impact_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+ impact_mat.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_DISABLED
+ magic_flash.material_override = impact_mat
  magic_flash.visible = false
  skill_flash = VisualFactory.sphere(attack_flash_root, 0.45, Vector3(0.0, 0.18, -0.15), Color("#ffe59a"))
  skill_flash.visible = false

@@ -27,6 +27,10 @@ Thus the two Avatar objects share an equal number of serialized skeleton pose en
 
 **Limits:** Equal index bytes are evidence for serialized pose equality at those positions, *not* proof that Avatar skeleton name/parent mappings are identical. The differing indices are **not yet mapped to specific bones**. This check does not prove that the dly/ndly weapon-hand bindpose discrepancy is caused by either index, nor that Godot 4.7.2 character rigs match the Avatars.
 
+## Further verification (2026-11-10)
+
+The two differing indices have now been identified by `m_SkeletonNameIDArray` and `m_TOS`. Their ordering is reversed across variants: DLY index 150 = shoes and 154 = weapon; NDLY index 150 = weapon and 154 = shoes. For the same named equipment category, shoe poses match exactly and weapon poses differ only in translation (maximum absolute coordinate difference 0.078783493 Unity units). See [the detailed resolution](ULALA_2026_11_10_AVATAR_INDEX_RESOLUTION.md). The earlier per-index mismatches do not indicate two changed biological skeletal bones.
+
 ## Next validation
 
 1. Decode `m_AvatarSkeleton.m_Node` parent indices and `m_SkeletonNameIDArray` against `m_TOS` to name the two differing entries.

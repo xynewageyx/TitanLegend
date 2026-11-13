@@ -8,6 +8,9 @@ on:
       - 'scripts/chibi_glb_visual.gd'
       - 'scripts/equipment/chibi_imported_equipment_sockets.gd'
       - 'tests/test_chibi_imported_equipment_binding.gd'
+      - 'tests/test_chibi_weapon_animation_grip.gd'
+      - 'tests/test_death_knight_locomotion_polish.gd'
+      - 'scripts/animation/death_knight_locomotion_polish.gd'
       - 'tests/test_chibi_imported_rigs.gd'
       - 'tests/test_titan_skeleton_bridge.gd'
       - '.github/workflows/titan-skeleton-bridge-smoke.yml'
@@ -33,8 +36,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/skeleton-import.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/skeleton-import.log; then exit 1; fi
+          for attempt in 1 2 3; do
+            set +e
+            godot --headless --audio-driver Dummy --path . --editor --import --quit 2>&1 | tee /tmp/skeleton-import.log
+            status=${PIPESTATUS[0]}
+            set -e
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/skeleton-import.log; then exit 1; fi
+            if [ "$status" -eq 0 ]; then break; fi
+            if [ "$status" -ne 134 ] || [ "$attempt" -eq 3 ]; then
+              echo "::error::Skeleton import failed with $status after attempt $attempt"
+              exit "$status"
+            fi
+            echo "::warning::Transient Godot 4.7.2 import crash (134); retrying with clean cache"
+            rm -rf .godot
+            sleep 2
+          done
       - name: Verify skeleton bridge
         shell: bash
         run: |
@@ -56,3 +72,10 @@ jobs:
           godot --headless --path . --script res://tests/test_chibi_imported_equipment_binding.gd 2>&1 | tee /tmp/chibi-equipment-binding.log
           grep -Fq 'PASS: imported chibi equipment sockets bound to all 12 animated GLB rigs' /tmp/chibi-equipment-binding.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/chibi-equipment-binding.log; then exit 1; fi
+      - name: Verify weapon grip during Idle Walk Attack Dodge across twelve classes
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/test_chibi_weapon_animation_grip.gd 2>&1 | tee /tmp/chibi-weapon-grip.log
+          grep -Fq 'PASS: animated weapon grip continuity classes=12 actions=4 samples=144 death_knight_hand=Hand_R_2' /tmp/chibi-weapon-grip.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/chibi-weapon-grip.log; then exit 1; fi

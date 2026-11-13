@@ -6,7 +6,8 @@ import math
 from pathlib import Path
 
 
-def validate(data):
+def validate(data, allow_empty_scenes=None):
+    allow_empty_scenes = set(allow_empty_scenes or [])
     errors = []
     skeletons = data.get("skeletons", [])
     if not skeletons:
@@ -16,7 +17,7 @@ def validate(data):
     for skeleton in skeletons:
         scene = skeleton.get("scene", "<unknown>")
         bones = skeleton.get("bones", [])
-        if not bones:
+        if not bones and scene not in allow_empty_scenes:
             errors.append(f"{scene}: skeleton contains no bones")
         names = [b.get("name") for b in bones]
         if len(names) != len(set(names)):
@@ -76,8 +77,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("inventory", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--allow-empty-scene", action="append", default=[],
+                        help="Explicit scene path whose intentionally unpopulated prototype Skeleton3D is allowed")
     args = parser.parse_args()
-    report = validate(json.loads(args.inventory.read_text(encoding="utf-8")))
+    report = validate(json.loads(args.inventory.read_text(encoding="utf-8")),
+                      allow_empty_scenes=args.allow_empty_scene)
     rendered = json.dumps(report, indent=2) + "\n"
     if args.output:
         args.output.write_text(rendered, encoding="utf-8")

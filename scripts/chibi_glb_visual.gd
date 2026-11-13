@@ -2,6 +2,7 @@ extends Node3D
 ## Imported original chibi base mesh; preserve existing gameplay and equipment nodes.
 const RIG_BRIDGE = preload("res://scripts/rig/titan_skeleton_bridge.gd")
 const IMPORTED_SOCKETS = preload("res://scripts/equipment/chibi_imported_equipment_sockets.gd")
+const DEATH_KNIGHT_POLISH = preload("res://scripts/animation/death_knight_locomotion_polish.gd")
 const NAMES := ["warrior", "paladin", "druid", "shaman", "hunter", "rogue", "mage", "warlock", "summoner", "priest", "brawler", "death_knight"]
 var imported_skeleton: Skeleton3D
 var rig_audit: Dictionary = {}
@@ -66,6 +67,11 @@ func configure(class_id: int) -> void:
     if limb != null:
      limb.visible = false
  animation_player = _find_animation_player(model)
+ if index == 11 and imported_skeleton != null and animation_player != null:
+  var locomotion_report: Dictionary = DEATH_KNIGHT_POLISH.install(animation_player, imported_skeleton)
+  set_meta("death_knight_locomotion_polish", locomotion_report)
+  if not bool(locomotion_report.get("installed", false)):
+   push_warning("Death Knight locomotion polish could not be installed: " + str(locomotion_report.get("warnings", [])))
  play_clip("Idle")
 
 ## The imported Death Knight uses several pure-white GLB materials.

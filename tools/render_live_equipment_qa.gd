@@ -118,7 +118,7 @@ func _build_contact_sheet(pose: String) -> bool:
   return false
  return true
 
-func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
+func _fit_camera_to_visible_hero(hero: Node3D, formation: bool = false) -> bool:
  # The oversized Mythic greatsword and lateral spell focuses can extend well
  # outside a fixed portrait crop. Fit all visible 3D meshes in camera space
  # while retaining a consistent viewing direction for front/side comparisons.
@@ -150,7 +150,7 @@ func _fit_camera_to_visible_hero(hero: Node3D) -> bool:
  # Leave 0.45m safety margin for fast-moving cloth and weapon tips.
  var needed: float = maxf(high.y - low.y + 0.45, (high.x - low.x + 0.45) / aspect)
  camera.size = maxf(3.95, needed)
- if is_nan(camera.size) or camera.size > 12.0:
+ if is_nan(camera.size) or camera.size > (24.0 if formation else 12.0):
   _fail("Equipment is too far from hero for a readable QA frame")
   return false
  return true
@@ -250,6 +250,661 @@ func _descendants(parent: Node) -> Array[Node]:
   items.append_array(_descendants(child))
  return items
 
+func _screen_bounds_for_meshes(subtree: Node3D) -> Rect2:
+ # Conservative pixel-space projected AABB; NOT a true silhouette mask or
+ # occlusion/collision detector. Used for reproducible formation QA only.
+ var minimum := Vector2(INF, INF)
+ var maximum := Vector2(-INF, -INF)
+ var has_geometry := false
+ for descendant in _descendants(subtree):
+  var mesh_piece: MeshInstance3D = descendant as MeshInstance3D
+  if mesh_piece == null or mesh_piece.mesh == null or not mesh_piece.is_visible_in_tree():
+   continue
+  var bounds: AABB = mesh_piece.get_aabb()
+  for corner in range(8):
+   var position_world: Vector3 = mesh_piece.global_transform * bounds.get_endpoint(corner)
+   if camera.is_position_behind(position_world):
+    continue
+   var pixel: Vector2 = camera.unproject_position(position_world)
+   minimum.x = minf(minimum.x, pixel.x)
+   minimum.y = minf(minimum.y, pixel.y)
+   maximum.x = maxf(maximum.x, pixel.x)
+   maximum.y = maxf(maximum.y, pixel.y)
+   has_geometry = true
+ if not has_geometry:
+  return Rect2()
+ return Rect2(minimum, maximum - minimum)
+
+
+func _four_hero_screen_visibility() -> Dictionary:
+ var viewport: Rect2 = root.get_visible_rect()
+ var frames: Array[Dictionary] = []
+ var rectangles: Array[Rect2] = []
+ var minimum_fraction: float = 1.0
+ for index in range(team.heroes.size()):
+  var hero: Node3D = team.heroes[index]
+  var visual: Node3D = hero.get_node_or_null("ChibiGLBVisual") as Node3D
+  if visual == null:
+   return {"valid": false, "reason": "missing imported hero visual"}
+  # Keep imported body separate from mythic weapons/armor and passive pets.
+  var box: Rect2 = _screen_bounds_for_meshes(visual)
+  if box.size.x < 1.0 or box.size.y < 1.0:
+   return {"valid": false, "reason": "empty projected imported GLB"}
+  var visible: Rect2 = box.intersection(viewport)
+  var fraction: float = (visible.size.x * visible.size.y) / maxf(1.0, box.size.x * box.size.y)
+  minimum_fraction = minf(minimum_fraction, fraction)
+  rectangles.append(box)
+  frames.append({"class": CLASSES[team.class_ids[index]], "slot": index,
+   "body_bbox_px": [snappedf(box.position.x, 0.1), snappedf(box.position.y, 0.1),
+    snappedf(box.size.x, 0.1), snappedf(box.size.y, 0.1)],
+   "body_viewport_fraction": snappedf(fraction, 0.001)})
+ var pair_overlap: Array[Dictionary] = []
+ var maximum_overlap: float = 0.0
+ for first in range(rectangles.size()):
+  for second in range(first + 1, rectangles.size()):
+   var overlap: Rect2 = rectangles[first].intersection(rectangles[second])
+   var a: float = rectangles[first].size.x * rectangles[first].size.y
+   var b: float = rectangles[second].size.x * rectangles[second].size.y
+   var ratio: float = (overlap.size.x * overlap.size.y) / maxf(1.0, minf(a,b))
+   maximum_overlap = maxf(maximum_overlap, ratio)
+   pair_overlap.append({"slots": [first, second], "overlap_of_smaller_bbox": snappedf(ratio, 0.001)})
+ var weapon_rectangles: Array[Rect2] = []
+ var weapon_frames: Array[Dictionary] = []
+ var weapon_other_body_overlap: Array[Dictionary] = []
+ var maximum_weapon_overlap: float = 0.0
+ for index in range(team.heroes.size()):
+  var controller: Node3D = team.heroes[index].get_node_or_null("EquipmentController") as Node3D
+  if controller == null:
+   return {"valid": false, "reason": "missing equipment controller"}
+  var equipped: Dictionary = controller.get("equipped_nodes")
+  var weapon: Node3D = equipped.get("mainhand") as Node3D
+  if weapon == null:
+   return {"valid": false, "reason": "missing equipped mythic weapon"}
+  var weapon_box: Rect2 = _screen_bounds_for_meshes(weapon)
+  if weapon_box.size.x < 1.0 or weapon_box.size.y < 1.0:
+   return {"valid": false, "reason": "empty projected mythic weapon"}
+  weapon_rectangles.append(weapon_box)
+  weapon_frames.append({"class": CLASSES[team.class_ids[index]], "slot": index,
+   "bbox_px": [snappedf(weapon_box.position.x, 0.1), snappedf(weapon_box.position.y, 0.1),
+    snappedf(weapon_box.size.x, 0.1), snappedf(weapon_box.size.y, 0.1)]})
+ for weapon_index in range(weapon_rectangles.size()):
+  for target in range(rectangles.size()):
+   if weapon_index == target:
+    continue
+   var intersection: Rect2 = weapon_rectangles[weapon_index].intersection(rectangles[target])
+   var target_area: float = rectangles[target].size.x * rectangles[target].size.y
+   var ratio: float = intersection.size.x * intersection.size.y / maxf(1.0, target_area)
+   maximum_weapon_overlap = maxf(maximum_weapon_overlap, ratio)
+   weapon_other_body_overlap.append({"weapon_slot": weapon_index, "body_slot": target,
+    "fraction_of_other_body_bbox": snappedf(ratio, 0.001)})
+ # Distinguish visible companion and transient FX footprint from weapon geometry.
+ # A projected AABB intersection is a broad-phase visual warning only.
+ var extras: Array[Dictionary] = []
+ var maximum_pet_vs_other_body: float = 0.0
+ var maximum_fx_vs_body: float = 0.0
+ for source_index in range(team.heroes.size()):
+  var source_hero: Node3D = team.heroes[source_index]
+  for category in ["pet", "effect"]:
+   var subtree: Node3D = source_hero.get_node_or_null("PassivePet" if category == "pet" else "HeroCombatMotion/AttackFlash") as Node3D
+   if subtree == null or not subtree.is_visible_in_tree():
+    continue
+   var projected: Rect2 = _screen_bounds_for_meshes(subtree)
+   if projected.size.x < 1.0 or projected.size.y < 1.0:
+    continue
+   var viewport_box: Rect2 = projected.intersection(viewport)
+   var viewport_fraction: float = (viewport_box.size.x * viewport_box.size.y) / maxf(1.0, projected.size.x * projected.size.y)
+   var overlaps: Array[Dictionary] = []
+   for body_index in range(rectangles.size()):
+    if body_index == source_index and category == "pet":
+     continue
+    var cover: Rect2 = projected.intersection(rectangles[body_index])
+    var body_area: float = rectangles[body_index].size.x * rectangles[body_index].size.y
+    var ratio: float = (cover.size.x * cover.size.y) / maxf(1.0, body_area)
+    overlaps.append({"body_slot": body_index, "fraction_of_body_bbox": snappedf(ratio, 0.001)})
+    if category == "pet":
+     maximum_pet_vs_other_body = maxf(maximum_pet_vs_other_body, ratio)
+    else:
+     maximum_fx_vs_body = maxf(maximum_fx_vs_body, ratio)
+   extras.append({"source_slot": source_index, "category": category,
+    "viewport_fraction": snappedf(viewport_fraction, 0.001),
+    "bbox_px": [snappedf(projected.position.x, 0.1), snappedf(projected.position.y, 0.1),
+     snappedf(projected.size.x, 0.1), snappedf(projected.size.y, 0.1)],
+    "overlaps": overlaps})
+ return {"valid": minimum_fraction >= 0.95, "body_frames": frames,
+  "minimum_body_viewport_fraction": snappedf(minimum_fraction, 0.001),
+  "maximum_pair_bbox_overlap": snappedf(maximum_overlap, 0.001),
+  "pairs": pair_overlap, "weapon_frames": weapon_frames,
+  "max_weapon_vs_other_body_bbox_overlap": snappedf(maximum_weapon_overlap, 0.001),
+  "weapon_vs_other_body": weapon_other_body_overlap,
+  "pet_effect_frames": extras,
+  "max_pet_vs_other_body_bbox_overlap": snappedf(maximum_pet_vs_other_body, 0.001),
+  "max_effect_vs_body_bbox_overlap": snappedf(maximum_fx_vs_body, 0.001),
+  "metric_description": "Projected geometry AABB overlap is a conservative screen-space proxy, not pixel-accurate occlusion or mesh clipping."}
+
+
+
+func _pixel_delta_stats(reference: Image, counterfactual: Image, body_frames: Array) -> Dictionary:
+ # Compare the actual framebuffer readbacks pixel by pixel. This is NOT a
+ # depth-buffer object-ID mask or proof that body pixels were hidden.
+ if reference == null or counterfactual == null or reference.get_size() != counterfactual.get_size():
+  return {"valid": false, "reason": "pixel comparison dimensions differ"}
+ var a: Image = reference.duplicate() as Image
+ var b: Image = counterfactual.duplicate() as Image
+ a.convert(Image.FORMAT_RGB8)
+ b.convert(Image.FORMAT_RGB8)
+ var raw_a: PackedByteArray = a.get_data()
+ var raw_b: PackedByteArray = b.get_data()
+ var bounds: Array[Rect2i] = []
+ var hits: Array[int] = []
+ var totals: Array[int] = []
+ for item in body_frames:
+  var rect: Array = item.get("body_bbox_px", [])
+  if rect.size() != 4:
+   return {"valid": false, "reason": "missing projected body rectangle"}
+  var x0: int = clampi(int(floor(float(rect[0]))), 0, a.get_width())
+  var y0: int = clampi(int(floor(float(rect[1]))), 0, a.get_height())
+  var x1: int = clampi(int(ceil(float(rect[0]) + float(rect[2]))), 0, a.get_width())
+  var y1: int = clampi(int(ceil(float(rect[1]) + float(rect[3]))), 0, a.get_height())
+  bounds.append(Rect2i(x0, y0, maxi(0, x1 - x0), maxi(0, y1 - y0)))
+  hits.append(0)
+  totals.append(maxi(1, (x1 - x0) * (y1 - y0)))
+ var changed := 0
+ for y in range(a.get_height()):
+  for x in range(a.get_width()):
+   var offset: int = (y * a.get_width() + x) * 3
+   if absi(int(raw_a[offset]) - int(raw_b[offset])) <= 24 and absi(int(raw_a[offset+1]) - int(raw_b[offset+1])) <= 24 and absi(int(raw_a[offset+2]) - int(raw_b[offset+2])) <= 24:
+    continue
+   changed += 1
+   for index in range(bounds.size()):
+    if bounds[index].has_point(Vector2i(x,y)):
+     hits[index] += 1
+ var by_hero: Array[Dictionary] = []
+ for index in range(bounds.size()):
+  by_hero.append({"slot": index, "changed_pixels": hits[index],
+   "body_rectangle_area_px": totals[index],
+   "changed_fraction_of_body_rectangle": snappedf(float(hits[index]) / float(totals[index]), 0.00001)})
+ return {"valid": true, "pixel_threshold_max_rgb_8bit": 24,
+  "changed_pixels": changed,
+  "total_pixels": a.get_width() * a.get_height(),
+  "changed_fraction_of_frame": snappedf(float(changed) / float(maxi(1, a.get_width() * a.get_height())), 0.00001),
+  "body_regions": by_hero,
+  "method": "same-camera framebuffer counterfactual difference, not hidden body pixel or 3D collision percentage"}
+
+
+func _capture_counterfactual_attack_frames(reference: Image, visibility: Dictionary) -> Dictionary:
+ var changes: Dictionary = {}
+ for category in ["weapon", "pet", "effect"]:
+  var roots: Array[Node3D] = []
+  for hero in team.heroes:
+   var target: Node3D
+   if category == "pet":
+    target = hero.get_node_or_null("PassivePet") as Node3D
+   elif category == "effect":
+    target = hero.get_node_or_null("HeroCombatMotion/AttackFlash") as Node3D
+   else:
+    var controller: Node3D = hero.get_node_or_null("EquipmentController") as Node3D
+    var equipped: Dictionary = controller.get("equipped_nodes") if controller != null else {}
+    target = equipped.get("mainhand") as Node3D
+   if target == null or not target.is_visible_in_tree():
+    return {"valid": false, "reason": category + " has no visible source on every hero"}
+   roots.append(target)
+  for target in roots:
+   target.visible = false
+  await RenderingServer.frame_post_draw
+  var without: Image = root.get_texture().get_image()
+  var result: Dictionary = _pixel_delta_stats(reference, without, visibility.get("body_frames", []))
+  var filename: String = "formation_mythic_attack_without_" + category + ".png"
+  if without == null or without.save_png(OUTPUT + "/" + filename) != OK:
+   for target in roots:
+    target.visible = true
+   return {"valid": false, "reason": "could not save " + filename}
+  for target in roots:
+   target.visible = true
+  if not bool(result.get("valid", false)):
+   return result
+  result["counterfactual_image"] = filename
+  changes[category] = result
+ return {"valid": changes.size() == 3, "categories": changes,
+  "note": "Pixel deltas include transparent blending, lighting, exposed background and potentially overlapping props; they are not a direct hidden-body mask."}
+
+
+
+func _body_mask_pixel_count(image: Image) -> int:
+ # Opaque unshaded white represents ONLY the selected GLB body. Everything
+ # else is hidden or rendered opaque black, respecting the depth buffer.
+ var data: Image = image.duplicate() as Image
+ data.convert(Image.FORMAT_RGB8)
+ var rgb: PackedByteArray = data.get_data()
+ var found := 0
+ for offset in range(0, rgb.size(), 3):
+  if int(rgb[offset]) >= 240 and int(rgb[offset+1]) >= 240 and int(rgb[offset+2]) >= 240:
+   found += 1
+ return found
+
+
+func _category_meshes(category: String) -> Array[MeshInstance3D]:
+ var meshes: Array[MeshInstance3D] = []
+ for hero in team.heroes:
+  var subtree: Node3D
+  if category == "pet":
+   subtree = hero.get_node_or_null("PassivePet") as Node3D
+  elif category == "effect":
+   subtree = hero.get_node_or_null("HeroCombatMotion/AttackFlash") as Node3D
+  else:
+   var ctrl: Node3D = hero.get_node_or_null("EquipmentController") as Node3D
+   var equipped: Dictionary = ctrl.get("equipped_nodes") if ctrl != null else {}
+   subtree = equipped.get("mainhand") as Node3D
+  if subtree == null:
+   continue
+  for node in _descendants(subtree):
+   if node is MeshInstance3D and (node as MeshInstance3D).is_visible_in_tree():
+    meshes.append(node as MeshInstance3D)
+ return meshes
+
+
+func _capture_depth_silhouette_masks() -> Dictionary:
+ # A BODY-specific white unshaded pass plus three black-occluder passes.
+ # Godot's normal depth test determines exactly which white body pixels remain.
+ # This is a QA-only drawing override. Original visual state is restored.
+ var all_meshes: Array[MeshInstance3D] = []
+ var prior: Array[Dictionary] = []
+ for node in _descendants(world):
+  if node is MeshInstance3D:
+   var mesh: MeshInstance3D = node as MeshInstance3D
+   all_meshes.append(mesh)
+   prior.append({"visible": mesh.visible, "override": mesh.material_override,
+    "shadow": mesh.cast_shadow})
+ var matte_white := StandardMaterial3D.new()
+ matte_white.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+ matte_white.albedo_color = Color.WHITE
+ matte_white.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+ matte_white.cull_mode = BaseMaterial3D.CULL_DISABLED
+ var matte_black := StandardMaterial3D.new()
+ matte_black.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+ matte_black.albedo_color = Color.BLACK
+ matte_black.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+ matte_black.cull_mode = BaseMaterial3D.CULL_DISABLED
+ var world_environment: WorldEnvironment
+ for child in world.get_children():
+  if child is WorldEnvironment:
+   world_environment = child as WorldEnvironment
+   break
+ if world_environment == null:
+  return {"valid": false, "error": "missing scene environment"}
+ var background: Environment = world_environment.environment
+ var saved_background_mode: int = background.background_mode
+ var saved_background_color: Color = background.background_color
+ background.background_mode = Environment.BG_COLOR
+ background.background_color = Color.BLACK
+ var results_by_hero: Array[Dictionary] = []
+ var saved_process: Array[bool] = []
+ for hero in team.heroes:
+  var visual: Node3D = hero.get_node_or_null("HeroCombatMotion") as Node3D
+  saved_process.append(visual.is_processing() if visual != null else false)
+  if visual != null:
+   visual.set_process(false)
+ for slot in range(team.heroes.size()):
+  var hero: Node3D = team.heroes[slot]
+  var body: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+  var body_meshes: Array[MeshInstance3D] = []
+  for node in _descendants(body):
+   if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+    body_meshes.append(node as MeshInstance3D)
+  var data: Dictionary = {"slot": slot, "class": CLASSES[team.class_ids[slot]]}
+  for category in ["baseline", "weapon", "pet", "effect"]:
+   for mesh in all_meshes:
+    mesh.visible = false
+    mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+   for mesh in body_meshes:
+    mesh.visible = true
+    mesh.material_override = matte_white
+   if category != "baseline":
+    for mesh in _category_meshes_for_mask(category):
+     if not body_meshes.has(mesh):
+      mesh.visible = true
+      mesh.material_override = matte_black
+   await RenderingServer.frame_post_draw
+   var image: Image = root.get_texture().get_image()
+   var pixels: int = _body_mask_pixel_count(image)
+   var filename: String = "formation_mask_" + str(slot) + "_" + category + ".png"
+   if image.save_png(OUTPUT + "/" + filename) != OK:
+    return {"valid": false, "error": "Cannot save " + filename}
+   data[category + "_visible_body_pixels"] = pixels
+   data[category + "_image"] = filename
+  var baseline: int = int(data["baseline_visible_body_pixels"])
+  for category in ["weapon", "pet", "effect"]:
+   var visible_pixels: int = int(data[category + "_visible_body_pixels"])
+   data[category + "_hidden_body_pixels"] = maxi(0, baseline - visible_pixels)
+   data[category + "_hidden_body_fraction"] = snappedf(float(maxi(0, baseline-visible_pixels)) / float(maxi(1,baseline)), 0.00001)
+  if baseline <= 0:
+   data["error"] = "no white baseline body pixels"
+  results_by_hero.append(data)
+ for index in range(all_meshes.size()):
+  all_meshes[index].visible = bool(prior[index]["visible"])
+  all_meshes[index].material_override = prior[index]["override"]
+  all_meshes[index].cast_shadow = prior[index]["shadow"]
+ background.background_mode = saved_background_mode
+ background.background_color = saved_background_color
+ for i in range(team.heroes.size()):
+  var visual: Node3D = team.heroes[i].get_node_or_null("HeroCombatMotion") as Node3D
+  if visual != null:
+   visual.set_process(saved_process[i])
+ var valid := true
+ for item in results_by_hero:
+  if item.has("error"):
+   valid = false
+ return {"valid": valid, "heroes": results_by_hero,
+  "mask_images": team.heroes.size() * 4,
+  "measurement": "opaque white unshaded imported GLB geometry, black depth-tested selected props at frozen attack pose",
+  "limitations": "Only imported body geometry; excludes armor and hair outside GLB and excludes alpha-transparent original material appearance."}
+
+
+func _category_meshes_for_mask(category: String) -> Array[MeshInstance3D]:
+ # Use current scene membership, not visibility, because each pass has
+ # just hidden all mesh nodes. Preserve only meshes that were visible when
+ # the attack snapshot was taken, via the category source nodes.
+ var result: Array[MeshInstance3D] = []
+ for hero in team.heroes:
+  var subtree: Node3D
+  if category == "pet":
+   subtree = hero.get_node_or_null("PassivePet") as Node3D
+  elif category == "effect":
+   subtree = hero.get_node_or_null("HeroCombatMotion/AttackFlash") as Node3D
+  else:
+   var controller: Node3D = hero.get_node("EquipmentController") as Node3D
+   var equipped: Dictionary = controller.get("equipped_nodes")
+   subtree = equipped.get("mainhand") as Node3D
+  if subtree == null:
+   continue
+  for node in _descendants(subtree):
+   if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+    result.append(node as MeshInstance3D)
+ return result
+
+
+func _capture_four_hero_formation() -> int:
+ # Four practical combat roles, including Death Knight's distinct 24-bone rig.
+ # The formation remains temporary QA data; no class setup or save is altered.
+ var lineup: Array[int] = [0, 6, 11, 2]
+ var roles: Array[int] = [0, 1, 1, 2]
+ for index in range(4):
+  team.class_ids[index] = lineup[index]
+  team.role_ids[index] = roles[index]
+ team.create_team()
+ await process_frame
+ if team.heroes.size() != 4:
+  _fail("Formation QA requires exactly four heroes")
+  return -1
+ for index in range(4):
+  var hero: Node3D = team.heroes[index]
+  hero.visible = true
+  var view: Node3D = hero.get_node_or_null("ChibiGLBVisual") as Node3D
+  var controller: Node3D = hero.get_node_or_null("EquipmentController") as Node3D
+  if view == null or controller == null:
+   _fail("Formation hero missing imported visual or equipment controller")
+   return -1
+  view.set_process(false)
+  if not bool(controller.call("equip_weapon", ADAPTER.weapon_type_for_class(team.class_ids[index]), 5)):
+   _fail("Formation mythic weapon could not be equipped at slot " + str(index))
+   return -1
+  if not bool(controller.call("equip_armor_slot", "ChestSocket", team.class_ids[index], 5)):
+   _fail("Formation mythic chest armor could not be equipped at slot " + str(index))
+   return -1
+ # Elevated 4-hero battle view separates front and back row silhouettes.
+ camera.position = Vector3(0.0, 10.0, 12.0)
+ camera.look_at(Vector3(0.0, 1.2, 0.0), Vector3.UP)
+ var captured := 0
+ for action in ["Idle", "Walk", "Attack", "Dodge"]:
+  for hero in team.heroes:
+   var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+   var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
+   var skeleton: Skeleton3D = view.get("imported_skeleton") as Skeleton3D
+   if player == null or skeleton == null:
+    _fail("Four-hero formation lacks imported animation")
+    return -1
+   view.call("play_clip", action)
+   var selected: String = str(player.current_animation)
+   if not (selected == action or selected.begins_with(action + "_")):
+    _fail("Formation selected unexpected animation: " + selected)
+    return -1
+   var animation: Animation = player.get_animation(selected)
+   var range_seconds: float = 1.4 if action == "Idle" else 1.1 if action == "Walk" else 0.95 if action == "Attack" else 0.90
+   player.seek(maxf(0.0, animation.length - 0.45 * range_seconds), true)
+   player.pause()
+   skeleton.force_update_all_bone_transforms()
+  # Exercise actual in-game cosmetic attack flashes, not a fabricated mesh.
+  # Other test poses reset the flash to avoid contaminating their measurements.
+  for hero in team.heroes:
+   var motion: Node3D = hero.get_node_or_null("HeroCombatMotion") as Node3D
+   if motion == null:
+    _fail("Formation hero has no cosmetic combat motion")
+    return -1
+   motion.set_process(true)
+   if action == "Attack":
+    motion.call("play_attack")
+   else:
+    motion.set("attack_remaining", 0.0)
+  await process_frame
+  await RenderingServer.frame_post_draw
+  if not _fit_camera_to_visible_hero(team, true):
+   return -1
+  await RenderingServer.frame_post_draw
+  var snapshot: Image = root.get_texture().get_image()
+  if snapshot == null or snapshot.is_empty():
+   _fail("Formation screenshot readback empty for " + action)
+   return -1
+  var name: String = "formation_mythic_" + action.to_lower() + ".png"
+  if snapshot.save_png(OUTPUT + "/" + name) != OK:
+   _fail("Formation screenshot could not be written: " + name)
+   return -1
+  var anchor_count := 0
+  for hero in team.heroes:
+   var controller: Node3D = hero.get_node("EquipmentController") as Node3D
+   var anchor: Node3D = controller.call("_socket", "RightHandSocket") as Node3D
+   if anchor == null or anchor.get_child_count() != 1:
+    _fail("Formation contains missing or duplicate weapon during " + action)
+    return -1
+   anchor_count += 1
+  var visibility: Dictionary = _four_hero_screen_visibility()
+  if action == "Attack":
+   var effect_count: int = 0
+   for record in visibility.get("pet_effect_frames", []):
+    if record.get("category", "") == "effect":
+     effect_count += 1
+   if effect_count != 4:
+    _fail("Expected four active cosmetic attack flashes; measured " + str(effect_count))
+    return -1
+  if not bool(visibility.get("valid", false)):
+   _fail("Formation body geometry falls outside portrait frame in " + action + ": " + str(visibility))
+   return -1
+  if action == "Attack":
+   # Lock cosmetic motion and passive pet processing for identical frame poses.
+   for hero in team.heroes:
+    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+    motion.set_process(false)
+    var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
+    if pet != null:
+     pet.set_process(false)
+   var pixel_result: Dictionary = await _capture_counterfactual_attack_frames(snapshot, visibility)
+   if not bool(pixel_result.get("valid", false)):
+    _fail("Pixel-difference attack QA failed: " + str(pixel_result))
+    return -1
+   visibility["pixel_differential"] = pixel_result
+   print("TITAN_FORMATION_PIXEL_DIFFERENTIAL " + JSON.stringify(pixel_result))
+   # Compare against fully opaque impact spheres with the SAME attack pose,
+   # camera and weapons; only QA temporarily modifies the material alpha.
+   var fx_materials: Array[StandardMaterial3D] = []
+   var fx_alphas: Array[float] = []
+   for hero in team.heroes:
+    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+    var sphere: MeshInstance3D = motion.get("magic_flash") as MeshInstance3D
+    var mat: StandardMaterial3D = sphere.material_override as StandardMaterial3D
+    if mat == null or mat.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA or absf(mat.albedo_color.a - 0.55) > 0.001:
+     _fail("Expected translucent attack sphere material in visual QA")
+     return -1
+    fx_materials.append(mat)
+    fx_alphas.append(mat.albedo_color.a)
+    var full: Color = mat.albedo_color
+    full.a = 1.0
+    mat.albedo_color = full
+   await RenderingServer.frame_post_draw
+   var opaque_frame: Image = root.get_texture().get_image()
+   var opaque_path: String = OUTPUT + "/formation_mythic_attack_opaque_reference.png"
+   if opaque_frame == null or opaque_frame.save_png(opaque_path) != OK:
+    _fail("Cannot capture opaque attack FX comparison")
+    return -1
+   for index in range(fx_materials.size()):
+    var restored: Color = fx_materials[index].albedo_color
+    restored.a = fx_alphas[index]
+    fx_materials[index].albedo_color = restored
+   var alpha_comparison: Dictionary = _pixel_delta_stats(snapshot, opaque_frame, visibility.get("body_frames", []))
+   if not bool(alpha_comparison.get("valid", false)):
+    _fail("Attack alpha comparison failed")
+    return -1
+   alpha_comparison["opaque_reference_image"] = "formation_mythic_attack_opaque_reference.png"
+   alpha_comparison["production_alpha"] = 0.55
+   visibility["attack_flash_transparency_comparison"] = alpha_comparison
+   print("TITAN_FORMATION_ATTACK_ALPHA_COMPARISON " + JSON.stringify(alpha_comparison))
+   var depth_masks: Dictionary = await _capture_depth_silhouette_masks()
+   if not bool(depth_masks.get("valid", false)):
+    _fail("Four-hero depth silhouette mask audit failed: " + str(depth_masks))
+    return -1
+   visibility["depth_silhouette_masks"] = depth_masks
+   print("TITAN_FORMATION_DEPTH_MASKS " + JSON.stringify(depth_masks))
+  print("TITAN_FORMATION_SCREEN_COVERAGE pose=%s details=%s" % [action, JSON.stringify(visibility)])
+  results.append({"image": name, "class": "formation", "pose": action.to_lower(),
+   "hero_count": 4, "class_ids": [0,6,11,2], "weapon_anchors": anchor_count,
+   "screen_visibility": visibility,
+   "width": snapshot.get_width(), "height": snapshot.get_height()})
+  print("TITAN_FORMATION_VISUAL_QA_FRAME pose=%s weapons=%d" % [action, anchor_count])
+  captured += 1
+ return captured
+
+
+
+func _measure_gameplay_camera_performance() -> Dictionary:
+ # This uses the REAL portrait CameraFollow script from scenes/main.tscn, not
+ # the orthographic inspection camera. Linux xvfb/Mesa timing is diagnostic.
+ var gallery_camera: Camera3D = camera
+ var play_camera := Camera3D.new()
+ play_camera.name = "ActualGameplayCameraQA"
+ play_camera.set_script(load("res://scripts/camera_follow.gd"))
+ play_camera.set("target_path", NodePath("../EquipmentQATeam"))
+ world.add_child(play_camera)
+ play_camera.set_process(false)
+ gallery_camera.current = false
+ play_camera.current = true
+ camera = play_camera
+ var camera_data := {
+  "projection": "perspective",
+  "fov_degrees": snappedf(play_camera.fov, 0.01),
+  "source_script": "res://scripts/camera_follow.gd",
+  "camera_position": _vec3_metrics(play_camera.global_position),
+  "gameplay_offset": _vec3_metrics(play_camera.get("camera_offset")),
+  "gameplay_look_ahead": _vec3_metrics(play_camera.get("look_ahead"))
+ }
+ var captures: Array[Dictionary] = []
+ var idle_image: Image
+ var action_delta: Dictionary = {}
+ for action in ["Idle", "Attack"]:
+  for hero in team.heroes:
+   var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+   var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
+   var skeleton: Skeleton3D = view.get("imported_skeleton") as Skeleton3D
+   view.call("play_clip", action)
+   var selected: String = str(player.current_animation)
+   if not (selected == action or selected.begins_with(action + "_")):
+    return {"valid": false, "reason": "wrong gameplay clip " + selected}
+   var clip: Animation = player.get_animation(selected)
+   var active_window: float = 1.4 if action == "Idle" else 0.95
+   player.play(selected, 0.0)
+   player.seek(maxf(0.0, clip.length - active_window * 0.45), true)
+   player.pause()
+   skeleton.force_update_all_bone_transforms()
+   var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+   motion.set_process(false)
+   if action == "Attack":
+    motion.call("play_attack")
+    # Sample the real existing cosmetic attack progression at a meaningful
+    # mid-strike time, rather than recording its zero-intensity first frame.
+    motion.call("_process", 0.19)
+   else:
+    motion.set("attack_remaining", 0.0)
+    motion.call("_process", 0.01)
+  await RenderingServer.frame_post_draw
+  await RenderingServer.frame_post_draw
+  var screenshot: Image = root.get_texture().get_image()
+  var name: String = "formation_gameplay_camera_" + action.to_lower() + ".png"
+  if screenshot == null or screenshot.is_empty() or screenshot.save_png(OUTPUT + "/" + name) != OK:
+   return {"valid": false, "reason": "gameplay camera snapshot failed " + action}
+  if action == "Idle":
+   idle_image = screenshot.duplicate()
+  else:
+   action_delta = _pixel_delta_stats(idle_image, screenshot, [])
+   if not bool(action_delta.get("valid", false)) or int(action_delta.get("changed_pixels", 0)) < 100:
+    return {"valid": false, "reason": "Gameplay Attack and Idle frames are visually identical or near identical", "pixel_delta": action_delta}
+  var visibility: Dictionary = _four_hero_screen_visibility()
+  captures.append({"pose": action.to_lower(), "image": name,
+   "body_visibility": visibility.get("body_frames", []),
+   "minimum_body_viewport_fraction": visibility.get("minimum_body_viewport_fraction", 0.0),
+   "frame_width": screenshot.get_width(), "frame_height": screenshot.get_height()})
+ # Now run the same original four GLBs with their imported AnimationPlayers
+ # and cosmetic effects active (no screenshots or readback in timed interval).
+ for hero in team.heroes:
+  var view: Node3D = hero.get_node("ChibiGLBVisual") as Node3D
+  view.set_process(true)
+  var player: AnimationPlayer = view.get("animation_player") as AnimationPlayer
+  player.play("Attack")
+  var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+  motion.set_process(true)
+  var pet: Node3D = hero.get_node_or_null("PassivePet") as Node3D
+  if pet != null:
+   pet.set_process(true)
+ for index in range(20):
+  await RenderingServer.frame_post_draw
+ var elapsed_ms: Array[float] = []
+ for index in range(90):
+  if index % 18 == 0:
+   for hero in team.heroes:
+    var motion: Node3D = hero.get_node("HeroCombatMotion") as Node3D
+    motion.call("play_attack")
+  var started: int = Time.get_ticks_usec()
+  await RenderingServer.frame_post_draw
+  elapsed_ms.append(float(Time.get_ticks_usec() - started) / 1000.0)
+ elapsed_ms.sort()
+ var sum_ms := 0.0
+ for frame_ms in elapsed_ms:
+  sum_ms += frame_ms
+ var mean_ms: float = sum_ms / float(elapsed_ms.size())
+ var bench := {
+  "valid": captures.size() == 2 and elapsed_ms.size() == 90,
+  "camera": camera_data,
+  "captures": captures,
+  "idle_vs_attack_pixel_delta": action_delta,
+  "benchmark": {"warmup_frames": 20, "measured_frames": elapsed_ms.size(),
+   "mean_frame_ms": snappedf(mean_ms, 0.001),
+   "median_frame_ms": snappedf(elapsed_ms[44], 0.001),
+   "p95_frame_ms": snappedf(elapsed_ms[85], 0.001),
+   "estimated_mean_fps": snappedf(1000.0 / maxf(mean_ms, 0.001), 0.01),
+   "renderer": "Godot 4.7.2 gl_compatibility via xvfb Mesa on GitHub Linux",
+   "device": OS.get_name(),
+   "real_android_device_tested": false,
+   "performance_claim": "diagnostic CI runner render-loop timing; not device FPS or a performance guarantee"},
+  "note": "Camera script matches the normal non-boss gameplay view. Scripted boss framing, HUD and Android GPU have not been tested in this capture."
+ }
+ var file := FileAccess.open(OUTPUT + "/gameplay_camera_benchmark.json", FileAccess.WRITE)
+ if file == null:
+  return {"valid": false, "reason": "cannot write gameplay benchmark"}
+ file.store_string(JSON.stringify(bench, "  ") + "\n")
+ file.close()
+ camera = gallery_camera
+ gallery_camera.current = true
+ play_camera.current = false
+ play_camera.queue_free()
+ print("TITAN_GAMEPLAY_CAMERA_BENCHMARK " + JSON.stringify(bench))
+ return bench
+
+
 func _run() -> void:
  if DisplayServer.get_name() == "headless":
   _fail("Visual QA requires a display renderer, not Godot headless mode")
@@ -302,6 +957,9 @@ func _run() -> void:
   if animator == null:
    _fail("Missing original GLB animation for " + CLASSES[i])
    return
+  # Freeze only the automatic combat selector in this isolated screenshot scene.
+  # Manual AnimationPlayer playback must not be overridden before readback.
+  chibi.set_process(false)
   # Front and attack frames for every class; side view for the hero and death
   # knight. Screenshots use real GLB body and actual rarity-5 equipment.
   chibi.call("play_clip", "Idle")
@@ -327,6 +985,27 @@ func _run() -> void:
   if weapon_before.is_equal_approx(weapon_after):
    _fail("Equipped weapon stayed static during attack: " + CLASSES[i])
    return
+  # Also capture imported Walk and Dodge for all classes. Keep the original
+  # animation at its active movement interval, including DK's 24-bone rig.
+  for moving_pose in ["Walk", "Dodge"]:
+   chibi.call("play_clip", moving_pose)
+   var moving_name: String = str(animator.current_animation)
+   if not (moving_name == moving_pose or moving_name.begins_with(moving_pose + "_")):
+    _fail("Wrong imported animation for %s / %s: %s" % [CLASSES[i], moving_pose, moving_name])
+    return
+   var moving_clip: Animation = animator.get_animation(moving_name)
+   if moving_clip == null or moving_clip.get_track_count() == 0:
+    _fail("Empty moving animation for %s / %s" % [CLASSES[i], moving_pose])
+    return
+   var motion_window: float = 1.1 if moving_pose == "Walk" else 0.9
+   animator.seek(maxf(0.0, moving_clip.length - 0.45 * motion_window), true)
+   var moving_label: String = "front_" + moving_pose.to_lower()
+   if not await _capture(CLASSES[i] + "_" + moving_label, hero, moving_label, i):
+    return
+   pictures += 1
+  # Restore attack pose for consistent side-by-side attack visuals.
+  chibi.call("play_clip", "Attack")
+  animator.seek(midpoint, true)
   # Every class gets a side view, revealing weapon/armor overlap on Android.
   hero.rotation.y = PI * 0.5
   if not await _capture(CLASSES[i] + "_side_attack", hero, "side_attack", i):
@@ -352,8 +1031,17 @@ func _run() -> void:
     if not await _capture(label, hero, "front_rarity_" + str(sampled_quality), i):
      return
     pictures += 1
- if not _build_contact_sheet("front_attack") or not _build_contact_sheet("side_attack"):
+ if not _build_contact_sheet("front_attack") or not _build_contact_sheet("side_attack") or not _build_contact_sheet("front_walk") or not _build_contact_sheet("front_dodge"):
   return
+ var team_captures: int = await _capture_four_hero_formation()
+ if team_captures != 4:
+  return
+ pictures += team_captures + 3 + 16 + 1 # 3 comparison, 16 masks, 1 opaque reference
+ var gameplay_metrics: Dictionary = await _measure_gameplay_camera_performance()
+ if not bool(gameplay_metrics.get("valid", false)):
+  _fail("Gameplay camera / performance QA failed: " + str(gameplay_metrics))
+  return
+ pictures += 2 # actual perspective gameplay camera, Idle and Attack
  var file := FileAccess.open(OUTPUT + "/manifest.json", FileAccess.WRITE)
  if file == null:
   _fail("Cannot write QA manifest")
@@ -361,7 +1049,9 @@ func _run() -> void:
  file.store_string(JSON.stringify({
    "generator": "Godot 4.7.2 live imported GLB equipment QA",
    "image_count": pictures, "class_count": CLASSES.size(),
-   "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png"],
+   "formation_capture_count": team_captures, "formation_classes": ["warrior", "mage", "death_knight", "druid"],
+   "gameplay_camera": gameplay_metrics,
+   "contact_sheets": ["overview_front_attack.png", "overview_side_attack.png", "overview_front_walk.png", "overview_front_dodge.png"],
    "contact_sheet_order": CLASSES,
    "real_android_device_tested": false, "renders": results
   }, "  "))

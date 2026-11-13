@@ -9,6 +9,18 @@ on:
       - 'scripts/weapons/procedural_weapon_preview.gd'
       - 'tests/test_weapon_armor_silhouette_v2.gd'
       - 'tools/render_live_equipment_qa.gd'
+      - 'tools/render_boss_gameplay_camera_qa.gd'
+      - 'tools/boss_camera_qa_state.gd'
+      - 'tools/boss_camera_real_hud_qa.gd'
+      - 'tools/check_boss_gameplay_camera_report.py'
+      - 'tests/test_check_boss_gameplay_camera_report.py'
+      - 'tools/check_gameplay_camera_benchmark.py'
+      - 'tests/test_check_gameplay_camera_benchmark.py'
+      - 'tools/check_four_hero_visual_manifest.py'
+      - 'tests/test_check_four_hero_visual_manifest.py'
+      - 'tests/test_death_knight_locomotion_polish.gd'
+      - 'scripts/animation/death_knight_locomotion_polish.gd'
+      - 'tests/test_chibi_weapon_animation_grip.gd'
       - '.github/workflows/animated-equipment-visual-qa.yml'
   push:
     branches: [main]
@@ -51,8 +63,24 @@ jobs:
           set -euo pipefail
           rm -rf original_update168
           python3 tools/generate_audio_sfx.py
-          timeout 180s godot --headless --path . --editor --import --quit 2>&1 | tee /tmp/equipment-visual-import.log
-          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/equipment-visual-import.log; then exit 1; fi
+          # Godot 4.7.2 editor import intermittently aborts on Mesa runners
+          # (double-free or internal index failure, process exit 134).
+          # Only retry that engine abort; never suppress parse/script errors.
+          for attempt in 1 2 3; do
+            set +e
+            timeout 180s godot --headless --audio-driver Dummy --path . --editor --import --quit 2>&1 | tee /tmp/equipment-visual-import.log
+            status=${PIPESTATUS[0]}
+            set -e
+            if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script' /tmp/equipment-visual-import.log; then exit 1; fi
+            if [ "$status" -eq 0 ]; then break; fi
+            if [ "$status" -ne 134 ] || [ "$attempt" -eq 3 ]; then
+              echo "::error::Godot visual import failed with $status after attempt $attempt"
+              exit "$status"
+            fi
+            echo "::warning::Transient Godot editor-import abort 134; resetting cache and retrying ($attempt/3)"
+            rm -rf .godot
+            sleep 2
+          done
       - name: Validate all 72 weapon rarities and 156 armor profiles
         shell: bash
         run: |
@@ -60,17 +88,27 @@ jobs:
           timeout 120s godot --headless --path . --script res://tests/test_weapon_armor_silhouette_v2.gd 2>&1 | tee /tmp/titan-silhouette-v2.log
           grep -Fq 'TITAN_SILHOUETTE_V2_OK weapons=72 armors=156 faceted=36 rarities=6' /tmp/titan-silhouette-v2.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/titan-silhouette-v2.log; then exit 1; fi
+      - name: Verify Death Knight Idle Walk polish with real OpenGL renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+            --path . --rendering-method gl_compatibility --audio-driver Dummy \
+            --script res://tests/test_death_knight_locomotion_polish.gd \
+            2>&1 | tee /tmp/death-knight-opengl-polish.log
+          grep -Fq 'PASS: Death Knight private Idle Walk polish actions=2 added_tracks=6 original_glb_unchanged=true' /tmp/death-knight-opengl-polish.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/death-knight-opengl-polish.log; then exit 1; fi
       - name: Render original twelve-class equipment in Godot OpenGL
         shell: bash
         run: |
           set -euo pipefail
-          timeout 180s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+          timeout 480s xvfb-run -a -s '-screen 0 720x1280x24' godot \
             --path . --rendering-method gl_compatibility --audio-driver Dummy \
             --script res://tools/render_live_equipment_qa.gd \
             2>&1 | tee /tmp/equipment-visual-qa.log
-          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=40 classes=12' /tmp/equipment-visual-qa.log
+          grep -Fq 'TITAN_EQUIPMENT_VISUAL_QA_OK images=90 classes=12' /tmp/equipment-visual-qa.log
           if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/equipment-visual-qa.log; then exit 1; fi
-          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 42
+          test "$(find build/animated_equipment_qa -name '*.png' | wc -l)" -eq 94
           test -s build/animated_equipment_qa/manifest.json
           test -s build/animated_equipment_qa/death_knight_front_attack.png
           test -s build/animated_equipment_qa/warrior_side_attack.png
@@ -78,6 +116,51 @@ jobs:
           test -s build/animated_equipment_qa/mage_side_attack.png
           test -s build/animated_equipment_qa/overview_front_attack.png
           test -s build/animated_equipment_qa/overview_side_attack.png
+          test -s build/animated_equipment_qa/overview_front_walk.png
+          test -s build/animated_equipment_qa/overview_front_dodge.png
+          test -s build/animated_equipment_qa/death_knight_front_dodge.png
+          test -s build/animated_equipment_qa/formation_mythic_idle.png
+          test -s build/animated_equipment_qa/formation_mythic_walk.png
+          test -s build/animated_equipment_qa/formation_mythic_attack.png
+          test -s build/animated_equipment_qa/formation_mythic_dodge.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_without_weapon.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_without_pet.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_without_effect.png
+          grep -Fq "TITAN_FORMATION_PIXEL_DIFFERENTIAL" /tmp/equipment-visual-qa.log
+          grep -Fq "TITAN_FORMATION_DEPTH_MASKS" /tmp/equipment-visual-qa.log
+          test -s build/animated_equipment_qa/formation_mask_0_baseline.png
+          test -s build/animated_equipment_qa/formation_mask_2_effect.png
+          test -s build/animated_equipment_qa/formation_mask_3_pet.png
+          test -s build/animated_equipment_qa/formation_mythic_attack_opaque_reference.png
+          test -s build/animated_equipment_qa/formation_gameplay_camera_idle.png
+          test -s build/animated_equipment_qa/formation_gameplay_camera_attack.png
+          test -s build/animated_equipment_qa/gameplay_camera_benchmark.json
+          grep -Fq "TITAN_GAMEPLAY_CAMERA_BENCHMARK" /tmp/equipment-visual-qa.log
+          grep -Fq "TITAN_FORMATION_ATTACK_ALPHA_COMPARISON" /tmp/equipment-visual-qa.log
+          grep -Fq 'TITAN_FORMATION_VISUAL_QA_FRAME pose=Dodge weapons=4' /tmp/equipment-visual-qa.log
+      - name: Audit four-hero camera, pet and attack-effect visibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_check_four_hero_visual_manifest.py' -v
+          python3 tools/check_four_hero_visual_manifest.py build/animated_equipment_qa/manifest.json --output build/animated_equipment_qa/formation_visibility_audit.json
+          test -s build/animated_equipment_qa/formation_visibility_audit.json
+          python3 -m unittest discover -s tests -p 'test_check_gameplay_camera_benchmark.py' -v
+          python3 tools/check_gameplay_camera_benchmark.py build/animated_equipment_qa/gameplay_camera_benchmark.json
+      - name: Render real elemental boss models with production boss camera
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 150s xvfb-run -a -s '-screen 0 720x1280x24' godot \
+            --path . --rendering-method gl_compatibility --audio-driver Dummy \
+            --script res://tools/render_boss_gameplay_camera_qa.gd \
+            2>&1 | tee /tmp/boss-camera-qa.log
+          grep -Fq 'TITAN_BOSS_CAMERA_QA_OK scenarios=2 images=4' /tmp/boss-camera-qa.log
+          if grep -E 'SCRIPT ERROR:|Parse Error:|Failed to load script|ERROR:' /tmp/boss-camera-qa.log; then exit 1; fi
+          test "$(find build/boss_gameplay_camera_qa -name '*.png' | wc -l)" -eq 4
+          test -s build/boss_gameplay_camera_qa/boss_camera_report.json
+          python3 -m unittest discover -s tests -p 'test_check_boss_gameplay_camera_report.py' -v
+          python3 tools/check_boss_gameplay_camera_report.py build/boss_gameplay_camera_qa/boss_camera_report.json
       - name: Upload screenshot collection for Android review
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,5 +169,9 @@ jobs:
           path: |
             build/animated_equipment_qa/*.png
             build/animated_equipment_qa/manifest.json
+            build/animated_equipment_qa/formation_visibility_audit.json
+            build/animated_equipment_qa/gameplay_camera_benchmark.json
+            build/boss_gameplay_camera_qa/*.png
+            build/boss_gameplay_camera_qa/boss_camera_report.json
           if-no-files-found: warn
           retention-days: 30

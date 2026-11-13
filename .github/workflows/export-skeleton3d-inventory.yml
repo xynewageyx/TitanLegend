@@ -2,6 +2,20 @@ name: Export Titan Legends Skeleton3D inventory
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/export-skeleton3d-inventory.yml
+      - tools/audit_titan_twelve_rigs.py
+      - tools/audit_titan_rig_pose_compatibility.py
+      - tools/export_twelve_class_bone_motion.gd
+      - tools/analyze_twelve_class_bone_motion.py
+      - tests/test_analyze_twelve_class_bone_motion.py
+      - tests/test_audit_titan_rig_pose_compatibility.py
+      - tests/test_audit_titan_twelve_rigs.py
+      - tools/export_skeleton3d_inventory.gd
+      - tools/validate_skeleton3d_inventory.py
   push:
     branches:
       - main
@@ -18,6 +32,8 @@ on:
       - tools/analyze_chibi_animation_inventory.py
       - tools/audit_chibi_animation_duplicates.py
       - tests/test_validate_skeleton3d_inventory.py
+      - tests/test_audit_titan_twelve_rigs.py
+      - tools/audit_titan_twelve_rigs.py
       - tests/test_analyze_chibi_animation_inventory.py
       - tests/test_audit_chibi_animation_duplicates.py
 
@@ -28,6 +44,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Test Skeleton3D inventory validator
         run: python3 -m unittest discover -s tests -p 'test_validate_skeleton3d_inventory.py' -v
+      - name: Test twelve-class rig coverage auditor
+        run: python3 -m unittest discover -s tests -p 'test_audit_titan_twelve_rigs.py' -v
+      - name: Test twelve-class rest-pose and equipment-socket auditor
+        run: python3 -m unittest discover -s tests -p 'test_audit_titan_rig_pose_compatibility.py' -v
+      - name: Test twelve-class motion analyzer
+        run: python3 -m unittest discover -s tests -p 'test_analyze_twelve_class_bone_motion.py' -v
       - name: Test Chibi animation coverage analyzer
         run: python3 -m unittest discover -s tests -p 'test_analyze_chibi_animation_inventory.py' -v
       - name: Test Chibi animation duplicate auditor
@@ -75,7 +97,33 @@ jobs:
           test -s build/skeleton3d_inventory.json
       - name: Validate exported skeletons and rest poses
         run: |
-          python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json
+          python3 tools/validate_skeleton3d_inventory.py build/skeleton3d_inventory.json --output build/skeleton3d_validation.json --allow-empty-scene res://scenes/character/titan_modular_character.tscn
+      - name: Audit twelve imported class rigs
+        if: always()
+        run: |
+          mkdir -p build
+          if [ -s build/skeleton3d_inventory.json ]; then
+            python3 tools/audit_titan_twelve_rigs.py build/skeleton3d_inventory.json --output build/twelve_class_rig_coverage.json || true
+          else
+            printf '{"complete": false, "error": "Skeleton3D inventory missing"}\n' > build/twelve_class_rig_coverage.json
+          fi
+      - name: Audit twelve-class rest poses and equipment sockets
+        if: always()
+        run: |
+          if [ -s build/skeleton3d_inventory.json ]; then
+            python3 tools/audit_titan_rig_pose_compatibility.py build/skeleton3d_inventory.json --output build/twelve_class_pose_compatibility.json
+          else
+            mkdir -p build
+            printf '{"valid": false, "error": "Skeleton3D inventory missing"}\n' > build/twelve_class_pose_compatibility.json
+            exit 1
+          fi
+      - name: Quantify bone movement in four original GLB actions
+        run: |
+          "$GODOT_BIN" --headless --path . --script res://tools/export_twelve_class_bone_motion.gd
+          test -s build/twelve_class_bone_motion.json
+      - name: Evaluate Death Knight hand motion and Idle Walk observations
+        run: |
+          python3 tools/analyze_twelve_class_bone_motion.py build/twelve_class_bone_motion.json --output build/twelve_class_motion_report.json
       - name: Upload inventory
         if: always()
         uses: actions/upload-artifact@v4
@@ -84,6 +132,10 @@ jobs:
           path: |
             build/skeleton3d_inventory.json
             build/skeleton3d_validation.json
+            build/twelve_class_rig_coverage.json
+            build/twelve_class_pose_compatibility.json
+            build/twelve_class_bone_motion.json
+            build/twelve_class_motion_report.json
             build/chibi_animation_inventory.json
             build/chibi_animation_coverage.json
             build/chibi_animation_duplicate_audit.json
