@@ -1,7 +1,7 @@
 # Titan Legends – Gemeinsamer Live-Projektstatus
 
-Automatisch erzeugt: **2026-11-13 03:34 UTC**
-Git-Stand: **6bf696232e0f7ad0cd5bf5d1fc437fe0e321a163** auf Branch **main**
+Automatisch erzeugt: **2026-11-13 03:54 UTC**
+Git-Stand: **4e9bc58e83854a895fbb50de2b2cbae51d890cf6** auf Branch **main**
 
 > Diese Datei wird nach Repository-Änderungen aktualisiert. Sie synchronisiert keine Chat-Verläufe und beweist keine bestandenen Tests. Jeder Fach-Chat liest sie vor der Arbeit und dokumentiert eigene Änderungen per GitHub-Commit.
 
@@ -25,10 +25,10 @@ Git-Stand: **6bf696232e0f7ad0cd5bf5d1fc437fe0e321a163** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Gameplay — Gameplay-/Talent-Chat
-- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
+- `4e9bc58` (2026-11-13): chore: remove redundant talent-only CI workflow
 
 ### Skills und Animationen — Skills-und-Animationen-Chat
-- `facd9ba` (2026-11-08): Agent (skills): bounded improvement (#89)
+- Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Grafiktreiber / Rendering — Grafiktreiber-Chat
 - `76552ed` (2026-11-08): fix: face Chibi attack flashes forward and reduce oversized impact orbs (#216)
@@ -45,6 +45,7 @@ Git-Stand: **6bf696232e0f7ad0cd5bf5d1fc437fe0e321a163** auf Branch **main**
 - Keine eindeutig zugeordneten Änderungen in den letzten 30 Commits (kein Nachweis für Inaktivität).
 
 ### Integration/CI — GitHub-/Integrations-Chat
+- `4e9bc58` (2026-11-13): chore: remove redundant talent-only CI workflow
 - `47b72c4` (2026-11-12): chore: remove obsolete Update 168 import workflows
 - `fac3e0a` (2026-11-08): qa: capture all-class attack side views and weapon/armor geometry metrics (#212)
 
