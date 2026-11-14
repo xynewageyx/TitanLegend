@@ -18,6 +18,7 @@ func _ready() -> void:
  var center := CenterContainer.new()
  center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ center.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
  shade.add_child(center)
  var stack := VBoxContainer.new()
  stack.add_theme_constant_override("separation", 14)
