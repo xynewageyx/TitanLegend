@@ -111,6 +111,9 @@ func equip_socket_hairstyle(style: int, color: Color = Color("#694333")) -> bool
 
 ## Preview-only: assemble the actual twelve-class modular character scene.
 ## Logical inventory, skill slots, class roles, and combat state are untouched.
+func equip_visual_loadout_preview() -> void:
+    pass
+
 func equip_visual_loadout(rarity: int) -> bool:
     if rarity < 0 or rarity > 5:
         return false
