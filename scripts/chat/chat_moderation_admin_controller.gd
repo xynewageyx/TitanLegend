@@ -19,6 +19,7 @@ func _ready() -> void:
 	var layout := VBoxContainer.new()
 	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(layout)
+	_connect_transport()
 	var navigation := HBoxContainer.new()
 	layout.add_child(navigation)
 	refresh_button = Button.new()
@@ -43,7 +44,6 @@ func _ready() -> void:
 	evidence_output.custom_minimum_size.y = 180
 	evidence_output.placeholder_text = "Chatbeweise werden nur nach Serverfreigabe angezeigt."
 	layout.add_child(evidence_output)
-	_connect_transport()
 	_select_case(0)
 
 func _connect_transport() -> void:
