@@ -14,6 +14,7 @@ extends Node3D
 @export var show_boots := true
 @export var show_back := true
 const TIER_COLORS := [Color("#777b80"), Color("#328e48"), Color("#317bd9"), Color("#e7bb48"), Color("#f16b22"), Color("#9e45ef")]
+@export var emission_multiplier: float = 1.2
 const METAL := Color("#292d37")
 const CLOTH := Color("#242532")
 func _ready() -> void:
@@ -31,7 +32,7 @@ func piece(p: Vector3, dimensions: Vector3, tint: Color, emissive: bool = false)
     if emissive:
         material.emission_enabled = true
         material.emission = tint
-        material.emission_energy_multiplier = 1.2
+        material.emission_energy_multiplier = emission_multiplier
     m.material_override = material
     add_child(m)
 func rebuild() -> void:
