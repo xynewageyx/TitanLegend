@@ -80,7 +80,7 @@ static func build(parent: Node3D, element: int, fused: bool) -> void:
   8: # Lightning: charged shoulder coils
    for side in [-1.0, 1.0]:
     VisualFactory.sphere(parent, 0.36, Vector3(side * 1.75, 4.6, -0.45), color.lightened(0.6))
-    VisualFactory.cylinder(parent, 0.85, 0.13, Vector3(side * 1.8, 5.15, 0), color)
+    VisualFactory.cylinder(parent, 1.2, 0.18, Vector3(side * 1.75, 4.2, -0.45), color.lightened(0.6))inder(parent, 0.85, 0.13, Vector3(side * 1.8, 5.15, 0), color)
   9: # Chaos: deliberately unbalanced shoulders
    VisualFactory.box(parent, Vector3(1.2, 1.45, 0.85), Vector3(-1.5, 4.5, 0.2), dark)
    VisualFactory.sphere(parent, 0.7, Vector3(1.7, 4.7, -0.2), color.lightened(0.35))
