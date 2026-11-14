@@ -24,6 +24,8 @@ func _ready() -> void:
 	refresh_button = Button.new()
 	refresh_button.text = "Sperrantraege aktualisieren"
 	refresh_button.pressed.connect(refresh_cases)
+	if multiplayer.has_multiplayer_peer():
+		refresh_cases()
 	navigation.add_child(refresh_button)
 	previous_button = Button.new()
 	previous_button.text = "Zurueck"
