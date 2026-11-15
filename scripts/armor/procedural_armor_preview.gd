@@ -38,7 +38,7 @@ func rebuild() -> void:
     for c in get_children():
         remove_child(c)
         c.queue_free()
-    var tint: Color = TIER_COLORS[rarity]
+    var tint: Color = TIER_COLORS[clampi(rarity, 0, TIER_COLORS.size() - 1)]
     var bulk := 1.0 + float(rarity) * 0.09
     var heavy := armor_class == 0 or armor_class == 1 or armor_class == 4
     var width := 0.6 * bulk if heavy else 0.46 * bulk
