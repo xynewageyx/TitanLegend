@@ -23,7 +23,7 @@ func _ready() -> void:
 	layout.add_child(navigation)
 	refresh_button = Button.new()
 	refresh_button.text = "Sperrantraege aktualisieren"
-	refresh_button.pressed.connect(refresh_cases)
+	refresh_button.pressed.connect(func(): refresh_cases())
 	navigation.add_child(refresh_button)
 	previous_button = Button.new()
 	previous_button.text = "Zurueck"
