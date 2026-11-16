@@ -51,6 +51,8 @@ func _connect_transport() -> void:
 		return
 	rpc_transport = get_node_or_null(moderation_rpc_path) as ChatModerationRpcServer
 	if rpc_transport == null:
+		rpc_transport = find_child("ModerationRpc", true, false) as ChatModerationRpcServer
+	if rpc_transport == null:
 		push_warning("Moderation RPC transport not found")
 		return
 	rpc_transport.pending_cases_received.connect(_on_pending_cases)
