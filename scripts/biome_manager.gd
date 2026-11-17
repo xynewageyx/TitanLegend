@@ -52,7 +52,7 @@ func generate_terrain() -> void:
   var x: float = side * rng.randf_range(5.5, 17.0)
   var z: float = rng.randf_range(-43.0, 18.0)
   if current_biome == BiomeType.NATURE:
-   var tree_scale: float = rng.randf_range(0.75, 1.3)
+   var tree_scale: float = rng.randf_range(0.75, 1.35)
    var leaf_tint: Color = Color("#277a40").lerp(Color("#489e54"), rng.randf())
    VisualFactory.cylinder(terrain, 2.8 * tree_scale, 0.35 * tree_scale, Vector3(x, 1.4 * tree_scale, z), Color("#68452c"))
    VisualFactory.sphere(terrain, 1.55 * tree_scale, Vector3(x, 3.55 * tree_scale, z), leaf_tint)
