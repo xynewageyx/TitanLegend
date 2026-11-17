@@ -12,8 +12,8 @@ class LocalClassAudioTests(unittest.TestCase):
         self.assertIn('_get_event_stream("class_skill_%d" % class_id)', AUDIO)
 
     def test_switch_and_disconnect_clear_class(self):
-        self.assertIn("if local_hero_slot != slot:\n  stop_sfx()\n  local_hero_class_id = -1", AUDIO)
-        self.assertIn("func clear_local_hero() -> void:\n stop_sfx()\n local_hero_slot = -1\n local_hero_class_id = -1", AUDIO)
+        self.assertIn("if local_hero_slot != slot:\n  stop_session_combat_sfx()\n  local_hero_class_id = -1", AUDIO)
+        self.assertIn("func clear_local_hero() -> void:\n stop_session_combat_sfx()\n local_hero_slot = -1\n local_hero_class_id = -1", AUDIO)
 
     def test_authoritative_snapshot_validates_identity_and_class(self):
         self.assertIn("func bind_local_hero_with_classes(owner_peer_ids: Array[int], class_ids: Array[int], local_peer_id: int) -> bool:", AUDIO)

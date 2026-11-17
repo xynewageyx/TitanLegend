@@ -189,6 +189,12 @@ func stop_sfx() -> void:
   boss_warning_player.stop()
  _animate_boss_duck(1.0, 0.15)
 
+# Session changes silence pooled hero/combat effects, but must not cancel a
+# globally audible boss telegraph or reset its music/ambience ducking.
+func stop_session_combat_sfx() -> void:
+ for player in effects:
+  player.stop()
+
 # Named audio events keep gameplay independent from asset paths.
 const AUDIO_EVENTS = preload("res://scripts/audio_event_catalog.gd")
 
@@ -248,12 +254,12 @@ func set_local_hero_slot(slot: int) -> void:
   clear_local_hero()
   return
  if local_hero_slot != slot:
-  stop_sfx()
+  stop_session_combat_sfx()
   local_hero_class_id = -1
  local_hero_slot = slot
 
 func clear_local_hero() -> void:
- stop_sfx()
+ stop_session_combat_sfx()
  local_hero_slot = -1
  local_hero_class_id = -1
 
