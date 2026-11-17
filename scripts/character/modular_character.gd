@@ -111,6 +111,10 @@ func equip_socket_hairstyle(style: int, color: Color = Color("#694333")) -> bool
 
 ## Preview-only: assemble the actual twelve-class modular character scene.
 ## Logical inventory, skill slots, class roles, and combat state are untouched.
+## Adds a helper to query whether a given class name is valid in Titan Legends.
+func is_valid_class(class_name: String) -> bool:
+    return CLASSES.has(class_name)
+
 func equip_visual_loadout(rarity: int) -> bool:
     if rarity < 0 or rarity > 5:
         return false
