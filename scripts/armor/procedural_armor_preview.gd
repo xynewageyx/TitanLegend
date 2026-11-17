@@ -5,6 +5,7 @@ extends Node3D
 ## Visual only: stats, save data, skinning and equipment inventory are separate.
 @export_enum("Tank", "Warrior", "Assassin", "Mage", "Paladin", "Healer") var armor_class: int = 0
 @export_enum("Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic") var rarity: int = 0
+@export var enable_pulsing_glow: bool = false
 @export var show_helmet := true
 @export var show_chest := true
 @export var show_shoulders := true
