@@ -87,7 +87,7 @@ func validate_character() -> PackedStringArray:
         if get_node_or_null(NodePath("Slots/" + slot_name)) == null:
             issues.append("Missing slot: " + slot_name)
     var skeleton := get_node_or_null(skeleton_path) as Skeleton3D
-    if skeleton != null and skeleton.get_bone_count() == 0:
+    if skeleton != null and skeleton.get_bone_count() == 0 and not build_original_prototype_rig:
         issues.append("Skeleton3D has no bones")
     if build_original_prototype_rig and skeleton != null and skeleton.get_bone_count() > 0:
         var builder := TitanHumanoidRigBuilder.new()
