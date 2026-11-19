@@ -44,7 +44,7 @@ func rebuild() -> void:
     var width := 0.6 * bulk if heavy else 0.46 * bulk
     if show_chest:
         piece(Vector3(0,1.28,0),Vector3(width,0.62,0.29),METAL if heavy else CLOTH)
-        piece(Vector3(0,1.38,-0.17),Vector3(width*0.76,0.32,0.08),tint,rarity>=2)
+        piece(Vector3(0,1.38,0.17),Vector3(width*0.76,0.32,0.08),tint,rarity>=2)
     if show_helmet:
         piece(Vector3(0,1.78,0),Vector3(0.38*bulk,0.33,0.37),METAL if heavy else CLOTH)
         piece(Vector3(0,1.79,-0.2),Vector3(0.28,0.055,0.045),tint,rarity>=2)
