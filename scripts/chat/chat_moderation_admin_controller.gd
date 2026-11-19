@@ -48,6 +48,7 @@ func _ready() -> void:
 
 func _connect_transport() -> void:
 	if moderation_rpc_path.is_empty():
+		set_process_mode(Node.PROCESS_MODE_DISABLED)
 		return
 	rpc_transport = get_node_or_null(moderation_rpc_path) as ChatModerationRpcServer
 	if rpc_transport == null:
