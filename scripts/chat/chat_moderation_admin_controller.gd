@@ -22,7 +22,7 @@ func _ready() -> void:
 	var navigation := HBoxContainer.new()
 	layout.add_child(navigation)
 	refresh_button = Button.new()
-	refresh_button.text = "Sperrantraege aktualisieren"
+	refresh_button.text = "Sperranträge aktualisieren"
 	refresh_button.pressed.connect(refresh_cases)
 	navigation.add_child(refresh_button)
 	previous_button = Button.new()
