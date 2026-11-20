@@ -7,4 +7,4 @@ func _enter_tree() -> void:
  print("Titan Legends UI toolkit enabled")
 
 func _exit_tree() -> void:
- pass
+ print("Titan Legends UI toolkit disabled")
