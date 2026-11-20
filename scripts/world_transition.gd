@@ -19,6 +19,7 @@ func _ready() -> void:
  center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  center.mouse_filter = Control.MOUSE_FILTER_IGNORE
  shade.add_child(center)
+ center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  var stack := VBoxContainer.new()
  stack.add_theme_constant_override("separation", 14)
  center.add_child(stack)
