@@ -24,6 +24,7 @@ func _ready() -> void:
 	refresh_button = Button.new()
 	refresh_button.text = "Sperrantraege aktualisieren"
 	refresh_button.pressed.connect(refresh_cases)
+	visibility_changed.connect(func(): if is_visible_in_tree(): refresh_cases())
 	navigation.add_child(refresh_button)
 	previous_button = Button.new()
 	previous_button.text = "Zurueck"
