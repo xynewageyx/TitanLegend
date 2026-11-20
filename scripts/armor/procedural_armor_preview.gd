@@ -65,6 +65,12 @@ func rebuild() -> void:
         piece(Vector3(0,1.32,0.23),Vector3(0.38,0.55,0.08),tint,rarity>=4)
     if rarity >= 4:
         piece(Vector3(0,1.35,-0.24),Vector3(0.16,0.18,0.08),tint,true)
+        var aura_light := OmniLight3D.new()
+        aura_light.position = Vector3(0, 1.35, -0.24)
+        aura_light.light_color = tint
+        aura_light.light_energy = 0.8 + float(rarity) * 0.4
+        aura_light.omni_range = 2.5
+        add_child(aura_light)
     if rarity == 5:
         for side in [-1.0,1.0]:
             piece(Vector3(side*0.57,1.9,0),Vector3(0.1,0.32,0.1),tint,true)
