@@ -16,6 +16,8 @@ extends Node3D
 const TIER_COLORS := [Color("#777b80"), Color("#328e48"), Color("#317bd9"), Color("#e7bb48"), Color("#f16b22"), Color("#9e45ef")]
 const METAL := Color("#292d37")
 const CLOTH := Color("#242532")
+func material_glow_pulse(_c: Color) -> void:
+    pass
 func _ready() -> void:
     rebuild()
 func piece(p: Vector3, dimensions: Vector3, tint: Color, emissive: bool = false) -> void:
@@ -65,6 +67,7 @@ func rebuild() -> void:
         piece(Vector3(0,1.32,0.23),Vector3(0.38,0.55,0.08),tint,rarity>=4)
     if rarity >= 4:
         piece(Vector3(0,1.35,-0.24),Vector3(0.16,0.18,0.08),tint,true)
+        material_glow_pulse(tint)
     if rarity == 5:
         for side in [-1.0,1.0]:
             piece(Vector3(side*0.57,1.9,0),Vector3(0.1,0.32,0.1),tint,true)
