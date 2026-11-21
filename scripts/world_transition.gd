@@ -30,6 +30,7 @@ func _ready() -> void:
  subtitle_label = Label.new()
  subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
  subtitle_label.add_theme_font_size_override("font_size", 22)
+ subtitle_label.add_theme_color_override("font_color", Color(0.85, 0.88, 0.95))
  stack.add_child(subtitle_label)
  element_bar = ColorRect.new()
  element_bar.custom_minimum_size = Vector2(190.0, 6.0)
