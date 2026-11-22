@@ -13,6 +13,14 @@ const CLASS_TREES := {
  "mage": ["fire", "frost", "arcane"],
  "ranger": ["precision", "wilderness", "trapper"],
  "priest": ["healing", "blessing", "light"],
+ "gladiator": ["brawler", "shout", "survival"],
+ "mage": ["fire", "frost", "arcane"],
+ "warlock": ["curse", "summon", "fire"],
+ "ranger": ["precision", "wilderness", "trapper"],
+ "hunter": ["beast", "marksmanship", "survival"],
+ "priest": ["healing", "blessing", "light"],
+ "druid": ["nature", "shapeshift", "restoration"],
+ "shaman": ["totem", "elemental", "ancestral"],
  "assassin": ["shadow", "blades", "poison"],
  "death_knight": ["blood", "frost", "unholy"]
 }
