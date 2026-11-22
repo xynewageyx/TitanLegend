@@ -58,7 +58,7 @@ func _connect_transport() -> void:
 	rpc_transport.case_decision_received.connect(_on_case_decision)
 
 func refresh_cases() -> void:
-	if rpc_transport == null or not multiplayer.has_multiplayer_peer():
+	if rpc_transport == null or not (multiplayer != null and multiplayer.has_multiplayer_peer()):
 		panel.status_label.text = "Keine Serververbindung."
 		return
 	rpc_transport.request_pending_cases.rpc_id(1)
