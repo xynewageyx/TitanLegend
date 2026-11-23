@@ -19,6 +19,8 @@ const CLOTH := Color("#242532")
 func _ready() -> void:
     rebuild()
 func piece(p: Vector3, dimensions: Vector3, tint: Color, emissive: bool = false) -> void:
+    if rarity > 0:
+        emissive = emissive or (rarity >= 2 and tint != METAL and tint != CLOTH)
     var m := MeshInstance3D.new()
     var box := BoxMesh.new()
     box.size = dimensions
