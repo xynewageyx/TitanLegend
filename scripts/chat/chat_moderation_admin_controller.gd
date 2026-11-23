@@ -20,6 +20,7 @@ func _ready() -> void:
 	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(layout)
 	var navigation := HBoxContainer.new()
+	navigation.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.add_child(navigation)
 	refresh_button = Button.new()
 	refresh_button.text = "Sperrantraege aktualisieren"
