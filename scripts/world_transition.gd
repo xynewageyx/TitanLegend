@@ -34,6 +34,7 @@ func _ready() -> void:
  element_bar = ColorRect.new()
  element_bar.custom_minimum_size = Vector2(190.0, 6.0)
  element_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ element_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
  stack.add_child(element_bar)
  shade.visible = false
  if biome_manager != null:
