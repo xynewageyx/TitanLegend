@@ -53,9 +53,12 @@ func _connect_transport() -> void:
 	if rpc_transport == null:
 		push_warning("Moderation RPC transport not found")
 		return
-	rpc_transport.pending_cases_received.connect(_on_pending_cases)
-	rpc_transport.case_evidence_received.connect(_on_case_evidence)
-	rpc_transport.case_decision_received.connect(_on_case_decision)
+	if not rpc_transport.pending_cases_received.is_connected(_on_pending_cases):
+		rpc_transport.pending_cases_received.connect(_on_pending_cases)
+	if not rpc_transport.case_evidence_received.is_connected(_on_case_evidence):
+		rpc_transport.case_evidence_received.connect(_on_case_evidence)
+	if not rpc_transport.case_decision_received.is_connected(_on_case_decision):
+		rpc_transport.case_decision_received.connect(_on_case_decision)
 
 func refresh_cases() -> void:
 	if rpc_transport == null or not multiplayer.has_multiplayer_peer():
