@@ -68,3 +68,4 @@ func rebuild() -> void:
     if rarity == 5:
         for side in [-1.0,1.0]:
             piece(Vector3(side*0.57,1.9,0),Vector3(0.1,0.32,0.1),tint,true)
+            piece(Vector3(side*0.35,2.15,0),Vector3(0.08,0.22,0.08),tint,true)
