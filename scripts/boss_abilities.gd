@@ -55,7 +55,7 @@ static func warn(parent: Node3D, team: Node3D, element: int, fusion: bool) -> vo
  if not is_instance_valid(parent) or not is_instance_valid(team):
   return
  var palette: Array[Color] = [Color.ORANGE_RED, Color.DODGER_BLUE, Color.SANDY_BROWN, Color.LIME_GREEN, Color.GOLD, Color.MEDIUM_PURPLE, Color.SKY_BLUE, Color.LIGHT_CYAN, Color.YELLOW, Color.MAGENTA]
- _floor_telegraph(parent, team.global_position + Vector3(0, 1, 0), palette[clampi(element, 0, 9)], element, fusion)
+ _floor_telegraph(parent, team.global_position + Vector3(0, 1, 0), palette[clampi(element, 0, palette.size() - 1)], element, fusion)
 
 static func affected_heroes(team: Node3D, element: int, fusion: bool) -> Array[int]:
  var affected: Array[int] = []
