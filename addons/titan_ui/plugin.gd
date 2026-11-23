@@ -5,6 +5,7 @@ extends EditorPlugin
 # Runtime HUD remains independent of editor plugins.
 func _enter_tree() -> void:
  print("Titan Legends UI toolkit enabled")
+ add_autoload_singleton("TitanHUDManager", "res://scripts/ui/titan_hud_manager.gd")
 
 func _exit_tree() -> void:
  pass
