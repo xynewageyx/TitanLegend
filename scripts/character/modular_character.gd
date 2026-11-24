@@ -35,7 +35,8 @@ func _ready() -> void:
         var animator := skeleton.get_node_or_null("TitanAnimations") as AnimationPlayer
         if animator != null and animator.has_method("setup_rig"):
             if bool(animator.call("setup_rig", skeleton)):
-                animator.call("play_motion", "idle")
+                var default_anim: String = "cast" if hero_class in ["mage", "warlock", "summoner", "priest"] else "idle"
+                animator.call("play_motion", default_anim)
 
 func _ensure_slot(slot_name: String) -> Node3D:
     if _slots.has(slot_name) and is_instance_valid(_slots[slot_name]):
