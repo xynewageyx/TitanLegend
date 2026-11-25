@@ -66,6 +66,8 @@ func refresh_cases() -> void:
 
 func _on_pending_cases(cases: Array) -> void:
 	pending_cases = cases.duplicate(true)
+	if panel != null:
+		panel.status_label.text = "Sperrantraege geladen: %d" % pending_cases.size()
 	_select_case(0)
 
 func _select_case(index: int) -> void:
