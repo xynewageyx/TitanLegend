@@ -29,7 +29,7 @@ func set_biome(biome: int) -> void:
   env.background_color = COLORS[current_biome].darkened(0.65)
   env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
   env.ambient_light_color = COLORS[current_biome].lightened(0.35)
-  env.ambient_light_energy = 0.65 if current_biome in [0, 5, 9] else 0.85
+  env.ambient_light_energy = 0.68 if current_biome in [0, 5, 9] else 0.88
   env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
  if sun_light:
   sun_light.light_color = COLORS[current_biome].lightened(0.65)
