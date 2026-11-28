@@ -61,7 +61,7 @@ static func affected_heroes(team: Node3D, element: int, fusion: bool) -> Array[i
  var affected: Array[int] = []
  if not is_instance_valid(team):
   return affected
- var hero_nodes: Array = team.get("heroes")
+ var hero_nodes: Array = team.get("heroes") if team.get("heroes") is Array else []
  var shapes: Array[Vector3] = _zone_shapes(element, fusion)
  for i in range(hero_nodes.size()):
   var hero: Node3D = hero_nodes[i] as Node3D
